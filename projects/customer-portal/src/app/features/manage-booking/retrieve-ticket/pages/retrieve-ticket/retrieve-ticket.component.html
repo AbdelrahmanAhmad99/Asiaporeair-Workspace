@@ -1,0 +1,75 @@
+<!-- ============================================================================
+     retrieve-ticket.component.html
+     Asiaporeair | "Locate Your Electronic Ticket" — Smart Page
+     ============================================================================ -->
+
+<!-- ── Page Header ─────────────────────────────────────────────────────── -->
+<header class="rt-header rt-animate">
+  <div class="rt-header__eyebrow">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="rt-header__icon">
+      <path d="M20 12V22H4V12" />
+      <path d="M22 7H2v5h20V7z" />
+      <path d="M12 22V7" />
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+    </svg>
+    <span>Manage Booking</span>
+  </div>
+  <h1 class="rt-header__title">Locate Your <span class="accent">Ticket</span></h1>
+  <p class="rt-header__subtitle">
+    Please provide your journey details as they appear on your passport and booking confirmation.
+  </p>
+</header>
+
+<div class="rt-page" [@pageReveal]="'animate'">
+
+  <!-- ── Ambient Background Orbs ─────────────────────────────────────────── -->
+  <div class="rt-bg-orb rt-bg-orb--1" aria-hidden="true"></div>
+  <div class="rt-bg-orb rt-bg-orb--2" aria-hidden="true"></div>
+
+
+
+  <!-- ── Main Content Grid ───────────────────────────────────────────────── -->
+  <main class="rt-content">
+
+    <!-- Left Column: Form + Error + Skeleton -->
+    <section class="rt-column rt-column--form">
+
+      <!-- Skeleton Loader (shown while API call is in-flight) -->
+      @if (isRetrieving()) {
+      <div class="rt-skeleton-overlay rt-animate" [@fadeUp]>
+        <div class="rt-skeleton rt-skeleton--tall"></div>
+        <div class="rt-skeleton rt-skeleton--medium"></div>
+        <div class="rt-skeleton rt-skeleton--short"></div>
+      </div>
+      }
+
+      <!-- Lookup Form (shown when NOT loading) -->
+      @if (!isRetrieving()) {
+      <div class="rt-form-wrapper rt-animate" [@fadeUp]>
+        <app-pnr-lookup-form [isLoading]="isRetrieving()" [serverError]="retrievalError()"
+          (formSubmit)="onTicketLookupSubmit($event)">
+        </app-pnr-lookup-form>
+      </div>
+      }
+
+    </section>
+
+    <!-- Right Column: Helper Card + Quick Links -->
+    <aside class="rt-column rt-column--aside">
+
+      <div class="rt-animate">
+        <app-retrieval-helper-card></app-retrieval-helper-card>
+      </div>
+
+      <div class="rt-animate">
+        <app-quick-links-panel (checkFlightStatus)="onCheckFlightStatus()" (accessSuite)="onAccessSuite()">
+        </app-quick-links-panel>
+      </div>
+
+    </aside>
+
+  </main>
+
+</div>

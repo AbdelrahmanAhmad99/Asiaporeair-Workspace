@@ -1,0 +1,337 @@
+<form class="aff-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off"
+    aria-label="Airline partner configuration form">
+
+    <div class="aff-card">
+
+        <!-- ══════════════════════════════════════════════════════════════
+         SECTION 1 — Partner Identity
+         IATA Code · Airline Name · Callsign
+    ═══════════════════════════════════════════════════════════════ -->
+        <section class="aff-section" aria-labelledby="aff-identity-heading">
+            <header class="aff-section__header">
+                <div class="aff-section__icon-wrap" aria-hidden="true">
+                    <svg class="aff-section__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75
+                     12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v
+                     -4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504
+                     1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75
+                     M8.25 21h8.25" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="aff-identity-heading" class="aff-section__title">Partner Identity</h3>
+                    <p class="aff-section__subtitle">Unique codes and official designations</p>
+                </div>
+
+                <!-- Locked badge in Edit mode -->
+                @if (isEditMode()) {
+                <span class="aff-locked-badge" title="IATA code cannot be changed after registration">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25
+                       2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25
+                       2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                    </svg>
+                    IATA Locked
+                </span>
+                }
+            </header>
+
+            <div class="aff-fields">
+
+                <!-- IATA Code -->
+                <div class="aff-field" [class.aff-field--error]="isInvalid('iataCode')"
+                    [class.aff-field--locked]="isEditMode()">
+                    <input id="aff-iata" class="aff-input" type="text" formControlName="iataCode" maxlength="2"
+                        placeholder=" " [attr.aria-invalid]="isInvalid('iataCode') ? 'true' : 'false'"
+                        [attr.aria-describedby]="isInvalid('iataCode') ? 'aff-iata-err' : null">
+                    <label class="aff-label" for="aff-iata">
+                        IATA Code <span class="aff-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isEditMode()) {
+                    <span class="aff-field__lock-icon" aria-label="Locked" title="Cannot be changed">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25
+                         2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25
+                         2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                        </svg>
+                    </span>
+                    }
+                    @if (isInvalid('iataCode')) {
+                    <span id="aff-iata-err" class="aff-error" role="alert">
+                        @if (iataCtrl.hasError('required')) { IATA code is required. }
+                        @else if (iataCtrl.hasError('exactLength')) { Must be exactly 2 uppercase letters (e.g. SQ). }
+                        @else if (iataCtrl.hasError('uppercaseOnly')) { Uppercase letters only. }
+                    </span>
+                    }
+                    <span class="aff-hint">2 uppercase letters · e.g. SQ, EK, QF</span>
+                </div>
+
+                <!-- Airline Name -->
+                <div class="aff-field" [class.aff-field--error]="isInvalid('name')">
+                    <input id="aff-name" class="aff-input" type="text" formControlName="name" maxlength="120"
+                        placeholder=" " [attr.aria-invalid]="isInvalid('name') ? 'true' : 'false'">
+                    <label class="aff-label" for="aff-name">
+                        Airline Name <span class="aff-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isInvalid('name')) {
+                    <span class="aff-error" role="alert">
+                        @if (nameCtrl.hasError('required')) { Airline name is required. }
+                        @else if (nameCtrl.hasError('minlength')) { Minimum 3 characters. }
+                        @else if (nameCtrl.hasError('maxlength')) { Maximum 120 characters. }
+                    </span>
+                    }
+                </div>
+
+                <!-- Callsign — spans full width -->
+                <div class="aff-field aff-field--wide" [class.aff-field--error]="isInvalid('callsign')">
+                    <input id="aff-callsign" class="aff-input" type="text" formControlName="callsign" maxlength="40"
+                        placeholder=" " [attr.aria-invalid]="isInvalid('callsign') ? 'true' : 'false'">
+                    <label class="aff-label" for="aff-callsign">
+                        Radio Callsign <span class="aff-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isInvalid('callsign')) {
+                    <span class="aff-error" role="alert">
+                        @if (callCtrl.hasError('required')) { Callsign is required. }
+                        @else if (callCtrl.hasError('minlength')) { Minimum 2 characters. }
+                    </span>
+                    }
+                    <span class="aff-hint">Radiotelephony designator · e.g. SINGAPORE, EMIRATES</span>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="aff-divider" aria-hidden="true"></div>
+
+        <!-- ══════════════════════════════════════════════════════════════
+         SECTION 2 — Operational Mandate
+         Operating Region
+    ═══════════════════════════════════════════════════════════════ -->
+        <section class="aff-section" aria-labelledby="aff-mandate-heading">
+            <header class="aff-section__header">
+                <div class="aff-section__icon-wrap" aria-hidden="true">
+                    <svg class="aff-section__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004
+                     0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485
+                     3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="aff-mandate-heading" class="aff-section__title">Operational Mandate</h3>
+                    <p class="aff-section__subtitle">Primary operating territory for route assignment</p>
+                </div>
+            </header>
+
+            <div class="aff-fields">
+
+                <!-- Operating Region — full-width select -->
+                <div class="aff-field aff-field--wide aff-field--select"
+                    [class.aff-field--error]="isInvalid('operatingRegion')">
+                    <select id="aff-region" class="aff-select" formControlName="operatingRegion"
+                        [attr.aria-invalid]="isInvalid('operatingRegion') ? 'true' : 'false'">
+                        <option value="" disabled hidden></option>
+                        @for (r of regions; track r) {
+                        <option [value]="r">{{ r }}</option>
+                        }
+                    </select>
+                    <label class="aff-label aff-label--select" for="aff-region">
+                        Operating Region <span class="aff-label__req" aria-hidden="true">*</span>
+                    </label>
+                    <div class="aff-select__chevron" aria-hidden="true">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                        </svg>
+                    </div>
+                    @if (isInvalid('operatingRegion')) {
+                    <span class="aff-error" role="alert">Please select an operating region.</span>
+                    }
+                </div>
+
+            </div>
+        </section>
+
+        <div class="aff-divider" aria-hidden="true"></div>
+
+        <!-- ══════════════════════════════════════════════════════════════
+         SECTION 3 — Strategic Hub Selection
+         Searchable autocomplete for base airport
+    ═══════════════════════════════════════════════════════════════ -->
+        <section class="aff-section" aria-labelledby="aff-hub-heading">
+            <header class="aff-section__header">
+                <div class="aff-section__icon-wrap aff-section__icon-wrap--gold" aria-hidden="true">
+                    <svg class="aff-section__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768
+                     59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="aff-hub-heading" class="aff-section__title">Strategic Hub Selection</h3>
+                    <p class="aff-section__subtitle">Search and confirm the partner's primary operational base</p>
+                </div>
+            </header>
+
+            <div class="aff-fields">
+
+                <!-- Hidden real value control (holds confirmed IATA code) -->
+                <input type="hidden" formControlName="baseAirportIataCode">
+
+                <!-- Autocomplete wrapper — full width -->
+                <div class="aff-field aff-field--wide aff-field--hub"
+                    [class.aff-field--error]="isInvalid('baseAirportIataCode')">
+
+                    <!-- Search input with magnifier + spinner -->
+                    <div class="aff-hub-input-wrap">
+                        <!-- Icon: spinner or search -->
+                        <div class="aff-hub-input-wrap__icon" aria-hidden="true">
+                            @if (airportSearching()) {
+                            <svg class="aff-hub-input-wrap__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992
+                           m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031
+                           9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                            } @else {
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5
+                           0 0 0 10.607 10.607z" />
+                            </svg>
+                            }
+                        </div>
+
+                        <!-- Confirmed hub badge (shown after selection) -->
+                        @if (selectedHubIata()) {
+                        <span class="aff-hub-confirmed" aria-label="Confirmed hub">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                            </svg>
+                            {{ selectedHubIata() }}
+                        </span>
+                        }
+
+                        <input id="aff-hub" class="aff-input aff-input--hub" type="text" [value]="hubSearchText()"
+                            (input)="onHubInput($event)" (blur)="onHubBlur()"
+                            (focus)="hubPanelOpen.set(airportOptions().length > 0)"
+                            placeholder="Search airports… (e.g. Singapore, Dubai)" autocomplete="off"
+                            [attr.aria-expanded]="hubPanelOpen()" [attr.aria-autocomplete]="'list'"
+                            [attr.aria-controls]="'aff-hub-panel'" [attr.aria-activedescendant]="null"
+                            [attr.aria-invalid]="isInvalid('baseAirportIataCode') ? 'true' : 'false'" role="combobox">
+
+                        <!-- Clear button -->
+                        @if (hubSearchText()) {
+                        <button class="aff-hub-clear" type="button" (click)="clearHub()"
+                            aria-label="Clear hub selection">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        }
+                    </div>
+
+                    <!-- Floating label -->
+                    <label class="aff-label aff-label--hub" for="aff-hub">
+                        Primary Operations Hub <span class="aff-label__req" aria-hidden="true">*</span>
+                    </label>
+
+                    <!-- Validation error for hub -->
+                    @if (isInvalid('baseAirportIataCode')) {
+                    <span class="aff-error" role="alert">
+                        Please search for and select a valid operational airport.
+                    </span>
+                    }
+
+                    <!-- ── Autocomplete Dropdown Panel ─────────────────────── -->
+                    @if (hubPanelOpen() && airportOptions().length > 0) {
+                    <ul id="aff-hub-panel" class="aff-hub-panel" role="listbox" aria-label="Airport suggestions">
+
+                        @for (airport of airportOptions(); track airport.iataCode) {
+                        <li class="aff-hub-option" role="option"
+                            [attr.aria-selected]="selectedHubIata() === airport.iataCode"
+                            [class.aff-hub-option--selected]="selectedHubIata() === airport.iataCode"
+                            (mousedown)="selectHub(airport)">
+
+                            <!-- IATA badge -->
+                            <span class="aff-hub-option__iata">{{ airport.iataCode }}</span>
+
+                            <!-- Details -->
+                            <span class="aff-hub-option__details">
+                                <span class="aff-hub-option__name">{{ airport.name }}</span>
+                                <span class="aff-hub-option__loc">{{ airport.city }}, {{ airport.countryName }}</span>
+                            </span>
+
+                            <!-- Check icon for selected -->
+                            @if (selectedHubIata() === airport.iataCode) {
+                            <svg class="aff-hub-option__check" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                            </svg>
+                            }
+
+                        </li>
+                        }
+
+                    </ul>
+                    }
+
+                    <!-- No-results notice -->
+                    @if (hubPanelOpen() && !airportSearching() && airportOptions().length === 0 &&
+                    hubSearchText().length > 1 && !selectedHubIata()) {
+                    <div class="aff-hub-no-results" role="status" aria-live="polite">
+                        No operational airports found for "{{ hubSearchText() }}"
+                    </div>
+                    }
+
+                </div>
+            </div>
+        </section>
+
+        <div class="aff-divider" aria-hidden="true"></div>
+
+        <!-- ══ Form Actions Footer ═══════════════════════════════════ -->
+        <footer class="aff-actions">
+
+            <!-- Save error -->
+            @if (formError()) {
+            <div class="aff-save-error" role="alert">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9
+                     3.75h.008v.008H12v-.008z" />
+                </svg>
+                <span>{{ formError() }}</span>
+            </div>
+            }
+
+            <button type="button" class="aff-btn aff-btn--cancel" (click)="cancel()" [disabled]="isSubmitting()">
+                Cancel
+            </button>
+
+            <button type="submit" class="aff-btn aff-btn--save" [disabled]="isSubmitting()">
+                @if (isSubmitting()) {
+                <svg class="aff-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992
+                     m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031
+                     9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                {{ isEditMode() ? 'Updating…' : 'Registering…' }}
+                } @else {
+                <svg class="aff-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                {{ isEditMode() ? 'Save Configuration' : 'Register Partner' }}
+                }
+            </button>
+
+        </footer>
+
+    </div>
+</form>

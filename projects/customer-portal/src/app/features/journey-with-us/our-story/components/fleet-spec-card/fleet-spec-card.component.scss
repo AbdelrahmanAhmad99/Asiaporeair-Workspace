@@ -1,0 +1,183 @@
+    :host {
+        display: block;
+    }
+
+    @keyframes cardIn {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fsc {
+        background: #FFFFFF;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(226, 199, 128, .22);
+        box-shadow: 0 4px 22px rgba(5, 25, 55, .07);
+        transition: transform .34s ease, box-shadow .34s ease;
+        animation: cardIn 560ms cubic-bezier(.4, 0, .2, 1) both;
+        animation-delay: var(--delay, 0ms);
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 44px rgba(5, 25, 55, .14);
+
+            .fsc__img {
+                transform: scale(1.04);
+            }
+
+            .fsc__divider {
+                width: 64px;
+            }
+        }
+    }
+
+    .fsc__img-wrap {
+        position: relative;
+        aspect-ratio: 16/9;
+        overflow: hidden;
+        background: #051937;
+    }
+
+    .fsc__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform .42s ease;
+    }
+
+    .fsc__img-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(5, 25, 55, .6) 0%, transparent 55%);
+    }
+
+    .fsc__badge {
+        position: absolute;
+        top: 13px;
+        left: 14px;
+        padding: 3px 11px;
+        border-radius: 4px;
+        background: #B68F24;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: #051937;
+    }
+
+    .fsc__since {
+        position: absolute;
+        bottom: 12px;
+        right: 14px;
+        font-size: 10px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, .6);
+        letter-spacing: .05em;
+    }
+
+    .fsc__body {
+        padding: 20px 22px 24px;
+    }
+
+    .fsc__nickname {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: #B68F24;
+        margin: 0 0 4px;
+    }
+
+    .fsc__model {
+        font-family: 'Montserrat', 'Inter', sans-serif;
+        font-size: clamp(15px, 2vw, 18px);
+        font-weight: 800;
+        letter-spacing: -.025em;
+        color: #101056;
+        margin: 0 0 12px;
+        line-height: 1.2;
+    }
+
+    .fsc__divider {
+        height: 2px;
+        width: 36px;
+        background: linear-gradient(90deg, #B68F24, #E2C780);
+        border-radius: 1px;
+        margin-bottom: 12px;
+        transition: width .36s ease;
+    }
+
+    .fsc__highlight {
+        font-size: 12px;
+        color: #718096;
+        line-height: 1.65;
+        margin: 0 0 18px;
+    }
+
+    .fsc__specs {
+        display: flex;
+        gap: 18px;
+        padding: 14px 0;
+        border-top: 1px solid rgba(226, 199, 128, .15);
+        border-bottom: 1px solid rgba(226, 199, 128, .15);
+        margin-bottom: 14px;
+    }
+
+    .fsc__spec {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .fsc__spec-val {
+        font-family: 'Montserrat', 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: -.01em;
+        color: #101056;
+    }
+
+    .fsc__spec-lbl {
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: #718096;
+    }
+
+    .fsc__cabins {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .fsc__cabin-pill {
+        padding: 2px 9px;
+        border-radius: 20px;
+        background: rgba(5, 25, 55, .05);
+        border: 1px solid rgba(5, 25, 55, .1);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: .04em;
+        color: #101056;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .fsc {
+            animation: none;
+            transition: none;
+        }
+
+        .fsc__img,
+        .fsc__divider {
+            transition: none;
+        }
+    }

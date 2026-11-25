@@ -1,0 +1,671 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Glassmorphism backdrop
+ // ============================================================================
+ .fcd-backdrop {
+   position: fixed;
+   inset: 0;
+   z-index: 40;
+   background: rgba($midnight, 0.65);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+   animation: fcd-fade-in 200ms $ease both;
+ }
+
+ // ============================================================================
+ // 2. Panel (squircle 12px)
+ // ============================================================================
+ .fcd-panel {
+   position: fixed;
+   z-index: 50;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: min(560px, calc(100vw - 2rem));
+   max-height: calc(100vh - 4rem);
+   overflow-y: auto;
+
+   border-radius: 12px;
+   background: var(--aoms-bg-card, #ffffff);
+   border: 1px solid rgba($ruby, 0.25);
+   box-shadow:
+     0 24px 72px rgba($midnight, 0.32),
+     0 0 0 1px rgba($ruby, 0.08);
+   overflow: hidden;
+   animation: fcd-panel-enter 290ms $luxury both;
+
+   &::-webkit-scrollbar {
+     width: 4px;
+   }
+
+   &::-webkit-scrollbar-thumb {
+     background: rgba($champagne, 0.3);
+     border-radius: 2px;
+   }
+
+   // ── Ruby accent bar ────────────────────────────────────────────────────
+   &__ruby-bar {
+     height: 4px;
+     background: linear-gradient(90deg, $ruby-deep 0%, $ruby 60%, lighten($ruby, 8%) 100%);
+   }
+
+   &__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 1.375rem 1.5rem 0.875rem;
+     border-bottom: 1px solid rgba($champagne, 0.12);
+     background: linear-gradient(135deg, rgba($ruby, 0.04) 0%, transparent 70%);
+   }
+
+   &__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.75rem;
+     height: 2.75rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.25);
+
+     svg {
+       width: 1.25rem;
+       height: 1.25rem;
+       color: $ruby;
+     }
+   }
+
+   &__header-text {
+     flex: 1;
+   }
+
+   &__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 16px;
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.25rem;
+   }
+
+   &__subtitle {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     margin: 0;
+   }
+
+   &__close {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 1.875rem;
+     height: 1.875rem;
+     border: 1px solid rgba($champagne, 0.2);
+     border-radius: 4px;
+     background: transparent;
+     cursor: pointer;
+     color: var(--aoms-text-muted);
+     transition: all 150ms $ease;
+
+     svg {
+       width: 0.75rem;
+       height: 0.75rem;
+     }
+
+     &:hover:not(:disabled) {
+       border-color: $champagne;
+       color: $ruby;
+     }
+
+     &:disabled {
+       opacity: 0.35;
+       cursor: not-allowed;
+     }
+
+     &:focus-visible {
+       outline: 2px solid $champagne;
+       outline-offset: 2px;
+     }
+   }
+ }
+
+ // ============================================================================
+ // 3. Flight identity strip
+ // ============================================================================
+ .fcd-flight-strip {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+   margin: 1rem 1.5rem 0;
+   padding: 1rem 1.125rem;
+   border-radius: 10px;
+   background: rgba($midnight, 0.05);
+   border: 1px solid rgba($champagne, 0.18);
+   flex-wrap: wrap;
+
+   &__left {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+   }
+
+   &__corridor {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex: 1;
+     justify-content: center;
+   }
+
+   &__times {
+     display: flex;
+     align-items: center;
+     gap: 0.4rem;
+     flex-shrink: 0;
+   }
+ }
+
+ .fcd-flight-no {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 1.5rem;
+   font-weight: 900;
+   letter-spacing: 0.08em;
+   text-transform: uppercase;
+   color: $ruby;
+ }
+
+ .fcd-tail {
+   display: inline-flex;
+   align-items: center;
+   padding: 0.2rem 0.55rem;
+   border-radius: 4px;
+   background: rgba($champagne, 0.1);
+   border: 1px solid rgba($champagne, 0.22);
+   font-family: 'Courier New', monospace;
+   font-size: 11px;
+   font-weight: 700;
+   letter-spacing: 0.06em;
+   color: $champagne;
+ }
+
+ .fcd-iata {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 1.25rem;
+   font-weight: 800;
+   letter-spacing: 0.1em;
+   text-transform: uppercase;
+
+   &--origin {
+     color: $gold;
+   }
+
+   &--dest {
+     color: $champagne;
+   }
+ }
+
+ .fcd-arrow {
+   width: 1.25rem;
+   height: 1.25rem;
+   color: rgba($champagne, 0.35);
+   flex-shrink: 0;
+ }
+
+ .fcd-time {
+   font-family: 'Courier New', monospace;
+   font-size: 14px;
+   font-weight: 700;
+   color: var(--aoms-text-secondary);
+   letter-spacing: 0.05em;
+ }
+
+ .fcd-time-sep {
+   color: var(--aoms-text-muted);
+   font-size: 11px;
+ }
+
+ .fcd-time-label {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 9px;
+   font-weight: 700;
+   letter-spacing: 0.1em;
+   text-transform: uppercase;
+   color: var(--aoms-text-muted);
+ }
+
+ // ============================================================================
+ // 4. API error (previous failed attempt)
+ // ============================================================================
+ .fcd-api-error {
+   display: flex;
+   align-items: flex-start;
+   gap: 0.625rem;
+   margin: 0.875rem 1.5rem 0;
+   padding: 0.75rem 1rem;
+   border-radius: 6px;
+   background: rgba($ruby, 0.08);
+   border: 1px solid rgba($ruby, 0.25);
+   border-left: 3px solid $ruby;
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   color: $ruby;
+   line-height: 1.5;
+   animation: fcd-error-in 180ms $luxury both;
+
+   svg {
+     width: 0.9375rem;
+     height: 0.9375rem;
+     flex-shrink: 0;
+     margin-top: 0.1rem;
+   }
+ }
+
+ // ============================================================================
+ // 5. Form
+ // ============================================================================
+ .fcd-form {
+   padding: 1rem 1.5rem 0;
+   display: flex;
+   flex-direction: column;
+   gap: 1rem;
+ }
+
+ // ============================================================================
+ // 6. Field wrapper
+ // ============================================================================
+ .fcd-field {
+   display: flex;
+   flex-direction: column;
+   gap: 0.35rem;
+
+   &--error {
+     .fcd-select {
+       border-color: $ruby !important;
+     }
+
+     .fcd-textarea {
+       border-color: $ruby !important;
+     }
+
+     .fcd-label {
+       color: $ruby !important;
+     }
+   }
+
+   &__error {
+     display: block;
+     padding: 0.25rem 0.625rem;
+     border-radius: 4px;
+     background: rgba($ruby, 0.05);
+     border-left: 2px solid $ruby;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 500;
+     color: $ruby;
+     animation: fcd-error-in 180ms $luxury both;
+   }
+
+   &__meta {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+   }
+ }
+
+ .fcd-label {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 11px;
+   font-weight: 700;
+   letter-spacing: 0.07em;
+   text-transform: uppercase;
+   color: var(--aoms-text-secondary);
+   display: flex;
+   align-items: center;
+   gap: 0.25rem;
+
+   &__req {
+     color: $ruby;
+   }
+
+   &__optional {
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     text-transform: none;
+     letter-spacing: 0;
+     font-size: 10px;
+   }
+ }
+
+ // ============================================================================
+ // 7. Select
+ // ============================================================================
+ .fcd-select-wrap {
+   position: relative;
+ }
+
+ .fcd-select {
+   appearance: none;
+   -webkit-appearance: none;
+   outline: none;
+   width: 100%;
+   height: 3rem;
+   padding: 0 2.5rem 0 1rem;
+
+   font-family: 'Inter', 'Montserrat', sans-serif;
+   font-size: 13px;
+   font-weight: 500;
+   color: var(--aoms-text-primary, $charcoal);
+   cursor: pointer;
+
+   background: $off-white;
+   border: 1px solid rgba($charcoal, 0.15);
+   border-radius: 8px;
+   transition:
+     border-color 180ms $ease,
+     background 180ms $ease,
+     box-shadow 180ms $ease;
+
+   &:focus {
+     border-color: $champagne;
+     background: #ffffff;
+     box-shadow: 0 0 0 3px rgba($champagne, 0.14);
+   }
+
+   option {
+     background: #ffffff;
+     color: $charcoal;
+   }
+ }
+
+ .fcd-select-wrap__chevron {
+   position: absolute;
+   right: 0.875rem;
+   top: 50%;
+   transform: translateY(-50%);
+   width: 0.875rem;
+   height: 0.875rem;
+   pointer-events: none;
+   color: var(--aoms-text-muted);
+
+   svg {
+     width: 100%;
+     height: 100%;
+   }
+ }
+
+ // ============================================================================
+ // 8. Textarea
+ // ============================================================================
+ .fcd-textarea {
+   appearance: none;
+   outline: none;
+   resize: vertical;
+   width: 100%;
+   padding: 0.75rem 1rem;
+
+   font-family: 'Inter', 'Montserrat', sans-serif;
+   font-size: 13px;
+   font-weight: 400;
+   line-height: 1.6;
+   color: var(--aoms-text-primary, $charcoal);
+
+   background: $off-white;
+   border: 1px solid rgba($charcoal, 0.15);
+   border-radius: 8px;
+   transition:
+     border-color 180ms $ease,
+     background 180ms $ease,
+     box-shadow 180ms $ease;
+
+   &::placeholder {
+     color: var(--aoms-text-muted);
+     font-size: 12px;
+   }
+
+   &:focus {
+     border-color: $champagne;
+     background: #ffffff;
+     box-shadow: 0 0 0 3px rgba($champagne, 0.14);
+   }
+ }
+
+ .fcd-char-count {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 10px;
+   color: var(--aoms-text-muted);
+   margin-left: auto;
+   transition: color 180ms $ease;
+
+   &--near {
+     color: $amber;
+     font-weight: 700;
+   }
+ }
+
+ // ============================================================================
+ // 9. Warning notice
+ // ============================================================================
+ .fcd-warning {
+   display: flex;
+   align-items: flex-start;
+   gap: 0.625rem;
+   padding: 0.875rem 1rem;
+   border-radius: 6px;
+   background: rgba($amber, 0.06);
+   border-left: 3px solid rgba($amber, 0.5);
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   line-height: 1.65;
+   color: var(--aoms-text-secondary);
+
+   svg {
+     width: 1rem;
+     height: 1rem;
+     flex-shrink: 0;
+     margin-top: 0.1rem;
+     color: $amber;
+   }
+ }
+
+ // ============================================================================
+ // 10. Action buttons — the critical CTA
+ // ============================================================================
+ .fcd-actions {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   gap: 0.625rem;
+   padding: 1rem 0 1.375rem;
+   border-top: 1px solid rgba($champagne, 0.12);
+ }
+
+ .fcd-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.4rem;
+   height: 2.5rem;
+   padding: 0 1.25rem;
+   border-radius: 4px;
+   font-family: 'Montserrat', sans-serif;
+   font-size: 13px;
+   font-weight: 700;
+   cursor: pointer;
+   white-space: nowrap;
+   transition: all 150ms $ease;
+
+   &:disabled {
+     opacity: 0.45;
+     cursor: not-allowed;
+     pointer-events: none;
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &__icon,
+   &__spin {
+     width: 0.9375rem;
+     height: 0.9375rem;
+     flex-shrink: 0;
+   }
+
+   &__spin {
+     animation: fcd-spin 1s linear infinite;
+   }
+
+   // "Stand Down" — neutral ghost
+   &--dismiss {
+     background: transparent;
+     border: 1px solid rgba($charcoal, 0.2);
+     color: var(--aoms-text-secondary);
+
+     &:hover:not(:disabled) {
+       border-color: $champagne;
+       color: $gold;
+       background: rgba($champagne, 0.06);
+     }
+   }
+
+   // "Confirm Cancellation" — Ruby Red with Champagne Gold border per spec
+   &--confirm {
+     background: $ruby;
+     border: 2px solid $champagne; // Gold border on Ruby background per spec
+     color: #ffffff;
+     letter-spacing: 0.02em;
+     box-shadow: 0 2px 12px rgba($ruby, 0.25);
+
+     &:hover:not(:disabled) {
+       background: $ruby-deep;
+       border-color: $gold;
+       box-shadow: 0 4px 18px rgba($ruby, 0.4);
+     }
+   }
+ }
+
+ // ============================================================================
+ // 11. Keyframes
+ // ============================================================================
+ @keyframes fcd-fade-in {
+   from {
+     opacity: 0;
+   }
+
+   to {
+     opacity: 1;
+   }
+ }
+
+ @keyframes fcd-panel-enter {
+   from {
+     opacity: 0;
+     transform: translate(-50%, calc(-50% + 18px)) scale(0.98);
+   }
+
+   to {
+     opacity: 1;
+     transform: translate(-50%, -50%) scale(1);
+   }
+ }
+
+ @keyframes fcd-error-in {
+   from {
+     opacity: 0;
+     transform: translateX(-4px);
+   }
+
+   to {
+     opacity: 1;
+     transform: translateX(0);
+   }
+ }
+
+ @keyframes fcd-spin {
+   from {
+     transform: rotate(0deg);
+   }
+
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ // ============================================================================
+ // 12. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+   .fcd-panel {
+     background: #0d1f35;
+     border-color: rgba($ruby, 0.35);
+     box-shadow: 0 28px 72px rgba(0, 0, 0, 0.55);
+   }
+
+   .fcd-panel__title {
+     color: rgba(255, 255, 255, 0.9);
+   }
+
+   .fcd-panel__subtitle {
+     color: rgba(255, 255, 255, 0.38);
+   }
+
+   .fcd-flight-strip {
+     background: rgba(255, 255, 255, 0.04);
+     border-color: rgba($champagne, 0.1);
+   }
+
+   .fcd-select,
+   .fcd-textarea {
+     background: rgba($midnight, 0.55);
+     border-color: rgba(255, 255, 255, 0.1);
+     color: rgba(255, 255, 255, 0.88);
+
+     &:focus {
+       background: rgba($midnight, 0.8);
+     }
+
+     option {
+       background: #0d1f35;
+       color: rgba(255, 255, 255, 0.88);
+     }
+
+     &::placeholder {
+       color: rgba(255, 255, 255, 0.3);
+     }
+   }
+
+   .fcd-warning {
+     background: rgba($amber, 0.1);
+     color: rgba(255, 255, 255, 0.6);
+   }
+
+   .fcd-actions {
+     border-top-color: rgba($champagne, 0.08);
+   }
+
+   .fcd-btn--dismiss {
+     border-color: rgba(255, 255, 255, 0.15);
+     color: rgba(255, 255, 255, 0.6);
+
+     &:hover:not(:disabled) {
+       border-color: $champagne;
+       color: $champagne;
+     }
+   }
+ }

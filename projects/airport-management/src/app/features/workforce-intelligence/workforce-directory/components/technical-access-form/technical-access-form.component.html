@@ -1,0 +1,249 @@
+<!-- technical-access-form.component.html -->
+
+<div class="taf">
+
+    <!-- ══ Personal Identity ══════════════════════════════════════ -->
+    <section class="taf__section">
+        <h3 class="taf__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="taf__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            </svg>
+            Personal Identity
+        </h3>
+
+        <div class="taf__grid taf__grid--2">
+
+            <div class="taf__fl" [class.taf__fl--error]="touched() && !firstName()">
+                <input class="taf__input" id="taf-fn" type="text" placeholder=" " autocomplete="given-name"
+                    [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" />
+                <label class="taf__label" for="taf-fn">First Name <span class="taf__req">*</span></label>
+                @if (touched() && !firstName()) {
+                <span class="taf__field-err" role="alert">Required</span>
+                }
+            </div>
+
+            <div class="taf__fl" [class.taf__fl--error]="touched() && !lastName()">
+                <input class="taf__input" id="taf-ln" type="text" placeholder=" " autocomplete="family-name"
+                    [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" />
+                <label class="taf__label" for="taf-ln">Last Name <span class="taf__req">*</span></label>
+                @if (touched() && !lastName()) {
+                <span class="taf__field-err" role="alert">Required</span>
+                }
+            </div>
+
+            <div class="taf__fl">
+                <input class="taf__input" id="taf-ph" type="tel" placeholder=" " autocomplete="tel"
+                    [ngModel]="phoneNumber()" (ngModelChange)="phoneNumber.set($event)" />
+                <label class="taf__label" for="taf-ph">Phone Number</label>
+            </div>
+
+            <div class="taf__fl">
+                <input class="taf__input" id="taf-dob" type="date" placeholder=" " [ngModel]="dateOfBirth()"
+                    (ngModelChange)="dateOfBirth.set($event)" />
+                <label class="taf__label taf__label--date" for="taf-dob">Date of Birth</label>
+            </div>
+
+            <div class="taf__fl taf__fl--span2">
+                <input class="taf__input" id="taf-addr" type="text" placeholder=" " autocomplete="street-address"
+                    [ngModel]="address()" (ngModelChange)="address.set($event)" />
+                <label class="taf__label" for="taf-addr">Address</label>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ Employment Record ══════════════════════════════════════ -->
+    <section class="taf__section">
+        <h3 class="taf__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="taf__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006-3.75 4.5M4.5 11.131a48.114 48.114 0 0 0-3.413-.387C.04 10.706-.001 10.36-.001 10.003V6.489c0-1.081.769-2.014 1.837-2.174A48.09 48.09 0 0 1 12 4.5c2.291 0 4.545.16 6.797.459" />
+            </svg>
+            Employment Record
+        </h3>
+
+        <div class="taf__grid taf__grid--2">
+
+            <div class="taf__fl">
+                <input class="taf__input" id="taf-hd" type="date" placeholder=" " [ngModel]="dateOfHire()"
+                    (ngModelChange)="dateOfHire.set($event)" />
+                <label class="taf__label taf__label--date" for="taf-hd">Date of Hire</label>
+            </div>
+
+            <div class="taf__fl">
+                <input class="taf__input" id="taf-sal" type="number" min="0" placeholder=" " [ngModel]="salary()"
+                    (ngModelChange)="salary.set($event)" />
+                <label class="taf__label" for="taf-sal">Annual Salary (SGD)</label>
+            </div>
+
+            <!-- Admin only -->
+            @if (isAdmin()) {
+            <div class="taf__fl">
+                <input class="taf__input" id="taf-dept" type="text" placeholder=" " [ngModel]="department()"
+                    (ngModelChange)="department.set($event)" />
+                <label class="taf__label" for="taf-dept">Department</label>
+            </div>
+            }
+
+            <!-- Supervisor only -->
+            @if (isSupervisor()) {
+            <div class="taf__fl">
+                <input class="taf__input" id="taf-ma" type="text" placeholder=" " [ngModel]="managedArea()"
+                    (ngModelChange)="managedArea.set($event)" />
+                <label class="taf__label" for="taf-ma">Managed Area</label>
+            </div>
+            }
+
+        </div>
+    </section>
+
+    <!-- ══ Crew Operations (Pilot + Attendant) ════════════════════ -->
+    @if (needsAirport()) {
+    <section class="taf__section">
+        <h3 class="taf__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="taf__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+            Crew Base Airport
+        </h3>
+
+        <div class="taf__grid taf__grid--1">
+            <div class="taf__fl taf__fl--dropdown"
+                [class.taf__fl--error]="touched() && needsAirport() && !crewBaseAirportId()">
+
+                <div class="taf__airport">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="taf__airport__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                    </svg>
+                    <input class="taf__airport__input" id="taf-base" type="text"
+                        [placeholder]="isLoadingDeps() ? 'Loading airports…' : 'Search IATA, name or city…'"
+                        [disabled]="isLoadingDeps()" [ngModel]="airportSearch()"
+                        (ngModelChange)="airportSearch.set($event)" (focus)="onAirportFocus()" (blur)="onAirportBlur()"
+                        autocomplete="off" aria-label="Search crew base airport"
+                        [attr.aria-expanded]="showAirportDrop()" />
+                    @if (crewBaseAirportId()) {
+                    <span class="taf__airport__tag">{{ crewBaseAirportId() }}</span>
+                    }
+                </div>
+
+                @if (showAirportDrop()) {
+                <div class="taf__ap-dropdown" role="listbox">
+                    @for (ap of filteredAirports(); track ap.iataCode) {
+                    <button class="taf__ap-opt" type="button" role="option" (click)="onSelectAirport(ap.iataCode)">
+                        <span class="taf__ap-opt__iata">{{ ap.iataCode }}</span>
+                        <span class="taf__ap-opt__name">{{ ap.name }}</span>
+                        <span class="taf__ap-opt__city">{{ ap.city }}, {{ ap.countryIsoCode }}</span>
+                    </button>
+                    }
+                    @if (filteredAirports().length === 0) {
+                    <p class="taf__ap-dropdown__empty">No airports match "{{ airportSearch() }}"</p>
+                    }
+                </div>
+                }
+
+                @if (touched() && needsAirport() && !crewBaseAirportId()) {
+                <span class="taf__field-err" role="alert">Crew base airport is required for flight crew.</span>
+                }
+            </div>
+        </div>
+    </section>
+    }
+
+    <!-- ══ Pilot Certifications ═══════════════════════════════════ -->
+    @if (isPilot()) {
+    <section class="taf__section">
+        <h3 class="taf__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="taf__section__icon taf__section__icon--pilot" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            Pilot Certifications
+        </h3>
+
+        <div class="taf__grid taf__grid--2">
+
+            <div class="taf__fl" [class.taf__fl--error]="touched() && isPilot() && !licenseNumber()">
+                <input class="taf__input" id="taf-lic" type="text" placeholder=" " [ngModel]="licenseNumber()"
+                    (ngModelChange)="licenseNumber.set($event)" />
+                <label class="taf__label" for="taf-lic">License Number <span class="taf__req">*</span></label>
+                @if (touched() && isPilot() && !licenseNumber()) {
+                <span class="taf__field-err" role="alert">License number is required for pilots.</span>
+                }
+            </div>
+
+            <div class="taf__fl">
+                <input class="taf__input" id="taf-fh" type="number" min="0" placeholder=" "
+                    [ngModel]="totalFlightHours()" (ngModelChange)="totalFlightHours.set($event)" />
+                <label class="taf__label" for="taf-fh">Total Flight Hours</label>
+            </div>
+
+            <div class="taf__fl">
+                <input class="taf__input" id="taf-sim" type="date" placeholder=" " [ngModel]="lastSimCheckDate()"
+                    (ngModelChange)="lastSimCheckDate.set($event)" />
+                <label class="taf__label taf__label--date" for="taf-sim">Last Sim Check Date</label>
+            </div>
+
+        </div>
+    </section>
+    }
+
+    <!-- ══ Profile Picture ════════════════════════════════════════ -->
+    <section class="taf__section">
+        <h3 class="taf__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="taf__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0z" />
+            </svg>
+            Profile Picture
+            <span class="taf__section__opt">(optional)</span>
+        </h3>
+
+        <label class="taf__file" [class.taf__file--active]="!!profilePicture()">
+            <input type="file" accept="image/*" class="taf__file__input" (change)="onFileChange($event)"
+                aria-label="Upload profile picture" />
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="taf__file__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+            </svg>
+            <span class="taf__file__label">
+                @if (profilePicture()) { {{ profilePicture()!.name }} }
+                @else { Click to upload or drag and drop — PNG, JPG, WEBP }
+            </span>
+        </label>
+    </section>
+
+    <!-- ══ Actions ════════════════════════════════════════════════ -->
+    <div class="taf__actions">
+        <button class="taf__cancel" type="button" (click)="cancelled.emit()">Cancel</button>
+        <button class="taf__submit" type="button" [disabled]="(touched() && !isValid()) || isSubmitting()"
+            [class.taf__submit--pulsing]="isSubmitting()" (click)="onSubmit()">
+            @if (!isSubmitting()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="taf__submit__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+            </svg>
+            Commit Access Update
+            }
+            @if (isSubmitting()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="taf__submit__icon taf__submit__icon--spin" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Synchronising…
+            }
+        </button>
+    </div>
+
+</div>

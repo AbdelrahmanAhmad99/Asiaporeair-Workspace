@@ -1,0 +1,45 @@
+<article class="fsc" [style.--delay]="animDelay + 'ms'">
+
+    <!-- Image -->
+    <div class="fsc__img-wrap">
+        <img class="fsc__img" [src]="fleet.imagePath" [alt]="fleet.model + ' aircraft'" loading="lazy" />
+        <div class="fsc__img-overlay" aria-hidden="true"></div>
+        @if (fleet.badge) {
+        <span class="fsc__badge">{{ fleet.badge }}</span>
+        }
+        <!-- Year entered service tag -->
+        <span class="fsc__since">Since {{ fleet.entered }}</span>
+    </div>
+
+    <!-- Body -->
+    <div class="fsc__body">
+        <p class="fsc__nickname">{{ fleet.nickname }}</p>
+        <h3 class="fsc__model">{{ fleet.model }}</h3>
+        <div class="fsc__divider" aria-hidden="true"></div>
+        <p class="fsc__highlight">{{ fleet.highlight }}</p>
+
+        <!-- Spec grid -->
+        <div class="fsc__specs" aria-label="Aircraft specifications">
+            <div class="fsc__spec">
+                <span class="fsc__spec-val">{{ fleet.range }}</span>
+                <span class="fsc__spec-lbl">Range</span>
+            </div>
+            <div class="fsc__spec">
+                <span class="fsc__spec-val">{{ fleet.maxPassengers }}</span>
+                <span class="fsc__spec-lbl">Seats</span>
+            </div>
+            <div class="fsc__spec">
+                <span class="fsc__spec-val">{{ fleet.cabins.length }}</span>
+                <span class="fsc__spec-lbl">Cabin Classes</span>
+            </div>
+        </div>
+
+        <!-- Cabin class pills -->
+        <div class="fsc__cabins" aria-label="Available cabin classes">
+            @for (cabin of fleet.cabins; track cabin) {
+            <span class="fsc__cabin-pill">{{ cabin }}</span>
+            }
+        </div>
+    </div>
+
+</article>

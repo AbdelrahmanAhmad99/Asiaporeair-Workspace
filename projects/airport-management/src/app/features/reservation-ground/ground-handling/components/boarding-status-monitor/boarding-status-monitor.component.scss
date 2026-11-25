@@ -1,0 +1,195 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $t-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+ $t-fast: 150ms ease;
+
+ // ── 1. Bar Shell ──────────────────────────────────────────────────────────
+ .bsm-bar {
+     display: flex;
+     align-items: center;
+     gap: 1.5rem;
+     padding: 1rem 1.5rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 4px 20px rgba($midnight, 0.2);
+     flex-wrap: wrap;
+     transition: border-color $t-fast;
+
+     &--complete {
+         border-color: rgba($emerald, 0.35);
+         box-shadow: 0 4px 20px rgba($midnight, 0.2), 0 0 0 1px rgba($emerald, 0.06) inset;
+     }
+ }
+
+ // ── 2. Circular Ring ──────────────────────────────────────────────────────
+ .bsm-ring-wrap {
+     position: relative;
+     width: 80px;
+     height: 80px;
+     flex-shrink: 0;
+ }
+
+ .bsm-ring {
+     width: 80px;
+     height: 80px;
+
+     &__track {
+         stroke: rgba($champagne, 0.1);
+     }
+
+     &__fill {
+         stroke: $gold;
+         transition: stroke-dashoffset $t-base, stroke $t-fast;
+
+         &--complete {
+             stroke: lighten($emerald, 30%);
+             filter: drop-shadow(0 0 4px rgba($emerald, 0.5));
+         }
+     }
+ }
+
+ .bsm-ring__center {
+     position: absolute;
+     inset: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .bsm-ring__pct {
+     font-size: 1rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     color: $champagne;
+     transition: color $t-fast;
+
+     &--complete {
+         color: lighten($emerald, 40%);
+     }
+ }
+
+ // ── 3. Stat Widgets ───────────────────────────────────────────────────────
+ .bsm-stats {
+     display: flex;
+     align-items: center;
+     gap: 1.25rem;
+     flex: 1;
+ }
+
+ .bsm-divider {
+     width: 1px;
+     height: 36px;
+     background: rgba($champagne, 0.1);
+     flex-shrink: 0;
+ }
+
+ .bsm-stat {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+     min-width: 60px;
+
+     &__value {
+         font-size: 1.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.03em;
+         line-height: 1;
+         color: $champagne;
+         font-variant-numeric: tabular-nums;
+         transition: color $t-fast;
+     }
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: rgba($champagne, 0.4);
+     }
+
+     // Boarded — emerald accent
+     &--boarded &__value {
+         color: lighten($emerald, 38%);
+     }
+
+     // Remaining — gold while positive
+     &--remaining &__value {
+         color: $gold;
+     }
+
+     // Zero remaining — emerald (complete)
+     &--remaining#{&}--zero &__value {
+         color: lighten($emerald, 38%);
+     }
+ }
+
+ // ── 4. Linear Progress Bar ────────────────────────────────────────────────
+ .bsm-linear-wrap {
+     width: 100%;
+     flex-shrink: 0;
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+
+     @media (min-width: 768px) {
+         width: auto;
+         flex: 2;
+     }
+ }
+
+ .bsm-linear-track {
+     height: 6px;
+     border-radius: 100px;
+     background: rgba($champagne, 0.08);
+     overflow: hidden;
+ }
+
+ .bsm-linear-fill {
+     height: 100%;
+     border-radius: 100px;
+     background: linear-gradient(to right, rgba($gold, 0.7), $gold, $champagne);
+     box-shadow: 0 0 10px rgba($gold, 0.45);
+     transition: width $t-base;
+     position: relative;
+     overflow: hidden;
+
+     &--complete {
+         background: linear-gradient(to right, rgba($emerald, 0.6), lighten($emerald, 20%), lighten($emerald, 35%));
+         box-shadow: 0 0 12px rgba($emerald, 0.5);
+     }
+
+     &__shimmer {
+         position: absolute;
+         top: 0;
+         left: -60%;
+         width: 60%;
+         height: 100%;
+         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+         animation: bsm-shimmer-sweep 1.8s ease-in-out infinite;
+     }
+ }
+
+ .bsm-linear-label {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: rgba($champagne, 0.35);
+ }
+
+ @keyframes bsm-shimmer-sweep {
+     0% {
+         left: -60%;
+     }
+
+     100% {
+         left: 110%;
+     }
+ }

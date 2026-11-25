@@ -1,0 +1,174 @@
+   :host {
+       display: block;
+   }
+
+   $royal-gold : #B68F24;
+   $champagne : #E2C780;
+   $midnight : #051937;
+   $charcoal : #101056;
+   $muted : #718096;
+   $white : #FFFFFF;
+   $font : 'Montserrat',
+   'Inter',
+   sans-serif;
+   $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+   .pcb {
+       background: linear-gradient(90deg, rgba($midnight, 0.97) 0%, rgba($midnight, 0.9) 100%);
+       border-top: 1px solid rgba($royal-gold, 0.15);
+       border-bottom: 1px solid rgba($royal-gold, 0.15);
+   }
+
+   .pcb__inner {
+       max-width: 1240px;
+       margin: 0 auto;
+       padding: 18px 40px;
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       gap: 24px;
+       flex-wrap: wrap;
+
+       @media (max-width: 768px) {
+           padding: 18px 20px;
+           flex-direction: column;
+           align-items: flex-start;
+       }
+   }
+
+   .pcb__text {
+       display: flex;
+       align-items: center;
+       gap: 14px;
+   }
+
+   .pcb__icon {
+       stroke: $royal-gold;
+       flex-shrink: 0;
+   }
+
+   .pcb__label {
+       font-family: $font;
+       font-size: 13px;
+       font-weight: 700;
+       color: $white;
+       margin: 0;
+   }
+
+   .pcb__sublabel {
+       font-size: 11px;
+       color: rgba($white, 0.42);
+       margin: 2px 0 0;
+   }
+
+   .pcb__form {
+       display: flex;
+       flex-direction: column;
+       gap: 6px;
+       flex-shrink: 0;
+   }
+
+   .pcb__field-wrap {
+       display: flex;
+       align-items: stretch;
+       height: 38px;
+   }
+
+   .pcb__input {
+       padding: 0 14px;
+       border-radius: 4px 0 0 4px;
+       border: 1px solid rgba($royal-gold, 0.3);
+       border-right: none;
+       background: rgba($white, 0.06);
+       font-family: $font;
+       font-size: 13px;
+       color: $white;
+       outline: none;
+       min-width: 190px;
+
+       &::placeholder {
+           color: rgba($white, 0.25);
+       }
+
+       &:focus {
+           border-color: rgba($royal-gold, 0.65);
+           background: rgba($white, 0.1);
+       }
+   }
+
+   .pcb__btn {
+       padding: 0 20px;
+       border-radius: 0 4px 4px 0;
+       border: 1px solid $royal-gold;
+       background: $royal-gold;
+       font-family: $font;
+       font-size: 12px;
+       font-weight: 700;
+       letter-spacing: 0.07em;
+       text-transform: uppercase;
+       color: $midnight;
+       cursor: pointer;
+       display: flex;
+       align-items: center;
+       gap: 6px;
+       transition: background 220ms $ease;
+
+       &:hover:not(:disabled) {
+           background: darken(#B68F24, 8%);
+       }
+
+       &:disabled {
+           opacity: 0.5;
+           cursor: not-allowed;
+       }
+
+       &:focus-visible {
+           outline: 2px solid $champagne;
+           outline-offset: 2px;
+       }
+   }
+
+   .pcb__spinner {
+       display: inline-block;
+       width: 14px;
+       height: 14px;
+       border: 2px solid rgba($midnight, 0.3);
+       border-top-color: $midnight;
+       border-radius: 50%;
+       animation: pcbSpin 600ms linear infinite;
+   }
+
+   .pcb__feedback {
+       font-size: 11px;
+       font-weight: 500;
+       margin: 0;
+
+       &--success {
+           color: #4ade80;
+       }
+
+       &--error {
+           color: #f87171;
+       }
+   }
+
+   .sr-only {
+       position: absolute;
+       width: 1px;
+       height: 1px;
+       overflow: hidden;
+       clip: rect(0 0 0 0);
+       white-space: nowrap;
+   }
+
+   @keyframes pcbSpin {
+       to {
+           transform: rotate(360deg);
+       }
+   }
+
+   @media (prefers-reduced-motion: reduce) {
+       .pcb__spinner {
+           animation: none;
+       }
+   }

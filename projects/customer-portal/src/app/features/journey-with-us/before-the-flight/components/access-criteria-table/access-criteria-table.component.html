@@ -1,0 +1,58 @@
+   <div class="act" role="region" aria-label="Lounge access criteria">
+
+      <div class="act__table-wrap">
+        <table class="act__table" aria-label="Lounge access by cabin class and tier">
+          <thead class="act__thead">
+            <tr>
+              <th class="act__th" scope="col">Cabin / Tier</th>
+              <th class="act__th" scope="col">Lounge Access</th>
+              <th class="act__th" scope="col">Key Benefits</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tier of tiers; track tier.cabinOrTier) {
+              <tr class="act__row" [class.act__row--gold]="tier.badge === 'gold'" [class.act__row--silver]="tier.badge === 'silver'">
+
+                <!-- Cabin / tier name -->
+                <td class="act__td act__td--name">
+                  <div class="act__name-cell">
+                    @if (tier.badge) {
+                      <span class="act__badge" [class.act__badge--gold]="tier.badge === 'gold'" [class.act__badge--silver]="tier.badge === 'silver'">
+                        {{ tier.badge === 'gold' ? '★' : tier.badge === 'silver' ? '◆' : '○' }}
+                      </span>
+                    }
+                    <span class="act__cabin">{{ tier.cabinOrTier }}</span>
+                  </div>
+                </td>
+
+                <!-- Lounge name -->
+                <td class="act__td act__td--lounge">
+                  {{ tier.lounge }}
+                </td>
+
+                <!-- Benefits -->
+                <td class="act__td act__td--benefits">
+                  <ul class="act__benefits-list">
+                    @for (benefit of tier.benefits; track benefit) {
+                      <li class="act__benefit">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        {{ benefit }}
+                      </li>
+                    }
+                  </ul>
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="act__note">
+        Lounge access is subject to flight routing and availability.
+        Conditions apply for guests accompanied by eligible passengers.
+      </p>
+
+    </div>

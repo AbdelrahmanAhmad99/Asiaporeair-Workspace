@@ -1,0 +1,18 @@
+<div class="acf-bar" role="toolbar" aria-label="Filter by product category">
+
+    @for (cat of categories(); track cat.value) {
+    <button class="acf-btn" type="button" [class.acf-btn--active]="cat.value === activeCategory()"
+        [disabled]="loading()" (click)="onSelect(cat.value)" [attr.aria-pressed]="cat.value === activeCategory()"
+        [attr.aria-label]="'Filter by ' + cat.label">
+
+        <!-- Category icon -->
+        <svg class="acf-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="getCategoryIcon(cat.value)" />
+        </svg>
+
+        {{ cat.label }}
+    </button>
+    }
+
+</div>

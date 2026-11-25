@@ -1,0 +1,61 @@
+<section class="tier-card" [ngClass]="tierClass" aria-label="Tier Status Card">
+
+  <!-- ── Shimmer Skeleton ──────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="tier-card__skeleton">
+      <div class="skeleton-line skeleton-line--wide"></div>
+      <div class="skeleton-line skeleton-line--medium"></div>
+      <div class="skeleton-line skeleton-line--narrow"></div>
+      <div class="skeleton-divider"></div>
+      <div class="skeleton-line skeleton-line--medium"></div>
+      <div class="skeleton-line skeleton-line--medium"></div>
+      <div class="skeleton-line skeleton-line--wide"></div>
+    </div>
+  }
+
+  <!-- ── Content ──────────────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+    <header class="tier-card__header">
+      <span class="tier-card__icon" aria-hidden="true">{{ tierIcon }}</span>
+      <div class="tier-card__meta">
+        <h2 class="tier-card__tier-name">{{ tier() }}</h2>
+        <p class="tier-card__label">{{ tierLabel }}</p>
+      </div>
+
+      <!-- Active badge -->
+      @if (isActive()) {
+        <span class="tier-card__badge tier-card__badge--active">Active</span>
+      } @else {
+        <span class="tier-card__badge tier-card__badge--inactive">Inactive</span>
+      }
+    </header>
+
+    <!-- Card number -->
+    <div class="tier-card__card-number">
+      <span class="tier-card__card-label">Membership Card</span>
+      <span class="tier-card__number">{{ cardNumber() }}</span>
+    </div>
+
+    <hr class="tier-card__divider" aria-hidden="true" />
+
+    <!-- Benefits list -->
+    <div class="tier-card__benefits">
+      <h3 class="tier-card__benefits-title">Your Privileges</h3>
+      <ul class="tier-card__benefits-list" role="list">
+        @for (benefit of benefits(); track benefit) {
+          <li class="tier-card__benefit-item">
+            <!-- Thin line-art check icon -->
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.5"
+                 stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true" width="16" height="16">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>{{ benefit }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+
+</section>

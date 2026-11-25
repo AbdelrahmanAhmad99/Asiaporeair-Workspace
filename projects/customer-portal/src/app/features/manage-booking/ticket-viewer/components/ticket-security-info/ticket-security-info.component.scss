@@ -1,0 +1,232 @@
+// ticket-security-info.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$t: 240ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+// ── Toggle row ────────────────────────────────────────────────────────────────
+.toggle-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: $font;
+    text-align: left;
+    padding: 0;
+    transition: opacity $t;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        border-radius: 4px;
+    }
+}
+
+.toggle-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($royal-gold, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+}
+
+.toggle-label {
+    flex: 1;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: $text-sec;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.toggle-chevron {
+    color: $text-muted;
+    transition: transform $t;
+    flex-shrink: 0;
+
+    &--open {
+        transform: rotate(180deg);
+        color: $royal-gold;
+    }
+}
+
+// ── Sections Grid ─────────────────────────────────────────────────────────────
+.sections-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 1rem;
+    border: 1px solid rgba($charcoal, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.sec-item {
+    border-bottom: 1px solid rgba($charcoal, 0.06);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.sec-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.75rem 1rem;
+    background: rgba($charcoal, 0.02);
+    border: none;
+    cursor: pointer;
+    font-family: $font;
+    text-align: left;
+    transition: background $t;
+
+    &:hover {
+        background: rgba($charcoal, 0.04);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: -2px;
+    }
+}
+
+.sec-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background: rgba($charcoal, 0.05);
+    border: 1px solid rgba($charcoal, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+}
+
+.sec-title {
+    flex: 1;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: $charcoal;
+}
+
+.sec-chevron {
+    color: $text-muted;
+    transition: transform $t;
+    flex-shrink: 0;
+
+    &--open {
+        transform: rotate(180deg);
+        color: $royal-gold;
+    }
+}
+
+.sec-body {
+    padding: 0.75rem 1rem 1rem 1rem;
+    overflow: hidden;
+    background: $white;
+}
+
+.sec-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sec-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.68rem;
+    color: $text-sec;
+    line-height: 1.55;
+}
+
+.list-bullet {
+    color: rgba($royal-gold, 0.7);
+    font-size: 0.65rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+// ── Legal Footer ──────────────────────────────────────────────────────────────
+.legal-footer {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 0.875rem 0 0;
+    margin-top: 0.875rem;
+    border-top: 1px solid rgba($charcoal, 0.07);
+    font-size: 0.62rem;
+    color: $text-muted;
+    line-height: 1.5;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+        color: $text-muted;
+    }
+}
+
+// Print: expand all sections fully
+@media print {
+    .toggle-row {
+        display: none;
+    }
+
+    .sections-grid {
+        display: block !important;
+    }
+
+    .sec-header {
+        display: none;
+    }
+
+    .sec-body {
+        display: block !important;
+        padding: 0.5rem 0;
+    }
+
+    .sec-list-item {
+        font-size: 7pt;
+    }
+
+    .legal-footer {
+        font-size: 6pt;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .toggle-chevron,
+    .sec-chevron {
+        transition: none !important;
+    }
+}

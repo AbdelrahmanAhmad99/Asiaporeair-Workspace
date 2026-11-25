@@ -1,0 +1,222 @@
+// modification-summary-card.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$success: #2E7D52;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$warning: #B87333;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.summary-card {
+    background: $midnight;
+    border: 1px solid rgba($champagne, 0.18);
+    border-radius: 12px;
+    overflow: hidden;
+    color: $white;
+    box-shadow: 0 8px 30px rgba($midnight, 0.25);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($champagne, 0.4), transparent);
+    }
+
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.summary-pnr {
+    padding: 1.125rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.pnr-label {
+    font-size: 0.57rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba($champagne, 0.5);
+}
+
+.pnr-value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: $champagne;
+    letter-spacing: 0.1em;
+}
+
+.gold-rule {
+    height: 1px;
+    margin: 0 1.25rem;
+    background: linear-gradient(to right, transparent, rgba($royal-gold, 0.35), transparent);
+}
+
+.flight-summary {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.flight-number {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba($white, 0.75);
+
+    svg {
+        color: $royal-gold;
+    }
+}
+
+.route-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.route-endpoint {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    &--right {
+        text-align: right;
+        align-items: flex-end;
+    }
+}
+
+.route-iata {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: $white;
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.route-city {
+    font-size: 0.58rem;
+    color: rgba($white, 0.45);
+}
+
+.route-arrow {
+    flex: 1;
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba($champagne, 0.4);
+}
+
+.dep-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+}
+
+.dep-date {
+    color: rgba($white, 0.65);
+}
+
+.dep-sep {
+    color: rgba($champagne, 0.3);
+}
+
+.dep-time {
+    font-weight: 700;
+    color: $champagne;
+}
+
+.pax-progress {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: rgba($white, 0.55);
+}
+
+.progress-fraction {
+    font-weight: 700;
+    color: $champagne;
+}
+
+.progress-bar-track {
+    height: 4px;
+    background: rgba($white, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(to right, $royal-gold, $champagne);
+    transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pax-progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 0;
+}
+
+.pax-progress-name {
+    font-size: 0.7rem;
+    color: rgba($white, 0.70);
+}
+
+.pax-status-saved {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: lighten($success, 30%);
+}
+
+.pax-status-dirty {
+    font-size: 0.8rem;
+    color: $royal-gold;
+}
+
+.pax-status-idle {
+    font-size: 0.7rem;
+    color: rgba($white, 0.25);
+}
+
+.unsaved-warning {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.75rem 1.25rem;
+    background: rgba($warning, 0.08);
+    border-top: 1px solid rgba($warning, 0.2);
+    font-size: 0.65rem;
+    color: lighten($warning, 20%);
+
+    svg {
+        flex-shrink: 0;
+        color: lighten($warning, 15%);
+    }
+}

@@ -1,0 +1,61 @@
+<article class="csb" [class.csb--recommended]="plan.badge === 'recommended'"
+    [class.csb--best-value]="plan.badge === 'best-value'" [class.csb--free]="plan.isFree"
+    [style.--delay]="animDelay + 'ms'">
+
+    <!-- Badge label -->
+    @if (plan.badge) {
+    <div class="csb__badge-label" aria-label="Plan badge: {{ plan.badge }}">
+        @switch (plan.badge) {
+        @case ('recommended') { Recommended }
+        @case ('popular') { Most Popular }
+        @case ('best-value') { Best Value }
+        }
+    </div>
+    }
+
+    <!-- Header -->
+    <div class="csb__header">
+        <!-- Wi-Fi icon -->
+        <div class="csb__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                <line x1="12" y1="20" x2="12.01" y2="20" />
+            </svg>
+        </div>
+
+        <div>
+            <p class="csb__plan-name">{{ plan.name }}</p>
+            <span class="csb__speed-pill">{{ plan.speed }}</span>
+        </div>
+    </div>
+
+    <p class="csb__desc">{{ plan.description }}</p>
+
+    <div class="csb__divider" aria-hidden="true"></div>
+
+    <!-- Feature list -->
+    <ul class="csb__features" aria-label="Plan features">
+        @for (feature of plan.features; track feature) {
+        <li class="csb__feature">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            {{ feature }}
+        </li>
+        }
+    </ul>
+
+    <!-- Price -->
+    <div class="csb__price-row">
+        <span class="csb__price" [class.csb__price--free]="plan.isFree">
+            {{ plan.priceFrom }}
+        </span>
+        @if (plan.isFree) {
+        <span class="csb__free-tag">Included</span>
+        }
+    </div>
+
+</article>

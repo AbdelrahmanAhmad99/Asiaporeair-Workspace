@@ -1,0 +1,469 @@
+// ============================================================================
+// booking-success.component.scss
+// Asiaporeair | "Your Suite is Prepared" — Success Page
+// ============================================================================
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --ivory: #F8F9FA;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --success: #10b981;
+    --radius: 12px;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --trans: 280ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    display: block;
+    font-family: var(--font);
+    background: var(--ivory);
+    min-height: 100vh;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HERO BAND
+// ══════════════════════════════════════════════════════════════════════════════
+.hero-band {
+    background: var(--midnight);
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 2rem 3.5rem;
+    text-align: center;
+}
+
+// Decorative grid lines
+.hero-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+    gap: 0;
+}
+
+.grid-line {
+    flex: 1;
+    border-right: 1px solid rgba(226, 199, 128, 0.04);
+
+    &:last-child {
+        border-right: none;
+    }
+}
+
+// Gold shimmer sweep
+.hero-shimmer {
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(226, 199, 128, 0.04) 50%, transparent);
+    animation: shimmer-sweep 6s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes shimmer-sweep {
+
+    0%,
+    100% {
+        left: -40%;
+    }
+
+    50% {
+        left: 60%;
+    }
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+// ── Checkmark badge ───────────────────────────────────────────────────────────
+.check-badge {
+    width: 88px;
+    height: 88px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.check-ring {
+    position: absolute;
+    border-radius: 50%;
+
+    &--outer {
+        inset: 0;
+        border: 1px solid rgba(226, 199, 128, 0.2);
+        background: rgba(226, 199, 128, 0.04);
+        animation: pulse-outer 2.8s ease-in-out infinite;
+    }
+
+    &--mid {
+        inset: 12px;
+        border: 1px solid rgba(226, 199, 128, 0.3);
+        background: rgba(226, 199, 128, 0.06);
+    }
+}
+
+@keyframes pulse-outer {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: 0.7;
+    }
+}
+
+.check-core {
+    position: relative;
+    z-index: 2;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--midnight);
+    border: 1.5px solid rgba(226, 199, 128, 0.4);
+    box-shadow: 0 0 24px rgba(226, 199, 128, 0.12), inset 0 0 0 1px rgba(226, 199, 128, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// ── Hero copy ─────────────────────────────────────────────────────────────────
+.hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hero-eyebrow {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--royal-gold);
+}
+
+.hero-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.04em;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+    line-height: 1.6;
+}
+
+// ── PNR Display ───────────────────────────────────────────────────────────────
+.pnr-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 32px;
+    background: rgba(182, 143, 36, 0.08);
+    border: 1px solid rgba(182, 143, 36, 0.25);
+    border-radius: var(--radius);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 0 1px rgba(182, 143, 36, 0.1);
+}
+
+.pnr-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(226, 199, 128, 0.6);
+}
+
+.pnr-code {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--champagne);
+    letter-spacing: 0.12em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.hero-timestamp {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+.email-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.4;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
+// ── Hero quick actions ────────────────────────────────────────────────────────
+.hero-quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hero-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.65);
+    font-family: var(--font);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--trans);
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    &--print {
+        border-color: rgba(182, 143, 36, 0.3);
+        color: var(--champagne);
+        background: rgba(182, 143, 36, 0.08);
+    }
+
+    &--print:hover {
+        background: rgba(182, 143, 36, 0.15);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--champagne);
+        outline-offset: 2px;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CONTENT WRAPPER
+// ══════════════════════════════════════════════════════════════════════════════
+.content-wrapper {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+
+    @media (max-width: 640px) {
+        padding: 1.25rem 1rem 3rem;
+    }
+}
+
+// ── Loading ───────────────────────────────────────────────────────────────────
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+}
+
+.loading-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.gold-loader {
+    width: 48px;
+    height: 48px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(182, 143, 36, 0.15);
+    border-top-color: var(--royal-gold);
+    animation: spin 0.9s linear infinite;
+}
+
+.loading-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+// ── Error banner ──────────────────────────────────────────────────────────────
+.error-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    margin-bottom: 1.25rem;
+    border-radius: 8px;
+    background: rgba(245, 158, 11, 0.06);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #92400e;
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
+// ── Detail Grid ───────────────────────────────────────────────────────────────
+.detail-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.detail-card {
+    background: #fff;
+    border: 1px solid rgba(5, 25, 55, 0.08);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(5, 25, 55, 0.06);
+    overflow: hidden;
+    backdrop-filter: blur(15px); // Glassmorphism subtle layer
+
+    &--actions {
+        background: rgba(5, 25, 55, 0.02);
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PRINT STYLES
+// ══════════════════════════════════════════════════════════════════════════════
+.print-header {
+    display: none;
+    font-family: var(--font);
+}
+
+@media print {
+    :host {
+        background: #fff;
+        --ivory: #fff;
+    }
+
+    .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 0 8px;
+        border-bottom: 2px solid #051937;
+        margin-bottom: 16px;
+    }
+
+    .print-brand {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #051937;
+        letter-spacing: -0.02em;
+    }
+
+    .print-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #4a5568;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .print-ref {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #B68F24;
+        letter-spacing: 0.08em;
+    }
+
+    .hero-band {
+        background: #051937 !important;
+        color: #fff;
+        padding: 20px;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+        page-break-after: avoid;
+    }
+
+    .hero-shimmer,
+    .hero-grid,
+    .hero-quick-actions,
+    .no-print {
+        display: none !important;
+    }
+
+    .detail-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+    }
+
+    .content-wrapper {
+        padding: 1rem 0;
+    }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .pnr-code {
+        font-size: 1.25rem;
+        letter-spacing: 0.08em;
+    }
+
+    .pnr-display {
+        padding: 12px 20px;
+    }
+
+    .hero-band {
+        padding: 3rem 1.25rem 2.5rem;
+    }
+}

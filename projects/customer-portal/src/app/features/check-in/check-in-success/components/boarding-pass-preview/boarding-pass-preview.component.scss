@@ -1,0 +1,528 @@
+// ============================================================================
+// boarding-pass-preview.component.scss
+// Asiaporeair | Premium Digital Boarding Pass
+// Handles: screen / hover / animation / @media print
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+// ── §1 Host ───────────────────────────────────────────────────────────────────
+:host {
+    display: block;
+}
+
+// ── §2 Card shell ─────────────────────────────────────────────────────────────
+.bp-card {
+    background: $white;
+    border-radius: 16px;
+    border: 1px solid rgba($royal-gold, 0.22);
+    box-shadow:
+        0 0 0 1px rgba($royal-gold, 0.06),
+        0 8px 24px rgba($midnight, 0.1),
+        0 24px 64px rgba($midnight, 0.08),
+        0 0 60px rgba($royal-gold, 0.05);
+    overflow: hidden;
+    max-width: 520px;
+    width: 100%;
+    animation: passReveal 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    transition: box-shadow 320ms $ease, transform 320ms $ease;
+
+    &:hover {
+        box-shadow:
+            0 0 0 1px rgba($royal-gold, 0.12),
+            0 12px 32px rgba($midnight, 0.14),
+            0 32px 80px rgba($midnight, 0.1),
+            0 0 80px rgba($royal-gold, 0.08);
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes passReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.94) translateY(24px);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.01) translateY(-2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+// ── §3 Header ─────────────────────────────────────────────────────────────────
+.bp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem 1.125rem;
+    background: linear-gradient(135deg, $midnight 0%, lighten($midnight, 6%) 100%);
+    position: relative;
+    overflow: hidden;
+
+    // Shimmer sweep on hover
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(105deg,
+                transparent 35%,
+                rgba($champagne, 0.04) 50%,
+                transparent 65%);
+        background-size: 200% 100%;
+        transition: background-position 500ms;
+    }
+
+    &:hover::after {
+        background-position: -100% center;
+    }
+
+    &__brand {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+    }
+
+    &__brand-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba($champagne, 0.08);
+        border: 1px solid rgba($champagne, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    &__brand-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    &__airline {
+        font-family: $font;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        background: linear-gradient(90deg, $royal-gold, $champagne);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    &__tagline {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.55rem;
+        color: rgba($white, 0.3);
+        letter-spacing: 0.08em;
+    }
+
+    &__right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+    }
+}
+
+.bp-flight-num {
+    font-family: $font;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: $white;
+}
+
+.bp-cabin-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    color: $champagne;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    background: rgba($champagne, 0.08);
+    border: 1px solid rgba($champagne, 0.2);
+    border-radius: 3px;
+}
+
+// ── §4 Route bar ──────────────────────────────────────────────────────────────
+.bp-route {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 1.5rem 1.25rem;
+    gap: 0;
+    background: linear-gradient(180deg, $midnight 0%, lighten($midnight, 3%) 100%);
+
+    &__leg {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        flex-shrink: 0;
+
+        &--dest {
+            text-align: right;
+        }
+    }
+
+    &__iata {
+        font-family: $font;
+        font-size: 2.6rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $white;
+        line-height: 1;
+    }
+
+    &__time {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: $champagne;
+        letter-spacing: 0.04em;
+    }
+
+    &__date {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.62rem;
+        color: rgba($white, 0.4);
+        letter-spacing: 0.02em;
+    }
+
+    &__arc {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 0 1rem;
+        position: relative;
+    }
+
+    &__line {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(to right,
+                rgba($royal-gold, 0.2),
+                rgba($champagne, 0.55),
+                rgba($royal-gold, 0.2));
+    }
+
+    &__plane {
+        color: $champagne;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+}
+
+// ── §5 Perforated tear line ────────────────────────────────────────────────────
+.bp-perforation {
+    position: relative;
+    height: 1px;
+    display: flex;
+    align-items: center;
+
+    &__line {
+        flex: 1;
+        border-top: 1px dashed rgba($royal-gold, 0.25);
+        margin: 0 -8px; // extend past card edges slightly
+    }
+
+    // Punch holes
+    &::before,
+    &::after {
+        content: '';
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: $ivory;
+        border: 1px solid rgba($royal-gold, 0.15);
+        flex-shrink: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    &--bottom::before,
+    &--bottom::after {
+        background: $ivory;
+    }
+}
+
+// ── §6 Body — Seat hero + details grid ───────────────────────────────────────
+.bp-body {
+    display: flex;
+    align-items: stretch;
+    padding: 1.5rem;
+    gap: 1.25rem;
+
+    &__vdivider {
+        width: 1px;
+        background: linear-gradient(to bottom,
+                transparent,
+                rgba($royal-gold, 0.2),
+                rgba($champagne, 0.35),
+                rgba($royal-gold, 0.2),
+                transparent);
+        flex-shrink: 0;
+    }
+}
+
+// ── §7 Seat hero ──────────────────────────────────────────────────────────────
+.bp-seat-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 90px;
+    flex-shrink: 0;
+
+    &__label {
+        font-family: $font;
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba($charcoal, 0.38);
+    }
+
+    &__number {
+        font-family: $font;
+        font-size: 3.2rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: $charcoal;
+        line-height: 1;
+
+        background: linear-gradient(135deg, $midnight, lighten($midnight, 25%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    &__group {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.62rem;
+        font-weight: 600;
+        color: $royal-gold;
+        letter-spacing: 0.06em;
+        padding: 2px 8px;
+        background: rgba($royal-gold, 0.07);
+        border: 1px solid rgba($royal-gold, 0.2);
+        border-radius: 3px;
+    }
+}
+
+// ── §8 Details grid ───────────────────────────────────────────────────────────
+.bp-details {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.875rem 0.75rem;
+    align-content: start;
+}
+
+.bp-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+
+    &__icon {
+        flex-shrink: 0;
+        color: rgba($charcoal, 0.3);
+        margin-top: 1px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        min-width: 0;
+    }
+
+    &__label {
+        font-family: $font;
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba($charcoal, 0.35);
+    }
+
+    &__val {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: $charcoal;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &--name {
+            font-size: 0.72rem;
+            white-space: normal;
+            line-height: 1.35;
+        }
+
+        &--pnr {
+            font-family: $font;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: $royal-gold;
+        }
+    }
+}
+
+// Pre-check badge
+.bp-precheck {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: $font;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: darken($royal-gold, 5%);
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($royal-gold, 0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+    grid-column: 1 / -1;
+}
+
+// ── §9 QR strip ───────────────────────────────────────────────────────────────
+.bp-qr-strip {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+    background: rgba($ivory, 0.6);
+    border-top: 1px solid rgba($charcoal, 0.07);
+}
+
+.bp-qr-wrap {
+    flex-shrink: 0;
+    padding: 6px;
+    border: 1px solid rgba($royal-gold, 0.3);
+    border-radius: 8px;
+    background: $white;
+    box-shadow: 0 2px 12px rgba($midnight, 0.08);
+}
+
+.bp-qr-svg {
+    display: block;
+    border-radius: 4px;
+}
+
+.bp-qr-shimmer {
+    width: 126px;
+    height: 126px;
+    border-radius: 4px;
+    background: linear-gradient(90deg,
+            rgba($royal-gold, 0.05) 0%,
+            rgba($champagne, 0.18) 50%,
+            rgba($royal-gold, 0.05) 100%);
+    background-size: 300% 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -300% center;
+    }
+
+    100% {
+        background-position: 300% center;
+    }
+}
+
+.bp-ticket-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.bp-ticket-code {
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: $charcoal;
+    word-break: break-all;
+}
+
+.bp-ticket-hint {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    color: $muted;
+    line-height: 1.5;
+}
+
+// ── §10 Print styles ──────────────────────────────────────────────────────────
+@media print {
+    :host {
+        display: block !important;
+    }
+
+    .bp-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        border-radius: 0 !important;
+        animation: none !important;
+        transform: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        page-break-inside: avoid;
+    }
+
+    .bp-header {
+        background: $midnight !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .bp-route {
+        background: $midnight !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .bp-qr-strip {
+        background: $white !important;
+    }
+
+    .bp-card:hover {
+        box-shadow: none !important;
+        transform: none !important;
+    }
+}
+
+// ── §11 Reduced motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+    .bp-card {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .bp-qr-shimmer {
+        animation: none !important;
+    }
+}

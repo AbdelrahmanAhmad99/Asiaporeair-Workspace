@@ -1,0 +1,288 @@
+// seat-grid.component.scss
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --trans: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
+}
+
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+.grid-wrapper {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 12px 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: linear-gradient(180deg,
+            rgba(5, 25, 55, 0.03) 0%,
+            rgba(5, 25, 55, 0.01) 50%,
+            rgba(5, 25, 55, 0.03) 100%);
+    border: 1px solid rgba(5, 25, 55, 0.07);
+    border-radius: 0 0 12px 12px;
+}
+
+// ── Column Headers ────────────────────────────────────────────────────────────
+.col-headers {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 8px 8px;
+    border-bottom: 1px solid rgba(5, 25, 55, 0.06);
+    margin-bottom: 4px;
+}
+
+.col-letter {
+    width: 38px;
+    text-align: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    font-family: var(--font);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(16, 16, 86, 0.4);
+}
+
+.row-num-spacer {
+    width: 28px;
+    flex-shrink: 0;
+}
+
+// ── Seat Row ──────────────────────────────────────────────────────────────────
+.seat-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    transition: background var(--trans);
+
+    &:hover {
+        background: rgba(182, 143, 36, 0.025);
+    }
+}
+
+.row-num {
+    width: 28px;
+    flex-shrink: 0;
+    font-size: 0.58rem;
+    font-weight: 700;
+    font-family: var(--font);
+    color: rgba(16, 16, 86, 0.3);
+    text-align: center;
+    letter-spacing: 0.04em;
+}
+
+// ── Aisle Spacer ──────────────────────────────────────────────────────────────
+.aisle-spacer {
+    width: 18px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--header {
+        opacity: 0;
+    }
+}
+
+// ── Exit Row ──────────────────────────────────────────────────────────────────
+.exit-row-marker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    margin: 4px 0 2px;
+}
+
+.exit-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(245, 158, 11, 0.35);
+}
+
+.exit-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.57rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(245, 158, 11, 0.8);
+    white-space: nowrap;
+
+    svg {
+        opacity: 0.8;
+    }
+}
+
+// ── Popover Anchor + Card ─────────────────────────────────────────────────────
+.popover-anchor {
+    display: flex;
+    justify-content: center;
+    padding: 6px 8px 2px;
+}
+
+.seat-popover {
+    position: relative;
+    background: #fff;
+    border: 1px solid rgba(182, 143, 36, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(5, 25, 55, 0.14), 0 4px 12px rgba(5, 25, 55, 0.08);
+    padding: 1rem 1.125rem;
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: var(--font);
+
+    // Gold top accent
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--royal-gold), transparent);
+        border-radius: 12px 12px 0 0;
+    }
+}
+
+.popover-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(5, 25, 55, 0.05);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--trans);
+
+    &:hover {
+        background: rgba(5, 25, 55, 0.1);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+    }
+}
+
+.popover-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.popover-seat-num {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.04em;
+}
+
+.popover-cabin {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.popover-attrs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.attr-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 100px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: rgba(5, 25, 55, 0.05);
+    color: var(--charcoal);
+    border: 1px solid rgba(5, 25, 55, 0.1);
+
+    &--exit {
+        background: rgba(245, 158, 11, 0.08);
+        color: #92400e;
+        border-color: rgba(245, 158, 11, 0.25);
+    }
+}
+
+.popover-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(5, 25, 55, 0.06);
+}
+
+.popover-price-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.popover-price {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.02em;
+}
+
+.popover-select-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    padding: 10px;
+    background: var(--midnight);
+    color: var(--champagne);
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--trans);
+
+    &:hover {
+        background: var(--royal-gold);
+        color: var(--midnight);
+        box-shadow: 0 6px 20px rgba(182, 143, 36, 0.25);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: 2px;
+    }
+}
+
+// ── Popover animation alias ───────────────────────────────────────────────────
+// (animation defined in parent component, wired via @popoverAnim on seat-grid html
+// but we need to handle it here since seat-grid hosts the trigger)

@@ -1,0 +1,142 @@
+<div class="ctrl-panel">
+
+    <!-- ══ Panel Header ════════════════════════════════════════════ -->
+    <div class="ctrl-panel__header">
+        <div class="ctrl-panel__header__icon-wrap" aria-hidden="true">
+            <svg class="ctrl-panel__header__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58
+                 .622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934
+                 c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0
+                 -1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836
+                 .88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0
+                 l4.994 2.497c.317.158.69.158 1.006 0z" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="ctrl-panel__title">Route Distance Target</h3>
+            <p class="ctrl-panel__sub">Define the operational distance for suitability analysis</p>
+        </div>
+    </div>
+
+    <!-- ══ Route Map SVG Preview ════════════════════════════════════ -->
+    <div class="ctrl-panel__map" aria-hidden="true">
+        <svg class="ctrl-panel__map__svg" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="arc-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#B68F24" stop-opacity="0.6" />
+                    <stop offset="50%" stop-color="#E2C780" />
+                    <stop offset="100%" stop-color="#B68F24" stop-opacity="0.6" />
+                </linearGradient>
+                <filter id="arc-glow">
+                    <feGaussianBlur stdDeviation="2.5" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- Ground line -->
+            <line x1="10" y1="80" x2="290" y2="80" stroke="rgba(226,199,128,0.15)" stroke-width="1" />
+
+            <!-- Animated flight path arc -->
+            <path class="ctrl-panel__map__arc" [attr.d]="arcCurve()" fill="none" stroke="url(#arc-grad)"
+                stroke-width="2" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="0"
+                filter="url(#arc-glow)" />
+
+            <!-- Origin dot -->
+            <circle cx="10" cy="80" r="4" fill="#B68F24" />
+            <!-- Destination dot -->
+            <circle cx="290" cy="80" r="4" fill="#B68F24" />
+
+            <!-- Distance label at apex -->
+            <text [attr.x]="150" [attr.y]="labelY()" text-anchor="middle" class="ctrl-panel__map__label">
+            </text>
+        </svg>
+
+        <!-- Distance label overlay (outside SVG for font rendering) -->
+        <div class="ctrl-panel__map__distance-label">
+            <span class="ctrl-panel__map__distance-label__value">{{ displayValue() | number }}</span>
+            <span class="ctrl-panel__map__distance-label__unit">{{ displayUnit() }}</span>
+        </div>
+    </div>
+
+    <!-- ══ Slider + Numeric Input ═══════════════════════════════════ -->
+    <div class="ctrl-panel__slider-wrap">
+
+        <!-- Numeric input -->
+        <div class="ctrl-panel__numeric">
+            <input class="ctrl-panel__numeric__input" type="number" [value]="displayValue()" [min]="displayMin()"
+                [max]="displayMax()" [attr.aria-label]="'Target distance in ' + displayUnit()"
+                (change)="onInputChange(+$any($event.target).value)" />
+            <span class="ctrl-panel__numeric__unit">{{ displayUnit() }}</span>
+
+            <!-- Unit toggle -->
+            <button class="ctrl-panel__unit-toggle" type="button" (click)="toggleUnit()"
+                [attr.aria-label]="'Switch to ' + (unitMode() === 'km' ? 'nautical miles' : 'kilometres')">
+                <span class="ctrl-panel__unit-toggle__option"
+                    [class.ctrl-panel__unit-toggle__option--active]="unitMode() === 'km'">km</span>
+                <span class="ctrl-panel__unit-toggle__sep" aria-hidden="true">/</span>
+                <span class="ctrl-panel__unit-toggle__option"
+                    [class.ctrl-panel__unit-toggle__option--active]="unitMode() === 'nm'">nm</span>
+            </button>
+        </div>
+
+        <!-- Custom range slider -->
+        <div class="ctrl-panel__slider-track-wrap">
+            <div class="ctrl-panel__slider-track">
+                <div class="ctrl-panel__slider-track__fill" [style.width.%]="sliderPercent()">
+                </div>
+            </div>
+            <input class="ctrl-panel__slider" type="range" [min]="displayMin()" [max]="displayMax()"
+                [value]="displayValue()" step="50"
+                [attr.aria-label]="'Route distance slider: ' + displayValue() + ' ' + displayUnit()"
+                (input)="onSliderChange(+$any($event.target).value)" />
+        </div>
+
+        <!-- Range legend -->
+        <div class="ctrl-panel__range-legend" aria-hidden="true">
+            <span>{{ displayMin() }} {{ displayUnit() }}</span>
+            <span>{{ displayMax() | number }} {{ displayUnit() }}</span>
+        </div>
+
+    </div>
+
+    <!-- ══ Quick Route Presets ═══════════════════════════════════════ -->
+    <div class="ctrl-panel__presets" role="group" aria-label="Quick distance presets">
+        <span class="ctrl-panel__presets__label">Quick Presets</span>
+        <div class="ctrl-panel__presets__grid">
+            @for (preset of presets; track preset.distanceKm) {
+            <button class="ctrl-panel__preset-btn" type="button"
+                [class.ctrl-panel__preset-btn--active]="distanceKm() === preset.distanceKm"
+                (click)="onPresetClick(preset)" [attr.aria-pressed]="distanceKm() === preset.distanceKm"
+                [attr.aria-label]="preset.archetype + ': ' + preset.label">
+                <span class="ctrl-panel__preset-btn__archetype">{{ preset.archetype }}</span>
+                <span class="ctrl-panel__preset-btn__distance">{{ preset.label }}</span>
+            </button>
+            }
+        </div>
+    </div>
+
+    <!-- ══ ETOPS Mode Toggle ════════════════════════════════════════ -->
+    <div class="ctrl-panel__etops" role="group" aria-label="ETOPS extended operations mode">
+
+        <div class="ctrl-panel__etops__info">
+            <span class="ctrl-panel__etops__title">Extended Range Operations (ETOPS)</span>
+            <span class="ctrl-panel__etops__desc">
+                Applies +20% effective range multiplier for twin-engine extended operations approval
+            </span>
+        </div>
+
+        <button class="ctrl-panel__etops__toggle" type="button" role="switch"
+            [attr.aria-checked]="rangeMode() === 'etops'"
+            [class.ctrl-panel__etops__toggle--on]="rangeMode() === 'etops'" (click)="toggleMode()"
+            aria-label="Toggle ETOPS mode">
+            <span class="ctrl-panel__etops__toggle__thumb"></span>
+        </button>
+
+    </div>
+
+</div>

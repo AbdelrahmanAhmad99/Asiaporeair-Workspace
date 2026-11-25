@@ -1,0 +1,77 @@
+<div class="sud-wrap">
+
+    <!-- Trigger button — shows current status -->
+    <button class="sud-trigger" type="button" [class.sud-trigger--open]="isOpen()"
+        [class.sud-trigger--terminal]="isTerminal()" [class.sud-trigger--updating]="isUpdating()"
+        [disabled]="isUpdating() || isTerminal()" (click)="toggleMenu()" (blur)="closeMenu()"
+        [attr.aria-expanded]="isOpen()" aria-haspopup="listbox"
+        [attr.aria-label]="'Change status from ' + currentStatus()">
+
+        <!-- Current status pill -->
+        @if (currentOption()) {
+        <span class="sud-pill" [ngClass]="currentOption()!.colorCls">
+            <span class="sud-pill__dot" aria-hidden="true"></span>
+            {{ currentOption()!.label }}
+        </span>
+        } @else {
+        <span class="sud-pill">{{ currentStatus() }}</span>
+        }
+
+        @if (!isTerminal() && !isUpdating()) {
+        <svg class="sud-trigger__chevron" [class.sud-trigger__chevron--open]="isOpen()" fill="none"
+            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+        </svg>
+        }
+
+        @if (isUpdating()) {
+        <svg class="sud-trigger__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        }
+
+    </button>
+
+    <!-- Floating Sapphire Menu -->
+    @if (isOpen()) {
+    <ul class="sud-menu" role="listbox" [attr.aria-label]="'Select new status for flight'">
+
+        @if (availableOptions().length === 0) {
+        <li class="sud-menu__empty">No valid transitions available.</li>
+        }
+
+        @for (opt of availableOptions(); track opt.value) {
+        <li class="sud-menu__item" role="option" [attr.aria-selected]="currentStatus() === opt.value"
+            (mousedown)="$event.preventDefault(); selectStatus(opt)">
+
+            <!-- Gold selection indicator on left edge per spec -->
+            <div class="sud-menu__gold-indicator" aria-hidden="true"></div>
+
+            <svg class="sud-menu__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="opt.icon" />
+            </svg>
+
+            <div class="sud-menu__label-wrap">
+                <span class="sud-menu__label">{{ opt.label }}</span>
+                <span class="sud-menu__status-code">{{ opt.value }}</span>
+            </div>
+
+            @if (currentStatus() === opt.value) {
+            <svg class="sud-menu__check" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            }
+
+        </li>
+        }
+
+    </ul>
+    }
+
+</div>

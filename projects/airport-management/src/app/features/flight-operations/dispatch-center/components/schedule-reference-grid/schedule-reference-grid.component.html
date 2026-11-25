@@ -1,0 +1,186 @@
+<div class="srg-card">
+
+    <!-- ── Grid Header with filter ──────────────────────────────── -->
+    <div class="srg-toolbar">
+
+        <div class="srg-toolbar__left">
+            <h3 class="srg-toolbar__title">Master Schedule Registry</h3>
+            @if (!loading()) {
+            <span class="srg-toolbar__counts" aria-live="polite">
+                <span class="srg-toolbar__active">{{ activeCount() }} active</span>
+                @if (filterQuery()) {
+                <span class="srg-toolbar__filtered">· {{ filteredCount() }} match</span>
+                } @else {
+                <span class="srg-toolbar__total">· {{ schedules().length }} total</span>
+                }
+            </span>
+            }
+        </div>
+
+        <div class="srg-toolbar__search">
+            <div class="srg-search">
+                <div class="srg-search__icon" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                    </svg>
+                </div>
+                <input class="srg-search__input" type="text" [value]="filterQuery()"
+                    (input)="onFilterInput($any($event.target).value)" placeholder="Filter by flight, IATA, airline…"
+                    aria-label="Filter schedules" autocomplete="off">
+                @if (filterQuery()) {
+                <button class="srg-search__clear" type="button" (click)="clearFilter()" aria-label="Clear filter">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Column Headers — Midnight Sapphire + Champagne Gold per spec ── -->
+    <div class="srg-head" role="row" aria-label="Schedule table header">
+        <div class="srg-th" role="columnheader">Schedule ID</div>
+        <div class="srg-th" role="columnheader">Flight No.</div>
+        <div class="srg-th" role="columnheader">Airline</div>
+        <div class="srg-th srg-th--corridor" role="columnheader">Corridor</div>
+        <div class="srg-th" role="columnheader">Block Time</div>
+        <div class="srg-th srg-th--days" role="columnheader">Days</div>
+        <div class="srg-th" role="columnheader">Valid From</div>
+        <div class="srg-th" role="columnheader">Valid Until</div>
+        <div class="srg-th srg-th--status" role="columnheader">Status</div>
+    </div>
+
+    <!-- ── Loading Shimmer ────────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="srg-shimmer-list" aria-busy="true" aria-label="Loading schedules">
+        @for (r of shimmerRows; track $index) {
+        <div class="srg-shimmer-row" [class.srg-shimmer-row--odd]="$index % 2 !== 0">
+            @for (w of ['40px','56px','52px','80px','56px','88px','72px','72px','60px']; track $index) {
+            <div class="srg-sk" [style.width]="w"></div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Empty State ────────────────────────────────────────────── -->
+    @if (!loading() && filteredSchedules().length === 0) {
+    <div class="srg-empty">
+        <div class="srg-empty__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006
+                   V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006
+                   0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27
+                   3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69
+                   -.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+            </svg>
+        </div>
+        <p class="srg-empty__title">
+            @if (filterQuery()) { No schedules match "{{ filterQuery() }}" }
+            @else { No active master schedules loaded. }
+        </p>
+        <p class="srg-empty__sub">
+            @if (!filterQuery()) { Reference data may still be loading. Try refreshing. }
+        </p>
+    </div>
+    }
+
+    <!-- ── CDK Virtual Scroll Data Rows ───────────────────────────── -->
+    @if (!loading() && filteredSchedules().length > 0) {
+    <cdk-virtual-scroll-viewport class="srg-viewport" itemSize="52"
+        [attr.aria-label]="'Schedule reference grid, ' + filteredSchedules().length + ' schedules'">
+
+        @for (sched of filteredSchedules(); track sched.scheduleId; let even = $even) {
+        @let daysSet = activeDays(sched.daysOfWeek);
+        <div class="srg-row" [class.srg-row--even]="even" [class.srg-row--odd]="!even"
+            [class.srg-row--inactive]="!sched.isActive" role="row"
+            [attr.aria-label]="sched.flightNo + ' · ' + sched.originAirportIata + ' to ' + sched.destinationAirportIata">
+
+            <!-- Schedule ID -->
+            <div class="srg-td" role="cell">
+                <span class="srg-id">#{{ sched.scheduleId }}</span>
+            </div>
+
+            <!-- Flight Number — Montserrat per spec -->
+            <div class="srg-td" role="cell">
+                <span class="srg-flight-no">{{ sched.flightNo }}</span>
+            </div>
+
+            <!-- Airline IATA -->
+            <div class="srg-td" role="cell">
+                <span class="srg-airline">{{ sched.airlineIataCode }}</span>
+            </div>
+
+            <!-- O-D Corridor -->
+            <div class="srg-td srg-td--corridor" role="cell">
+                <div class="srg-corridor">
+                    <span class="srg-corridor__iata srg-corridor__iata--gold">{{ sched.originAirportIata }}</span>
+                    <svg class="srg-corridor__arrow" fill="none" stroke="currentColor" stroke-width="1.25"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                    </svg>
+                    <span class="srg-corridor__iata srg-corridor__iata--champagne">{{ sched.destinationAirportIata
+                        }}</span>
+                </div>
+            </div>
+
+            <!-- Block Time -->
+            <div class="srg-td" role="cell">
+                <span class="srg-time">{{ blockTime(sched.departureTimeScheduled, sched.arrivalTimeScheduled) }}</span>
+            </div>
+
+            <!-- Days of Week badges -->
+            <div class="srg-td srg-td--days" role="cell">
+                <div class="srg-days" [attr.aria-label]="sched.daysOfWeek">
+                    @for (day of allDays; track day) {
+                    <span class="srg-day" [class.srg-day--active]="daysSet.has(day)"
+                        [attr.aria-label]="day + (daysSet.has(day) ? ' (operating)' : ' (not operating)')">
+                        {{ day }}
+                    </span>
+                    }
+                </div>
+            </div>
+
+            <!-- Valid From -->
+            <div class="srg-td" role="cell">
+                <span class="srg-date">{{ sched.effectiveStartDate | date:'dd MMM yy' }}</span>
+            </div>
+
+            <!-- Valid Until (open-ended guard) -->
+            <div class="srg-td" role="cell">
+                <span class="srg-date" [class.srg-date--open]="!sched.effectiveEndDate">
+                    {{ sched.effectiveEndDate ? (sched.effectiveEndDate | date:'dd MMM yy') : 'Open' }}
+                </span>
+            </div>
+
+            <!-- Status Pill -->
+            <div class="srg-td srg-td--status" role="cell">
+                <span class="srg-status-pill" [class.srg-status-pill--active]="sched.isActive"
+                    [class.srg-status-pill--inactive]="!sched.isActive">
+                    {{ sched.isActive ? 'Active' : 'Inactive' }}
+                </span>
+            </div>
+
+        </div>
+        }
+
+    </cdk-virtual-scroll-viewport>
+    }
+
+    <!-- Grid footer -->
+    @if (!loading() && filteredSchedules().length > 0) {
+    <div class="srg-footer">
+        <span class="srg-footer__label">
+            Showing {{ filteredSchedules().length }}
+            of {{ schedules().length }} schedule{{ schedules().length !== 1 ? 's' : '' }}
+            · {{ activeCount() }} active
+        </span>
+        <span class="srg-footer__note">Read-only reference — edit in Network Planning</span>
+    </div>
+    }
+
+</div>

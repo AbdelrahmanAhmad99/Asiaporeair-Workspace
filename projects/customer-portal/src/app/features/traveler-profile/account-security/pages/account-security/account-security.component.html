@@ -1,0 +1,196 @@
+<!-- ============================================================================
+     account-security.component.html
+     Asiaporeair | "Account Security Hub" — Smart Page
+     ============================================================================ -->
+
+<div class="sec-shell" [@pageEnter]="'animate'">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       PAGE HERO HEADER
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="sec-hero sec-animate" role="banner">
+        <div class="sec-hero__inner">
+
+            <!-- Breadcrumb -->
+            <nav class="sec-breadcrumb" aria-label="Breadcrumb">
+                <a class="sec-breadcrumb__link" routerLink="/">Home</a>
+                <span class="sec-breadcrumb__sep" aria-hidden="true">›</span>
+                <a class="sec-breadcrumb__link" routerLink="/profile">My Profile</a>
+                <span class="sec-breadcrumb__sep" aria-hidden="true">›</span>
+                <span class="sec-breadcrumb__current">Account Security</span>
+            </nav>
+
+            <div class="sec-hero__content">
+                <div class="sec-hero__text">
+                    <h1 class="sec-hero__title">Account Security</h1>
+                    <p class="sec-hero__subtitle">
+                        Manage your credentials, two-factor authentication, and active login sessions.
+                    </p>
+                </div>
+
+                <!-- Security status pill -->
+                <div class="sec-hero__status-pill" [class.is-secured]="store.is2FAEnabled()" [@fadeUp]>
+                    @if (store.is2FAEnabled()) {
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <polyline points="9 12 11 14 15 10" />
+                    </svg>
+                    Fully Secured
+                    } @else {
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    Enable 2FA for stronger protection
+                    }
+                </div>
+            </div>
+
+            <div class="sec-hero__rule" aria-hidden="true"></div>
+        </div>
+    </header>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT GRID
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="sec-content" role="main">
+        <div class="sec-content__inner">
+
+            <!-- ── LEFT COLUMN: Security forms ─────────────────────────────── -->
+            <div class="sec-col sec-col--main">
+
+                <!-- Global error banner -->
+                @if (store.securityError() || store.errorMessage()) {
+                <div class="sec-error-banner sec-animate" [@fadeUp] role="alert">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    {{ store.securityError() || store.errorMessage() }}
+                </div>
+                }
+
+                <!-- Page section label -->
+                <div class="sec-section-header sec-animate">
+                    <h2 class="sec-section-header__title">Security Settings</h2>
+                    <p class="sec-section-header__sub">
+                        Keep your account protected with a strong password and two-factor authentication.
+                    </p>
+                </div>
+
+                <!-- Change Password -->
+                <div class="sec-animate">
+                    <!-- <app-change-password-form [isSaving]="store.isChangingPassword()"
+                        [saveState]="store.passwordSaveState()"
+                        (formSave)="onChangePassword($event)"></app-change-password-form> -->
+                </div>
+
+                <!-- 2FA Toggle -->
+                <div class="sec-animate">
+                    <app-two-factor-toggle [isEnabled]="store.is2FAEnabled()"
+                        [isLoading]="store.isLoadingSecurityData()" [isToggling]="store.isToggling2FA()"
+                        (toggle)="onToggle2FA()"></app-two-factor-toggle>
+                </div>
+
+                <!-- Login History -->
+                <div class="sec-animate">
+                    <app-login-history-list [records]="store.loginHistory()" [isLoading]="store.isLoadingSecurityData()"
+                        (revokeSession)="onRevokeSession($event)"></app-login-history-list>
+                </div>
+
+            </div>
+
+            <!-- ── RIGHT COLUMN: Quick links + escape hatches ─────────────── -->
+            <aside class="sec-col sec-col--nav" aria-label="Security quick actions">
+
+                <!-- Critical auth escape hatches -->
+                <div class="sec-escape-block sec-animate">
+                    <h3 class="sec-escape-block__title">Security Assistance</h3>
+
+                    <button class="sec-escape-btn sec-escape-btn--primary" type="button"
+                        (click)="navigateToForgotPassword()" aria-label="Navigate to forgot password page">
+                        <div class="sec-escape-btn__icon" aria-hidden="true">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                        </div>
+                        <div class="sec-escape-btn__body">
+                            <span class="sec-escape-btn__label">Forgot Password?</span>
+                            <span class="sec-escape-btn__desc">Request a secure reset link</span>
+                        </div>
+                        <svg class="sec-escape-btn__chevron" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+
+                    <button class="sec-escape-btn sec-escape-btn--secondary" type="button"
+                        (click)="navigateToResetPassword()" aria-label="Navigate to reset security credentials page">
+                        <div class="sec-escape-btn__icon" aria-hidden="true">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+                            </svg>
+                        </div>
+                        <div class="sec-escape-btn__body">
+                            <span class="sec-escape-btn__label">Reset Credentials</span>
+                            <span class="sec-escape-btn__desc">Full security reset via email</span>
+                        </div>
+                        <svg class="sec-escape-btn__chevron" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Profile navigation -->
+                <div class="sec-nav-header sec-animate">
+                    <h3 class="sec-nav-header__title">Your Account</h3>
+                    <p class="sec-nav-header__subtitle">Jump to other profile sections</p>
+                </div>
+
+                <nav class="sec-nav-list sec-animate" aria-label="Profile quick links">
+                    @for (link of quickNavLinks; track trackByNavRoute($index, link)) {
+                    <button class="sec-nav-card" type="button" (click)="navigateTo(link.route)"
+                        [attr.aria-label]="'Go to ' + link.label">
+                        <div class="sec-nav-card__icon" [innerHTML]="link.icon" aria-hidden="true"></div>
+                        <span class="sec-nav-card__label">{{ link.label }}</span>
+                        <svg class="sec-nav-card__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+                    }
+                </nav>
+
+                <!-- Security tip card -->
+                <div class="sec-tip-card sec-animate" [@fadeUp]>
+                    <div class="sec-tip-card__icon" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                    </div>
+                    <div class="sec-tip-card__body">
+                        <p class="sec-tip-card__title">Security Recommendation</p>
+                        <p class="sec-tip-card__text">
+                            Enable Two-Factor Authentication and rotate your password every 90 days
+                            to maintain First Class–level account security.
+                        </p>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    </main>
+
+</div>

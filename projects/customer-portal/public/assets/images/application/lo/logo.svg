@@ -1,0 +1,10 @@
+<svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stylized "A" bird-like icon similar to SIA logo -->
+  <path d="M45 15L15 45H25L35 35L45 55L55 35L65 45H75L45 15Z" fill="#C89731"/>
+  <path d="M45 25L30 40H35L45 30L55 40H60L45 25Z" fill="white"/>
+  
+  <!-- ASIAPOREAIR Text -->
+  <text x="85" y="42" style="font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: 0.1em;">
+    <tspan fill="white">ASIAPORE</tspan><tspan fill="#C89731">AIR</tspan>
+  </text>
+</svg>

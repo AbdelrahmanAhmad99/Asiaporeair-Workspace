@@ -1,0 +1,74 @@
+   :host {
+       display: block;
+       position: relative;
+       z-index: 10;
+   }
+
+   .alh {
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       padding: 16px 40px;
+       background: rgba(5, 25, 55, 0.55);
+       backdrop-filter: blur(12px);
+       border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+
+       @media (max-width: 640px) {
+           padding: 14px 20px;
+       }
+   }
+
+   .alh__back {
+       display: flex;
+       align-items: center;
+       gap: 6px;
+       font-size: 12px;
+       font-weight: 600;
+       letter-spacing: 0.04em;
+       color: rgba(255, 255, 255, 0.5);
+       text-decoration: none;
+       font-family: 'Montserrat', 'Inter', sans-serif;
+       transition: color 200ms ease;
+
+       &:hover {
+           color: #E2C780;
+       }
+
+       &:focus-visible {
+           outline: 2px solid #B68F24;
+           border-radius: 4px;
+           outline-offset: 3px;
+       }
+   }
+
+   .alh__logo {
+       position: absolute;
+       left: 50%;
+       transform: translateX(-50%);
+       display: flex;
+       align-items: center;
+       text-decoration: none;
+       transition: opacity 200ms ease;
+
+       &:hover {
+           opacity: 0.85;
+       }
+
+       &:focus-visible {
+           outline: 2px solid #B68F24;
+           border-radius: 4px;
+       }
+
+       @media (max-width: 480px) {
+           position: static;
+           transform: none;
+       }
+   }
+
+   .alh__spacer {
+       width: 64px; // mirrors .alh__back approximate width for centering
+
+       @media (max-width: 480px) {
+           display: none;
+       }
+   }

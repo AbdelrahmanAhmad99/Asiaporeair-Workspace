@@ -1,0 +1,133 @@
+<section class="rcc-card" aria-label="Air corridor overview">
+
+    <!-- Ghost watermark — route ID depth layer -->
+    <span class="rcc-watermark" aria-hidden="true">#{{ route().routeId }}</span>
+
+    <!-- ══ Status strip — top ═══════════════════════════════════════ -->
+    <header class="rcc-top-strip">
+        <span class="rcc-status-badge" [class.rcc-status-badge--active]="route().isActive"
+            [class.rcc-status-badge--inactive]="!route().isActive">
+            <span class="rcc-status-badge__dot" aria-hidden="true"></span>
+            {{ route().isActive ? 'Active Corridor' : 'Inactive' }}
+        </span>
+
+        <span class="rcc-route-id">Route #{{ route().routeId }}</span>
+    </header>
+
+    <!-- ══ The Golden Link — Hub → Hub visualization ════════════════ -->
+    <div class="rcc-corridor" role="img"
+        [attr.aria-label]="route().originAirportIataCode + ' to ' + route().destinationAirportIataCode">
+
+        <!-- Origin Hub -->
+        <div class="rcc-hub rcc-hub--origin">
+            <span class="rcc-hub__iata">{{ route().originAirportIataCode }}</span>
+            <span class="rcc-hub__name">{{ route().originAirportName }}</span>
+            <span class="rcc-hub__city">{{ route().originCity }}</span>
+            <span class="rcc-hub__label">Origin Hub</span>
+        </div>
+
+        <!-- Golden Link connector -->
+        <div class="rcc-link" aria-hidden="true">
+            <!-- Left line segment -->
+            <div class="rcc-link__line rcc-link__line--left"></div>
+
+            <!-- Centred plane icon on Midnight disc -->
+            <div class="rcc-link__plane-disc">
+                <svg class="rcc-link__plane-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.25">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                   0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+            </div>
+
+            <!-- Right line segment -->
+            <div class="rcc-link__line rcc-link__line--right"></div>
+        </div>
+
+        <!-- Destination Hub -->
+        <div class="rcc-hub rcc-hub--destination">
+            <span class="rcc-hub__iata">{{ route().destinationAirportIataCode }}</span>
+            <span class="rcc-hub__name">{{ route().destinationAirportName }}</span>
+            <span class="rcc-hub__city">{{ route().destinationCity }}</span>
+            <span class="rcc-hub__label">Destination Hub</span>
+        </div>
+
+    </div>
+
+    <!-- ══ Glassmorphism Intelligence Badge ═══════════════════════════ -->
+    <div class="rcc-intel-badge" role="region" aria-label="Corridor metrics">
+
+        <!-- Distance KM -->
+        <div class="rcc-intel-badge__metric">
+            <svg class="rcc-intel-badge__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+            </svg>
+            <span class="rcc-intel-badge__value">
+                {{ route().distanceKm.toLocaleString() }}
+                <span class="rcc-intel-badge__unit">km</span>
+            </span>
+            <span class="rcc-intel-badge__label">Great Circle</span>
+        </div>
+
+        <div class="rcc-intel-badge__sep" aria-hidden="true"></div>
+
+        <!-- Distance NM -->
+        @if (distanceNm()) {
+        <div class="rcc-intel-badge__metric">
+            <svg class="rcc-intel-badge__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+            </svg>
+            <span class="rcc-intel-badge__value">
+                {{ distanceNm()?.toLocaleString() }}
+                <span class="rcc-intel-badge__unit">NM</span>
+            </span>
+            <span class="rcc-intel-badge__label">Nautical Miles</span>
+        </div>
+
+        <div class="rcc-intel-badge__sep" aria-hidden="true"></div>
+        }
+
+        <!-- Estimated Flight Time -->
+        @if (flightTime()) {
+        <div class="rcc-intel-badge__metric">
+            <svg class="rcc-intel-badge__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <span class="rcc-intel-badge__value">{{ flightTime() }}</span>
+            <span class="rcc-intel-badge__label">Est. Block Time</span>
+        </div>
+
+        <div class="rcc-intel-badge__sep" aria-hidden="true"></div>
+        }
+
+        <!-- Operators -->
+        <div class="rcc-intel-badge__metric">
+            <svg class="rcc-intel-badge__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            <span class="rcc-intel-badge__value">
+                {{ activeOperators() }}
+                <span class="rcc-intel-badge__unit">/ {{ totalOperators() }}</span>
+            </span>
+            <span class="rcc-intel-badge__label">Operators Active</span>
+        </div>
+
+        @if (codeshareCount() > 0) {
+        <div class="rcc-intel-badge__sep" aria-hidden="true"></div>
+        <div class="rcc-intel-badge__metric">
+            <span class="rcc-intel-badge__value">{{ codeshareCount() }}</span>
+            <span class="rcc-intel-badge__label">Codeshare</span>
+        </div>
+        }
+
+    </div>
+
+</section>

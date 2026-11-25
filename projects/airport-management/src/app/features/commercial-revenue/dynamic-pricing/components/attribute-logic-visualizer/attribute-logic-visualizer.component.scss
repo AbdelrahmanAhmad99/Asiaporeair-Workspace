@@ -1,0 +1,552 @@
+ // ── Design Tokens ─────────────────────────────────────────────
+ :host {
+     // Core Palette
+     --color-midnight: #051937; // Midnight Sapphire
+     --color-midnight-deep: #020d1d; // Deeper canvas bg
+     --color-gold: #B68F24; // Royal Gold
+     --color-champagne: #E2C780; // Champagne Gold
+     --color-ivory: #F8F9FA; // Off-White
+     --color-navy-text: #101056; // Deep Charcoal Navy
+     --color-white: #ffffff;
+
+     // Node type accent colours (match SVG fill gradients)
+     --color-trigger: #4A9EFF; // Cool blue — triggers
+     --color-condition: #E2C780; // Champagne Gold — conditions
+     --color-modifier: #34D399; // Emerald — modifiers  (#064E3B family)
+     --color-output: #F59E0B; // Warm Amber — output (#B45309 family)
+
+     // Status
+     --color-success: #064E3B;
+     --color-warning: #B45309;
+     --color-danger: #710D06;
+
+     // Surfaces
+     --surface-panel: linear-gradient(160deg, #07213f 0%, #030f1f 100%);
+     --surface-header: rgba(5, 25, 55, 0.75);
+     --surface-canvas: linear-gradient(180deg, #051937 0%, #020d1d 100%);
+
+     // Shadows — NO black; soft dark-blue
+     --shadow-panel: 0 8px 40px rgba(5, 25, 55, 0.55),
+         0 2px 12px rgba(5, 25, 55, 0.35);
+     --shadow-chip: 0 2px 8px rgba(5, 25, 55, 0.40);
+
+     // Borders
+     --border-gold-faint: 1px solid rgba(226, 199, 128, 0.20);
+     --border-gold-medium: 1px solid rgba(226, 199, 128, 0.40);
+     --border-gold-strong: 1px solid rgba(182, 143, 36, 0.70);
+
+     // Radii — Squircle system
+     --radius-card: 12px;
+     --radius-btn: 4px;
+     --radius-chip: 20px;
+     --radius-legend: 6px;
+
+     // Typography
+     --font-base: 'Inter', 'Roboto', system-ui, sans-serif;
+     --font-display: 'Montserrat', 'Inter', sans-serif;
+     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+     // Transitions
+     --transition-fast: 150ms ease;
+     --transition-normal: 260ms ease;
+     --transition-slow: 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+     display: block;
+     width: 100%;
+     font-family: var(--font-base);
+ }
+
+ // ============================================================
+ //  ROOT PANEL
+ // ============================================================
+
+ .alv-panel {
+     display: flex;
+     flex-direction: column;
+     background: var(--surface-panel);
+     border-radius: var(--radius-card);
+     border: var(--border-gold-faint);
+     box-shadow: var(--shadow-panel);
+     overflow: hidden;
+     width: 100%;
+ }
+
+ // ============================================================
+ //  PANEL HEADER
+ // ============================================================
+
+ .alv-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 14px 18px;
+     background: var(--surface-header);
+     backdrop-filter: blur(15px); // Glassmorphism per guidelines
+     -webkit-backdrop-filter: blur(15px);
+     border-bottom: var(--border-gold-faint);
+     gap: 12px;
+     flex-shrink: 0;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+     }
+
+     &__icon {
+         width: 20px;
+         height: 20px;
+         color: var(--color-champagne);
+         flex-shrink: 0;
+         opacity: 0.85;
+     }
+
+     &__title {
+         font-family: var(--font-display);
+         font-size: 0.875rem;
+         font-weight: 700;
+         letter-spacing: 0.05em;
+         text-transform: uppercase;
+         color: var(--color-champagne);
+         margin: 0;
+         line-height: 1.2;
+     }
+
+     &__sub {
+         font-size: 0.6875rem;
+         color: var(--color-champagne);
+         opacity: 0.50;
+         margin: 0;
+         letter-spacing: 0.03em;
+         margin-top: 2px;
+     }
+ }
+
+ // Rule chip — attributeId badge
+ .alv-rule-chip {
+     font-family: var(--font-mono);
+     font-size: 0.6875rem;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     color: var(--color-midnight);
+     background: var(--color-champagne);
+     padding: 3px 10px;
+     border-radius: var(--radius-chip);
+     box-shadow: var(--shadow-chip);
+     white-space: nowrap;
+     flex-shrink: 0;
+     transition: background var(--transition-fast), transform var(--transition-fast);
+
+     &:hover {
+         background: var(--color-gold);
+         transform: translateY(-1px);
+     }
+ }
+
+ // ============================================================
+ //  CANVAS WRAPPER
+ // ============================================================
+
+ .alv-canvas-wrap {
+     position: relative;
+     flex: 1;
+     min-height: 320px;
+     overflow: auto;
+     background: var(--surface-canvas);
+
+     // Custom slim scrollbar — Luxury feel
+     scrollbar-width: thin;
+     scrollbar-color: rgba(226, 199, 128, 0.30) transparent;
+
+     &::-webkit-scrollbar {
+         width: 5px;
+         height: 5px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba(226, 199, 128, 0.30);
+         border-radius: 10px;
+
+         &:hover {
+             background: rgba(226, 199, 128, 0.55);
+         }
+     }
+ }
+
+ // ============================================================
+ //  IDLE / PLACEHOLDER STATE
+ // ============================================================
+
+ @keyframes alv-float {
+
+     0%,
+     100% {
+         transform: translateY(0);
+         opacity: 0.45;
+     }
+
+     50% {
+         transform: translateY(-6px);
+         opacity: 0.70;
+     }
+ }
+
+ .alv-placeholder {
+     position: absolute;
+     inset: 0;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 14px;
+     padding: 32px;
+
+     svg {
+         width: 52px;
+         height: 52px;
+         color: var(--color-champagne);
+         animation: alv-float 3s ease-in-out infinite;
+         opacity: 0.50;
+     }
+
+     p {
+         font-size: 0.8125rem;
+         color: var(--color-champagne);
+         opacity: 0.55;
+         text-align: center;
+         margin: 0;
+         max-width: 280px;
+         line-height: 1.6;
+         letter-spacing: 0.02em;
+     }
+ }
+
+ // ============================================================
+ //  SIMULATING / LOADING STATE
+ // ============================================================
+
+ @keyframes alv-pulse-ring {
+     0% {
+         transform: scale(0.85);
+         opacity: 0.80;
+         box-shadow: 0 0 0 0 rgba(226, 199, 128, 0.50);
+     }
+
+     50% {
+         transform: scale(1.10);
+         opacity: 1.00;
+         box-shadow: 0 0 0 18px rgba(226, 199, 128, 0.00);
+     }
+
+     100% {
+         transform: scale(0.85);
+         opacity: 0.80;
+         box-shadow: 0 0 0 0 rgba(226, 199, 128, 0.00);
+     }
+ }
+
+ .alv-simulating {
+     position: absolute;
+     inset: 0;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 20px;
+     background: rgba(2, 13, 29, 0.60);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+
+     p {
+         font-size: 0.8125rem;
+         color: var(--color-champagne);
+         margin: 0;
+         letter-spacing: 0.06em;
+         text-transform: uppercase;
+         opacity: 0.80;
+     }
+
+     &__pulse {
+         width: 48px;
+         height: 48px;
+         border-radius: 50%;
+         background: rgba(226, 199, 128, 0.20);
+         border: 2px solid var(--color-champagne);
+         animation: alv-pulse-ring 1.6s ease-in-out infinite;
+     }
+ }
+
+ // ============================================================
+ //  SVG FLOWCHART
+ // ============================================================
+
+ .alv-svg {
+     display: block;
+     // Allow the SVG to overflow and scroll within .alv-canvas-wrap
+     overflow: visible;
+ }
+
+ // ── Edges ─────────────────────────────────────────────────────
+ // .alv-edge {
+ // Edge lines are fully styled via SVG attributes in the template.
+ // This class exists for potential future JS targeting.
+ // }
+
+ // ── Node Groups — enter animation ────────────────────────────
+ @keyframes alv-node-enter {
+     from {
+         opacity: 0;
+         transform: translateY(8px) scale(0.96);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }
+
+ // Base node group — applied to every <g [class]="nodeClass(node)">
+ // nodeClass returns one of:
+ //   alv-node alv-node--trigger
+ //   alv-node alv-node--condition
+ //   alv-node alv-node--modifier
+ //   alv-node alv-node--output
+ [class*="alv-node"] {
+     animation: alv-node-enter 350ms var(--transition-slow) both;
+     cursor: default;
+ }
+
+ // ── Shadow behind node rect ───────────────────────────────────
+ .alv-node-shadow {
+     // fill="rgba(0,0,0,0.4)" is set inline in the template.
+     // Keeps the depth illusion without black CSS box-shadows.
+     filter: blur(3px);
+ }
+
+ // ── Node body — base styles ───────────────────────────────────
+ // Fill and gradient are applied via SVG url(#alv-*-fill) inline.
+ // Hover interaction: scale body subtly via SVG group transform.
+ .alv-node-body {
+     transition: filter 200ms ease;
+
+     [class*="alv-node"]:hover & {
+         filter: brightness(1.15);
+     }
+ }
+
+ // ── Node border ───────────────────────────────────────────────
+ .alv-node-border {
+     stroke-width: 1.2;
+     transition: stroke-opacity 200ms ease;
+
+     // Per node type — stroke from AOMS palette
+     .alv-node--trigger & {
+         stroke: var(--color-trigger);
+         stroke-opacity: 0.55;
+     }
+
+     .alv-node--condition & {
+         stroke: var(--color-champagne);
+         stroke-opacity: 0.45;
+     }
+
+     .alv-node--modifier & {
+         stroke: var(--color-modifier);
+         stroke-opacity: 0.50;
+     }
+
+     .alv-node--output & {
+         stroke: var(--color-output);
+         stroke-opacity: 0.50;
+     }
+
+     // Brighten border on group hover
+     [class*="alv-node"]:hover & {
+         stroke-opacity: 0.90;
+     }
+ }
+
+ // ── Left accent bar ───────────────────────────────────────────
+ .alv-node-accent {
+
+     // Per node type fill
+     .alv-node--trigger & {
+         fill: var(--color-trigger);
+     }
+
+     .alv-node--condition & {
+         fill: var(--color-champagne);
+     }
+
+     .alv-node--modifier & {
+         fill: var(--color-modifier);
+     }
+
+     .alv-node--output & {
+         fill: var(--color-output);
+     }
+ }
+
+ // ── Primary label text ────────────────────────────────────────
+ .alv-node-label {
+     fill: var(--color-champagne);
+     font-family: var(--font-display);
+
+     // Slightly dim for non-active node types
+     .alv-node--condition & {
+         fill: var(--color-champagne);
+         fill-opacity: 0.90;
+     }
+
+     .alv-node--modifier & {
+         fill: var(--color-modifier);
+         fill-opacity: 0.90;
+     }
+
+     .alv-node--output & {
+         fill: var(--color-output);
+         fill-opacity: 0.90;
+     }
+
+     .alv-node--trigger & {
+         fill: var(--color-trigger);
+         fill-opacity: 0.95;
+     }
+ }
+
+ // ── Sub-label text ────────────────────────────────────────────
+ .alv-node-sublabel {
+     fill: var(--color-champagne);
+     fill-opacity: 0.50;
+
+     .alv-node--modifier & {
+         fill: var(--color-modifier);
+         fill-opacity: 0.55;
+     }
+
+     .alv-node--output & {
+         fill: var(--color-output);
+         fill-opacity: 0.55;
+     }
+
+     .alv-node--trigger & {
+         fill: var(--color-trigger);
+         fill-opacity: 0.55;
+     }
+ }
+
+ // ── Type indicator circle ─────────────────────────────────────
+ .alv-node-indicator {
+     fill-opacity: 0.80;
+     transition: r 200ms ease, fill-opacity 200ms ease;
+
+     .alv-node--trigger & {
+         fill: var(--color-trigger);
+     }
+
+     .alv-node--condition & {
+         fill: var(--color-champagne);
+     }
+
+     .alv-node--modifier & {
+         fill: var(--color-modifier);
+     }
+
+     .alv-node--output & {
+         fill: var(--color-output);
+     }
+
+     [class*="alv-node"]:hover & {
+         fill-opacity: 1;
+     }
+ }
+
+ // ============================================================
+ //  LEGEND
+ // ============================================================
+
+ .alv-legend {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-wrap: wrap;
+     gap: 10px;
+     padding: 10px 18px;
+     background: rgba(5, 25, 55, 0.65);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     border-top: var(--border-gold-faint);
+     flex-shrink: 0;
+ }
+
+ .alv-legend__item {
+     display: inline-flex;
+     align-items: center;
+     gap: 7px;
+     font-size: 0.6875rem;
+     font-weight: 600;
+     letter-spacing: 0.07em;
+     text-transform: uppercase;
+     color: var(--color-champagne);
+     opacity: 0.70;
+     padding: 4px 10px 4px 8px;
+     border-radius: var(--radius-legend);
+     border: 1px solid transparent;
+     transition: opacity var(--transition-fast), border-color var(--transition-fast);
+
+     // Left dot via ::before pseudo-element
+     &::before {
+         content: '';
+         display: inline-block;
+         width: 8px;
+         height: 8px;
+         border-radius: 50%;
+         flex-shrink: 0;
+     }
+
+     &:hover {
+         opacity: 1;
+         border-color: rgba(226, 199, 128, 0.20);
+     }
+
+     // Per-type colour for dot and text
+     &--trigger {
+         &::before {
+             background: var(--color-trigger);
+             box-shadow: 0 0 6px rgba(74, 158, 255, 0.60);
+         }
+
+         color: var(--color-trigger);
+     }
+
+     &--condition {
+         &::before {
+             background: var(--color-champagne);
+             box-shadow: 0 0 6px rgba(226, 199, 128, 0.55);
+         }
+
+         color: var(--color-champagne);
+     }
+
+     &--modifier {
+         &::before {
+             background: var(--color-modifier);
+             box-shadow: 0 0 6px rgba(52, 211, 153, 0.55);
+         }
+
+         color: var(--color-modifier);
+     }
+
+     &--output {
+         &::before {
+             background: var(--color-output);
+             box-shadow: 0 0 6px rgba(245, 158, 11, 0.55);
+         }
+
+         color: var(--color-output);
+     }
+ }

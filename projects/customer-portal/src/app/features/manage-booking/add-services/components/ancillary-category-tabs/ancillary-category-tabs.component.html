@@ -1,0 +1,12 @@
+ <nav class="cat-tabs" role="tablist" aria-label="Filter by category">
+            <button *ngFor="let cat of categories"
+                    class="cat-tab"
+                    [class.cat-tab--active]="cat === activeCategory"
+                    role="tab"
+                    [attr.aria-selected]="cat === activeCategory"
+                    [attr.aria-label]="getLabel(cat) + ' services'"
+                    (click)="categoryChange.emit(cat)">
+                <span class="cat-icon" [innerHTML]="getIconSvg(cat)" aria-hidden="true"></span>
+                <span class="cat-label">{{ getLabel(cat) }}</span>
+            </button>
+        </nav>

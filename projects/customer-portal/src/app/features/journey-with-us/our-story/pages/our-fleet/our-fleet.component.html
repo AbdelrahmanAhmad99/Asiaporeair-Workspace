@@ -1,0 +1,57 @@
+<div class="fl-shell">
+
+    <header class="fl-hero">
+        <div class="fl-hero__inner">
+            <nav class="fl-bc" aria-label="Breadcrumb">
+                <a href="/" class="fl-bc__link">Home</a><span class="fl-bc__sep">›</span>
+                <a href="/journey-with-us/our-story" class="fl-bc__link">Our Story</a>
+                <span class="fl-bc__sep">›</span><span class="fl-bc__cur">Our Fleet</span>
+            </nav>
+            <div class="fl-hero__pre">
+                <div class="fl-hero__line"></div><span class="fl-hero__ey">The Aircraft That Connect the World</span>
+            </div>
+            <h1 class="fl-hero__title">Our Fleet</h1>
+            <p class="fl-hero__sub">{{ fleet().length }} aircraft families, each chosen for its performance, passenger
+                comfort, and contribution to our sustainability goals. Every fleet decision is a statement of our
+                values.</p>
+        </div>
+        <div class="fl-hero__img-band" aria-hidden="true">
+            <img src="assets/images/journey-with-us/fleet-hero.png" alt="" class="fl-hero__bg" loading="eager" />
+            <div class="fl-hero__ov"></div>
+        </div>
+    </header>
+
+    <section class="fl-grid-section">
+        <div class="fl-inner">
+            <div class="fl-sec-hdr">
+                <div class="fl-sec-line"></div>
+                <div>
+                    <p class="fl-sec-ey">Aircraft Overview</p>
+                    <h2 class="fl-sec-title">Fleet at a Glance</h2>
+                </div>
+            </div>
+            <div class="fl-grid">
+                @for (aircraft of fleet(); track aircraft.id; let i = $index) {
+                <app-fleet-spec-card [fleet]="aircraft" [animDelay]="i * 80"></app-fleet-spec-card>
+                }
+            </div>
+        </div>
+    </section>
+
+    <div class="fl-sustainability">
+        <div class="fl-sustainability__inner">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <div>
+                <strong>Our Commitment to the Planet</strong>
+                <p>All new aircraft acquisitions prioritise fuel efficiency and reduced emissions. We are committed to
+                    net-zero carbon by 2050 through fleet renewal, sustainable aviation fuel, and operational
+                    excellence.</p>
+            </div>
+        </div>
+    </div>
+
+</div>

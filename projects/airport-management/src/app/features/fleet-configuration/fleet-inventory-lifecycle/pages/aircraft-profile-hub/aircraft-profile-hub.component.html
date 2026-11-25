@@ -1,0 +1,188 @@
+<div class="hub-page">
+
+    <!-- ══ Concierge Toast ════════════════════════════════════════ -->
+    @if (toast()) {
+    <div class="hub-toast" [class.hub-toast--success]="toast()!.type === 'success'"
+        [class.hub-toast--error]="toast()!.type === 'error'" role="status" aria-live="polite">
+
+        @if (toast()!.type === 'success') {
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="hub-toast__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+        </svg>
+        } @else {
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="hub-toast__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        }
+
+        <span class="hub-toast__message">{{ toast()!.message }}</span>
+
+        <button class="hub-toast__dismiss" type="button" (click)="dismissToast()" aria-label="Dismiss notification">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+    </div>
+    }
+
+    <!-- ══ Sticky Header ══════════════════════════════════════════ -->
+    <header class="hub-header">
+
+        <div>
+            <nav class="hub-breadcrumb" aria-label="Breadcrumb">
+                <button class="hub-breadcrumb__back" type="button" (click)="backToFleet()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="hub-breadcrumb__back__arrow" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    Fleet Assets
+                </button>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="hub-breadcrumb__sep"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="hub-breadcrumb__current">{{ tailNumber }}</span>
+            </nav>
+            <h1 class="hub-title">Aircraft Profile Suite</h1>
+        </div>
+
+        <div class="hub-header__controls">
+
+            <!-- Edit Aircraft button -->
+            @if (!store.isLoadingProfile() && store.selectedAircraftDetails()) {
+            <button class="hub-edit-btn" type="button" (click)="navigateToEdit()">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="hub-edit-btn__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                </svg>
+                Edit Profile
+            </button>
+            }
+
+            <!-- Refresh -->
+            <button class="hub-icon-btn" type="button" [disabled]="store.isLoadingProfile()"
+                (click)="store.loadAircraftFullProfile(tailNumber)" title="Refresh profile"
+                aria-label="Refresh aircraft profile">
+                <svg class="hub-icon-btn__icon" [class.hub-icon-btn__icon--spin]="store.isLoadingProfile()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                   3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                   13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Dark Mode Toggle -->
+            <button class="hub-icon-btn hub-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Light mode' : 'Dark mode'">
+                @if (isDarkMode()) {
+                <svg class="hub-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="hub-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ══════════════════════════════════════════════ -->
+    <main class="hub-body">
+
+        <!-- Error Banner -->
+        @if (store.profileError()) {
+        <div class="hub-error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="hub-error__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{ store.profileError() }}
+        </div>
+        }
+
+        <!-- ── Hero Identity Card ────────────────────────────────── -->
+        <aoms-operational-identity-card [aircraft]="store.selectedAircraftDetails()"
+            [loading]="store.isLoadingProfile()" />
+
+        <!-- ── Two-column action area ─────────────────────────────── -->
+        <div class="hub-actions-grid">
+
+            <aoms-flight-hours-logger [isProcessing]="store.isActionProcessing()"
+                [currentTotal]="store.selectedAircraftDetails()?.totalFlightHours"
+                (hoursLogged)="onHoursLogged($event)" />
+
+            <aoms-status-management-form [currentStatus]="store.selectedAircraftDetails()?.status ?? ''"
+                [isProcessing]="store.isActionProcessing()" (statusChanged)="onStatusChanged($event)" />
+
+        </div>
+
+        <!-- ── Configurations Summary ────────────────────────────── -->
+        @if (!store.isLoadingProfile() && store.selectedAircraftDetails()?.configurations?.length) {
+        <div class="hub-configs-card">
+            <div class="hub-configs-card__header">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="hub-configs-card__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                <h3 class="hub-configs-card__title">Cabin Configurations</h3>
+                <span class="hub-configs-card__count">{{ store.selectedAircraftDetails()!.configurations.length
+                    }}</span>
+            </div>
+
+            <div class="hub-configs-grid">
+                @for (config of store.selectedAircraftDetails()!.configurations; track config.configId) {
+                <div class="hub-config-item">
+                    <span class="hub-config-item__name">{{ config.configurationName }}</span>
+                    <span class="hub-config-item__seats">{{ config.totalSeatsCount ?? '—' }} seats</span>
+                    <div class="hub-config-item__classes">
+                        @for (cls of config.cabinClasses; track cls.cabinClassId) {
+                        <span class="hub-config-item__class-chip">
+                            {{ cls.name }} · {{ cls.seatCount }}
+                        </span>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+        }
+
+        <!-- ── Danger Zone ─────────────────────────────────────────── -->
+        @if (!store.isLoadingProfile() && store.selectedAircraftDetails()) {
+        <div class="hub-danger-zone">
+            <div class="hub-danger-zone__info">
+                <span class="hub-danger-zone__title">Decommission Aircraft</span>
+                <span class="hub-danger-zone__desc">
+                    Permanently remove {{ tailNumber }} from active fleet registry. This cannot be undone without admin
+                    intervention.
+                </span>
+            </div>
+            <button class="hub-danger-btn" type="button" [disabled]="store.isActionProcessing()"
+                (click)="onDecommission()">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="hub-danger-btn__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+                Decommission
+            </button>
+        </div>
+        }
+
+    </main>
+
+</div>

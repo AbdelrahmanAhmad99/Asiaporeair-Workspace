@@ -1,0 +1,202 @@
+ // ----------------------------------------------------------------------------
+ // 1. Page Shell
+ // ----------------------------------------------------------------------------
+ .ci-page {
+   min-height: 100%;
+   background-color: var(--aoms-bg-primary);
+   transition: background-color var(--aoms-transition-base);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Sticky Page Header
+ // ----------------------------------------------------------------------------
+ .ci-header {
+   position: sticky;
+   top: 0;
+   z-index: 20;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 1rem 1.5rem;
+   background-color: var(--aoms-bg-card);
+   border-bottom: 1px solid rgba(226, 199, 128, 0.15);
+   box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+
+   // Glassmorphism layer
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+ }
+
+ // 2a. Breadcrumb navigation
+ .ci-breadcrumb {
+   display: flex;
+   align-items: center;
+   gap: 0.375rem;
+   margin-bottom: 0.25rem;
+
+   &__section {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: var(--aoms-text-muted);
+     transition: color var(--aoms-transition-fast);
+   }
+
+   &__separator {
+     width: 0.75rem;
+     height: 0.75rem;
+     color: var(--aoms-text-muted);
+     flex-shrink: 0;
+   }
+
+   &__current {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: var(--aoms-gold);
+     transition: color var(--aoms-transition-fast);
+   }
+ }
+
+ // 2b. Page title
+ .ci-title {
+   font-size: 20px;
+   font-family: var(--aoms-font-heading);
+   font-weight: 700;
+   letter-spacing: -0.02em;
+   line-height: 1;
+   color: var(--aoms-text-primary);
+   transition: color var(--aoms-transition-fast);
+ }
+
+ // 2c. Header right-side controls
+ .ci-header-controls {
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Icon Button (Refresh · Dark-mode toggle)
+ // ----------------------------------------------------------------------------
+ .ci-icon-btn {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 2.25rem;
+   height: 2.25rem;
+   border-radius: 4px;
+   border: 1px solid rgba(226, 199, 128, 0.25);
+   background: transparent;
+   color: var(--aoms-text-secondary);
+   cursor: pointer;
+   transition: all var(--aoms-transition-fast);
+
+   &:hover {
+     border-color: var(--aoms-champagne);
+     background: rgba(226, 199, 128, 0.08);
+     color: var(--aoms-midnight);
+   }
+
+   &:focus-visible {
+     outline: 2px solid var(--aoms-champagne);
+     outline-offset: 2px;
+   }
+
+   &:disabled {
+     opacity: 0.4;
+     cursor: not-allowed;
+
+     &:hover {
+       border-color: rgba(226, 199, 128, 0.25);
+       background: transparent;
+       color: var(--aoms-text-secondary);
+     }
+   }
+
+   // Gold variant used for the theme toggle
+   &--gold {
+     color: var(--aoms-gold);
+
+     &:hover {
+       background: rgba(182, 143, 36, 0.1);
+     }
+   }
+
+   // Refresh spin animation when loading
+   .ci-icon-btn__icon--spinning {
+     animation: ci-spin 1s linear infinite;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Page Body
+ // ----------------------------------------------------------------------------
+ .ci-body {
+   padding: 1.5rem;
+   display: flex;
+   flex-direction: column;
+   gap: 1.25rem;
+   overflow-y: auto;
+   max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Error Banner
+ // ----------------------------------------------------------------------------
+ .ci-error-banner {
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+   padding: 0.75rem 1rem;
+   border-radius: 8px;
+   background: rgba(113, 13, 6, 0.08);
+   border: 1px solid rgba(113, 13, 6, 0.2);
+   color: #710d06;
+   font-size: 0.875rem;
+   font-family: var(--aoms-font-body);
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+     flex-shrink: 0;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Keyframes
+ // ----------------------------------------------------------------------------
+ @keyframes ci-spin {
+   from {
+     transform: rotate(0deg);
+   }
+
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ // ============================================================================
+ // 7. Dark Mode Overrides  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+   .ci-header {
+     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+   }
+
+   .ci-icon-btn {
+     &:hover {
+       color: var(--aoms-champagne);
+     }
+   }
+
+   .ci-error-banner {
+     background: rgba(113, 13, 6, 0.14);
+     border-color: rgba(113, 13, 6, 0.35);
+     color: #f87171;
+   }
+ }

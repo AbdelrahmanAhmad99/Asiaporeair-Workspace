@@ -1,0 +1,97 @@
+<div class="login-shell">
+
+    <!-- ── Cinematic background ──────────────────────────────────────────────── -->
+    <div class="login-shell__bg" aria-hidden="true">
+        <img class="login-shell__bg-image" src="assets/images/auth/login-hero.png" alt="" loading="eager" />
+        <div class="login-shell__bg-overlay"></div>
+    </div>
+
+    <!-- ── Layout header (logo + back home) ──────────────────────────────────── -->
+    <app-auth-layout-header />
+
+    <!-- ── Main split layout ─────────────────────────────────────────────────── -->
+    <main class="login-main" role="main">
+
+        <!-- Left — ambient branding (hidden on mobile) -->
+        <aside class="login-brand" aria-hidden="true">
+            <figure class="login-brand__badge">
+                <div class="login-brand__pre-line"></div>
+                <blockquote class="login-brand__quote">
+                    "The world's most awarded airline experience,<br />
+                    now at your fingertips."
+                </blockquote>
+                <div class="login-brand__stats">
+                    <div class="login-brand__stat">
+                        <span class="login-brand__stat-num">135+</span>
+                        <span class="login-brand__stat-label">Destinations</span>
+                    </div>
+                    <div class="login-brand__stat-divider" aria-hidden="true"></div>
+                    <div class="login-brand__stat">
+                        <span class="login-brand__stat-num">52</span>
+                        <span class="login-brand__stat-label">Years of Excellence</span>
+                    </div>
+                    <div class="login-brand__stat-divider" aria-hidden="true"></div>
+                    <div class="login-brand__stat">
+                        <span class="login-brand__stat-num">12×</span>
+                        <span class="login-brand__stat-label">World's Best Airline</span>
+                    </div>
+                </div>
+            </figure>
+        </aside>
+
+        <!-- Right — form card -->
+        <section class="login-panel" aria-label="Sign in to your account">
+            <div class="login-panel__card">
+
+                <!-- Card header -->
+                <header class="login-panel__header">
+                    <p class="login-panel__eyebrow">Welcome back</p>
+                    <h1 class="login-panel__title">Access Your Suite</h1>
+                    <p class="login-panel__subtitle">
+                        Sign in to manage your bookings, miles, and exclusive member benefits.
+                    </p>
+                </header>
+
+                <!-- Social login -->
+                <app-social-login-buttons />
+
+                <!-- Divider -->
+                <div class="login-divider" aria-hidden="true">
+                    <span class="login-divider__line"></span>
+                    <span class="login-divider__text">or continue with email</span>
+                    <span class="login-divider__line"></span>
+                </div>
+
+                <!-- Global error -->
+                @if (store.hasError()) {
+                <div class="login-error-alert" role="alert" aria-live="assertive">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    {{ store.authError() }}
+                </div>
+                }
+
+                <!-- Login form -->
+                <app-login-form [isLoading]="store.isLoading()" (formSubmit)="onSubmit($event)" />
+
+                <!-- Register link -->
+                <p class="login-panel__register">
+                    New to Asiaporeair?
+                    <a routerLink="/auth/signup" class="login-panel__register-link">
+                        Begin Your Journey
+                    </a>
+                </p>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ── Layout footer ─────────────────────────────────────────────────────── -->
+    <app-auth-layout-footer />
+
+</div>

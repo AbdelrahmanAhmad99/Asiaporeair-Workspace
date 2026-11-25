@@ -1,0 +1,694 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #710D06;
+ $ruby-mid: #9f1239;
+ $emerald: #064E3B;
+ $slate: #6C757D;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .aaa-page {
+     min-height: 100%;
+     background: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+     position: relative; // for toast stack positioning
+ }
+
+ // ============================================================================
+ // 2. Sticky Command Header
+ // ============================================================================
+ .aaa-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.9375rem 1.5rem;
+     background: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 14px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ .aaa-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // Back arrow button
+ .aaa-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+         transform: translateX(-2px);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // Breadcrumb
+ .aaa-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__link {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color 150ms $ease;
+
+         &:hover {
+             color: $gold;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .aaa-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color 150ms $ease;
+ }
+
+ // Header right cluster
+ .aaa-header-right {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-shrink: 0;
+ }
+
+ // Stat pills in header
+ .aaa-stats {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+ }
+
+ .aaa-stat {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     padding: 0.2rem 0.6rem;
+     border-radius: 3px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     letter-spacing: 0.04em;
+
+     strong {
+         font-weight: 700;
+     }
+
+     &--total {
+         background: rgba($champagne, 0.1);
+         border: 1px solid rgba($champagne, 0.2);
+         color: var(--aoms-text-secondary, $charcoal);
+     }
+
+     &--deactivated {
+         background: rgba($ruby-mid, 0.07);
+         border: 1px solid rgba($ruby-mid, 0.18);
+         color: $ruby-mid;
+
+         strong {
+             color: $ruby-mid;
+         }
+     }
+ }
+
+ // Refresh icon button
+ .aaa-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: aaa-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // "Return to Operations" primary button
+ .aaa-return-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     background: $gold;
+     border: 1px solid $gold;
+     color: $midnight;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 150ms $ease;
+
+     &:hover {
+         background: $champagne;
+         border-color: $champagne;
+         box-shadow: 0 4px 14px rgba($gold, 0.35);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .aaa-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     overflow-y: auto;
+     max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+ }
+
+ // ============================================================================
+ // 4. Error Banner
+ // ============================================================================
+ .aaa-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby-mid, 0.07);
+     border: 1px solid rgba($ruby-mid, 0.2);
+     color: $ruby-mid;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+         color: $ruby-mid;
+     }
+ }
+
+ // ============================================================================
+ // 5. Controls Bar (filter toggle + search)
+ // ============================================================================
+ .aaa-controls {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     flex-wrap: wrap;
+ }
+
+ // ── Filter toggle group ────────────────────────────────────────────────────
+ .aaa-filter-group {
+     display: flex;
+     align-items: center;
+     border-radius: 6px;
+     overflow: hidden;
+     border: 1px solid rgba($champagne, 0.2);
+     background: var(--aoms-bg-card, #ffffff);
+     box-shadow: 0 2px 8px rgba($midnight, 0.05);
+     flex-shrink: 0;
+ }
+
+ .aaa-filter-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     height: 2.25rem;
+     padding: 0 0.875rem;
+     border: none;
+     border-right: 1px solid rgba($champagne, 0.15);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.03em;
+     cursor: pointer;
+     transition: all 150ms $ease;
+     white-space: nowrap;
+
+     &:last-child {
+         border-right: none;
+     }
+
+     &:hover:not(.aaa-filter-btn--active) {
+         background: rgba($champagne, 0.08);
+         color: $gold;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     // Active segment — filled Midnight Sapphire with Gold text
+     &--active {
+         background: $midnight;
+         color: $champagne;
+         cursor: default;
+
+         .aaa-filter-btn__icon {
+             color: $champagne;
+         }
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         color: var(--aoms-text-muted);
+         transition: color 150ms $ease;
+     }
+ }
+
+ // ── Instant Search ─────────────────────────────────────────────────────────
+ .aaa-search {
+     position: relative;
+     display: flex;
+     align-items: center;
+     flex: 1;
+     min-width: 0;
+     max-width: 28rem;
+
+     &__icon-wrap {
+         position: absolute;
+         left: 0.875rem;
+         top: 50%;
+         transform: translateY(-50%);
+         pointer-events: none;
+         width: 1rem;
+         height: 1rem;
+         color: var(--aoms-text-muted);
+     }
+
+     &__icon {
+         width: 100%;
+         height: 100%;
+     }
+
+     &__input {
+         width: 100%;
+         height: 2.25rem;
+         padding: 0 2.25rem 0 2.375rem; // left pad for icon, right pad for clear btn
+         border-radius: 6px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: var(--aoms-bg-card, #ffffff);
+         color: var(--aoms-text-primary, $charcoal);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 400;
+         outline: none;
+         transition:
+             border-color 180ms $ease,
+             box-shadow 180ms $ease;
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+         }
+
+         &:focus {
+             border-color: $champagne;
+             box-shadow: 0 0 0 3px rgba($champagne, 0.14);
+         }
+     }
+
+     &__clear {
+         position: absolute;
+         right: 0.625rem;
+         top: 50%;
+         transform: translateY(-50%);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         color: var(--aoms-text-muted);
+         cursor: pointer;
+         border-radius: 2px;
+         transition: color 150ms $ease;
+
+         svg {
+             width: 0.8rem;
+             height: 0.8rem;
+         }
+
+         &:hover {
+             color: $ruby-mid;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Toast Notification Stack
+ // ============================================================================
+ .aaa-toast-stack {
+     position: fixed;
+     bottom: 1.5rem;
+     right: 1.5rem;
+     z-index: 100;
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+     pointer-events: none; // stack itself is click-through; toasts re-enable
+     width: min(360px, calc(100vw - 3rem));
+ }
+
+ .aaa-toast {
+     pointer-events: auto;
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 1rem 1.125rem;
+     border-radius: 10px;
+     box-shadow:
+         0 8px 32px rgba($midnight, 0.18),
+         0 2px 8px rgba($midnight, 0.1);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     animation: aaa-toast-in 280ms $luxury both;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 6px;
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+     }
+
+     &__msg {
+         flex: 1;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12.5px;
+         font-weight: 500;
+         line-height: 1.5;
+         margin: 0;
+     }
+
+     &__dismiss {
+         flex-shrink: 0;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.375rem;
+         height: 1.375rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         border-radius: 3px;
+         transition: background 150ms $ease;
+         opacity: 0.5;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             opacity: 1;
+         }
+     }
+
+     // ── Success variant ────────────────────────────────────────────────────
+     &--success {
+         background: rgba(236, 253, 245, 0.97);
+         border: 1px solid rgba($emerald, 0.3);
+
+         .aaa-toast__icon-wrap {
+             background: rgba($emerald, 0.12);
+             border: 1px solid rgba($emerald, 0.25);
+         }
+
+         .aaa-toast__icon {
+             color: #059669;
+         }
+
+         .aaa-toast__msg {
+             color: #065F46;
+         }
+
+         .aaa-toast__dismiss {
+             color: #065F46;
+         }
+     }
+
+     // ── Error variant ──────────────────────────────────────────────────────
+     &--error {
+         background: rgba(255, 241, 242, 0.97);
+         border: 1px solid rgba($ruby-mid, 0.3);
+
+         .aaa-toast__icon-wrap {
+             background: rgba($ruby-mid, 0.1);
+             border: 1px solid rgba($ruby-mid, 0.22);
+         }
+
+         .aaa-toast__icon {
+             color: $ruby-mid;
+         }
+
+         .aaa-toast__msg {
+             color: #7f1d1d;
+         }
+
+         .aaa-toast__dismiss {
+             color: $ruby-mid;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. Keyframes
+ // ============================================================================
+ @keyframes aaa-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes aaa-toast-in {
+     from {
+         opacity: 0;
+         transform: translateX(20px) scale(0.97);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0) scale(1);
+     }
+ }
+
+ // ============================================================================
+ // 8. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .aaa-header {
+         box-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+     }
+
+     .aaa-back-btn:hover {
+         color: $champagne;
+     }
+
+     .aaa-icon-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .aaa-stat--total {
+         color: rgba(255, 255, 255, 0.6);
+         background: rgba($champagne, 0.06);
+         border-color: rgba($champagne, 0.12);
+     }
+
+     .aaa-filter-group {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .aaa-filter-btn:hover:not(.aaa-filter-btn--active) {
+         background: rgba($champagne, 0.06);
+         color: $champagne;
+     }
+
+     .aaa-filter-btn__icon {
+         color: rgba(255, 255, 255, 0.35);
+     }
+
+     .aaa-search__input {
+         background: rgba(255, 255, 255, 0.05);
+         border-color: rgba($champagne, 0.12);
+         color: rgba(255, 255, 255, 0.85);
+
+         &::placeholder {
+             color: rgba(255, 255, 255, 0.3);
+         }
+
+         &:focus {
+             background: rgba(255, 255, 255, 0.08);
+         }
+     }
+
+     .aaa-error-banner {
+         background: rgba($ruby-mid, 0.12);
+         border-color: rgba($ruby-mid, 0.3);
+         color: #f43f5e;
+
+         &__icon {
+             color: #f43f5e;
+         }
+     }
+
+     .aaa-toast--success {
+         background: rgba(6, 78, 59, 0.92);
+         border-color: rgba(5, 150, 105, 0.4);
+
+         .aaa-toast__msg {
+             color: #6ee7b7;
+         }
+
+         .aaa-toast__dismiss {
+             color: #6ee7b7;
+         }
+     }
+
+     .aaa-toast--error {
+         background: rgba(127, 29, 29, 0.9);
+         border-color: rgba($ruby-mid, 0.4);
+
+         .aaa-toast__msg {
+             color: #fca5a5;
+         }
+
+         .aaa-toast__dismiss {
+             color: #fca5a5;
+         }
+     }
+ }

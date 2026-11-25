@@ -1,0 +1,295 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 160ms ease;
+
+ // ── Modal Panel ───────────────────────────────────────────────────────────
+ .frm-modal {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 50;
+     width: min(480px, calc(100vw - 2rem));
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 0 0 1.5rem;
+     border-radius: 12px;
+
+     // Glassmorphism — Midnight Sapphire with blur
+     background: rgba($midnight, 0.92);
+     border: 1px solid rgba($gold, 0.3);
+     backdrop-filter: blur(15px);
+     -webkit-backdrop-filter: blur(15px);
+     box-shadow:
+         0 24px 64px rgba(0, 0, 0, 0.55),
+         0 0 0 1px rgba($gold, 0.06) inset;
+     overflow: hidden;
+
+     // Fade-in-Scale entrance animation
+     animation: frm-enter 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     >*:not(.frm-rule):not(.frm-loading) {
+         padding-left: 1.5rem;
+         padding-right: 1.5rem;
+     }
+ }
+
+ // ── Gold Accent Rule ──────────────────────────────────────────────────────
+ .frm-rule {
+     height: 3px;
+     flex-shrink: 0;
+     background: linear-gradient(to right,
+             rgba($gold, 0.3),
+             $gold,
+             rgba($gold, 0.3));
+ }
+
+ // ── Icon ─────────────────────────────────────────────────────────────────
+ .frm-icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3rem;
+     height: 3rem;
+     border-radius: 50%;
+     flex-shrink: 0;
+     margin-top: 0.625rem;
+     background: rgba($gold, 0.12);
+     border: 1px solid rgba($gold, 0.28);
+ }
+
+ .frm-icon {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: $champagne;
+ }
+
+ // ── Body ──────────────────────────────────────────────────────────────────
+ .frm-body {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+ }
+
+ .frm-title {
+     font-size: 1.1875rem;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     color: $champagne;
+     margin: 0;
+ }
+
+ // ── Target ────────────────────────────────────────────────────────────────
+ .frm-target {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+
+     &__code {
+         display: inline-block;
+         padding: 0.25rem 0.625rem;
+         border-radius: 4px;
+         background: rgba($gold, 0.12);
+         border: 1px solid rgba($gold, 0.28);
+         font-family: 'Courier New', monospace;
+         font-size: 0.9375rem;
+         font-weight: 700;
+         color: $champagne;
+         letter-spacing: 0.06em;
+     }
+
+     &__desc {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: rgba(255, 255, 255, 0.5);
+         font-style: italic;
+     }
+ }
+
+ .frm-copy {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     line-height: 1.55;
+     color: rgba(255, 255, 255, 0.5);
+     margin: 0;
+ }
+
+ // ── Info Pill ─────────────────────────────────────────────────────────────
+ .frm-info-pill {
+     display: inline-flex;
+     align-items: flex-start;
+     gap: 0.4375rem;
+     padding: 0.4375rem 0.75rem;
+     border-radius: 8px;
+     background: rgba($gold, 0.07);
+     border: 1px solid rgba($gold, 0.16);
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: rgba($champagne, 0.8);
+     line-height: 1.4;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         margin-top: 0.05rem;
+         color: $champagne;
+     }
+ }
+
+ // ── Error ─────────────────────────────────────────────────────────────────
+ .frm-error {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.625rem;
+     padding: 0.75rem 1rem;
+     border-radius: 6px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.22);
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: lighten($ruby, 38%);
+     line-height: 1.4;
+
+     svg {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+         margin-top: 0.1rem;
+     }
+ }
+
+ // ── Actions ───────────────────────────────────────────────────────────────
+ .frm-actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding-top: 0.375rem;
+     border-top: 1px solid rgba(255, 255, 255, 0.07);
+ }
+
+ .frm-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.5625rem 1.125rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     transition: all $t;
+
+     svg {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // Cancel — Champagne outline
+     &--cancel {
+         color: rgba(255, 255, 255, 0.5);
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.25);
+
+         &:hover {
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+             border-color: $champagne;
+         }
+     }
+
+     // Confirm — Royal Gold with glow
+     &--confirm {
+         color: $midnight;
+         background: $gold;
+         border: none;
+         box-shadow: 0 4px 18px rgba($gold, 0.5);
+
+         &:hover {
+             background: lighten($gold, 7%);
+             box-shadow: 0 6px 26px rgba($gold, 0.68);
+             transform: translateY(-1px);
+         }
+
+         &:active {
+             transform: translateY(0);
+         }
+     }
+ }
+
+ // ── Processing / Loading State ────────────────────────────────────────────
+ .frm-loading {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 2.75rem 1.5rem;
+     text-align: center;
+
+     p {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: rgba(255, 255, 255, 0.8);
+         margin: 0;
+
+         strong {
+             color: $champagne;
+         }
+     }
+
+     span {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.35);
+     }
+
+     &__spinner {
+         width: 2rem;
+         height: 2rem;
+         color: $champagne;
+         animation: frm-spin 1s linear infinite;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes frm-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px)) scale(0.92);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%) scale(1);
+     }
+ }
+
+ @keyframes frm-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }

@@ -1,0 +1,51 @@
+<!-- user-role-selector.component.html -->
+
+<div class="urs">
+
+    <div class="urs__intro">
+        <h2 class="urs__intro__title">Select Professional Role</h2>
+        <p class="urs__intro__sub">
+            The registration form will dynamically adapt to the selected operational position.
+            Each role has its own credential requirements and system access levels.
+        </p>
+    </div>
+
+    <div class="urs__grid" role="list">
+        @for (card of roleCards; track card.role) {
+
+        <button class="urs__card" type="button" role="listitem" [attr.data-role]="card.role"
+            [style.--card-accent]="card.accent" (click)="onCardClick(card.role)"
+            (mouseenter)="hoveredRole.set(card.role)" (mouseleave)="hoveredRole.set(null)"
+            [attr.aria-label]="'Register as ' + card.title">
+
+            <!-- Ambient glow (appears on hover) -->
+            <div class="urs__card__glow" aria-hidden="true"></div>
+
+            <!-- Icon -->
+            <div class="urs__card__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urs__card__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="card.iconPath" />
+                </svg>
+            </div>
+
+            <!-- Text -->
+            <div class="urs__card__body">
+                <div class="urs__card__title-row">
+                    <h3 class="urs__card__title">{{ card.title }}</h3>
+                    <span class="urs__card__subtitle">{{ card.subtitle }}</span>
+                </div>
+                <p class="urs__card__desc">{{ card.description }}</p>
+            </div>
+
+            <!-- Chevron -->
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urs__card__chevron"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+
+        </button>
+
+        }
+    </div>
+
+</div>

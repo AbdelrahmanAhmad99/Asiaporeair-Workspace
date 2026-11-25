@@ -1,0 +1,386 @@
+ // ── Design tokens ─────────────────────────────────────────────────────────
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .ce-page {
+     min-height: 100%;
+     background-color: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Sticky Page Header
+ // ============================================================================
+ .ce-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 1rem 1.5rem;
+     background-color: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ // 2a. Left cluster
+ .ce-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // 2b. Back button
+ .ce-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.25rem;
+     height: 2.25rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast, 150ms ease);
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+         transform: translateX(-2px);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // 2c. Breadcrumb
+ .ce-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-family: var(--aoms-font-body);
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__link {
+         font-family: var(--aoms-font-body);
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color var(--aoms-transition-fast, 150ms ease);
+
+         &:hover {
+             color: $gold;
+         }
+     }
+
+     &__separator {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: var(--aoms-font-body);
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ // 2d. Page title
+ .ce-title {
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 32ch;
+     transition: color var(--aoms-transition-fast, 150ms ease);
+ }
+
+ // 2e. Right side
+ .ce-header-right {
+     flex-shrink: 0;
+ }
+
+ // ── Mode badge ────────────────────────────────────────────────────────────
+ .ce-mode-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.3rem 0.75rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.07em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &--create {
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.25);
+         color: $gold;
+     }
+
+     &--edit {
+         background: rgba($midnight, 0.06);
+         border: 1px solid rgba($midnight, 0.15);
+         color: $charcoal;
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .ce-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+     max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+     max-width: 860px;
+     margin: 0 auto;
+ }
+
+ // ============================================================================
+ // 4. Error Banners
+ // ============================================================================
+ .ce-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 1rem 1.125rem;
+     border-radius: 8px;
+     background: rgba(159, 18, 57, 0.07);
+     border: 1px solid rgba(159, 18, 57, 0.2);
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+         color: #9f1239;
+         margin-top: 0.1rem;
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.2rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__title {
+         font-family: var(--aoms-font-body);
+         font-size: 13px;
+         font-weight: 700;
+         color: #9f1239;
+     }
+
+     &__message {
+         font-family: var(--aoms-font-body);
+         font-size: 12px;
+         color: rgba(159, 18, 57, 0.8);
+         line-height: 1.5;
+         word-break: break-word;
+     }
+
+     &__action {
+         flex-shrink: 0;
+         background: none;
+         border: 1px solid rgba(159, 18, 57, 0.3);
+         border-radius: 4px;
+         color: #9f1239;
+         font-family: var(--aoms-font-body);
+         font-size: 12px;
+         font-weight: 600;
+         padding: 0.375rem 0.75rem;
+         cursor: pointer;
+         transition: all var(--aoms-transition-fast, 150ms ease);
+         white-space: nowrap;
+
+         &:hover {
+             background: rgba(159, 18, 57, 0.08);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Form Loading Skeleton
+ // ============================================================================
+ .ce-form-skeleton {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.2);
+     padding: 1.75rem 2rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+     animation: ce-pulse 1.6s ease-in-out infinite;
+ }
+
+ .ce-skeleton__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+ }
+
+ .ce-skeleton__line {
+     border-radius: 6px;
+     background: rgba($champagne, 0.1);
+
+     &--icon {
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 8px;
+         flex-shrink: 0;
+     }
+
+     &--title {
+         width: 10rem;
+         height: 1rem;
+         margin-bottom: 0.5rem;
+     }
+
+     &--sub {
+         width: 16rem;
+         height: 0.75rem;
+     }
+ }
+
+ .ce-skeleton__fields {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 1.25rem;
+ }
+
+ .ce-skeleton__field {
+     height: 3.5rem;
+     border-radius: 8px;
+     background: rgba($champagne, 0.07);
+
+     &--wide {
+         grid-column: 1 / -1;
+     }
+ }
+
+ // ============================================================================
+ // 6. Keyframes
+ // ============================================================================
+ @keyframes ce-pulse {
+
+     0%,
+     100% {
+         opacity: 0.7;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 7. Dark Mode Overrides  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .ce-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .ce-back-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .ce-mode-badge--edit {
+         background: rgba(255, 255, 255, 0.05);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.6);
+     }
+
+     .ce-error-banner {
+         background: rgba(159, 18, 57, 0.12);
+         border-color: rgba(159, 18, 57, 0.3);
+
+         &__title {
+             color: #f43f5e;
+         }
+
+         &__message {
+             color: rgba(244, 63, 94, 0.8);
+         }
+
+         &__icon {
+             color: #f43f5e;
+         }
+
+         &__action {
+             color: #f43f5e;
+             border-color: rgba(244, 63, 94, 0.3);
+         }
+     }
+
+     .ce-form-skeleton {
+         background: rgba(255, 255, 255, 0.03);
+         border-color: rgba($champagne, 0.08);
+     }
+
+     .ce-skeleton__line,
+     .ce-skeleton__field {
+         background: rgba($champagne, 0.05);
+     }
+ }

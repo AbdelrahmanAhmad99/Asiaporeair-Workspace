@@ -1,0 +1,941 @@
+// ─── 1. DESIGN TOKENS (CSS Custom Properties) ────────────────────────────────
+:host {
+    // Brand Colors
+    --clr-midnight: #051937; // Primary — main backgrounds
+    --clr-utility-bar: #030f22; // Utility bar — 15% darker
+    --clr-royal-gold: #B68F24; // Accents — buttons, borders
+    --clr-champagne: #E2C780; // Hover states, subtle highlights
+    --clr-ivory: #F8F9FA; // Light body
+    --clr-white: #ffffff;
+
+    // Navbar heights
+    --utility-height: 36px;
+    --main-nav-height: 70px;
+    --navbar-total: calc(var(--utility-height) + var(--main-nav-height));
+
+    // Transitions — "expensive" cubic-bezier
+    --ease-luxury: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-snap: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-base: 300ms var(--ease-luxury);
+
+    // Z-indices
+    --z-navbar: 1000;
+    --z-mega: 999;
+    --z-overlay: 1100;
+    --z-mobile: 1200;
+    --z-backdrop: 1150;
+
+    // Font
+    --font-nav: 'Montserrat', 'Inter', -apple-system, sans-serif;
+
+    display: block;
+}
+
+// ─── 2. GOOGLE FONT IMPORT ───────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+// ─── 3. UTILITY MIXINS ───────────────────────────────────────────────────────
+@mixin flex-center($gap: 0) {
+    display: flex;
+    align-items: center;
+
+    @if $gap >0 {
+        gap: #{$gap}px;
+    }
+}
+
+@mixin transition($props...) {
+    transition-property: #{$props};
+    transition-duration: 300ms;
+    transition-timing-function: var(--ease-luxury);
+}
+
+// ─── 4. ROOT NAVBAR WRAPPER ──────────────────────────────────────────────────
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-navbar);
+    font-family: var(--font-nav);
+    will-change: background-color, box-shadow;
+
+    // Default: Transparent (over hero image)
+    background-color: transparent;
+    // background-color: var(--clr-midnight);
+    box-shadow: none;
+    @include transition(background-color, box-shadow, backdrop-filter);
+
+    // Scrolled state: Solid midnight sapphire
+    &.is-scrolled {
+        background-color: var(--clr-midnight);
+        box-shadow: 0 8px 32px rgba(5, 25, 55, 0.35), 0 1px 0 rgba(182, 143, 36, 0.15);
+        backdrop-filter: blur(0px);
+    }
+}
+
+// ─── 5. TIER 1 — UTILITY BAR ─────────────────────────────────────────────────
+.utility-bar {
+    height: var(--utility-height);
+    // background-color: rgba(3, 15, 34, 0.9); // Always slightly visible
+    background-color: var(--clr-utility-bar);
+    border-bottom: 1px solid rgba(182, 143, 36, 0.12);
+    @include transition(background-color, opacity);
+
+    .is-scrolled & {
+        background-color: var(--clr-utility-bar);
+    }
+
+    &__inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        height: 100%;
+        @include flex-center(0);
+        justify-content: space-between;
+    }
+
+    &__left,
+    &__right {
+        @include flex-center(20);
+    }
+
+    &__auth-group {
+        @include flex-center(8);
+    }
+}
+
+// ─── 6. UTILITY LINKS ────────────────────────────────────────────────────────
+.utility-link {
+    @include flex-center(5);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.65);
+    font-family: var(--font-nav);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 4px 0;
+    @include transition(color);
+
+    svg {
+        flex-shrink: 0;
+        opacity: 0.75;
+    }
+
+    &:hover {
+        color: var(--clr-champagne);
+
+        svg {
+            opacity: 1;
+        }
+    }
+
+    // Gold-styled Login button
+    &--login {
+        background: none;
+        border: 1px solid rgba(182, 143, 36, 0.4);
+        border-radius: 3px;
+        padding: 3px 10px;
+        color: var(--clr-champagne);
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        @include transition(border-color, background-color, color);
+
+        &:hover {
+            background-color: rgba(182, 143, 36, 0.1);
+            border-color: var(--clr-royal-gold);
+            color: var(--clr-champagne);
+        }
+    }
+
+    &--signup {
+        background-color: var(--clr-royal-gold);
+        border: 1px solid var(--clr-royal-gold);
+        border-radius: 3px;
+        padding: 3px 12px;
+        color: var(--clr-midnight);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        @include transition(background-color, border-color, color);
+
+        &:hover {
+            background-color: var(--clr-champagne);
+            border-color: var(--clr-champagne);
+            color: var(--clr-midnight);
+        }
+    }
+
+    // Loyalty star icon link
+    &--loyalty {
+        svg {
+            color: var(--clr-royal-gold);
+            opacity: 1;
+        }
+    }
+
+    // Authenticated user display
+    &--user {
+        @include flex-center(6);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    &--username {
+        font-weight: 500;
+        color: var(--clr-champagne);
+        font-size: 0.7rem;
+        cursor: pointer;
+        @include transition(color, text-decoration);
+
+        &:hover {
+            color: var(--clr-white);
+            text-decoration: underline !important;
+        }
+    }
+
+    &--signout {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.5);
+        font-family: var(--font-nav);
+        font-size: 0.68rem;
+        font-weight: 400;
+        letter-spacing: 0.03em;
+        padding: 0;
+        @include transition(color);
+
+        &:hover {
+            color: var(--clr-champagne);
+        }
+    }
+}
+
+.utility-divider {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 0.7rem;
+    user-select: none;
+}
+
+// ─── 7. TIER 2 — MAIN NAVIGATION ─────────────────────────────────────────────
+.main-nav {
+    height: var(--main-nav-height);
+    background-color: var(--clr-midnight);
+
+    &__inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        height: 100%;
+        @include flex-center(0);
+        justify-content: space-between;
+        gap: 2rem;
+    }
+
+
+}
+
+// ─── 8. LOGO ─────────────────────────────────────────────────────────────────
+.nav-logo {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+    @include transition(opacity);
+
+    &:hover {
+        opacity: 0.85;
+    }
+
+    &__wordmark {
+        display: block;
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        color: var(--clr-white);
+        line-height: 1;
+
+        // Gold underline accent beneath wordmark
+        background: linear-gradient(90deg, var(--clr-royal-gold), var(--clr-champagne));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    &__tagline {
+        display: block;
+        font-size: 0.52rem;
+        font-weight: 300;
+        letter-spacing: 0.35em;
+        color: rgba(226, 199, 128, 0.6);
+        text-transform: uppercase;
+        margin-top: 2px;
+    }
+}
+
+// ─── 9. DESKTOP NAV LINKS ────────────────────────────────────────────────────
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.nav-link {
+    @include flex-center(5);
+    color: rgba(255, 255, 255, 0.88);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    padding: 0 1.1rem;
+    height: 100%;
+    white-space: nowrap;
+    position: relative;
+    @include transition(color);
+
+    // ── Golden underline animation: center → outward ──────────────────────
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--clr-royal-gold), var(--clr-champagne));
+        transform: translateX(-50%);
+        transition: width 280ms var(--ease-snap);
+    }
+
+    &:hover,
+    &.active {
+        color: var(--clr-champagne);
+
+        &::after {
+            width: 100%;
+        }
+    }
+
+    // Chevron icon for mega menu trigger
+    &__chevron {
+        @include transition(transform);
+
+        &.rotated {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+// Active mega menu item: keep underline open
+.nav-item--has-mega:hover .nav-link::after,
+.nav-item--has-mega .nav-link[aria-expanded="true"]::after {
+    width: 100%;
+}
+
+// ─── 10. MEGA MENU ───────────────────────────────────────────────────────────
+.mega-menu {
+    position: fixed;
+    top: var(--navbar-total);
+    left: 0;
+    width: 100%;
+    z-index: var(--z-mega);
+    background-color: var(--clr-midnight);
+    border-top: 1px solid rgba(182, 143, 36, 0.2);
+    border-bottom: 1px solid rgba(182, 143, 36, 0.1);
+    box-shadow: 0 20px 60px rgba(5, 25, 55, 0.6);
+
+    // Entry animation
+    animation: megaMenuEnter 250ms var(--ease-luxury) forwards;
+
+    &__inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2.5rem 2rem;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+    }
+
+    &__column {
+        padding: 0 1rem 0 0;
+
+        // Gold divider on all but last column
+        &:not(:last-child) {
+            border-right: 1px solid rgba(182, 143, 36, 0.1);
+        }
+    }
+
+    &__column-title {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--clr-royal-gold);
+        margin: 0 0 1rem 0;
+        padding-bottom: 0.6rem;
+        border-bottom: 1px solid rgba(182, 143, 36, 0.2);
+    }
+
+    &__links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+    }
+
+    &__link {
+        @include flex-center(8);
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.82rem;
+        font-weight: 300;
+        letter-spacing: 0.01em;
+        padding: 0.5rem 0.6rem;
+        border-radius: 4px;
+        @include transition(color, background-color, padding-left);
+
+        &:hover {
+            color: var(--clr-champagne);
+            background-color: rgba(182, 143, 36, 0.06);
+            padding-left: 1rem;
+        }
+    }
+
+    &__link-arrow {
+        color: var(--clr-royal-gold);
+        font-size: 1rem;
+        line-height: 1;
+        opacity: 0;
+        transform: translateX(-4px);
+        @include transition(opacity, transform);
+    }
+
+    &__link:hover &__link-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes megaMenuEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ─── 11. NAV ACTIONS (Search + Hamburger) ────────────────────────────────────
+.nav-actions {
+    @include flex-center(4);
+    flex-shrink: 0;
+}
+
+.nav-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 8px;
+    border-radius: 4px;
+    @include transition(color, background-color);
+    line-height: 0;
+
+    &:hover {
+        color: var(--clr-champagne);
+        background-color: rgba(255, 255, 255, 0.06);
+    }
+
+    // Hamburger — hidden on desktop
+    &--hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        padding: 8px 6px;
+        width: 38px;
+        height: 38px;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+// ─── 12. HAMBURGER BARS ──────────────────────────────────────────────────────
+.hamburger-bar {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 2px;
+    @include transition(transform, opacity, width);
+    transform-origin: center;
+}
+
+.nav-action-btn--hamburger.is-active {
+    .hamburger-bar:nth-child(1) {
+        transform: translateY(6.5px) rotate(45deg);
+        background-color: var(--clr-champagne);
+    }
+
+    .hamburger-bar:nth-child(2) {
+        opacity: 0;
+        width: 0;
+    }
+
+    .hamburger-bar:nth-child(3) {
+        transform: translateY(-6.5px) rotate(-45deg);
+        background-color: var(--clr-champagne);
+    }
+}
+
+// ─── 13. SEARCH OVERLAY ──────────────────────────────────────────────────────
+.search-overlay {
+    position: fixed;
+    top: var(--navbar-total);
+    left: 0;
+    right: 0;
+    z-index: var(--z-overlay);
+    background-color: rgba(5, 25, 55, 0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(182, 143, 36, 0.2);
+    animation: searchEnter 250ms var(--ease-luxury) forwards;
+
+    &__inner {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    &__field {
+        @include flex-center(12);
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(182, 143, 36, 0.3);
+        border-radius: 4px;
+        padding: 0 1.2rem;
+        @include transition(border-color, box-shadow);
+
+        &:focus-within {
+            border-color: var(--clr-royal-gold);
+            box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+        }
+    }
+
+    &__icon {
+        color: rgba(255, 255, 255, 0.35);
+        flex-shrink: 0;
+    }
+
+    &__input {
+        flex: 1;
+        background: none;
+        border: none;
+        outline: none;
+        color: var(--clr-white);
+        font-family: var(--font-nav);
+        font-size: 1rem;
+        font-weight: 300;
+        letter-spacing: 0.02em;
+        padding: 1rem 0;
+
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.4);
+        padding: 4px;
+        flex-shrink: 0;
+        @include transition(color);
+
+        &:hover {
+            color: var(--clr-champagne);
+        }
+    }
+}
+
+@keyframes searchEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ─── 14. MOBILE BACKDROP ─────────────────────────────────────────────────────
+.mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-backdrop);
+    background-color: rgba(3, 9, 22, 0.7);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 300ms var(--ease-luxury) forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// ─── 15. MOBILE SLIDE-IN MENU (Glassmorphism) ────────────────────────────────
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(340px, 88vw);
+    height: 100dvh;
+    z-index: var(--z-mobile);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+
+    // Glassmorphism
+    background: rgba(5, 25, 55, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(182, 143, 36, 0.18);
+    box-shadow: -20px 0 60px rgba(3, 9, 22, 0.5);
+
+    // Slide-in from right
+    transform: translateX(100%);
+    transition: transform 380ms var(--ease-snap);
+
+    &.is-open {
+        transform: translateX(0);
+    }
+
+    // Scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: rgba(182, 143, 36, 0.3) transparent;
+
+    &__header {
+        @include flex-center(0);
+        justify-content: space-between;
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid rgba(182, 143, 36, 0.12);
+        flex-shrink: 0;
+    }
+
+    &__logo {
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        background: linear-gradient(90deg, var(--clr-royal-gold), var(--clr-champagne));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.5);
+        padding: 4px;
+        @include transition(color);
+
+        &:hover {
+            color: var(--clr-champagne);
+        }
+    }
+
+    &__auth {
+        @include flex-center(10);
+        padding: 1.2rem 1.5rem;
+        flex-shrink: 0;
+    }
+
+    &__user {
+        @include flex-center(8);
+        color: var(--clr-champagne);
+        font-size: 0.82rem;
+        font-weight: 500;
+    }
+
+    &__divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(182, 143, 36, 0.25), transparent);
+        margin: 0 1.5rem;
+        flex-shrink: 0;
+    }
+
+    &__nav {
+        flex: 1;
+        padding: 0.8rem 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(182, 143, 36, 0.1);
+        @include flex-center(16);
+        flex-shrink: 0;
+    }
+}
+
+// ─── 16. MOBILE AUTH BUTTONS ─────────────────────────────────────────────────
+.mobile-auth-btn {
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-nav);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border-radius: 3px;
+    @include transition(background-color, color, border-color);
+
+    &--login {
+        background-color: var(--clr-royal-gold);
+        color: var(--clr-midnight);
+
+        &:hover {
+            background-color: var(--clr-champagne);
+        }
+    }
+
+    &--register {
+        background-color: transparent;
+        color: rgba(255, 255, 255, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        &:hover {
+            border-color: var(--clr-champagne);
+            color: var(--clr-champagne);
+        }
+    }
+
+    &--logout {
+        background-color: transparent;
+        color: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 6px 14px;
+        font-size: 0.72rem;
+
+        &:hover {
+            border-color: rgba(182, 143, 36, 0.4);
+            color: var(--clr-champagne);
+        }
+    }
+}
+
+// ─── 17. MOBILE NAV LINKS ────────────────────────────────────────────────────
+.mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.88rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    padding: 0.85rem 1.5rem;
+    @include transition(color, background-color, padding-left);
+
+    &:hover {
+        color: var(--clr-champagne);
+        background-color: rgba(182, 143, 36, 0.05);
+        padding-left: 1.9rem;
+
+        +.mobile-nav-item--accordion {
+            // adjacent sibling
+            background-color: transparent;
+        }
+    }
+
+    // Accordion toggle button variant
+    &--accordion-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        font-family: var(--font-nav);
+        text-align: left;
+
+        &.is-active {
+            color: var(--clr-champagne);
+            background-color: rgba(182, 143, 36, 0.06);
+        }
+    }
+}
+
+.mobile-chevron {
+    @include transition(transform);
+    color: rgba(255, 255, 255, 0.4);
+
+    &.rotated {
+        transform: rotate(180deg);
+    }
+}
+
+// ─── 18. MOBILE ACCORDION CONTENT ────────────────────────────────────────────
+.mobile-accordion {
+    &__content {
+        background-color: rgba(3, 9, 22, 0.3);
+        border-top: 1px solid rgba(182, 143, 36, 0.08);
+        padding: 0.8rem 0 0.4rem;
+        animation: accordionOpen 220ms var(--ease-luxury) forwards;
+    }
+
+    &__group {
+        padding: 0.5rem 1.5rem 0.5rem 2rem;
+    }
+
+    &__group-title {
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--clr-royal-gold);
+        margin: 0 0 0.5rem;
+    }
+
+    &__link {
+        display: block;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.8rem;
+        font-weight: 300;
+        padding: 0.35rem 0;
+        @include transition(color, padding-left);
+
+        &:hover {
+            color: var(--clr-champagne);
+            padding-left: 0.5rem;
+        }
+    }
+}
+
+@keyframes accordionOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ─── 19. RESPONSIVE BREAKPOINTS ──────────────────────────────────────────────
+
+// Tablet / large mobile — hide some utility items
+@media (max-width: 1024px) {
+    .nav-links {
+        display: none;
+    }
+
+    .nav-action-btn--hamburger {
+        display: flex;
+    }
+
+    .utility-bar__left {
+        display: none;
+    }
+
+    .utility-bar__right {
+        gap: 12px;
+        margin-left: auto;
+
+        .utility-link--loyalty {
+            display: none;
+        }
+    }
+}
+
+// Compact mobile
+@media (max-width: 640px) {
+    .main-nav__inner {
+        padding: 0 1rem;
+    }
+
+    .utility-bar__inner {
+        padding: 0 1rem;
+    }
+
+    .nav-logo__wordmark {
+        font-size: 1.1rem;
+        letter-spacing: 0.16em;
+    }
+
+    .nav-logo__tagline {
+        display: none;
+    }
+}
+
+// ─── 20. MEGA MENU RESPONSIVE ────────────────────────────────────────────────
+@media (max-width: 1280px) {
+    .mega-menu__inner {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+// ─── 21. ACCESSIBILITY — FOCUS STYLES ────────────────────────────────────────
+.nav-link:focus-visible,
+.nav-action-btn:focus-visible,
+.utility-link:focus-visible,
+.mobile-nav-link:focus-visible,
+.mobile-auth-btn:focus-visible {
+    outline: 2px solid var(--clr-royal-gold);
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+// ─── 22. REDUCED MOTION ──────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+// ─── 23. PRINT STYLES ─────────────────────────────────────────────────────────
+@media print {
+
+    :host,
+    .navbar {
+        display: none !important;
+    }
+
+    .footer {
+        display: none !important;
+    }
+}

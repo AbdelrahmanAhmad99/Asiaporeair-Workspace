@@ -1,0 +1,545 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 160ms ease;
+ $t-base: 240ms ease;
+
+ // CSS custom properties for dot colours used in the intel table
+ :host {
+     --dot-cobalt: #2563EB;
+     --dot-emerald: #059669;
+     --dot-gold: #B68F24;
+     --dot-violet: #7C3AED;
+     --dot-amber: #B45309;
+     --dot-slate: #64748B;
+     display: block;
+     min-height: 100%;
+ }
+
+ .ewd-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ── Header ─────────────────────────────────────────────────────────────────
+ .ewd-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1.25rem;
+     padding: 1rem 1.75rem;
+     background: $midnight;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 2px 16px rgba(5, 25, 55, 0.4), 0 0 0 1px rgba(226, 199, 128, 0.06) inset;
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     flex-wrap: wrap;
+     transition: box-shadow $t-base;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+         flex: 1;
+     }
+
+     &__title-row {
+         display: flex;
+         align-items: center;
+         gap: 0.75rem;
+     }
+
+     &__logo-icon {
+         width: 1.5rem;
+         height: 1.5rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__title {
+         font-size: 1.125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: rgba(255, 255, 255, 0.95);
+     }
+
+     &__sub {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: rgba(226, 199, 128, 0.4);
+         letter-spacing: 0.04em;
+     }
+
+     &__right {
+         display: flex;
+         align-items: center;
+         gap: 0.625rem;
+         flex-shrink: 0;
+         flex-wrap: wrap;
+     }
+
+     &__sync-tag {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.3125rem;
+         padding: 0.1875rem 0.625rem;
+         border-radius: 100px;
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         font-variant-numeric: tabular-nums;
+         color: rgba(226, 199, 128, 0.45);
+         background: rgba(226, 199, 128, 0.07);
+         border: 1px solid rgba(226, 199, 128, 0.14);
+         letter-spacing: 0.04em;
+
+         &__icon {
+             width: 0.75rem;
+             height: 0.75rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ // ── Strategic Navigation Buttons ──────────────────────────────────────────
+ // Center-out golden underline on hover
+ .ewd-nav-btn {
+     position: relative;
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.5rem 1rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: rgba(226, 199, 128, 0.55);
+     background: rgba(255, 255, 255, 0.04);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     overflow: hidden;
+     transition: color $t, border-color $t, background $t;
+
+     // Center-out golden line
+     &::after {
+         content: '';
+         position: absolute;
+         bottom: 0;
+         left: 50%;
+         transform: translateX(-50%);
+         width: 0;
+         height: 2px;
+         background: linear-gradient(to right, transparent, $gold, transparent);
+         transition: width 220ms ease;
+     }
+
+     &:hover {
+         color: $champagne;
+         border-color: rgba(226, 199, 128, 0.38);
+         background: rgba(226, 199, 128, 0.06);
+
+         &::after {
+             width: 100%;
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .ewd-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     background: transparent;
+     color: rgba(226, 199, 128, 0.45);
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.08);
+         color: $champagne;
+     }
+
+     &:disabled {
+         opacity: 0.35;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: ewd-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── Body ───────────────────────────────────────────────────────────────────
+ .ewd-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.375rem;
+     overflow-y: auto;
+ }
+
+ // ── Error Panel ───────────────────────────────────────────────────────────
+ .ewd-error-panel {
+     position: relative;
+     overflow: hidden;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1.25rem;
+     padding: 1.25rem 1.375rem;
+     border-radius: 12px;
+     background: rgba(113, 13, 6, 0.1);
+     border: 1px solid rgba(113, 13, 6, 0.32);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     animation: ewd-fadein 200ms ease forwards;
+
+     &__glass {
+         position: absolute;
+         inset: 0;
+         pointer-events: none;
+         background: linear-gradient(135deg, rgba(113, 13, 6, 0.1) 0%, transparent 60%);
+     }
+
+     &__left {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+         flex: 1;
+         position: relative;
+     }
+
+     &__icon {
+         width: 1.5rem;
+         height: 1.5rem;
+         color: lighten($ruby, 18%);
+         flex-shrink: 0;
+         margin-top: 1px;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: lighten($ruby, 22%);
+         margin-bottom: 0.375rem;
+     }
+
+     &__msg {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         line-height: 1.5;
+         color: lighten($ruby, 32%);
+     }
+
+     &__retry {
+         position: relative;
+         display: inline-flex;
+         align-items: center;
+         gap: 0.4375rem;
+         flex-shrink: 0;
+         align-self: center;
+         padding: 0.5625rem 1.25rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: #fff;
+         background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+         border: none;
+         border-radius: 4px;
+         cursor: pointer;
+         outline: none;
+         box-shadow: 0 4px 14px rgba(182, 143, 36, 0.38);
+         transition: all $t;
+
+         &:hover {
+             background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+             box-shadow: 0 6px 20px rgba(182, 143, 36, 0.55);
+             transform: translateY(-1px);
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         &__icon {
+             width: 0.9375rem;
+             height: 0.9375rem;
+         }
+     }
+ }
+
+ // ── Chart Grid ─────────────────────────────────────────────────────────────
+ .ewd-grid {
+     display: grid;
+     grid-template-columns: 1fr 380px;
+     gap: 1.375rem;
+     align-items: start;
+
+     @media (max-width: 1100px) {
+         grid-template-columns: 1fr;
+     }
+
+     @media (min-width: 1400px) {
+         grid-template-columns: 1fr 440px;
+     }
+ }
+
+ .ewd-grid__col {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+
+     &--intel {
+         display: flex;
+         flex-direction: column;
+         gap: 1.125rem;
+     }
+ }
+
+ // ── Intelligence Card (role table) ─────────────────────────────────────────
+ .ewd-intel-card {
+     padding: 1.25rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba(226, 199, 128, 0.16);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.2);
+     transition: box-shadow $t;
+
+     &:hover {
+         box-shadow: 0 6px 24px rgba(5, 25, 55, 0.3);
+     }
+
+     &__header {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         margin-bottom: 1rem;
+         padding-bottom: 0.75rem;
+         border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+     }
+
+     &__header__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__header__label {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: rgba(255, 255, 255, 0.85);
+         letter-spacing: -0.01em;
+     }
+ }
+
+ .ewd-intel-table {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5625rem;
+ }
+
+ .ewd-intel-table__row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 0.3125rem 0.375rem;
+     border-radius: 5px;
+     transition: background $t;
+
+     &:hover {
+         background: rgba(226, 199, 128, 0.03);
+     }
+ }
+
+ .ewd-intel-table__dot {
+     width: 8px;
+     height: 8px;
+     border-radius: 50%;
+     flex-shrink: 0;
+     opacity: 0.8;
+ }
+
+ .ewd-intel-table__role {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: rgba(226, 199, 128, 0.6);
+     width: 90px;
+     flex-shrink: 0;
+     white-space: nowrap;
+ }
+
+ .ewd-intel-table__bar-track {
+     flex: 1;
+     height: 4px;
+     background: rgba(255, 255, 255, 0.06);
+     border-radius: 100px;
+     overflow: hidden;
+ }
+
+ .ewd-intel-table__bar {
+     height: 100%;
+     border-radius: 100px;
+     max-width: 100%;
+     transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
+     opacity: 0.7;
+ }
+
+ .ewd-intel-table__count {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     font-variant-numeric: tabular-nums;
+     color: rgba(255, 255, 255, 0.8);
+     width: 42px;
+     text-align: right;
+ }
+
+ .ewd-intel-table__pct {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     color: rgba(226, 199, 128, 0.35);
+     width: 38px;
+     text-align: right;
+     font-variant-numeric: tabular-nums;
+ }
+
+ // ── Stat Cards ─────────────────────────────────────────────────────────────
+ .ewd-stat-card {
+     padding: 1.125rem 1.25rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba(226, 199, 128, 0.14);
+     box-shadow: 0 4px 14px rgba(5, 25, 55, 0.2);
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+     transition: transform $t, box-shadow $t;
+
+     &:hover {
+         transform: translateY(-1px);
+         box-shadow: 0 6px 20px rgba(5, 25, 55, 0.3);
+     }
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: rgba(226, 199, 128, 0.35);
+     }
+
+     &__value {
+         font-size: 1.5rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 800;
+         letter-spacing: -0.03em;
+         color: rgba(255, 255, 255, 0.85);
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__sub {
+         font-size: 0.6875rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(226, 199, 128, 0.3);
+     }
+
+     &--gold {
+         border-color: rgba(182, 143, 36, 0.2);
+     }
+
+     &__value--gold {
+         color: $champagne;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes ewd-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes ewd-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ── Dark Mode ──────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .ewd-header {
+         box-shadow: 0 2px 20px rgba(0, 0, 0, 0.45);
+     }
+
+     .ewd-nav-btn:hover {
+         background: rgba(226, 199, 128, 0.08);
+     }
+
+     .ewd-intel-card,
+     .ewd-stat-card {
+         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .ewd-error-panel {
+         background: rgba(113, 13, 6, 0.15);
+         border-color: rgba(113, 13, 6, 0.4);
+     }
+ }

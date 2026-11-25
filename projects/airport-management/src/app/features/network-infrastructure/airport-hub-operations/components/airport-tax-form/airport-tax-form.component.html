@@ -1,0 +1,117 @@
+<div class="atf-card">
+
+    <!-- ── Card Header ──────────────────────────────────────────────── -->
+    <header class="atf-header">
+        <div class="atf-header__icon-wrap" aria-hidden="true">
+            <svg class="atf-header__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342
+                 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375
+                 c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0
+                 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125
+                 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75
+                 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125
+                 V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0
+                 3 3 0 0 1 6 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="atf-header__title">Financial Configuration</h3>
+            <p class="atf-header__subtitle">Taxes &amp; Fees · All amounts in USD</p>
+        </div>
+
+        <!-- "Future" badge — signals planned integration -->
+        <span class="atf-badge" title="Tax integration is in the next sprint">
+            <svg class="atf-badge__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            Planned
+        </span>
+    </header>
+
+    <!-- ── Form ──────────────────────────────────────────────────────── -->
+    <form class="atf-form" [formGroup]="form" (ngSubmit)="false" novalidate autocomplete="off">
+
+        <div class="atf-grid">
+
+            <!-- Landing Fee -->
+            <div class="atf-field" [class.atf-field--error]="isInvalid('landingFeeUsd')">
+                <div class="atf-input-wrap">
+                    <span class="atf-prefix" aria-hidden="true">$</span>
+                    <input id="landingFee" class="atf-input atf-input--prefixed" type="number"
+                        formControlName="landingFeeUsd" placeholder=" " min="0" step="0.01"
+                        [attr.aria-label]="'Landing fee per tonne of MTOW in USD'">
+                    <label class="atf-label atf-label--prefixed" for="landingFee">
+                        Landing Fee <span class="atf-label__unit">/ MTOW tonne</span>
+                    </label>
+                </div>
+                @if (isInvalid('landingFeeUsd')) {
+                <span class="atf-error" role="alert">Enter a value between 0 and 999,999.</span>
+                }
+            </div>
+
+            <!-- Passenger Service Charge -->
+            <div class="atf-field" [class.atf-field--error]="isInvalid('passengerServiceChargeUsd')">
+                <div class="atf-input-wrap">
+                    <span class="atf-prefix" aria-hidden="true">$</span>
+                    <input id="psc" class="atf-input atf-input--prefixed" type="number"
+                        formControlName="passengerServiceChargeUsd" placeholder=" " min="0" step="0.01"
+                        [attr.aria-label]="'Passenger service charge per departure in USD'">
+                    <label class="atf-label atf-label--prefixed" for="psc">
+                        Passenger Service Charge <span class="atf-label__unit">/ departure</span>
+                    </label>
+                </div>
+                @if (isInvalid('passengerServiceChargeUsd')) {
+                <span class="atf-error" role="alert">Enter a value between 0 and 9,999.</span>
+                }
+            </div>
+
+            <!-- Security Levy -->
+            <div class="atf-field" [class.atf-field--error]="isInvalid('securityLevyUsd')">
+                <div class="atf-input-wrap">
+                    <span class="atf-prefix" aria-hidden="true">$</span>
+                    <input id="security" class="atf-input atf-input--prefixed" type="number"
+                        formControlName="securityLevyUsd" placeholder=" " min="0" step="0.01"
+                        [attr.aria-label]="'Security levy per passenger in USD'">
+                    <label class="atf-label atf-label--prefixed" for="security">
+                        Security Levy <span class="atf-label__unit">/ passenger</span>
+                    </label>
+                </div>
+                @if (isInvalid('securityLevyUsd')) {
+                <span class="atf-error" role="alert">Enter a value between 0 and 9,999.</span>
+                }
+            </div>
+
+            <!-- Fuel Surcharge Multiplier -->
+            <div class="atf-field" [class.atf-field--error]="isInvalid('fuelSurchargeMultiplier')">
+                <div class="atf-input-wrap">
+                    <span class="atf-prefix atf-prefix--sym" aria-hidden="true">×</span>
+                    <input id="fuelMulti" class="atf-input atf-input--prefixed" type="number"
+                        formControlName="fuelSurchargeMultiplier" placeholder=" " min="0" max="2" step="0.01"
+                        [attr.aria-label]="'Fuel surcharge multiplier, 0.00 to 2.00'">
+                    <label class="atf-label atf-label--prefixed" for="fuelMulti">
+                        Fuel Surcharge Multiplier <span class="atf-label__unit">0 – 2.00</span>
+                    </label>
+                </div>
+                @if (isInvalid('fuelSurchargeMultiplier')) {
+                <span class="atf-error" role="alert">Must be between 0.00 and 2.00.</span>
+                }
+            </div>
+
+        </div>
+
+        <!-- Disclaimer note -->
+        <p class="atf-note">
+            <svg class="atf-note__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75
+                 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            Tax data will be applied to revenue calculations in the next sprint. Values
+            saved here are stored but not yet enforced in booking flows.
+        </p>
+
+    </form>
+
+</div>

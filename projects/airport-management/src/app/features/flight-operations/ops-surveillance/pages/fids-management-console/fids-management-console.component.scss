@@ -1,0 +1,355 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page — Deep Midnight full-bleed canvas (the board IS the page)
+ // ============================================================================
+ .fmc-page {
+     min-height: 100vh;
+     background: var(--aoms-bg-primary, $off-white);
+     display: flex;
+     flex-direction: column;
+     position: relative;
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Luxury Dashboard Header
+ // ============================================================================
+ .fmc-header {
+     display: flex;
+     align-items: stretch;
+     background: darken($midnight, 3%);
+     border-bottom: 1px solid rgba($gold, 0.18);
+     box-shadow: 0 2px 20px rgba($midnight, 0.6);
+     flex-shrink: 0;
+ }
+
+ // Back button
+ .fmc-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: clamp(2.5rem, 4vw, 3.5rem);
+     border: none;
+     border-right: 1px solid rgba($gold, 0.1);
+     background: transparent;
+     color: rgba($champagne, 0.4);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover {
+         background: rgba($champagne, 0.05);
+         color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     &__icon {
+         width: 1.25rem;
+         height: 1.25rem;
+         transition: transform 150ms $ease;
+     }
+
+     &:hover &__icon {
+         transform: translateX(-3px);
+     }
+ }
+
+ // Title block
+ .fmc-header__title-block {
+     flex: 1;
+     padding: clamp(0.625rem, 1.2vh, 0.875rem) clamp(1rem, 2vw, 1.5rem);
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+     justify-content: center;
+     min-width: 0;
+ }
+
+ .fmc-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: clamp(9px, 1vw, 11px);
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba($champagne, 0.3);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: rgba($champagne, 0.2);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: clamp(9px, 1vw, 11px);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: $gold;
+     }
+ }
+
+ .fmc-title-row {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     flex-wrap: wrap;
+ }
+
+ .fmc-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(1.125rem, 2.5vw, 1.75rem);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: $champagne;
+     margin: 0;
+     white-space: nowrap;
+ }
+
+ // "Live Sync" pulsing Gold dot badge per spec
+ .fmc-live-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4rem;
+     padding: 0.2rem 0.625rem;
+     border-radius: 4px;
+     background: rgba($gold, 0.1);
+     border: 1px solid rgba($gold, 0.25);
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(9px, 1vw, 11px);
+     font-weight: 700;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+     color: $gold;
+
+     &__dot {
+         width: 7px;
+         height: 7px;
+         border-radius: 50%;
+         background: $gold;
+         animation: fmc-gold-pulse 1.8s ease-in-out infinite;
+         flex-shrink: 0;
+     }
+ }
+
+ // Offline/error badge
+ .fmc-offline-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4rem;
+     padding: 0.2rem 0.625rem;
+     border-radius: 4px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.28);
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(9px, 1vw, 11px);
+     font-weight: 700;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+     color: lighten($ruby, 10%);
+
+     &__dot {
+         width: 7px;
+         height: 7px;
+         border-radius: 50%;
+         background: $ruby;
+         animation: fmc-ruby-pulse 1.2s ease-in-out infinite;
+         flex-shrink: 0;
+     }
+ }
+
+ // Context strip
+ .fmc-context-strip {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(10px, 1.1vw, 12px);
+
+     &__airport {
+         font-weight: 900;
+         letter-spacing: 0.12em;
+         text-transform: uppercase;
+         color: $gold;
+     }
+
+     &__sep {
+         color: rgba($champagne, 0.25);
+     }
+
+     &__view {
+         font-weight: 600;
+         color: rgba($champagne, 0.55);
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+     }
+
+     &__count {
+         color: rgba($champagne, 0.35);
+     }
+ }
+
+ // ============================================================================
+ // 3. System Connectivity Alert — Ruby background + Gold border per spec
+ // ============================================================================
+ .fmc-connectivity-alert {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 1rem clamp(1rem, 2vw, 1.5rem);
+     background: rgba($ruby, 0.1);
+     // Gold border on the Ruby background per spec
+     border-bottom: 2px solid $gold;
+     border-top: 2px solid rgba($ruby, 0.4);
+     flex-shrink: 0;
+     animation: fmc-alert-enter 250ms $luxury both;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 7px;
+         background: rgba($ruby, 0.18);
+         border: 1px solid rgba($ruby, 0.35);
+
+         svg {
+             width: 1.125rem;
+             height: 1.125rem;
+             color: lighten($ruby, 10%);
+         }
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: clamp(12px, 1.2vw, 14px);
+         font-weight: 700;
+         color: lighten($ruby, 10%);
+     }
+
+     &__msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: clamp(11px, 1.1vw, 13px);
+         color: rgba($champagne, 0.6);
+         line-height: 1.55;
+         margin: 0;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 1.5rem;
+         height: 1.5rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         color: rgba($ruby, 0.45);
+         border-radius: 3px;
+         transition: color 150ms $ease;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             color: lighten($ruby, 10%);
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 4. Board area — flex:1 so the board fills the screen (4K-ready)
+ // ============================================================================
+ .fmc-board-area {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     overflow: hidden;
+
+     // Ensure the child board also fills
+     aoms-fids-digital-board,
+     ::ng-deep .fdb-board {
+         flex: 1;
+         min-height: 0;
+     }
+ }
+
+ // ============================================================================
+ // 5. Keyframes
+ // ============================================================================
+ @keyframes fmc-gold-pulse {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba($gold, 0.5);
+         opacity: 1;
+     }
+
+     50% {
+         box-shadow: 0 0 0 5px transparent;
+         opacity: 0.6;
+     }
+ }
+
+ @keyframes fmc-ruby-pulse {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba($ruby, 0.55);
+     }
+
+     50% {
+         box-shadow: 0 0 0 4px transparent;
+     }
+ }
+
+ @keyframes fmc-alert-enter {
+     from {
+         opacity: 0;
+         transform: translateY(-8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }

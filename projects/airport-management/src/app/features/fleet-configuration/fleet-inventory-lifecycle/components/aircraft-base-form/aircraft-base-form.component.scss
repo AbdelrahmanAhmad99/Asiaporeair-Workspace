@@ -1,0 +1,586 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $error: #9f1239;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Form Container
+ // ============================================================================
+ .reg-form {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+ }
+
+ // ============================================================================
+ // 2. Section Tab Navigation
+ // ============================================================================
+ .reg-form__tabs {
+     display: flex;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.18);
+     overflow-x: auto;
+     scrollbar-width: none;
+
+     &::-webkit-scrollbar {
+         display: none;
+     }
+ }
+
+ .reg-tab {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.875rem 1.25rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+     background: transparent;
+     border: none;
+     border-bottom: 2px solid transparent;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     flex-shrink: 0;
+     transition: color $t-fast, border-color $t-fast, background $t-fast;
+
+     &:hover {
+         color: var(--aoms-text-secondary);
+         background: rgba(226, 199, 128, 0.04);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     &--active {
+         color: var(--aoms-midnight);
+         border-bottom-color: $gold;
+         font-weight: 600;
+         background: rgba(182, 143, 36, 0.05);
+     }
+
+     &--valid {
+         color: $emerald;
+
+         .reg-tab__icon {
+             color: $emerald;
+         }
+
+         .reg-tab__check {
+             opacity: 1;
+         }
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+         opacity: 0.7;
+
+         .reg-tab--active & {
+             opacity: 1;
+             color: $gold;
+         }
+     }
+
+     &__label {
+         @media (max-width: 639px) {
+             display: none;
+         }
+     }
+
+     &__check {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $emerald;
+         flex-shrink: 0;
+         opacity: 0;
+         transition: opacity $t-fast;
+     }
+ }
+
+ // ============================================================================
+ // 3. Section Panels
+ // ============================================================================
+ .reg-panel {
+     display: none;
+     flex-direction: column;
+     gap: 1.5rem;
+     padding: 1.75rem;
+     animation: rf-fadein 200ms ease forwards;
+
+     &--active {
+         display: flex;
+     }
+
+     // Success glow on valid panel
+     &--valid {
+         box-shadow: inset 0 0 0 1px rgba($emerald, 0.15);
+     }
+ }
+
+ .reg-panel__header {
+     display: flex;
+     flex-direction: column;
+     gap: 0.1875rem;
+ }
+
+ .reg-panel__title {
+     font-size: 1.0625rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.015em;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+ }
+
+ .reg-panel__sub {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     transition: color $t-fast;
+ }
+
+ // ============================================================================
+ // 4. Fields Grid
+ // ============================================================================
+ .reg-fields {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 1.5rem;
+
+     &--two-col {
+         @media (min-width: 640px) {
+             grid-template-columns: 1fr 1fr;
+         }
+     }
+ }
+
+ .reg-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3125rem;
+
+     &--wide {
+         @media (min-width: 640px) {
+             grid-column: span 1;
+         }
+     }
+
+     &__label {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+         transition: color $t-fast;
+     }
+
+     // Valid/invalid tint via select border
+     &--valid .type-select {
+         border-color: rgba($emerald, 0.45);
+     }
+
+     &--invalid .type-select {
+         border-color: rgba($ruby, 0.5);
+     }
+ }
+
+ // ============================================================================
+ // 5. Floating Label Input
+ // ============================================================================
+ .fl-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+
+     &__input {
+         // width: 100%;
+         // padding: 1.375rem 2.75rem 0.5rem 1rem;
+         // font-size: 0.9375rem;
+         // font-family: var(--aoms-font-body);
+         // font-weight: 400;
+         // color: var(--aoms-text-primary);
+         // background: var(--aoms-bg-card);
+         // border: 1.5px solid rgba(226, 199, 128, 0.25);
+         // border-radius: 8px;
+         // outline: none;
+         // appearance: none;
+         // transition: border-color $t-fast, box-shadow $t-fast, background $t-base;
+         appearance: none;
+         -webkit-appearance: none;
+         outline: none;
+         border: none;
+         background: none;
+
+         width: 100%;
+         height: 3.5rem;
+         padding: 1.45rem 1rem 0.45rem;
+
+         font-family: 'Inter', 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 500;
+         color: var(--aoms-text-primary, $charcoal);
+
+         background: $off-white;
+         border: 1px solid rgba($charcoal, 0.15);
+         border-radius: 8px;
+
+         transition:
+             border-color 180ms $ease,
+             background 180ms $ease,
+             box-shadow 180ms $ease;
+
+         &:focus {
+             border-color: $champagne;
+             background: #ffffff;
+             box-shadow:
+                 0 0 0 3px rgba($champagne, 0.15),
+                 0 0 14px rgba($champagne, 0.07);
+         }
+
+         // Hub variant (no top/bottom padding, controlled by wrapper)
+         &--hub {
+             padding: 0.625rem 3rem 0.625rem 2.5rem;
+             height: 3rem;
+             border: none;
+             border-radius: 0;
+             background: transparent;
+             box-shadow: none;
+             flex: 1;
+
+             &:focus {
+                 box-shadow: none;
+                 border: none;
+             }
+
+             &::placeholder {
+                 color: var(--aoms-text-muted);
+                 font-weight: 400;
+             }
+         }
+
+         &::placeholder {
+             color: transparent;
+         }
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+         }
+
+         &:focus+.fl-wrap__label,
+         &:not(:placeholder-shown)+.fl-wrap__label {
+             // transform: translateY(-0.5625rem) scale(0.78);
+             color: $gold;
+             padding: 0.625rem 3rem 0.625rem 2.5rem;
+             height: 3rem;
+             border: none;
+             border-radius: 0;
+             background: transparent;
+             box-shadow: none;
+             flex: 1;
+         }
+
+         &--date {
+             padding-right: 1rem;
+
+             &:not(:placeholder-shown)+.fl-wrap__label,
+             &:focus+.fl-wrap__label {
+                 transform: translateY(-0.5625rem) scale(0.78);
+                 color: $gold;
+             }
+         }
+
+         &[readonly] {
+             background: rgba(5, 25, 55, 0.03);
+             color: var(--aoms-text-muted);
+             cursor: not-allowed;
+         }
+     }
+
+     &__label {
+         position: absolute;
+         left: 1rem;
+         top: 50%;
+         transform: translateY(-50%);
+         transform-origin: left center;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+         background: var(--aoms-bg-card);
+         padding: 0 0.25rem;
+         border-radius: 2px;
+         transition: transform $t-fast, color $t-fast;
+
+         &--date {
+             pointer-events: none;
+         }
+     }
+
+     &__state {
+         position: absolute;
+         right: 0.875rem;
+         width: 1.125rem;
+         height: 1.125rem;
+         pointer-events: none;
+
+         &--valid {
+             color: $emerald;
+         }
+
+         &--invalid {
+             color: $ruby;
+         }
+     }
+
+     &__required {
+         color: $amber;
+         margin-left: 2px;
+     }
+
+     &__error {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: $ruby;
+         padding-left: 0.125rem;
+         animation: rf-fadein 150ms ease forwards;
+     }
+
+     &__hint {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         padding-left: 0.125rem;
+         line-height: 1.4;
+         transition: color $t-fast;
+
+         &--locked {
+             color: $amber;
+             font-style: italic;
+         }
+
+         &--warn {
+             color: $amber;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Aircraft Type Select
+ // ============================================================================
+ .type-select-wrap {
+     position: relative;
+ }
+
+ .type-select {
+     appearance: none;
+     -webkit-appearance: none;
+     width: 100%;
+     padding: 0.75rem 2.5rem 0.75rem 1rem;
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-primary);
+     background: var(--aoms-bg-card);
+     border: 1.5px solid rgba(226, 199, 128, 0.25);
+     border-radius: 8px;
+     outline: none;
+     cursor: pointer;
+     transition: border-color $t-fast, box-shadow $t-fast, background $t-base;
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+     }
+
+     option {
+         background: var(--aoms-bg-card);
+         color: var(--aoms-text-primary);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+ }
+
+ .type-select-wrap__chevron {
+     position: absolute;
+     right: 0.75rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 0.875rem;
+     height: 0.875rem;
+     pointer-events: none;
+     color: var(--aoms-text-muted);
+ }
+
+ // ============================================================================
+ // 7. Type Shimmer Skeleton
+ // ============================================================================
+ .type-shimmer {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+
+     &__bar {
+         border-radius: 4px;
+         background: rgba(182, 143, 36, 0.08);
+         animation: rf-pulse 1.5s ease-in-out infinite;
+
+         &--label {
+             height: 0.625rem;
+             width: 100px;
+         }
+
+         &--select {
+             height: 2.75rem;
+             width: 100%;
+             border-radius: 8px;
+             animation-delay: 0.1s;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 8. Panel Navigation
+ // ============================================================================
+ .reg-panel__nav {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.75rem;
+     padding-top: 0.5rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.1);
+
+     &--spaced {
+         justify-content: space-between;
+     }
+ }
+
+ .reg-nav-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.5rem 1rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: $gold;
+     background: transparent;
+     border: 1px solid rgba(182, 143, 36, 0.28);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     &:hover {
+         background: rgba(182, 143, 36, 0.07);
+         border-color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--back {
+         color: var(--aoms-text-secondary);
+         border-color: rgba(226, 199, 128, 0.18);
+
+         &:hover {
+             color: var(--aoms-text-primary);
+             border-color: rgba(226, 199, 128, 0.38);
+         }
+     }
+
+     &__arrow {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 9. Keyframes
+ // ============================================================================
+ @keyframes rf-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rf-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 10. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+
+     .fl-wrap__input,
+     .type-select {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.18);
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .fl-wrap__input:focus+.fl-wrap__label,
+     .fl-wrap__input:not(:placeholder-shown)+.fl-wrap__label {
+         color: $champagne;
+         background: rgba(5, 25, 55, 0.9);
+     }
+
+     .fl-wrap__label {
+         background: transparent;
+     }
+
+     .fl-wrap__error {
+         color: #fca5a5;
+     }
+
+     .reg-panel--valid {
+         box-shadow: inset 0 0 0 1px rgba(52, 211, 153, 0.12);
+     }
+
+     .reg-tab--active {
+         color: $champagne;
+     }
+ }

@@ -1,0 +1,48 @@
+<!-- ============================================================================
+     hero-video-banner.component.html
+     Asiaporeair | Hero Video Banner — Edge-to-Edge Luxury Banner
+     ============================================================================ -->
+
+<section class="hvb" aria-label="Journey with us hero">
+
+    <!-- Video layer -->
+    <div class="hvb__media" aria-hidden="true">
+        <video class="hvb__video" [src]="videoSrc" [poster]="posterImage" autoplay muted loop playsinline
+            preload="auto"></video>
+        <!-- Dark sapphire overlay -->
+        <div class="hvb__overlay"></div>
+        <!-- Gold accent line at bottom -->
+        <div class="hvb__gold-line" aria-hidden="true"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="hvb__content">
+
+        <!-- Breadcrumbs -->
+        @if (breadcrumbs.length) {
+        <nav class="hvb__breadcrumb" aria-label="Breadcrumb">
+            @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+            @if (!last) {
+            <a [href]="crumb.route ?? '#'" class="hvb__breadcrumb-link">{{ crumb.label }}</a>
+            <span class="hvb__breadcrumb-sep" aria-hidden="true">›</span>
+            } @else {
+            <span class="hvb__breadcrumb-current">{{ crumb.label }}</span>
+            }
+            }
+        </nav>
+        }
+
+        <!-- Decorative pre-title line -->
+        <div class="hvb__pre-line" aria-hidden="true"></div>
+
+        <h1 class="hvb__headline">{{ headline }}</h1>
+        <p class="hvb__subheadline">{{ subheadline }}</p>
+
+        <!-- Scroll indicator -->
+        <div class="hvb__scroll-hint" aria-hidden="true">
+            <div class="hvb__scroll-dot"></div>
+        </div>
+
+    </div>
+
+</section>

@@ -1,0 +1,451 @@
+// ============================================================================
+// passenger-check-in-card.component.scss
+// Asiaporeair | Passenger Card — Four visual states
+// idle · generating · checked-in · error
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$success : #1E6E45;
+$error : #C53030;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+:host {
+    display: block;
+}
+
+// ── §1 Card shell ─────────────────────────────────────────────────────────────
+.pax-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.09);
+    box-shadow: 0 2px 8px rgba($midnight, 0.05), 0 8px 24px rgba($midnight, 0.04);
+    overflow: hidden;
+    transition: box-shadow $t, border-color $t, transform $t;
+    animation: cardEntry 400ms $ease both;
+
+    &:hover:not(.pax-card--generating) {
+        box-shadow: 0 4px 16px rgba($midnight, 0.1), 0 12px 32px rgba($midnight, 0.06);
+        border-color: rgba($royal-gold, 0.25);
+        transform: translateY(-2px);
+    }
+
+    // ── Checked-in state ──
+    &--checked-in {
+        border-color: rgba($success, 0.25);
+        background: linear-gradient(135deg, $white 0%, rgba($success, 0.03) 100%);
+
+        .pax-card__bar {
+            background: linear-gradient(90deg, darken($success, 5%), lighten($success, 10%));
+        }
+    }
+
+    // ── Generating / loading state ──
+    &--generating {
+        border-color: rgba($royal-gold, 0.2);
+        cursor: wait;
+
+        .pax-card__bar {
+            background-size: 200% 100%;
+            animation: goldBarShimmer 1.6s ease-in-out infinite;
+        }
+    }
+
+    // ── Error state ──
+    &--error {
+        border-color: rgba($error, 0.2);
+
+        .pax-card__bar {
+            background: linear-gradient(90deg, $error, lighten($error, 15%));
+        }
+    }
+}
+
+@keyframes cardEntry {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── §2 Gold accent bar ────────────────────────────────────────────────────────
+.pax-card__bar {
+    height: 2.5px;
+    background: linear-gradient(90deg, $royal-gold, $champagne, $royal-gold);
+    transition: background $t;
+}
+
+@keyframes goldBarShimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── §3 Inner layout ───────────────────────────────────────────────────────────
+.pax-card__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    &--skeleton {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.875rem;
+    }
+}
+
+// ── §4 Identity block ─────────────────────────────────────────────────────────
+.pax-identity {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+}
+
+// ── §5 Avatar bubble ──────────────────────────────────────────────────────────
+.pax-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba($midnight, 0.06);
+    border: 1.5px solid rgba($charcoal, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: rgba($charcoal, 0.4);
+    transition: background $t, border-color $t, color $t;
+
+    .pax-card:hover & {
+        border-color: rgba($royal-gold, 0.3);
+        color: rgba($midnight, 0.6);
+    }
+
+    &--done {
+        background: rgba($success, 0.1);
+        border-color: rgba($success, 0.3);
+        color: $success;
+    }
+}
+
+// ── §6 Meta block ─────────────────────────────────────────────────────────────
+.pax-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+
+    &__top-row {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+    }
+}
+
+.pax-counter {
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba($charcoal, 0.35);
+}
+
+.pax-name {
+    font-family: $font;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: $charcoal;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+// ── §7 Status badge ───────────────────────────────────────────────────────────
+.pax-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($royal-gold, 0.2);
+    color: darken($royal-gold, 8%);
+    transition: all $t;
+
+    &--checked {
+        background: rgba($success, 0.08);
+        border-color: rgba($success, 0.25);
+        color: $success;
+    }
+}
+
+// ── §8 Detail chips ───────────────────────────────────────────────────────────
+.pax-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.1rem;
+}
+
+.pax-detail-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.67rem;
+    color: $muted;
+    background: rgba($charcoal, 0.04);
+    border: 1px solid rgba($charcoal, 0.08);
+    border-radius: 4px;
+    padding: 2px 7px;
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    &--unassigned {
+        color: rgba($muted, 0.55);
+        font-style: italic;
+    }
+}
+
+// ── §9 Action area ────────────────────────────────────────────────────────────
+.pax-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+
+    @media (max-width: 600px) {
+        width: 100%;
+        align-items: stretch;
+    }
+}
+
+// ── §10 Error notice ──────────────────────────────────────────────────────────
+.pax-error-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 0.5rem 0.75rem;
+    background: rgba($error, 0.05);
+    border: 1px solid rgba($error, 0.2);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.67rem;
+    color: $error;
+    line-height: 1.45;
+    max-width: 220px;
+    animation: slideIn 220ms $ease;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    @media (max-width: 600px) {
+        max-width: 100%;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+// ── §11 Buttons ───────────────────────────────────────────────────────────────
+.pax-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.6rem 1.1rem;
+    white-space: nowrap;
+    transition: background $t, box-shadow $t, transform $t, color $t, border-color $t;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    // "Generate Boarding Pass" — primary, midnight bg
+    &--generate {
+        background: $midnight;
+        border: 1px solid rgba($champagne, 0.25);
+        color: $champagne;
+
+        &:hover {
+            background: lighten($midnight, 7%);
+            border-color: rgba($champagne, 0.5);
+            box-shadow: 0 4px 16px rgba($midnight, 0.3);
+            color: lighten($champagne, 8%);
+            transform: translateY(-1px);
+        }
+    }
+
+    // "View Pass" — secondary, gold border
+    &--view {
+        background: transparent;
+        border: 1px solid rgba($royal-gold, 0.45);
+        color: $royal-gold;
+
+        &:hover {
+            background: rgba($royal-gold, 0.06);
+            border-color: $royal-gold;
+            box-shadow: 0 2px 10px rgba($royal-gold, 0.12);
+        }
+    }
+}
+
+// ── §12 Skeleton shimmer ──────────────────────────────────────────────────────
+@keyframes shimmer {
+    0% {
+        background-position: -300% center;
+    }
+
+    100% {
+        background-position: 300% center;
+    }
+}
+
+%shimmer-base {
+    background: linear-gradient(90deg,
+            rgba($royal-gold, 0.05) 0%,
+            rgba($champagne, 0.18) 50%,
+            rgba($royal-gold, 0.05) 100%);
+    background-size: 300% 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.skel-avatar {
+    @extend %shimmer-base;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skel-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.skel {
+    @extend %shimmer-base;
+
+    &--name {
+        height: 16px;
+        width: 55%;
+    }
+
+    &--detail {
+        height: 11px;
+        width: 72%;
+    }
+
+    &--detail-sm {
+        width: 40%;
+    }
+}
+
+.skel-cta {
+    @extend %shimmer-base;
+    height: 36px;
+    width: 180px;
+    border-radius: 4px;
+    align-self: flex-end;
+}
+
+.generating-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: $font;
+    font-size: 0.64rem;
+    color: rgba($royal-gold, 0.65);
+    letter-spacing: 0.04em;
+    align-self: flex-end;
+}
+
+.spin-icon {
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pax-card {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .skel,
+    .skel-avatar,
+    .skel-cta {
+        animation: none !important;
+    }
+
+    .spin-icon {
+        animation: none !important;
+    }
+}

@@ -1,0 +1,39 @@
+<!-- ============================================================================
+     timeline-milestone.component.html
+     Asiaporeair | Timeline Milestone — Vertical Timeline Node
+     ============================================================================ -->
+
+<div class="tlm" [class.tlm--highlight]="event.isHighlight" [class.tlm--left]="side === 'left'"
+    [style.--delay]="animDelay + 'ms'" [attr.aria-label]="event.year + ': ' + event.title">
+
+    <!-- ── Spine connector ── -->
+    <div class="tlm__spine" aria-hidden="true">
+        <div class="tlm__spine-line tlm__spine-line--top"></div>
+        <div class="tlm__node">
+            <div class="tlm__node-ring" aria-hidden="true"></div>
+            <span class="tlm__year">{{ event.year }}</span>
+        </div>
+        <div class="tlm__spine-line tlm__spine-line--bottom"></div>
+    </div>
+
+    <!-- ── Content panel ── -->
+    <div class="tlm__panel">
+
+        @if (event.badge) {
+        <span class="tlm__badge">{{ event.badge }}</span>
+        }
+
+        <h3 class="tlm__title">{{ event.title }}</h3>
+        <div class="tlm__divider" aria-hidden="true"></div>
+        <p class="tlm__desc">{{ event.description }}</p>
+
+        <!-- Optional photo -->
+        @if (event.imagePath) {
+        <div class="tlm__photo-wrap">
+            <img class="tlm__photo" [src]="event.imagePath" [alt]="event.year + ' — ' + event.title" loading="lazy" />
+        </div>
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,106 @@
+<!-- ============================================================================
+     heritage.component.html
+     Asiaporeair | Our Heritage — Timeline + Vintage Photos Page
+     ============================================================================ -->
+
+<div class="hg-shell">
+
+    <!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
+    <header class="hg-hero">
+        <div class="hg-hero__inner">
+
+            <nav class="hg-bc" aria-label="Breadcrumb">
+                @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+                @if (!last) {
+                <a [href]="crumb.route ?? '#'" class="hg-bc__link">{{ crumb.label }}</a>
+                <span class="hg-bc__sep" aria-hidden="true">›</span>
+                } @else {
+                <span class="hg-bc__cur">{{ crumb.label }}</span>
+                }
+                }
+            </nav>
+
+            <div class="hg-hero__pre-block" aria-hidden="true">
+                <div class="hg-hero__pre-line"></div>
+                <span class="hg-hero__eyebrow">Our Heritage</span>
+            </div>
+            <h1 class="hg-hero__title">Five Decades of Pursuit</h1>
+            <p class="hg-hero__sub">
+                From a bold inaugural flight in 1972 to pioneering the world's longest non-stop
+                commercial route — a timeline of the milestones that shaped Asiaporeair.
+            </p>
+
+        </div>
+
+        <!-- Image band -->
+        <div class="hg-hero__img-band" aria-hidden="true">
+            <img src="assets/images/journey-with-us/heritage-hero.png" alt="" class="hg-hero__bg-img" loading="eager" />
+            <div class="hg-hero__overlay"></div>
+        </div>
+    </header>
+
+    <!-- ══ VINTAGE PHOTOS ════════════════════════════════════════════════════ -->
+    <section class="hg-photos" aria-labelledby="hg-photos-title">
+        <div class="hg-photos__inner">
+            <header class="hg-section-hdr">
+                <div class="hg-section-hdr__line" aria-hidden="true"></div>
+                <div>
+                    <p class="hg-section-hdr__eyebrow">From the Archives</p>
+                    <h2 class="hg-section-hdr__title" id="hg-photos-title">A Glimpse Through Time</h2>
+                </div>
+            </header>
+
+            <div class="hg-photos__grid">
+                @for (photo of vintagePhotos(); track trackById($index, photo); let i = $index) {
+                <app-vintage-photo-frame [photo]="photo" [animDelay]="i * 90"></app-vintage-photo-frame>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ TIMELINE ══════════════════════════════════════════════════════════ -->
+    <section class="hg-timeline" aria-labelledby="hg-timeline-title">
+        <div class="hg-timeline__inner">
+
+            <header class="hg-section-hdr">
+                <div class="hg-section-hdr__line" aria-hidden="true"></div>
+                <div>
+                    <p class="hg-section-hdr__eyebrow">Milestones</p>
+                    <h2 class="hg-section-hdr__title" id="hg-timeline-title">The Asiaporeair Story</h2>
+                </div>
+            </header>
+
+            <!-- Timeline spine container -->
+            <div class="hg-timeline__track">
+                @for (event of timelineEvents(); track trackById($index, event); let i = $index) {
+                <app-timeline-milestone [event]="event" [side]="sideFor(i)"
+                    [animDelay]="i * 80"></app-timeline-milestone>
+                }
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ BACK CTA ══════════════════════════════════════════════════════════ -->
+    <div class="hg-back-cta">
+        <div class="hg-back-cta__inner">
+            <a class="hg-back-cta__btn" routerLink="/journey-with-us/our-story">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                </svg>
+                Back to Our Story
+            </a>
+            <a class="hg-back-cta__btn hg-back-cta__btn--next" routerLink="/journey-with-us/our-story/our-fleet">
+                Explore Our Fleet
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
+</div>

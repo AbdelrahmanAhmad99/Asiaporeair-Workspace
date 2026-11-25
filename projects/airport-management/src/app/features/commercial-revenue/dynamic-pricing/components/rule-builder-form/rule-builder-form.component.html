@@ -1,0 +1,270 @@
+<div class="rbf-card">
+
+    <!-- ── Section Navigator ──────────────────────────────────────── -->
+    <div class="rbf-stepper" role="tablist" aria-label="Rule builder sections">
+
+        <!-- Step 1: Context -->
+        <button class="rbf-step" type="button" role="tab" [class.rbf-step--active]="activeSection() === 1"
+            [attr.aria-selected]="activeSection() === 1" (click)="navigateTo(1)" aria-controls="rbf-section-1">
+            <span class="rbf-step__num">01</span>
+            <div class="rbf-step__info">
+                <span class="rbf-step__label">Booking Context</span>
+                @if (form && (form.get('timeUntilDeparture')?.value || form.get('lengthOfStay')?.value)) {
+                <span class="rbf-step__preview">
+                    {{ form.get('timeUntilDeparture')?.value ? form.get('timeUntilDeparture')?.value + 'd departure' :
+                    '' }}
+                    {{ form.get('lengthOfStay')?.value ? form.get('lengthOfStay')?.value + 'd stay' : '' }}
+                </span>
+                }
+            </div>
+        </button>
+
+        <div class="rbf-step-connector" aria-hidden="true"></div>
+
+        <!-- Step 2: Pricing Factors -->
+        <button class="rbf-step" type="button" role="tab" [class.rbf-step--active]="activeSection() === 2"
+            [attr.aria-selected]="activeSection() === 2" (click)="navigateTo(2)" aria-controls="rbf-section-2">
+            <span class="rbf-step__num">02</span>
+            <div class="rbf-step__info">
+                <span class="rbf-step__label">Pricing Factors</span>
+                @if (form && form.get('willingnessToPay')?.value) {
+                <span class="rbf-step__preview">SGD {{ form.get('willingnessToPay')?.value }}</span>
+                }
+            </div>
+        </button>
+
+    </div>
+
+    <!-- ── Skeleton Loading ──────────────────────────────────────── -->
+    @if (isLoading()) {
+    <div class="rbf-skeleton-wrap" aria-hidden="true">
+        @for (i of skeletonFields; track i) {
+        <div class="rbf-sk-field">
+            <div class="rbf-sk rbf-sk--label"></div>
+            <div class="rbf-sk rbf-sk--input"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Form Body ─────────────────────────────────────────────── -->
+    @if (!isLoading()) {
+
+    <form class="rbf-form" [formGroup]="form" (ngSubmit)="onPublish()" novalidate>
+
+        <!-- ══ Section 1: Departure & Stay Context ═══════════════════════ -->
+        <div class="rbf-section" [class.rbf-section--visible]="activeSection() === 1" id="rbf-section-1"
+            role="tabpanel">
+
+            <div class="rbf-section__context-banner">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+                Define the booking context — time until departure and minimum length of stay for this rule to apply.
+            </div>
+
+            <!-- Attribute Type -->
+            <div class="rbf-field">
+                <label class="rbf-label" for="rbf-attribute-type">
+                    Attribute Type <span class="rbf-hint">(required)</span>
+                </label>
+                <select id="rbf-attribute-type" class="rbf-select" [class.rbf-input--error]="isInvalid('attributeType')"
+                    formControlName="attributeType" aria-describedby="rbf-attribute-type-err">
+                    @for (t of attributeTypes; track t.value) {
+                    <option [value]="t.value">{{ t.label }}</option>
+                    }
+                </select>
+                @if (isInvalid('attributeType')) {
+                <p class="rbf-error" id="rbf-attribute-type-err" role="alert">{{ getError('attributeType') }}</p>
+                }
+                <p class="rbf-hint">Select the type of pricing context attribute to check.</p>
+            </div>
+
+            <!-- Target Value -->
+            <div class="rbf-field">
+                <label class="rbf-label" for="rbf-target-value">
+                    Target Value <span class="rbf-hint">(required)</span>
+                </label>
+                <input id="rbf-target-value" class="rbf-input" [class.rbf-input--error]="isInvalid('targetValue')"
+                    type="text" formControlName="targetValue" placeholder="e.g. J, Gold, 15, Summer" autocomplete="off"
+                    spellcheck="false" aria-describedby="rbf-target-value-err" />
+                @if (isInvalid('targetValue')) {
+                <p class="rbf-error" id="rbf-target-value-err" role="alert">{{ getError('targetValue') }}</p>
+                }
+                <p class="rbf-hint">The value to match against the selected attribute.</p>
+            </div>
+
+            <!-- Time Until Departure -->
+            <div class="rbf-field">
+                <label class="rbf-label" for="rbf-time-departure">
+                    Time Until Departure <span class="rbf-hint">(days, optional)</span>
+                </label>
+                <input id="rbf-time-departure" class="rbf-input"
+                    [class.rbf-input--error]="isInvalid('timeUntilDeparture')" type="number"
+                    formControlName="timeUntilDeparture" placeholder="e.g. 7 (days before departure)" min="0" max="365"
+                    step="1" autocomplete="off" aria-describedby="rbf-time-departure-err" />
+                @if (isInvalid('timeUntilDeparture')) {
+                <p class="rbf-error" id="rbf-time-departure-err" role="alert">{{ getError('timeUntilDeparture') }}</p>
+                }
+                <p class="rbf-hint">Number of days before departure date. Range: 0–365.</p>
+            </div>
+
+            <!-- Length of Stay -->
+            <div class="rbf-field">
+                <label class="rbf-label" for="rbf-length-stay">
+                    Length of Stay <span class="rbf-hint">(days, optional)</span>
+                </label>
+                <input id="rbf-length-stay" class="rbf-input" [class.rbf-input--error]="isInvalid('lengthOfStay')"
+                    type="number" formControlName="lengthOfStay" placeholder="e.g. 5 (nights of stay)" min="0" max="365"
+                    step="1" autocomplete="off" aria-describedby="rbf-length-stay-err" />
+                @if (isInvalid('lengthOfStay')) {
+                <p class="rbf-error" id="rbf-length-stay-err" role="alert">{{ getError('lengthOfStay') }}</p>
+                }
+                <p class="rbf-hint">Minimum number of nights the passenger stays. Range: 0–365.</p>
+            </div>
+
+            <div class="rbf-section__footer">
+                <button class="rbf-btn rbf-btn--next" type="button" (click)="navigateTo(2)">
+                    Next: Pricing Factors
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ══ Section 2: Pricing Factors ════════════════════════════════ -->
+        <div class="rbf-section" [class.rbf-section--visible]="activeSection() === 2" id="rbf-section-2"
+            role="tabpanel">
+
+            <div class="rbf-section__context-banner">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                </svg>
+                Set the market pricing factors — competitor fares data and passenger willingness-to-pay ceiling.
+            </div>
+
+            <!-- Competitor Fares -->
+            <div class="rbf-field">
+                <label class="rbf-label" for="rbf-competitor-fares">
+                    Competitor Fares <span class="rbf-hint">(optional)</span>
+                </label>
+                <input id="rbf-competitor-fares" class="rbf-input"
+                    [class.rbf-input--error]="isInvalid('competitorFares')" type="text"
+                    formControlName="competitorFares" placeholder="e.g. CX:3000, CI:3200" autocomplete="off"
+                    spellcheck="false" aria-describedby="rbf-competitor-fares-err" />
+                @if (isInvalid('competitorFares')) {
+                <p class="rbf-error" id="rbf-competitor-fares-err" role="alert">{{ getError('competitorFares') }}</p>
+                }
+                <p class="rbf-hint">
+                    Comma-separated competitor airline fares. Format: IATA_CODE:PRICE (e.g. CX:3000, CI:3200).
+                </p>
+            </div>
+
+            <!-- Willingness to Pay -->
+            <div class="rbf-field">
+                <label class="rbf-label" for="rbf-wtp">
+                    Willingness to Pay (SGD) <span class="rbf-hint">(optional)</span>
+                </label>
+                <input id="rbf-wtp" class="rbf-input" [class.rbf-input--error]="isInvalid('willingnessToPay')"
+                    type="number" formControlName="willingnessToPay" placeholder="e.g. 3500" min="0" max="999999"
+                    step="1" aria-describedby="rbf-wtp-err rbf-wtp-hint" />
+                @if (isInvalid('willingnessToPay')) {
+                <p class="rbf-error" id="rbf-wtp-err" role="alert">{{ getError('willingnessToPay') }}</p>
+                }
+                <p class="rbf-hint" id="rbf-wtp-hint">
+                    Maximum price the passenger segment is willing to pay (SGD). Used as absolute base fare ceiling.
+                </p>
+            </div>
+
+            <!-- Modifier Percentage -->
+            <div class="rbf-field">
+                <label class="rbf-label" for="rbf-modifier-percentage">
+                    Modifier Percentage (%) <span class="rbf-hint">(required)</span>
+                </label>
+                <input id="rbf-modifier-percentage" class="rbf-input"
+                    [class.rbf-input--error]="isInvalid('modifierPercentage')" type="number"
+                    formControlName="modifierPercentage" placeholder="e.g. 10 (for +10% price adjustment) or -5"
+                    min="-100" max="1000" step="1" autocomplete="off" aria-describedby="rbf-modifier-percentage-err" />
+                @if (isInvalid('modifierPercentage')) {
+                <p class="rbf-error" id="rbf-modifier-percentage-err" role="alert">{{ getError('modifierPercentage') }}
+                </p>
+                }
+                <p class="rbf-hint">Percentage to adjust fare price. Negative values discount, positive values premium.
+                </p>
+
+                <!-- Quick Presets -->
+                <div class="rbf-presets" style="margin-top: 0.5rem;">
+                    <span class="rbf-presets__label">Quick Presets:</span>
+                    @for (pct of [-15, -10, -5, 5, 10, 15, 20]; track pct) {
+                    <button type="button" class="rbf-preset-btn"
+                        [class.rbf-preset-btn--active]="form.get('modifierPercentage')?.value === pct"
+                        (click)="form.get('modifierPercentage')?.setValue(pct)">
+                        {{ pct > 0 ? '+' : '' }}{{ pct }}%
+                    </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Priority -->
+            <div class="rbf-field">
+                <label class="rbf-label" for="rbf-priority">
+                    Priority Level <span class="rbf-hint">(required)</span>
+                </label>
+                <input id="rbf-priority" class="rbf-input" [class.rbf-input--error]="isInvalid('priority')"
+                    type="number" formControlName="priority" placeholder="e.g. 1 (highest priority to match first)"
+                    min="1" max="999" step="1" autocomplete="off" aria-describedby="rbf-priority-err" />
+                @if (isInvalid('priority')) {
+                <p class="rbf-error" id="rbf-priority-err" role="alert">{{ getError('priority') }}</p>
+                }
+                <p class="rbf-hint">Execution priority rank. Range: 1–999. Lower values execute first.</p>
+
+                <!-- Priority visual bar -->
+                @if (form.get('priority')?.value; as prio) {
+                <div class="rbf-priority-bar">
+                    <div class="rbf-priority-bar__fill"
+                        [style.width.%]="Math.max(0, Math.min(100, (prio / 999) * 100))"></div>
+                </div>
+                <div class="rbf-priority-bar__labels">
+                    <span>High Priority (1)</span>
+                    <span>Low Priority (999)</span>
+                </div>
+                }
+            </div>
+
+            <!-- Final Actions -->
+            <div class="rbf-section__footer rbf-section__footer--publish">
+                <button class="rbf-btn rbf-btn--ghost" type="button" (click)="navigateTo(1)">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                    Back
+                </button>
+                <button class="rbf-btn rbf-btn--cancel" type="button" (click)="onCancel()">
+                    Cancel
+                </button>
+                <button class="rbf-btn rbf-btn--publish" type="submit" [disabled]="isSaving()">
+                    @if (isSaving()) {
+                    <svg class="rbf-btn__spinner" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Publishing…
+                    } @else {
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                    </svg>
+                    {{ isEditMode() ? 'Update Rule' : 'Publish Rule' }}
+                    }
+                </button>
+            </div>
+        </div>
+
+    </form>
+    }
+
+</div>

@@ -1,0 +1,478 @@
+ // ----------------------------------------------------------------------------
+ // 1. Section Wrapper
+ // ----------------------------------------------------------------------------
+ .ag-section {
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     animation: ag-section-enter 380ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Section Header
+ // ----------------------------------------------------------------------------
+ .ag-header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     flex-wrap: wrap;
+ }
+
+ .ag-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+ }
+
+ // Icon wrapper — Midnight Sapphire pill
+ .ag-header-icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.75rem;
+     height: 2.75rem;
+     border-radius: 10px;
+     background: var(--aoms-midnight, #051937);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     flex-shrink: 0;
+     box-shadow: 0 4px 12px rgba(5, 25, 55, 0.15);
+ }
+
+ .ag-header-icon {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: var(--aoms-champagne, #E2C780);
+ }
+
+ .ag-section-title {
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 700;
+     font-size: 1rem;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary, #101056);
+     margin: 0;
+     transition: color var(--aoms-transition-fast);
+ }
+
+ .ag-section-subtitle {
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     margin: 0.15rem 0 0;
+     transition: color var(--aoms-transition-fast);
+ }
+
+ // ── Status Summary Chips ─────────────────────────────────────────────────────
+ .ag-status-summary {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-wrap: wrap;
+ }
+
+ .ag-status-chip {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4rem;
+     padding: 0.3rem 0.75rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+
+     &--active {
+         background: rgba(6, 78, 59, 0.1);
+         border: 1px solid rgba(6, 78, 59, 0.25);
+         color: #064E3B;
+     }
+
+     &--maintenance {
+         background: rgba(180, 83, 9, 0.1);
+         border: 1px solid rgba(180, 83, 9, 0.25);
+         color: #B45309;
+     }
+ }
+
+ .ag-status-dot {
+     width: 6px;
+     height: 6px;
+     border-radius: 50%;
+     flex-shrink: 0;
+
+     &--active {
+         background: #064E3B;
+         box-shadow: 0 0 0 2px rgba(6, 78, 59, 0.25);
+     }
+
+     &--maintenance {
+         background: #B45309;
+         box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.25);
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Airport Card Grid
+ //    Auto-fill with min 14rem columns; 3-4 columns on wide viewports.
+ // ----------------------------------------------------------------------------
+ .ag-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+     gap: 1rem;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Individual Airport Card
+ //    Off-White (#F8F9FA) base, thin Royal Gold border on hover.
+ //    Squircle corners: 12px.
+ // ----------------------------------------------------------------------------
+ .ag-card {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+     border-radius: 12px;
+     background-color: #F8F9FA;
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     box-shadow: 0 2px 10px rgba(5, 25, 55, 0.05);
+     overflow: hidden;
+     cursor: pointer;
+     transition:
+         transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+         border-color 180ms ease,
+         box-shadow 200ms ease;
+
+     // Maintenance state — subtle amber tint
+     &--maintenance {
+         background-color: #fffdf5;
+         border-color: rgba(180, 83, 9, 0.18);
+     }
+
+     // ── Hover State ──
+     &:hover {
+         transform: translateY(-3px);
+         border-color: var(--aoms-gold, #B68F24);
+         box-shadow:
+             0 8px 24px rgba(5, 25, 55, 0.1),
+             0 0 0 1px rgba(182, 143, 36, 0.15);
+
+         // Reveal footer on hover
+         .ag-card__footer {
+             opacity: 1;
+             transform: translateY(0);
+         }
+
+         // Shift IATA badge to gold on hover
+         .ag-card__iata {
+             color: var(--aoms-gold, #B68F24);
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid var(--aoms-champagne);
+         outline-offset: 2px;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Card Top — IATA Code + Status Indicator
+ // ----------------------------------------------------------------------------
+ .ag-card__top {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.5rem;
+     padding: 1rem 1rem 0.5rem;
+ }
+
+ // IATA code — bold Champagne Gold accent typography
+ .ag-card__iata {
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 800;
+     font-size: 1.375rem;
+     letter-spacing: 0.06em;
+     color: var(--aoms-midnight, #051937);
+     line-height: 1;
+     transition: color 180ms ease;
+ }
+
+ // Live status indicator pill
+ .ag-card__status-indicator {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0.2rem 0.5rem;
+     border-radius: 3px;
+     font-family: var(--aoms-font-body);
+     font-size: 10px;
+     font-weight: 600;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     &--active {
+         background: rgba(6, 78, 59, 0.08);
+         color: #064E3B;
+     }
+
+     &--maintenance {
+         background: rgba(180, 83, 9, 0.08);
+         color: #B45309;
+     }
+ }
+
+ .ag-card__status-dot {
+     width: 5px;
+     height: 5px;
+     border-radius: 50%;
+     flex-shrink: 0;
+
+     &--active {
+         background: #064E3B;
+         animation: ag-pulse-green 2.2s ease-in-out infinite;
+     }
+
+     &--maintenance {
+         background: #B45309;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Card Body — Airport Name
+ // ----------------------------------------------------------------------------
+ .ag-card__body {
+     padding: 0.25rem 1rem 0.875rem;
+     flex: 1;
+ }
+
+ .ag-card__name {
+     font-family: var(--aoms-font-body);
+     font-size: 13px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, #101056);
+     line-height: 1.4;
+     margin: 0;
+     transition: color var(--aoms-transition-fast);
+
+     // Clamp to 2 lines max — keeps grid uniform
+     display: -webkit-box;
+     // -webkit-line-clamp: 2;
+     -webkit-box-orient: vertical;
+     overflow: hidden;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 7. Card Footer — "View Terminal" CTA (reveals on hover)
+ // ----------------------------------------------------------------------------
+ .ag-card__footer {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.625rem 1rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.15);
+     background: rgba(5, 25, 55, 0.03);
+     opacity: 0;
+     transform: translateY(4px);
+     transition:
+         opacity 180ms ease,
+         transform 200ms ease;
+ }
+
+ .ag-card__footer-icon {
+     width: 0.875rem;
+     height: 0.875rem;
+     color: var(--aoms-gold, #B68F24);
+     flex-shrink: 0;
+ }
+
+ .ag-card__footer-label {
+     font-family: var(--aoms-font-body);
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+     color: var(--aoms-gold, #B68F24);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 8. Empty State
+ // ----------------------------------------------------------------------------
+ .ag-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     gap: 0.875rem;
+     padding: 3.5rem 1.5rem;
+     border-radius: 12px;
+     background: rgba(248, 249, 250, 0.6);
+     border: 1px dashed rgba(226, 199, 128, 0.25);
+ }
+
+ .ag-empty__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3.5rem;
+     height: 3.5rem;
+     border-radius: 12px;
+     background: rgba(5, 25, 55, 0.05);
+     border: 1px solid rgba(226, 199, 128, 0.15);
+ }
+
+ .ag-empty__icon {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: var(--aoms-text-muted);
+ }
+
+ .ag-empty__title {
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-size: 0.9375rem;
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     margin: 0;
+ }
+
+ .ag-empty__subtitle {
+     font-family: var(--aoms-font-body);
+     font-size: 13px;
+     color: var(--aoms-text-muted);
+     max-width: 32ch;
+     margin: 0;
+     line-height: 1.6;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 9. Keyframes
+ // ----------------------------------------------------------------------------
+ @keyframes ag-pulse-green {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba(6, 78, 59, 0.35);
+     }
+
+     50% {
+         box-shadow: 0 0 0 4px rgba(6, 78, 59, 0);
+     }
+ }
+
+ @keyframes ag-section-enter {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ // ============================================================================
+ // 10. Responsive
+ // ============================================================================
+ @media (max-width: 640px) {
+     .ag-grid {
+         grid-template-columns: 1fr 1fr;
+     }
+
+     .ag-header {
+         flex-direction: column;
+     }
+ }
+
+ @media (max-width: 400px) {
+     .ag-grid {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ // ============================================================================
+ // 11. Dark Mode Overrides  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .ag-section-title {
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .ag-section-subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .ag-card {
+         background-color: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.1);
+         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+
+         &--maintenance {
+             background-color: rgba(180, 83, 9, 0.06);
+             border-color: rgba(180, 83, 9, 0.2);
+         }
+
+         &:hover {
+             border-color: var(--aoms-gold);
+             box-shadow:
+                 0 8px 28px rgba(0, 0, 0, 0.3),
+                 0 0 0 1px rgba(182, 143, 36, 0.2);
+
+             .ag-card__iata {
+                 color: var(--aoms-champagne);
+             }
+         }
+     }
+
+     .ag-card__iata {
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .ag-card__name {
+         color: rgba(255, 255, 255, 0.72);
+     }
+
+     .ag-card__footer {
+         background: rgba(255, 255, 255, 0.03);
+         border-top-color: rgba(226, 199, 128, 0.08);
+     }
+
+     .ag-status-chip--active {
+         background: rgba(6, 78, 59, 0.18);
+         border-color: rgba(6, 78, 59, 0.35);
+         color: #6ee7b7;
+     }
+
+     .ag-status-chip--maintenance {
+         background: rgba(180, 83, 9, 0.18);
+         border-color: rgba(180, 83, 9, 0.35);
+         color: #fbbf24;
+     }
+
+     .ag-status-dot--active {
+         background: #6ee7b7;
+     }
+
+     .ag-status-dot--maintenance {
+         background: #fbbf24;
+     }
+
+     .ag-empty {
+         background: rgba(255, 255, 255, 0.02);
+         border-color: rgba(226, 199, 128, 0.12);
+     }
+
+     .ag-empty__title {
+         color: rgba(255, 255, 255, 0.6);
+     }
+
+     .ag-empty__subtitle {
+         color: rgba(255, 255, 255, 0.3);
+     }
+
+     .ag-header-icon-wrap {
+         background: rgba(5, 25, 55, 0.6);
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+     }
+ }

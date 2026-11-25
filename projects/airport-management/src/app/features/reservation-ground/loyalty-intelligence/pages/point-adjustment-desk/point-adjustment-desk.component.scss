@@ -1,0 +1,861 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ivory: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Page Shell ─────────────────────────────────────────────────────────
+ .pad-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary, $ivory);
+     transition: background-color $t-base;
+ }
+
+ // ── 2. Sticky Header ──────────────────────────────────────────────────────
+ .pad-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card, #fff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+     }
+ }
+
+ .pad-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .pad-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+ }
+
+ .pad-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .pad-member-tag {
+     font-size: 11px;
+     font-family: 'Courier New', monospace;
+     font-weight: 700;
+     letter-spacing: 0.05em;
+     color: $champagne;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     background: rgba($gold, 0.08);
+     border: 1px solid rgba($gold, 0.2);
+ }
+
+ .pad-toast {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.375rem 0.875rem;
+     border-radius: 6px;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     max-width: 400px;
+     animation: pad-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         opacity: 0.6;
+         color: inherit;
+         border-radius: 2px;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             opacity: 1;
+         }
+     }
+
+     &--success {
+         color: lighten($emerald, 30%);
+         background: rgba($emerald, 0.08);
+         border: 1px solid rgba($emerald, 0.2);
+     }
+ }
+
+ .pad-nav-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0 0.75rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     font-weight: 600;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     &:hover {
+         border-color: $champagne;
+         color: $gold;
+         background: rgba($champagne, 0.06);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .pad-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: pad-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── 3. Body ───────────────────────────────────────────────────────────────
+ .pad-body {
+     flex: 1;
+     padding: 1.25rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ // ── 4. Error Banner (Ruby red with Gold border accent) ─────────────────────
+ .pad-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.75rem 1rem;
+     border-radius: 8px;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 22%);
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.2);
+     border-left: 3px solid $gold; // gold accent per spec
+     animation: pad-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+         color: $gold;
+     }
+
+     &__dismiss {
+         margin-left: auto;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         color: rgba($champagne, 0.5);
+         border-radius: 3px;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             color: $champagne;
+         }
+     }
+ }
+
+ // ── 5. Member Lookup Card ─────────────────────────────────────────────────
+ .pad-lookup-card {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.12);
+     box-shadow: 0 4px 20px rgba($midnight, 0.2);
+     overflow: hidden;
+
+     &__accent {
+         height: 3px;
+         background: linear-gradient(to right, transparent, rgba($gold, 0.5), rgba($champagne, 0.85), rgba($gold, 0.5), transparent);
+     }
+
+     &__inner {
+         display: flex;
+         align-items: flex-start;
+         gap: 1.25rem;
+         padding: 1.5rem;
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3rem;
+         height: 3rem;
+         border-radius: 50%;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.25);
+         color: $champagne;
+         flex-shrink: 0;
+
+         svg {
+             width: 1.375rem;
+             height: 1.375rem;
+         }
+     }
+
+     &__content {
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__title {
+         font-size: 1rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: $champagne;
+         margin-bottom: 0.25rem;
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: rgba($champagne, 0.4);
+         line-height: 1.5;
+         margin-bottom: 0.875rem;
+     }
+ }
+
+ .pad-lookup-field {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     position: relative;
+     max-width: 400px;
+
+     &__icon {
+         position: absolute;
+         left: 0.625rem;
+         width: 0.875rem;
+         height: 0.875rem;
+         color: rgba($champagne, 0.4);
+         pointer-events: none;
+     }
+
+     &__input {
+         flex: 1;
+         height: 2.25rem;
+         padding: 0 0.75rem 0 2.125rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: rgba(255, 255, 255, 0.04);
+         font-family: 'Courier New', monospace;
+         font-size: 0.9375rem;
+         font-weight: 600;
+         letter-spacing: 0.04em;
+         color: $champagne;
+         outline: none;
+         transition: border-color $t-fast, box-shadow $t-fast;
+         // -webkit-appearance: none;
+
+         &[type='number'] {
+             // -moz-appearance: textfield;
+
+             &::-webkit-inner-spin-button,
+             &::-webkit-outer-spin-button {
+                 -webkit-appearance: none;
+             }
+         }
+
+         &::placeholder {
+             color: rgba($champagne, 0.3);
+             font-family: var(--aoms-font-body);
+             letter-spacing: 0;
+         }
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba($gold, 0.15);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+     }
+
+     &__btn {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.375rem;
+         padding: 0 1.125rem;
+         height: 2.25rem;
+         border-radius: 4px;
+         border: none;
+         background: $gold;
+         color: $midnight;
+         font-family: var(--aoms-font-body);
+         font-size: 0.8125rem;
+         font-weight: 700;
+         cursor: pointer;
+         white-space: nowrap;
+         box-shadow: 0 4px 14px rgba($gold, 0.4);
+         transition: all $t-fast;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+             flex-shrink: 0;
+         }
+
+         &:hover:not(:disabled) {
+             background: lighten($gold, 6%);
+             box-shadow: 0 6px 18px rgba($gold, 0.55);
+             transform: translateY(-1px);
+         }
+
+         &:disabled {
+             opacity: 0.45;
+             cursor: not-allowed;
+             transform: none;
+             box-shadow: none;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ // ── 6. Loading Skeleton ───────────────────────────────────────────────────
+ .pad-skeleton {
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     animation: pad-fadein 200ms ease forwards;
+
+     &__member {
+         border-radius: 12px;
+         background: $midnight;
+         border: 1px solid rgba($champagne, 0.1);
+         padding: 1.25rem;
+         display: flex;
+         align-items: center;
+         gap: 1.25rem;
+     }
+
+     &__body {
+         display: grid;
+         grid-template-columns: 380px 1fr;
+         gap: 1.25rem;
+     }
+ }
+
+ .pad-shimmer {
+     border-radius: 6px;
+     background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+     background-size: 200% 100%;
+     animation: pad-shimmer 1.4s infinite;
+
+     &--badge {
+         width: 100px;
+         height: 32px;
+         border-radius: 100px;
+         flex-shrink: 0;
+     }
+
+     &--name {
+         height: 18px;
+         width: 180px;
+     }
+
+     &--balance {
+         height: 40px;
+         width: 120px;
+         border-radius: 8px;
+         margin-left: auto;
+         flex-shrink: 0;
+     }
+
+     &--form {
+         height: 380px;
+     }
+
+     &--table {
+         height: 380px;
+     }
+ }
+
+ // ── 7. Member Identity Banner ─────────────────────────────────────────────
+ .pad-identity-banner {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.12);
+     box-shadow: 0 4px 20px rgba($midnight, 0.2);
+     overflow: hidden;
+     animation: pad-fadein 280ms ease forwards;
+
+     &__accent {
+         height: 3px;
+         background: linear-gradient(to right, transparent, rgba($gold, 0.5), rgba($champagne, 0.85), rgba($gold, 0.5), transparent);
+     }
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 1.125rem;
+         padding: 1.125rem 1.5rem 0;
+         flex-wrap: wrap;
+     }
+
+     &__info {
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__name {
+         font-size: 1.0625rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: $champagne;
+         line-height: 1.15;
+     }
+
+     &__card {
+         font-size: 10px;
+         font-family: 'Courier New', monospace;
+         color: rgba($champagne, 0.35);
+         letter-spacing: 0.07em;
+         margin-top: 0.125rem;
+     }
+ }
+
+ // Balance block
+ .pad-balance-block {
+     display: flex;
+     align-items: flex-start;
+     gap: 1.25rem;
+     padding: 1rem 1.5rem 1.25rem;
+
+     &__current,
+     &__projected {
+         display: flex;
+         flex-direction: column;
+         gap: 0.0625rem;
+         min-width: 140px;
+     }
+
+     &__label {
+         font-size: 9.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: rgba($champagne, 0.38);
+     }
+
+     &__amount {
+         font-size: 2rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.03em;
+         line-height: 1;
+         color: $champagne;
+         font-variant-numeric: tabular-nums;
+         transition: color 200ms ease;
+     }
+
+     &__unit {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         color: rgba($champagne, 0.3);
+     }
+
+     // Projected balance state colours
+     &__projected--up .pad-balance-block__amount {
+         color: lighten($emerald, 38%);
+     }
+
+     &__projected--down .pad-balance-block__amount {
+         color: lighten($amber, 20%);
+     }
+
+     &__arrow {
+         display: flex;
+         align-items: center;
+         margin-top: 1.25rem;
+         color: rgba($champagne, 0.3);
+
+         svg {
+             width: 1.25rem;
+             height: 1.25rem;
+         }
+     }
+
+     &__delta {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         letter-spacing: 0.03em;
+         font-variant-numeric: tabular-nums;
+
+         &--positive {
+             color: lighten($emerald, 35%);
+         }
+
+         &--negative {
+             color: lighten($amber, 18%);
+         }
+     }
+ }
+
+ // ── 8. Workspace Grid ─────────────────────────────────────────────────────
+ .pad-workspace {
+     display: grid;
+     grid-template-columns: 380px 1fr;
+     gap: 1.25rem;
+     align-items: start;
+
+     @media (max-width: 1024px) {
+         grid-template-columns: 1fr;
+     }
+
+     &__forms {
+         display: flex;
+         flex-direction: column;
+         gap: 1rem;
+         position: sticky;
+         top: calc(var(--aoms-topbar-height, 64px) + 1.25rem);
+
+         @media (max-width: 1024px) {
+             position: static;
+         }
+     }
+
+     &__history {
+         min-width: 0;
+     }
+ }
+
+ // ── 9. Booking Miles Card ─────────────────────────────────────────────────
+ .pad-booking-card {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 8px rgba($midnight, 0.04);
+     padding: 1rem 1.125rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+
+     &__header {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__title {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__desc {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         line-height: 1.5;
+     }
+ }
+
+ .pad-booking-field {
+     display: flex;
+     gap: 0.5rem;
+
+     &__input {
+         flex: 1;
+         height: 2.125rem;
+         padding: 0 0.75rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: rgba($midnight, 0.025);
+         font-family: 'Courier New', monospace;
+         font-size: 0.875rem;
+         font-weight: 600;
+         letter-spacing: 0.04em;
+         color: var(--aoms-text-primary, $charcoal);
+         outline: none;
+         transition: border-color $t-fast, box-shadow $t-fast;
+         // -webkit-appearance: none;
+
+         &[type='number'] {
+             // -moz-appearance: textfield;
+
+             &::-webkit-inner-spin-button,
+             &::-webkit-outer-spin-button {
+                 -webkit-appearance: none;
+             }
+         }
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+             opacity: 0.55;
+             font-family: var(--aoms-font-body);
+             letter-spacing: 0;
+         }
+
+         &:focus:not(:disabled) {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba($gold, 0.12);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+     }
+
+     &__btn {
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         gap: 0.375rem;
+         padding: 0 1rem;
+         height: 2.125rem;
+         border-radius: 4px;
+         border: none;
+         background: rgba($emerald, 0.12);
+         color: lighten($emerald, 30%);
+         border: 1px solid rgba($emerald, 0.25);
+         font-family: var(--aoms-font-body);
+         font-size: 0.8125rem;
+         font-weight: 700;
+         cursor: pointer;
+         white-space: nowrap;
+         transition: all $t-fast;
+
+         &:hover:not(:disabled) {
+             background: rgba($emerald, 0.2);
+             border-color: rgba($emerald, 0.45);
+         }
+
+         &:disabled {
+             opacity: 0.45;
+             cursor: not-allowed;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ .pad-spin {
+     animation: pad-spin 1s linear infinite;
+ }
+
+ // ── 10. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes pad-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes pad-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes pad-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── 11. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .pad-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .pad-booking-card {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     .pad-booking-field__input {
+         background: rgba(255, 255, 255, 0.04);
+         color: rgba(255, 255, 255, 0.85);
+
+         &:focus:not(:disabled) {
+             background: rgba($gold, 0.04);
+         }
+     }
+ }

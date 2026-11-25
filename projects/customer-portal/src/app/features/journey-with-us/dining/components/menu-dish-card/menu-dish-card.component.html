@@ -1,0 +1,32 @@
+<article class="mdc" [style.--anim-delay]="animDelay + 'ms'">
+
+    <!-- Image -->
+    <div class="mdc__img-wrap">
+        <img class="mdc__img" [src]="dish.imagePath" [alt]="dish.name" loading="lazy" />
+
+        @if (dish.highlight) {
+        <span class="mdc__highlight">{{ dish.highlight }}</span>
+        }
+
+        <!-- Dietary tags -->
+        @if (dish.dietary?.length) {
+        <div class="mdc__dietary-tags" aria-label="Dietary information">
+            @for (tag of dish.dietary!; track tag) {
+            <span class="mdc__dietary-tag">{{ dietaryLabel(tag) }}</span>
+            }
+        </div>
+        }
+    </div>
+
+    <!-- Content -->
+    <div class="mdc__body">
+        <div class="mdc__meta-row">
+            <span class="mdc__course">{{ courseLabel }}</span>
+            <span class="mdc__cabin">{{ cabinLabel }}</span>
+        </div>
+        <h3 class="mdc__name">{{ dish.name }}</h3>
+        <div class="mdc__divider" aria-hidden="true"></div>
+        <p class="mdc__desc">{{ dish.description }}</p>
+    </div>
+
+</article>

@@ -1,0 +1,404 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ruby: #710D06;
+ $charcoal: #101056;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Backdrop ───────────────────────────────────────────────────────────
+ .vcd-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 49;
+     background: rgba($midnight, 0.78);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     animation: vcd-fade 200ms ease forwards;
+ }
+
+ // ── 2. Panel ──────────────────────────────────────────────────────────────
+ .vcd-panel {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 50;
+     width: min(460px, calc(100vw - 2rem));
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 1rem;
+     padding: 0 1.75rem 1.75rem;
+     border-radius: 12px;
+     background: $midnight;
+
+     // Gold border accent — Ruby danger + Gold luxury boundary
+     border: 1px solid rgba($ruby, 0.35);
+     box-shadow:
+         0 0 0 1px rgba($gold, 0.1),
+         0 24px 60px rgba(0, 0, 0, 0.65),
+         0 0 40px rgba($ruby, 0.08) inset;
+
+     overflow: hidden;
+     text-align: center;
+     animation: vcd-enter 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     // Ruby accent bar at top — unmistakable destructive signal
+     &__accent {
+         width: calc(100% + 3.5rem);
+         height: 4px;
+         margin: 0 -1.75rem;
+         background: linear-gradient(to right,
+                 rgba($ruby, 0.4),
+                 darken($ruby, 5%),
+                 lighten($ruby, 18%),
+                 darken($ruby, 5%),
+                 rgba($ruby, 0.4));
+         flex-shrink: 0;
+     }
+ }
+
+ // ── 3. Warning Icon ───────────────────────────────────────────────────────
+ .vcd-icon-wrap {
+     position: relative;
+     width: 72px;
+     height: 72px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     margin-top: 0.375rem;
+ }
+
+ .vcd-icon-ring {
+     position: absolute;
+     border-radius: 50%;
+     border: 1.5px solid rgba($ruby, 0.3);
+
+     &--1 {
+         width: 54px;
+         height: 54px;
+         border-color: rgba($ruby, 0.55);
+     }
+
+     &--2 {
+         width: 64px;
+         height: 64px;
+         border-color: rgba($ruby, 0.3);
+         animation: vcd-ring-pulse 2s ease-out infinite;
+     }
+
+     &--3 {
+         width: 72px;
+         height: 72px;
+         border-color: rgba($ruby, 0.15);
+         animation: vcd-ring-pulse 2s ease-out 0.4s infinite;
+     }
+ }
+
+ .vcd-icon {
+     width: 1.75rem;
+     height: 1.75rem;
+     color: lighten($ruby, 28%);
+     position: relative;
+     z-index: 1;
+     filter: drop-shadow(0 0 6px rgba($ruby, 0.5));
+ }
+
+ // ── 4. Title & Pass ID ───────────────────────────────────────────────────
+ .vcd-title {
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     color: rgba(255, 255, 255, 0.9);
+     line-height: 1;
+ }
+
+ .vcd-pass-id {
+     font-size: 0.8125rem;
+     font-family: 'Courier New', monospace;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     color: rgba($champagne, 0.45);
+     margin-top: -0.375rem;
+ }
+
+ // ── 5. Passenger Context Card ─────────────────────────────────────────────
+ .vcd-context-card {
+     width: 100%;
+     display: flex;
+     flex-direction: column;
+     gap: 0.4375rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.06);
+     border: 1px solid rgba($ruby, 0.18);
+     text-align: left;
+ }
+
+ .vcd-context-row {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+ }
+
+ .vcd-context-key {
+     font-size: 9.5px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: rgba($champagne, 0.35);
+     flex-shrink: 0;
+ }
+
+ .vcd-context-val {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: rgba(255, 255, 255, 0.8);
+     text-align: right;
+     word-break: break-all;
+
+     &--mono {
+         font-family: 'Courier New', monospace;
+         font-size: 0.8125rem;
+         letter-spacing: 0.05em;
+         color: $champagne;
+     }
+
+     &--seat {
+         font-family: var(--aoms-font-heading);
+         font-size: 0.9375rem;
+         font-weight: 700;
+         color: $gold;
+     }
+ }
+
+ // ── 6. Warning Banner ─────────────────────────────────────────────────────
+ .vcd-warning {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.08);
+     border: 1px solid rgba($ruby, 0.22);
+     text-align: left;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: lighten($ruby, 20%);
+         flex-shrink: 0;
+         margin-top: 0.0625rem;
+     }
+
+     p {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         line-height: 1.6;
+         color: rgba(255, 255, 255, 0.55);
+
+         strong {
+             color: lighten($ruby, 22%);
+             font-weight: 700;
+         }
+     }
+ }
+
+ // ── 7. API Error ──────────────────────────────────────────────────────────
+ .vcd-api-error {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.5rem;
+     width: 100%;
+     padding: 0.625rem 0.875rem;
+     border-radius: 6px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.25);
+     text-align: left;
+     animation: vcd-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: lighten($ruby, 25%);
+         flex-shrink: 0;
+         margin-top: 0.0625rem;
+     }
+
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 28%);
+     line-height: 1.5;
+ }
+
+ // ── 8. Actions ────────────────────────────────────────────────────────────
+ .vcd-actions {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.75rem;
+     width: 100%;
+     padding-top: 0.5rem;
+     border-top: 1px solid rgba(255, 255, 255, 0.06);
+ }
+
+ .vcd-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.625rem 1.25rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.875rem;
+     font-weight: 700;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // Cancel — neutral ghost
+     &--cancel {
+         color: rgba(255, 255, 255, 0.45);
+         background: transparent;
+         border: 1px solid rgba(255, 255, 255, 0.12);
+
+         &:hover:not(:disabled) {
+             color: rgba(255, 255, 255, 0.75);
+             border-color: rgba(255, 255, 255, 0.25);
+             background: rgba(255, 255, 255, 0.05);
+         }
+
+         &:disabled {
+             opacity: 0.3;
+             cursor: not-allowed;
+         }
+     }
+
+     // Confirm — Deep Ruby Red with Gold border accent
+     &--confirm {
+         color: #fff;
+         background: $ruby;
+         border: 1px solid rgba($gold, 0.35); // Gold border accent per spec
+         box-shadow:
+             0 4px 16px rgba($ruby, 0.55),
+             inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+         &:hover:not(:disabled) {
+             background: lighten($ruby, 10%);
+             border-color: rgba($gold, 0.55);
+             box-shadow:
+                 0 6px 22px rgba($ruby, 0.65),
+                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
+             transform: translateY(-1px);
+         }
+
+         &:active:not(:disabled) {
+             transform: translateY(0);
+             box-shadow: 0 3px 10px rgba($ruby, 0.45);
+         }
+
+         &:disabled {
+             opacity: 0.45;
+             cursor: not-allowed;
+             transform: none;
+             box-shadow: none;
+         }
+     }
+
+     &__spin {
+         animation: vcd-spin 1s linear infinite;
+     }
+ }
+
+ // ── 9. ESC Hint ───────────────────────────────────────────────────────────
+ .vcd-esc-hint {
+     font-size: 10.5px;
+     font-family: var(--aoms-font-body);
+     color: rgba($champagne, 0.22);
+     margin-top: -0.375rem;
+
+     kbd {
+         font-family: 'Courier New', monospace;
+         font-size: 10px;
+         padding: 0.0625rem 0.3125rem;
+         border-radius: 3px;
+         background: rgba($champagne, 0.08);
+         border: 1px solid rgba($champagne, 0.14);
+         color: rgba($champagne, 0.35);
+     }
+ }
+
+ // ── 10. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes vcd-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes vcd-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px)) scale(0.93);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%) scale(1);
+     }
+ }
+
+ @keyframes vcd-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(-3px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes vcd-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes vcd-ring-pulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.6;
+     }
+
+     100% {
+         transform: scale(1.5);
+         opacity: 0;
+     }
+ }

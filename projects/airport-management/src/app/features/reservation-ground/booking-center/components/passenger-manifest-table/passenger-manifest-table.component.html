@@ -1,0 +1,88 @@
+<!-- passenger-manifest-table.component.html -->
+
+<div class="pmt-container">
+    <!-- Section Header -->
+    <header class="pmt-header">
+        <h2 class="pmt-header__title">
+            <svg class="pmt-header__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            Passenger Manifest
+        </h2>
+        <span class="pmt-header__count" [attr.aria-label]="passengers().length + ' passengers'">
+            {{ passengers().length }} PAX
+        </span>
+    </header>
+
+    <!-- Data Table -->
+    <div class="pmt-table-wrap">
+        @if (!hasPassengers()) {
+        <div class="pmt-empty" role="status">
+            <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 48 48" class="pmt-empty__icon"
+                aria-hidden="true">
+                <circle cx="24" cy="18" r="7" />
+                <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke-dasharray="4 3" />
+            </svg>
+            <p>No passenger records on this booking.</p>
+        </div>
+        } @else {
+        <table class="pmt-table" aria-label="Passenger manifest">
+            <thead>
+                <tr class="pmt-thead-row">
+                    <th scope="col" class="pmt-th pmt-th--avatar" aria-label="Avatar"></th>
+                    <th scope="col" class="pmt-th">Passenger Name</th>
+                    <th scope="col" class="pmt-th">Passport No.</th>
+                    <th scope="col" class="pmt-th pmt-th--dob">Date of Birth</th>
+                    <th scope="col" class="pmt-th pmt-th--status">Doc Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (pax of formattedPassengers(); track pax.passengerId) {
+                <tr class="pmt-row">
+                    <!-- Avatar cell -->
+                    <td class="pmt-cell pmt-cell--avatar" aria-hidden="true">
+                        <div class="pmt-avatar">{{ pax.initials }}</div>
+                    </td>
+
+                    <!-- Name -->
+                    <td class="pmt-cell pmt-cell--name">
+                        <span class="pmt-pax-name">{{ pax.fullName }}</span>
+                    </td>
+
+                    <!-- Passport -->
+                    <td class="pmt-cell">
+                        @if (pax.passportNumber) {
+                        <span class="pmt-passport">{{ pax.passportNumber }}</span>
+                        } @else {
+                        <span class="pmt-missing">Not provided</span>
+                        }
+                    </td>
+
+                    <!-- DOB -->
+                    <td class="pmt-cell pmt-cell--dob">
+                        {{ pax.dobFormatted }}
+                    </td>
+
+                    <!-- Doc Status indicator -->
+                    <td class="pmt-cell pmt-cell--status">
+                        @if (pax.passportNumber) {
+                        <span class="pmt-doc-badge pmt-doc-badge--ok">
+                            <span class="pmt-doc-badge__dot" aria-hidden="true"></span>
+                            Verified
+                        </span>
+                        } @else {
+                        <span class="pmt-doc-badge pmt-doc-badge--missing">
+                            <span class="pmt-doc-badge__dot" aria-hidden="true"></span>
+                            Missing
+                        </span>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+</div>

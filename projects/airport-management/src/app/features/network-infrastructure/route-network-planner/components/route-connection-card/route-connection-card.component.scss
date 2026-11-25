@@ -1,0 +1,374 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #9f1239;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Card — Midnight Sapphire with gold gradient layers
+ // ============================================================================
+ .rcc-card {
+     position: relative;
+     border-radius: 12px;
+     background: $midnight;
+     overflow: hidden;
+
+     // Layered gold gradient — subtle directional shimmer
+     background-image:
+         linear-gradient(135deg, rgba($gold, 0.09) 0%, transparent 50%),
+         linear-gradient(270deg, rgba($charcoal, 0.5) 0%, transparent 70%);
+
+     border: 1px solid rgba($gold, 0.16);
+     box-shadow:
+         0 12px 48px rgba($midnight, 0.28),
+         0 1px 0 rgba($champagne, 0.12) inset;
+
+     padding: 1.75rem 2rem 0;
+
+     animation: rcc-enter 480ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. Ghost watermark — route ID for depth
+ // ============================================================================
+ .rcc-watermark {
+     position: absolute;
+     bottom: -0.1em;
+     right: 0.5rem;
+     font-family: 'Montserrat', sans-serif;
+     font-weight: 900;
+     font-size: clamp(5rem, 15vw, 10rem);
+     line-height: 1;
+     letter-spacing: -0.06em;
+     color: transparent;
+     -webkit-text-stroke: 1px rgba($champagne, 0.05);
+     // text-stroke: 1px rgba($champagne, 0.05);
+     user-select: none;
+     pointer-events: none;
+ }
+
+ // ============================================================================
+ // 3. Status strip — top bar
+ // ============================================================================
+ .rcc-top-strip {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     margin-bottom: 1.75rem;
+     animation: rcc-slide-up 320ms $luxury 50ms both;
+ }
+
+ .rcc-status-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.28rem 0.75rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+
+     &__dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         flex-shrink: 0;
+     }
+
+     &--active {
+         background: rgba($emerald, 0.22);
+         border: 1px solid rgba($emerald, 0.42);
+         color: #6ee7b7;
+
+         .rcc-status-badge__dot {
+             background: #6ee7b7;
+             animation: rcc-pulse-emerald 2.2s ease-in-out infinite;
+         }
+     }
+
+     &--inactive {
+         background: rgba($ruby, 0.18);
+         border: 1px solid rgba($ruby, 0.35);
+         color: #fca5a5;
+
+         .rcc-status-badge__dot {
+             background: #fca5a5;
+         }
+     }
+ }
+
+ .rcc-route-id {
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     color: rgba($champagne, 0.45);
+ }
+
+ // ============================================================================
+ // 4. Corridor — Hub → Hub layout
+ // ============================================================================
+ .rcc-corridor {
+     display: flex;
+     align-items: center;
+     gap: 0;
+     margin-bottom: 1.5rem;
+     animation: rcc-slide-left 420ms $luxury 80ms both;
+ }
+
+ // ── Hub block ────────────────────────────────────────────────────────────────
+ .rcc-hub {
+     display: flex;
+     flex-direction: column;
+     gap: 0.35rem;
+     flex-shrink: 0;
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-weight: 900;
+         font-size: clamp(2.5rem, 6vw, 4rem);
+         letter-spacing: -0.02em;
+         line-height: 1;
+         text-transform: uppercase;
+     }
+
+     &__name {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 500;
+         letter-spacing: 0.05em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.9);
+     }
+
+     &__city {
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         font-size: 12px;
+         font-weight: 500;
+         letter-spacing: 0.05em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.9);
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.12em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.45);
+     }
+
+     // Origin — Royal Gold
+     &--origin .rcc-hub__iata {
+         color: $gold;
+         text-shadow: 0 0 32px rgba($gold, 0.25);
+     }
+
+     // Destination — Champagne
+     &--destination .rcc-hub__iata {
+         color: $champagne;
+         text-shadow: 0 0 32px rgba($champagne, 0.2);
+     }
+
+     &--destination {
+         text-align: right;
+     }
+ }
+
+ // ── The Golden Link ────────────────────────────────────────────────────────
+ .rcc-link {
+     flex: 1;
+     display: flex;
+     align-items: center;
+     padding: 0 0.75rem;
+     // Keeps the link centred vertically with the IATA text
+     margin-bottom: 1.25rem;
+
+     &__line {
+         flex: 1;
+         height: 1px;
+         background: linear-gradient(90deg, rgba($gold, 0.15), rgba($gold, 0.7));
+
+         &--right {
+             background: linear-gradient(90deg, rgba($gold, 0.7), rgba($champagne, 0.15));
+         }
+     }
+
+     &__plane-disc {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 50%;
+         background: $midnight;
+         border: 1px solid rgba($gold, 0.45);
+         box-shadow:
+             0 0 16px rgba($gold, 0.15),
+             0 4px 12px rgba($midnight, 0.4);
+         margin: 0 0.375rem;
+     }
+
+     &__plane-icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $champagne;
+     }
+ }
+
+ // ============================================================================
+ // 5. Glassmorphism Intelligence Badge — floating metrics strip
+ // ============================================================================
+ .rcc-intel-badge {
+     display: flex;
+     align-items: center;
+     gap: 0;
+     justify-content: center;
+     flex-wrap: wrap;
+
+     // Glassmorphism panel — sits at the bottom of the card
+     margin: 0 -2rem;
+     padding: 1.125rem 2rem;
+     background: rgba(255, 255, 255, 0.05);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     border-top: 1px solid rgba($champagne, 0.12);
+
+     animation: rcc-slide-up 360ms $luxury 180ms both;
+
+     &__metric {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 0.2rem;
+         padding: 0.25rem 1.25rem;
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: rgba($champagne, 0.5);
+         margin-bottom: 0.15rem;
+     }
+
+     &__value {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 1.375rem;
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         line-height: 1;
+         color: $champagne;
+     }
+
+     &__unit {
+         font-size: 0.65em;
+         font-weight: 400;
+         opacity: 0.65;
+         margin-left: 0.15em;
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.35);
+     }
+
+     &__sep {
+         width: 1px;
+         height: 2.5rem;
+         background: rgba($champagne, 0.12);
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 6. Keyframes
+ // ============================================================================
+ @keyframes rcc-enter {
+     from {
+         opacity: 0;
+         transform: translateX(-10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes rcc-slide-up {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rcc-slide-left {
+     from {
+         opacity: 0;
+         transform: translateX(-12px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes rcc-pulse-emerald {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.45);
+     }
+
+     50% {
+         box-shadow: 0 0 0 4px rgba(110, 231, 183, 0);
+     }
+ }
+
+ // ============================================================================
+ // 7. Responsive
+ // ============================================================================
+ @media (max-width: 600px) {
+     .rcc-hub__iata {
+         font-size: 2.5rem;
+     }
+
+     .rcc-intel-badge__metric {
+         padding: 0.25rem 0.75rem;
+     }
+
+     .rcc-intel-badge__value {
+         font-size: 1.125rem;
+     }
+ }
+
+ // ============================================================================
+ // 8. Dark Mode — card is already dark-first; deepen shadows
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .rcc-card {
+         box-shadow:
+             0 16px 56px rgba(0, 0, 0, 0.5),
+             0 1px 0 rgba($champagne, 0.1) inset;
+     }
+ }

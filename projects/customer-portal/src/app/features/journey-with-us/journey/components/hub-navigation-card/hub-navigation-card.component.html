@@ -1,0 +1,35 @@
+<!-- ============================================================================
+     hub-navigation-card.component.html
+     Asiaporeair | Hub Navigation Card — Luxury Section Link Card
+     ============================================================================ -->
+
+<a class="hnc" [routerLink]="section.route" [style.--anim-delay]="(index * 80) + 'ms'"
+    [attr.aria-label]="'Explore ' + section.tagline">
+
+    <!-- Image with overlay -->
+    <div class="hnc__image-wrap">
+        <img class="hnc__image" [src]="section.imagePath" [alt]="section.title + ' — ' + section.tagline"
+            loading="lazy" />
+        <div class="hnc__image-overlay" aria-hidden="true"></div>
+    </div>
+
+    <!-- Text content (visible over image at bottom) -->
+    <div class="hnc__body">
+        <span class="hnc__tagline">{{ section.tagline }}</span>
+        <h3 class="hnc__title">{{ section.title }}</h3>
+        <p class="hnc__desc">{{ section.description }}</p>
+
+        <div class="hnc__cta" aria-hidden="true">
+            <span class="hnc__cta-text">Discover more</span>
+            <svg class="hnc__cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Gold accent corner -->
+    <div class="hnc__corner" aria-hidden="true"></div>
+
+</a>

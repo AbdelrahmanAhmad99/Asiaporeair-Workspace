@@ -1,0 +1,114 @@
+// seat-assignment-display.component.scss — Light Theme
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+$midnight  : #051937;
+$royal-gold: #B68F24;
+$champagne : #E2C780;
+$charcoal  : #101056;
+$ivory     : #F8F9FA;
+$white     : #FFFFFF;
+$font      : 'Inter', 'Montserrat', -apple-system, sans-serif;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $white;
+}
+
+.seat-grid-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: $ivory;
+}
+
+.seat-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: $white;
+    border: 1px solid rgba($midnight, 0.09);
+    border-radius: 10px;
+    min-width: 220px;
+    flex: 1;
+    box-shadow: 0 2px 6px rgba($midnight, 0.04);
+    transition: border-color 250ms ease, box-shadow 250ms ease;
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.38);
+        box-shadow: 0 4px 14px rgba($midnight, 0.08);
+    }
+}
+
+.aircraft-mini {
+    flex-shrink: 0;
+}
+
+.seat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.seat-number-block {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.seat-row-num {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: $midnight;
+    letter-spacing: -0.06em;
+    line-height: 1;
+}
+
+.seat-letter {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: $royal-gold;
+    letter-spacing: 0;
+    line-height: 1;
+}
+
+.seat-attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.attr-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    background: rgba($midnight, 0.04);
+    border: 1px solid rgba($midnight, 0.09);
+    border-radius: 100px;
+    font-size: 0.58rem;
+    font-weight: 600;
+    color: rgba($midnight, 0.65);
+
+    svg {
+        flex-shrink: 0;
+        color: $royal-gold;
+    }
+
+    &--cabin {
+        background: rgba($royal-gold, 0.08);
+        border-color: rgba($royal-gold, 0.22);
+        color: darken($royal-gold, 5%);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 0.55rem;
+    }
+}
+
+.seat-pax-name {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba($midnight, 0.65);
+    letter-spacing: -0.01em;
+}

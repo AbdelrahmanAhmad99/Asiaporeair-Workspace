@@ -1,0 +1,121 @@
+<!-- seat-legend.component.html -->
+
+<div class="legend-card" aria-label="Seat map legend" role="region">
+
+    <div class="legend-header">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        Seat Legend
+    </div>
+
+    <div class="legend-grid" role="list">
+
+        <!-- Available Standard -->
+        <div class="legend-item" role="listitem">
+            <div class="legend-swatch swatch--available" aria-hidden="true"></div>
+            <div class="legend-info">
+                <span class="legend-name">Standard Seat</span>
+                <span class="legend-sub">Complimentary</span>
+            </div>
+        </div>
+
+        <!-- Exit / Extra Legroom -->
+        <div class="legend-item" role="listitem">
+            <div class="legend-swatch swatch--exit" aria-hidden="true"></div>
+            <div class="legend-info">
+                <span class="legend-name">Exit Row</span>
+                <span class="legend-sub">Extra legroom</span>
+            </div>
+        </div>
+
+        <!-- Selected — You -->
+        <div class="legend-item" role="listitem">
+            <div class="legend-swatch swatch--selected-you" aria-hidden="true">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            </div>
+            <div class="legend-info">
+                <span class="legend-name">Your Selection</span>
+                <span class="legend-sub">Active passenger</span>
+            </div>
+        </div>
+
+        <!-- Selected — Other Passenger -->
+        <div class="legend-item" role="listitem">
+            <div class="legend-swatch swatch--selected-other" aria-hidden="true">
+                <span class="swatch-num">2</span>
+            </div>
+            <div class="legend-info">
+                <span class="legend-name">Other Traveller</span>
+                <span class="legend-sub">Co-passenger seat</span>
+            </div>
+        </div>
+
+        <!-- Occupied -->
+        <div class="legend-item" role="listitem">
+            <div class="legend-swatch swatch--occupied" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </div>
+            <div class="legend-info">
+                <span class="legend-name">Unavailable</span>
+                <span class="legend-sub">Already occupied</span>
+            </div>
+        </div>
+
+        <!-- Window -->
+        <div class="legend-item" role="listitem">
+            <div class="legend-swatch swatch--window" aria-hidden="true">
+                <span class="window-pip" aria-hidden="true"></span>
+            </div>
+            <div class="legend-info">
+                <span class="legend-name">Window Seat</span>
+                <span class="legend-sub">Gold dot indicator</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Aircraft Feature Key -->
+    <div class="feature-row" role="list" aria-label="Aircraft features">
+        <div class="feature-item" role="listitem">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span>Emergency Exit</span>
+        </div>
+        <div class="feature-item" role="listitem">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>Lavatories</span>
+        </div>
+        <div class="feature-item" role="listitem">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+                <line x1="3" y1="6" x2="3.01" y2="6" />
+                <line x1="3" y1="12" x2="3.01" y2="12" />
+                <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>
+            <span>Galley</span>
+        </div>
+    </div>
+
+</div>

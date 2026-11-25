@@ -1,0 +1,103 @@
+<!-- ============================================================================
+     our-story-landing.component.html
+     Asiaporeair | Our Story — Hub Landing Page
+     ============================================================================ -->
+
+<div class="osl-shell">
+
+    <!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
+    <header class="osl-hero" role="banner">
+        <div class="osl-hero__inner">
+
+            <!-- Breadcrumb -->
+            <nav class="osl-hero__bc" aria-label="Breadcrumb">
+                @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+                @if (!last) {
+                <a [href]="crumb.route ?? '#'" class="osl-hero__bc-link">{{ crumb.label }}</a>
+                <span class="osl-hero__bc-sep" aria-hidden="true">›</span>
+                } @else {
+                <span class="osl-hero__bc-cur">{{ crumb.label }}</span>
+                }
+                }
+            </nav>
+
+            <div class="osl-hero__content">
+                <div>
+                    <div class="osl-hero__pre-block" aria-hidden="true">
+                        <div class="osl-hero__pre-line"></div>
+                        <span class="osl-hero__eyebrow">Who We Are</span>
+                    </div>
+                    <h1 class="osl-hero__title">Our Story</h1>
+                    <p class="osl-hero__subtitle">
+                        A legacy built on an unrelenting commitment to excellence — shaped by five
+                        decades of service, innovation, and a deep respect for every passenger we carry.
+                    </p>
+                </div>
+
+                <!-- Heritage stats strip -->
+                <div class="osl-hero__stats" aria-label="Key milestones">
+                    <div class="osl-hero__stat">
+                        <span class="osl-hero__stat-num">52</span>
+                        <span class="osl-hero__stat-label">Years of service</span>
+                    </div>
+                    <div class="osl-hero__stat">
+                        <span class="osl-hero__stat-num">135+</span>
+                        <span class="osl-hero__stat-label">Global destinations</span>
+                    </div>
+                    <div class="osl-hero__stat">
+                        <span class="osl-hero__stat-num">7,000+</span>
+                        <span class="osl-hero__stat-label">Crew members worldwide</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Full-bleed image band with overlay -->
+        <div class="osl-hero__img-band" aria-hidden="true">
+            <img src="assets/images/journey-with-us/our-story-hero.png" alt="" class="osl-hero__bg-img"
+                loading="eager" />
+            <div class="osl-hero__overlay"></div>
+        </div>
+    </header>
+
+    <!-- ══ HUB NAVIGATION CARDS ══════════════════════════════════════════════ -->
+    <section class="osl-hub" aria-labelledby="osl-hub-title">
+        <div class="osl-hub__inner">
+
+            <header class="osl-hub__header">
+                <div class="osl-hub__header-line" aria-hidden="true"></div>
+                <div>
+                    <p class="osl-hub__eyebrow">Explore Our Identity</p>
+                    <h2 class="osl-hub__title" id="osl-hub-title">The Pillars of Asiaporeair</h2>
+                    <p class="osl-hub__subtitle">
+                        Heritage, craft, people, and recognition — four chapters that together tell
+                        the story of an airline defined by its pursuit of exceptional.
+                    </p>
+                </div>
+            </header>
+
+            <!-- 2×2 grid -->
+            <div class="osl-hub__grid">
+                @for (section of hubSections(); track trackById($index, section); let i = $index) {
+                <app-hub-navigation-card [section]="section" [index]="i"></app-hub-navigation-card>
+                }
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ FOUNDING QUOTE BLOCK ══════════════════════════════════════════════ -->
+    <div class="osl-founding-quote">
+        <div class="osl-founding-quote__inner">
+            <div class="osl-founding-quote__mark" aria-hidden="true">"</div>
+            <blockquote class="osl-founding-quote__text">
+                We did not set out to build the world's best airline.
+                We set out to give every passenger an experience they would never forget —
+                and found that excellence followed naturally.
+            </blockquote>
+            <p class="osl-founding-quote__attr">— Founding Charter, Asiaporeair, 1972</p>
+        </div>
+    </div>
+
+</div>

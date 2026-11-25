@@ -1,0 +1,420 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+
+ $node-size: 26px;
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Container ──────────────────────────────────────────────────────────
+ .tip-container {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 4px 20px rgba($midnight, 0.25);
+     overflow: hidden;
+     padding: 0 1.5rem 1.375rem;
+     transition: border-color $t-base;
+
+     &--complete {
+         border-color: rgba($emerald, 0.35);
+         box-shadow: 0 4px 20px rgba($midnight, 0.25), 0 0 0 1px rgba($emerald, 0.06) inset;
+     }
+
+     &--failed {
+         border-color: rgba($ruby, 0.35);
+         box-shadow: 0 4px 20px rgba($midnight, 0.25), 0 0 0 1px rgba($ruby, 0.06) inset;
+     }
+
+     &__accent {
+         height: 3px;
+         margin: 0 -1.5rem;
+         flex-shrink: 0;
+         background: linear-gradient(to right,
+                 transparent,
+                 rgba($gold, 0.5),
+                 rgba($champagne, 0.85),
+                 rgba($gold, 0.5),
+                 transparent);
+         margin-bottom: 1.25rem;
+
+         .tip-container--complete & {
+             background: linear-gradient(to right,
+                     transparent,
+                     rgba($emerald, 0.5),
+                     lighten($emerald, 30%),
+                     rgba($emerald, 0.5),
+                     transparent);
+         }
+
+         .tip-container--failed & {
+             background: linear-gradient(to right,
+                     rgba($ruby, 0.35),
+                     lighten($ruby, 18%),
+                     rgba($ruby, 0.35));
+         }
+     }
+ }
+
+ // ── 2. Header Row ─────────────────────────────────────────────────────────
+ .tip-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     margin-bottom: 1.125rem;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0.875rem;
+         flex: 1;
+         min-width: 0;
+     }
+ }
+
+ // ── 3. Status Icon ────────────────────────────────────────────────────────
+ .tip-status-icon {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.75rem;
+     height: 2.75rem;
+     border-radius: 50%;
+     flex-shrink: 0;
+     transition: all $t-base;
+
+     svg {
+         width: 1.25rem;
+         height: 1.25rem;
+     }
+
+     // Default / idle state
+     background: rgba($gold, 0.1);
+     border: 1.5px solid rgba($gold, 0.25);
+     color: rgba($champagne, 0.5);
+
+     // Active — glowing pulse
+     &--active {
+         background: rgba($gold, 0.12);
+         border-color: rgba($gold, 0.6);
+         color: $champagne;
+         box-shadow: 0 0 18px rgba($gold, 0.4), 0 0 6px rgba($gold, 0.2);
+         animation: tip-glow-pulse 2s ease-in-out infinite alternate;
+     }
+
+     // Complete — emerald
+     &--complete {
+         background: rgba($emerald, 0.15);
+         border-color: rgba($emerald, 0.45);
+         color: lighten($emerald, 40%);
+         box-shadow: 0 0 12px rgba($emerald, 0.3);
+         animation: none;
+     }
+
+     // Failed — ruby
+     &--failed {
+         background: rgba($ruby, 0.14);
+         border-color: rgba($ruby, 0.45);
+         color: lighten($ruby, 30%);
+         box-shadow: 0 0 12px rgba($ruby, 0.3);
+         animation: none;
+     }
+ }
+
+ .tip-spinner {
+     animation: tip-spin 1s linear infinite;
+ }
+
+ // ── 4. Status Labels ──────────────────────────────────────────────────────
+ .tip-status-label {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: $champagne;
+     line-height: 1.2;
+     margin-bottom: 0.1875rem;
+
+     .tip-container--complete & {
+         color: lighten($emerald, 40%);
+     }
+
+     .tip-container--failed & {
+         color: lighten($ruby, 28%);
+     }
+ }
+
+ .tip-status-desc {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: rgba($champagne, 0.4);
+     line-height: 1.4;
+     max-width: 340px;
+ }
+
+ // ── 5. Percentage Display ─────────────────────────────────────────────────
+ .tip-percent {
+     font-size: 1.5rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     font-variant-numeric: tabular-nums;
+     color: $gold;
+     flex-shrink: 0;
+     transition: color $t-base;
+
+     &--complete {
+         color: lighten($emerald, 35%);
+     }
+
+     &--failed {
+         color: lighten($ruby, 25%);
+     }
+ }
+
+ // ── 6. Progress Bar Track ─────────────────────────────────────────────────
+ .tip-bar-track {
+     width: 100%;
+     height: 6px;
+     border-radius: 100px;
+     background: rgba($champagne, 0.08);
+     overflow: hidden;
+     margin-bottom: 1.5rem;
+ }
+
+ .tip-bar-fill {
+     height: 100%;
+     border-radius: 100px;
+     background: linear-gradient(to right, rgba($gold, 0.7), $gold, $champagne);
+     box-shadow: 0 0 10px rgba($gold, 0.5);
+     transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+     position: relative;
+     overflow: hidden;
+
+     &--complete {
+         background: linear-gradient(to right, rgba($emerald, 0.7), $emerald, lighten($emerald, 25%));
+         box-shadow: 0 0 12px rgba($emerald, 0.5);
+     }
+
+     &--failed {
+         background: linear-gradient(to right, rgba($ruby, 0.7), $ruby, lighten($ruby, 18%));
+         box-shadow: 0 0 12px rgba($ruby, 0.4);
+     }
+
+     // Animated shimmer travelling along the fill when active
+     &__shimmer {
+         position: absolute;
+         top: 0;
+         left: -60%;
+         width: 60%;
+         height: 100%;
+         background: linear-gradient(90deg,
+                 transparent 0%,
+                 rgba(255, 255, 255, 0.35) 50%,
+                 transparent 100%);
+         animation: tip-shimmer-sweep 1.6s ease-in-out infinite;
+         border-radius: 100px;
+     }
+ }
+
+ // ── 7. Stage Nodes (horizontal pipeline) ─────────────────────────────────
+ .tip-stages {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0;
+ }
+
+ .tip-stage {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.5rem;
+     flex: 1;
+     position: relative;
+
+     // Connector line: horizontal, runs from this node to the next
+     &__connector {
+         position: absolute;
+         top: calc(#{$node-size} / 2);
+         left: calc(50% + #{$node-size} / 2);
+         right: calc(-50% + #{$node-size} / 2);
+         height: 2px;
+         transition: background $t-base;
+         z-index: 0;
+
+         &--completed {
+             background: linear-gradient(to right, rgba($gold, 0.6), rgba($champagne, 0.4));
+         }
+
+         &--active {
+             background: linear-gradient(to right,
+                     rgba($gold, 0.5),
+                     rgba($champagne, 0.12));
+         }
+
+         &--pending {
+             background: repeating-linear-gradient(to right,
+                     rgba($champagne, 0.12) 0px,
+                     rgba($champagne, 0.12) 4px,
+                     transparent 4px,
+                     transparent 8px);
+         }
+
+         &--error {
+             background: rgba($ruby, 0.3);
+         }
+     }
+
+     // Node circle
+     &__node {
+         position: relative;
+         z-index: 1;
+         width: $node-size;
+         height: $node-size;
+         border-radius: 50%;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         transition: all $t-base;
+
+         svg {
+             width: 11px;
+             height: 11px;
+         }
+
+         // Pending — ghost dashed ring
+         &--pending {
+             background: transparent;
+             border: 1.5px dashed rgba($champagne, 0.2);
+         }
+
+         // Active — glowing gold ring
+         &--active {
+             background: rgba($gold, 0.1);
+             border: 1.5px solid rgba($gold, 0.75);
+             box-shadow: 0 0 14px rgba($gold, 0.5), 0 0 4px rgba($champagne, 0.3);
+             animation: tip-node-glow 2s ease-in-out infinite alternate;
+         }
+
+         // Completed — filled emerald
+         &--completed {
+             background: rgba($emerald, 0.15);
+             border: 1.5px solid rgba($emerald, 0.5);
+             color: lighten($emerald, 35%);
+             box-shadow: 0 0 10px rgba($emerald, 0.3);
+         }
+
+         // Error — ruby
+         &--error {
+             background: rgba($ruby, 0.14);
+             border: 1.5px solid rgba($ruby, 0.5);
+             color: lighten($ruby, 28%);
+             box-shadow: 0 0 10px rgba($ruby, 0.3);
+         }
+     }
+
+     // Inner pulse dot for active node
+     &__node-pulse {
+         display: block;
+         width: 8px;
+         height: 8px;
+         border-radius: 50%;
+         background: $gold;
+         box-shadow: 0 0 6px rgba($gold, 0.7);
+         animation: tip-dot-pulse 1.5s ease-in-out infinite;
+     }
+
+     // Stage label below node
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-align: center;
+         white-space: nowrap;
+         transition: color $t-fast;
+
+         // Default
+         color: rgba($champagne, 0.25);
+     }
+
+     // Label color per state
+     &--completed &__label {
+         color: rgba($champagne, 0.55);
+     }
+
+     &--active &__label {
+         color: $champagne;
+         font-weight: 700;
+     }
+
+     &--error &__label {
+         color: lighten($ruby, 25%);
+     }
+
+     &--pending &__label {
+         color: rgba($champagne, 0.2);
+     }
+ }
+
+ // ── 8. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes tip-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes tip-glow-pulse {
+     from {
+         box-shadow: 0 0 10px rgba($gold, 0.35), 0 0 4px rgba($gold, 0.2);
+     }
+
+     to {
+         box-shadow: 0 0 22px rgba($gold, 0.65), 0 0 8px rgba($champagne, 0.4);
+     }
+ }
+
+ @keyframes tip-node-glow {
+     from {
+         box-shadow: 0 0 8px rgba($gold, 0.35);
+     }
+
+     to {
+         box-shadow: 0 0 18px rgba($gold, 0.7), 0 0 4px rgba($champagne, 0.35);
+     }
+ }
+
+ @keyframes tip-dot-pulse {
+
+     0%,
+     100% {
+         transform: scale(1);
+         opacity: 1;
+     }
+
+     50% {
+         transform: scale(1.4);
+         opacity: 0.7;
+     }
+ }
+
+ @keyframes tip-shimmer-sweep {
+     0% {
+         left: -60%;
+     }
+
+     100% {
+         left: 110%;
+     }
+ }

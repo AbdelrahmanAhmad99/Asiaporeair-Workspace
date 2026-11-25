@@ -1,0 +1,628 @@
+ // ── Design Tokens (CSS Variables) ────────────────────────────
+ :host {
+   // Palette
+   --color-midnight: #051937; // Primary — Midnight Sapphire
+   --color-gold: #B68F24; // Secondary — Royal Gold
+   --color-champagne: #E2C780; // Accent — Champagne Gold
+   --color-ivory: #F8F9FA; // Neutral Background
+   --color-navy-text: #101056; // Deep Charcoal Navy
+   --color-white: #ffffff;
+
+   // Status colours
+   --color-success: #064E3B; // Dark Emerald Green
+   --color-warning: #B45309; // Warm Amber
+   --color-danger: #710D06; // Deep Ruby Red
+
+   // Derived surfaces
+   --surface-header: var(--color-midnight);
+   --surface-row-even: var(--color-white);
+   --surface-row-odd: #F4F5F9; // Very light tint for alternating rows
+   --surface-hover: rgba(226, 199, 128, 0.10); // 10 % Champagne Gold
+
+   // Shadows — NO black; soft dark-blue
+   --shadow-card: 0 2px 16px rgba(5, 25, 55, 0.10);
+   --shadow-row-hover: 0 2px 12px rgba(5, 25, 55, 0.12);
+
+   // Typography
+   --font-base: 'Inter', 'Roboto', system-ui, sans-serif;
+   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+   // Radii — Squircle system
+   --radius-card: 12px;
+   --radius-btn: 4px;
+   --radius-badge: 4px;
+   --radius-shimmer: 6px;
+
+   // Grid column widths
+   --col-code: 14%;
+   --col-status: 10%;
+   --col-pax: 20%;
+   --col-flight: 8%;
+   --col-route: 11%;
+   --col-seat: 6%;
+   --col-date: 12%;
+   --col-actions: 19%;
+
+   // Transition
+   --transition-fast: 160ms ease;
+   --transition-normal: 240ms ease;
+
+   display: block;
+   width: 100%;
+   font-family: var(--font-base);
+ }
+
+ // ── Root Container ────────────────────────────────────────────
+ .tag-container {
+   width: 100%;
+   min-height: 420px;
+   display: flex;
+   flex-direction: column;
+   background: transparent;
+ }
+
+ // ============================================================
+ //  SHIMMER LOADING STATE
+ // ============================================================
+
+ @keyframes tag-shimmer-sweep {
+   0% {
+     background-position: -600px 0;
+   }
+
+   100% {
+     background-position: 600px 0;
+   }
+ }
+
+ .tag-shimmer-list {
+   display: flex;
+   flex-direction: column;
+   gap: 6px;
+   padding: 0 4px;
+ }
+
+ .tag-shimmer-row {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   height: 48px;
+   padding: 0 16px;
+   background: var(--color-white);
+   border-radius: var(--radius-card);
+   box-shadow: var(--shadow-card);
+   overflow: hidden;
+ }
+
+ // Individual shimmer cells — base mixin via placeholder
+ %shimmer-base {
+   border-radius: var(--radius-shimmer);
+   height: 14px;
+   background: linear-gradient(90deg,
+       #e8eaf0 25%,
+       #f4f5f9 50%,
+       #e8eaf0 75%);
+   background-size: 600px 100%;
+   animation: tag-shimmer-sweep 1.4s infinite linear;
+   flex-shrink: 0;
+ }
+
+ .tag-shimmer {
+   @extend %shimmer-base;
+
+   &--code {
+     width: var(--col-code);
+   }
+
+   &--pill {
+     width: var(--col-status);
+     height: 20px;
+     border-radius: 10px;
+   }
+
+   &--name {
+     width: var(--col-pax);
+   }
+
+   &--flight {
+     width: var(--col-flight);
+   }
+
+   &--date {
+     width: var(--col-date);
+   }
+ }
+
+ // ============================================================
+ //  PRE-SEARCH IDLE STATE
+ // ============================================================
+
+ @keyframes tag-idle-pulse {
+
+   0%,
+   100% {
+     opacity: 0.45;
+     transform: scale(1);
+   }
+
+   50% {
+     opacity: 0.80;
+     transform: scale(1.06);
+   }
+ }
+
+ .tag-idle {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 12px;
+   flex: 1;
+   padding: 64px 24px;
+
+   &__ring {
+     width: 72px;
+     height: 72px;
+     border-radius: 50%;
+     border: 2.5px solid var(--color-champagne);
+     animation: tag-idle-pulse 2.4s ease-in-out infinite;
+     box-shadow: 0 0 24px rgba(226, 199, 128, 0.25);
+   }
+
+   &__label {
+     font-size: 1rem;
+     font-weight: 600;
+     color: var(--color-midnight);
+     letter-spacing: 0.04em;
+     text-transform: uppercase;
+     margin: 0;
+   }
+
+   &__hint {
+     font-size: 0.8125rem;
+     color: var(--color-navy-text);
+     opacity: 0.55;
+     text-align: center;
+     max-width: 360px;
+     margin: 0;
+     line-height: 1.55;
+   }
+ }
+
+ // ============================================================
+ //  EMPTY STATE
+ // ============================================================
+
+ .tag-empty {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 12px;
+   flex: 1;
+   padding: 64px 24px;
+
+   &__icon {
+     width: 80px;
+     height: 60px;
+     color: var(--color-champagne);
+     opacity: 0.55;
+   }
+
+   &__title {
+     font-size: 0.9375rem;
+     font-weight: 600;
+     color: var(--color-navy-text);
+     margin: 0;
+   }
+
+   &__sub {
+     font-size: 0.8125rem;
+     color: var(--color-navy-text);
+     opacity: 0.50;
+     margin: 0;
+     text-align: center;
+     max-width: 340px;
+     line-height: 1.55;
+   }
+ }
+
+ // ============================================================
+ //  TABLE SHELL
+ // ============================================================
+
+ .tag-table-shell {
+   display: flex;
+   flex-direction: column;
+   background: var(--color-white);
+   border-radius: var(--radius-card);
+   box-shadow: var(--shadow-card);
+   border: 1px solid rgba(226, 199, 128, 0.30); // thin Champagne Gold border
+   overflow: hidden;
+   flex: 1;
+ }
+
+ // ── Column grid helper ────────────────────────────────────────
+ %tag-grid {
+   display: grid;
+   grid-template-columns:
+     var(--col-code) var(--col-status) var(--col-pax) var(--col-flight) var(--col-route) var(--col-seat) var(--col-date) var(--col-actions);
+   align-items: center;
+ }
+
+ // ── Sticky Header Row ─────────────────────────────────────────
+ .tag-header-row {
+   @extend %tag-grid;
+
+   position: sticky;
+   top: 0;
+   z-index: 10;
+   background: var(--color-midnight); // Midnight Sapphire per guidelines
+   border-bottom: 2px solid var(--color-gold);
+ }
+
+ // Header cells
+ .tag-th {
+   padding: 13px 14px;
+   font-size: 0.6875rem;
+   font-weight: 700;
+   letter-spacing: 0.08em;
+   text-transform: uppercase;
+   color: var(--color-champagne); // Champagne Gold text on dark header
+   white-space: nowrap;
+   user-select: none;
+
+   &--actions {
+     justify-self: center;
+   }
+ }
+
+ // ============================================================
+ //  VIRTUAL SCROLL VIEWPORT
+ // ============================================================
+
+ .tag-viewport {
+   flex: 1;
+   overflow-y: auto;
+   // Custom slim scrollbar — luxury feel
+   scrollbar-width: thin;
+   scrollbar-color: rgba(182, 143, 36, 0.35) transparent;
+
+   &::-webkit-scrollbar {
+     width: 5px;
+   }
+
+   &::-webkit-scrollbar-track {
+     background: transparent;
+   }
+
+   &::-webkit-scrollbar-thumb {
+     background: rgba(182, 143, 36, 0.35);
+     border-radius: 10px;
+
+     &:hover {
+       background: rgba(182, 143, 36, 0.60);
+     }
+   }
+ }
+
+ // ============================================================
+ //  DATA ROWS
+ // ============================================================
+
+ .tag-row {
+   @extend %tag-grid;
+
+   min-height: 48px;
+   border-bottom: 1px solid rgba(226, 199, 128, 0.12);
+   transition:
+     background var(--transition-fast),
+     box-shadow var(--transition-fast);
+   cursor: default;
+
+   // Alternating rows
+   &:nth-child(even) {
+     background: var(--surface-row-even);
+   }
+
+   &:nth-child(odd) {
+     background: var(--surface-row-odd);
+   }
+
+   // Hover — subtle Champagne Gold overlay
+   &:hover {
+     background: var(--surface-hover) !important;
+     box-shadow: var(--shadow-row-hover);
+     position: relative;
+     z-index: 1;
+   }
+
+   // Voided row — muted treatment
+   &--voided {
+     opacity: 0.52;
+     background: rgba(113, 13, 6, 0.04) !important;
+
+     &:hover {
+       background: rgba(113, 13, 6, 0.07) !important;
+     }
+   }
+
+   // Loading / disabled state
+   &--loading {
+     pointer-events: none;
+     opacity: 0.70;
+   }
+ }
+
+ // ── Generic cell ──────────────────────────────────────────────
+ .tag-cell {
+   padding: 10px 14px;
+   font-size: 0.8125rem;
+   color: var(--color-navy-text);
+   display: flex;
+   align-items: center;
+   overflow: hidden;
+
+   &--actions {
+     gap: 8px;
+     justify-content: flex-start;
+     overflow: visible;
+   }
+ }
+
+ // ============================================================
+ //  CELL CONTENT ELEMENTS
+ // ============================================================
+
+ // ── Ticket Code ───────────────────────────────────────────────
+ .tag-ticket-code {
+   font-family: var(--font-mono);
+   font-size: 0.75rem;
+   font-weight: 600;
+   letter-spacing: 0.04em;
+   color: var(--color-midnight);
+   background: rgba(5, 25, 55, 0.06);
+   padding: 3px 8px;
+   border-radius: var(--radius-badge);
+   border: 1px solid rgba(5, 25, 55, 0.12);
+   white-space: nowrap;
+   transition: color var(--transition-fast), border-color var(--transition-fast);
+
+   &--voided {
+     color: var(--color-danger);
+     border-color: rgba(113, 13, 6, 0.25);
+     text-decoration: line-through;
+     text-decoration-color: rgba(113, 13, 6, 0.45);
+   }
+ }
+
+ // ── Passenger ─────────────────────────────────────────────────
+ .tag-pax-name {
+   font-size: 0.8125rem;
+   font-weight: 500;
+   color: var(--color-navy-text);
+   display: block;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   max-width: 100%;
+   transition: color var(--transition-fast);
+
+   &--voided {
+     color: var(--color-danger);
+     text-decoration: line-through;
+     text-decoration-color: rgba(113, 13, 6, 0.40);
+   }
+ }
+
+ .tag-pax-passport {
+   font-family: var(--font-mono);
+   font-size: 0.6875rem;
+   color: var(--color-navy-text);
+   opacity: 0.50;
+   display: block;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   margin-top: 1px;
+ }
+
+ // The passenger cell stacks name + passport vertically
+ .tag-cell--pax {
+   flex-direction: column;
+   align-items: flex-start;
+   gap: 2px;
+ }
+
+ // ── Flight Number ─────────────────────────────────────────────
+ .tag-flight {
+   font-family: var(--font-mono);
+   font-size: 0.8125rem;
+   font-weight: 600;
+   letter-spacing: 0.05em;
+   color: var(--color-gold);
+ }
+
+ // ── Route ─────────────────────────────────────────────────────
+ .tag-route {
+   display: inline-flex;
+   align-items: center;
+   gap: 5px;
+   font-family: var(--font-mono);
+   font-size: 0.8125rem;
+   font-weight: 600;
+   color: var(--color-navy-text);
+   white-space: nowrap;
+
+   &__arrow {
+     width: 14px;
+     height: 14px;
+     color: var(--color-gold);
+     flex-shrink: 0;
+     opacity: 0.80;
+   }
+ }
+
+ // ── Seat ──────────────────────────────────────────────────────
+ .tag-seat {
+   font-family: var(--font-mono);
+   font-size: 0.8125rem;
+   font-weight: 500;
+   color: var(--color-navy-text);
+ }
+
+ // ── Issue Date ────────────────────────────────────────────────
+ .tag-date {
+   font-size: 0.8125rem;
+   color: var(--color-navy-text);
+   opacity: 0.80;
+   white-space: nowrap;
+ }
+
+ // ============================================================
+ //  ACTIONS CELL
+ // ============================================================
+
+ // ── Status Select ─────────────────────────────────────────────
+ .tag-status-select-wrap {
+   position: relative;
+   display: inline-flex;
+   align-items: center;
+
+   &:focus-within .tag-status-select {
+     border-color: var(--color-gold);
+     box-shadow: 0 0 0 2px rgba(182, 143, 36, 0.18);
+   }
+ }
+
+ .tag-status-select {
+   appearance: none;
+   -webkit-appearance: none;
+   background: var(--color-ivory);
+   border: 1px solid rgba(5, 25, 55, 0.16);
+   border-radius: var(--radius-btn);
+   color: var(--color-navy-text);
+   font-family: var(--font-base);
+   font-size: 0.75rem;
+   font-weight: 500;
+   padding: 5px 28px 5px 10px;
+   cursor: pointer;
+   transition:
+     border-color var(--transition-fast),
+     box-shadow var(--transition-fast);
+
+   &:hover:not(:disabled) {
+     border-color: var(--color-gold);
+   }
+
+   &:disabled {
+     opacity: 0.45;
+     cursor: not-allowed;
+   }
+
+   option {
+     background: var(--color-white);
+     color: var(--color-navy-text);
+   }
+ }
+
+ .tag-status-select__caret {
+   position: absolute;
+   right: 7px;
+   width: 14px;
+   height: 14px;
+   color: var(--color-gold);
+   pointer-events: none;
+ }
+
+ // ── Action Buttons ────────────────────────────────────────────
+ .tag-action-btn {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 30px;
+   height: 30px;
+   border: none;
+   border-radius: var(--radius-btn);
+   cursor: pointer;
+   transition:
+     background var(--transition-fast),
+     transform var(--transition-fast),
+     box-shadow var(--transition-fast);
+   flex-shrink: 0;
+
+   svg {
+     width: 15px;
+     height: 15px;
+     transition: stroke var(--transition-fast);
+   }
+
+   &:active:not(:disabled) {
+     transform: scale(0.93);
+   }
+
+   &:disabled {
+     opacity: 0.38;
+     cursor: not-allowed;
+   }
+
+   // Void button — Deep Ruby Red
+   &--void {
+     background: rgba(113, 13, 6, 0.09);
+     color: var(--color-danger);
+     border: 1px solid rgba(113, 13, 6, 0.20);
+
+     &:hover:not(:disabled) {
+       background: rgba(113, 13, 6, 0.16);
+       box-shadow: 0 2px 8px rgba(113, 13, 6, 0.18);
+     }
+   }
+ }
+
+ // ============================================================
+ //  FOOTER
+ // ============================================================
+
+ .tag-footer {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   padding: 10px 16px;
+   background: var(--color-midnight);
+   border-top: 1px solid rgba(226, 199, 128, 0.20);
+   border-radius: 0 0 var(--radius-card) var(--radius-card);
+ }
+
+ .tag-footer__count {
+   font-size: 0.75rem;
+   color: var(--color-champagne);
+   opacity: 0.75;
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+
+   strong {
+     color: var(--color-champagne);
+     opacity: 1;
+     font-weight: 700;
+   }
+ }
+
+ // Footer action-in-progress spinner
+ @keyframes tag-spin {
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ .tag-footer__spinner {
+   display: inline-flex;
+   align-items: center;
+
+   svg {
+     width: 14px;
+     height: 14px;
+     color: var(--color-champagne);
+     animation: tag-spin 1s linear infinite;
+   }
+ }

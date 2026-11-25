@@ -1,0 +1,161 @@
+<!-- Glassmorphism backdrop -->
+<div class="fcd-backdrop" (click)="onDismiss.emit()" aria-hidden="true"></div>
+
+<!-- Modal panel -->
+<div class="fcd-panel" role="dialog" aria-modal="true" [attr.aria-label]="'Cancel flight ' + instance().flightNo">
+
+  <!-- Ruby Red accent bar -->
+  <div class="fcd-panel__ruby-bar" aria-hidden="true"></div>
+
+  <!-- Panel header -->
+  <div class="fcd-panel__header">
+    <div class="fcd-panel__icon-wrap" aria-hidden="true">
+      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                 16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
+    </div>
+    <div class="fcd-panel__header-text">
+      <h2 class="fcd-panel__title">Cancel Flight Instance</h2>
+      <p class="fcd-panel__subtitle">
+        This action is irreversible. All boarding passes will be invalidated.
+      </p>
+    </div>
+    <button class="fcd-panel__close" type="button" (click)="onDismiss.emit()" [disabled]="isProcessing()"
+      aria-label="Close dialog">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Flight identity strip -->
+  <div class="fcd-flight-strip" aria-label="Flight details">
+    <div class="fcd-flight-strip__left">
+      <span class="fcd-flight-no">{{ instance().flightNo }}</span>
+      @if (instance().tailNumber) {
+      <span class="fcd-tail">{{ instance().tailNumber }}</span>
+      }
+    </div>
+
+    <div class="fcd-flight-strip__corridor">
+      <span class="fcd-iata fcd-iata--origin">{{ instance().originAirportIata }}</span>
+      <svg class="fcd-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+      </svg>
+      <span class="fcd-iata fcd-iata--dest">{{ instance().destinationAirportIata }}</span>
+    </div>
+
+    <div class="fcd-flight-strip__times">
+      <span class="fcd-time">{{ instance().scheduledDepartureUtc | date:'HH:mm' }}</span>
+      <span class="fcd-time-sep" aria-hidden="true">→</span>
+      <span class="fcd-time">{{ instance().scheduledArrivalUtc | date:'HH:mm' }}</span>
+      <span class="fcd-time-label">UTC</span>
+    </div>
+  </div>
+
+  <!-- API error from previous attempt -->
+  @if (apiError()) {
+  <div class="fcd-api-error" role="alert">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636
+                 5.636m12.728 12.728L5.636 5.636" />
+    </svg>
+    <span>{{ apiError() }}</span>
+  </div>
+  }
+
+  <!-- Form -->
+  <form class="fcd-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+    <!-- Cancellation Reason -->
+    <div class="fcd-field" [class.fcd-field--error]="isInvalid('reason')">
+      <label class="fcd-label" for="fcd-reason">
+        Cancellation Reason
+        <span class="fcd-label__req" aria-hidden="true">*</span>
+      </label>
+
+      <div class="fcd-select-wrap">
+        <select id="fcd-reason" class="fcd-select" formControlName="reason"
+          [attr.aria-invalid]="isInvalid('reason') ? 'true' : null">
+          <option value="" disabled>Select operational reason…</option>
+          @for (r of reasons; track r.value) {
+          <option [value]="r.value">{{ r.label }}</option>
+          }
+        </select>
+        <div class="fcd-select-wrap__chevron" aria-hidden="true">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      @if (isInvalid('reason')) {
+      <span class="fcd-field__error" role="alert">
+        A cancellation reason is required for audit compliance.
+      </span>
+      }
+    </div>
+
+    <!-- Operational Notes -->
+    <div class="fcd-field" [class.fcd-field--error]="isInvalid('notes')">
+      <label class="fcd-label" for="fcd-notes">
+        Operational Notes
+        <span class="fcd-label__optional">(optional)</span>
+      </label>
+
+      <textarea id="fcd-notes" class="fcd-textarea" formControlName="notes" rows="4" maxlength="500"
+        placeholder="Describe the operational context, passenger impact, or crew instructions…"
+        [attr.aria-invalid]="isInvalid('notes') ? 'true' : null">
+      </textarea>
+
+      <div class="fcd-field__meta">
+        @if (isInvalid('notes')) {
+        <span class="fcd-field__error" role="alert">Maximum 500 characters.</span>
+        }
+        <span class="fcd-char-count" [class.fcd-char-count--near]="charCount > 400">
+          {{ charCount }} / 500
+        </span>
+      </div>
+    </div>
+
+    <!-- Warning notice -->
+    <div class="fcd-warning" role="note">
+      <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+      </svg>
+      <span>
+        Cancelling this flight instance will trigger automated passenger notification
+        workflows and log a permanent audit record under your dispatcher credentials.
+      </span>
+    </div>
+
+    <!-- Actions -->
+    <div class="fcd-actions">
+      <button type="button" class="fcd-btn fcd-btn--dismiss" (click)="onDismiss.emit()" [disabled]="isProcessing()">
+        Stand Down
+      </button>
+
+      <button type="submit" class="fcd-btn fcd-btn--confirm" [disabled]="isProcessing()">
+        @if (isProcessing()) {
+        <svg class="fcd-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        Cancelling…
+        } @else {
+        <svg class="fcd-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        Confirm Cancellation
+        }
+      </button>
+    </div>
+
+  </form>
+</div>

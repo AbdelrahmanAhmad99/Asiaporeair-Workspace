@@ -1,0 +1,143 @@
+<!-- ============================================================================
+     pnr-lookup-form.component.html
+     Asiaporeair | Ticket Lookup Form — Floating Labels, Gold Borders
+     ============================================================================ -->
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="plf-form" novalidate>
+
+  <!-- ── Form Title ─────────────────────────────────────────────────────── -->
+  <header class="plf-header">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true" class="plf-header__icon">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    <div>
+      <h2 class="plf-header__title">Journey Credentials</h2>
+      <p class="plf-header__sub">Retrieve your electronic travel document</p>
+    </div>
+  </header>
+
+  <!-- ── Field: Ticket Reference ───────────────────────────────────────── -->
+  <div class="plf-field" [class.plf-field--error]="isInvalid(ticketCodeCtrl)">
+    <div class="plf-float-group"
+         [class.plf-float-group--focused]="isTicketCodeFocused"
+         [class.plf-float-group--filled]="ticketCodeCtrl.value">
+      <input
+        id="ticketCode"
+        type="text"
+        formControlName="ticketCode"
+        class="plf-input"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        maxlength="13"
+        aria-describedby="ticketCode-error"
+        (focus)="isTicketCodeFocused = true"
+        (blur)="isTicketCodeFocused = false"
+      />
+      <label for="ticketCode" class="plf-label">Ticket Reference</label>
+      <!-- Suffix icon -->
+      <span class="plf-field__suffix" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+        </svg>
+      </span>
+    </div>
+    <p class="plf-hint">6–13 alphanumeric characters (e.g. 0172344567890)</p>
+    @if (isInvalid(ticketCodeCtrl)) {
+      <p id="ticketCode-error" class="plf-error" [@errorSlide] role="alert">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        {{ getTicketCodeError() }}
+      </p>
+    }
+  </div>
+
+  <!-- ── Field: Last Name ───────────────────────────────────────────────── -->
+  <div class="plf-field" [class.plf-field--error]="isInvalid(lastNameCtrl)">
+    <div class="plf-float-group"
+         [class.plf-float-group--focused]="isLastNameFocused"
+         [class.plf-float-group--filled]="lastNameCtrl.value">
+      <input
+        id="lastName"
+        type="text"
+        formControlName="lastName"
+        class="plf-input"
+        autocomplete="family-name"
+        maxlength="60"
+        aria-describedby="lastName-hint lastName-error"
+        (focus)="isLastNameFocused = true"
+        (blur)="isLastNameFocused = false"
+      />
+      <label for="lastName" class="plf-label">Last Name</label>
+      <!-- Suffix icon -->
+      <span class="plf-field__suffix" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </span>
+    </div>
+    <p id="lastName-hint" class="plf-hint">As appearing in your passport or travel document</p>
+    @if (isInvalid(lastNameCtrl)) {
+      <p id="lastName-error" class="plf-error" [@errorSlide] role="alert">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        {{ getLastNameError() }}
+      </p>
+    }
+  </div>
+
+  <!-- ── Server / Retrieval Error Banner ───────────────────────────────── -->
+  @if (serverError) {
+    <div class="plf-server-error" [@errorSlide] role="alert">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <span>{{ serverError }}</span>
+    </div>
+  }
+
+  <!-- ── Submit Button ──────────────────────────────────────────────────── -->
+  <button
+    type="submit"
+    class="plf-btn-submit"
+    [disabled]="isLoading"
+    [class.plf-btn-submit--loading]="isLoading"
+    aria-label="Retrieve your journey credentials">
+
+    @if (isLoading) {
+      <!-- Spinner -->
+      <svg class="plf-btn__spinner" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="31.4" stroke-dashoffset="10"/>
+      </svg>
+      <span>Locating Your E-Ticket…</span>
+    } @else {
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <span>Retrieve Journey Credentials</span>
+    }
+  </button>
+
+</form>

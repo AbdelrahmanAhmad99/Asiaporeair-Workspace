@@ -1,0 +1,384 @@
+// ============================================================================
+// add-passenger-modal.component.scss
+// Asiaporeair | Add Passenger Modal — Glassmorphism Overlay
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$error : #c53030;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes shimmer-gold {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+@keyframes backdropIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+// ── Backdrop ─────────────────────────────────────────────────────────────────
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba($midnight, 0.55);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: backdropIn 220ms $ease forwards;
+}
+
+// ── Modal panel ───────────────────────────────────────────────────────────────
+.modal {
+    width: 100%;
+    max-width: 480px;
+    background: $white;
+    border-radius: 16px;
+    border: 1px solid rgba($champagne, 0.3);
+    box-shadow:
+        0 24px 60px rgba($midnight, 0.25),
+        0 0 0 1px rgba($royal-gold, 0.08) inset;
+    overflow: hidden;
+    animation: modalSlideIn 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+    // Top gold accent bar
+    &::before {
+        content: '';
+        display: block;
+        height: 3px;
+        background: linear-gradient(90deg, $midnight 0%, $royal-gold 50%, $champagne 100%);
+    }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24px 28px 0;
+    gap: 12px;
+}
+
+.modal__title-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.modal__icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($royal-gold, 0.2);
+    color: $royal-gold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.modal__title {
+    font-family: $font;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: $charcoal;
+    margin: 0 0 3px;
+}
+
+.modal__subtitle {
+    font-family: $font;
+    font-size: 0.7rem;
+    color: $muted;
+    margin: 0;
+}
+
+.modal__close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: none;
+    border: 1px solid rgba($charcoal, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba($charcoal, 0.5);
+    flex-shrink: 0;
+    transition: all $t;
+
+    &:hover:not(:disabled) {
+        border-color: rgba($charcoal, 0.35);
+        color: $charcoal;
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.modal__rule {
+    height: 1px;
+    margin: 20px 28px 0;
+    background: linear-gradient(90deg, transparent, rgba($champagne, 0.4), transparent);
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────────
+.modal__form {
+    padding: 22px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.modal-form {
+    &__row {
+        display: grid;
+        gap: 14px;
+
+        &--2col {
+            grid-template-columns: 1fr 1fr;
+
+            @media (max-width: 420px) {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding-top: 6px;
+        border-top: 1px solid rgba($champagne, 0.15);
+    }
+}
+
+// ── Floating Label Field ──────────────────────────────────────────────────────
+.modal-field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    &__input {
+        height: 52px;
+        padding: 20px 14px 8px;
+        border: 1px solid rgba($charcoal, 0.14);
+        border-radius: 6px;
+        background: $ivory;
+        font-family: $font;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: $charcoal;
+        outline: none;
+        transition: border-color $t, box-shadow $t, background $t;
+
+        &::placeholder {
+            color: transparent;
+        }
+
+        &:focus {
+            border-color: $royal-gold;
+            box-shadow: 0 0 0 3px rgba($royal-gold, 0.12);
+            background: $white;
+
+            ~.modal-field__label {
+                top: 8px;
+                font-size: 0.58rem;
+                color: $royal-gold;
+                letter-spacing: 0.08em;
+            }
+
+            ~.modal-field__border {
+                transform: scaleX(1);
+            }
+        }
+
+        &--mono {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.06em;
+        }
+    }
+
+    &__label {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: $font;
+        font-size: 0.82rem;
+        font-weight: 400;
+        color: $muted;
+        pointer-events: none;
+        transition: top $t, font-size $t, color $t, letter-spacing $t;
+
+        // &--date {
+        //     /* always floated for date inputs */
+        // }
+    }
+
+    // Float label when field has a value
+    &.is-active .modal-field__label,
+    &--date .modal-field__label {
+        top: 8px;
+        font-size: 0.58rem;
+        letter-spacing: 0.08em;
+        transform: none;
+    }
+
+    &.has-error .modal-field__input {
+        border-color: rgba($error, 0.5);
+    }
+
+    &__border {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, $royal-gold, $champagne);
+        border-radius: 0 0 6px 6px;
+        transform: scaleX(0);
+        transition: transform 240ms $ease;
+        pointer-events: none;
+    }
+
+    &__error {
+        font-family: $font;
+        font-size: 0.6rem;
+        color: $error;
+        margin-top: 4px;
+        padding-left: 2px;
+    }
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+.modal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all $t;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &--secondary {
+        background: none;
+        border: 1px solid rgba($charcoal, 0.2);
+        color: rgba($charcoal, 0.6);
+
+        &:hover:not(:disabled) {
+            border-color: $charcoal;
+            color: $charcoal;
+        }
+    }
+
+    &--primary {
+        background: $midnight;
+        border: 1px solid rgba($royal-gold, 0.3);
+        color: $champagne;
+
+        &:hover:not(:disabled) {
+            background: $royal-gold;
+            border-color: $royal-gold;
+            color: $midnight;
+            box-shadow: 0 4px 16px rgba($royal-gold, 0.3);
+        }
+
+        &.is-saving {
+            pointer-events: none;
+        }
+    }
+
+    &__spinner {
+        width: 13px;
+        height: 13px;
+        border: 1.5px solid rgba($champagne, 0.35);
+        border-top-color: $champagne;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modal-backdrop {
+        animation: none;
+    }
+
+    .modal {
+        animation: none;
+    }
+
+    .modal-btn__spinner {
+        animation: none;
+    }
+}

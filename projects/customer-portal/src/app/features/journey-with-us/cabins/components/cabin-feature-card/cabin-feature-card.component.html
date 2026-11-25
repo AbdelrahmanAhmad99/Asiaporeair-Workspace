@@ -1,0 +1,49 @@
+<!-- ============================================================================
+     cabin-feature-card.component.html
+     Asiaporeair | Cabin Feature Card — Wide Horizontal Luxury Card
+     ============================================================================ -->
+
+<a class="cfc" [routerLink]="cabin.route" [class.cfc--flipped]="flipped" [style.--anim-delay]="(index * 100) + 'ms'"
+    [attr.aria-label]="'Explore ' + cabin.title + ' — ' + cabin.tagline">
+
+    <!-- Image half -->
+    <div class="cfc__image-wrap">
+        <img class="cfc__image" [src]="cabin.imagePath" [alt]="cabin.title" loading="lazy" />
+        @if (cabin.badge) {
+        <span class="cfc__badge">{{ cabin.badge }}</span>
+        }
+    </div>
+
+    <!-- Content half -->
+    <div class="cfc__content">
+
+        <div class="cfc__content-inner">
+            <p class="cfc__tagline">{{ cabin.tagline }}</p>
+            <h2 class="cfc__title">{{ cabin.title }}</h2>
+            <div class="cfc__divider" aria-hidden="true"></div>
+            <p class="cfc__desc">{{ cabin.description }}</p>
+
+            <!-- Specs grid -->
+            <div class="cfc__specs" aria-label="Cabin specifications">
+                @for (spec of cabin.specs; track spec.label) {
+                <div class="cfc__spec-item">
+                    <span class="cfc__spec-value">{{ spec.value }}</span>
+                    <span class="cfc__spec-label">{{ spec.label }}</span>
+                </div>
+                }
+            </div>
+
+            <!-- CTA -->
+            <div class="cfc__cta">
+                <span class="cfc__cta-text">Explore {{ cabin.title }}</span>
+                <svg class="cfc__cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </div>
+        </div>
+
+    </div>
+
+</a>

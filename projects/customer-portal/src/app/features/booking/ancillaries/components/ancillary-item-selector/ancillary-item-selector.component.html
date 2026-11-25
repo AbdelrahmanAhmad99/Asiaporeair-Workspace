@@ -1,0 +1,75 @@
+<div class="item-card" [class.card--selected]="isSelected()"
+    [attr.aria-label]="product().name + ': ' + currency() + ' ' + formatPrice(product().baseCost) + ' ' + unitLabel() + (isSelected() ? ', added' : '')">
+
+    <!-- Top: Name + Price -->
+    <div class="item-top">
+        <div class="item-info">
+            <span class="item-name">{{ product().name }}</span>
+            <span class="item-unit">{{ unitLabel() }}</span>
+        </div>
+        <div class="item-price-block">
+            <span class="item-price-currency">{{ currency() }}</span>
+            <span class="item-price-amount">{{ formatPrice(product().baseCost) }}</span>
+        </div>
+    </div>
+
+    <!-- Bottom: Quantity Controls or Add Toggle -->
+    <div class="item-bottom">
+
+        <!-- If quantity > 1 allowed (baggage-style), show stepper -->
+        <ng-container *ngIf="product().unitOfMeasure.toUpperCase() === 'PER_KG'; else toggleMode">
+            <div class="qty-stepper" [class.stepper--active]="isSelected()" role="group"
+                [attr.aria-label]="'Quantity for ' + product().name">
+                <button class="qty-btn qty-btn--dec" (click)="decrement()" [disabled]="quantity() <= 0"
+                    [attr.aria-label]="'Decrease quantity of ' + product().name">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                </button>
+                <span class="qty-display" aria-live="polite"
+                    [attr.aria-label]="quantity() + ' ' + product().unitOfMeasure">
+                    {{ quantity() > 0 ? quantity() + ' ' + product().unitOfMeasure : '0' }}
+                </span>
+                <button class="qty-btn qty-btn--inc" (click)="increment()"
+                    [attr.aria-label]="'Increase quantity of ' + product().name">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                </button>
+            </div>
+        </ng-container>
+
+        <!-- Toggle-style add/remove for per-flight items -->
+        <ng-template #toggleMode>
+            <button class="toggle-btn" [class.toggle-btn--selected]="isSelected()" (click)="toggle()"
+                [attr.aria-pressed]="isSelected()"
+                [attr.aria-label]="(isSelected() ? 'Remove ' : 'Add ') + product().name">
+                <ng-container *ngIf="!isSelected()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Add to Journey
+                </ng-container>
+                <ng-container *ngIf="isSelected()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Added
+                </ng-container>
+            </button>
+        </ng-template>
+
+        <!-- Line Total -->
+        <span *ngIf="isSelected()" class="item-line-total" aria-live="polite"
+            [attr.aria-label]="'Total: ' + currency() + ' ' + formatPrice(lineTotal())">
+            = {{ currency() }} {{ formatPrice(lineTotal()) }}
+        </span>
+    </div>
+
+</div>

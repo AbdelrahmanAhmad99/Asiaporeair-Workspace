@@ -1,0 +1,210 @@
+<div class="bst-page">
+
+  <!-- ══ Quick View Drawer (rendered at page level for z-index control) ══ -->
+  <aoms-pnr-quick-view-drawer [booking]="store.selectedBooking()" [isOpen]="store.isDrawerOpen()"
+    [isLoading]="store.isDrawerLoading()" [error]="store.drawerError()" (closed)="onDrawerClose()"
+    (deepExplore)="onDrawerDeepExplore($event)" />
+
+  <!-- ══ Sticky Page Header ════════════════════════════════════════ -->
+  <header class="bst-header">
+
+    <div class="bst-header__left">
+      <!-- Breadcrumb -->
+      <nav class="bst-breadcrumb" aria-label="Breadcrumb">
+        <span class="bst-breadcrumb__section">Reservation &amp; Ground</span>
+        <svg class="bst-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+        </svg>
+        <span class="bst-breadcrumb__current">Booking Search Terminal</span>
+      </nav>
+
+      <!-- Title row -->
+      <div class="bst-title-row">
+        <h1 class="bst-title">
+          <svg class="bst-title__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+          </svg>
+          PNR Search Terminal
+        </h1>
+
+        @if (store.hasSearched() && store.pagination().total > 0) {
+        <span class="bst-result-badge" [attr.aria-label]="store.pagination().total + ' bookings found'">
+          {{ store.resultLabel() }}
+        </span>
+        }
+      </div>
+    </div>
+
+    <!-- Header Controls -->
+    <div class="bst-header__controls">
+
+      <!-- Passenger Index -->
+      <button class="bst-nav-btn" type="button" (click)="onPassengerIndex()" title="Passenger Index">
+        <svg class="bst-nav-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0z" />
+        </svg>
+        Passenger Index
+      </button>
+
+      <!-- Create Booking -->
+      <button class="bst-create-btn" type="button" (click)="onCreateBooking()">
+        <svg class="bst-create-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        New Booking
+      </button>
+
+      <!-- Dark Mode Toggle -->
+      <button class="bst-icon-btn bst-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+        [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+        @if (isDarkMode()) {
+        <svg class="bst-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+        </svg>
+        } @else {
+        <svg class="bst-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+        </svg>
+        }
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ══ Page Body ═════════════════════════════════════════════════ -->
+  <main class="bst-body">
+
+    <!-- Filter Bar -->
+    <aoms-booking-search-filters [currentFilters]="store.filters()" [isLoading]="store.isLoading()"
+      (filtersSubmitted)="onFiltersSubmitted($event)" (filtersReset)="onFiltersReset()"
+      (referenceSearchTriggered)="onReferenceSearchTriggered($event)" />
+
+    <!-- Error Banner -->
+    @if (store.error()) {
+    <div class="bst-error-banner" role="alert">
+      <svg class="bst-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
+      {{ store.error() }}
+    </div>
+    }
+
+    <!-- ── Results Section ────────────────────────────────────────── -->
+    @if (store.hasSearched() || store.isLoading()) {
+
+    <!-- Loading shimmer grid -->
+    @if (store.isLoading()) {
+    <div class="bst-results-grid bst-results-grid--shimmer" aria-busy="true" aria-label="Loading bookings">
+      @for (i of [1,2,3,4,5,6,7,8]; track i) {
+      <div class="bst-shimmer-card">
+        <div class="bst-shimmer-card__line bst-shimmer-card__line--wide"></div>
+        <div class="bst-shimmer-card__line bst-shimmer-card__line--mid"></div>
+        <div class="bst-shimmer-card__line bst-shimmer-card__line--narrow"></div>
+        <div class="bst-shimmer-card__footer">
+          <div class="bst-shimmer-card__pill"></div>
+          <div class="bst-shimmer-card__dot"></div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Empty state -->
+    @if (store.isEmpty()) {
+    <div class="bst-empty-state" role="status">
+      <div class="bst-empty-state__art" aria-hidden="true">
+        <!-- Airline line-art style SVG illustration -->
+        <svg viewBox="0 0 160 120" fill="none" stroke="currentColor" stroke-width="1.2" class="bst-empty-state__svg">
+          <!-- Ground line -->
+          <line x1="20" y1="95" x2="140" y2="95" stroke-opacity="0.25" />
+          <!-- Aircraft silhouette -->
+          <path
+            d="M80 55 C85 45, 100 40, 110 42 C118 44, 120 50, 115 56 L95 58 L100 68 L88 65 L80 70 L72 65 L60 68 L65 58 L45 56 C40 50, 42 44, 50 42 C60 40, 75 45, 80 55Z"
+            stroke-opacity="0.5" />
+          <!-- Wing sweep lines -->
+          <path d="M80 55 L55 72" stroke-opacity="0.3" />
+          <path d="M80 55 L105 72" stroke-opacity="0.3" />
+          <!-- Dotted flight path arc -->
+          <path d="M35 80 Q80 30, 125 80" stroke-dasharray="4 4" stroke-opacity="0.2" />
+          <!-- Magnifier with X -->
+          <circle cx="118" cy="30" r="12" stroke-opacity="0.4" />
+          <line x1="109" y1="21" x2="127" y2="39" stroke-opacity="0.3" />
+          <line x1="127" y1="21" x2="109" y2="39" stroke-opacity="0.3" />
+          <line x1="126" y1="38" x2="136" y2="48" stroke-width="2.5" stroke-opacity="0.4" stroke-linecap="round" />
+        </svg>
+      </div>
+      <h3 class="bst-empty-state__title">No Records Located</h3>
+      <p class="bst-empty-state__copy">
+        The search parameters yielded no matching bookings.<br />
+        Refine your criteria or verify the PNR reference.
+      </p>
+      <button class="bst-empty-state__reset" type="button" (click)="onFiltersReset()">
+        Clear Search Parameters
+      </button>
+    </div>
+    }
+
+    <!-- Result Cards Grid -->
+    @if (!store.isLoading() && store.bookings().length > 0) {
+    <div class="bst-results-grid" role="list" aria-label="Booking search results">
+      @for (booking of store.bookings(); track booking.bookingId) {
+      <aoms-pnr-status-card [booking]="booking" role="listitem" (quickView)="onCardQuickView($event)"
+        (deepExplore)="onCardDeepExplore($event)" />
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (store.pagination().totalPages > 1) {
+    <nav class="bst-pagination" aria-label="Search result pages">
+      <button class="bst-pagination__btn" type="button" [disabled]="store.pagination().page <= 1" (click)="onPrevPage()"
+        aria-label="Previous page">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+
+      <div class="bst-pagination__info">
+        <span class="bst-pagination__current">{{ store.pagination().page }}</span>
+        <span class="bst-pagination__sep">/</span>
+        <span class="bst-pagination__total">{{ store.pagination().totalPages }}</span>
+      </div>
+
+      <button class="bst-pagination__btn" type="button"
+        [disabled]="store.pagination().page >= store.pagination().totalPages" (click)="onNextPage()"
+        aria-label="Next page">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+    </nav>
+    }
+
+    } <!-- /results -->
+    } <!-- /hasSearched -->
+
+    <!-- Fallback only if init search has not started yet -->
+    @if (!store.hasSearched() && !store.isLoading()) {
+    <div class="bst-ready-state" role="status" aria-label="Loading bookings">
+      <div class="bst-ready-state__inner">
+        <div class="bst-ready-state__pulse" aria-hidden="true"></div>
+        <p class="bst-ready-state__label">Loading Bookings…</p>
+        <p class="bst-ready-state__hint">Retrieving the full booking list. You can refine results with filters above.
+        </p>
+      </div>
+    </div>
+    }
+
+  </main>
+</div>

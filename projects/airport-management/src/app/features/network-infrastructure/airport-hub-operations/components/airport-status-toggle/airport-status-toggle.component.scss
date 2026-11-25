@@ -1,0 +1,374 @@
+ $midnight-sapphire: #051937;
+ $royal-gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $luxury-ruby: #D32F2F;
+ $ruby-dark: #B71C1C;
+ $ruby-light: rgba(211, 47, 47, 0.08);
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Section wrapper
+ // ============================================================================
+ .ast-section {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($luxury-ruby, 0.18);
+     box-shadow: 0 4px 20px rgba($midnight-sapphire, 0.06);
+     animation: ast-enter 360ms $luxury both;
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Section header
+ // ============================================================================
+ .ast-header {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 1.125rem 1.5rem;
+     background: rgba($luxury-ruby, 0.03);
+     border-bottom: 1px solid rgba($luxury-ruby, 0.12);
+ }
+
+ .ast-header__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.375rem;
+     height: 2.375rem;
+     border-radius: 8px;
+     background: rgba($luxury-ruby, 0.1);
+     border: 1px solid rgba($luxury-ruby, 0.22);
+ }
+
+ .ast-header__icon {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: $luxury-ruby;
+ }
+
+ .ast-header__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.15rem;
+ }
+
+ .ast-header__subtitle {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     margin: 0;
+ }
+
+ // ============================================================================
+ // 3. Trigger view (Phase 1)
+ // ============================================================================
+ .ast-trigger-wrap {
+     padding: 1.25rem 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     animation: ast-fade-in 220ms $ease both;
+ }
+
+ .ast-warning-copy {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     line-height: 1.65;
+     color: var(--aoms-text-secondary);
+     margin: 0;
+     padding: 0.75rem 1rem;
+     border-radius: 6px;
+     background: rgba($luxury-ruby, 0.04);
+     border-left: 3px solid rgba($luxury-ruby, 0.3);
+
+     strong {
+         font-weight: 700;
+         color: $luxury-ruby;
+     }
+ }
+
+ // ============================================================================
+ // 4. Safety Guard view (Phase 2)
+ // ============================================================================
+ .ast-guard {
+     padding: 1.25rem 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     animation: ast-slide-in 260ms $luxury both;
+     background: rgba($luxury-ruby, 0.025);
+ }
+
+ // Target airport summary strip
+ .ast-guard__target {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($midnight-sapphire, 0.04);
+     border: 1px solid rgba($champagne, 0.15);
+     position: relative;
+ }
+
+ .ast-guard__iata {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.75rem;
+     font-weight: 900;
+     letter-spacing: -0.03em;
+     color: $luxury-ruby;
+     flex-shrink: 0;
+     text-shadow: 0 0 20px rgba($luxury-ruby, 0.2);
+ }
+
+ .ast-guard__name {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.15rem;
+ }
+
+ .ast-guard__label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: $luxury-ruby;
+     margin: 0;
+ }
+
+ // Pulsing ruby dot — top-right of target strip
+ .ast-guard__pulse-dot {
+     position: absolute;
+     top: 0.625rem;
+     right: 0.75rem;
+     width: 8px;
+     height: 8px;
+     border-radius: 50%;
+     background: $luxury-ruby;
+     animation: ast-pulse-ruby 1.8s ease-in-out infinite;
+ }
+
+ // Confirmation copy
+ .ast-guard__copy {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     line-height: 1.65;
+     color: var(--aoms-text-secondary);
+     margin: 0;
+ }
+
+ // Guard action buttons row
+ .ast-guard__actions {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     justify-content: flex-end;
+ }
+
+ // ============================================================================
+ // 5. Buttons
+ // ============================================================================
+ .ast-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.25rem;
+     padding: 0 1.125rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 180ms $ease;
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: ast-spin 1s linear infinite;
+         }
+     }
+
+     // Deactivate (initial button) — Luxury Ruby solid with soft glow
+     &--deactivate {
+         background: $luxury-ruby;
+         border: 1px solid $luxury-ruby;
+         color: #ffffff;
+         align-self: flex-start;
+
+         &:hover:not(:disabled) {
+             background: $ruby-dark;
+             border-color: $ruby-dark;
+             box-shadow: 0 4px 16px rgba($luxury-ruby, 0.38);
+         }
+     }
+
+     // Cancel (from guard) — ghost
+     &--cancel-guard {
+         background: transparent;
+         border: 1px solid rgba($charcoal, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $royal-gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // Confirm (from guard) — deep ruby fill
+     &--confirm {
+         background: $luxury-ruby;
+         border: 1px solid $luxury-ruby;
+         color: #ffffff;
+
+         &:hover:not(:disabled) {
+             background: $ruby-dark;
+             border-color: $ruby-dark;
+             box-shadow: 0 4px 14px rgba($luxury-ruby, 0.4);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Keyframes
+ // ============================================================================
+ @keyframes ast-enter {
+     from {
+         opacity: 0;
+         transform: translateY(6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes ast-fade-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes ast-slide-in {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes ast-pulse-ruby {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba($luxury-ruby, 0.5);
+     }
+
+     50% {
+         box-shadow: 0 0 0 6px rgba($luxury-ruby, 0);
+     }
+ }
+
+ @keyframes ast-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================================
+ // 7. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .ast-section {
+         background: rgba(255, 255, 255, 0.03);
+         border-color: rgba($luxury-ruby, 0.25);
+     }
+
+     .ast-header {
+         background: rgba($luxury-ruby, 0.06);
+         border-bottom-color: rgba($luxury-ruby, 0.2);
+     }
+
+     .ast-header__title {
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .ast-header__subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .ast-warning-copy {
+         color: rgba(255, 255, 255, 0.6);
+     }
+
+     .ast-guard__target {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .ast-guard__name {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .ast-guard__copy {
+         color: rgba(255, 255, 255, 0.55);
+     }
+
+     .ast-guard {
+         background: rgba($luxury-ruby, 0.05);
+     }
+
+     .ast-btn--cancel-guard {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+ }

@@ -1,0 +1,49 @@
+<!-- e-ticket-header.component.html -->
+<div class="ticket-header">
+
+    <!-- Royal Gold top border bar -->
+    <div class="gold-top-bar" aria-hidden="true"></div>
+
+    <div class="header-body">
+
+        <!-- Left: Brand -->
+        <div class="brand-block">
+            <div class="brand-logo" aria-label="Asiaporeair">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                    aria-hidden="true">
+                    <path
+                        d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                </svg>
+                <span class="brand-name">ASIAPOREAIR</span>
+            </div>
+            <span class="brand-sub">Electronic Ticket · Itinerary Receipt</span>
+        </div>
+
+        <!-- Centre: Ticket Number -->
+        <div class="ticket-number-block" aria-label="Ticket number: {{ ticket.ticketCode }}">
+            <span class="tn-label">Ticket Number</span>
+            <span class="tn-value">{{ ticket.ticketCode }}</span>
+        </div>
+
+        <!-- Right: Status + Meta -->
+        <div class="meta-block">
+            <span class="status-badge" [class]="statusBadge.cls" role="status"
+                [attr.aria-label]="'Ticket status: ' + statusBadge.label">
+                <span class="status-dot" aria-hidden="true"></span>
+                {{ statusBadge.label }}
+            </span>
+            <div class="meta-rows">
+                <div class="meta-row">
+                    <span class="meta-key">Issued</span>
+                    <span class="meta-val">{{ issueDate }}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-key">Booking Ref</span>
+                    <span class="meta-val meta-val--accent">{{ ticket.bookingReference }}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

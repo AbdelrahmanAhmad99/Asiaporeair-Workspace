@@ -1,0 +1,200 @@
+<!-- ============================================================================
+     saved-passengers.component.html
+     Asiaporeair | "Travel Companions Hub" — Smart Page
+     ============================================================================ -->
+
+<div class="sp-shell" [@pageEnter]="'animate'">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       PAGE HERO HEADER
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="sp-hero sp-animate" role="banner">
+        <div class="sp-hero__inner">
+
+            <!-- Breadcrumb -->
+            <nav class="sp-breadcrumb" aria-label="Breadcrumb">
+                <a class="sp-breadcrumb__link" routerLink="/">Home</a>
+                <span class="sp-breadcrumb__sep" aria-hidden="true">›</span>
+                <a class="sp-breadcrumb__link" routerLink="/profile">My Profile</a>
+                <span class="sp-breadcrumb__sep" aria-hidden="true">›</span>
+                <span class="sp-breadcrumb__current">Travel Companions</span>
+            </nav>
+
+            <div class="sp-hero__content">
+                <div class="sp-hero__text">
+                    <h1 class="sp-hero__title">Travel Companions</h1>
+                    <p class="sp-hero__subtitle">
+                        Save profiles of family and friends for a faster, seamless booking experience.
+                    </p>
+                </div>
+
+                <!-- Companion count pill -->
+                @if (!store.isLoadingPassengers()) {
+                <div class="sp-hero__count-pill" [@fadeUp]>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    {{ store.passengerCount() }}
+                    {{ store.passengerCount() === 1 ? 'Companion' : 'Companions' }}
+                </div>
+                }
+            </div>
+
+            <div class="sp-hero__rule" aria-hidden="true"></div>
+        </div>
+    </header>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="sp-content" role="main">
+        <div class="sp-content__inner">
+
+            <!-- ── LEFT: Passenger List ─────────────────────────────────────── -->
+            <div class="sp-col sp-col--list">
+
+                <!-- Toolbar -->
+                <div class="sp-toolbar sp-animate">
+                    <div class="sp-toolbar__left">
+                        <h2 class="sp-toolbar__title">Saved Companions</h2>
+                        @if (!store.isLoadingPassengers() && store.passengerCount() > 0) {
+                        <span class="sp-toolbar__count">{{ store.passengerCount() }}</span>
+                        }
+                    </div>
+                    <button class="sp-add-btn" type="button" (click)="openAddModal()"
+                        aria-label="Add a new travel companion">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Add Companion
+                    </button>
+                </div>
+
+                <!-- Error banner -->
+                @if (store.passengerError()) {
+                <div class="sp-error-banner sp-animate" [@fadeUp] role="alert">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    {{ store.passengerError() }}
+                </div>
+                }
+
+                <!-- ── Skeleton shimmer ────────────────────────────────────────── -->
+                @if (store.isLoadingPassengers()) {
+                <div class="sp-skeleton-grid" aria-busy="true" aria-label="Loading travel companions">
+                    @for (i of [1,2,3]; track i) {
+                    <div class="sp-skeleton-card">
+                        <div class="sp-skeleton__avatar"></div>
+                        <div class="sp-skeleton__body">
+                            <div class="sp-skeleton__line sp-skeleton__line--name"></div>
+                            <div class="sp-skeleton__line sp-skeleton__line--detail"></div>
+                            <div class="sp-skeleton__line sp-skeleton__line--detail2"></div>
+                        </div>
+                    </div>
+                    }
+                </div>
+                }
+
+                <!-- ── Passenger card grid ────────────────────────────────────── -->
+                @if (!store.isLoadingPassengers()) {
+
+                @if (store.passengerCount() === 0) {
+                <!-- Empty state -->
+                <div class="sp-empty" [@fadeUp]>
+                    <div class="sp-empty__icon" aria-hidden="true">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="0.8">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <line x1="19" y1="8" x2="19" y2="14" />
+                            <line x1="22" y1="11" x2="16" y2="11" />
+                        </svg>
+                    </div>
+                    <h3 class="sp-empty__title">No companions saved yet</h3>
+                    <p class="sp-empty__subtitle">
+                        Add family members or friends to pre-fill passenger details at checkout.
+                    </p>
+                    <button class="sp-empty__cta" type="button" (click)="openAddModal()">
+                        Add Your First Companion
+                    </button>
+                </div>
+
+                } @else {
+
+                <div class="sp-card-grid" [@cardGrid]="store.passengerCount()">
+                    @for (passenger of store.savedPassengers(); track trackById($index, passenger)) {
+                    <app-passenger-summary-card [passenger]="passenger"
+                        [isDeleting]="isDeletingThisPassenger(passenger.passengerId)"
+                        (editClicked)="openEditModal($event)"
+                        (deleteClicked)="onDeletePassenger($event)"></app-passenger-summary-card>
+                    }
+                </div>
+
+                }
+
+                }
+
+            </div>
+
+            <!-- ── RIGHT: Quick Navigation ──────────────────────────────────── -->
+            <aside class="sp-col sp-col--nav" aria-label="Profile navigation">
+
+                <div class="sp-nav-header sp-animate">
+                    <h3 class="sp-nav-header__title">Your Account</h3>
+                    <p class="sp-nav-header__subtitle">Jump to other profile sections</p>
+                </div>
+
+                <nav class="sp-nav-list sp-animate" aria-label="Profile quick links">
+                    @for (link of quickNavLinks; track link.route) {
+                    <button class="sp-nav-card" type="button" (click)="navigateTo(link.route)"
+                        [attr.aria-label]="'Go to ' + link.label">
+                        <div class="sp-nav-card__icon" [innerHTML]="link.icon" aria-hidden="true"></div>
+                        <span class="sp-nav-card__label">{{ link.label }}</span>
+                        <svg class="sp-nav-card__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+                    }
+                </nav>
+
+                <!-- Info card -->
+                <div class="sp-info-card sp-animate" [@fadeUp]>
+                    <div class="sp-info-card__icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                    </div>
+                    <div class="sp-info-card__body">
+                        <p class="sp-info-card__title">Faster Checkout</p>
+                        <p class="sp-info-card__text">
+                            Saved companions auto-fill passenger forms during booking, saving you time at every step.
+                        </p>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    </main>
+
+</div>
+
+<!-- ══ MODAL (rendered at component root, outside scroll containers) ══ -->
+<app-add-passenger-modal [isOpen]="isModalOpen()" [passenger]="editingPassenger()"
+    [isSaving]="store.isSavingPassenger()" (modalClose)="closeModal()"
+    (formSubmit)="onModalSubmit($event)"></app-add-passenger-modal>

@@ -1,0 +1,188 @@
+<div class="fat-container">
+
+    <!-- ── Legend ─────────────────────────────────────────────────────── -->
+    @if (!loading() && fares().length > 0) {
+    <div class="fat-legend" aria-label="Status legend">
+        <span class="fat-legend__item">
+            <span class="fat-legend__dot fat-legend__dot--active" aria-hidden="true"></span>
+            Active — visible to the pricing engine
+        </span>
+        <span class="fat-legend__item">
+            <span class="fat-legend__dot fat-legend__dot--deleted" aria-hidden="true"></span>
+            Deactivated — archived, not bookable
+        </span>
+    </div>
+    }
+
+    <!-- ── Data Table ──────────────────────────────────────────────────── -->
+    <div class="fat-table-wrap" role="region" aria-label="Fare audit archive">
+        <table class="fat-table" aria-live="polite">
+
+            <!-- Table Header -->
+            <thead class="fat-thead">
+                <tr>
+                    <th class="fat-th fat-th--code" scope="col">Fare Code</th>
+                    <th class="fat-th" scope="col">Description</th>
+                    <!-- <th class="fat-th fat-th--center" scope="col">Cabin Class</th>
+                    <th class="fat-th fat-th--center" scope="col">Multiplier</th> -->
+                    <th class="fat-th fat-th--center" scope="col">Status</th>
+                    <th class="fat-th fat-th--center" scope="col">Refund</th>
+                    <th class="fat-th fat-th--center" scope="col">Changeable</th>
+                    <th class="fat-th fat-th--center fat-th--action" scope="col">Restore</th>
+                </tr>
+            </thead>
+
+            <!-- Skeleton rows -->
+            @if (loading()) {
+            <tbody>
+                @for (row of skeletonRows; track $index) {
+                <tr class="fat-tr fat-tr--skeleton" aria-hidden="true">
+                    <td class="fat-td"><span class="fat-sk fat-sk--code"></span></td>
+                    <td class="fat-td"><span class="fat-sk fat-sk--desc"></span></td>
+                    <!-- <td class="fat-td fat-td--center"><span class="fat-sk fat-sk--badge"></span></td>
+                    <td class="fat-td fat-td--center"><span class="fat-sk fat-sk--num"></span></td> -->
+                    <td class="fat-td fat-td--center"><span class="fat-sk fat-sk--status"></span></td>
+                    <td class="fat-td fat-td--center"><span class="fat-sk fat-sk--bool"></span></td>
+                    <td class="fat-td fat-td--center"><span class="fat-sk fat-sk--bool"></span></td>
+                    <td class="fat-td fat-td--center"><span class="fat-sk fat-sk--action"></span></td>
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- Data rows -->
+            @if (!loading()) {
+            <tbody>
+
+                <!-- Empty state -->
+                @if (fares().length === 0) {
+                <tr>
+                    <td class="fat-td fat-td--empty" colspan="8">
+                        <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                        </svg>
+                        <p>No audit records found.</p>
+                        <span>The archive will populate as fare codes are created and modified.</span>
+                    </td>
+                </tr>
+                }
+
+                <!-- Fare rows (staggered animation via nth-child) -->
+                @for (fare of fares(); track trackByCode($index, fare); let i = $index) {
+                <tr class="fat-tr" [class.fat-tr--deleted]="!fare.isActive"
+                    [class.fat-tr--reactivating]="reactivatingCode() === fare.code"
+                    [style.animation-delay]="(i * 30) + 'ms'"
+                    [attr.aria-label]="fare.code + (fare.isActive ? ' — active' : ' — deactivated')">
+
+                    <!-- Fare Code -->
+                    <td class="fat-td fat-td--code">
+                        <span class="fat-code-chip" [class.fat-code-chip--deleted]="!fare.isActive">
+                            {{ fare.code }}
+                        </span>
+                    </td>
+
+                    <!-- Description -->
+                    <td class="fat-td fat-td--desc" [title]="fare.description">
+                        {{ fare.description }}
+                    </td>
+
+                    <!-- Cabin Class -->
+                    <!-- <td class="fat-td fat-td--center">
+                        <span class="fat-cabin" [class.fat-cabin--muted]="!fare.isActive">
+                            {{ getCabinLabel(fare.cabinClass) }}
+                        </span>
+                    </td> -->
+
+                    <!-- Base Price Multiplier -->
+                    <!-- <td class="fat-td fat-td--center fat-td--mono" [class.fat-td--muted]="!fare.isActive">
+                        ×{{ fare.basePriceMultiplier | number:'1.2-2' }}
+                    </td> -->
+
+                    <!-- Status Badge -->
+                    <td class="fat-td fat-td--center">
+                        @if (fare.isActive) {
+                        <span class="fat-status fat-status--active">
+                            <span class="fat-status__dot" aria-hidden="true"></span>
+                            Active
+                        </span>
+                        } @else {
+                        <span class="fat-status fat-status--deleted">
+                            <span class="fat-status__dot" aria-hidden="true"></span>
+                            Deactivated
+                        </span>
+                        }
+                    </td>
+
+                    <!-- Refundable -->
+                    <td class="fat-td fat-td--center">
+                        <span class="fat-bool" [class.fat-bool--yes]="fare.isRefundable && fare.isActive"
+                            [class.fat-bool--no]="!fare.isRefundable || !fare.isActive"
+                            [class.fat-bool--dim]="!fare.isActive"
+                            [attr.aria-label]="fare.isRefundable ? 'Refundable' : 'Non-refundable'">
+                            @if (fare.isRefundable) {
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                            } @else {
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                            }
+                        </span>
+                    </td>
+
+                    <!-- Changeable -->
+                    <td class="fat-td fat-td--center">
+                        <span class="fat-bool" [class.fat-bool--yes]="fare.isChangeable && fare.isActive"
+                            [class.fat-bool--no]="!fare.isChangeable || !fare.isActive"
+                            [class.fat-bool--dim]="!fare.isActive"
+                            [attr.aria-label]="fare.isChangeable ? 'Changeable' : 'Non-changeable'">
+                            @if (fare.isChangeable) {
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                            } @else {
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                            }
+                        </span>
+                    </td>
+
+                    <!-- Reactivate Action -->
+                    <td class="fat-td fat-td--center">
+                        @if (!fare.isActive) {
+                        <button class="fat-restore-btn" type="button" [disabled]="reactivatingCode() === fare.code"
+                            (click)="reactivateRequested.emit(fare)"
+                            [attr.aria-label]="'Restore fare code ' + fare.code" title="Restore to active inventory">
+                            @if (reactivatingCode() === fare.code) {
+                            <svg class="fat-restore-btn__spinner" fill="none" stroke="currentColor" stroke-width="1.5"
+                                viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                            } @else {
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                            Restore
+                            }
+                        </button>
+                        } @else {
+                        <span class="fat-active-chip" aria-label="Code is already active">—</span>
+                        }
+                    </td>
+
+                </tr>
+                }
+
+            </tbody>
+            }
+
+        </table>
+    </div>
+
+</div>

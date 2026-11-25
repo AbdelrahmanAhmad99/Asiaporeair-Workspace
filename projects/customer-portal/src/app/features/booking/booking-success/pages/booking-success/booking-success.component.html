@@ -1,0 +1,172 @@
+<!-- ============================================================================
+     booking-success.component.html
+     Asiaporeair | "Your Suite is Prepared" — Booking Success Page
+     ============================================================================ -->
+
+<div class="success-shell">
+
+    <!-- Print-only header (hidden on screen) -->
+    <div class="print-header">
+        <span class="print-brand">Asiaporeair</span>
+        <span class="print-title">Booking Confirmation Receipt</span>
+        <span class="print-ref">Ref: {{ bookingRef() }}</span>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HERO BAND
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="hero-band" role="banner" aria-label="Booking confirmation">
+
+        <!-- Decorative lines grid -->
+        <div class="hero-grid" aria-hidden="true">
+            <div class="grid-line" *ngFor="let i of [1,2,3,4,5,6]"></div>
+        </div>
+
+        <!-- Gold shimmer sweep decoration -->
+        <div class="hero-shimmer" aria-hidden="true"></div>
+
+        <div class="hero-inner" [@victoryEnter]>
+
+            <!-- Animated Checkmark -->
+            <div class="check-badge" [@checkmarkPop] aria-hidden="true">
+                <div class="check-ring check-ring--outer"></div>
+                <div class="check-ring check-ring--mid"></div>
+                <div class="check-core">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1.5"
+                        stroke-linecap="round">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Title & Subtitle -->
+            <div class="hero-copy" [@fadeUp]>
+                <div class="hero-eyebrow">Journey Successfully Initiated</div>
+                <h1 class="hero-title">Your Suite is Prepared</h1>
+                <p class="hero-subtitle">
+                    Your reservation is fully confirmed and secured. Sit back —
+                    extraordinary awaits.
+                </p>
+            </div>
+
+            <!-- PNR Display -->
+            <div *ngIf="!isLoading()" class="pnr-display" [@pnrReveal]
+                [attr.aria-label]="'Booking reference: ' + bookingRef()">
+                <span class="pnr-label">Booking Reference</span>
+                <span class="pnr-code">{{ bookingRef() }}</span>
+            </div>
+
+            <!-- Confirmed timestamp -->
+            <p *ngIf="confirmedAt()" class="hero-timestamp" [@fadeUp]>
+                Confirmed on {{ confirmedAt() }}
+            </p>
+
+            <!-- Email notice -->
+            <div class="email-notice" [@fadeUp]>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                </svg>
+                A confirmation has been sent to your registered email address.
+            </div>
+
+            <!-- Quick action buttons inside hero -->
+            <div class="hero-quick-actions" [@fadeUp]>
+                <button class="hero-action-btn hero-action-btn--print no-print" (click)="onPrintReceipt()"
+                    aria-label="Print booking receipt">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 6 2 18 2 18 9" />
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                        <rect x="6" y="14" width="12" height="8" />
+                    </svg>
+                    Print Receipt
+                </button>
+                <button class="hero-action-btn no-print" (click)="onManageJourney()" aria-label="Manage your booking">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path
+                            d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                    Manage Journey
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         CONTENT
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="content-wrapper">
+
+        <!-- Loading -->
+        <div *ngIf="isLoading()" class="loading-state" aria-busy="true" aria-label="Loading booking details">
+            <div class="loading-inner">
+                <div class="gold-loader" aria-hidden="true">
+                    <div class="loader-ring"></div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="0.8"
+                        aria-hidden="true">
+                        <path
+                            d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                </div>
+                <span class="loading-label">Retrieving your itinerary…</span>
+            </div>
+        </div>
+
+        <!-- Non-blocking error -->
+        <div *ngIf="loadError() && !isLoading()" class="error-banner" role="alert" aria-live="polite">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ loadError() }}
+        </div>
+
+        <!-- ── Detail Cards ─────────────────────────────────────────────────── -->
+        <div *ngIf="detailsVisible()" class="detail-grid" [@detailsStagger]="detailsVisible()">
+
+            <!-- 1 — PNR Status Banner -->
+            <div class="detail-card">
+                <app-pnr-status-banner [bookingReference]="bookingRef()"
+                    [paymentStatus]="bookingDetail()?.paymentStatus ?? completedPayment()?.status ?? 'Succeeded'"
+                    [confirmedAt]="confirmedAt()" [passengerCount]="passengerCount()" [currency]="currency()"
+                    [totalAmount]="grandTotal()">
+                </app-pnr-status-banner>
+            </div>
+
+            <!-- 2 — Itinerary -->
+            <div class="detail-card" *ngIf="bookingDetail()">
+                <app-itinerary-confirmation-card [bookingDetail]="bookingDetail()!" [currency]="currency()">
+                </app-itinerary-confirmation-card>
+            </div>
+
+            <!-- 3 — Passenger Manifest -->
+            <div class="detail-card" *ngIf="bookingDetail()">
+                <app-passenger-manifest-list [passengers]="bookingDetail()!.passengers"
+                    [ancillarySales]="bookingDetail()!.ancillarySales" [seatAssignments]="seatAssignments()"
+                    [currency]="currency()">
+                </app-passenger-manifest-list>
+            </div>
+
+            <!-- 4 — Payment Receipt -->
+            <div class="detail-card">
+                <app-payment-receipt-summary [bookingDetail]="bookingDetail()" [completedPayment]="completedPayment()"
+                    [currency]="currency()">
+                </app-payment-receipt-summary>
+            </div>
+
+            <!-- 5 — Action Hub (no-print on narrow screens) -->
+            <div class="detail-card detail-card--actions no-print">
+                <app-action-hub-footer (manageJourney)="onManageJourney()" (goToProfile)="onGoToProfile()"
+                    (goHome)="onGoHome()" (printReceipt)="onPrintReceipt()">
+                </app-action-hub-footer>
+            </div>
+
+        </div>
+    </div>
+</div>

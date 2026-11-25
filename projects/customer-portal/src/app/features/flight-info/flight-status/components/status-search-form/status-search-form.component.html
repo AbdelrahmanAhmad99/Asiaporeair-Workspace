@@ -1,0 +1,255 @@
+<!-- ============================================================================
+     status-search-form.component.html
+     Asiaporeair | "Track Your Journey" — Flight Status Search Form
+     States: idle · searching (gold shimmer skeleton) · error
+     ============================================================================ -->
+
+<div class="ssf-shell">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         GOLD SHIMMER SKELETON — shown while chained API is in-flight
+    ══════════════════════════════════════════════════════════════════════════ -->
+    @if (isSearching) {
+    <div class="ssf-skeleton" aria-busy="true" aria-label="Tracking your journey, please wait">
+
+        <div class="ssf-skel-header">
+            <div class="ssf-skel ssf-skel--icon"></div>
+            <div class="ssf-skel ssf-skel--title"></div>
+        </div>
+
+        <div class="ssf-skel-fields">
+            <div class="ssf-skel-field">
+                <div class="ssf-skel ssf-skel--label"></div>
+                <div class="ssf-skel ssf-skel--input"></div>
+            </div>
+            <div class="ssf-skel-field">
+                <div class="ssf-skel ssf-skel--label"></div>
+                <div class="ssf-skel ssf-skel--input"></div>
+            </div>
+        </div>
+
+        <div class="ssf-skel ssf-skel--btn"></div>
+
+        <div class="ssf-tracking-hint" aria-hidden="true">
+            <svg class="ssf-spin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                stroke-width="2">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+            </svg>
+            <span>Contacting flight systems… one moment.</span>
+        </div>
+
+    </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ACTIVE FORM — shown when not loading
+    ══════════════════════════════════════════════════════════════════════════ -->
+    @if (!isSearching) {
+    <form class="ssf-form" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+
+        <!-- Form header / divider -->
+        <div class="ssf-form-header" aria-hidden="true">
+            <div class="ssf-form-header__line"></div>
+            <span class="ssf-form-header__text">Journey Credentials</span>
+            <div class="ssf-form-header__line"></div>
+        </div>
+
+        <div class="ssf-fields">
+
+            <!-- ── Field 1: Flight Number ───────────────────────────── -->
+            <div class="ssf-field" [class.ssf-field--filled]="flightNumber().length > 0"
+                [class.ssf-field--error]="!!flightNumberError()">
+
+                <label class="ssf-float-label" for="ssf-flight-number">
+                    Flight Number
+                </label>
+
+                <div class="ssf-input-shell">
+                    <!-- Plane icon -->
+                    <span class="ssf-input-icon" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" stroke-linecap="round">
+                            <path
+                                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                        </svg>
+                    </span>
+
+                    <input id="ssf-flight-number" class="ssf-input ssf-input--code" type="text" inputmode="text"
+                        maxlength="7" spellcheck="false" placeholder=" " [value]="flightNumber()"
+                        (input)="onFlightNumberInput($event)" (blur)="onFlightNumberBlur()"
+                        [attr.aria-invalid]="!!flightNumberError()"
+                        [attr.aria-describedby]="flightNumberError() ? 'fn-error' : null" aria-required="true" />
+                </div>
+
+                @if (flightNumberError()) {
+                <p id="fn-error" class="ssf-field-error" role="alert">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    {{ flightNumberError() }}
+                </p>
+                }
+
+                <p class="ssf-field-hint">
+                    2–3 letter airline code followed by flight digits (e.g. ASP101)
+                </p>
+
+            </div>
+
+            <!-- ── Field 2: Date of Departure ───────────────────────── -->
+            <div class="ssf-field ssf-field--date" [class.ssf-field--filled]="!!selectedDate()"
+                [class.ssf-field--error]="!!dateError()">
+
+                <label class="ssf-float-label" for="ssf-date-trigger">
+                    Date of Departure
+                </label>
+
+                <div class="ssf-input-shell">
+                    <!-- Calendar icon -->
+                    <span class="ssf-input-icon" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" stroke-linecap="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                    </span>
+
+                    <button id="ssf-date-trigger" type="button" class="ssf-date-trigger"
+                        [class.ssf-date-trigger--open]="showCalendar()" (click)="toggleCalendar()"
+                        [attr.aria-expanded]="showCalendar()" [attr.aria-invalid]="!!dateError()" aria-haspopup="dialog"
+                        aria-required="true">
+
+                        @if (formattedDateDisplay) {
+                        <span class="ssf-date-display">{{ formattedDateDisplay }}</span>
+                        } @else {
+                        <span class="ssf-date-placeholder">Select date</span>
+                        }
+
+                        <svg class="ssf-date-chevron" [class.ssf-date-chevron--open]="showCalendar()" width="12"
+                            height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                            aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Calendar panel -->
+                @if (showCalendar()) {
+                <div class="ssf-calendar" role="dialog" aria-label="Select departure date" aria-modal="false">
+
+                    <!-- Calendar header -->
+                    <div class="ssf-cal-header">
+                        <button type="button" class="ssf-cal-nav" (click)="prevMonth()" aria-label="Previous month">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                        </button>
+                        <span class="ssf-cal-month-label">{{ calendarMonthLabel() }}</span>
+                        <button type="button" class="ssf-cal-nav" (click)="nextMonth()" aria-label="Next month">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Weekday headers -->
+                    <div class="ssf-cal-weekdays" aria-hidden="true">
+                        @for (wd of weekdays; track wd) {
+                        <span class="ssf-cal-weekday">{{ wd }}</span>
+                        }
+                    </div>
+
+                    <!-- Day grid -->
+                    <div class="ssf-cal-grid" role="grid" [attr.aria-label]="calendarMonthLabel()">
+                        @for (day of calendarDays(); track $index) {
+                        @if (!day) {
+                        <div class="ssf-cal-empty" aria-hidden="true"></div>
+                        } @else {
+                        <button type="button" role="gridcell" class="ssf-cal-day"
+                            [class.ssf-cal-day--selected]="isDateSelected(day)"
+                            [class.ssf-cal-day--today]="isToday(day)"
+                            [class.ssf-cal-day--disabled]="isDateDisabled(day)" [disabled]="isDateDisabled(day)"
+                            (click)="selectDate(day)" [attr.aria-pressed]="isDateSelected(day)"
+                            [attr.aria-disabled]="isDateDisabled(day)"
+                            [attr.aria-label]="day.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })">
+                            {{ day.getDate() }}
+                        </button>
+                        }
+                        }
+                    </div>
+
+                    <!-- Range notice -->
+                    <p class="ssf-cal-hint">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1.5"
+                            aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                        </svg>
+                        Available 90 days in the past · 365 days ahead
+                    </p>
+
+                </div>
+                }
+
+                @if (dateError()) {
+                <p id="date-error" class="ssf-field-error" role="alert">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                    </svg>
+                    {{ dateError() }}
+                </p>
+                }
+
+            </div>
+
+        </div>
+        <!-- /ssf-fields -->
+
+        <!-- ── Action row ──────────────────────────────────────────── -->
+        <div class="ssf-actions">
+
+            <button class="ssf-submit-btn" type="submit" [disabled]="isSearching" aria-label="Track this flight">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                Track Your Journey
+            </button>
+
+            @if (flightNumber() || selectedDate()) {
+            <button class="ssf-clear-btn" type="button" (click)="onClearSearch()" aria-label="Clear search fields">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+                Clear
+            </button>
+            }
+
+        </div>
+
+        <!-- Privacy / help note -->
+        <p class="ssf-help-note">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            Secure connection. Flight data is retrieved in real-time.
+        </p>
+
+    </form>
+    }
+
+</div>

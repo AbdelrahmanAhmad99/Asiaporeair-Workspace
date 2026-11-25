@@ -1,0 +1,205 @@
+/* =============================================================================
+   AOMS Global Styles — Luxury Midnight Design System
+   Airline Operations Management System (Asiaporeair)
+   ============================================================================= */
+
+
+/* 2. Google Fonts (Montserrat for headers, Inter for data) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+/* =============================================================================
+   3. AOMS Design Tokens (CSS Custom Properties)
+   ============================================================================= */
+:root {
+  /* ── Primary Palette ─────────────────────────────────────────────────────── */
+  --aoms-midnight: #051937;
+  --aoms-midnight-rgb: 5, 25, 55;
+  --aoms-gold: #B68F24;
+  --aoms-gold-rgb: 182, 143, 36;
+  --aoms-champagne: #E2C780;
+  --aoms-champagne-rgb: 226, 199, 128;
+  --aoms-ivory: #F8F9FA;
+  --aoms-charcoal: #101056;
+
+  /* ── Status Colors ───────────────────────────────────────────────────────── */
+  --aoms-emerald: #064E3B;
+  --aoms-amber: #B45309;
+  --aoms-ruby: #710D06;
+
+  /* ── Semantic Design System Aliases (Luxury Midnight) ───────────────────── */
+  --aoms-color-primary: var(--aoms-midnight);
+  --aoms-color-secondary: var(--aoms-gold);
+  --aoms-color-accent: var(--aoms-champagne);
+  --aoms-color-neutral-bg: var(--aoms-ivory);
+  --aoms-color-text: var(--aoms-charcoal);
+  --aoms-surface-card: #FFFFFF;
+  --aoms-color-success: var(--aoms-emerald);
+  --aoms-color-warning: var(--aoms-amber);
+  --aoms-color-danger: var(--aoms-ruby);
+
+  /* ── Surface & Background ────────────────────────────────────────────────── */
+  --aoms-bg-primary: var(--aoms-ivory);
+  --aoms-bg-sidebar: var(--aoms-midnight);
+  --aoms-bg-topbar: rgba(var(--aoms-midnight-rgb), 0.8);
+  --aoms-bg-card: #FFFFFF;
+  --aoms-bg-card-hover: rgba(var(--aoms-champagne-rgb), 0.1);
+
+  /* ── Text ─────────────────────────────────────────────────────────────────── */
+  --aoms-text-primary: var(--aoms-charcoal);
+  --aoms-text-secondary: #6B7280;
+  --aoms-text-muted: #9CA3AF;
+  --aoms-text-on-dark: #E5E7EB;
+  --aoms-text-on-dark-muted: rgba(255, 255, 255, 0.5);
+
+  /* ── Borders & Shadows ───────────────────────────────────────────────────── */
+  --aoms-border-subtle: rgba(var(--aoms-champagne-rgb), 0.25);
+  --aoms-border-gold: var(--aoms-champagne);
+  --aoms-shadow-card: 0 4px 20px rgba(var(--aoms-midnight-rgb), 0.08);
+  --aoms-shadow-elevated: 0 10px 30px rgba(var(--aoms-midnight-rgb), 0.1);
+  --aoms-shadow-none: none;
+
+  /* ── Squircle Radii ──────────────────────────────────────────────────────── */
+  --aoms-radius-card: 12px;
+  --aoms-radius-button: 4px;
+  --aoms-radius-squircle: 8px;
+
+  /* ── Spacing ─────────────────────────────────────────────────────────────── */
+  --aoms-sidebar-expanded: 260px;
+  --aoms-sidebar-collapsed: 72px;
+  --aoms-topbar-height: 64px;
+  --aoms-footer-height: 40px;
+
+  /* ── Transitions ─────────────────────────────────────────────────────────── */
+  --aoms-transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --aoms-transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --aoms-transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Typography ──────────────────────────────────────────────────────────── */
+  --aoms-font-heading: 'Montserrat', sans-serif;
+  --aoms-font-body: 'Inter', sans-serif;
+  --aoms-letter-heading: -0.02em;
+}
+
+/* =============================================================================
+   4. Dark Mode Overrides (.aoms-dark)
+   ============================================================================= */
+.aoms-dark {
+  --aoms-bg-primary: #0B1929;
+  --aoms-bg-sidebar: #030E1F;
+  --aoms-bg-topbar: rgba(3, 14, 31, 0.9);
+  --aoms-bg-card: #0F2236;
+  --aoms-bg-card-hover: rgba(var(--aoms-gold-rgb), 0.08);
+
+  --aoms-text-primary: #E5E7EB;
+  --aoms-text-secondary: #9CA3AF;
+  --aoms-text-muted: #6B7280;
+
+  --aoms-border-subtle: rgba(var(--aoms-champagne-rgb), 0.12);
+  --aoms-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --aoms-shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.4);
+
+  --aoms-color-neutral-bg: #0B1929;
+  --aoms-color-text: #E5E7EB;
+  --aoms-surface-card: #0F2236;
+}
+
+/* =============================================================================
+   5. Global Resets & Base Styles
+   ============================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--aoms-font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--aoms-text-primary);
+  background-color: var(--aoms-bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* ── Typography Classes ────────────────────────────────────────────────────── */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--aoms-font-heading);
+  letter-spacing: var(--aoms-letter-heading);
+  font-weight: 600;
+  color: var(--aoms-text-primary);
+}
+
+/* ── Scrollbar Styling (Luxury) ────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--aoms-midnight-rgb), 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--aoms-midnight-rgb), 0.35);
+}
+
+.aoms-dark ::-webkit-scrollbar-thumb {
+  background: rgba(var(--aoms-champagne-rgb), 0.15);
+}
+
+.aoms-dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--aoms-champagne-rgb), 0.3);
+}
+
+/* ── Focus Styles ──────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--aoms-champagne);
+  outline-offset: 2px;
+}
+
+/* ── Utility Classes ───────────────────────────────────────────────────────── */
+.aoms-squircle {
+  border-radius: var(--aoms-radius-card);
+}
+
+.aoms-squircle-sm {
+  border-radius: var(--aoms-radius-squircle);
+}
+
+.aoms-glass {
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* ── Toastr Overrides (Luxury Theme) ───────────────────────────────────────── */
+.success-snackbar {
+  background-color: var(--aoms-emerald) !important;
+  color: white;
+}
+
+.error-snackbar {
+  background-color: var(--aoms-ruby) !important;
+  color: white;
+}
+
+.warning-snackbar {
+  background-color: var(--aoms-amber) !important;
+  color: white;
+}

@@ -1,0 +1,165 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ // ── Card ──────────────────────────────────────────────────────────────────
+ .fhm-card {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+     padding: 1.5rem;
+     border-radius: 12px;
+     background: linear-gradient(145deg, $midnight, darken($midnight, 5%));
+     border: 1px solid rgba($champagne, 0.16);
+     box-shadow: 0 8px 28px rgba($midnight, 0.35);
+     height: 100%;
+ }
+
+ // ── Header ────────────────────────────────────────────────────────────────
+ .fhm-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.5rem;
+ }
+
+ .fhm-header__title {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 700;
+     color: #fff;
+     margin: 0;
+     letter-spacing: -0.01em;
+ }
+
+ .fhm-status {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     padding: 0.1875rem 0.5625rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 800;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+
+     svg {
+         width: 0.6875rem;
+         height: 0.6875rem;
+         flex-shrink: 0;
+     }
+
+     &--on {
+         color: lighten($emerald, 40%);
+         background: rgba($emerald, 0.14);
+         border: 1px solid rgba($emerald, 0.3);
+     }
+
+     &--off {
+         color: lighten($ruby, 28%);
+         background: rgba($ruby, 0.14);
+         border: 1px solid rgba($ruby, 0.3);
+     }
+ }
+
+ // ── Gauge Wrapper ─────────────────────────────────────────────────────────
+ .fhm-gauge-wrap {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 0.5rem;
+ }
+
+ .fhm-svg {
+     width: 100%;
+     max-width: 280px;
+     overflow: visible;
+ }
+
+ // ── Progress arc glow ─────────────────────────────────────────────────────
+ .fhm-progress-arc {
+     filter: drop-shadow(0 0 8px rgba($gold, 0.4));
+     transition: stroke-dasharray 500ms ease;
+ }
+
+ // ── Center Readout (SVG text) ────────────────────────────────────────────
+ .fhm-readout-value {
+     font-size: 32px;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 900;
+     fill: #fff;
+     text-anchor: middle;
+     letter-spacing: -0.02em;
+ }
+
+ .fhm-readout-caption {
+     font-size: 10px;
+     font-family: var(--aoms-font-body, sans-serif);
+     fill: rgba(255, 255, 255, 0.35);
+     text-anchor: middle;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     font-weight: 600;
+ }
+
+ // ── Target Caption ────────────────────────────────────────────────────────
+ .fhm-target-caption {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: rgba($champagne, 0.6);
+
+     svg {
+         width: 0.8125rem;
+         height: 0.8125rem;
+         flex-shrink: 0;
+     }
+
+     strong {
+         color: $champagne;
+         font-weight: 800;
+     }
+ }
+
+ // ── Skeleton Loading ──────────────────────────────────────────────────────
+ .fhm-skeleton {
+     flex: 1;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .fhm-sk {
+     display: block;
+     border-radius: 50%;
+     background: linear-gradient(90deg,
+             rgba(255, 255, 255, 0.03) 0%,
+             rgba($champagne, 0.1) 50%,
+             rgba(255, 255, 255, 0.03) 100%);
+     background-size: 200% 100%;
+     animation: fhm-shimmer 1.5s ease-in-out infinite;
+
+     &--gauge {
+         width: 220px;
+         height: 140px;
+         border-radius: 220px 220px 0 0;
+     }
+ }
+
+ @keyframes fhm-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }

@@ -1,0 +1,276 @@
+ $midnight : #051937;
+ $royal-gold : #B68F24;
+ $champagne : #E2C780;
+ $charcoal : #101056;
+ $muted : #718096;
+ $error : #B91C1C;
+ $error-bg : rgba(#B91C1C, 0.06);
+ $font : 'Montserrat',
+ 'Inter',
+ -apple-system,
+ sans-serif;
+ $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+ :host {
+     display: block;
+ }
+
+ // ── Form ───────────────────────────────────────────────────────────────────────
+ .sf {
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+
+     &__row {
+         display: flex;
+         gap: 14px;
+
+         &--2col {
+             >* {
+                 flex: 1;
+                 min-width: 0;
+             }
+         }
+
+         @media (max-width: 480px) {
+             &--2col {
+                 flex-direction: column;
+             }
+         }
+     }
+
+     // ── Floating-label field ────────────────────────────────────────────────────
+     &__field {
+         position: relative;
+
+         &--error {
+             .sf__input {
+                 border-color: rgba($error, 0.5);
+                 background: $error-bg;
+             }
+
+             .sf__label {
+                 color: $error;
+             }
+
+             .sf__border-bar {
+                 background: $error;
+                 transform: scaleX(1);
+             }
+         }
+     }
+
+     // ── Input ───────────────────────────────────────────────────────────────────
+     &__input {
+         width: 100%;
+         box-sizing: border-box;
+         padding: 18px 44px 8px 14px;
+         border-radius: 8px;
+         border: 1px solid rgba($muted, 0.22);
+         background: rgba(#F1F5F9, 0.6);
+         font-family: $font;
+         font-size: 14px;
+         color: $charcoal;
+         outline: none;
+         transition: border-color 220ms $ease, background 220ms $ease;
+         appearance: none;
+
+         &:focus {
+             border-color: rgba($royal-gold, 0.55);
+             background: #FFFFFF;
+         }
+
+         // Trigger label float when has value
+         &:not(:placeholder-shown)~.sf__label,
+         &:focus~.sf__label,
+         &.has-value~.sf__label {
+             top: 8px;
+             font-size: 10px;
+             font-weight: 700;
+             letter-spacing: 0.08em;
+             color: $royal-gold;
+         }
+
+         &:not(:focus).has-value~.sf__label {
+             color: $muted;
+         }
+
+         &:focus~.sf__border-bar {
+             transform: scaleX(1);
+         }
+
+         &--select {
+             padding-right: 36px;
+             cursor: pointer;
+         }
+     }
+
+     &__select-icon {
+         position: absolute;
+         top: 50%;
+         right: 14px;
+         transform: translateY(-50%);
+         pointer-events: none;
+         color: $muted;
+         transition: color 180ms $ease;
+     }
+
+     &__input:focus~&__select-icon {
+         color: $royal-gold;
+     }
+
+     // ── Floating label ──────────────────────────────────────────────────────────
+     &__label {
+         position: absolute;
+         top: 14px;
+         left: 14px;
+         font-family: $font;
+         font-size: 13px;
+         font-weight: 500;
+         color: $muted;
+         pointer-events: none;
+         transition: top 180ms $ease, font-size 180ms $ease, color 180ms $ease, letter-spacing 180ms $ease;
+     }
+
+     &__optional {
+         font-weight: 400;
+         opacity: 0.65;
+         font-size: 0.9em;
+     }
+
+     // ── Gold underline bar ──────────────────────────────────────────────────────
+     &__border-bar {
+         position: absolute;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         height: 2px;
+         border-radius: 0 0 8px 8px;
+         background: $royal-gold;
+         transform: scaleX(0);
+         transform-origin: center;
+         transition: transform 220ms $ease;
+     }
+
+     // ── Eye toggle button ───────────────────────────────────────────────────────
+     &__eye-btn {
+         position: absolute;
+         top: 50%;
+         right: 14px;
+         transform: translateY(-50%);
+         background: none;
+         border: none;
+         cursor: pointer;
+         color: $muted;
+         padding: 4px;
+         display: flex;
+         align-items: center;
+         transition: color 180ms $ease;
+
+         &:hover {
+             color: $royal-gold;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $royal-gold;
+             border-radius: 4px;
+         }
+     }
+
+     // ── Error message ───────────────────────────────────────────────────────────
+     &__error {
+         display: block;
+         margin-top: 5px;
+         font-size: 11px;
+         font-weight: 500;
+         color: $error;
+         padding-left: 2px;
+         animation: errorSlideIn 180ms $ease;
+     }
+
+     // ── Submit button ───────────────────────────────────────────────────────────
+     &__submit {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 10px;
+         width: 100%;
+         padding: 15px 24px;
+         border-radius: 4px;
+         background: $midnight;
+         border: 1px solid rgba($royal-gold, 0.35);
+         font-family: $font;
+         font-size: 13px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: $champagne;
+         cursor: pointer;
+         transition: background 260ms $ease, border-color 260ms $ease, color 260ms $ease, box-shadow 260ms $ease;
+         margin-top: 4px;
+
+         &:hover:not(:disabled) {
+             background: $royal-gold;
+             border-color: $royal-gold;
+             color: $midnight;
+             box-shadow: 0 6px 20px rgba($royal-gold, 0.3);
+         }
+
+         &:disabled {
+             opacity: 0.65;
+             cursor: not-allowed;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $royal-gold;
+             outline-offset: 3px;
+         }
+
+         &--loading {
+             pointer-events: none;
+         }
+     }
+
+     // ── Loading spinner ─────────────────────────────────────────────────────────
+     &__spinner {
+         width: 16px;
+         height: 16px;
+         border: 2px solid rgba($champagne, 0.35);
+         border-top-color: $champagne;
+         border-radius: 50%;
+         animation: spin 700ms linear infinite;
+         flex-shrink: 0;
+     }
+ }
+
+ @keyframes spin {
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes errorSlideIn {
+     from {
+         opacity: 0;
+         transform: translateY(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @media (prefers-reduced-motion: reduce) {
+     .sf__spinner {
+         animation: none;
+     }
+
+     .sf__border-bar {
+         transition: none;
+     }
+
+     .sf__label {
+         transition: none;
+     }
+ }

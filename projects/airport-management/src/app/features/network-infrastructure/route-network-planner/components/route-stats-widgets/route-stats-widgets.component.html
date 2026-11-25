@@ -1,0 +1,43 @@
+<div class="rsw-bar" role="region" aria-label="Air network summary metrics">
+
+    <!-- Loading shimmer -->
+    @if (loading()) {
+    @for (s of shimmerWidgets; track $index) {
+    <div class="rsw-widget rsw-widget--shimmer" aria-hidden="true">
+        <div class="rsw-shimmer rsw-shimmer--icon"></div>
+        <div class="rsw-shimmer-body">
+            <div class="rsw-shimmer rsw-shimmer--value"></div>
+            <div class="rsw-shimmer rsw-shimmer--label"></div>
+        </div>
+    </div>
+    }
+    }
+
+    <!-- Executive widgets -->
+    @if (!loading()) {
+    @for (widget of widgets; track widget.id; let i = $index) {
+    <div class="rsw-widget" [class]="'rsw-widget ' + widget.accentClass" [style.animation-delay]="(i * 90) + 'ms'"
+        role="group" [attr.aria-label]="widget.label + ': ' + widget.getValue(statistics())">
+
+        <!-- Accent strip -->
+        <div class="rsw-widget__accent" aria-hidden="true"></div>
+
+        <!-- 1px line-art icon -->
+        <div class="rsw-widget__icon-wrap" aria-hidden="true">
+            <svg class="rsw-widget__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="widget.iconPath" />
+            </svg>
+        </div>
+
+        <!-- Content -->
+        <div class="rsw-widget__content">
+            <span class="rsw-widget__value">{{ widget.getValue(statistics()) }}</span>
+            <span class="rsw-widget__label">{{ widget.label }}</span>
+            <span class="rsw-widget__sublabel">{{ widget.sublabel }}</span>
+        </div>
+
+    </div>
+    }
+    }
+
+</div>

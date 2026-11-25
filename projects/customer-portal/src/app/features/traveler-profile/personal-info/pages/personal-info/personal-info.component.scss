@@ -1,0 +1,585 @@
+// ============================================================================
+// personal-info.component.scss
+// Asiaporeair | "Digital Identity Hub" — Page Styles
+// ============================================================================
+
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+$midnight : #051937;
+$utility-dark : #030f22;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$pure-white : #FFFFFF;
+$charcoal : #101056;
+$text-muted : #718096;
+$text-secondary : #4a5568;
+$error : #c53030;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$snap : cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+@keyframes shimmer-gold {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HERO HEADER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.pi-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+
+    // Subtle diagonal texture overlay
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 80% -20%, rgba($royal-gold, 0.08) 0%, transparent 55%),
+            radial-gradient(ellipse at -10% 110%, rgba($royal-gold, 0.05) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    &__inner {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 48px 0;
+
+        @media (max-width: 768px) {
+            padding: 24px 24px 0;
+        }
+    }
+
+    &__content {
+        display: flex;
+        align-items: flex-end;
+        gap: 28px;
+        padding-bottom: 28px;
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    }
+
+    &__avatar-wrap {
+        flex-shrink: 0;
+        margin-bottom: -20px; // Bleeds into content area
+        position: relative;
+        z-index: 2;
+    }
+
+    &__identity {
+        flex: 1;
+        padding-bottom: 20px;
+        min-width: 0;
+    }
+
+    &__name {
+        font-size: clamp(1.3rem, 3vw, 1.9rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $pure-white;
+        margin: 0 0 5px;
+        line-height: 1.15;
+    }
+
+    &__email {
+        font-size: 0.82rem;
+        font-weight: 400;
+        color: rgba($pure-white, 0.55);
+        margin: 0 0 10px;
+        letter-spacing: 0.01em;
+    }
+
+    &__loyalty {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: $royal-gold;
+    }
+
+    &__loyalty-tier {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $royal-gold;
+    }
+
+    &__loyalty-sep {
+        color: rgba($pure-white, 0.2);
+        font-size: 0.75rem;
+    }
+
+    &__loyalty-miles {
+        font-size: 0.72rem;
+        font-weight: 400;
+        color: rgba($champagne, 0.75);
+    }
+
+    &__member-since {
+        font-size: 0.72rem;
+        font-weight: 400;
+        color: rgba($pure-white, 0.45);
+        letter-spacing: 0.01em;
+    }
+
+    // Skeleton for hero identity
+    &__skeleton-name {
+        height: 32px;
+        width: 220px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        background: linear-gradient(90deg,
+                rgba($royal-gold, 0.08) 0%,
+                rgba($royal-gold, 0.2) 50%,
+                rgba($royal-gold, 0.08) 100%);
+        background-size: 200% 100%;
+        animation: shimmer-gold 1.8s ease infinite;
+    }
+
+    &__skeleton-email {
+        height: 16px;
+        width: 160px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        background: linear-gradient(90deg,
+                rgba($royal-gold, 0.06) 0%,
+                rgba($royal-gold, 0.14) 50%,
+                rgba($royal-gold, 0.06) 100%);
+        background-size: 200% 100%;
+        animation: shimmer-gold 1.8s ease infinite;
+        animation-delay: 0.1s;
+    }
+
+    &__skeleton-miles {
+        height: 14px;
+        width: 120px;
+        border-radius: 4px;
+        background: linear-gradient(90deg,
+                rgba($royal-gold, 0.05) 0%,
+                rgba($royal-gold, 0.12) 50%,
+                rgba($royal-gold, 0.05) 100%);
+        background-size: 200% 100%;
+        animation: shimmer-gold 1.8s ease infinite;
+        animation-delay: 0.2s;
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba($royal-gold, 0.35), transparent);
+    }
+}
+
+// Breadcrumb
+.pi-hero__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.pi-breadcrumb {
+    &__link {
+        font-size: 0.68rem;
+        font-weight: 500;
+        color: rgba($pure-white, 0.4);
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        transition: color $t;
+
+        &:hover {
+            color: $champagne;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            border-radius: 2px;
+        }
+    }
+
+    &__sep {
+        font-size: 0.75rem;
+        color: rgba($pure-white, 0.2);
+    }
+
+    &__current {
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: rgba($champagne, 0.7);
+        letter-spacing: 0.04em;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MAIN CONTENT LAYOUT
+// ══════════════════════════════════════════════════════════════════════════════
+
+.pi-content {
+    padding: 0 48px 64px;
+    background: $ivory;
+
+    @media (max-width: 768px) {
+        padding: 0 20px 48px;
+    }
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-top: 40px;
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 36px;
+        align-items: start;
+
+        @media (max-width: 1024px) {
+            grid-template-columns: 1fr;
+            max-width: 680px;
+        }
+    }
+}
+
+.pi-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    &--forms {
+        min-width: 0;
+    }
+
+    // &--nav {}
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SECTION HEADER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.pi-section-header {
+    &__title {
+        font-family: $font;
+        font-size: 1.15rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: $charcoal;
+        margin: 0 0 6px;
+    }
+
+    &__subtitle {
+        font-size: 0.78rem;
+        color: $text-muted;
+        margin: 0;
+        line-height: 1.6;
+        max-width: 480px;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ERROR BANNER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.pi-error-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 18px;
+    background: rgba($error, 0.05);
+    border: 1px solid rgba($error, 0.2);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    color: $error;
+    font-family: $font;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RIGHT COLUMN — PROFILE NAV HEADER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.pi-nav-header {
+    &__title {
+        font-family: $font;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: $text-muted;
+        margin: 0 0 3px;
+    }
+
+    &__subtitle {
+        font-size: 0.7rem;
+        color: rgba($text-muted, 0.7);
+        margin: 0;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PROFILE NAV GRID (Quick-jump cards)
+// ══════════════════════════════════════════════════════════════════════════════
+
+.pi-nav-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pi-nav-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: $pure-white;
+    border: 1px solid rgba($champagne, 0.22);
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: border-color $t, box-shadow $t, transform $t, background $t;
+    box-shadow: 0 2px 10px rgba($midnight, 0.05);
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.45);
+        box-shadow: 0 6px 20px rgba($midnight, 0.08), 0 0 0 1px rgba($royal-gold, 0.15);
+        transform: translateY(-1px);
+        background: linear-gradient(135deg, $pure-white 80%, rgba($champagne, 0.06));
+
+        .pi-nav-card__chevron {
+            color: $royal-gold;
+            transform: translateX(3px);
+        }
+
+        .pi-nav-card__icon {
+            background: rgba($royal-gold, 0.12);
+            border-color: rgba($royal-gold, 0.3);
+            color: $royal-gold;
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &__icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: rgba($midnight, 0.05);
+        border: 1px solid rgba($midnight, 0.08);
+        color: rgba($charcoal, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background $t, border-color $t, color $t;
+
+        svg {
+            display: block;
+        }
+    }
+
+    &__body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__label {
+        display: block;
+        font-family: $font;
+        font-size: 0.84rem;
+        font-weight: 700;
+        color: $charcoal;
+        letter-spacing: -0.01em;
+        margin-bottom: 2px;
+    }
+
+    &__desc {
+        display: block;
+        font-family: $font;
+        font-size: 0.68rem;
+        font-weight: 400;
+        color: $text-muted;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__chevron {
+        color: rgba($charcoal, 0.25);
+        flex-shrink: 0;
+        transition: color $t, transform $t;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// LOYALTY MILESTONE CARD
+// ══════════════════════════════════════════════════════════════════════════════
+
+.pi-loyalty-card {
+    background: linear-gradient(145deg, $midnight, darken($midnight, 2%));
+    border: 1px solid rgba($royal-gold, 0.25);
+    border-radius: 12px;
+    padding: 22px 22px 20px;
+    box-shadow: 0 8px 32px rgba($midnight, 0.2);
+    position: relative;
+    overflow: hidden;
+
+    // Gold radial glow
+    &::before {
+        content: '';
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        width: 140px;
+        height: 140px;
+        background: radial-gradient(circle, rgba($royal-gold, 0.12) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 14px;
+        color: $royal-gold;
+        font-family: $font;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    &__tier {
+        font-family: $font;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba($champagne, 0.6);
+        margin-bottom: 2px;
+    }
+
+    &__miles-label {
+        font-family: $font;
+        font-size: 0.62rem;
+        font-weight: 400;
+        letter-spacing: 0.06em;
+        color: rgba($champagne, 0.45);
+        margin-bottom: 2px;
+    }
+
+    &__miles-value {
+        font-family: $font;
+        font-size: 1.8rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $champagne;
+        line-height: 1.1;
+        margin-bottom: 16px;
+    }
+
+    &__progress-wrap {
+        height: 3px;
+        background: rgba($pure-white, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 6px;
+    }
+
+    &__progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, $royal-gold, $champagne);
+        border-radius: 2px;
+        transition: width 600ms $ease;
+    }
+
+    &__progress-label {
+        font-family: $font;
+        font-size: 0.62rem;
+        color: rgba($champagne, 0.45);
+        margin: 0 0 16px;
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 18px;
+        background: rgba($royal-gold, 0.12);
+        border: 1px solid rgba($royal-gold, 0.3);
+        border-radius: 4px;
+        font-family: $font;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: $champagne;
+        cursor: pointer;
+        transition: all $t;
+        width: 100%;
+        justify-content: center;
+
+        &:hover {
+            background: $royal-gold;
+            border-color: $royal-gold;
+            color: $midnight;
+            box-shadow: 0 4px 14px rgba($royal-gold, 0.35);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 3px;
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ACCESSIBILITY & REDUCED MOTION
+// ══════════════════════════════════════════════════════════════════════════════
+
+.pi-hero__skeleton-name,
+.pi-hero__skeleton-email,
+.pi-hero__skeleton-miles {
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .pi-nav-card,
+    .pi-loyalty-card__progress-bar,
+    .pi-loyalty-card__cta {
+        transition: none;
+    }
+}

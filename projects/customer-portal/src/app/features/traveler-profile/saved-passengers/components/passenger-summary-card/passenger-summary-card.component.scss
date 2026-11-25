@@ -1,0 +1,314 @@
+// ============================================================================
+// passenger-summary-card.component.scss
+// Asiaporeair | Passenger Summary Card
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$danger : #c53030;
+$success : #276749;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+// Relationship tag palette (cycled deterministically in TS)
+$tags: (
+    'Family': (#e0f2fe, #0369a1),
+    'Friend': (#fef9c3, #854d0e),
+    'Colleague': (#f0fdf4, #166534),
+    'Travel Buddy': (#fdf4ff, #7e22ce),
+);
+
+:host {
+    display: block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ── Card ─────────────────────────────────────────────────────────────────────
+.psc {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 20px 20px 20px;
+    background: $white;
+    border: 1px solid rgba($champagne, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba($midnight, 0.06);
+    position: relative;
+    transition: box-shadow $t, border-color $t, opacity $t, transform $t;
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.4);
+        box-shadow: 0 6px 24px rgba($midnight, 0.1);
+    }
+
+    &--deleting {
+        opacity: 0.55;
+        pointer-events: none;
+    }
+
+    // Entry animation (applied by ngAnimate / CSS class added from parent)
+    &.psc--enter {
+        animation: cardEnter 420ms $ease forwards;
+    }
+}
+
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── Avatar ────────────────────────────────────────────────────────────────────
+.psc__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, darken($midnight, 2%), lighten($midnight, 8%));
+    border: 2px solid rgba($royal-gold, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font;
+    font-size: 1rem;
+    font-weight: 800;
+    color: $champagne;
+    flex-shrink: 0;
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────
+.psc__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.psc__header-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.psc__name {
+    font-family: $font;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: $charcoal;
+    margin: 0;
+}
+
+// ── Relationship badge ────────────────────────────────────────────────────────
+.psc__relation-badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba($royal-gold, 0.1);
+    border: 1px solid rgba($royal-gold, 0.3);
+    color: darken($royal-gold, 8%);
+}
+
+// ── Details ───────────────────────────────────────────────────────────────────
+.psc__details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.psc__detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.psc__detail-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: $font;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $muted;
+    min-width: 90px;
+    flex-shrink: 0;
+}
+
+.psc__detail-value {
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba($charcoal, 0.75);
+
+    &--mono {
+        font-family: 'Courier New', monospace;
+        letter-spacing: 0.06em;
+    }
+
+    &--gold {
+        color: darken($royal-gold, 5%);
+        font-weight: 600;
+    }
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+.psc__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.psc__action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: none;
+    border: 1px solid rgba($charcoal, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba($charcoal, 0.5);
+    transition: all $t;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &--edit:hover:not(:disabled) {
+        border-color: $royal-gold;
+        color: $royal-gold;
+        background: rgba($royal-gold, 0.06);
+    }
+
+    &--delete:hover:not(:disabled) {
+        border-color: rgba($danger, 0.4);
+        color: $danger;
+        background: rgba($danger, 0.04);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+.psc__spinner {
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid rgba($danger, 0.3);
+    border-top-color: $danger;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+// ── Delete confirm ────────────────────────────────────────────────────────────
+.psc__confirm {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: rgba($white, 0.96);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    animation: confirmIn 180ms $ease forwards;
+}
+
+@keyframes confirmIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.psc__confirm-text {
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $charcoal;
+}
+
+.psc__confirm-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.psc__confirm-btn {
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all $t;
+
+    &--cancel {
+        background: none;
+        border: 1px solid rgba($charcoal, 0.2);
+        color: rgba($charcoal, 0.6);
+
+        &:hover {
+            border-color: $charcoal;
+            color: $charcoal;
+        }
+    }
+
+    &--confirm {
+        background: $danger;
+        border: 1px solid $danger;
+        color: $white;
+
+        &:hover {
+            background: darken($danger, 8%);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .psc__spinner,
+    .psc {
+        animation: none !important;
+        transition: none !important;
+    }
+}

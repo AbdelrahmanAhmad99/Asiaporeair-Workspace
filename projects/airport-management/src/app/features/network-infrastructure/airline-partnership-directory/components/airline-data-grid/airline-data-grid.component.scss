@@ -1,0 +1,506 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ============================================================================
+ // 1. Card wrapper (squircle 12px)
+ // ============================================================================
+ .adg-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 4px 22px rgba($midnight, 0.07);
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Scroll
+ // ============================================================================
+ .adg-scroll {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+
+     &::-webkit-scrollbar {
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.28);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 3. Table
+ // ============================================================================
+ .adg-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 13px;
+ }
+
+ // ============================================================================
+ // 4. Sticky header — Midnight Sapphire with Champagne Gold labels
+ // ============================================================================
+ .adg-head {
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 2;
+ }
+
+ .adg-th {
+     padding: 0.875rem 1rem;
+     text-align: left;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Rows
+ // ============================================================================
+ .adg-tr {
+     border-bottom: 1px solid rgba($champagne, 0.07);
+     transition: background-color 120ms $ease;
+     cursor: default;
+
+     &--even {
+         background: var(--aoms-bg-card, #ffffff);
+     }
+
+     &--odd {
+         background: rgba($off-white, 0.55);
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.055) !important;
+
+         .adg-name {
+             color: $midnight;
+         }
+
+         .adg-actions {
+             opacity: 1;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Cells
+ // ============================================================================
+ .adg-td {
+     padding: 0.8125rem 1rem;
+     vertical-align: middle;
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+
+     &--logo {
+         width: 3.25rem;
+     }
+ }
+
+ // ============================================================================
+ // 7. Logo circle
+ // ============================================================================
+ .adg-logo {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.25rem;
+     height: 2.25rem;
+     border-radius: 50%;
+     background: $midnight;
+     border: 1px solid rgba($gold, 0.3);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 800;
+     letter-spacing: 0.06em;
+     color: $champagne;
+     flex-shrink: 0;
+     user-select: none;
+ }
+
+ // ============================================================================
+ // 8. IATA Code badge — Bold Royal Gold
+ // ============================================================================
+ .adg-iata {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.25rem 0.6rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 800;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: $gold;
+     background: rgba($gold, 0.08);
+     border: 1px solid rgba($gold, 0.22);
+     white-space: nowrap;
+ }
+
+ // ============================================================================
+ // 9. Name
+ // ============================================================================
+ .adg-name {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color 120ms $ease;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     display: block;
+     max-width: 20rem;
+ }
+
+ // ============================================================================
+ // 10. Callsign
+ // ============================================================================
+ .adg-callsign {
+     font-family: 'Courier New', monospace;
+     font-size: 12px;
+     font-weight: 700;
+     letter-spacing: 0.07em;
+     color: $champagne;
+ }
+
+ // ============================================================================
+ // 11. Base Hub
+ // ============================================================================
+ .adg-hub {
+     display: flex;
+     flex-direction: column;
+     gap: 0.1rem;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 700;
+     letter-spacing: 0.07em;
+     text-transform: uppercase;
+     color: var(--aoms-text-primary, $charcoal);
+
+     &__name {
+         font-size: 10px;
+         font-weight: 400;
+         letter-spacing: 0.02em;
+         text-transform: none;
+         color: var(--aoms-text-muted);
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         max-width: 12rem;
+     }
+ }
+
+ // ============================================================================
+ // 12. Region pills — colour-coded by geography
+ // ============================================================================
+ .adg-region-pill {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.6rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 600;
+     letter-spacing: 0.05em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     &.region--emerald {
+         background: rgba(6, 78, 59, 0.1);
+         border: 1px solid rgba(6, 78, 59, 0.25);
+         color: #059669;
+     }
+
+     &.region--sapphire {
+         background: rgba(37, 99, 235, 0.09);
+         border: 1px solid rgba(37, 99, 235, 0.22);
+         color: #3B82F6;
+     }
+
+     &.region--amber {
+         background: rgba(180, 83, 9, 0.1);
+         border: 1px solid rgba(180, 83, 9, 0.25);
+         color: #D97706;
+     }
+
+     &.region--default {
+         background: rgba($champagne, 0.08);
+         border: 1px solid rgba($champagne, 0.2);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ============================================================================
+ // 13. Responsive column hiding
+ // ============================================================================
+ .adg-col--md-hidden {
+     @media (max-width: 767px) {
+         display: none;
+     }
+ }
+
+ .adg-col--lg-hidden {
+     @media (max-width: 1023px) {
+         display: none;
+     }
+ }
+
+ // ============================================================================
+ // 14. Action buttons
+ // ============================================================================
+ .adg-actions {
+     display: flex;
+     align-items: center;
+     gap: 0.2rem;
+     opacity: 0.5;
+     transition: opacity 120ms $ease;
+ }
+
+ .adg-action-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     border-radius: 4px;
+     border: 1px solid transparent;
+     background: transparent;
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast, 150ms ease);
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+     }
+
+     // View — Sapphire
+     &--view {
+         color: rgba($midnight, 0.6);
+
+         &:hover {
+             color: $midnight;
+             border-color: rgba($midnight, 0.25);
+             background: rgba($midnight, 0.06);
+         }
+     }
+
+     // Edit — Champagne
+     &--edit {
+         color: rgba($champagne, 0.7);
+
+         &:hover {
+             color: $gold;
+             border-color: rgba($gold, 0.35);
+             background: rgba($gold, 0.08);
+         }
+     }
+
+     // Deactivate — Luxury Ruby
+     &--deactivate {
+         color: rgba($ruby, 0.5);
+
+         &:hover {
+             color: $ruby;
+             border-color: rgba($ruby, 0.3);
+             background: rgba($ruby, 0.07);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 15. Shimmer
+ // ============================================================================
+ .adg-shimmer {
+     height: 0.875rem;
+     border-radius: 4px;
+     background: rgba($champagne, 0.08);
+     animation: adg-pulse 1.5s ease-in-out infinite;
+
+     &--circle {
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 50%;
+     }
+ }
+
+ // ============================================================================
+ // 16. Empty state
+ // ============================================================================
+ .adg-empty {
+     padding: 4rem 1.5rem;
+     text-align: center;
+ }
+
+ .adg-empty__inner {
+     display: inline-flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+ }
+
+ .adg-empty__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3.25rem;
+     height: 3.25rem;
+     border-radius: 12px;
+     background: rgba($gold, 0.07);
+     border: 1px solid rgba($gold, 0.15);
+ }
+
+ .adg-empty__icon {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: var(--aoms-text-muted);
+ }
+
+ .adg-empty__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     margin: 0;
+ }
+
+ .adg-empty__sub {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     max-width: 30ch;
+     margin: 0;
+     line-height: 1.6;
+ }
+
+ // ============================================================================
+ // 17. Footer
+ // ============================================================================
+ .adg-footer {
+     display: flex;
+     align-items: center;
+     padding: 0.75rem 1.25rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     background: rgba($off-white, 0.5);
+ }
+
+ .adg-footer__label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+ }
+
+ // ============================================================================
+ // 18. Keyframes
+ // ============================================================================
+ @keyframes adg-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 19. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .adg-card {
+         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+     }
+
+     .adg-tr--odd {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .adg-tr--even {
+         background: rgba(255, 255, 255, 0.025);
+     }
+
+     .adg-tr:hover {
+         background: rgba($champagne, 0.04) !important;
+
+         .adg-name {
+             color: $champagne;
+         }
+     }
+
+     .adg-name {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .adg-callsign {
+         color: rgba($champagne, 0.7);
+     }
+
+     .adg-hub {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .adg-hub__name {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .adg-iata {
+         color: $champagne;
+         background: rgba($champagne, 0.1);
+         border-color: rgba($champagne, 0.25);
+     }
+
+     .adg-action-btn--view {
+         color: rgba(255, 255, 255, 0.4);
+     }
+
+     .adg-action-btn--view:hover {
+         color: $champagne;
+     }
+
+     .adg-footer {
+         background: rgba(255, 255, 255, 0.02);
+     }
+ }

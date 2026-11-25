@@ -1,0 +1,79 @@
+<!-- directory-filter-bar.component.html -->
+
+<div class="dfb">
+
+    <!-- Search -->
+    <div class="dfb__search">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="dfb__search__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+        </svg>
+        <input class="dfb__search__input" type="text" placeholder="Search by name or employee ID…"
+            [ngModel]="searchValue" (ngModelChange)="onSearchInput($event)" aria-label="Search employees" />
+        @if (searchValue) {
+        <button class="dfb__search__clear" type="button" (click)="onSearchInput('')" aria-label="Clear search">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        }
+    </div>
+
+    <!-- Role Dropdown -->
+    <div class="dfb__select-wrap">
+        <span class="dfb__select-label">Role</span>
+        <div class="dfb__select-inner">
+            <select class="dfb__select" [ngModel]="roleValue" (ngModelChange)="onRoleChange($event)"
+                aria-label="Filter by role">
+                @for (opt of roleOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+                }
+            </select>
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="dfb__select-inner__chev"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Status Dropdown -->
+    <div class="dfb__select-wrap">
+        <span class="dfb__select-label">Status</span>
+        <div class="dfb__select-inner">
+            <select class="dfb__select" [ngModel]="statusValue" (ngModelChange)="onStatusChange($event)"
+                aria-label="Filter by status">
+                @for (opt of statusOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+                }
+            </select>
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="dfb__select-inner__chev"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="dfb__spacer"></div>
+
+    <!-- Clear -->
+    @if (isFiltered) {
+    <button class="dfb__clear-btn" type="button" (click)="onClear()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="dfb__clear-btn__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        Clear
+    </button>
+    }
+
+    <!-- Onboard CTA -->
+    <button class="dfb__onboard-btn" type="button" (click)="onboardClicked.emit()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="dfb__onboard-btn__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Onboard Employee
+    </button>
+
+</div>

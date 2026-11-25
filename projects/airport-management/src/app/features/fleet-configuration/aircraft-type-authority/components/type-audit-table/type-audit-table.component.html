@@ -1,0 +1,171 @@
+<div class="audit-card">
+
+    <div class="audit-scroll">
+        <table class="audit-table" role="grid" aria-label="Aircraft type audit history">
+
+            <!-- ── Table Head ──────────────────────────────────────── -->
+            <thead class="audit-table__head">
+                <tr>
+                    @for (col of columns; track col.key) {
+                    <th class="audit-table__th" [class.audit-table__th--md-hidden]="col.hideOnMd"
+                        [class.audit-table__th--lg-hidden]="col.hideOnLg" scope="col">
+                        {{ col.label }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+
+            <!-- ── Loading Shimmer ─────────────────────────────────── -->
+            @if (loading()) {
+            <tbody>
+                @for (row of shimmerRows; track $index) {
+                <tr class="audit-table__tr">
+                    @for (col of columns; track col.key) {
+                    <td class="audit-table__shimmer-cell" [class.audit-table__td--md-hidden]="col.hideOnMd"
+                        [class.audit-table__td--lg-hidden]="col.hideOnLg">
+                        <div class="audit-table__shimmer-bar" [style.width]="col.shimmerWidth"></div>
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- ── Data Rows ────────────────────────────────────────── -->
+            @if (!loading()) {
+            <tbody [@auditRows]="records().length">
+
+                @for (record of records(); track record.typeId; let even = $even) {
+                <tr class="audit-table__tr" [class.audit-table__tr--even]="even" [class.audit-table__tr--odd]="!even"
+                    [class.audit-table__tr--archived]="record.isDeleted"
+                    [class.audit-table__tr--restoring]="isRestoringRow(record.typeId)"
+                    [@restoredRow]="record.isDeleted ? 'archived' : 'active'">
+
+                    <!-- Status badge -->
+                    <td class="audit-table__td">
+                        @if (!record.isDeleted) {
+                        <span class="audit-badge audit-badge--active">
+                            <svg class="audit-badge__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                            </svg>
+                            Active
+                        </span>
+                        }
+                        @if (record.isDeleted) {
+                        <span class="audit-badge audit-badge--archived">
+                            <svg class="audit-badge__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622
+                               a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375
+                               7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504
+                               -1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5
+                               c0 .621.504 1.125 1.125 1.125z" />
+                            </svg>
+                            Archived
+                        </span>
+                        }
+                    </td>
+
+                    <!-- Model Name -->
+                    <td class="audit-table__td">
+                        <span class="audit-table__td--model-text">{{ record.model }}</span>
+                    </td>
+
+                    <!-- Manufacturer -->
+                    <td class="audit-table__td audit-table__td--mfr">
+                        {{ record.manufacturer }}
+                    </td>
+
+                    <!-- Last Modified (hidden on mobile) -->
+                    <td class="audit-table__td audit-table__td--date audit-table__td--md-hidden">
+                        {{ formatDate(record.updatedAt) }}
+                    </td>
+
+                    <!-- Archived On (hidden on tablet) -->
+                    <td class="audit-table__td audit-table__td--date audit-table__td--lg-hidden">
+                        {{ formatDate(record.deletedAt) }}
+                    </td>
+
+                    <!-- Archived By (hidden on tablet) -->
+                    <td class="audit-table__td audit-table__td--user audit-table__td--lg-hidden">
+                        <span class="audit-table__user-chip">
+                            @if (record.deletedByUser) {
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                class="audit-table__user-chip__icon" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z
+                               M4.501 20.118a7.5 7.5 0 0 1 14.998 0" />
+                            </svg>
+                            {{ record.deletedByUser }}
+                            } @else {
+                            —
+                            }
+                        </span>
+                    </td>
+
+                    <!-- Reason (hidden on tablet) -->
+                    <td class="audit-table__td audit-table__td--reason audit-table__td--lg-hidden"
+                        [title]="record.archivedReason ?? ''">
+                        @if (record.archivedReason) {
+                        <span class="audit-table__reason-text">
+                            {{ truncateReason(record.archivedReason) }}
+                        </span>
+                        } @else {
+                        <span class="audit-table__td--empty">No reason recorded</span>
+                        }
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="audit-table__td audit-table__td--actions">
+                        <aoms-restore-action-cell [typeId]="record.typeId" [isDeleted]="record.isDeleted"
+                            [isRestoring]="isRestoringRow(record.typeId)" (confirmed)="restoreTriggered.emit($event)" />
+                    </td>
+
+                </tr>
+                }
+
+                <!-- ── Empty State ──────────────────────────────────── -->
+                @if (records().length === 0) {
+                <tr>
+                    <td [attr.colspan]="columns.length" class="audit-table__empty">
+                        <div class="audit-table__empty-inner">
+                            <div class="audit-table__empty-icon-wrap" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                    class="audit-table__empty-icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                                </svg>
+                            </div>
+                            <p class="audit-table__empty-title">Vault is Empty</p>
+                            <p class="audit-table__empty-sub">No aircraft type records match the current filter.</p>
+                        </div>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+            }
+
+        </table>
+    </div>
+
+    <!-- ── Table Footer ───────────────────────────────────────── -->
+    @if (!loading() && records().length > 0) {
+    <div class="audit-table__footer">
+        <span class="audit-table__footer-text">
+            Showing <strong>{{ records().length }}</strong>
+            {{ records().length === 1 ? 'record' : 'records' }}
+        </span>
+        <span class="audit-table__footer-badge">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="audit-table__footer-badge__icon" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75m-10.5.75a8.25 8.25 0 1 1 16.5 0 8.25 8.25 0 0 1-16.5 0z" />
+            </svg>
+            Secured Audit Log
+        </span>
+    </div>
+    }
+
+</div>

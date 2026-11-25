@@ -1,0 +1,37 @@
+<article class="csc" [style.--delay]="animDelay + 'ms'">
+
+    <!-- Portrait -->
+    <div class="csc__portrait-wrap">
+        <img class="csc__portrait" [src]="crew.imagePath" [alt]="crew.name + ' — ' + crew.role" loading="lazy" />
+        <div class="csc__portrait-overlay" aria-hidden="true"></div>
+
+        <!-- Name plate overlay on image -->
+        <div class="csc__name-plate">
+            <span class="csc__name">{{ crew.name }}</span>
+            <span class="csc__role">{{ crew.role }}</span>
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="csc__body">
+
+        <!-- Service stat -->
+        <div class="csc__stat" aria-label="{{ crew.yearsOfService }} years of service">
+            <span class="csc__stat-num">{{ crew.yearsOfService }}</span>
+            <div>
+                <span class="csc__stat-label">years of dedicated service</span>
+                <span class="csc__base">Based in {{ crew.baseCity }}</span>
+            </div>
+        </div>
+
+        <!-- Gold divider -->
+        <div class="csc__divider" aria-hidden="true"></div>
+
+        <!-- Quote -->
+        <blockquote class="csc__quote">
+            <p class="csc__quote-text">"{{ crew.quote }}"</p>
+        </blockquote>
+
+    </div>
+
+</article>

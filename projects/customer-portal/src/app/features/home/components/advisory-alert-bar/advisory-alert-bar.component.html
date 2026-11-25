@@ -1,0 +1,30 @@
+<div class="aab">
+    @for (alert of alerts; track alert.id) {
+    <div class="aab__alert" [class.aab__alert--warning]="alert.severity === 'warning'"
+        [class.aab__alert--critical]="alert.severity === 'critical'" role="alert">
+        <div class="aab__inner">
+            <svg class="aab__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <p class="aab__message">{{ alert.message }}</p>
+            <div class="aab__actions">
+                @if (alert.ctaLabel && alert.ctaRoute) {
+                <a class="aab__link" [routerLink]="alert.ctaRoute">{{ alert.ctaLabel }}</a>
+                }
+                @if (alert.dismissible) {
+                <button class="aab__dismiss" type="button" (click)="alertDismissed.emit(alert.id)"
+                    aria-label="Dismiss alert">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</div>

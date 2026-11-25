@@ -1,0 +1,98 @@
+<!-- ticket-qr-code.component.html -->
+<div class="qr-wrapper" role="figure" aria-label="QR code for ticket {{ ticketCode }}. Scan to verify boarding.">
+
+    <div class="qr-border" [class.qr-border--void]="!isValid">
+        <!-- Hand-crafted QR SVG (production: replace with real QR library) -->
+        <svg class="qr-svg" width="120" height="120" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img"
+            aria-hidden="true">
+            <!-- Background -->
+            <rect width="64" height="64" fill="white" />
+            <!-- Top-left finder -->
+            <rect x="2" y="2" width="16" height="16" rx="2" fill="none" stroke="#051937" stroke-width="2" />
+            <rect x="6" y="6" width="8" height="8" rx="1" fill="#051937" />
+            <!-- Top-right finder -->
+            <rect x="46" y="2" width="16" height="16" rx="2" fill="none" stroke="#051937" stroke-width="2" />
+            <rect x="50" y="6" width="8" height="8" rx="1" fill="#051937" />
+            <!-- Bottom-left finder -->
+            <rect x="2" y="46" width="16" height="16" rx="2" fill="none" stroke="#051937" stroke-width="2" />
+            <rect x="6" y="50" width="8" height="8" rx="1" fill="#051937" />
+            <!-- Data modules (simulated pattern) -->
+            <rect x="22" y="4" width="3" height="3" fill="#051937" />
+            <rect x="26" y="4" width="3" height="3" fill="#051937" />
+            <rect x="30" y="4" width="3" height="3" fill="#051937" />
+            <rect x="38" y="4" width="3" height="3" fill="#051937" />
+            <rect x="22" y="8" width="3" height="3" fill="#051937" />
+            <rect x="30" y="8" width="3" height="3" fill="#051937" />
+            <rect x="34" y="8" width="3" height="3" fill="#051937" />
+            <rect x="22" y="12" width="3" height="3" fill="#051937" />
+            <rect x="26" y="12" width="3" height="3" fill="#051937" />
+            <rect x="38" y="12" width="3" height="3" fill="#051937" />
+            <!-- Central data area rows -->
+            <rect x="4" y="22" width="3" height="3" fill="#051937" />
+            <rect x="8" y="22" width="3" height="3" fill="#051937" />
+            <rect x="16" y="22" width="3" height="3" fill="#051937" />
+            <rect x="22" y="22" width="3" height="3" fill="#051937" />
+            <rect x="30" y="22" width="3" height="3" fill="#051937" />
+            <rect x="38" y="22" width="3" height="3" fill="#051937" />
+            <rect x="46" y="22" width="3" height="3" fill="#051937" />
+            <rect x="54" y="22" width="3" height="3" fill="#051937" />
+            <rect x="4" y="26" width="3" height="3" fill="#051937" />
+            <rect x="12" y="26" width="3" height="3" fill="#051937" />
+            <rect x="20" y="26" width="3" height="3" fill="#051937" />
+            <rect x="28" y="26" width="3" height="3" fill="#051937" />
+            <rect x="36" y="26" width="3" height="3" fill="#051937" />
+            <rect x="44" y="26" width="3" height="3" fill="#051937" />
+            <rect x="52" y="26" width="3" height="3" fill="#051937" />
+            <rect x="8" y="30" width="3" height="3" fill="#051937" />
+            <rect x="16" y="30" width="3" height="3" fill="#051937" />
+            <rect x="24" y="30" width="3" height="3" fill="#051937" />
+            <rect x="32" y="30" width="3" height="3" fill="#051937" />
+            <rect x="40" y="30" width="3" height="3" fill="#051937" />
+            <rect x="48" y="30" width="3" height="3" fill="#051937" />
+            <rect x="56" y="30" width="3" height="3" fill="#051937" />
+            <rect x="4" y="34" width="3" height="3" fill="#051937" />
+            <rect x="12" y="34" width="3" height="3" fill="#051937" />
+            <rect x="22" y="34" width="3" height="3" fill="#051937" />
+            <rect x="30" y="34" width="3" height="3" fill="#051937" />
+            <rect x="38" y="34" width="3" height="3" fill="#051937" />
+            <rect x="46" y="34" width="3" height="3" fill="#051937" />
+            <rect x="54" y="34" width="3" height="3" fill="#051937" />
+            <rect x="8" y="38" width="3" height="3" fill="#051937" />
+            <rect x="16" y="38" width="3" height="3" fill="#051937" />
+            <rect x="24" y="38" width="3" height="3" fill="#051937" />
+            <rect x="32" y="38" width="3" height="3" fill="#051937" />
+            <rect x="40" y="38" width="3" height="3" fill="#051937" />
+            <rect x="50" y="38" width="3" height="3" fill="#051937" />
+            <!-- Bottom data area -->
+            <rect x="22" y="46" width="3" height="3" fill="#051937" />
+            <rect x="30" y="46" width="3" height="3" fill="#051937" />
+            <rect x="38" y="46" width="3" height="3" fill="#051937" />
+            <rect x="22" y="50" width="3" height="3" fill="#051937" />
+            <rect x="26" y="50" width="3" height="3" fill="#051937" />
+            <rect x="34" y="50" width="3" height="3" fill="#051937" />
+            <rect x="42" y="50" width="3" height="3" fill="#051937" />
+            <rect x="22" y="54" width="3" height="3" fill="#051937" />
+            <rect x="30" y="54" width="3" height="3" fill="#051937" />
+            <rect x="38" y="54" width="3" height="3" fill="#051937" />
+            <rect x="46" y="54" width="3" height="3" fill="#051937" />
+            <!-- Gold centre dot -->
+            <circle cx="32" cy="32" r="3" fill="#B68F24" />
+        </svg>
+    </div>
+
+    <div class="qr-labels">
+        <span class="scan-label">{{ isValid ? 'Scan to Board' : 'Ticket Void' }}</span>
+        <span class="ticket-code-label">{{ ticketCode }}</span>
+    </div>
+
+    <!-- Void overlay -->
+    <div *ngIf="!isValid" class="void-overlay" aria-label="Ticket voided">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d95f5f" stroke-width="1.5"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+        </svg>
+        <span>VOID</span>
+    </div>
+
+</div>

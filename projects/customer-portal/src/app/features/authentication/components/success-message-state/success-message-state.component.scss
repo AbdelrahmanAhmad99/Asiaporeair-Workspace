@@ -1,0 +1,166 @@
+  :host {
+      display: block;
+  }
+
+  .sms {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      padding: 8px 0;
+      animation: fadeUp 360ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &__icon-wrap {
+          width: 80px;
+          height: 80px;
+          margin-bottom: 4px;
+      }
+
+      &__check {
+          width: 100%;
+          height: 100%;
+          overflow: visible;
+      }
+
+      &__check-circle {
+          stroke: #B68F24;
+          fill: rgba(182, 143, 36, 0.08);
+          stroke-dasharray: 166;
+          stroke-dashoffset: 166;
+          animation: drawCircle 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          animation-delay: 100ms;
+      }
+
+      &__check-tick {
+          stroke: #B68F24;
+          fill: none;
+          stroke-dasharray: 48;
+          stroke-dashoffset: 48;
+          animation: drawTick 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          animation-delay: 600ms;
+      }
+
+      &__title {
+          font-family: 'Montserrat', 'Inter', sans-serif;
+          font-size: 1.35rem;
+          font-weight: 800;
+          letter-spacing: -0.025em;
+          color: #101056;
+          margin: 0;
+      }
+
+      &__body {
+          font-size: 13px;
+          color: #718096;
+          line-height: 1.65;
+          margin: 0;
+          max-width: 340px;
+      }
+
+      &__email-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          padding: 6px 14px;
+          border-radius: 20px;
+          background: rgba(182, 143, 36, 0.08);
+          border: 1px solid rgba(182, 143, 36, 0.25);
+          font-size: 12px;
+          font-weight: 600;
+          color: #7a5d15;
+          font-family: 'Montserrat', 'Inter', sans-serif;
+      }
+
+      &__hint {
+          font-size: 12px;
+          color: #718096;
+          margin: 0;
+          line-height: 1.55;
+      }
+
+      &__retry-btn {
+          background: none;
+          border: none;
+          padding: 0;
+          font: inherit;
+          font-size: 12px;
+          color: #B68F24;
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: underline;
+          text-underline-offset: 2px;
+
+          &:focus-visible {
+              outline: 2px solid #B68F24;
+              border-radius: 2px;
+          }
+      }
+
+      &__login-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          padding: 13px 24px;
+          border-radius: 4px;
+          background: #051937;
+          border: 1px solid rgba(182, 143, 36, 0.35);
+          font-family: 'Montserrat', 'Inter', sans-serif;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.09em;
+          text-transform: uppercase;
+          color: #E2C780;
+          text-decoration: none;
+          margin-top: 6px;
+          transition: background 260ms ease, border-color 260ms ease, color 260ms ease;
+
+          &:hover {
+              background: #B68F24;
+              border-color: #B68F24;
+              color: #051937;
+          }
+
+          &:focus-visible {
+              outline: 2px solid #B68F24;
+              outline-offset: 3px;
+          }
+      }
+  }
+
+  @keyframes fadeUp {
+      from {
+          opacity: 0;
+          transform: translateY(14px);
+      }
+
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  @keyframes drawCircle {
+      to {
+          stroke-dashoffset: 0;
+      }
+  }
+
+  @keyframes drawTick {
+      to {
+          stroke-dashoffset: 0;
+      }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+      .sms {
+          animation: none;
+      }
+
+      .sms__check-circle,
+      .sms__check-tick {
+          animation: none;
+          stroke-dashoffset: 0;
+      }
+  }

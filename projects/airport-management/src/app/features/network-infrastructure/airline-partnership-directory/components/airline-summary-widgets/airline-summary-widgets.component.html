@@ -1,0 +1,44 @@
+<div class="asw-bar" role="region" aria-label="Partner fleet summary metrics">
+
+    <!-- ══ Loading Shimmer ══════════════════════════════════════════ -->
+    @if (loading()) {
+    @for (s of shimmerWidgets; track $index) {
+    <div class="asw-widget asw-widget--shimmer" aria-hidden="true">
+        <div class="asw-shimmer asw-shimmer--icon"></div>
+        <div class="asw-shimmer--body">
+            <div class="asw-shimmer asw-shimmer--value"></div>
+            <div class="asw-shimmer asw-shimmer--label"></div>
+        </div>
+    </div>
+    }
+    }
+
+    <!-- ══ Executive Widgets ════════════════════════════════════════ -->
+    @if (!loading()) {
+    @for (widget of widgets; track widget.id; let i = $index) {
+    <div class="asw-widget" [class]="'asw-widget ' + widget.accentClass" [style.animation-delay]="(i * 90) + 'ms'"
+        role="group" [attr.aria-label]="widget.label + ': ' + widget.getValue(metrics())">
+
+        <!-- Accent strip -->
+        <div class="asw-widget__accent" aria-hidden="true"></div>
+
+        <!-- Line-art icon -->
+        <div class="asw-widget__icon-wrap" aria-hidden="true">
+            <svg class="asw-widget__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="widget.iconPath" />
+            </svg>
+        </div>
+
+        <!-- Content -->
+        <div class="asw-widget__content">
+            <span class="asw-widget__value">{{ widget.getValue(metrics()) }}</span>
+            <span class="asw-widget__label">{{ widget.label }}</span>
+            <span class="asw-widget__sublabel">{{ widget.sublabel }}</span>
+        </div>
+
+    </div>
+    }
+    }
+
+</div>

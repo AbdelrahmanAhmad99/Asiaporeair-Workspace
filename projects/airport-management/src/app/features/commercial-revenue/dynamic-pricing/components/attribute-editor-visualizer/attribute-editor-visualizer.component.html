@@ -1,0 +1,186 @@
+<div class="aev-panel">
+
+    <!-- ── Panel Header ──────────────────────────────────────────── -->
+    <div class="aev-header">
+        <div class="aev-header__left">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="aev-header__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+            <div>
+                <h3 class="aev-header__title">Live Blueprint</h3>
+                <p class="aev-header__sub">Updates as you build the rule</p>
+            </div>
+        </div>
+
+        <!-- Live pulse indicator -->
+        <div class="aev-live-dot" title="Live preview active" aria-label="Live preview active">
+            <span class="aev-live-dot__inner" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    <!-- ── Completion Progress ────────────────────────────────────── -->
+    <div class="aev-progress-wrap">
+        <div class="aev-progress-bar">
+            <div class="aev-progress-bar__fill" [style.width]="completionPct() + '%'"
+                [attr.aria-valuenow]="completionPct()" aria-valuemin="0" aria-valuemax="100" role="progressbar"
+                [attr.aria-label]="'Rule completion: ' + completionPct() + '%'">
+            </div>
+        </div>
+        <span class="aev-progress-label">{{ completionPct() }}% complete</span>
+    </div>
+
+    <!-- ── SVG Flowchart Canvas ──────────────────────────────────── -->
+    <div class="aev-canvas">
+        <svg class="aev-svg" [attr.viewBox]="'0 0 ' + svgW + ' ' + svgH" [attr.width]="svgW" [attr.height]="svgH"
+            xmlns="http://www.w3.org/2000/svg" role="img"
+            aria-label="Live logic flowchart of the pricing rule being built">
+
+            <!-- ── Gradient Definitions ──────────────────────────────── -->
+            <defs>
+                <!-- Dark gradient background -->
+                <linearGradient id="aev-bg" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#051937" />
+                    <stop offset="100%" stop-color="#01090f" />
+                </linearGradient>
+
+                <!-- Node fill by type -->
+                <linearGradient id="aev-trigger-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0a2a50" />
+                    <stop offset="100%" stop-color="#051937" />
+                </linearGradient>
+                <linearGradient id="aev-condition-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#1d1304" />
+                    <stop offset="100%" stop-color="#0e0b03" />
+                </linearGradient>
+                <linearGradient id="aev-modifier-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0b2217" />
+                    <stop offset="100%" stop-color="#061610" />
+                </linearGradient>
+                <linearGradient id="aev-output-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#1c1206" />
+                    <stop offset="100%" stop-color="#0e0b03" />
+                </linearGradient>
+
+                <!-- Glow filter for filled nodes -->
+                <filter id="aev-node-glow" x="-25%" y="-25%" width="150%" height="150%">
+                    <feGaussianBlur stdDeviation="3.5" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+
+                <!-- Champagne gold edge glow -->
+                <filter id="aev-edge-glow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="1.5" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+
+                <!-- Arrow marker -->
+                <marker id="aev-arrow-active" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#E2C780" fill-opacity="0.9" />
+                </marker>
+                <marker id="aev-arrow-dim" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#E2C780" fill-opacity="0.25" />
+                </marker>
+            </defs>
+
+            <!-- Background -->
+            <rect width="100%" height="100%" fill="url(#aev-bg)" />
+
+            <!-- ── Edges ───────────────────────────────────────────────── -->
+            @for (edge of edges(); track trackById($index, edge)) {
+            <g class="aev-edge">
+                <line [attr.x1]="edge.x1" [attr.y1]="edge.y1" [attr.x2]="edge.x2" [attr.y2]="edge.y2 - 8"
+                    [attr.stroke-opacity]="edge.active ? 0.8 : 0.2"
+                    [attr.stroke-dasharray]="edge.active ? '5 3' : '3 4'"
+                    [attr.marker-end]="edge.active ? 'url(#aev-arrow-active)' : 'url(#aev-arrow-dim)'"
+                    [attr.filter]="edge.active ? 'url(#aev-edge-glow)' : null" class="aev-edge__line"
+                    [class.aev-edge__line--active]="edge.active" />
+
+                @if (edge.label && edge.active) {
+                <rect [attr.x]="edge.x2 - 26" [attr.y]="(edge.y1 + edge.y2) / 2 - 8" width="52" height="16" rx="4"
+                    fill="rgba(14,11,3,0.85)" stroke="#E2C780" stroke-opacity="0.35" stroke-width="1" />
+                <text [attr.x]="edge.x2" [attr.y]="(edge.y1 + edge.y2) / 2 + 4.5" text-anchor="middle" font-size="8"
+                    font-family="'Inter', sans-serif" font-weight="700" fill="#E2C780" fill-opacity="0.85"
+                    letter-spacing="0.06em">
+                    {{ edge.label }}
+                </text>
+                }
+            </g>
+            }
+
+            <!-- ── Nodes ──────────────────────────────────────────────── -->
+            @for (node of nodes(); track trackById($index, node)) {
+            <g class="aev-node" [class.aev-node--filled]="node.filled" [class.aev-node--unfilled]="!node.filled"
+                [class.aev-node--pulse]="node.filled" [attr.data-type]="node.type"
+                [attr.key]="node.id + '-' + pulseKey()">
+
+                <!-- Drop shadow -->
+                <rect [attr.x]="cx - nodeW / 2 + 2" [attr.y]="node.y + 4" [attr.width]="nodeW" [attr.height]="nodeH"
+                    rx="8" fill="rgba(0,0,0,0.45)" class="aev-node__shadow" />
+
+                <!-- Body fill -->
+                <rect [attr.x]="cx - nodeW / 2" [attr.y]="node.y" [attr.width]="nodeW" [attr.height]="nodeH" rx="8"
+                    [attr.fill]="'url(#aev-' + node.type + '-grad)'"
+                    [attr.filter]="node.filled ? 'url(#aev-node-glow)' : null" class="aev-node__body" />
+
+                <!-- Border ring -->
+                <rect [attr.x]="cx - nodeW / 2" [attr.y]="node.y" [attr.width]="nodeW" [attr.height]="nodeH" rx="8"
+                    fill="none" class="aev-node__border" />
+
+                <!-- Left accent bar -->
+                <rect [attr.x]="cx - nodeW / 2" [attr.y]="node.y + 12" width="3" [attr.height]="nodeH - 24" rx="2"
+                    class="aev-node__accent" />
+
+                <!-- Title -->
+                <text [attr.x]="cx - nodeW / 2 + 18" [attr.y]="node.y + 23" font-size="11"
+                    font-family="'Montserrat', sans-serif" font-weight="700" class="aev-node__title"
+                    letter-spacing="0.015em">
+                    {{ node.title }}
+                </text>
+
+                <!-- Subtitle -->
+                <text [attr.x]="cx - nodeW / 2 + 18" [attr.y]="node.y + 39" font-size="9"
+                    font-family="'Inter', sans-serif" font-weight="500" class="aev-node__subtitle"
+                    letter-spacing="0.01em">
+                    {{ node.subtitle }}
+                </text>
+
+                <!-- Filled status dot -->
+                <circle [attr.cx]="cx + nodeW / 2 - 14" [attr.cy]="node.y + nodeH / 2" r="4"
+                    class="aev-node__status-dot" />
+
+            </g>
+            }
+
+        </svg>
+    </div>
+
+    <!-- ── Modifier Summary Footer ───────────────────────────────── -->
+    <div class="aev-summary">
+        <div class="aev-summary__item">
+            <span class="aev-summary__label">Net Adjustment</span>
+            <span class="aev-modifier" [ngClass]="modifierClass">{{ modifierDisplay }}</span>
+        </div>
+        <div class="aev-summary__item">
+            <span class="aev-summary__label">Priority</span>
+            <span class="aev-priority">
+                {{ liveValue()?.priority != null ? 'P' + liveValue()!.priority : '–' }}
+            </span>
+        </div>
+        <div class="aev-summary__item">
+            <span class="aev-summary__label">Mode</span>
+            <span class="aev-mode-chip" [class.aev-mode-chip--edit]="isEditMode()"
+                [class.aev-mode-chip--create]="!isEditMode()">
+                {{ isEditMode() ? 'Edit #' + ruleId() : 'New Rule' }}
+            </span>
+        </div>
+    </div>
+
+</div>

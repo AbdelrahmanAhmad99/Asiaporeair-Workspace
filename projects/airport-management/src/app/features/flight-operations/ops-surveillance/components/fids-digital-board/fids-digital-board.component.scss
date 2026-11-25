@@ -1,0 +1,528 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // Shared grid — matches both .fdb-header and .fdb-row / .fdb-shimmer-row
+ @mixin board-grid {
+     display: grid;
+     grid-template-columns:
+         clamp(80px, 9%, 120px) // time
+         clamp(90px, 10%, 130px) // flight no
+         1fr // destination — expands
+         clamp(120px, 15%, 200px) // airline
+         clamp(70px, 7%, 90px) // gate
+         clamp(110px, 13%, 160px); // status
+     align-items: center;
+ }
+
+ // ============================================================================
+ // 1. Board canvas — Deep Midnight per spec
+ // ============================================================================
+ .fdb-board {
+     background: $midnight;
+     border-radius: 0; // full-bleed to fill the page body
+     min-height: 600px;
+     display: flex;
+     flex-direction: column;
+     font-variant-numeric: tabular-nums;
+     animation: fdb-board-enter 400ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. Column Headers — Midnight Sapphire (darker) + Champagne Gold
+ // ============================================================================
+ .fdb-header {
+     @include board-grid;
+     background: darken($midnight, 3%);
+     border-bottom: 1px solid rgba($gold, 0.22);
+     border-top: 1px solid rgba($gold, 0.1);
+     padding: 0 clamp(1rem, 2vw, 2rem);
+     flex-shrink: 0;
+ }
+
+ .fdb-hcol {
+     padding: clamp(0.6rem, 1.2vh, 0.875rem) 0.5rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(9px, 0.85vw, 12px);
+     font-weight: 700;
+     letter-spacing: 0.14em;
+     text-transform: uppercase;
+     color: rgba($champagne, 0.55);
+
+     &--status {
+         text-align: center;
+     }
+ }
+
+ // ============================================================================
+ // 3. Rows list
+ // ============================================================================
+ .fdb-rows {
+     display: flex;
+     flex-direction: column;
+     flex: 1;
+     overflow-y: auto;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.15);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 4. Individual flight row — split-flap entry animation per spec
+ // ============================================================================
+ .fdb-row {
+     @include board-grid;
+     padding: 0 clamp(1rem, 2vw, 2rem);
+     position: relative;
+     animation: fdb-row-enter 320ms $luxury both;
+
+     // Stagger each row's entry — applied via nth-child in the @for loop
+     // (Angular 17+ @for renders DOM order so stagger works via animation-delay)
+     @for $i from 1 through 40 {
+         &:nth-child(#{$i}) {
+             animation-delay: #{$i * 25}ms;
+         }
+     }
+
+     min-height: clamp(48px, 7vh, 72px);
+     border-bottom: 1px solid rgba($champagne, 0.04);
+     transition: background-color 200ms $ease;
+
+     &--even {
+         background: rgba(255, 255, 255, 0.025);
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.04) !important;
+     }
+
+     // Cancelled — dim everything
+     &--cancelled {
+         opacity: 0.42;
+     }
+
+     // Boarding — pulsing gold background glow
+     &--boarding {
+         background: rgba($gold, 0.06) !important;
+         animation: fdb-row-enter 320ms $luxury, fdb-boarding-glow 2.2s ease-in-out infinite;
+     }
+
+     // Gold gradient separator per spec
+     &__separator {
+         position: absolute;
+         top: 0;
+         left: clamp(1rem, 2vw, 2rem);
+         right: clamp(1rem, 2vw, 2rem);
+         height: 1px;
+         background: linear-gradient(90deg,
+                 transparent 0%,
+                 rgba($champagne, 0.12) 30%,
+                 rgba($gold, 0.2) 50%,
+                 rgba($champagne, 0.12) 70%,
+                 transparent 100%);
+         pointer-events: none;
+     }
+ }
+
+ // ============================================================================
+ // 5. Columns
+ // ============================================================================
+ .fdb-col {
+     padding: clamp(0.5rem, 1.2vh, 0.75rem) 0.5rem;
+
+     &--time {
+         display: flex;
+         flex-direction: column;
+         gap: 0.15rem;
+     }
+
+     // &--flight {}
+
+     // &--dest {}
+
+     // &--airline {}
+
+     &--gate {
+         text-align: center;
+     }
+
+     &--status {
+         text-align: center;
+     }
+ }
+
+ // ============================================================================
+ // 6. Cell typography — monospaced for numbers per spec
+ // ============================================================================
+
+ // Scheduled time — Courier New (monospaced) for alignment per spec
+ .fdb-time {
+     font-family: 'Courier New', monospace;
+     font-size: clamp(1.125rem, 2.2vw, 1.75rem);
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     color: rgba($champagne, 0.85);
+     line-height: 1;
+ }
+
+ .fdb-est-time {
+     font-family: 'Courier New', monospace;
+     font-size: clamp(0.75rem, 1.2vw, 1rem);
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     color: $amber;
+     line-height: 1;
+ }
+
+ .fdb-delay-badge {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.1rem 0.3rem;
+     border-radius: 3px;
+     background: rgba($ruby, 0.2);
+     border: 1px solid rgba($ruby, 0.35);
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(8px, 0.8vw, 10px);
+     font-weight: 700;
+     letter-spacing: 0.06em;
+     color: lighten($ruby, 12%);
+     width: fit-content;
+ }
+
+ // Flight number — Courier New monospaced for precise alignment per spec
+ .fdb-flight-no {
+     font-family: 'Courier New', monospace;
+     font-size: clamp(1rem, 2vw, 1.5rem);
+     font-weight: 700;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: $gold;
+     text-shadow: 0 0 12px rgba($gold, 0.25);
+ }
+
+ .fdb-dest {
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(0.9375rem, 1.8vw, 1.375rem);
+     font-weight: 600;
+     color: rgba($champagne, 0.9);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+ }
+
+ .fdb-airline {
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: clamp(0.75rem, 1.3vw, 1.0625rem);
+     font-weight: 500;
+     color: rgba($champagne, 0.55);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+ }
+
+ .fdb-gate {
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(1rem, 1.9vw, 1.4375rem);
+     font-weight: 900;
+     letter-spacing: 0.06em;
+     color: $champagne;
+     text-align: center;
+     display: block;
+
+     &--tbd {
+         color: rgba($champagne, 0.25);
+         font-weight: 600;
+         letter-spacing: 0.14em;
+         font-size: clamp(0.7rem, 1.2vw, 1rem);
+     }
+ }
+
+ // ============================================================================
+ // 7. Status pill — full colour vocabulary per spec
+ // ============================================================================
+ .fdb-status {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     padding: clamp(0.3rem, 0.6vh, 0.45rem) clamp(0.6rem, 1.2vw, 0.875rem);
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: clamp(0.7rem, 1.1vw, 0.9375rem);
+     font-weight: 700;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     // ── Boarding — Flashing Royal Gold per spec ─────────────────────────────
+     &--boarding {
+         background: rgba($gold, 0.18);
+         border: 1px solid rgba($gold, 0.45);
+         color: $gold;
+         text-shadow: 0 0 10px rgba($gold, 0.35);
+         box-shadow: 0 0 12px rgba($gold, 0.2);
+     }
+
+     // Flashing animation for BOARDING status
+     &--flashing {
+         animation: fdb-boarding-flash 1.4s ease-in-out infinite;
+     }
+
+     // ── On Time — Emerald Green per spec ────────────────────────────────────
+     &--ontime {
+         background: rgba($emerald, 0.18);
+         border: 1px solid rgba($emerald, 0.35);
+         color: #34d399;
+         box-shadow: 0 0 8px rgba(52, 211, 153, 0.15);
+     }
+
+     // ── Scheduled ─────────────────────────────────────────────────────────
+     &--scheduled {
+         background: rgba($amber, 0.12);
+         border: 1px solid rgba($amber, 0.25);
+         color: $amber;
+     }
+
+     // ── Delayed — Ruby Red per spec ─────────────────────────────────────────
+     &--delayed {
+         background: rgba($ruby, 0.18);
+         border: 1px solid rgba($ruby, 0.38);
+         color: lighten($ruby, 12%);
+         box-shadow: 0 0 10px rgba($ruby, 0.25);
+     }
+
+     // ── Departed / Arrived — muted champagne ────────────────────────────────
+     &--departed,
+     &--arrived {
+         background: rgba($champagne, 0.07);
+         border: 1px solid rgba($champagne, 0.15);
+         color: rgba($champagne, 0.45);
+     }
+
+     // ── Cancelled — dimmed ruby ─────────────────────────────────────────────
+     &--cancelled {
+         background: rgba($ruby, 0.08);
+         border: 1px solid rgba($ruby, 0.18);
+         color: rgba($ruby, 0.55);
+     }
+
+     // ── Diverted ────────────────────────────────────────────────────────────
+     &--diverted {
+         background: rgba($amber, 0.15);
+         border: 1px solid rgba($amber, 0.3);
+         color: $amber;
+     }
+
+     &--unknown {
+         background: rgba(108, 117, 125, 0.12);
+         border: 1px solid rgba(108, 117, 125, 0.2);
+         color: rgba($champagne, 0.3);
+     }
+ }
+
+ // ============================================================================
+ // 8. Empty state
+ // ============================================================================
+ .fdb-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     flex: 1;
+     gap: 1.25rem;
+     padding: 4rem 2rem;
+
+     &__dash-frame {
+         padding: 1.25rem 2rem;
+         border: 1px dashed rgba($champagne, 0.2);
+         border-radius: 8px;
+         font-family: 'Courier New', monospace;
+         font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+         letter-spacing: 0.1em;
+         color: rgba($champagne, 0.2);
+         text-align: center;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+     }
+
+     &__sub {
+         font-family: 'Montserrat', sans-serif;
+         font-size: clamp(0.75rem, 1.2vw, 0.9375rem);
+         color: rgba($champagne, 0.3);
+         margin: 0;
+         text-align: center;
+         max-width: 36rem;
+         line-height: 1.65;
+     }
+ }
+
+ // ============================================================================
+ // 9. Shimmer rows
+ // ============================================================================
+ .fdb-shimmer-list {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .fdb-shimmer-row {
+     @include board-grid;
+     padding: 0.875rem clamp(1rem, 2vw, 2rem);
+     border-bottom: 1px solid rgba($champagne, 0.04);
+ }
+
+ .fdb-sk {
+     border-radius: 4px;
+     background: rgba($champagne, 0.06);
+     animation: fdb-pulse 1.5s ease-in-out infinite;
+
+     &--time {
+         height: 1.625rem;
+         width: 72%;
+     }
+
+     &--flight {
+         height: 1.25rem;
+         width: 80%;
+     }
+
+     &--dest {
+         height: 1.125rem;
+         width: 65%;
+     }
+
+     &--airline {
+         height: 0.875rem;
+         width: 70%;
+     }
+
+     &--gate {
+         height: 1.25rem;
+         width: 60%;
+         margin: 0 auto;
+     }
+
+     &--status {
+         height: 1.5rem;
+         width: 75%;
+         margin: 0 auto;
+         border-radius: 6px;
+     }
+ }
+
+ // ============================================================================
+ // 10. Footer
+ // ============================================================================
+ .fdb-footer {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 0.5rem clamp(1rem, 2vw, 2rem);
+     border-top: 1px solid rgba($champagne, 0.08);
+     background: rgba(0, 0, 0, 0.08);
+     flex-shrink: 0;
+
+     &__count {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: rgba($champagne, 0.35);
+         letter-spacing: 0.04em;
+     }
+
+     &__note {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: rgba($champagne, 0.2);
+         letter-spacing: 0.06em;
+     }
+ }
+
+ // ============================================================================
+ // 11. Keyframes — "split-flap" digital flip per spec
+ // ============================================================================
+
+ // Board-level entrance
+ @keyframes fdb-board-enter {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ // Row "split-flap": each row slides down from half-height + slight blur
+ // Simulates the mechanical flip of an airport split-flap display
+ @keyframes fdb-row-enter {
+     from {
+         opacity: 0;
+         transform: translateY(-50%) scaleY(0.3);
+         filter: blur(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0) scaleY(1);
+         filter: blur(0);
+     }
+ }
+
+ // Boarding flash — Royal Gold per spec
+ @keyframes fdb-boarding-flash {
+
+     0%,
+     49% {
+         color: $gold;
+         text-shadow: 0 0 10px rgba($gold, 0.35);
+         border-color: rgba($gold, 0.45);
+         box-shadow: 0 0 12px rgba($gold, 0.2);
+     }
+
+     50%,
+     100% {
+         color: rgba($gold, 0.35);
+         text-shadow: none;
+         border-color: rgba($gold, 0.1);
+         box-shadow: none;
+     }
+ }
+
+ // Boarding row glow
+ @keyframes fdb-boarding-glow {
+
+     0%,
+     100% {
+         background: rgba($gold, 0.06) !important;
+     }
+
+     50% {
+         background: rgba($gold, 0.11) !important;
+     }
+ }
+
+ // Shimmer
+ @keyframes fdb-pulse {
+
+     0%,
+     100% {
+         opacity: 0.35;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }

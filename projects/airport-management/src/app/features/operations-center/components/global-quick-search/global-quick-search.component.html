@@ -1,0 +1,97 @@
+<div class="search" [class.is-open]="isOpen()">
+    <label class="search__label" [for]="inputId">Search operations</label>
+
+    <div class="field">
+        <svg class="icon field__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4.3-4.3" />
+        </svg>
+
+        <input #searchInput class="field__input" type="text" role="combobox" autocomplete="off"
+            autocapitalize="characters" spellcheck="false" aria-autocomplete="list"
+            aria-keyshortcuts="Control+K Meta+K /" [id]="inputId" [placeholder]="placeholder()" [value]="query()"
+            [attr.aria-expanded]="isOpen() && hasSuggestions()" [attr.aria-controls]="listboxId"
+            [attr.aria-activedescendant]="activeDescendant()" [attr.aria-describedby]="hintsId" (focus)="open()"
+            (input)="onInput($event)" (keydown)="onInputKeydown($event)" />
+
+        @if (query().length > 0) {
+        <button type="button" class="field__clear" aria-label="Clear search" (click)="clearAndRefocus()">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+        </button>
+        } @else {
+        <kbd class="field__shortcut" aria-hidden="true">{{ shortcutLabel }}</kbd>
+        }
+    </div>
+
+    @if (isOpen()) {
+    <div class="panel">
+        @if (hasSuggestions()) {
+        <ul class="options" role="listbox" aria-label="Search suggestions" [id]="listboxId">
+            @for (suggestion of suggestions(); track suggestion.id; let i = $index) {
+            <li class="option" role="option" [id]="optionId(i)" [class.is-active]="i === highlightedIndex()"
+                [attr.aria-selected]="i === highlightedIndex()" (pointerdown)="$event.preventDefault()"
+                (pointerenter)="highlight(i)" (click)="select(suggestion)">
+                <svg class="icon option__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"
+                    focusable="false">
+                    @switch (suggestion.kind) {
+                    @case ('FLIGHT_NUMBER') {
+                    <path
+                        d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    }
+                    @case ('TAIL_NUMBER') {
+                    <path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18" />
+                    }
+                    @case ('PNR') {
+                    <path
+                        d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                    <path d="M13 5v2M13 17v2M13 11v2" />
+                    }
+                    @case ('CREW_ID') {
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                    }
+                    }
+                </svg>
+
+                <span class="option__text">
+                    <span class="option__title">{{ suggestion.title }}</span>
+                    <span class="option__destination">Open in {{ suggestion.destinationLabel }}</span>
+                </span>
+
+                @if (suggestion.isLive) {
+                <span class="option__live">
+                    <span class="option__live-dot" aria-hidden="true"></span>
+                    <span class="option__live-text">Airborne</span>
+                    <span class="option__detail">{{ suggestion.detail }}</span>
+                </span>
+                }
+            </li>
+            }
+        </ul>
+        }
+
+        @if (showHints()) {
+        <div class="hints">
+            <p class="hints__title">Recognised formats</p>
+            <ul class="hints__list">
+                @for (hint of formatHints; track hint.kind) {
+                <li class="hints__item">
+                    <span class="hints__entity">{{ hint.entityLabel }}</span>
+                    <span class="hints__example">{{ hint.example }}</span>
+                    <span class="hints__destination">{{ hint.destinationLabel }}</span>
+                </li>
+                }
+            </ul>
+        </div>
+        }
+    </div>
+    }
+
+    <p class="search__label" [id]="hintsId">
+        Type a flight number, aircraft tail, PNR or crew ID. Use arrow keys to choose and Enter to open. Press Control K
+        or
+        slash to focus search.
+    </p>
+</div>

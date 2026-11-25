@@ -1,0 +1,241 @@
+// ============================================================================
+// tier-status-card.component.scss
+// Asiaporeair | Luxury Tier Status Card — "Luxury Midnight" Design System
+// ============================================================================
+
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+$midnight-sapphire : #051937;
+$royal-gold        : #B68F24;
+$champagne-gold    : #E2C780;
+$off-white         : #F8F9FA;
+$charcoal-navy     : #101056;
+
+// ── Tier Palette Map ──────────────────────────────────────────────────────────
+$tier-configs: (
+  member   : (bg-start: #1a2744, bg-end: #0d1a32, accent: #8fa3cc, icon-color: #8fa3cc),
+  silver   : (bg-start: #2a3550, bg-end: #1a2440, accent: #c0c8d8, icon-color: #c0c8d8),
+  gold     : (bg-start: #2c1e00, bg-end: #1a1200, accent: $royal-gold, icon-color: $champagne-gold),
+  platinum : (bg-start: #0e2030, bg-end: #060f1e, accent: $champagne-gold, icon-color: #e8f0ff),
+);
+
+// ── Shimmer Keyframes ─────────────────────────────────────────────────────────
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Base Card ─────────────────────────────────────────────────────────────────
+.tier-card {
+  position        : relative;
+  border-radius   : 12px;
+  padding         : 28px 28px 24px;
+  overflow        : hidden;
+  background      : linear-gradient(145deg, #1a2744 0%, #0d1a32 100%);
+  box-shadow      : 0 12px 40px rgba(5, 25, 55, 0.22),
+                    0 1px 0 rgba(255,255,255,0.04) inset;
+  animation       : fadeSlideIn 0.45s ease both;
+
+  // Subtle top accent line
+  &::before {
+    content    : '';
+    position   : absolute;
+    top        : 0; left : 0; right: 0;
+    height     : 2px;
+    background : linear-gradient(90deg, transparent, $royal-gold, transparent);
+    opacity    : 0.7;
+  }
+
+  // ── Tier Variants ──────────────────────────────────────────────────────────
+  @each $tier, $cfg in $tier-configs {
+    &.tier--#{$tier} {
+      background: linear-gradient(
+        145deg,
+        map-get($cfg, bg-start) 0%,
+        map-get($cfg, bg-end)   100%
+      );
+
+      .tier-card__icon {
+        color      : map-get($cfg, icon-color);
+        text-shadow: 0 0 18px map-get($cfg, accent);
+      }
+
+      .tier-card__tier-name {
+        background         : linear-gradient(135deg, map-get($cfg, accent), lighten(map-get($cfg, accent), 15%));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip    : text;
+      }
+
+      &::before {
+        background: linear-gradient(90deg, transparent, map-get($cfg, accent), transparent);
+      }
+    }
+  }
+}
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+.tier-card__skeleton {
+  display        : flex;
+  flex-direction : column;
+  gap            : 14px;
+  padding        : 4px 0;
+}
+
+%shimmer-base {
+  border-radius: 6px;
+  background   : linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 400px 100%;
+  animation      : shimmer 1.4s infinite linear;
+}
+
+.skeleton-line {
+  @extend %shimmer-base;
+  height: 14px;
+
+  &--wide   { width: 100%; }
+  &--medium { width: 60%; }
+  &--narrow { width: 35%; }
+}
+
+.skeleton-divider {
+  @extend %shimmer-base;
+  height : 1px;
+  width  : 100%;
+  opacity: 0.4;
+}
+
+// ── Header ─────────────────────────────────────────────────────────────────────
+.tier-card__header {
+  display        : flex;
+  align-items    : flex-start;
+  gap            : 16px;
+  margin-bottom  : 20px;
+}
+
+.tier-card__icon {
+  font-size   : 2.4rem;
+  line-height : 1;
+  flex-shrink : 0;
+  filter      : drop-shadow(0 2px 8px rgba(182,143,36,0.4));
+}
+
+.tier-card__meta {
+  flex: 1;
+}
+
+.tier-card__tier-name {
+  font-family    : 'Montserrat', sans-serif;
+  font-size      : 1.75rem;
+  font-weight    : 700;
+  letter-spacing : -0.02em;
+  line-height    : 1.1;
+  margin         : 0 0 4px;
+  // Fallback before tier variant sets gradient
+  color          : $champagne-gold;
+}
+
+.tier-card__label {
+  font-size   : 0.75rem;
+  color       : rgba(255,255,255,0.5);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin      : 0;
+}
+
+// ── Badge ─────────────────────────────────────────────────────────────────────
+.tier-card__badge {
+  font-size     : 0.68rem;
+  font-weight   : 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius : 4px;
+  padding       : 3px 10px;
+  white-space   : nowrap;
+  flex-shrink   : 0;
+
+  &--active {
+    background: rgba(182, 143, 36, 0.18);
+    color     : $champagne-gold;
+    border    : 1px solid rgba(182, 143, 36, 0.35);
+  }
+
+  &--inactive {
+    background: rgba(255,255,255,0.06);
+    color     : rgba(255,255,255,0.35);
+    border    : 1px solid rgba(255,255,255,0.1);
+  }
+}
+
+// ── Card Number ───────────────────────────────────────────────────────────────
+.tier-card__card-number {
+  display        : flex;
+  flex-direction : column;
+  gap            : 4px;
+  margin-bottom  : 20px;
+}
+
+.tier-card__card-label {
+  font-size     : 0.68rem;
+  color         : rgba(255,255,255,0.38);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tier-card__number {
+  font-family   : 'Courier New', monospace;
+  font-size     : 0.98rem;
+  color         : rgba(255,255,255,0.75);
+  letter-spacing: 0.12em;
+}
+
+// ── Divider ───────────────────────────────────────────────────────────────────
+.tier-card__divider {
+  border       : none;
+  border-top   : 1px solid rgba(255,255,255,0.08);
+  margin       : 0 0 20px;
+}
+
+// ── Benefits ──────────────────────────────────────────────────────────────────
+.tier-card__benefits-title {
+  font-family   : 'Montserrat', sans-serif;
+  font-size     : 0.7rem;
+  font-weight   : 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color         : rgba(226, 199, 128, 0.6);
+  margin        : 0 0 12px;
+}
+
+.tier-card__benefits-list {
+  list-style    : none;
+  margin        : 0;
+  padding       : 0;
+  display       : flex;
+  flex-direction: column;
+  gap           : 10px;
+}
+
+.tier-card__benefit-item {
+  display    : flex;
+  align-items: flex-start;
+  gap        : 10px;
+  font-size  : 0.84rem;
+  color      : rgba(255, 255, 255, 0.72);
+  line-height: 1.4;
+
+  .benefit-icon {
+    color      : $royal-gold;
+    flex-shrink: 0;
+    margin-top : 1px;
+  }
+}

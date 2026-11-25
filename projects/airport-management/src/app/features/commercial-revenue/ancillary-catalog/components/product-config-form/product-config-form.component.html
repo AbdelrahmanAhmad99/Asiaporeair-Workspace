@@ -1,0 +1,113 @@
+<div class="pcf-card">
+
+    <!-- ── Card Header ────────────────────────────────────────────── -->
+    <div class="pcf-card-header">
+        <svg class="pcf-card-header__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.04l3.291.821M9.74 7.92l5.108-.233m-5.108.233a2.548 2.548 0 1 0-3.586-3.586L4.5 4.5" />
+        </svg>
+        <div>
+            <h3 class="pcf-card-header__title">Product Identity</h3>
+            <p class="pcf-card-header__sub">Name, classification, and internal reference</p>
+        </div>
+    </div>
+
+    <!-- ── Skeleton Loading ──────────────────────────────────────── -->
+    @if (isLoading()) {
+    <div class="pcf-skeleton-wrap" aria-hidden="true">
+        @for (i of skeletonFields; track i) {
+        <div class="pcf-sk-field">
+            <div class="pcf-sk pcf-sk--label"></div>
+            <div class="pcf-sk pcf-sk--input"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Form Body ─────────────────────────────────────────────── -->
+    @if (!isLoading()) {
+    <form class="pcf-form" [formGroup]="form" novalidate>
+
+        <!-- Product Name -->
+        <div class="pcf-field">
+            <label class="pcf-label" for="pcf-name">
+                Product Name <span class="pcf-label__req" aria-label="required">*</span>
+            </label>
+            <input id="pcf-name" class="pcf-input" [class.pcf-input--error]="isInvalid('name')" type="text"
+                formControlName="name" placeholder="e.g. Fast Track Security, Lounge Access — Star Class"
+                autocomplete="off" spellcheck="false" aria-describedby="pcf-name-err" />
+            @if (isInvalid('name')) {
+            <p class="pcf-error" id="pcf-name-err" role="alert">{{ getError('name') }}</p>
+            }
+        </div>
+
+        <!-- SKU + Category — side by side -->
+        <div class="pcf-row">
+
+            <!-- SKU (UI-only reference code) -->
+            <div class="pcf-field">
+                <label class="pcf-label" for="pcf-sku">
+                    SKU
+                    <span class="pcf-label__hint" title="Internal reference only — not sent to the pricing engine">
+                        (internal ref.)
+                    </span>
+                </label>
+                <input id="pcf-sku" class="pcf-input pcf-input--mono" [class.pcf-input--error]="isInvalid('sku')"
+                    type="text" formControlName="sku" placeholder="ANC-LOUNGE-001" style="text-transform:uppercase"
+                    autocomplete="off" spellcheck="false" aria-describedby="pcf-sku-err" />
+                @if (isInvalid('sku')) {
+                <p class="pcf-error" id="pcf-sku-err" role="alert">{{ getError('sku') }}</p>
+                }
+            </div>
+
+            <!-- Category -->
+            <div class="pcf-field">
+                <label class="pcf-label" for="pcf-category">
+                    Category <span class="pcf-label__req" aria-label="required">*</span>
+                </label>
+                <div class="pcf-select-wrap">
+                    <select id="pcf-category" class="pcf-select" [class.pcf-select--error]="isInvalid('category')"
+                        formControlName="category" aria-describedby="pcf-category-err">
+                        <option value="" disabled selected hidden>Select category…</option>
+                        @for (cat of categories; track cat.value) {
+                        <option [value]="cat.value">{{ cat.label }}</option>
+                        }
+                    </select>
+                    <svg class="pcf-select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                    </svg>
+                </div>
+                @if (isInvalid('category')) {
+                <p class="pcf-error" id="pcf-category-err" role="alert">{{ getError('category') }}</p>
+                }
+            </div>
+
+        </div>
+
+        <!-- Description -->
+        <div class="pcf-field">
+            <div class="pcf-label-row">
+                <label class="pcf-label" for="pcf-description">Description</label>
+                <span class="pcf-char-count" [class.pcf-char-count--warn]="descriptionLength > 360">
+                    {{ descriptionLength }} / 400
+                </span>
+            </div>
+            <textarea id="pcf-description" class="pcf-textarea" [class.pcf-input--error]="isInvalid('description')"
+                formControlName="description" rows="4"
+                placeholder="Describe this product as it should appear to passengers — tone, inclusions, restrictions…"
+                spellcheck="true" aria-describedby="pcf-description-err"></textarea>
+            @if (isInvalid('description')) {
+            <p class="pcf-error" id="pcf-description-err" role="alert">{{ getError('description') }}</p>
+            }
+            <p class="pcf-hint">
+                Internal reference field — used for the "Preview Live" passenger view. Not yet persisted to the catalog
+                API.
+            </p>
+        </div>
+
+    </form>
+    }
+
+</div>

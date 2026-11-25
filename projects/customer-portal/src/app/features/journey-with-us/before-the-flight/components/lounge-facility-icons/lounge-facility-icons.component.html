@@ -1,0 +1,17 @@
+<div class="lfi" role="list" aria-label="Lounge facilities">
+    @for (facility of facilities; track facility.id; let i = $index) {
+    <div class="lfi__item" role="listitem" [style.--delay]="(i * 60) + 'ms'">
+        <!-- Icon circle -->
+        <div class="lfi__icon-circle" aria-hidden="true">
+            <svg class="lfi__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="facility.iconPath" />
+            </svg>
+        </div>
+
+        <!-- Text -->
+        <h4 class="lfi__title">{{ facility.title }}</h4>
+        <p class="lfi__desc">{{ facility.description }}</p>
+    </div>
+    }
+</div>

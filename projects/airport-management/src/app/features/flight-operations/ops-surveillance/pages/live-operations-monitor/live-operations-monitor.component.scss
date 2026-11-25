@@ -1,0 +1,868 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page — Off-White workspace per spec
+ // ============================================================================
+ .lom-page {
+     min-height: 100%;
+     background: var(--aoms-bg-primary, $off-white);
+     display: flex;
+     flex-direction: column;
+     position: relative;
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Sticky Midnight Sapphire Header ("Digital Tower" branding)
+ // ============================================================================
+ .lom-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     padding: 0;
+     background: $midnight;
+     border-bottom: 1px solid rgba($champagne, 0.12);
+     box-shadow: 0 2px 18px rgba($midnight, 0.5);
+     flex-wrap: wrap;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0;
+         flex-shrink: 0;
+     }
+
+     &__right {
+         display: flex;
+         align-items: center;
+         gap: 0;
+         margin-left: auto;
+         flex-shrink: 0;
+     }
+ }
+
+ // Back button
+ .lom-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 3.5rem;
+     min-height: 4.5rem;
+     height: 100%;
+     border: none;
+     border-right: 1px solid rgba($champagne, 0.1);
+     background: transparent;
+     color: rgba($champagne, 0.45);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover {
+         background: rgba($champagne, 0.06);
+         color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     &__icon {
+         width: 1.25rem;
+         height: 1.25rem;
+         transition: transform 150ms $ease;
+     }
+
+     &:hover &__icon {
+         transform: translateX(-3px);
+     }
+ }
+
+ // Breadcrumb
+ .lom-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.875rem 1.25rem 0.2rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba($champagne, 0.35);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: rgba($champagne, 0.25);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: $gold;
+     }
+ }
+
+ .lom-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     color: $champagne;
+     margin: 0;
+     padding: 0 1.25rem 0.875rem;
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+
+     &__poll-dot {
+         display: inline-block;
+         width: 7px;
+         height: 7px;
+         border-radius: 50%;
+         background: #059669;
+         box-shadow: 0 0 6px rgba(5, 150, 105, 0.5);
+         animation: lom-poll-blink 2s ease-in-out infinite;
+         flex-shrink: 0;
+     }
+ }
+
+ // Status badge strip
+ .lom-status-strip {
+     display: flex;
+     align-items: center;
+     gap: 0;
+     flex: 1;
+     padding: 0 0.5rem;
+     flex-wrap: wrap;
+     row-gap: 0.25rem;
+     align-self: stretch;
+     padding-top: 0.75rem;
+ }
+
+ .lom-badge {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     padding: 0.4rem 0.875rem;
+     border-right: 1px solid rgba($champagne, 0.08);
+
+     &__n {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 1.375rem;
+         font-weight: 900;
+         letter-spacing: -0.03em;
+         line-height: 1;
+         margin-bottom: 0.15rem;
+     }
+
+     &__l {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 8.5px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.35);
+     }
+
+     &--scheduled .lom-badge__n {
+         color: $amber;
+     }
+
+     &--delayed .lom-badge__n {
+         color: lighten($ruby, 10%);
+     }
+
+     &--boarding .lom-badge__n {
+         color: #60a5fa;
+     }
+
+     &--inflight .lom-badge__n {
+         color: #34d399;
+     }
+
+     &--critical {
+         .lom-badge__n {
+             color: $ruby;
+         }
+
+         .lom-badge__l {
+             color: $ruby;
+         }
+
+         animation: lom-critical-pulse 1.8s ease-in-out infinite;
+     }
+ }
+
+ // Last-updated ticker — Champagne Gold per spec
+ .lom-ticker {
+     display: flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0 1rem;
+     min-height: 4.5rem;
+     border-left: 1px solid rgba($champagne, 0.08);
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: rgba($champagne, 0.35);
+         flex-shrink: 0;
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: rgba($champagne, 0.3);
+     }
+
+     &__time {
+         font-family: 'Courier New', monospace;
+         font-size: 12px;
+         font-weight: 700;
+         color: $champagne;
+         letter-spacing: 0.04em;
+         text-shadow: 0 0 8px rgba($champagne, 0.25);
+     }
+ }
+
+ .lom-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     height: 100%;
+     min-height: 4.5rem;
+     padding: 0 1.25rem;
+     border: none;
+     border-left: 1px solid rgba($champagne, 0.08);
+     background: transparent;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11.5px;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: rgba($champagne, 0.65);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &--fids {
+         color: $gold;
+         border-left: 1px solid rgba($gold, 0.15);
+         background: rgba($gold, 0.03);
+
+         svg {
+             width: 1.125rem;
+             height: 1.125rem;
+             color: $gold;
+         }
+
+         &:hover {
+             background: rgba($gold, 0.08);
+             color: lighten($gold, 15%);
+
+             svg {
+                 color: lighten($gold, 15%);
+             }
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+ }
+
+ .lom-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3.5rem;
+     min-height: 4.5rem;
+     height: 100%;
+     border: none;
+     border-left: 1px solid rgba($champagne, 0.08);
+     background: transparent;
+     color: rgba($champagne, 0.4);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         background: rgba($champagne, 0.06);
+         color: $champagne;
+     }
+
+     &:disabled {
+         opacity: 0.3;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+
+         &--spin {
+             animation: lom-spin 0.85s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .lom-body {
+     padding: 1.25rem 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     flex: 1;
+ }
+
+ // ============================================================================
+ // 4. Error Banner
+ // ============================================================================
+ .lom-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 0.875rem 1.125rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.22);
+     border-left: 4px solid $ruby;
+     animation: lom-fade-in 200ms $ease both;
+     flex-wrap: wrap;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 6px;
+         background: rgba($ruby, 0.12);
+         border: 1px solid rgba($ruby, 0.22);
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+             color: $ruby;
+         }
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.2rem;
+         flex: 1;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 700;
+         color: $ruby;
+     }
+
+     &__msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: rgba($ruby, 0.75);
+         line-height: 1.5;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         color: rgba($ruby, 0.45);
+         border-radius: 3px;
+         flex-shrink: 0;
+         transition: color 150ms $ease;
+
+         svg {
+             width: 0.7rem;
+             height: 0.7rem;
+         }
+
+         &:hover {
+             color: $ruby;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Filter bar
+ // ============================================================================
+ .lom-filter-bar {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.75rem 1rem;
+     border-radius: 10px;
+     background: rgba($midnight, 0.05);
+     border: 1px solid rgba($champagne, 0.15);
+     flex-wrap: wrap;
+     row-gap: 0.5rem;
+ }
+
+ .lom-filter-group {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+ }
+
+ .lom-filter-group--date {
+     .lom-filter-sep-arrow {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: rgba($champagne, 0.3);
+         flex-shrink: 0;
+     }
+ }
+
+ .lom-filter-input {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     height: 2.25rem;
+     border-radius: 6px;
+     border: 1px solid rgba($charcoal, 0.13);
+     background: rgba(255, 255, 255, 0.9);
+     padding: 0 0.75rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 500;
+     color: $charcoal;
+     transition: border-color 180ms $ease, box-shadow 180ms $ease;
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+     }
+
+     &:focus {
+         border-color: $champagne;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.13);
+     }
+
+     &--date {
+         cursor: pointer;
+         font-family: 'Courier New', monospace;
+         font-size: 11px;
+         width: 9.5rem;
+
+         &::-webkit-calendar-picker-indicator {
+             opacity: 0.4;
+             cursor: pointer;
+         }
+     }
+
+     &--flight {
+         width: 7rem;
+         text-transform: uppercase;
+         font-weight: 700;
+         letter-spacing: 0.06em;
+     }
+
+     &--iata {
+         width: 5rem;
+         text-align: center;
+         text-transform: uppercase;
+         font-weight: 800;
+         letter-spacing: 0.12em;
+         font-size: 13px;
+         color: $gold;
+     }
+ }
+
+ .lom-status-select-wrap {
+     position: relative;
+ }
+
+ .lom-status-select {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     height: 2.25rem;
+     padding: 0 2rem 0 0.75rem;
+     border-radius: 6px;
+     border: 1px solid rgba($charcoal, 0.13);
+     background: rgba(255, 255, 255, 0.9);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 500;
+     color: $charcoal;
+     cursor: pointer;
+     transition: border-color 180ms $ease, box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $champagne;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.13);
+     }
+
+     option {
+         background: #ffffff;
+         color: $charcoal;
+     }
+ }
+
+ .lom-status-select-wrap__chev {
+     position: absolute;
+     right: 0.5rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 0.875rem;
+     height: 0.875rem;
+     pointer-events: none;
+     color: var(--aoms-text-muted);
+ }
+
+ .lom-filter-sep {
+     width: 1px;
+     height: 1.5rem;
+     background: rgba($champagne, 0.2);
+     flex-shrink: 0;
+ }
+
+ .lom-filter-grow {
+     flex: 1;
+     min-width: 0.5rem;
+ }
+
+ .lom-reset-btn {
+     background: transparent;
+     border: none;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 700;
+     color: rgba($champagne, 0.55);
+     cursor: pointer;
+     text-decoration: underline;
+     text-underline-offset: 2px;
+     text-decoration-color: rgba($champagne, 0.3);
+     border-radius: 3px;
+     transition: color 150ms $ease, text-decoration-color 150ms $ease;
+
+     &:hover {
+         color: $champagne;
+         text-decoration-color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 6. Pagination
+ // ============================================================================
+ .lom-pagination {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 1rem;
+ }
+
+ .lom-page-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         color: $gold;
+         background: rgba($champagne, 0.06);
+     }
+
+     &:disabled {
+         opacity: 0.35;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .lom-page-info {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+
+     strong {
+         font-weight: 700;
+         color: var(--aoms-text-secondary);
+     }
+ }
+
+ // ============================================================================
+ // 7. Toast Stack
+ // ============================================================================
+ .lom-toast-stack {
+     position: fixed;
+     bottom: 1.5rem;
+     right: 1.5rem;
+     z-index: 100;
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+     pointer-events: none;
+     width: min(360px, calc(100vw - 3rem));
+ }
+
+ .lom-toast {
+     pointer-events: auto;
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 10px;
+     box-shadow: 0 8px 32px rgba($midnight, 0.18);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     animation: lom-toast-in 260ms $luxury both;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 1.875rem;
+         height: 1.875rem;
+         border-radius: 6px;
+
+         svg {
+             width: 1.125rem;
+             height: 1.125rem;
+         }
+     }
+
+     &__msg {
+         flex: 1;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12.5px;
+         font-weight: 500;
+         line-height: 1.5;
+         margin: 0;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         border-radius: 3px;
+         opacity: 0.4;
+         flex-shrink: 0;
+         transition: opacity 150ms $ease;
+
+         svg {
+             width: 0.7rem;
+             height: 0.7rem;
+         }
+
+         &:hover {
+             opacity: 1;
+         }
+     }
+
+     &--success {
+         background: rgba(236, 253, 245, 0.97);
+         border: 1px solid rgba($emerald, 0.3);
+
+         .lom-toast__icon-wrap {
+             background: rgba($emerald, 0.12);
+             border: 1px solid rgba($emerald, 0.25);
+
+             svg {
+                 color: #059669;
+             }
+         }
+
+         .lom-toast__msg,
+         .lom-toast__dismiss {
+             color: #065F46;
+         }
+     }
+
+     &--error {
+         background: rgba(255, 241, 242, 0.97);
+         border: 1px solid rgba($ruby, 0.3);
+
+         .lom-toast__icon-wrap {
+             background: rgba($ruby, 0.1);
+             border: 1px solid rgba($ruby, 0.22);
+
+             svg {
+                 color: $ruby;
+             }
+         }
+
+         .lom-toast__msg,
+         .lom-toast__dismiss {
+             color: $ruby-deep;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes lom-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes lom-fade-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes lom-toast-in {
+     from {
+         opacity: 0;
+         transform: translateX(18px) scale(0.97);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0) scale(1);
+     }
+ }
+
+ @keyframes lom-poll-blink {
+
+     0%,
+     100% {
+         box-shadow: 0 0 4px rgba(5, 150, 105, .3);
+     }
+
+     50% {
+         box-shadow: 0 0 10px rgba(5, 150, 105, .7);
+     }
+ }
+
+ @keyframes lom-critical-pulse {
+
+     0%,
+     100% {
+         opacity: 1;
+     }
+
+     50% {
+         opacity: 0.6;
+     }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .lom-filter-bar {
+         background: rgba($midnight, 0.5);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .lom-filter-input,
+     .lom-status-select {
+         background: rgba(255, 255, 255, 0.07);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.88);
+
+         &:focus {
+             box-shadow: 0 0 0 3px rgba($champagne, 0.12);
+         }
+
+         option {
+             background: #0d1f35;
+             color: rgba(255, 255, 255, 0.88);
+         }
+     }
+
+     .lom-filter-input--iata {
+         color: $gold;
+     }
+
+     .lom-toast--success {
+         background: rgba(6, 78, 59, 0.92);
+
+         .lom-toast__msg,
+         .lom-toast__dismiss {
+             color: #6ee7b7;
+         }
+     }
+
+     .lom-toast--error {
+         background: rgba(127, 29, 29, 0.9);
+
+         .lom-toast__msg,
+         .lom-toast__dismiss {
+             color: #fca5a5;
+         }
+     }
+ }

@@ -1,0 +1,247 @@
+<div class="aac-page">
+
+    <!-- ══ Sticky Command Header ═════════════════════════════════════ -->
+    <header class="aac-header">
+
+        <!-- Left: back + breadcrumb + title -->
+        <div class="aac-header-left">
+            <button class="aac-back-btn" (click)="returnToDashboard()"
+                aria-label="Return to Partnership Directory Dashboard" title="Back to Dashboard">
+                <svg class="aac-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <nav class="aac-breadcrumb" aria-label="Breadcrumb">
+                    <span class="aac-breadcrumb__section">Network &amp; Infrastructure</span>
+                    <svg class="aac-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <button class="aac-breadcrumb__link" (click)="returnToDashboard()">
+                        Partner Directory
+                    </button>
+                    <svg class="aac-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="aac-breadcrumb__current">Audit Center</span>
+                </nav>
+                <h1 class="aac-title">Airline Partner Audit Center</h1>
+            </div>
+        </div>
+
+        <!-- Right: counters + actions -->
+        <div class="aac-header-right">
+
+            <!-- Stat pills -->
+            <div class="aac-stats">
+                <span class="aac-stat aac-stat--total">
+                    <strong>{{ totalCount() }}</strong> total
+                </span>
+                <span class="aac-stat aac-stat--suspended">
+                    <strong>{{ deactivatedCount() }}</strong> suspended
+                </span>
+            </div>
+
+            <!-- Quick Navigate — Champagne Gold ghost -->
+            <button class="aac-btn aac-btn--ghost" type="button" (click)="openNavPanel()"
+                title="Quick Navigate to Partner Profile"
+                aria-label="Navigate directly to a partner's profile by IATA code">
+                <svg class="aac-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5
+                   a7.5 7.5 0 1 1 15 0z" />
+                </svg>
+                Quick Navigate
+            </button>
+
+            <!-- Refresh icon -->
+            <button class="aac-icon-btn" (click)="refresh()" [disabled]="loading()" aria-label="Refresh audit log"
+                title="Refresh">
+                <svg class="aac-icon-btn__icon" [class.aac-icon-btn__icon--spin]="loading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Back to Dashboard — Sapphire outline -->
+            <button class="aac-btn aac-btn--outline" type="button" (click)="returnToDashboard()"
+                aria-label="Return to Partner Operations Dashboard">
+                <svg class="aac-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75
+                   12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875
+                   c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125
+                   1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75
+                   M8.25 21h8.25" />
+                </svg>
+                Back to Operations
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="aac-body">
+
+        <!-- ── Backend Error Banner ───────────────────────────────────── -->
+        @if (backendError()) {
+        <div class="aac-error-banner" role="alert">
+            <div class="aac-error-banner__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71
+                     c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5
+                     -3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <div class="aac-error-banner__body">
+                <strong class="aac-error-banner__title">Registry Operation Failed</strong>
+                <span class="aac-error-banner__msg">{{ backendError() }}</span>
+            </div>
+            <button class="aac-error-banner__dismiss" type="button" (click)="dismissBackendError()"
+                aria-label="Dismiss error">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- ── Controls: Filter Toggle + Instant Search ──────────────── -->
+        <div class="aac-controls">
+
+            <!-- Filter toggle group -->
+            <div class="aac-filter-group" role="group" aria-label="Audit view filter">
+                @for (opt of filterOptions; track opt.value) {
+                <button class="aac-filter-btn" type="button"
+                    [class.aac-filter-btn--active]="currentFilter() === opt.value" (click)="setFilter(opt.value)"
+                    [attr.aria-pressed]="currentFilter() === opt.value" [attr.aria-label]="'Filter: ' + opt.label">
+                    <svg class="aac-filter-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="opt.icon" />
+                    </svg>
+                    {{ opt.label }}
+                </button>
+                }
+            </div>
+
+            <!-- Instant search -->
+            <div class="aac-search">
+                <div class="aac-search__icon" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                    </svg>
+                </div>
+                <input class="aac-search__input" type="text" [value]="searchQuery()"
+                    (input)="onSearchInput($any($event.target).value)"
+                    placeholder="Search IATA, Name, Callsign, Region…" aria-label="Search within audit registry"
+                    autocomplete="off">
+                @if (searchQuery()) {
+                <button class="aac-search__clear" type="button" (click)="clearSearch()" aria-label="Clear search">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                }
+            </div>
+
+        </div>
+
+        <!-- ── Audit Grid ─────────────────────────────────────────────── -->
+        <aoms-airline-audit-list [records]="records()" [activeSet]="activeSet()" [loading]="loading()"
+            [restoringCode]="restoringCode()" [errorIataCode]="errorIataCode()" (onReactivate)="onReactivate($event)" />
+
+    </main>
+
+    <!-- ══ Quick Navigate Panel ════════════════════════════════════ -->
+    @if (navPanelOpen()) {
+    <div class="aac-nav-backdrop" (click)="closeNavPanel()" aria-hidden="true"></div>
+
+    <div class="aac-nav-panel" role="dialog" aria-modal="true" aria-label="Quick navigate to partner profile">
+
+        <header class="aac-nav-panel__header">
+            <div class="aac-nav-panel__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="aac-nav-panel__title">Quick Navigate</h2>
+                <p class="aac-nav-panel__subtitle">Enter IATA code to jump to partner profile</p>
+            </div>
+            <button class="aac-nav-panel__close" (click)="closeNavPanel()" aria-label="Close">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </header>
+
+        <div class="aac-nav-panel__body">
+            <div class="aac-nav-panel__field">
+                <input class="aac-nav-panel__input" type="text" [value]="navIataInput()"
+                    (input)="onNavInput($any($event.target).value)" (keydown.enter)="navigateToDetails()"
+                    placeholder="e.g. SQ, EK, QF" maxlength="2" autocomplete="off" aria-label="Enter IATA code"
+                    autofocus>
+                <label class="aac-nav-panel__label">IATA Code (2 letters)</label>
+            </div>
+
+            <div class="aac-nav-panel__actions">
+                <button class="aac-nav-panel-btn aac-nav-panel-btn--cancel" type="button" (click)="closeNavPanel()">
+                    Cancel
+                </button>
+                <button class="aac-nav-panel-btn aac-nav-panel-btn--go" type="button" (click)="navigateToDetails()"
+                    [disabled]="navIataInput().length < 2">
+                    Navigate
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+    </div>
+    }
+
+    <!-- ══ Toast Notification Stack ════════════════════════════════ -->
+    <div class="aac-toast-stack" role="region" aria-label="Notifications" aria-live="polite">
+        @for (toast of toasts(); track toast.id) {
+        <div class="aac-toast" [class.aac-toast--success]="toast.type === 'success'"
+            [class.aac-toast--error]="toast.type === 'error'" role="status">
+
+            <div class="aac-toast__icon-wrap" aria-hidden="true">
+                @if (toast.type === 'success') {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                }
+            </div>
+
+            <p class="aac-toast__msg">{{ toast.message }}</p>
+
+            <button class="aac-toast__dismiss" type="button" (click)="dismissToast(toast.id)"
+                aria-label="Dismiss notification">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+        </div>
+        }
+    </div>
+
+</div>

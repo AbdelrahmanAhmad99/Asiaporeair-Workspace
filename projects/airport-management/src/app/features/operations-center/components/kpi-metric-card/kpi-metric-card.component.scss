@@ -1,0 +1,401 @@
+@use '../kpi-tokens' as t;
+
+:host {
+    @include t.kb-tokens;
+    display: block;
+    height: 100%;
+    font-family: var(--kb-font);
+}
+
+.icon {
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25; // ultra-thin line art, ~1px at rendered size
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+// ── Card shell ───────────────────────────────────────────────────────────────
+.card {
+    display: block;
+    height: 100%;
+    color: var(--kb-text);
+    text-decoration: none;
+    background: var(--kb-card);
+    border: 1px solid var(--kb-champagne-hairline);
+    border-radius: var(--kb-radius-card);
+    box-shadow: var(--kb-shadow-rest);
+    transition:
+        transform 180ms ease-in-out,
+        box-shadow 180ms ease-in-out,
+        border-color 180ms ease-in-out;
+
+    // Per-tone colour drives the dot, its pulse and the status label.
+    --tone: var(--kb-text-muted);
+
+    &[data-tone='NOMINAL'] {
+        --tone: var(--kb-emerald);
+    }
+
+    &[data-tone='WATCH'] {
+        --tone: var(--kb-amber);
+    }
+
+    &[data-tone='CRITICAL'] {
+        --tone: var(--kb-ruby);
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        border-color: var(--kb-gold);
+        box-shadow: var(--kb-shadow-hover);
+    }
+
+    &:focus-visible {
+        @include t.kb-focus-ring;
+        border-color: var(--kb-gold);
+    }
+}
+
+.card__content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0.875rem 1rem 0.75rem;
+    font-variant-numeric: tabular-nums;
+}
+
+// ── Header + status ──────────────────────────────────────────────────────────
+.card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.card__title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--tone);
+    white-space: nowrap;
+}
+
+.status__dot {
+    position: relative;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--tone);
+    border-radius: 50%;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 1px solid var(--tone);
+        border-radius: 50%;
+        animation: pulse 2.4s ease-out infinite;
+    }
+}
+
+// Distinct cadence per state so status is legible without colour.
+.card[data-tone='WATCH'] .status__dot::after {
+    animation-duration: 1.2s;
+}
+
+.card[data-tone='CRITICAL'] .status__dot::after {
+    animation: none;
+    inset: -3px;
+}
+
+.card[data-tone='PENDING'] .status__dot::after {
+    animation: none;
+    opacity: 0;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+// ── Reading ──────────────────────────────────────────────────────────────────
+.card__reading {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: 0.5rem;
+    margin-top: 0.625rem;
+}
+
+.card__value {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+
+.card__unit {
+    font-size: 0.8125rem;
+    color: var(--kb-text-muted);
+}
+
+// ── Micro-trend (delta vs forecast) ──────────────────────────────────────────
+.trend {
+    --s: var(--kb-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+
+    &[data-sentiment='FAVOURABLE'] {
+        --s: var(--kb-emerald);
+    }
+
+    &[data-sentiment='ADVERSE'] {
+        --s: var(--kb-ruby);
+    }
+}
+
+.trend__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.4375rem 0.125rem 0.3125rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--s);
+    background: color-mix(in srgb, var(--s) 10%, transparent);
+    border-radius: var(--kb-radius-chip);
+}
+
+.trend__caption {
+    font-size: 0.75rem;
+    color: var(--kb-text-muted);
+}
+
+// ── Meter ────────────────────────────────────────────────────────────────────
+.meter {
+    margin-top: 0.75rem;
+}
+
+.meter__track {
+    position: relative;
+    height: 6px;
+    background: var(--kb-champagne-track);
+    border-radius: 3px;
+}
+
+// transform-based fill: no layout work on telemetry updates.
+.meter__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--kb-gold);
+    border-radius: inherit;
+    transform: scaleX(var(--f, 0));
+    transform-origin: left center;
+    transition: transform 500ms ease-out;
+}
+
+.meter__marker {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: calc(var(--m, 0) * 100%);
+    width: 2px;
+    margin-left: -1px;
+    background: var(--kb-text);
+    border-radius: 1px;
+}
+
+.meter__caption {
+    display: block;
+    margin-top: 0.3125rem;
+    font-size: 0.6875rem;
+    color: var(--kb-text-muted);
+}
+
+// ── Segments (fleet) ─────────────────────────────────────────────────────────
+.segments {
+    margin-top: 0.75rem;
+}
+
+.segments__bar {
+    display: flex;
+    gap: 2px;
+    height: 6px;
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.segments__part {
+    flex-basis: 0;
+    min-width: 2px;
+    transition: flex-grow 500ms ease-out;
+}
+
+.segments__part[data-kind='OK'],
+.segments__swatch[data-kind='OK'] {
+    background: var(--kb-emerald);
+}
+
+.segments__part[data-kind='WARN'],
+.segments__swatch[data-kind='WARN'] {
+    background: var(--kb-amber);
+}
+
+.segments__part[data-kind='DANGER'],
+.segments__swatch[data-kind='DANGER'] {
+    background: var(--kb-ruby);
+}
+
+.segments__part[data-kind='REST'],
+.segments__swatch[data-kind='REST'] {
+    background: var(--kb-champagne);
+}
+
+.segments__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.125rem 0.75rem;
+    margin: 0.375rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.segments__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    font-size: 0.6875rem;
+}
+
+.segments__swatch {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 2px;
+}
+
+.segments__label {
+    color: var(--kb-text-muted);
+}
+
+.segments__value {
+    font-weight: 600;
+}
+
+// ── Facts (champagne interior dividers) ──────────────────────────────────────
+.facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: auto 0 0; // pushes facts + footer to the card bottom so rows align across the grid
+    padding-top: 0.75rem;
+}
+
+.fact {
+    --s: var(--kb-text);
+    display: grid;
+    row-gap: 0.125rem;
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    border-top: 1px solid var(--kb-champagne-hairline);
+
+    &+& {
+        padding-left: 0.75rem;
+        border-left: 1px solid var(--kb-champagne-hairline);
+    }
+
+    &[data-sentiment='FAVOURABLE'] {
+        --s: var(--kb-emerald);
+    }
+
+    &[data-sentiment='ADVERSE'] {
+        --s: var(--kb-ruby);
+    }
+}
+
+.fact__label {
+    margin: 0;
+    font-size: 0.6875rem;
+    color: var(--kb-text-muted);
+}
+
+.fact__value {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--s);
+}
+
+// ── Footer link line ─────────────────────────────────────────────────────────
+.card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto; // pending cards have no facts, so the footer takes the bottom edge itself
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--kb-champagne-hairline);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--kb-text-muted);
+    transition: color 180ms ease-in-out;
+}
+
+.card__arrow {
+    transition: transform 180ms ease-in-out;
+}
+
+.card:hover .card__foot,
+.card:focus-visible .card__foot {
+    color: var(--kb-text);
+}
+
+.card:hover .card__arrow,
+.card:focus-visible .card__arrow {
+    color: var(--kb-gold);
+    transform: translateX(3px);
+}
+
+// When facts exist they own the auto margin, so the footer follows them directly.
+.facts+.card__foot {
+    margin-top: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .card,
+    .card__arrow,
+    .card__foot,
+    .meter__fill,
+    .segments__part {
+        transition: none;
+    }
+
+    .card:hover {
+        transform: none;
+    }
+
+    .status__dot::after {
+        animation: none;
+        opacity: 0;
+    }
+
+    .card[data-tone='CRITICAL'] .status__dot::after {
+        opacity: 0.9;
+    }
+}

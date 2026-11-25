@@ -1,0 +1,150 @@
+<!-- workforce-onboarding-wizard.component.html -->
+
+<div class="wow-page">
+
+    <!-- ══ Header ════════════════════════════════════════════════ -->
+    <header class="wow-header">
+        <div class="wow-header__left">
+
+            <nav class="wow-breadcrumb" aria-label="Breadcrumb">
+                <button class="wow-breadcrumb__back" type="button" (click)="goBackToDirectory()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="wow-breadcrumb__back__arrow" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    Workforce Directory
+                </button>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="wow-breadcrumb__sep"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="wow-breadcrumb__current">Onboarding Wizard</span>
+            </nav>
+
+            <h1 class="wow-title">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="wow-title__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0zM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                </svg>
+                Global Entry Portal
+            </h1>
+        </div>
+
+        <div class="wow-header__controls">
+            <button class="wow-icon-btn wow-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Light mode' : 'Dark mode'">
+                @if (isDarkMode()) {
+                <svg class="wow-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="wow-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+        </div>
+    </header>
+
+    <!-- ══ Wizard Container ═══════════════════════════════════════ -->
+    <main class="wow-body">
+        <div class="wow-wizard">
+
+            <!-- Step Indicator -->
+            @if (store.onboardingStep() < 2) { <div class="wow-wizard__progress">
+                <aoms-onboarding-step-indicator [currentStep]="store.onboardingStep()"
+                    [selectedRole]="store.selectedRole()" />
+        </div>
+        }
+
+        <!-- Error Banner -->
+        @if (store.onboardingFeedback()?.type === 'error') {
+        <div class="wow-error-banner" role="alert" aria-live="assertive">
+            <div class="wow-error-banner__left">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="wow-error-banner__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+                <div>
+                    <p class="wow-error-banner__title">Technical Alert — Registration Failure</p>
+                    <p class="wow-error-banner__msg">{{ store.onboardingFeedback()!.message }}</p>
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- ── Step 0: Role Selection ─────────────────────────── -->
+        @if (store.onboardingStep() === 0) {
+        <div class="wow-wizard__panel" [@stepIn]>
+            <aoms-user-role-selector (roleSelected)="onRoleSelected($event)" />
+        </div>
+        }
+
+        <!-- ── Step 1: Data Entry Form ───────────────────────── -->
+        @if (store.onboardingStep() === 1 && store.selectedRole()) {
+        <div class="wow-wizard__panel" [@stepIn]>
+            <aoms-user-registration-dynamic [role]="store.selectedRole()!" [airports]="store.availableAirports()"
+                [aircraftTypes]="store.availableAircraftTypes()" [isSubmitting]="store.isSubmitting()"
+                [isLoadingSupport]="store.isLoadingSupport()" (formSubmitted)="onFormSubmitted($event)"
+                (backClicked)="onFormBack()" />
+        </div>
+        }
+
+        <!-- ── Step 2: Success Overlay ────────────────────────── -->
+        @if (store.onboardingStep() === 2) {
+        <div class="wow-success" [@successIn] role="status" aria-live="polite">
+
+            <!-- Celebration ring -->
+            <div class="wow-success__rings" aria-hidden="true">
+                <div class="wow-success__ring wow-success__ring--1"></div>
+                <div class="wow-success__ring wow-success__ring--2"></div>
+                <div class="wow-success__ring wow-success__ring--3"></div>
+            </div>
+
+            <!-- Check icon -->
+            <div class="wow-success__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="wow-success__icon">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            </div>
+
+            <!-- Message -->
+            <div class="wow-success__text">
+                <h2 class="wow-success__title">Welcome to the Fleet</h2>
+                <p class="wow-success__msg">
+                    {{ store.onboardingFeedback()?.message ?? 'Account provisioned successfully.' }}
+                </p>
+                <p class="wow-success__role">
+                    <span class="wow-success__role__badge">{{ store.selectedRole() }}</span>
+                    account is now active in the Asiaporeair personnel registry.
+                </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="wow-success__actions">
+                <button class="wow-success__view-btn" type="button" (click)="onViewProfile()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="wow-success__view-btn__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0z" />
+                    </svg>
+                    View Workforce Directory
+                </button>
+                <button class="wow-success__another-btn" type="button" (click)="onRegisterAnother()">
+                    Register Another Employee
+                </button>
+            </div>
+
+        </div>
+        }
+
+</div>
+</main>
+
+</div>

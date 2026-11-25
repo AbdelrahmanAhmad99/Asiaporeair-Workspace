@@ -1,0 +1,46 @@
+ @mixin gw-tokens {
+     --gw-sapphire: var(--aoms-color-primary, #051937);
+     --gw-gold: var(--aoms-color-secondary, #b68f24);
+     --gw-champagne: var(--aoms-color-accent, #e2c780);
+     --gw-ivory: var(--aoms-color-neutral-bg, #f8f9fa);
+
+     --gw-ivory-muted: rgba(248, 249, 250, 0.76);
+     --gw-slate: rgba(248, 249, 250, 0.5);
+
+     --gw-gold-border: rgba(182, 143, 36, 0.6);
+     --gw-champagne-hairline: rgba(226, 199, 128, 0.28);
+     --gw-champagne-wash: rgba(226, 199, 128, 0.1); // 10 % hover overlay
+     --gw-glass: rgba(248, 249, 250, 0.06);
+     --gw-inset: rgba(5, 25, 55, 0.55);
+
+     // Signal tints: legible on Midnight Sapphire (the guideline status colours are too dark here).
+     --gw-emerald-signal: #34d399;
+     --gw-amber-signal: #fbbf24;
+     --gw-ruby-signal: #f87171;
+
+     --gw-radius-card: 12px;
+     --gw-radius-button: 4px;
+     // Soft, blue-tinted shadows. Never black. Stronger than 0.1 because the panel itself is dark.
+     --gw-shadow-rest: 0 8px 24px rgba(5, 25, 55, 0.3);
+     --gw-shadow-hover: 0 14px 34px rgba(5, 25, 55, 0.45);
+
+     --gw-font-heading: 'Montserrat', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+     --gw-font-body: 'Inter', 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+ }
+
+ @mixin gw-focus-ring {
+     outline: 2px solid var(--gw-champagne);
+     outline-offset: 2px;
+ }
+
+ @mixin gw-visually-hidden {
+     position: absolute;
+     width: 1px;
+     height: 1px;
+     margin: -1px;
+     padding: 0;
+     overflow: hidden;
+     clip-path: inset(50%);
+     white-space: nowrap;
+     border: 0;
+ }

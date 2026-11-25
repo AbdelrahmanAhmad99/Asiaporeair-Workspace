@@ -1,0 +1,45 @@
+<!-- Layout Widgets — AOMS Quick Action Floating Menu -->
+<div class="widgets">
+
+  <!-- ── Quick Action Items (Expanded) ───────────────────────────────────── -->
+  @if (isOpen()) {
+    <div class="widgets__backdrop" (click)="toggleMenu()"></div>
+    <ul class="widgets__menu" role="menu">
+      @for (action of actions(); track action.id; let i = $index) {
+        <li class="widgets__menu-item"
+            [style.animation-delay]="(i * 60) + 'ms'"
+            role="none">
+          <button class="widgets__action"
+                  (click)="onActionClick(action)"
+                  role="menuitem"
+                  type="button">
+            <span class="widgets__action-icon" [style.background]="action.color">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="action.icon"/>
+              </svg>
+            </span>
+            <span class="widgets__action-label">{{ action.label }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+
+  <!-- ── FAB Trigger ─────────────────────────────────────────────────────── -->
+  <button class="widgets__fab"
+          [class.widgets__fab--active]="isOpen()"
+          (click)="toggleMenu()"
+          aria-label="Quick Actions"
+          type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+         class="widgets__fab-icon">
+      @if (isOpen()) {
+        <path d="M18 6L6 18M6 6l12 12"/>
+      } @else {
+        <path d="M12 5v14M5 12h14"/>
+      }
+    </svg>
+  </button>
+</div>

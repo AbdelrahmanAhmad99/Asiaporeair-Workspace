@@ -1,0 +1,366 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ .ace-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ── Body ──────────────────────────────────────────────────────────────
+ .ace-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ // ── Error Banner ──────────────────────────────────────────────────────
+ .ace-error {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1.125rem;
+     border-radius: 8px;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: $ruby;
+     background: rgba(113, 13, 6, 0.08);
+     border: 1px solid rgba(113, 13, 6, 0.2);
+     animation: ace-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── New Config Inline Form ────────────────────────────────────────────
+ .ace-new-form {
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(182, 143, 36, 0.28);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07);
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     animation: ace-fadein 200ms ease forwards;
+     transition: background-color $t-base, border-color $t-base;
+
+     &__title {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         font-size: 1rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary);
+         transition: color $t-fast;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__fields {
+         display: grid;
+         grid-template-columns: 1fr;
+         gap: 1rem;
+
+         @media (min-width: 640px) {
+             grid-template-columns: 2fr 1fr;
+         }
+     }
+
+     &__field {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+
+         // &--wide {}
+     }
+
+     &__error {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: $ruby;
+         padding-left: 0.125rem;
+         animation: ace-fadein 150ms ease forwards;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding-top: 0.5rem;
+         border-top: 1px solid rgba(226, 199, 128, 0.1);
+     }
+
+     &__cancel {
+         display: inline-flex;
+         align-items: center;
+         padding: 0.5rem 1rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-muted);
+         background: transparent;
+         border: none;
+         cursor: pointer;
+         outline: none;
+         transition: color $t-fast;
+
+         &:hover {
+             color: var(--aoms-text-secondary);
+             text-decoration: underline;
+             text-underline-offset: 3px;
+         }
+     }
+
+     &__submit {
+         display: inline-flex;
+         align-items: center;
+         padding: 0.5625rem 1.25rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: #fff;
+         background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+         border: none;
+         border-radius: 4px;
+         cursor: pointer;
+         outline: none;
+         box-shadow: 0 4px 12px rgba(182, 143, 36, 0.35);
+         transition: all $t-fast;
+
+         &:hover:not(:disabled) {
+             background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+             box-shadow: 0 6px 16px rgba(182, 143, 36, 0.48);
+             transform: translateY(-1px);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ // Floating Label inputs inside new form
+ .ace-fl-wrap {
+     position: relative;
+
+     &__input {
+         width: 100%;
+         padding: 1.25rem 1rem 0.5rem;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-primary);
+         background: var(--aoms-bg-card);
+         border: 1.5px solid rgba(226, 199, 128, 0.25);
+         border-radius: 8px;
+         outline: none;
+         appearance: none;
+         -moz-appearance: textfield;
+         transition: border-color $t-fast, box-shadow $t-fast, background $t-base;
+
+         &::-webkit-outer-spin-button,
+         &::-webkit-inner-spin-button {
+             -webkit-appearance: none;
+         }
+
+         &::placeholder {
+             color: transparent;
+         }
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.1);
+         }
+
+         &:focus+.ace-fl-wrap__label,
+         &:not(:placeholder-shown)+.ace-fl-wrap__label {
+             transform: translateY(-0.5rem) scale(0.78);
+             color: $gold;
+         }
+     }
+
+     &__label {
+         position: absolute;
+         left: 1rem;
+         top: 50%;
+         transform: translateY(-50%);
+         transform-origin: left center;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+         background: var(--aoms-bg-card);
+         padding: 0 0.25rem;
+         border-radius: 2px;
+         transition: transform $t-fast, color $t-fast;
+     }
+
+     &__req {
+         color: $amber;
+         margin-left: 2px;
+     }
+ }
+
+ // ── Cards Grid ─────────────────────────────────────────────────────────
+ .ace-grid {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 1.125rem;
+
+     @media (min-width: 640px) {
+         grid-template-columns: repeat(2, 1fr);
+     }
+
+     @media (min-width: 1280px) {
+         grid-template-columns: repeat(3, 1fr);
+     }
+ }
+
+ // ── Shimmer Skeleton Cards ─────────────────────────────────────────────
+ .ace-shimmer-card {
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.16);
+     pointer-events: none;
+
+     &__name {
+         height: 1.25rem;
+         width: 65%;
+         border-radius: 4px;
+         background: rgba(182, 143, 36, 0.07);
+         animation: ace-pulse 1.5s ease-in-out infinite;
+     }
+
+     &__seats {
+         height: 2.5rem;
+         width: 40%;
+         border-radius: 4px;
+         background: rgba(182, 143, 36, 0.08);
+         animation: ace-pulse 1.5s ease-in-out 0.1s infinite;
+     }
+
+     &__bar {
+         height: 8px;
+         width: 100%;
+         border-radius: 100px;
+         background: rgba(182, 143, 36, 0.06);
+         animation: ace-pulse 1.5s ease-in-out 0.15s infinite;
+     }
+
+     &__footer {
+         height: 2rem;
+         width: 100%;
+         border-radius: 4px;
+         background: rgba(182, 143, 36, 0.05);
+         animation: ace-pulse 1.5s ease-in-out 0.2s infinite;
+         margin-top: 0.25rem;
+     }
+ }
+
+ // ── Filter empty state ─────────────────────────────────────────────────
+ .ace-filter-empty {
+     grid-column: 1 / -1;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 3rem 1.5rem;
+     text-align: center;
+
+     &__text {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────
+ @keyframes ace-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes ace-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .ace-new-form {
+         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+
+         .ace-fl-wrap__input {
+             background: rgba(255, 255, 255, 0.04);
+             border-color: rgba(226, 199, 128, 0.18);
+             color: rgba(255, 255, 255, 0.9);
+         }
+
+         .ace-fl-wrap__label {
+             background: transparent;
+         }
+
+         .ace-fl-wrap__input:focus+.ace-fl-wrap__label,
+         .ace-fl-wrap__input:not(:placeholder-shown)+.ace-fl-wrap__label {
+             color: $champagne;
+             background: rgba(5, 25, 55, 0.9);
+         }
+     }
+
+     .ace-error {
+         background: rgba(113, 13, 6, 0.15);
+         border-color: rgba(113, 13, 6, 0.35);
+         color: #fca5a5;
+     }
+
+     .ace-shimmer-card {
+         box-shadow: none;
+     }
+ }

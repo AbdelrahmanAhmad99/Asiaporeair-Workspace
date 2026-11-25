@@ -1,0 +1,132 @@
+<div class="cfp-panel">
+
+  <!-- ── Panel Header ────────────────────────────────────────────────── -->
+  <div class="cfp-panel__header">
+    <div class="cfp-header__left">
+      <div class="cfp-icon-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+        </svg>
+      </div>
+      <div>
+        <span class="cfp-title">Strategic Filter</span>
+        <span class="cfp-subtitle">Crew Compliance Search Parameters</span>
+      </div>
+    </div>
+
+    @if (hasActiveFilters()) {
+    <div class="cfp-active-badge">
+      <span class="cfp-active-badge__dot"></span>
+      <span>{{ activeFilterCount() }} Active</span>
+    </div>
+    }
+  </div>
+
+  <!-- ── Divider ─────────────────────────────────────────────────────── -->
+  <div class="cfp-divider"></div>
+
+  <!-- ── Filter Fields Row ──────────────────────────────────────────── -->
+  <div class="cfp-fields">
+
+    <!-- Free-text Search -->
+    <div class="cfp-field cfp-field--search">
+      <label class="cfp-label" for="cfp-search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9z"
+            clip-rule="evenodd" />
+        </svg>
+        Search
+      </label>
+      <div class="cfp-input-wrap">
+        <input id="cfp-search" type="text" class="cfp-input" placeholder="Name or Employee ID…"
+          [value]="filters().search" [disabled]="loading()" (input)="onSearchInput($event)" autocomplete="off" />
+      </div>
+    </div>
+
+    <!-- Base Airport -->
+    <div class="cfp-field cfp-field--base">
+      <label class="cfp-label" for="cfp-base">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 0 0 .281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 15.088 17 12.369 17 9A7 7 0 1 0 3 9c0 3.369 1.698 6.088 3.354 7.585.829.799 1.654 1.381 2.274 1.765.31.193.57.337.757.433a5.74 5.74 0 0 0 .282.14l.018.008.006.003zM10 11.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5z"
+            clip-rule="evenodd" />
+        </svg>
+        Base Airport
+      </label>
+      <div class="cfp-input-wrap">
+        <input id="cfp-base" type="text" class="cfp-input cfp-input--mono" placeholder="e.g. SIN, KUL, NRT"
+          maxlength="3" [value]="filters().base" [disabled]="loading()" (input)="onBaseInput($event)"
+          autocomplete="off" />
+        @if (filters().base) {
+        <span class="cfp-input__badge">{{ filters().base }}</span>
+        }
+      </div>
+    </div>
+
+    <!-- Crew Rank -->
+    <div class="cfp-field">
+      <label class="cfp-label" for="cfp-rank">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path
+            d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003z" />
+        </svg>
+        Crew Rank
+      </label>
+      <div class="cfp-select-wrap">
+        <select id="cfp-rank" class="cfp-select" [value]="filters().rank" [disabled]="loading()"
+          (change)="onRankChange($event)">
+          @for (opt of rankOptions; track opt.value) {
+          <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+        <svg class="cfp-select__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+          aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06z"
+            clip-rule="evenodd" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Compliance Status -->
+    <div class="cfp-field">
+      <label class="cfp-label" for="cfp-status">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1zm3 8V5.5a3 3 0 1 0-6 0V9h6z"
+            clip-rule="evenodd" />
+        </svg>
+        Compliance Status
+      </label>
+      <div class="cfp-select-wrap">
+        <select id="cfp-status" class="cfp-select" [value]="filters().complianceStatus" [disabled]="loading()"
+          (change)="onStatusChange($event)">
+          @for (opt of statusOptions; track opt.value) {
+          <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+        <svg class="cfp-select__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+          aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06z"
+            clip-rule="evenodd" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Reset Button -->
+    <button class="cfp-reset-btn" type="button" [disabled]="!hasActiveFilters() || loading()" (click)="onReset()"
+      title="Clear all filters">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd"
+          d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5z"
+          clip-rule="evenodd" />
+      </svg>
+      Reset
+    </button>
+
+  </div><!-- /cfp-fields -->
+
+</div><!-- /cfp-panel -->

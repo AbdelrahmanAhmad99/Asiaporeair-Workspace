@@ -1,0 +1,189 @@
+// lookup-helper-card.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$t: 240ms cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.helper-card {
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.09);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba($midnight, 0.06);
+    display: flex;
+    flex-direction: column;
+}
+
+.helper-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.25rem;
+    background: rgba($charcoal, 0.02);
+    border-bottom: 1px solid rgba($charcoal, 0.07);
+}
+
+.helper-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($royal-gold, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+}
+
+.helper-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: $charcoal;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.gold-rule {
+    height: 1px;
+    margin: 0;
+    background: linear-gradient(to right, transparent, rgba($royal-gold, 0.18), transparent);
+}
+
+.sources-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+.source-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba($charcoal, 0.04);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.source-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    background: rgba($charcoal, 0.04);
+    border: 1px solid rgba($charcoal, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+}
+
+.source-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.source-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: $charcoal;
+    letter-spacing: -0.01em;
+}
+
+.source-desc {
+    font-size: 0.63rem;
+    color: $text-muted;
+    line-height: 1.5;
+}
+
+// ── Reference Format ──────────────────────────────────────────────────────────
+.format-example {
+    padding: 0.875rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.format-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $text-muted;
+}
+
+.format-mock {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+.format-char {
+    width: 26px;
+    height: 28px;
+    border-radius: 4px;
+    background: rgba($midnight, 0.06);
+    border: 1px solid rgba($midnight, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $charcoal;
+}
+
+.format-sep {
+    font-size: 0.6rem;
+    color: $text-muted;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+
+// ── Help CTA ──────────────────────────────────────────────────────────────────
+.help-cta {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid rgba($charcoal, 0.06);
+    font-size: 0.65rem;
+    color: $text-muted;
+    line-height: 1.4;
+
+    svg {
+        flex-shrink: 0;
+        color: $royal-gold;
+    }
+}
+
+.help-link {
+    color: $royal-gold;
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        border-radius: 2px;
+    }
+}

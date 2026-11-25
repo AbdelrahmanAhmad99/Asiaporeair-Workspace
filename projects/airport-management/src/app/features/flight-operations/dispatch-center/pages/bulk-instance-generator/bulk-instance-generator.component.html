@@ -1,0 +1,212 @@
+<div class="big-page">
+
+    <!-- ══ Sticky Luxury Header ═════════════════════════════════════ -->
+    <header class="big-header">
+
+        <!-- Back button -->
+        <button class="big-back-btn" type="button" (click)="goToControlRoom()"
+            aria-label="Return to Flight Instance Control Room">
+            <svg class="big-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+        </button>
+
+        <div class="big-header__center">
+            <nav class="big-breadcrumb" aria-label="Breadcrumb">
+                <span class="big-breadcrumb__section">Flight Operations</span>
+                <svg class="big-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <button class="big-breadcrumb__link" (click)="goToControlRoom()">Control Room</button>
+                <svg class="big-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="big-breadcrumb__current">Bulk Generator</span>
+            </nav>
+
+            <div class="big-title-row">
+                <h1 class="big-title">
+                    <span class="big-title__main">Bulk Instance Generator</span>
+                    <span class="big-title__sub">Mass Schedule → Flight Instance Conversion</span>
+                </h1>
+
+                @if (bulkRefLoading()) {
+                <div class="big-loading-badge" aria-live="polite" role="status">
+                    <svg class="big-loading-badge__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                       0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                       0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Loading schedules…
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Refresh -->
+        <button class="big-icon-btn" type="button" (click)="refreshRefData()" [disabled]="isAnyLoading()"
+            title="Refresh schedule registry" aria-label="Refresh master schedules and airline list">
+            <svg class="big-icon-btn__icon" [class.big-icon-btn__icon--spin]="bulkRefLoading()" fill="none"
+                stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+        </button>
+
+    </header>
+
+    <!-- ══ Generating Progress Bar ══════════════════════════════════ -->
+    @if (isGenerating()) {
+    <div class="big-progress-bar" role="progressbar" aria-label="Generating flight instances" aria-busy="true">
+        <div class="big-progress-bar__fill"></div>
+    </div>
+    }
+
+    <!-- ══ Page Body — Two Column Layout ═══════════════════════════ -->
+    <main class="big-body">
+
+        <!-- LEFT: Generation form -->
+        <section class="big-form-col" aria-label="Generation parameters">
+            <aoms-bulk-generation-form [airlines]="airlines()" [validityWindow]="validityWindow()"
+                [isGenerating]="isGenerating()" [formError]="null" (onGenerate)="onGenerate($event)"
+                (onCancel)="goToControlRoom()" />
+        </section>
+
+        <!-- RIGHT: Schedule reference grid -->
+        <section class="big-grid-col" aria-label="Master schedule reference">
+            <aoms-schedule-reference-grid [schedules]="schedules()" [loading]="bulkRefLoading()" />
+        </section>
+
+    </main>
+
+    <!-- ══ Operational Alert Modal (Error) ══════════════════════════ -->
+    @if (errorModalOpen()) {
+    <div class="big-modal-backdrop" (click)="closeErrorModal()" aria-hidden="true"></div>
+
+    <div class="big-modal big-modal--error" role="dialog" aria-modal="true" aria-labelledby="big-error-title">
+
+        <div class="big-modal__ruby-bar" aria-hidden="true"></div>
+
+        <div class="big-modal__header">
+            <div class="big-modal__icon-wrap big-modal__icon-wrap--ruby" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                     2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                     16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <div>
+                <h2 id="big-error-title" class="big-modal__title big-modal__title--ruby">
+                    Operational Alert
+                </h2>
+                <p class="big-modal__subtitle">Generation could not be completed</p>
+            </div>
+        </div>
+
+        <div class="big-modal__body">
+            <p class="big-modal__error-msg">{{ generationError() }}</p>
+            <div class="big-modal__actions">
+                <button class="big-modal-btn big-modal-btn--secondary" type="button" (click)="closeErrorModal()">
+                    Dismiss
+                </button>
+            </div>
+        </div>
+
+    </div>
+    }
+
+    <!-- ══ Success Report Modal ═════════════════════════════════════ -->
+    @if (successModalOpen() && lastReport()) {
+    <div class="big-modal-backdrop" (click)="closeSuccessModal()" aria-hidden="true"></div>
+
+    <div class="big-modal big-modal--success" role="dialog" aria-modal="true" aria-labelledby="big-success-title">
+
+        <div class="big-modal__gold-bar" aria-hidden="true"></div>
+
+        <div class="big-modal__header">
+            <div class="big-modal__icon-wrap big-modal__icon-wrap--gold" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598
+                     6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176
+                     -1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196
+                     0-6.1-1.248-8.25-3.285z" />
+                </svg>
+            </div>
+            <div>
+                <h2 id="big-success-title" class="big-modal__title big-modal__title--gold">
+                    Instances Generated Successfully
+                </h2>
+                <p class="big-modal__subtitle">Bulk operation completed · Operational register updated</p>
+            </div>
+        </div>
+
+        <div class="big-modal__body">
+
+            <!-- Report summary stats -->
+            <div class="big-report">
+                <div class="big-report__stat big-report__stat--primary">
+                    <span class="big-report__count">{{ lastReport()!.instancesCreated.toLocaleString() }}</span>
+                    <span class="big-report__label">Instances Created</span>
+                </div>
+                @if (lastReport()!.failures.length > 0) {
+                <div class="big-report__stat big-report__stat--warning">
+                    <span class="big-report__count">{{ lastReport()!.failures.length.toLocaleString() }}</span>
+                    <span class="big-report__label">With Failures</span>
+                </div>
+                } @else {
+                <div class="big-report__stat big-report__stat--clean">
+                    <span class="big-report__count">0</span>
+                    <span class="big-report__label">Failures</span>
+                </div>
+                }
+            </div>
+
+            <!-- Messages list (if any) -->
+            @if (lastReport()!.warnings.length > 0) {
+            <div class="big-report-messages">
+                <div class="big-report-messages__header">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166
+                         2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1
+                         .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741
+                         c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175
+                         -7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                    </svg>
+                    Operational Warnings
+                </div>
+                <ul class="big-report-messages__list">
+                    @for (msg of lastReport()!.warnings.slice(0, 8); track $index) {
+                    <li class="big-report-messages__item">{{ msg }}</li>
+                    }
+                    @if (lastReport()!.warnings.length > 8) {
+                    <li class="big-report-messages__more">
+                        +{{ lastReport()!.warnings.length - 8 }} additional warnings
+                    </li>
+                    }
+                </ul>
+            </div>
+            }
+
+            <div class="big-modal__actions">
+                <button class="big-modal-btn big-modal-btn--primary" type="button" (click)="viewInControlRoom()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638
+                       0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5
+                       12 19.5c-4.638 0-8.573-3.007-9.963-7.178z
+                       M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    </svg>
+                    View in Control Room
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+    }
+
+</div>

@@ -1,0 +1,66 @@
+<div class="pts-container">
+
+    <!-- Section Header -->
+    <header class="pts-header">
+        <h3 class="pts-header__title">
+            <svg class="pts-header__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0z" />
+            </svg>
+            Journey Timeline
+        </h3>
+    </header>
+
+    <!-- Steps -->
+    <ol class="pts-steps" aria-label="Booking journey timeline">
+        @for (step of steps(); track step.id; let last = $last) {
+        <li class="pts-step" [class]="'pts-step--' + step.status" [attr.aria-label]="step.label + ': ' + step.status">
+
+            <!-- Connector line (not for last item) -->
+            @if (!last) {
+            <div class="pts-step__connector" [class]="'pts-step__connector--' + step.status" aria-hidden="true"></div>
+            }
+
+            <!-- Node -->
+            <div class="pts-step__node" [class]="'pts-step__node--' + step.status" aria-hidden="true">
+
+                @if (step.status === 'completed') {
+                <!-- Checkmark -->
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                }
+
+                @if (step.status === 'active') {
+                <!-- Pulsing inner dot -->
+                <span class="pts-step__node-pulse" aria-hidden="true"></span>
+                }
+
+                @if (step.status === 'error') {
+                <!-- X mark -->
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                }
+
+                @if (step.status === 'pending') {
+                <!-- Empty ring — no inner content -->
+                }
+
+            </div>
+
+            <!-- Step Content -->
+            <div class="pts-step__content">
+                <p class="pts-step__label">{{ step.label }}</p>
+                <p class="pts-step__sub">{{ step.subLabel }}</p>
+                @if (step.timestamp) {
+                <p class="pts-step__time">{{ step.timestamp | date:'dd MMM yyyy · HH:mm' }}</p>
+                }
+            </div>
+
+        </li>
+        }
+    </ol>
+
+</div>

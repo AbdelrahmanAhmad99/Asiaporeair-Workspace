@@ -1,0 +1,586 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $ruby: #710D06;
+ $emerald: #064E3B;
+ $t: 160ms ease;
+
+ .rcf-form-wrap {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .rcf-form {
+     display: flex;
+     flex-direction: column;
+     gap: 1.375rem;
+ }
+
+ .rcf-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+ }
+
+ .rcf-label-row {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.5rem;
+ }
+
+ .rcf-label {
+     display: flex;
+     align-items: center;
+     gap: 0.3125rem;
+     font-size: 11px;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 800;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: var(--aoms-text-secondary);
+
+     &__req {
+         color: lighten($ruby, 18%);
+         font-size: 13px;
+         line-height: 1;
+     }
+ }
+
+ .rcf-full-btn {
+     font-size: 0.6875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: $gold;
+     background: transparent;
+     border: none;
+     cursor: pointer;
+     padding: 0;
+     transition: all $t;
+     text-decoration: underline;
+     text-underline-offset: 2px;
+     white-space: nowrap;
+
+     &:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .rcf-select-wrap {
+     position: relative;
+
+     &__chevron {
+         position: absolute;
+         right: 0.875rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $champagne;
+         pointer-events: none;
+     }
+ }
+
+ .rcf-select {
+     width: 100%;
+     height: 2.75rem;
+     padding: 0 2.5rem 0 0.875rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: rgba($charcoal, 0.04);
+     color: var(--aoms-text-primary);
+     font-family: var(--aoms-font-body);
+     font-size: 0.9rem;
+     font-weight: 600;
+     outline: none;
+     appearance: none;
+     cursor: pointer;
+     transition: all $t;
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.16);
+         background: rgba($charcoal, 0.06);
+     }
+
+     option {
+         background: var(--aoms-bg-card, #fff);
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &--error {
+         border-color: lighten($ruby, 18%);
+         background: rgba($ruby, 0.04);
+         animation: rcf-shake 360ms ease;
+     }
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+     }
+ }
+
+ .rcf-amount-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+ }
+
+ .rcf-amount-prefix {
+     position: absolute;
+     left: 1rem;
+     font-size: 0.875rem;
+     font-weight: 800;
+     color: $gold;
+     pointer-events: none;
+     z-index: 1;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     letter-spacing: 0.04em;
+ }
+
+ .rcf-amount-input {
+     width: 100%;
+     height: 3.5rem;
+     padding: 0 1rem 0 3.5rem;
+     border-radius: 12px;
+     border: 1.5px solid rgba($champagne, 0.22);
+     background: rgba($charcoal, 0.04);
+     color: var(--aoms-text-primary);
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-size: 1.625rem;
+     font-weight: 900;
+     letter-spacing: -0.02em;
+     font-variant-numeric: tabular-nums;
+     outline: none;
+     transition: all $t;
+
+     &[type="number"] {
+         // -moz-appearance: textfield;
+
+         &::-webkit-inner-spin-button,
+         &::-webkit-outer-spin-button {
+             -webkit-appearance: none;
+         }
+     }
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+         font-weight: 400;
+         opacity: 0.6;
+         font-size: 1.25rem;
+     }
+
+     &:focus {
+         border-color: $gold;
+         background: rgba($charcoal, 0.07);
+         box-shadow: 0 0 0 4px rgba($gold, 0.14), 0 0 18px rgba($gold, 0.1);
+     }
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+     }
+
+     &--error {
+         border-color: lighten($ruby, 18%);
+         background: rgba($ruby, 0.04);
+         animation: rcf-shake 360ms ease;
+
+         &:focus {
+             border-color: lighten($ruby, 12%);
+             box-shadow: 0 0 0 4px rgba($ruby, 0.12);
+         }
+     }
+
+     &--valid {
+         border-color: rgba($emerald, 0.5);
+
+         &:focus {
+             border-color: $emerald;
+             box-shadow: 0 0 0 3px rgba($emerald, 0.14);
+         }
+     }
+ }
+
+ .rcf-error {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: lighten($ruby, 18%);
+     margin: 0;
+ }
+
+ .rcf-hint {
+     font-size: 0.6875rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     margin: 0;
+
+     strong {
+         color: var(--aoms-text-secondary);
+         font-weight: 700;
+     }
+ }
+
+ .rcf-submit-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.5rem;
+     width: 100%;
+     height: 3rem;
+     padding: 0 1.5rem;
+     border-radius: 4px;
+     border: none;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-size: 0.9375rem;
+     font-weight: 800;
+     letter-spacing: 0.02em;
+     cursor: pointer;
+     transition: all $t;
+     margin-top: 0.5rem;
+
+     svg {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:not(&--locked):not(:disabled) {
+         background: lighten($ruby, 4%);
+         color: #fff;
+         box-shadow: 0 4px 16px rgba($ruby, 0.38);
+
+         &:hover {
+             background: lighten($ruby, 10%);
+             box-shadow: 0 6px 22px rgba($ruby, 0.52);
+             transform: translateY(-1px);
+         }
+
+         &:active {
+             transform: translateY(0);
+         }
+     }
+
+     &--locked,
+     &:disabled {
+         background: rgba($champagne, 0.1);
+         color: rgba($champagne, 0.38);
+         border: 1px solid rgba($champagne, 0.18);
+         cursor: not-allowed;
+         box-shadow: none;
+         transform: none;
+     }
+ }
+
+ .rcf-double-confirm {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 1rem;
+     padding: 1.75rem 1.25rem;
+     border-radius: 12px;
+     background: rgba($ruby, 0.08);
+     border: 1.5px solid rgba($ruby, 0.3);
+     text-align: center;
+     animation: rcf-fadein 200ms ease forwards;
+ }
+
+ .rcf-dc-icon {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3rem;
+     height: 3rem;
+     border-radius: 50%;
+     background: rgba($ruby, 0.14);
+     border: 1px solid rgba($ruby, 0.3);
+     color: lighten($ruby, 26%);
+     animation: rcf-pulse-ruby 2s ease-in-out infinite;
+
+     svg {
+         width: 1.5rem;
+         height: 1.5rem;
+     }
+ }
+
+ .rcf-dc-title {
+     font-size: 1.0625rem;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 800;
+     letter-spacing: -0.01em;
+     color: lighten($ruby, 28%);
+     margin: 0;
+ }
+
+ .rcf-dc-summary {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+     width: 100%;
+     padding: 0.75rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.06);
+     border: 1px solid rgba($ruby, 0.18);
+
+     &__row {
+         display: flex;
+         align-items: baseline;
+         justify-content: space-between;
+         gap: 0.5rem;
+     }
+
+     &__label {
+         font-size: 0.6875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: rgba(255, 255, 255, 0.3);
+     }
+
+     &__value {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: rgba(255, 255, 255, 0.8);
+         text-align: right;
+     }
+
+     &__value--amount {
+         font-size: 1.125rem;
+         font-weight: 900;
+         color: lighten($ruby, 28%);
+         font-variant-numeric: tabular-nums;
+     }
+ }
+
+ .rcf-dc-warning {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: rgba(255, 255, 255, 0.45);
+     line-height: 1.5;
+     margin: 0;
+
+     strong {
+         color: lighten($ruby, 24%);
+         font-weight: 700;
+     }
+ }
+
+ .rcf-dc-actions {
+     display: flex;
+     gap: 0.625rem;
+     width: 100%;
+ }
+
+ .rcf-dc-btn {
+     flex: 1;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.375rem;
+     height: 2.75rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.875rem;
+     font-weight: 700;
+     cursor: pointer;
+     transition: all $t;
+
+     svg {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.25);
+         color: rgba($champagne, 0.7);
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     &--confirm {
+         background: lighten($ruby, 4%);
+         border: none;
+         color: #fff;
+         box-shadow: 0 4px 14px rgba($ruby, 0.4);
+
+         &:hover {
+             background: lighten($ruby, 10%);
+             box-shadow: 0 6px 20px rgba($ruby, 0.55);
+             transform: translateY(-1px);
+         }
+
+         &:active {
+             transform: translateY(0);
+         }
+     }
+ }
+
+ .rcf-processing {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 2.5rem 1.5rem;
+     text-align: center;
+
+     &__ring {
+         position: relative;
+         width: 4rem;
+         height: 4rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+     }
+
+     &__ring-inner {
+         position: absolute;
+         inset: 0;
+         border-radius: 50%;
+         border: 2px solid rgba($gold, 0.3);
+         animation: rcf-security-pulse 1.4s ease-in-out infinite;
+     }
+
+     &__icon {
+         width: 2rem;
+         height: 2rem;
+         color: $gold;
+         z-index: 1;
+         animation: rcf-icon-throb 1.4s ease-in-out infinite;
+     }
+
+     &__label {
+         font-size: 1rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 800;
+         color: $champagne;
+         letter-spacing: 0.04em;
+         margin: 0;
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.4);
+         letter-spacing: 0.02em;
+     }
+ }
+
+ :host-context(.aoms-dark) {
+
+     .rcf-amount-input,
+     .rcf-select {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.18);
+         color: rgba(255, 255, 255, 0.88);
+     }
+ }
+
+ @keyframes rcf-shake {
+
+     0%,
+     100% {
+         transform: translateX(0);
+     }
+
+     20% {
+         transform: translateX(-4px);
+     }
+
+     40% {
+         transform: translateX(4px);
+     }
+
+     60% {
+         transform: translateX(-2px);
+     }
+
+     80% {
+         transform: translateX(2px);
+     }
+ }
+
+ @keyframes rcf-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rcf-pulse-ruby {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba($ruby, 0.5);
+     }
+
+     50% {
+         box-shadow: 0 0 0 8px rgba($ruby, 0);
+     }
+ }
+
+ @keyframes rcf-security-pulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.9;
+         border-color: rgba($gold, 0.7);
+     }
+
+     50% {
+         transform: scale(1.45);
+         opacity: 0.3;
+         border-color: rgba($gold, 0.2);
+     }
+
+     100% {
+         transform: scale(1);
+         opacity: 0.9;
+         border-color: rgba($gold, 0.7);
+     }
+ }
+
+ @keyframes rcf-icon-throb {
+
+     0%,
+     100% {
+         opacity: 1;
+     }
+
+     50% {
+         opacity: 0.5;
+     }
+ }

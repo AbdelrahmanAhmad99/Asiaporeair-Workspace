@@ -1,0 +1,193 @@
+<!-- ============================================================================
+     silverkris-lounges.component.html
+     Asiaporeair | SilverKris Lounges — Detail Page
+     ============================================================================ -->
+
+<div class="skl-shell">
+
+    <!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
+    <header class="skl-hero" role="banner">
+        <div class="skl-hero__inner">
+
+            <nav class="skl-hero__breadcrumb" aria-label="Breadcrumb">
+                @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+                @if (!last) {
+                <a [href]="crumb.route ?? '#'" class="skl-hero__bc-link">{{ crumb.label }}</a>
+                <span class="skl-hero__bc-sep" aria-hidden="true">›</span>
+                } @else {
+                <span class="skl-hero__bc-cur">{{ crumb.label }}</span>
+                }
+                }
+            </nav>
+
+            <div class="skl-hero__content">
+                <div class="skl-hero__text">
+                    <div class="skl-hero__pre-block" aria-hidden="true">
+                        <div class="skl-hero__pre-line"></div>
+                        <span class="skl-hero__eyebrow">Before the Flight</span>
+                    </div>
+                    <h1 class="skl-hero__title">SilverKris Lounges</h1>
+                    <p class="skl-hero__subtitle">
+                        An oasis of calm in the world's great airports. Six premium lounge
+                        environments across global hubs, each a masterclass in pre-flight luxury.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Hero image with parallax-style overlay -->
+        <div class="skl-hero__image-band" aria-hidden="true">
+            <img src="assets/images/journey-with-us/lounges-hero.png" alt="" class="skl-hero__bg-image"
+                loading="eager" />
+            <div class="skl-hero__overlay"></div>
+        </div>
+    </header>
+
+    <!-- ══ LOUNGE GALLERY ════════════════════════════════════════════════════ -->
+    <section class="skl-gallery" aria-labelledby="skl-gallery-title">
+        <div class="skl-gallery__inner">
+
+            <header class="skl-section-header">
+                <div class="skl-section-header__line" aria-hidden="true"></div>
+                <div>
+                    <p class="skl-section-header__eyebrow">Inside the Lounges</p>
+                    <h2 class="skl-section-header__title" id="skl-gallery-title">A Sanctuary Before Departure</h2>
+                </div>
+            </header>
+
+            <!-- Gallery viewer -->
+            <div class="skl-gallery__viewer">
+                <div class="skl-gallery__main">
+                    <img [src]="loungeGalleryImages[activeGalleryIndex()]"
+                        alt="Lounge gallery image {{ activeGalleryIndex() + 1 }}" class="skl-gallery__main-img"
+                        loading="lazy" />
+
+                    <button class="skl-gallery__ctrl skl-gallery__ctrl--prev" type="button" (click)="prevImage()"
+                        aria-label="Previous lounge image">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+
+                    <button class="skl-gallery__ctrl skl-gallery__ctrl--next" type="button" (click)="nextImage()"
+                        aria-label="Next lounge image">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+
+                    <div class="skl-gallery__counter" aria-live="polite">
+                        {{ activeGalleryIndex() + 1 }} / {{ loungeGalleryImages.length }}
+                    </div>
+                </div>
+
+                <!-- Thumbnails -->
+                <div class="skl-gallery__thumbs" role="list" aria-label="Gallery thumbnails">
+                    @for (img of loungeGalleryImages; track img; let i = $index) {
+                    <button class="skl-gallery__thumb" [class.skl-gallery__thumb--active]="i === activeGalleryIndex()"
+                        type="button" role="listitem" (click)="setGalleryIndex(i)"
+                        [attr.aria-label]="'View lounge image ' + (i + 1)">
+                        <img [src]="img" [alt]="'Lounge thumbnail ' + (i + 1)" loading="lazy" />
+                    </button>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ FACILITIES GRID ═══════════════════════════════════════════════════ -->
+    <section class="skl-facilities" aria-labelledby="skl-facilities-title">
+        <div class="skl-facilities__inner">
+
+            <header class="skl-section-header">
+                <div class="skl-section-header__line" aria-hidden="true"></div>
+                <div>
+                    <p class="skl-section-header__eyebrow">Lounge Amenities</p>
+                    <h2 class="skl-section-header__title" id="skl-facilities-title">Everything You Need</h2>
+                    <p class="skl-section-header__sub">
+                        Thoughtfully curated so every moment before your flight is one of ease.
+                    </p>
+                </div>
+            </header>
+
+            <app-lounge-facility-icons [facilities]="facilities()"></app-lounge-facility-icons>
+
+        </div>
+    </section>
+
+    <!-- ══ THE PRIVATE ROOM — Feature callout ══════════════════════════════ -->
+    <section class="skl-private-room" aria-labelledby="skl-pr-title">
+        <div class="skl-private-room__inner">
+            <div class="skl-private-room__text">
+                <p class="skl-private-room__eyebrow">Exclusive to Suites Travellers</p>
+                <h2 class="skl-private-room__title" id="skl-pr-title">The Private Room</h2>
+                <div class="skl-private-room__divider" aria-hidden="true"></div>
+                <p class="skl-private-room__desc">
+                    Located within the SilverKris First Class Lounge, The Private Room is an
+                    invitation-only sanctuary reserved exclusively for Asiaporeair Suites passengers.
+                    With personalised butler service, a private dining room, and curated library,
+                    it reimagines what it means to wait for a flight.
+                </p>
+                <ul class="skl-private-room__features" aria-label="Private Room highlights">
+                    <li>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Personal butler-style attendant
+                    </li>
+                    <li>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Chef's table private dining experience
+                    </li>
+                    <li>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Complimentary pre-flight spa treatment
+                    </li>
+                    <li>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Secure luggage holding and tagging
+                    </li>
+                </ul>
+            </div>
+            <div class="skl-private-room__image-wrap" aria-hidden="true">
+                <img src="assets/images/journey-with-us/lounge-private-room-feature.png" alt=""
+                    class="skl-private-room__image" loading="lazy" />
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ ACCESS CRITERIA TABLE ═════════════════════════════════════════════ -->
+    <section class="skl-access" aria-labelledby="skl-access-title">
+        <div class="skl-access__inner">
+
+            <header class="skl-section-header">
+                <div class="skl-section-header__line" aria-hidden="true"></div>
+                <div>
+                    <p class="skl-section-header__eyebrow">Lounge Eligibility</p>
+                    <h2 class="skl-section-header__title" id="skl-access-title">Who Has Access</h2>
+                    <p class="skl-section-header__sub">
+                        Find your lounge based on your cabin class or Voyager membership tier.
+                    </p>
+                </div>
+            </header>
+
+            <app-access-criteria-table [tiers]="accessTiers()"></app-access-criteria-table>
+
+        </div>
+    </section>
+
+</div>

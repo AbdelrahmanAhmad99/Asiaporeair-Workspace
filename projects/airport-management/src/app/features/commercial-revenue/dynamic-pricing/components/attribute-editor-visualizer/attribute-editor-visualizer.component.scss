@@ -1,0 +1,380 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 180ms ease;
+
+ // ── Panel ─────────────────────────────────────────────────────────────────
+ .aev-panel {
+     display: flex;
+     flex-direction: column;
+     border-radius: 12px;
+     background: rgba($midnight, 0.9);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow:
+         0 8px 32px rgba($midnight, 0.45),
+         0 0 0 1px rgba($champagne, 0.05) inset;
+     backdrop-filter: blur(20px);
+     -webkit-backdrop-filter: blur(20px);
+     overflow: hidden;
+ }
+
+ // ── Header ────────────────────────────────────────────────────────────────
+ .aev-header {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 0.875rem 1.125rem;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex: 1;
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__title {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 700;
+         color: $champagne;
+         margin: 0;
+         letter-spacing: -0.01em;
+     }
+
+     &__sub {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.32);
+         margin: 0;
+     }
+ }
+
+ // ── Live Indicator ────────────────────────────────────────────────────────
+ .aev-live-dot {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 0.625rem;
+     height: 0.625rem;
+     flex-shrink: 0;
+
+     &__inner {
+         width: 0.5rem;
+         height: 0.5rem;
+         border-radius: 50%;
+         background: $gold;
+         animation: aev-live-pulse 2.2s ease-in-out infinite;
+     }
+ }
+
+ // ── Completion Progress ───────────────────────────────────────────────────
+ .aev-progress-wrap {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 0.5rem 1.125rem;
+     border-bottom: 1px solid rgba($champagne, 0.08);
+ }
+
+ .aev-progress-bar {
+     flex: 1;
+     height: 3px;
+     border-radius: 100px;
+     background: rgba($champagne, 0.1);
+     overflow: hidden;
+
+     &__fill {
+         height: 100%;
+         border-radius: 100px;
+         background: linear-gradient(to right, $gold, $champagne);
+         transition: width 280ms cubic-bezier(0.4, 0, 0.2, 1);
+         box-shadow: 0 0 6px rgba($gold, 0.4);
+     }
+ }
+
+ .aev-progress-label {
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: rgba(255, 255, 255, 0.3);
+     letter-spacing: 0.03em;
+     white-space: nowrap;
+     flex-shrink: 0;
+ }
+
+ // ── SVG Canvas ────────────────────────────────────────────────────────────
+ .aev-canvas {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 0.5rem 0;
+     overflow: hidden;
+ }
+
+ .aev-svg {
+     display: block;
+     max-width: 100%;
+ }
+
+ // ── SVG Node Styles (applied via CSS, not inline SVG attributes) ──────────
+
+ // Edge line base
+ .aev-edge__line {
+     stroke: #E2C780;
+     stroke-width: 1.5;
+     transition: stroke-opacity $t;
+
+     &--active {
+         stroke-width: 2;
+         // Glowing gold line for active paths
+         filter: drop-shadow(0 0 3px rgba(#E2C780, 0.5));
+     }
+ }
+
+ // Node body border (type-specific colors applied via SCSS maps)
+ .aev-node {
+     cursor: default;
+
+     &__body {
+         transition: filter $t;
+     }
+
+     // Border colors by node type (accessed via [data-type] attribute)
+     &[data-type="trigger"] .aev-node__border {
+         stroke: rgba(#4A90D9, 0.4);
+         stroke-width: 1;
+     }
+
+     &[data-type="condition"] .aev-node__border {
+         stroke: rgba($champagne, 0.35);
+         stroke-width: 1;
+     }
+
+     &[data-type="modifier"] .aev-node__border {
+         stroke: rgba($emerald, 0.4);
+         stroke-width: 1;
+     }
+
+     &[data-type="output"] .aev-node__border {
+         stroke: rgba($gold, 0.45);
+         stroke-width: 1;
+     }
+
+     // Accent bar colors
+     &[data-type="trigger"] .aev-node__accent {
+         fill: rgba(#4A90D9, 0.7);
+     }
+
+     &[data-type="condition"] .aev-node__accent {
+         fill: rgba($champagne, 0.7);
+     }
+
+     &[data-type="modifier"] .aev-node__accent {
+         fill: rgba($emerald, 0.8);
+     }
+
+     &[data-type="output"] .aev-node__accent {
+         fill: rgba($gold, 0.8);
+     }
+
+     // Title colors
+     &[data-type="trigger"] .aev-node__title {
+         fill: rgba(255, 255, 255, 0.85);
+     }
+
+     &[data-type="condition"] .aev-node__title {
+         fill: $champagne;
+     }
+
+     &[data-type="modifier"] .aev-node__title {
+         fill: lighten($emerald, 40%);
+     }
+
+     &[data-type="output"] .aev-node__title {
+         fill: lighten($gold, 25%);
+     }
+
+     .aev-node__subtitle {
+         fill: rgba(255, 255, 255, 0.4);
+     }
+
+     // Status dot
+     &--filled .aev-node__status-dot {
+         fill: $emerald;
+         animation: aev-dot-pulse 2s ease-in-out infinite;
+     }
+
+     &--unfilled .aev-node__status-dot {
+         fill: rgba(255, 255, 255, 0.12);
+     }
+
+     // Border glow on filled
+     &--filled[data-type="condition"] .aev-node__border {
+         stroke: rgba($champagne, 0.55);
+         stroke-width: 1.5;
+     }
+
+     &--filled[data-type="modifier"] .aev-node__border {
+         stroke: rgba($emerald, 0.6);
+         stroke-width: 1.5;
+     }
+
+     &--filled[data-type="output"] .aev-node__border {
+         stroke: rgba($gold, 0.65);
+         stroke-width: 1.5;
+     }
+
+     // Royal Gold pulse animation — fires when a new value arrives
+     // (via Angular re-keying the group element)
+     &--pulse {
+         animation: aev-node-pulse 600ms ease forwards;
+     }
+ }
+
+ // ── Summary Footer ────────────────────────────────────────────────────────
+ .aev-summary {
+     display: flex;
+     align-items: center;
+     justify-content: space-around;
+     padding: 0.625rem 1.125rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     background: rgba(0, 0, 0, 0.12);
+     gap: 0.5rem;
+
+     &__item {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 0.1875rem;
+         flex: 1;
+     }
+
+     &__label {
+         font-size: 9px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba(255, 255, 255, 0.28);
+     }
+ }
+
+ // ── Summary Value Elements ────────────────────────────────────────────────
+ .aev-modifier {
+     font-size: 1.0625rem;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 800;
+     letter-spacing: -0.02em;
+     font-variant-numeric: tabular-nums;
+
+     &--positive {
+         color: lighten($emerald, 40%);
+     }
+
+     &--negative {
+         color: lighten($ruby, 30%);
+     }
+
+     &--neutral {
+         color: rgba(255, 255, 255, 0.3);
+     }
+ }
+
+ .aev-priority {
+     font-size: 1.0625rem;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 800;
+     letter-spacing: -0.01em;
+     color: $champagne;
+ }
+
+ .aev-mode-chip {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     text-transform: uppercase;
+
+     &--edit {
+         background: rgba($gold, 0.12);
+         color: $champagne;
+         border: 1px solid rgba($gold, 0.22);
+     }
+
+     &--create {
+         background: rgba($emerald, 0.12);
+         color: lighten($emerald, 38%);
+         border: 1px solid rgba($emerald, 0.22);
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+
+ // Live dot pulse (Gold)
+ @keyframes aev-live-pulse {
+     0% {
+         opacity: 1;
+         box-shadow: 0 0 0 0 rgba($gold, 0.6);
+     }
+
+     70% {
+         opacity: 0.7;
+         box-shadow: 0 0 0 6px rgba($gold, 0);
+     }
+
+     100% {
+         opacity: 1;
+         box-shadow: 0 0 0 0 rgba($gold, 0);
+     }
+ }
+
+ // Node status dot pulse (Emerald for filled nodes)
+ @keyframes aev-dot-pulse {
+     0% {
+         opacity: 1;
+     }
+
+     50% {
+         opacity: 0.5;
+     }
+
+     100% {
+         opacity: 1;
+     }
+ }
+
+ // Node pulse on new value — Royal Gold flash
+ @keyframes aev-node-pulse {
+     0% {
+         opacity: 1;
+     }
+
+     20% {
+         opacity: 0.65;
+         filter: drop-shadow(0 0 8px rgba($gold, 0.7));
+     }
+
+     60% {
+         opacity: 0.9;
+         filter: drop-shadow(0 0 4px rgba($gold, 0.35));
+     }
+
+     100% {
+         opacity: 1;
+         filter: none;
+     }
+ }

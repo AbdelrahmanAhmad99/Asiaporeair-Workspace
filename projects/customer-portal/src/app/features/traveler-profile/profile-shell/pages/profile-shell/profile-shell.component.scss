@@ -1,0 +1,356 @@
+// ============================================================================
+// profile-shell.component.scss
+// Asiaporeair | Profile Shell — Midnight Sapphire Sidebar Layout
+// ============================================================================
+
+$midnight : #051937;
+$navy-deep : #030f22;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #a0aec0;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+$sidebar-w : 240px;
+
+:host {
+    display: block;
+}
+
+// ── Shell Layout ──────────────────────────────────────────────────────────────
+.shell {
+    display: flex;
+    min-height: 100vh;
+    background: $ivory;
+    font-family: $font;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SIDEBAR
+// ══════════════════════════════════════════════════════════════════════════════
+
+.shell__sidebar {
+    width: $sidebar-w;
+    flex-shrink: 0;
+    background: $midnight;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba($royal-gold, 0.2) transparent;
+    z-index: 50;
+
+    // Subtle gold radial glow top-right
+    &::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: $sidebar-w;
+        height: 100%;
+        background: radial-gradient(ellipse at 120% -10%, rgba($royal-gold, 0.07) 0%, transparent 55%);
+        pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        transition: transform 320ms $ease;
+        box-shadow: 4px 0 32px rgba($midnight, 0.4);
+        z-index: 200;
+
+        &.is-open {
+            transform: translateX(0);
+        }
+    }
+}
+
+// ── Identity block ─────────────────────────────────────────────────────────
+.sidebar__identity {
+    padding: 28px 20px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, darken($midnight, 2%), lighten($midnight, 10%));
+    border: 2px solid rgba($royal-gold, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    &-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &-initials {
+        font-family: $font;
+        font-size: 1rem;
+        font-weight: 700;
+        color: $champagne;
+        line-height: 1;
+    }
+}
+
+.sidebar__user-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.sidebar__name {
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: $white;
+    margin: 0 0 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar__tier {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $royal-gold;
+}
+
+// ── Rule ───────────────────────────────────────────────────────────────────
+.sidebar__rule {
+    height: 1px;
+    margin: 0 20px;
+    background: linear-gradient(90deg, transparent, rgba($royal-gold, 0.2), transparent);
+}
+
+// ── Nav links ──────────────────────────────────────────────────────────────
+.sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 10px;
+    gap: 2px;
+}
+
+.sidebar__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background $t, color $t;
+
+    &-icon {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba($muted, 0.7);
+        transition: color $t;
+    }
+
+    &-label {
+        font-family: $font;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: rgba($white, 0.55);
+        white-space: nowrap;
+        transition: color $t;
+    }
+
+    &-indicator {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 20px;
+        background: $royal-gold;
+        border-radius: 2px 0 0 2px;
+    }
+
+    &:hover {
+        background: rgba($white, 0.05);
+
+        .sidebar__link-icon {
+            color: $champagne;
+        }
+
+        .sidebar__link-label {
+            color: rgba($white, 0.85);
+        }
+    }
+
+    &.is-active {
+        background: rgba($royal-gold, 0.1);
+
+        .sidebar__link-icon {
+            color: $royal-gold;
+        }
+
+        .sidebar__link-label {
+            color: $champagne;
+            font-weight: 700;
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── Miles widget ───────────────────────────────────────────────────────────
+.sidebar__miles-widget {
+    padding: 16px 20px 24px;
+}
+
+.miles-widget {
+    &__label {
+        font-family: $font;
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba($champagne, 0.45);
+        margin-bottom: 2px;
+    }
+
+    &__value {
+        font-family: $font;
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $champagne;
+        line-height: 1.1;
+        margin-bottom: 10px;
+    }
+
+    &__bar-wrap {
+        height: 3px;
+        background: rgba($white, 0.08);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 5px;
+    }
+
+    &__bar {
+        height: 100%;
+        width: 65%;
+        background: linear-gradient(90deg, $royal-gold, $champagne);
+        border-radius: 2px;
+    }
+
+    &__sub {
+        font-size: 0.6rem;
+        font-weight: 400;
+        color: rgba($champagne, 0.35);
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MAIN CONTENT AREA
+// ══════════════════════════════════════════════════════════════════════════════
+
+.shell__main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+// ── Mobile header bar ──────────────────────────────────────────────────────
+.shell__mobile-bar {
+    display: none;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    background: $midnight;
+    border-bottom: 1px solid rgba($royal-gold, 0.15);
+
+    @media (max-width: 900px) {
+        display: flex;
+    }
+}
+
+.mobile-bar {
+    &__menu-btn {
+        background: none;
+        border: 1px solid rgba($royal-gold, 0.3);
+        border-radius: 6px;
+        padding: 6px 8px;
+        cursor: pointer;
+        color: $champagne;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background $t;
+
+        &:hover {
+            background: rgba($royal-gold, 0.1);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 2px;
+        }
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: $champagne;
+    }
+}
+
+// ── Mobile backdrop ────────────────────────────────────────────────────────
+.shell__backdrop {
+    display: none;
+
+    @media (max-width: 900px) {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba($midnight, 0.5);
+        backdrop-filter: blur(3px);
+        z-index: 150;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shell__sidebar {
+        transition: none;
+    }
+}

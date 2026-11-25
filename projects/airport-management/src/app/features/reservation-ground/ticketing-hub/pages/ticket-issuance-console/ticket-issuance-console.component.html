@@ -1,0 +1,402 @@
+<div class="tic-page">
+
+    <!-- ══ Issuance Confirmation Modal ═══════════════════════════════ -->
+    @if (showConfirmModal()) {
+    <div class="tic-modal-bd" (click)="onIssuanceDismissed()" aria-hidden="true"></div>
+
+    <div class="tic-modal" role="dialog" aria-modal="true" aria-labelledby="tic-modal-title">
+        <div class="tic-modal__accent-line"></div>
+
+        <div class="tic-modal__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+            </svg>
+        </div>
+
+        <div class="tic-modal__body">
+            <h2 class="tic-modal__title" id="tic-modal-title">Confirm Ticket Issuance</h2>
+            @if (store.activeBooking()) {
+            <p class="tic-modal__pnr">PNR · {{ store.activeBooking()!.bookingReference }}</p>
+            }
+            <p class="tic-modal__copy">
+                This will generate legally binding e-tickets for all passengers on this booking.
+                Once issued, tickets cannot be modified without supervisor authorisation.
+            </p>
+            <div class="tic-modal__meta">
+                @if (store.activeBooking()) {
+                <div class="tic-modal__meta-row">
+                    <span class="tic-modal__meta-key">Flight</span>
+                    <span class="tic-modal__meta-val">{{ store.activeBooking()!.flightNumber }}</span>
+                </div>
+                <div class="tic-modal__meta-row">
+                    <span class="tic-modal__meta-key">Route</span>
+                    <span class="tic-modal__meta-val">
+                        {{ store.activeBooking()!.originAirportCode }} → {{
+                        store.activeBooking()!.destinationAirportCode }}
+                    </span>
+                </div>
+                <div class="tic-modal__meta-row">
+                    <span class="tic-modal__meta-key">Passengers</span>
+                    <span class="tic-modal__meta-val">{{ store.activeBooking()!.passengers.length }}</span>
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="tic-modal__actions">
+            <button class="tic-modal__btn tic-modal__btn--cancel" type="button" (click)="onIssuanceDismissed()">
+                Cancel
+            </button>
+            <button class="tic-modal__btn tic-modal__btn--confirm" type="button" (click)="onIssuanceConfirmed()">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                </svg>
+                Issue Tickets
+            </button>
+        </div>
+    </div>
+    }
+
+    <!-- ══ Sticky Page Header ═════════════════════════════════════════ -->
+    <header class="tic-header">
+        <div class="tic-header__left">
+            <button class="tic-back-btn" type="button" (click)="goBack()" aria-label="Back to search terminal">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+                Terminal
+            </button>
+
+            <nav class="tic-breadcrumb" aria-label="Breadcrumb">
+                <span class="tic-breadcrumb__section">Reservation &amp; Ground</span>
+                <svg class="tic-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="tic-breadcrumb__section">Ticketing Hub</span>
+                <svg class="tic-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="tic-breadcrumb__current">Issuance Console</span>
+            </nav>
+
+            <div class="tic-title-row">
+                <h1 class="tic-title">
+                    <svg class="tic-title__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                    </svg>
+                    Ticket Issuance Console
+                </h1>
+                @if (store.activeBooking()) {
+                <span class="tic-pnr-badge">{{ store.activeBooking()!.bookingReference }}</span>
+                }
+                @if (store.isCompleted()) {
+                <span class="tic-success-badge">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                    Issued
+                </span>
+                }
+            </div>
+        </div>
+
+        <div class="tic-header__controls">
+            <!-- View PNR Explorer -->
+            @if (store.activeBooking()) {
+            <button class="tic-nav-btn" type="button" (click)="viewPnrExplorer()" title="View PNR Explorer">
+                <svg class="tic-nav-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0z" />
+                </svg>
+                PNR Explorer
+            </button>
+            }
+
+            <!-- Back to PNR (shown after completion) -->
+            @if (store.isCompleted()) {
+            <button class="tic-nav-btn tic-nav-btn--back" type="button" (click)="viewPnrExplorer()"
+                title="Return to PNR Deep Explorer">
+                <svg class="tic-nav-btn__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+                Back to PNR
+            </button>
+            }
+
+            <!-- Print -->
+            @if (store.isCompleted()) {
+            <button class="tic-nav-btn tic-nav-btn--print" type="button" (click)="onPrint()" title="Print Documents">
+                <svg class="tic-nav-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
+                </svg>
+                Print Documents
+            </button>
+            }
+
+            <!-- Dark mode -->
+            <button class="tic-icon-btn tic-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+                @if (isDarkMode()) {
+                <svg class="tic-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="tic-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+        </div>
+    </header>
+
+    <!-- ══ Page Body ══════════════════════════════════════════════════ -->
+    <main class="tic-body">
+
+        <!-- ── Booking Loading Skeleton ────────────────────────────────── -->
+        @if (store.bookingLoading()) {
+        <div class="tic-skeleton" aria-busy="true" aria-label="Loading booking context">
+            <div class="tic-skeleton__card">
+                <div class="tic-shimmer tic-shimmer--xl"></div>
+                <div class="tic-shimmer tic-shimmer--lg"></div>
+                <div class="tic-shimmer tic-shimmer--md"></div>
+            </div>
+        </div>
+        }
+
+        <!-- ── Booking Load Error ──────────────────────────────────────── -->
+        @if (store.bookingError() && !store.bookingLoading()) {
+        <div class="tic-load-error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="tic-load-error__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div>
+                <p class="tic-load-error__title">Context Load Failure</p>
+                <p class="tic-load-error__msg">{{ store.bookingError() }}</p>
+            </div>
+        </div>
+        }
+
+        <!-- ── Main Console (booking loaded) ──────────────────────────── -->
+        @if (store.activeBooking() && !store.bookingLoading()) {
+        <div class="tic-console">
+
+            <!-- Console Left: Booking Summary Card + Issuance Control -->
+            <aside class="tic-console__sidebar">
+
+                <!-- Booking Summary -->
+                <div class="tic-booking-card">
+                    <div class="tic-booking-card__accent" aria-hidden="true"></div>
+
+                    <div class="tic-booking-card__top">
+                        <div>
+                            <p class="tic-booking-card__label">Booking Reference</p>
+                            <p class="tic-booking-card__pnr">{{ store.activeBooking()!.bookingReference }}</p>
+                        </div>
+                        <span class="tic-status-pill" [class]="'tic-status-pill--' + store.bookingStatusTheme()">
+                            {{ store.activeBooking()!.paymentStatus }}
+                        </span>
+                    </div>
+
+                    <!-- Route Hero -->
+                    <div class="tic-route">
+                        <div class="tic-route__node">
+                            <span class="tic-route__iata">{{ store.activeBooking()!.originAirportCode }}</span>
+                            <span class="tic-route__name">{{ store.activeBooking()!.originAirportName }}</span>
+                        </div>
+                        <div class="tic-route__center" aria-hidden="true">
+                            <div class="tic-route__line"></div>
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                class="tic-route__plane">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                            </svg>
+                        </div>
+                        <div class="tic-route__node tic-route__node--right">
+                            <span class="tic-route__iata">{{ store.activeBooking()!.destinationAirportCode }}</span>
+                            <span class="tic-route__name">{{ store.activeBooking()!.destinationAirportName }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Meta grid -->
+                    <div class="tic-booking-card__meta">
+                        <div class="tic-meta">
+                            <span class="tic-meta__key">Flight</span>
+                            <span class="tic-meta__val">{{ store.activeBooking()!.flightNumber }}</span>
+                        </div>
+                        <div class="tic-meta">
+                            <span class="tic-meta__key">Aircraft</span>
+                            <span class="tic-meta__val">{{ store.activeBooking()!.aircraftModel }}</span>
+                        </div>
+                        <div class="tic-meta">
+                            <span class="tic-meta__key">Passengers</span>
+                            <span class="tic-meta__val">{{ store.activeBooking()!.passengers.length }}</span>
+                        </div>
+                        <div class="tic-meta">
+                            <span class="tic-meta__key">Total</span>
+                            <span class="tic-meta__val tic-meta__val--price">
+                                {{ store.activeBooking()!.totalPrice | currency:'USD':'symbol':'1.2-2' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Issuance Control Panel -->
+                <div class="tic-control-panel">
+                    <p class="tic-control-panel__title">Issuance Control</p>
+
+                    <!-- Already issued notice -->
+                    @if (store.isCompleted() && store.issuedTickets().length > 0) {
+                    <div class="tic-already-issued" role="status">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                        </svg>
+                        {{ store.issuedTickets().length }} ticket{{ store.issuedTickets().length !== 1 ? 's' : '' }}
+                        issued successfully.
+                    </div>
+                    }
+
+                    <!-- Pre-existing tickets warning -->
+                    @if (!store.isCompleted() && store.issuedTickets().length > 0) {
+                    <div class="tic-warning-banner" role="alert">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                        Tickets already exist for this booking.
+                    </div>
+                    }
+
+                    <!-- Cancelled booking warning -->
+                    @if (store.activeBooking()!.isCancelled) {
+                    <div class="tic-error-banner" role="alert">
+                        Booking cancelled — issuance not permitted.
+                    </div>
+                    }
+
+                    <!-- Generate button -->
+                    <button class="tic-generate-btn" type="button"
+                        [disabled]="!store.canIssue() || store.isProcessing()" (click)="onGenerateClicked()">
+                        @if (store.isProcessing()) {
+                        <svg class="tic-generate-btn__icon tic-generate-btn__icon--spin" fill="none"
+                            stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Processing…
+                        } @else {
+                        <svg class="tic-generate-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                        </svg>
+                        Generate Tickets
+                        }
+                    </button>
+
+                    @if (store.hasFailed()) {
+                    <button class="tic-retry-btn" type="button" (click)="onRetry()">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Retry Issuance
+                    </button>
+                    }
+                </div>
+
+            </aside>
+
+            <!-- Console Right: Progress + Ticket Previews -->
+            <section class="tic-console__main">
+
+                <!-- Progress tracker — shown during and after processing -->
+                @if (store.isProcessing() || store.isCompleted() || store.hasFailed()) {
+                <aoms-ticket-issuance-progress [status]="store.issuanceStatus()"
+                    [overallProgress]="store.overallProgress()" [stageIndex]="store.stageIndex()"
+                    [error]="store.globalError()" />
+                }
+
+                <!-- Global error overlay -->
+                @if (store.hasFailed() && store.globalError()) {
+                <div class="tic-global-error" role="alert">
+                    <div class="tic-global-error__inner">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="tic-global-error__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        <div>
+                            <p class="tic-global-error__title">Issuance Failed</p>
+                            <p class="tic-global-error__msg">{{ store.globalError() }}</p>
+                        </div>
+                        <button class="tic-global-error__retry" type="button" (click)="onRetry()">Retry</button>
+                    </div>
+                </div>
+                }
+
+                <!-- Issued Ticket Previews grid -->
+                @if (store.isCompleted() && store.issuedTickets().length > 0) {
+                <div class="tic-tickets-section">
+                    <h2 class="tic-tickets-section__title">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="tic-tickets-section__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                        </svg>
+                        Issued Documents
+                        <span class="tic-tickets-section__count">{{ store.issuedTickets().length }}</span>
+                    </h2>
+
+                    <div class="tic-tickets-grid">
+                        @for (ticket of store.issuedTickets(); track trackByTicketId($index, ticket)) {
+                        <aoms-electronic-ticket-preview [ticket]="ticket" [booking]="store.activeBooking()!" />
+                        }
+                    </div>
+                </div>
+                }
+
+                <!-- Idle placeholder — no processing yet -->
+                @if (store.issuanceStatus() === 'Idle' && store.issuedTickets().length === 0) {
+                <div class="tic-idle-state" role="status">
+                    <div class="tic-idle-state__ring" aria-hidden="true"></div>
+                    <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 64 64"
+                        class="tic-idle-state__icon" aria-hidden="true">
+                        <rect x="8" y="20" width="48" height="24" rx="3" stroke-opacity="0.4" />
+                        <line x1="20" y1="28" x2="44" y2="28" stroke-opacity="0.3" />
+                        <line x1="20" y1="34" x2="36" y2="34" stroke-opacity="0.2" />
+                        <circle cx="52" cy="16" r="6" stroke-opacity="0.5" />
+                        <path d="M49 16h6M52 13v6" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round" />
+                    </svg>
+                    <p class="tic-idle-state__label">Console Standby</p>
+                    <p class="tic-idle-state__hint">
+                        Verify booking status, then click <strong>Generate Tickets</strong> to begin issuance.
+                    </p>
+                </div>
+                }
+
+            </section>
+        </div>
+        } <!-- /activeBooking -->
+
+    </main>
+</div>

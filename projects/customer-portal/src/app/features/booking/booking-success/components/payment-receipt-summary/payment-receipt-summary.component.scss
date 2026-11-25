@@ -1,0 +1,187 @@
+// payment-receipt-summary.component.scss
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --success: #10b981;
+    --radius: 12px;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    display: block;
+}
+
+.receipt-card {
+    background: #fff;
+    border: 1px solid rgba(5, 25, 55, 0.08);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(5, 25, 55, 0.06);
+    font-family: var(--font);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+    background: rgba(5, 25, 55, 0.02);
+    border-bottom: 1px solid rgba(5, 25, 55, 0.07);
+}
+
+.header-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    background: rgba(5, 25, 55, 0.06);
+    border: 1px solid rgba(5, 25, 55, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--royal-gold);
+}
+
+.card-title {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.03em;
+    margin: 0 0 2px;
+}
+
+.card-sub {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.receipt-status {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: rgba(5, 25, 55, 0.06);
+    border: 1px solid rgba(5, 25, 55, 0.1);
+    color: var(--text-muted);
+
+    &--success {
+        background: rgba(16, 185, 129, 0.08);
+        border-color: rgba(16, 185, 129, 0.25);
+        color: #059669;
+    }
+}
+
+// ── Receipt Rows ──────────────────────────────────────────────────────────────
+.receipt-body {
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.receipt-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(5, 25, 55, 0.04);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.row-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.row-value {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    text-align: right;
+    word-break: break-all;
+
+    &--mono {
+        font-family: 'Courier New', monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.03em;
+    }
+}
+
+// ── Total Block ───────────────────────────────────────────────────────────────
+.total-block {
+    background: var(--midnight);
+    padding: 1.125rem 1.25rem;
+    border-top: 1px solid rgba(182, 143, 36, 0.15);
+}
+
+.total-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.total-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.total-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.total-note {
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.total-amount-group {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.total-currency {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(226, 199, 128, 0.7);
+    letter-spacing: 0.04em;
+    align-self: flex-start;
+    margin-top: 3px;
+}
+
+.total-amount {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--champagne);
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+// ── Legal Note ────────────────────────────────────────────────────────────────
+.legal-note {
+    padding: 10px 1.25rem 12px;
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    border-top: 1px solid rgba(5, 25, 55, 0.06);
+}

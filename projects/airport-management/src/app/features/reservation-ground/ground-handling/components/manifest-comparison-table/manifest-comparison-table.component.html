@@ -1,0 +1,152 @@
+<div class="mct-container">
+
+    <!-- ── Loading shimmer ──────────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="mct-shimmer-list" aria-busy="true" aria-label="Loading manifest comparison">
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+        <div class="mct-shimmer-row">
+            <div class="mct-shimmer mct-shimmer--icon"></div>
+            <div class="mct-shimmer mct-shimmer--name"></div>
+            <div class="mct-shimmer mct-shimmer--seat"></div>
+            <div class="mct-shimmer mct-shimmer--class"></div>
+            <div class="mct-shimmer mct-shimmer--ticket"></div>
+            <div class="mct-shimmer mct-shimmer--status"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Empty state ──────────────────────────────────────────────── -->
+    @if (isEmpty()) {
+    <div class="mct-empty" role="status">
+        <svg class="mct-empty__icon" viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="1.2"
+            aria-hidden="true">
+            <rect x="10" y="15" width="60" height="35" rx="3" stroke-opacity="0.3" />
+            <line x1="20" y1="25" x2="60" y2="25" stroke-opacity="0.2" />
+            <line x1="20" y1="32" x2="50" y2="32" stroke-opacity="0.15" />
+            <line x1="20" y1="39" x2="45" y2="39" stroke-opacity="0.1" />
+        </svg>
+        <p class="mct-empty__title">No Manifest Data</p>
+        <p class="mct-empty__sub">No passengers found for this flight's booking manifest.</p>
+    </div>
+    }
+
+    <!-- ── Data table ───────────────────────────────────────────────── -->
+    @if (!loading() && entries().length > 0) {
+    <div class="mct-table-shell">
+
+        <!-- Sticky header — Midnight Sapphire / Champagne Gold -->
+        <div class="mct-header-row" role="row" aria-label="Manifest comparison header">
+            <div class="mct-th mct-th--status" role="columnheader" aria-label="Boarding status"></div>
+            <div class="mct-th mct-th--seq" role="columnheader">Seq</div>
+            <div class="mct-th mct-th--name" role="columnheader">Passenger</div>
+            <div class="mct-th mct-th--seat" role="columnheader">Seat</div>
+            <div class="mct-th mct-th--class" role="columnheader">Cabin</div>
+            <div class="mct-th mct-th--booking" role="columnheader">Booking Ref</div>
+            <div class="mct-th mct-th--ticket" role="columnheader">Ticket Code</div>
+            <div class="mct-th mct-th--state" role="columnheader">State</div>
+        </div>
+
+        <!-- Conditional virtualization based on row count -->
+        @if (useVirtualScroll()) {
+        <cdk-virtual-scroll-viewport class="mct-viewport" [itemSize]="rowHeight" [style.height]="viewportHeight()"
+            role="rowgroup" aria-label="Manifest entries">
+            <div *cdkVirtualFor="let entry of entries(); trackBy: trackByPassengerId; templateCacheSize: 20"
+                class="mct-row" [class.mct-row--boarded]="entry.hasBoarded" [class.mct-row--noshow]="!entry.hasBoarded"
+                role="row" [attr.aria-label]="entry.passengerName + (entry.hasBoarded ? ' boarded' : ' no-show')">
+
+                <ng-container *ngTemplateOutlet="rowTemplate; context: { entry: entry }"></ng-container>
+
+            </div>
+        </cdk-virtual-scroll-viewport>
+        } @else {
+        <!-- Plain rendering for small manifests -->
+        <div class="mct-plain-list" role="rowgroup">
+            @for (entry of entries(); track trackByPassengerId($index, entry)) {
+            <div class="mct-row" [class.mct-row--boarded]="entry.hasBoarded" [class.mct-row--noshow]="!entry.hasBoarded"
+                role="row" [attr.aria-label]="entry.passengerName + (entry.hasBoarded ? ' boarded' : ' no-show')">
+
+                <ng-container *ngTemplateOutlet="rowTemplate; context: { entry: entry }"></ng-container>
+
+            </div>
+            }
+        </div>
+        }
+
+    </div>
+    }
+
+</div>
+
+<!-- ── Shared Row Template ──────────────────────────────────────────── -->
+<ng-template #rowTemplate let-entry="entry">
+
+    <!-- Status icon column -->
+    <div class="mct-cell mct-cell--status" role="cell">
+        @if (entry.hasBoarded) {
+        <span class="mct-status-icon mct-status-icon--boarded" title="Boarded" aria-label="Boarded">
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+        </span>
+        } @else {
+        <span class="mct-status-icon mct-status-icon--noshow" title="No-Show" aria-label="No-show">
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </span>
+        }
+    </div>
+
+    <!-- Sequence number -->
+    <div class="mct-cell mct-cell--seq" role="cell">
+        <span class="mct-seq" [class.mct-seq--empty]="!entry.hasBoarded">
+            {{ entry.hasBoarded ? entry.sequenceNumber : '—' }}
+        </span>
+    </div>
+
+    <!-- Passenger name -->
+    <div class="mct-cell mct-cell--name" role="cell">
+        <span class="mct-name" [class.mct-name--noshow]="!entry.hasBoarded">
+            {{ entry.passengerName }}
+        </span>
+        @if (entry.passportNumber) {
+        <span class="mct-passport">{{ entry.passportNumber }}</span>
+        }
+    </div>
+
+    <!-- Seat -->
+    <div class="mct-cell mct-cell--seat" role="cell">
+        <span class="mct-seat" [class.mct-seat--noshow]="!entry.hasBoarded">{{ entry.seatNumber }}</span>
+    </div>
+
+    <!-- Cabin class -->
+    <div class="mct-cell mct-cell--class" role="cell">
+        <span class="mct-class-badge"
+            [class.mct-class-badge--first]="entry.cabinClass?.toLowerCase().includes('first') || entry.cabinClass?.toLowerCase().includes('suite')"
+            [class.mct-class-badge--business]="entry.cabinClass?.toLowerCase().includes('business')"
+            [class.mct-class-badge--economy]="entry.cabinClass?.toLowerCase().includes('economy')">
+            {{ entry.cabinClass }}
+        </span>
+    </div>
+
+    <!-- Booking reference -->
+    <div class="mct-cell mct-cell--booking" role="cell">
+        <span class="mct-mono">{{ entry.bookingReference }}</span>
+    </div>
+
+    <!-- Ticket code -->
+    <div class="mct-cell mct-cell--ticket" role="cell">
+        <span class="mct-mono">{{ entry.ticketCode }}</span>
+    </div>
+
+    <!-- State badge -->
+    <div class="mct-cell mct-cell--state" role="cell">
+        @if (entry.hasBoarded) {
+        <span class="mct-state-badge mct-state-badge--boarded">Boarded</span>
+        } @else {
+        <span class="mct-state-badge mct-state-badge--noshow">No-Show</span>
+        }
+    </div>
+
+</ng-template>

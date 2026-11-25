@@ -1,0 +1,461 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ============================================================================
+ // 1. Card (squircle 12px)
+ // ============================================================================
+ .rdg-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 4px 22px rgba($midnight, 0.07);
+     animation: rdg-card-enter 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Scroll container
+ // ============================================================================
+ .rdg-scroll {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+
+     &::-webkit-scrollbar {
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.28);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 3. Table
+ // ============================================================================
+ .rdg-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 13px;
+ }
+
+ // ============================================================================
+ // 4. Sticky Midnight Sapphire header
+ // ============================================================================
+ .rdg-head {
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 2;
+ }
+
+ .rdg-th {
+     padding: 0.875rem 1rem;
+     text-align: left;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Rows — Sapphire zebra-stripe for long-shift readability
+ // ============================================================================
+ .rdg-tr {
+     border-bottom: 1px solid rgba($champagne, 0.07);
+     transition: background-color 120ms $ease;
+
+     // Even rows: pure white (standard)
+     &--even {
+         background: var(--aoms-bg-card, #ffffff);
+     }
+
+     // Odd rows: faint Sapphire tint — the "zebra-stripe" per spec
+     &--odd {
+         background: rgba($midnight, 0.025);
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.055) !important;
+
+         .rdg-iata {
+             text-shadow: 0 0 16px rgba($gold, 0.25);
+         }
+
+         .rdg-actions {
+             opacity: 1;
+         }
+     }
+
+     // Inactive route — dimmed
+     &--inactive {
+         opacity: 0.65;
+
+         &:hover {
+             opacity: 0.8;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Cells
+ // ============================================================================
+ .rdg-td {
+     padding: 0.8125rem 1rem;
+     vertical-align: middle;
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+
+     &--arrow {
+         width: 2.25rem;
+         padding: 0.8125rem 0;
+         text-align: center;
+     }
+ }
+
+ // ============================================================================
+ // 7. Bold Royal Gold IATA codes — the primary visual anchor
+ // ============================================================================
+ .rdg-iata {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 800;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     display: inline-block;
+     padding: 0.25rem 0.625rem;
+     border-radius: 4px;
+     transition:
+         color 120ms $ease,
+         text-shadow 200ms $ease;
+
+     &--origin {
+         color: $gold;
+         background: rgba($gold, 0.08);
+         border: 1px solid rgba($gold, 0.22);
+     }
+
+     &--destination {
+         color: $champagne;
+         background: rgba($champagne, 0.06);
+         border: 1px solid rgba($champagne, 0.18);
+     }
+
+     &--inactive {
+         color: var(--aoms-text-muted) !important;
+         background: rgba(108, 117, 125, 0.07) !important;
+         border-color: rgba(108, 117, 125, 0.18) !important;
+     }
+ }
+
+ // Route arrow
+ .rdg-route-arrow {
+     width: 1rem;
+     height: 1rem;
+     color: rgba($champagne, 0.4);
+ }
+
+ // ============================================================================
+ // 8. Other cell text styles
+ // ============================================================================
+ .rdg-distance {
+     font-family: 'Courier New', monospace;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-secondary);
+ }
+
+ .rdg-id {
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.06em;
+ }
+
+ // ============================================================================
+ // 9. Status pills
+ // ============================================================================
+ .rdg-status-pill {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.55rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.07em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     &--active {
+         background: rgba($emerald, 0.1);
+         border: 1px solid rgba($emerald, 0.28);
+         color: #059669;
+     }
+
+     &--inactive {
+         background: rgba(108, 117, 125, 0.1);
+         border: 1px solid rgba(108, 117, 125, 0.22);
+         color: #6C757D;
+     }
+ }
+
+ // ============================================================================
+ // 10. Action buttons
+ // ============================================================================
+ .rdg-actions {
+     display: flex;
+     align-items: center;
+     gap: 0.2rem;
+     opacity: 0.5;
+     transition: opacity 120ms $ease;
+ }
+
+ .rdg-action-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     border-radius: 4px;
+     border: 1px solid transparent;
+     background: transparent;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+     }
+
+     // Analyze — Sapphire
+     &--analyze {
+         color: rgba($midnight, 0.55);
+
+         &:hover {
+             color: $midnight;
+             border-color: rgba($midnight, 0.22);
+             background: rgba($midnight, 0.06);
+         }
+     }
+
+     // Modify — Champagne
+     &--modify {
+         color: rgba($champagne, 0.7);
+
+         &:hover {
+             color: $gold;
+             border-color: rgba($gold, 0.32);
+             background: rgba($gold, 0.08);
+         }
+     }
+
+     // Deactivate — Ruby
+     &--deactivate {
+         color: rgba($ruby, 0.5);
+
+         &:hover {
+             color: $ruby;
+             border-color: rgba($ruby, 0.3);
+             background: rgba($ruby, 0.07);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 11. Responsive column hiding
+ // ============================================================================
+ .rdg-col--md-hidden {
+     @media (max-width: 767px) {
+         display: none;
+     }
+ }
+
+ .rdg-col--lg-hidden {
+     @media (max-width: 1023px) {
+         display: none;
+     }
+ }
+
+ // ============================================================================
+ // 12. Shimmer
+ // ============================================================================
+ .rdg-shimmer {
+     height: 0.875rem;
+     border-radius: 4px;
+     background: rgba($champagne, 0.08);
+     animation: rdg-pulse 1.5s ease-in-out infinite;
+ }
+
+ // ============================================================================
+ // 13. Empty state
+ // ============================================================================
+ .rdg-empty {
+     padding: 4rem 1.5rem;
+     text-align: center;
+ }
+
+ .rdg-empty__inner {
+     display: inline-flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+ }
+
+ .rdg-empty__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3.25rem;
+     height: 3.25rem;
+     border-radius: 12px;
+     background: rgba($gold, 0.07);
+     border: 1px solid rgba($gold, 0.15);
+ }
+
+ .rdg-empty__icon {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: var(--aoms-text-muted);
+ }
+
+ .rdg-empty__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     margin: 0;
+ }
+
+ .rdg-empty__sub {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     max-width: 30ch;
+     margin: 0;
+     line-height: 1.6;
+ }
+
+ // ============================================================================
+ // 14. Footer
+ // ============================================================================
+ .rdg-footer {
+     display: flex;
+     align-items: center;
+     padding: 0.75rem 1.25rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     background: rgba($off-white, 0.5);
+ }
+
+ .rdg-footer__label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+ }
+
+ // ============================================================================
+ // 15. Keyframes
+ // ============================================================================
+ @keyframes rdg-card-enter {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rdg-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 16. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .rdg-card {
+         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+     }
+
+     .rdg-tr--even {
+         background: rgba(255, 255, 255, 0.025);
+     }
+
+     .rdg-tr--odd {
+         background: rgba($midnight, 0.4);
+     }
+
+     .rdg-tr:hover {
+         background: rgba($champagne, 0.04) !important;
+     }
+
+     .rdg-iata--destination {
+         color: rgba($champagne, 0.7);
+     }
+
+     .rdg-distance {
+         color: rgba(255, 255, 255, 0.5);
+     }
+
+     .rdg-id {
+         color: rgba(255, 255, 255, 0.28);
+     }
+
+     .rdg-action-btn--analyze {
+         color: rgba(255, 255, 255, 0.4);
+     }
+
+     .rdg-footer {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+ }

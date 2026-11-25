@@ -1,0 +1,202 @@
+<article class="etp-card" [class]="'etp-card--' + statusTheme()" [attr.aria-label]="'E-ticket ' + ticket().ticketCode">
+
+    <!-- ── Card Background: layered glassmorphism ──────────────────── -->
+    <div class="etp-card__glass-layer" aria-hidden="true"></div>
+    <div class="etp-card__noise-layer" aria-hidden="true"></div>
+
+    <!-- ── Perforated tear line ─────────────────────────────────────── -->
+    <div class="etp-tear-line" aria-hidden="true">
+        <div class="etp-tear-line__circle etp-tear-line__circle--left"></div>
+        <div class="etp-tear-line__dash-row">
+            @for (i of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track i) {
+            <div class="etp-tear-line__dash"></div>
+            }
+        </div>
+        <div class="etp-tear-line__circle etp-tear-line__circle--right"></div>
+    </div>
+
+    <!-- ══ Upper Half: Flight Information ═══════════════════════════ -->
+    <div class="etp-upper">
+
+        <!-- Airline brand row -->
+        <div class="etp-airline-row">
+            <div class="etp-airline-mark" aria-hidden="true">
+                <!-- Stylised "A" wordmark placeholder -->
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 4 L28 28 H20 L16 18 L12 28 H4 L16 4Z" fill="currentColor" opacity="0.9" />
+                    <line x1="9" y1="22" x2="23" y2="22" stroke="currentColor" stroke-width="1.5" opacity="0.5" />
+                </svg>
+            </div>
+            <div>
+                <p class="etp-airline-name">Asiaporeair</p>
+                <p class="etp-ticket-type">Electronic Boarding Pass</p>
+            </div>
+            <div class="etp-status-badge" [class]="'etp-status-badge--' + statusTheme()"
+                [attr.aria-label]="'Status: ' + ticket().status">
+                {{ ticket().status }}
+            </div>
+        </div>
+
+        <!-- Route hero -->
+        <div class="etp-route-hero">
+            <div class="etp-route-hero__node">
+                <span class="etp-route-hero__iata">{{ originAirportCode() }}</span>
+                <span class="etp-route-hero__airport">{{ originAirportName() }}</span>
+                <span class="etp-route-hero__time">{{ formattedDeparture() }}</span>
+            </div>
+
+            <!-- Centre path -->
+            <div class="etp-route-hero__path" aria-hidden="true">
+                <div class="etp-route-hero__line"></div>
+                <svg class="etp-route-hero__plane" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+            </div>
+
+            <div class="etp-route-hero__node etp-route-hero__node--right">
+                <span class="etp-route-hero__iata">{{ destinationAirportCode() }}</span>
+                <span class="etp-route-hero__airport">{{ destinationAirportName() }}</span>
+                <span class="etp-route-hero__time">{{ formattedArrival() }}</span>
+            </div>
+        </div>
+
+        <!-- Flight detail bar -->
+        <div class="etp-detail-bar">
+            <div class="etp-kv">
+                <span class="etp-kv__key">Flight</span>
+                <span class="etp-kv__val">{{ flightNumber() }}</span>
+            </div>
+            <div class="etp-kv">
+                <span class="etp-kv__key">Aircraft</span>
+                <span class="etp-kv__val">{{ aircraftModel() }}</span>
+            </div>
+            <div class="etp-kv">
+                <span class="etp-kv__key">Class</span>
+                <span class="etp-kv__val">{{ cabinClass() }}</span>
+            </div>
+            <div class="etp-kv">
+                <span class="etp-kv__key">Seat</span>
+                <span class="etp-kv__val etp-kv__val--seat">{{ seatNumber() }}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══ Lower Half: Passenger + QR ═══════════════════════════════ -->
+    <div class="etp-lower">
+
+        <!-- Passenger info -->
+        <div class="etp-pax-section">
+            <p class="etp-pax-label">Passenger</p>
+            <p class="etp-pax-name">{{ passengerName() }}</p>
+
+            <!-- Ticket code -->
+            <div class="etp-ticket-code-row">
+                <p class="etp-ticket-code-label">Ticket Code</p>
+                <p class="etp-ticket-code">{{ ticket().ticketCode }}</p>
+            </div>
+
+            <!-- PNR -->
+            <div class="etp-pnr-row">
+                <p class="etp-pnr-label">PNR</p>
+                <p class="etp-pnr">{{ bookingReference() }}</p>
+            </div>
+
+            <!-- Issue date -->
+            <div class="etp-issue-row">
+                <p class="etp-issue-label">Issued</p>
+                <p class="etp-issue-val">{{ formattedIssueDate() }}</p>
+            </div>
+        </div>
+
+        <!-- QR Code placeholder -->
+        <div class="etp-qr-section" aria-label="QR code placeholder">
+            <!-- SVG-rendered placeholder QR: a procedurally-structured grid pattern -->
+            <div class="etp-qr-wrap" aria-hidden="true">
+                <svg class="etp-qr" viewBox="0 0 80 80" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Finder patterns (three corners) -->
+                    <!-- Top-left finder -->
+                    <rect x="4" y="4" width="22" height="22" rx="2" fill="none" stroke="currentColor"
+                        stroke-width="2" />
+                    <rect x="8" y="8" width="14" height="14" rx="1" />
+                    <rect x="11" y="11" width="8" height="8" rx="0.5" fill="var(--etp-bg, #051937)" />
+
+                    <!-- Top-right finder -->
+                    <rect x="54" y="4" width="22" height="22" rx="2" fill="none" stroke="currentColor"
+                        stroke-width="2" />
+                    <rect x="58" y="8" width="14" height="14" rx="1" />
+                    <rect x="61" y="11" width="8" height="8" rx="0.5" fill="var(--etp-bg, #051937)" />
+
+                    <!-- Bottom-left finder -->
+                    <rect x="4" y="54" width="22" height="22" rx="2" fill="none" stroke="currentColor"
+                        stroke-width="2" />
+                    <rect x="8" y="58" width="14" height="14" rx="1" />
+                    <rect x="11" y="61" width="8" height="8" rx="0.5" fill="var(--etp-bg, #051937)" />
+
+                    <!-- Timing patterns (alternating) -->
+                    <rect x="30" y="4" width="2" height="2" opacity="0.6" />
+                    <rect x="34" y="4" width="2" height="2" opacity="0.6" />
+                    <rect x="38" y="4" width="2" height="2" opacity="0.6" />
+                    <rect x="42" y="4" width="2" height="2" opacity="0.6" />
+                    <rect x="46" y="4" width="2" height="2" opacity="0.6" />
+
+                    <rect x="4" y="30" width="2" height="2" opacity="0.6" />
+                    <rect x="4" y="34" width="2" height="2" opacity="0.6" />
+                    <rect x="4" y="38" width="2" height="2" opacity="0.6" />
+                    <rect x="4" y="42" width="2" height="2" opacity="0.6" />
+                    <rect x="4" y="46" width="2" height="2" opacity="0.6" />
+
+                    <!-- Data modules (randomised aesthetic pattern) -->
+                    <rect x="30" y="30" width="4" height="4" opacity="0.8" />
+                    <rect x="36" y="30" width="4" height="4" opacity="0.8" />
+                    <rect x="44" y="30" width="4" height="4" opacity="0.8" />
+                    <rect x="30" y="36" width="4" height="4" opacity="0.8" />
+                    <rect x="38" y="36" width="2" height="2" opacity="0.6" />
+                    <rect x="42" y="36" width="6" height="4" opacity="0.8" />
+                    <rect x="30" y="42" width="6" height="4" opacity="0.8" />
+                    <rect x="38" y="42" width="4" height="4" opacity="0.8" />
+                    <rect x="44" y="42" width="4" height="4" opacity="0.8" />
+                    <rect x="30" y="48" width="4" height="2" opacity="0.6" />
+                    <rect x="36" y="48" width="6" height="4" opacity="0.8" />
+                    <rect x="44" y="50" width="4" height="2" opacity="0.6" />
+
+                    <!-- Bottom-right data cluster -->
+                    <rect x="54" y="30" width="4" height="4" opacity="0.8" />
+                    <rect x="60" y="30" width="4" height="4" opacity="0.8" />
+                    <rect x="66" y="30" width="4" height="4" opacity="0.8" />
+                    <rect x="56" y="36" width="6" height="4" opacity="0.8" />
+                    <rect x="64" y="36" width="4" height="4" opacity="0.8" />
+                    <rect x="54" y="42" width="4" height="6" opacity="0.8" />
+                    <rect x="60" y="44" width="4" height="4" opacity="0.8" />
+                    <rect x="66" y="42" width="4" height="4" opacity="0.8" />
+
+                    <!-- More bottom data -->
+                    <rect x="30" y="54" width="4" height="4" opacity="0.8" />
+                    <rect x="36" y="56" width="4" height="4" opacity="0.6" />
+                    <rect x="42" y="54" width="6" height="4" opacity="0.8" />
+                    <rect x="54" y="54" width="4" height="4" opacity="0.8" />
+                    <rect x="60" y="56" width="4" height="4" opacity="0.8" />
+                    <rect x="66" y="54" width="4" height="4" opacity="0.6" />
+                    <rect x="30" y="60" width="6" height="4" opacity="0.8" />
+                    <rect x="38" y="62" width="4" height="4" opacity="0.6" />
+                    <rect x="44" y="60" width="4" height="6" opacity="0.8" />
+                    <rect x="54" y="60" width="4" height="6" opacity="0.8" />
+                    <rect x="60" y="62" width="6" height="4" opacity="0.8" />
+                    <rect x="68" y="60" width="4" height="4" opacity="0.8" />
+                </svg>
+            </div>
+            <p class="etp-qr-label">Scan at Gate</p>
+        </div>
+
+    </div>
+
+    <!-- ── Barcode strip at the bottom ──────────────────────────────── -->
+    <div class="etp-barcode" aria-hidden="true">
+        @for (i of [3,1,4,1,5,2,3,2,4,1,3,2,1,4,2,3,1,5,2,3,4,1,2,3,1,4,2,5,1,3]; track i + '_' + $index) {
+        <div class="etp-barcode__bar" [style.height.%]="i * 16 + 20"></div>
+        }
+    </div>
+
+</article>

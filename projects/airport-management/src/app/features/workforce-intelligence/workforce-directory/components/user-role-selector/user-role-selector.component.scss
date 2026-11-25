@@ -1,0 +1,186 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $t: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+
+ .urs {
+     display: flex;
+     flex-direction: column;
+     gap: 1.75rem;
+ }
+
+ // Intro block
+ .urs__intro {
+     text-align: center;
+
+     &__title {
+         font-size: 1.375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.025em;
+         color: var(--aoms-text-primary);
+         transition: color $t;
+     }
+
+     &__sub {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         max-width: 520px;
+         margin: 0.5rem auto 0;
+         line-height: 1.55;
+         transition: color $t;
+     }
+ }
+
+ // Grid of cards
+ .urs__grid {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+ }
+
+ // Individual role card
+ .urs__card {
+     position: relative;
+     display: flex;
+     align-items: center;
+     gap: 1.125rem;
+     padding: 1.125rem 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.16);
+     cursor: pointer;
+     outline: none;
+     text-align: left;
+     overflow: hidden;
+     transition: transform $t, box-shadow $t, border-color $t, background $t;
+
+     &:hover {
+         border-color: var(--card-accent, #{$gold});
+         background: var(--aoms-bg-card);
+         transform: translateX(4px);
+         box-shadow: 0 4px 20px rgba(5, 25, 55, 0.1),
+         -3px 0 0 var(--card-accent, #{$gold});
+
+         .urs__card__glow {
+             opacity: 1;
+         }
+
+         .urs__card__icon-wrap {
+             border-color: var(--card-accent, #{$gold});
+             background: rgba(from var(--card-accent, #{$gold}) r g b / 0.12);
+         }
+
+         .urs__card__icon {
+             color: var(--card-accent, #{$gold});
+         }
+
+         .urs__card__title {
+             color: var(--card-accent, #{$gold});
+         }
+
+         .urs__card__chevron {
+             transform: translateX(4px);
+             opacity: 1;
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:active {
+         transform: translateX(2px);
+     }
+ }
+
+ // Ambient background glow
+ .urs__card__glow {
+     position: absolute;
+     inset: 0;
+     opacity: 0;
+     pointer-events: none;
+     background: radial-gradient(ellipse at 0% 50%, rgba(182, 143, 36, 0.06) 0%, transparent 60%);
+     transition: opacity $t;
+ }
+
+ // Icon
+ .urs__card__icon-wrap {
+     width: 3rem;
+     height: 3rem;
+     border-radius: 10px;
+     flex-shrink: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background: rgba(182, 143, 36, 0.07);
+     border: 1px solid rgba(226, 199, 128, 0.16);
+     transition: all $t;
+ }
+
+ .urs__card__icon {
+     width: 1.375rem;
+     height: 1.375rem;
+     color: var(--aoms-text-muted);
+     transition: color $t;
+ }
+
+ // Body text
+ .urs__card__body {
+     flex: 1;
+     min-width: 0;
+ }
+
+ .urs__card__title-row {
+     display: flex;
+     align-items: baseline;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+     margin-bottom: 0.125rem;
+ }
+
+ .urs__card__title {
+     font-size: 1rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary);
+     transition: color $t;
+ }
+
+ .urs__card__subtitle {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: var(--aoms-text-muted);
+     transition: color $t;
+ }
+
+ .urs__card__desc {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     line-height: 1.4;
+     transition: color $t;
+ }
+
+ // Chevron
+ .urs__card__chevron {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: var(--aoms-text-muted);
+     flex-shrink: 0;
+     opacity: 0.5;
+     transition: transform $t, opacity $t;
+ }
+
+ :host-context(.aoms-dark) {
+     .urs__card:hover {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+         -3px 0 0 var(--card-accent, #{$gold});
+     }
+ }

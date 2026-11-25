@@ -1,0 +1,72 @@
+<!-- payment-receipt-summary.component.html -->
+
+<div class="receipt-card" role="region" aria-label="Payment receipt">
+
+    <!-- Header -->
+    <div class="card-header">
+        <div class="header-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+        </div>
+        <div>
+            <h2 class="card-title">Payment Receipt</h2>
+            <span class="card-sub">Official confirmation of your transaction</span>
+        </div>
+        <div class="receipt-status" [class.receipt-status--success]="isSucceeded()"
+            aria-label="Payment status: {{ paymentStatus() }}">
+            <svg *ngIf="isSucceeded()" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            {{ isSucceeded() ? 'Succeeded' : paymentStatus() }}
+        </div>
+    </div>
+
+    <!-- Receipt Line Items -->
+    <div class="receipt-body">
+
+        <div class="receipt-row">
+            <span class="row-label">Transaction ID</span>
+            <span class="row-value row-value--mono">{{ transactionId() }}</span>
+        </div>
+
+        <div class="receipt-row">
+            <span class="row-label">Payment Method</span>
+            <span class="row-value">{{ paymentMethod() }}</span>
+        </div>
+
+        <div class="receipt-row" *ngIf="transactionDate()">
+            <span class="row-label">Transaction Date</span>
+            <span class="row-value">{{ transactionDate() }}</span>
+        </div>
+
+        <div class="receipt-row" *ngIf="bookingDetail()?.userEmail">
+            <span class="row-label">Receipt Sent To</span>
+            <span class="row-value">{{ bookingDetail()!.userEmail }}</span>
+        </div>
+
+    </div>
+
+    <!-- Total Block -->
+    <div class="total-block" aria-label="Total amount charged">
+        <div class="total-inner">
+            <div class="total-labels">
+                <span class="total-label">Total Charged</span>
+                <span class="total-note">All taxes &amp; fees included</span>
+            </div>
+            <div class="total-amount-group">
+                <span class="total-currency">{{ currency() }}</span>
+                <span class="total-amount">{{ formatPrice(totalPaid()) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Note -->
+    <div class="legal-note" role="note">
+        This receipt serves as an official record of your payment. Please retain this confirmation for your records.
+        For queries, contact Asiaporeair Customer Care.
+    </div>
+
+</div>

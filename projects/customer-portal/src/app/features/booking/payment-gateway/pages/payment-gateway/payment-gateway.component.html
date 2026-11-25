@@ -1,0 +1,334 @@
+<!-- ============================================================================
+     payment-gateway.component.html
+     Asiaporeair | "Finalize Your Suite Reservation" — Payment Page
+     ============================================================================ -->
+
+<div class="payment-shell" [@pageEnter]>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         TOP CONTEXT BAR
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="context-bar" role="banner">
+        <div class="context-inner">
+
+            <div class="context-brand">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="0.8"
+                    aria-hidden="true">
+                    <path
+                        d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                </svg>
+                <span class="brand-text">Asiaporeair</span>
+            </div>
+
+            <nav class="progress-stepper" aria-label="Booking steps">
+                <div class="step step--done" *ngFor="let s of ['Flights','Passengers','Enhancements','Seats']">
+                    <span class="step-num" aria-hidden="true">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </span>
+                    <span class="step-name">{{ s }}</span>
+                    <div class="step-line" aria-hidden="true"></div>
+                </div>
+                <div class="step step--active" aria-current="step">
+                    <span class="step-num">5</span>
+                    <span class="step-name">Payment</span>
+                </div>
+            </nav>
+
+            <!-- Session Timer -->
+            <div class="session-timer" [class.timer--warning]="timerIsWarning()" aria-live="polite"
+                [attr.aria-label]="'Session expires in ' + timerDisplay()">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+                {{ timerDisplay() }}
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Journey Band -->
+    <div class="journey-band" aria-label="Booking summary header">
+        <div class="journey-band-inner">
+            <div class="journey-left">
+                <span class="journey-route">{{ journeyLabel() || confirmedBooking()?.originAirportCode + ' → ' +
+                    confirmedBooking()?.destinationAirportCode }}</span>
+                <span class="journey-ref" *ngIf="confirmedBooking()">
+                    Ref: <strong>{{ confirmedBooking()!.bookingReference }}</strong>
+                </span>
+            </div>
+            <div class="journey-timer-notice" [class.notice--warning]="timerIsWarning()">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path
+                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                Complete payment within {{ timerDisplay() }} to secure your reservation
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN GRID
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="main-grid" [@sectionStagger]>
+
+        <!-- ── LEFT: Review + Payment Form ───────────────────────────────────── -->
+        <main class="main-column" role="main">
+
+            <!-- Page Title -->
+            <div class="page-header stagger-item">
+                <button class="back-link" (click)="onBack()" aria-label="Return to seat selection">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back
+                </button>
+                <h1 class="page-title">Review Your Booking</h1>
+                <p class="page-subtitle">
+                    Verify all details before securing your suite reservation.
+                    Complete payment to finalise.
+                </p>
+            </div>
+
+            <!-- ── Loading Skeleton ───────────────────────────────────────────── -->
+            <div *ngIf="isLoadingDetail()" class="review-skeleton stagger-item" aria-busy="true"
+                aria-label="Loading booking details">
+                <div class="skel-accordion" *ngFor="let i of [1,2,3]">
+                    <div class="skel skel--header"></div>
+                    <div class="skel skel--body"></div>
+                </div>
+            </div>
+
+            <!-- ── Error State ────────────────────────────────────────────────── -->
+            <div *ngIf="detailError() && !isLoadingDetail()" class="error-banner stagger-item" role="alert">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {{ detailError() }}
+            </div>
+
+            <!-- ── Review Accordion ───────────────────────────────────────────── -->
+            <div *ngIf="!isLoadingDetail() && bookingDetail()" class="stagger-item">
+                <app-booking-review-accordion [bookingDetail]="bookingDetail()!" [seatAssignments]="seatAssignments()"
+                    [currency]="currency()">
+                </app-booking-review-accordion>
+            </div>
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 PAYMENT FORM SECTION
+            ══════════════════════════════════════════════════════════════════ -->
+            <div class="payment-section stagger-item" *ngIf="!isLoadingDetail()">
+
+                <div class="section-title-row">
+                    <h2 class="section-title">Select Payment Method</h2>
+                    <div class="security-badge" aria-label="Secure payment">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        256-bit SSL Encrypted
+                    </div>
+                </div>
+
+                <!-- Payment Method Selector -->
+                <app-payment-method-selector [methods]="paymentMethods()" [selectedMethod]="selectedMethod()"
+                    (methodSelect)="selectMethod($event)">
+                </app-payment-method-selector>
+
+                <!-- Card Form (shown when CreditCard selected) -->
+                <app-stripe-card-element *ngIf="selectedMethod() === 'CreditCard'" [@fadeSlide] [form]="cardForm"
+                    [currency]="currency()" [amount]="grandTotal()" [getFieldError]="getFieldError.bind(this)">
+                </app-stripe-card-element>
+
+                <!-- PayPal Message -->
+                <div *ngIf="selectedMethod() === 'PayPal'" class="redirect-notice" [@fadeSlide] role="status">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 8 16 12 12 16" />
+                        <line x1="8" y1="12" x2="16" y2="12" />
+                    </svg>
+                    <div>
+                        <strong>You will be redirected to PayPal</strong> to complete your payment securely.
+                        Your booking will be held for {{ timerDisplay() }}.
+                    </div>
+                </div>
+
+                <!-- AMEX Message -->
+                <div *ngIf="selectedMethod() === 'AMEX'" class="redirect-notice redirect-notice--amex" [@fadeSlide]
+                    role="status">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                        aria-hidden="true">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <line x1="2" y1="10" x2="22" y2="10" />
+                    </svg>
+                    <div>
+                        <strong>American Express — 0% interest, 6-month instalment.</strong>
+                        Eligible AMEX cardholders only. Terms apply.
+                    </div>
+                </div>
+
+                <!-- Payment Error -->
+                <div *ngIf="paymentError() && flowState() !== 'creating-intent'" class="payment-error-banner"
+                    role="alert" aria-live="assertive">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <div>
+                        <strong>Payment Unsuccessful</strong>
+                        <span>{{ paymentError() }}</span>
+                    </div>
+                    <button *ngIf="flowState() === 'failed'" class="retry-btn" (click)="onRetryPayment()">Try
+                        Again</button>
+                </div>
+
+                <!-- Processing Overlay State -->
+                <div *ngIf="isProcessing()" class="processing-state" role="status" aria-live="polite">
+                    <div class="processing-inner">
+                        <div class="gold-spinner" aria-hidden="true">
+                            <div class="spinner-ring"></div>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2C780"
+                                stroke-width="0.8" aria-hidden="true">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <span class="processing-label">
+                            <ng-container *ngIf="flowState() === 'creating-intent'">Initiating secure
+                                connection…</ng-container>
+                            <ng-container *ngIf="flowState() === 'awaiting-stripe'">Processing with payment
+                                gateway…</ng-container>
+                            <ng-container *ngIf="flowState() === 'confirming'">Verifying transaction…</ng-container>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Success State -->
+                <div *ngIf="flowState() === 'succeeded'" class="success-state" role="status" aria-live="assertive">
+                    <div class="success-icon" aria-hidden="true">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </div>
+                    <div class="success-text">
+                        <strong>Payment Successful</strong>
+                        <span>Redirecting to your booking confirmation…</span>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /payment-section -->
+
+        </main>
+
+        <!-- ── RIGHT: Sticky Total + Pay CTA ─────────────────────────────────── -->
+        <aside class="summary-rail" aria-label="Payment summary">
+
+            <!-- Total to Pay -->
+            <div class="total-card" aria-label="Total amount due">
+                <div class="total-header">
+                    <span class="total-label">Total to Pay</span>
+                    <span class="total-note">Inclusive of all taxes &amp; fees</span>
+                </div>
+                <div class="total-price-row">
+                    <span class="total-currency">{{ currency() }}</span>
+                    <span class="total-amount">{{ formatPrice(grandTotal()) }}</span>
+                </div>
+
+                <!-- Pay Button -->
+                <button class="pay-btn" [class.pay-btn--processing]="isProcessing()"
+                    [class.pay-btn--success]="flowState() === 'succeeded'"
+                    [class.pay-btn--failed]="flowState() === 'failed'"
+                    [disabled]="isProcessing() || flowState() === 'succeeded'" (click)="onSecurePayment()"
+                    [attr.aria-busy]="isProcessing()" aria-label="Secure your journey — final payment">
+
+                    <ng-container *ngIf="!isProcessing() && flowState() !== 'succeeded'">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        Secure Your Journey
+                    </ng-container>
+
+                    <ng-container *ngIf="isProcessing()">
+                        <span class="btn-spinner" aria-hidden="true"></span>
+                        Processing…
+                    </ng-container>
+
+                    <ng-container *ngIf="flowState() === 'succeeded'">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Confirmed
+                    </ng-container>
+                </button>
+
+                <!-- Trust Row -->
+                <div class="trust-badges" aria-label="Security guarantees">
+                    <div class="trust-item">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        <span>SSL Secured</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span>PCI Compliant</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span>3D Secure</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Reference Card -->
+            <div class="ref-card" *ngIf="confirmedBooking()" aria-label="Booking reference">
+                <span class="ref-label">Booking Reference</span>
+                <span class="ref-value">{{ confirmedBooking()!.bookingReference }}</span>
+                <span class="ref-note">Keep this reference for your records</span>
+            </div>
+
+            <!-- Fare Note -->
+            <div class="fare-note" role="note">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                Fares are subject to foreign transaction and currency conversion fees. Booking may expire if payment is
+                not completed within the session window.
+            </div>
+
+        </aside>
+
+    </div>
+    <!-- /main-grid -->
+
+</div>

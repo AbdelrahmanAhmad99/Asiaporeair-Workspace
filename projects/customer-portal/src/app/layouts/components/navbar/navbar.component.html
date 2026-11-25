@@ -1,0 +1,498 @@
+<!-- ═══════════════════════════════════════════════════════════════════════════
+  ASIAPOREAIR — Premium Dual-Tier Navbar
+  Tier 1: Top Utility Bar
+  Tier 2: Main Navigation + Mega Menu
+  ═══════════════════════════════════════════════════════════════════════════ -->
+<nav class="navbar" [class.is-scrolled]="isScrolled()" [class.mobile-open]="isMobileMenuOpen()">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       TIER 1 — TOP UTILITY BAR
+       ══════════════════════════════════════════════════════════════════════ -->
+    <div class="utility-bar">
+        <div class="utility-bar__inner">
+
+            <!-- Left: Language / Region -->
+            <div class="utility-bar__left">
+                <button class="utility-link utility-link--icon" type="button" aria-label="Select language and region">
+                    <!-- Globe icon (thin line art) -->
+                    <svg class="icon-globe" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                    <span>English (SGD)</span>
+                </button>
+            </div>
+
+            <!-- Right: Utility Links -->
+            <div class="utility-bar__right">
+
+                <!-- Help -->
+                <a class="utility-link" href="#" aria-label="Help centre">
+                    <svg class="icon-help" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                    <span>Help</span>
+                </a>
+
+                <!-- Loyalty Programme -->
+                <a class="utility-link utility-link--loyalty" routerLink="/loyalty"
+                    aria-label="Asiaporeair Loyalty programme">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    <span>Asiaporeair Loyalty</span>
+                </a>
+
+                <!-- Auth: Guest State -->
+                @if (!authState.isAuthenticated()) {
+                <div class="utility-bar__auth-group">
+                    <button class="utility-link utility-link--login" (click)="navigateToLogin()" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span>Login</span>
+                    </button>
+                    <button class="utility-link utility-link--signup" (click)="navigateToRegister()" type="button">
+                        <span>Sign Up</span>
+                    </button>
+                </div>
+                }
+
+                <!-- Auth: Authenticated State -->
+                @if (authState.isAuthenticated()) {
+                <div class="utility-link utility-link--user">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <a routerLink="/profile/personal-info" class="utility-link--username"
+                        style="text-decoration: none;">
+                        {{ userDisplayName() }}
+                    </a>
+                    <span class="utility-divider">|</span>
+                    <button class="utility-link--signout" (click)="logout()" type="button">Sign Out</button>
+                </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <!-- / END UTILITY BAR -->
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       TIER 2 — MAIN NAVIGATION BAR
+       ══════════════════════════════════════════════════════════════════════ -->
+    <div class="main-nav">
+        <div class="main-nav__inner">
+
+            <!-- Logo -->
+            <a class="nav-logo" routerLink="/" aria-label="Asiaporeair Home">
+                <span class="nav-logo__wordmark">ASIAPOREAIR</span>
+                <span class="nav-logo__tagline">Elevate Your Journey</span>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <ul class="nav-links" role="menubar">
+
+                <!-- Begin Your Journey (with Mega Menu) -->
+                <li class="nav-item nav-item--has-mega" role="none" (mouseenter)="openMegaMenu('book')"
+                    (mouseleave)="scheduleMegaMenuClose()">
+                    <a class="nav-link" href="#" role="menuitem" aria-haspopup="true"
+                        [attr.aria-expanded]="activeMenu() === 'book'"
+                        (click)="$event.preventDefault(); openMegaMenu('book')">
+                        Begin Your Journey
+                        <svg class="nav-link__chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" [class.rotated]="activeMenu() === 'book'">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </a>
+                </li>
+
+                <!-- Manage Booking (with Mega Menu) -->
+                <li class="nav-item nav-item--has-mega" role="none" (mouseenter)="openMegaMenu('manage')"
+                    (mouseleave)="scheduleMegaMenuClose()">
+                    <a class="nav-link" href="#" role="menuitem" aria-haspopup="true"
+                        [attr.aria-expanded]="activeMenu() === 'manage'"
+                        (click)="$event.preventDefault(); openMegaMenu('manage')">
+                        Manage Booking
+                        <svg class="nav-link__chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" [class.rotated]="activeMenu() === 'manage'">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </a>
+                </li>
+
+                <!-- Journey With Us (with Mega Menu) -->
+                <li class="nav-item nav-item--has-mega" role="none" (mouseenter)="openMegaMenu('journey')"
+                    (mouseleave)="scheduleMegaMenuClose()">
+                    <a class="nav-link" routerLink="/journey-with-us/landing" role="menuitem" aria-haspopup="true"
+                        [attr.aria-expanded]="activeMenu() === 'journey'">
+                        Journey with Us
+                        <svg class="nav-link__chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" [class.rotated]="activeMenu() === 'journey'">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </a>
+                </li>
+
+                <!-- Boarding & Services (with Mega Menu) -->
+                <li class="nav-item nav-item--has-mega" role="none" (mouseenter)="openMegaMenu('boarding')"
+                    (mouseleave)="scheduleMegaMenuClose()">
+                    <a class="nav-link" href="#" role="menuitem" aria-haspopup="true"
+                        [attr.aria-expanded]="activeMenu() === 'boarding'"
+                        (click)="$event.preventDefault(); openMegaMenu('boarding')">
+                        Boarding &amp; Services
+                        <svg class="nav-link__chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            [class.rotated]="activeMenu() === 'boarding'">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </a>
+                </li>
+
+
+            </ul>
+            <!-- / END NAV LINKS -->
+
+            <!-- Right Actions: Search + Mobile Hamburger -->
+            <div class="nav-actions">
+
+                <!-- Search Button -->
+                <button class="nav-action-btn nav-action-btn--search" type="button" aria-label="Open search"
+                    (click)="toggleSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                </button>
+
+                <!-- Hamburger (Mobile) -->
+                <button class="nav-action-btn nav-action-btn--hamburger" type="button"
+                    [class.is-active]="isMobileMenuOpen()" aria-label="Toggle mobile menu"
+                    [attr.aria-expanded]="isMobileMenuOpen()" (click)="toggleMobileMenu()">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
+
+            </div>
+        </div>
+    </div>
+    <!-- / END MAIN NAV -->
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       MEGA MENUS
+       ══════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Generic Mega Menu Container -->
+    @if (activeMenu()) {
+    <div class="mega-menu" role="menu" (mouseenter)="cancelMegaMenuClose()" (mouseleave)="scheduleMegaMenuClose()">
+        <div class="mega-menu__inner">
+
+            <!-- Determine which menu to show -->
+            @let currentMenu = activeMenu() === 'book' ? bookMegaMenu :
+            activeMenu() === 'manage' ? manageBookingMegaMenu :
+            activeMenu() === 'boarding' ? boardingMegaMenu :
+            activeMenu() === 'journey' ? journeyMegaMenu : null;
+
+            @if (currentMenu) {
+            @for (column of currentMenu; track column.title) {
+            <div class="mega-menu__column">
+                @if (column.route) {
+                <h4 class="mega-menu__column-title">
+                    <a [routerLink]="column.route" (click)="closeMegaMenu()"
+                        style="text-decoration: none; color: inherit;">{{ column.title }}</a>
+                </h4>
+                } @else {
+                <h4 class="mega-menu__column-title">{{ column.title }}</h4>
+                }
+                <ul class="mega-menu__links" role="group">
+                    @for (link of column.links; track link.label) {
+                    <li>
+                        <a class="mega-menu__link" [routerLink]="link.route ?? null" role="menuitem"
+                            (click)="closeMegaMenu()">
+                            <span class="mega-menu__link-arrow">›</span>
+                            {{ link.label }}
+                        </a>
+                    </li>
+                    }
+                </ul>
+            </div>
+            }
+            }
+
+        </div>
+    </div>
+    }
+    <!-- / END MEGA MENU -->
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       SEARCH OVERLAY
+       ══════════════════════════════════════════════════════════════════════ -->
+    @if (isSearchOpen()) {
+    <div class="search-overlay" role="dialog" aria-label="Search">
+        <div class="search-overlay__inner">
+            <div class="search-overlay__field">
+                <svg class="search-overlay__icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input class="search-overlay__input" type="text" placeholder="Search destinations, flights, offers…"
+                    aria-label="Search" autofocus />
+                <button class="search-overlay__close" type="button" aria-label="Close search" (click)="closeSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+    <!-- / END SEARCH OVERLAY -->
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       MOBILE SLIDE-IN MENU (Glassmorphism)
+       ══════════════════════════════════════════════════════════════════════ -->
+    <!-- Backdrop -->
+    @if (isMobileMenuOpen()) {
+    <div class="mobile-backdrop" (click)="closeMobileMenu()" aria-hidden="true"></div>
+    }
+
+    <div class="mobile-menu" [class.is-open]="isMobileMenuOpen()" role="dialog" aria-label="Mobile navigation">
+
+        <!-- Mobile Menu Header -->
+        <div class="mobile-menu__header">
+            <span class="mobile-menu__logo">ASIAPOREAIR</span>
+            <button class="mobile-menu__close" type="button" aria-label="Close menu" (click)="closeMobileMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Auth State -->
+        <div class="mobile-menu__auth">
+            @if (!authState.isAuthenticated()) {
+            <button class="mobile-auth-btn mobile-auth-btn--login" (click)="navigateToLogin()" type="button">
+                Login
+            </button>
+            <button class="mobile-auth-btn mobile-auth-btn--register" (click)="navigateToRegister()" type="button">
+                Register
+            </button>
+            }
+            @if (authState.isAuthenticated()) {
+            <div class="mobile-menu__user">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span>{{ userDisplayName() }}</span>
+            </div>
+            <button class="mobile-auth-btn mobile-auth-btn--logout" (click)="logout()" type="button">Sign Out</button>
+            }
+        </div>
+
+        <!-- Divider -->
+        <div class="mobile-menu__divider"></div>
+
+        <!-- Mobile Navigation Links -->
+        <nav class="mobile-menu__nav" aria-label="Mobile navigation links">
+
+            <!-- Book (Accordion) -->
+            <div class="mobile-nav-item mobile-nav-item--accordion">
+                <button class="mobile-nav-link mobile-nav-link--accordion-toggle" (click)="toggleMobileBook()"
+                    [class.is-active]="isMobileBookOpen()" type="button">
+                    Begin Your Journey
+                    <svg class="mobile-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" [class.rotated]="isMobileBookOpen()">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </button>
+
+                <!-- Accordion Content -->
+                @if (isMobileBookOpen()) {
+                <div class="mobile-accordion__content">
+                    @for (column of bookMegaMenu; track column.title) {
+                    <div class="mobile-accordion__group">
+                        @if (column.route) {
+                        <p class="mobile-accordion__group-title">
+                            <a [routerLink]="column.route" (click)="closeMobileMenu()"
+                                style="text-decoration: none; color: inherit;">{{ column.title }}</a>
+                        </p>
+                        } @else {
+                        <p class="mobile-accordion__group-title">{{ column.title }}</p>
+                        }
+                        @for (link of column.links; track link.label) {
+                        <a class="mobile-accordion__link" [routerLink]="link.route ?? null"
+                            (click)="closeMobileMenu()">{{ link.label }}</a>
+                        }
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Manage Booking (Accordion) -->
+            <div class="mobile-nav-item mobile-nav-item--accordion">
+                <button class="mobile-nav-link mobile-nav-link--accordion-toggle" (click)="toggleMobileManage()"
+                    [class.is-active]="isMobileManageOpen()" type="button">
+                    Manage Booking
+                    <svg class="mobile-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" [class.rotated]="isMobileManageOpen()">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </button>
+
+                @if (isMobileManageOpen()) {
+                <div class="mobile-accordion__content">
+                    @for (column of manageBookingMegaMenu; track column.title) {
+                    <div class="mobile-accordion__group">
+                        @if (column.route) {
+                        <p class="mobile-accordion__group-title">
+                            <a [routerLink]="column.route" (click)="closeMobileMenu()"
+                                style="text-decoration: none; color: inherit;">{{ column.title }}</a>
+                        </p>
+                        } @else {
+                        <p class="mobile-accordion__group-title">{{ column.title }}</p>
+                        }
+                        @for (link of column.links; track link.label) {
+                        <a class="mobile-accordion__link" [routerLink]="link.route ?? null"
+                            (click)="closeMobileMenu()">{{ link.label }}</a>
+                        }
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Boarding & Services (Accordion) -->
+            <div class="mobile-nav-item mobile-nav-item--accordion">
+                <button class="mobile-nav-link mobile-nav-link--accordion-toggle" (click)="toggleMobileBoarding()"
+                    [class.is-active]="isMobileBoardingOpen()" type="button">
+                    Boarding &amp; Services
+                    <svg class="mobile-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" [class.rotated]="isMobileBoardingOpen()">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </button>
+
+                @if (isMobileBoardingOpen()) {
+                <div class="mobile-accordion__content">
+                    @for (column of boardingMegaMenu; track column.title) {
+                    <div class="mobile-accordion__group">
+                        @if (column.route) {
+                        <p class="mobile-accordion__group-title">
+                            <a [routerLink]="column.route" (click)="closeMobileMenu()"
+                                style="text-decoration: none; color: inherit;">{{ column.title }}</a>
+                        </p>
+                        } @else {
+                        <p class="mobile-accordion__group-title">{{ column.title }}</p>
+                        }
+                        @for (link of column.links; track link.label) {
+                        <a class="mobile-accordion__link" [routerLink]="link.route ?? null"
+                            (click)="closeMobileMenu()">{{ link.label }}</a>
+                        }
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Journey with Us (Accordion) -->
+            <div class="mobile-nav-item mobile-nav-item--accordion">
+                <button class="mobile-nav-link mobile-nav-link--accordion-toggle" (click)="toggleMobileJourney()"
+                    [class.is-active]="isMobileJourneyOpen()" type="button">
+                    Journey with Us
+                    <svg class="mobile-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" [class.rotated]="isMobileJourneyOpen()">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </button>
+
+                @if (isMobileJourneyOpen()) {
+                <div class="mobile-accordion__content">
+                    @for (column of journeyMegaMenu; track column.title) {
+                    <div class="mobile-accordion__group">
+                        @if (column.route) {
+                        <p class="mobile-accordion__group-title">
+                            <a [routerLink]="column.route" (click)="closeMobileMenu()"
+                                style="text-decoration: none; color: inherit;">{{ column.title }}</a>
+                        </p>
+                        } @else {
+                        <p class="mobile-accordion__group-title">{{ column.title }}</p>
+                        }
+                        @for (link of column.links; track link.label) {
+                        <a class="mobile-accordion__link" [routerLink]="link.route ?? null"
+                            (click)="closeMobileMenu()">{{ link.label }}</a>
+                        }
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+
+            <a class="mobile-nav-link" routerLink="/loyalty" (click)="closeMobileMenu()">Asiaporeair Loyalty</a>
+
+        </nav>
+
+        <!-- Mobile Footer -->
+        <div class="mobile-menu__footer">
+            <button class="utility-link" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                English (SGD)
+            </button>
+            <a class="utility-link" href="#" aria-label="Help">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                Help
+            </a>
+        </div>
+
+    </div>
+    <!-- / END MOBILE MENU -->
+
+</nav>
+<!-- / END NAVBAR -->

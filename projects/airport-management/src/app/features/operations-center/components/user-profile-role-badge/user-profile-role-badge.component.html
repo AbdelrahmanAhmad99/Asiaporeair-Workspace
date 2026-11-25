@@ -1,0 +1,16 @@
+<button type="button" class="profile" [attr.aria-label]="accessibleName()" (click)="activated.emit()">
+    <span class="profile__avatar" aria-hidden="true">
+        @if (operator().avatarUrl; as avatarUrl) {
+        <img class="profile__image" [src]="avatarUrl" alt="" width="36" height="36" />
+        } @else {
+        <span class="profile__initials">{{ initials() }}</span>
+        }
+    </span>
+
+    <span class="profile__text">
+        <span class="profile__name">{{ operator().fullName }}</span>
+        <span class="profile__role" [class.profile__role--primary]="roleConfig().emphasis === 'PRIMARY'">
+            {{ roleConfig().label }}
+        </span>
+    </span>
+</button>

@@ -1,0 +1,385 @@
+// ============================================================================
+// flight-promo-banners.component.scss
+// Asiaporeair | Promotional Banner Carousel
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+}
+
+// ── §1 Section header ─────────────────────────────────────────────────────────
+.promo-section {
+    padding: 0;
+}
+
+.promo-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    &__eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: $font;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba($royal-gold, 0.7);
+    }
+
+    &__line {
+        flex: 0 0 32px;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($royal-gold, 0.4));
+
+        &:last-child {
+            background: linear-gradient(to left, transparent, rgba($royal-gold, 0.4));
+        }
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 300;
+        letter-spacing: -0.03em;
+        color: $charcoal;
+        margin: 0;
+    }
+
+    &__title-accent {
+        font-weight: 700;
+        color: $midnight;
+    }
+}
+
+// ── §2 Carousel wrapper ───────────────────────────────────────────────────────
+.promo-carousel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &.transitioning .promo-banner__content {
+        animation: bannerFade 380ms $ease both;
+    }
+}
+
+@keyframes bannerFade {
+    from {
+        opacity: 0;
+        transform: translateX(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+// ── §3 Banner ─────────────────────────────────────────────────────────────────
+.promo-banner {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 220px;
+    display: flex;
+    align-items: stretch;
+    border: 1px solid rgba($royal-gold, 0.15);
+    box-shadow:
+        0 8px 32px rgba($midnight, 0.2),
+        0 0 0 1px rgba($royal-gold, 0.05) inset;
+
+    @media (max-width: 640px) {
+        min-height: 280px;
+    }
+}
+
+.promo-banner__bg {
+    position: absolute;
+    inset: 0;
+    background: var(--banner-gradient, linear-gradient(135deg, #051937, #0a3060));
+    transition: transform 500ms $ease;
+}
+
+// 40% dark sapphire overlay as per guidelines
+.promo-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba($midnight, 0.42);
+}
+
+// ── §4 Decorative geometry ────────────────────────────────────────────────────
+.promo-banner__deco {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.promo-deco__line {
+    position: absolute;
+    background: rgba($royal-gold, 0.08);
+
+    &--1 {
+        width: 1px;
+        height: 200%;
+        top: -50%;
+        right: 28%;
+        transform: rotate(12deg);
+    }
+
+    &--2 {
+        height: 1px;
+        width: 60%;
+        top: 35%;
+        right: -10%;
+        transform: rotate(-6deg);
+    }
+}
+
+.promo-deco__circle {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba($royal-gold, 0.06);
+    right: -80px;
+    top: -80px;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 40px;
+        border-radius: 50%;
+        border: 1px solid rgba($royal-gold, 0.05);
+    }
+}
+
+// ── §5 Banner content ─────────────────────────────────────────────────────────
+.promo-banner__content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.875rem;
+    flex: 1;
+    max-width: 680px;
+
+    @media (max-width: 640px) {
+        padding: 1.5rem 1.25rem;
+    }
+}
+
+.promo-banner__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.promo-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba($royal-gold, 0.18);
+    border: 1px solid rgba($champagne, 0.3);
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $champagne;
+}
+
+.promo-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba($champagne, 0.75);
+    padding: 2px 8px;
+    border: 1px dashed rgba($champagne, 0.25);
+    border-radius: 4px;
+}
+
+.promo-banner__headline {
+    font-family: $font;
+    font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: $white;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.promo-banner__subline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: rgba($white, 0.55);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 500px;
+}
+
+.promo-banner__footer {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.promo-valid {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    color: rgba($white, 0.35);
+    letter-spacing: 0.03em;
+}
+
+.promo-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.65rem 1.375rem;
+    border-radius: 4px;
+    background: $royal-gold;
+    border: 1px solid transparent;
+    font-family: $font;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: $midnight;
+    cursor: pointer;
+    transition: background $t, box-shadow $t, transform $t;
+
+    &:hover {
+        background: darken($royal-gold, 6%);
+        box-shadow: 0 4px 16px rgba($royal-gold, 0.4);
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $champagne;
+        outline-offset: 2px;
+    }
+}
+
+// ── §6 Navigation arrows ──────────────────────────────────────────────────────
+.promo-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba($midnight, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba($champagne, 0.2);
+    color: rgba($white, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background $t, border-color $t, color $t;
+
+    &--prev {
+        left: 1rem;
+    }
+
+    &--next {
+        right: 1rem;
+    }
+
+    &:hover {
+        background: rgba($midnight, 0.9);
+        border-color: rgba($champagne, 0.4);
+        color: $champagne;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §7 Dot indicators ────────────────────────────────────────────────────────
+.promo-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.promo-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba($charcoal, 0.2);
+    border: 1px solid rgba($charcoal, 0.1);
+    cursor: pointer;
+    transition: all $t;
+    padding: 0;
+
+    &--active {
+        width: 22px;
+        border-radius: 3px;
+        background: $royal-gold;
+        border-color: $royal-gold;
+    }
+
+    &:hover:not(&--active) {
+        background: rgba($royal-gold, 0.4);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .promo-banner__bg,
+    .promo-cta,
+    .promo-arrow,
+    .promo-dot {
+        transition: none !important;
+    }
+
+    .promo-carousel.transitioning .promo-banner__content {
+        animation: none !important;
+    }
+}

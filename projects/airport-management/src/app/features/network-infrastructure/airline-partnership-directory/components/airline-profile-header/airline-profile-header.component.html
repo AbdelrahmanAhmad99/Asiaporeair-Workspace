@@ -1,0 +1,117 @@
+<section class="aph-hero" aria-label="Airline partner identity overview">
+
+    <!-- Ghost typographic watermark -->
+    <span class="aph-watermark" aria-hidden="true">{{ watermarkText() }}</span>
+
+    <!-- ══ Content wrapper ════════════════════════════════════════ -->
+    <div class="aph-content">
+
+        <!-- ── Top Row: Status Badge + Region Tag ─────────────────── -->
+        <div class="aph-top-row">
+
+            <!-- Status Badge -->
+            <span class="aph-status-badge" [class.aph-status-badge--active]="isActive()"
+                [class.aph-status-badge--inactive]="!isActive()">
+                <span class="aph-status-badge__dot" aria-hidden="true"></span>
+                {{ isActive() ? 'Active Partner' : 'Inactive' }}
+            </span>
+
+            <!-- Region Tag -->
+            <span class="aph-region-tag">
+                <svg class="aph-region-tag__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0
+                   1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0
+                   18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3" />
+                </svg>
+                {{ airline().operatingRegion }}
+            </span>
+
+        </div>
+
+        <!-- ── Primary Identity Row: Logo + Name + IATA ───────────── -->
+        <div class="aph-identity-row">
+
+            <!-- Squircle Logo Avatar -->
+            <div class="aph-logo" [attr.aria-label]="airline().name + ' logo'">
+                {{ logoInitials() }}
+            </div>
+
+            <!-- Name + IATA block -->
+            <div class="aph-name-block">
+                <h2 class="aph-airline-name">{{ airline().name }}</h2>
+
+                <div class="aph-codes-row">
+                    <span class="aph-iata-code">{{ airline().iataCode }}</span>
+                    <span class="aph-code-sep" aria-hidden="true">·</span>
+                    <span class="aph-callsign">{{ airline().callsign }}</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── Divider ────────────────────────────────────────────── -->
+        <div class="aph-divider" aria-hidden="true"></div>
+
+        <!-- ── Metadata + Fleet Stats Grid ───────────────────────── -->
+        <div class="aph-meta-grid">
+
+            <!-- Base Hub -->
+            <div class="aph-meta-item">
+                <dt class="aph-meta-item__label">
+                    <svg class="aph-meta-item__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                     0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                    </svg>
+                    Base Hub
+                </dt>
+                <dd class="aph-meta-item__value aph-meta-item__value--iata">
+                    {{ airline().baseAirportIataCode }}
+                </dd>
+                <dd class="aph-meta-item__sub">{{ airline().baseAirportName }}</dd>
+            </div>
+
+            <!-- Fleet Total -->
+            <div class="aph-meta-item">
+                <dt class="aph-meta-item__label">
+                    <svg class="aph-meta-item__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0
+                     1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3" />
+                    </svg>
+                    Registered Fleet
+                </dt>
+                <dd class="aph-meta-item__value aph-meta-item__value--gold">{{ fleetSize() }}</dd>
+                <dd class="aph-meta-item__sub">aircraft</dd>
+            </div>
+
+            <!-- Active Aircraft -->
+            <div class="aph-meta-item">
+                <dt class="aph-meta-item__label">
+                    <span class="aph-dot aph-dot--active" aria-hidden="true"></span>
+                    Active
+                </dt>
+                <dd class="aph-meta-item__value aph-meta-item__value--emerald">
+                    {{ fleetBreakdown().active }}
+                </dd>
+                <dd class="aph-meta-item__sub">aircraft</dd>
+            </div>
+
+            <!-- Maintenance -->
+            <div class="aph-meta-item">
+                <dt class="aph-meta-item__label">
+                    <span class="aph-dot aph-dot--maintenance" aria-hidden="true"></span>
+                    Maintenance
+                </dt>
+                <dd class="aph-meta-item__value aph-meta-item__value--amber">
+                    {{ fleetBreakdown().maintenance }}
+                </dd>
+                <dd class="aph-meta-item__sub">aircraft</dd>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

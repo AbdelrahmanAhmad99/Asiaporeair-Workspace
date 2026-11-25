@@ -1,0 +1,118 @@
+<!-- ============================================================================
+     before-the-flight-landing.component.html
+     Asiaporeair | Before the Flight — Hub Landing Page
+     ============================================================================ -->
+
+<div class="btfl-shell">
+
+    <!-- ══ HERO HEADER ═══════════════════════════════════════════════════════ -->
+    <header class="btfl-hero" role="banner">
+        <div class="btfl-hero__inner">
+
+            <!-- Breadcrumb -->
+            <nav class="btfl-hero__breadcrumb" aria-label="Breadcrumb">
+                @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+                @if (!last) {
+                <a [href]="crumb.route ?? '#'" class="btfl-hero__bc-link">{{ crumb.label }}</a>
+                <span class="btfl-hero__bc-sep" aria-hidden="true">›</span>
+                } @else {
+                <span class="btfl-hero__bc-cur">{{ crumb.label }}</span>
+                }
+                }
+            </nav>
+
+            <div class="btfl-hero__content">
+                <div class="btfl-hero__left">
+                    <div class="btfl-hero__pre-block" aria-hidden="true">
+                        <div class="btfl-hero__pre-line"></div>
+                        <span class="btfl-hero__eyebrow">Ground Experience</span>
+                    </div>
+                    <h1 class="btfl-hero__title">Before the Flight</h1>
+                    <p class="btfl-hero__subtitle">
+                        The Asiaporeair experience begins the moment you leave for the airport.
+                        From dedicated lounges to seamless check-in, every detail is curated
+                        to ensure your journey starts in complete comfort.
+                    </p>
+                </div>
+
+                <!-- Stat badges -->
+                <div class="btfl-hero__stats" aria-label="Service highlights">
+                    <div class="btfl-hero__stat">
+                        <span class="btfl-hero__stat-value">6</span>
+                        <span class="btfl-hero__stat-label">Premium Lounges worldwide</span>
+                    </div>
+                    <div class="btfl-hero__stat">
+                        <span class="btfl-hero__stat-value">24/7</span>
+                        <span class="btfl-hero__stat-label">Ground concierge available</span>
+                    </div>
+                    <div class="btfl-hero__stat">
+                        <span class="btfl-hero__stat-value">500+</span>
+                        <span class="btfl-hero__stat-label">Exclusive inflight products</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ══ HERO IMAGE BAND ════════════════════════════════════════════════════ -->
+    <div class="btfl-img-band" aria-hidden="true">
+        <img src="assets/images/journey-with-us/btf-hero-wide.png" alt="" class="btfl-img-band__image"
+            loading="eager" />
+        <div class="btfl-img-band__overlay"></div>
+    </div>
+
+    <!-- ══ HUB NAVIGATION CARDS ══════════════════════════════════════════════ -->
+    <section class="btfl-hub" aria-labelledby="btfl-hub-title">
+        <div class="btfl-hub__inner">
+
+            <header class="btfl-hub__header">
+                <div class="btfl-hub__header-line" aria-hidden="true"></div>
+                <div>
+                    <p class="btfl-hub__eyebrow">Your Journey Starts Here</p>
+                    <h2 class="btfl-hub__title" id="btfl-hub-title">Explore Our Ground Services</h2>
+                    <p class="btfl-hub__subtitle">
+                        Three pillars of the Asiaporeair ground experience — each designed
+                        to elevate the moments before you board.
+                    </p>
+                </div>
+            </header>
+
+            <!-- 3-card row -->
+            <div class="btfl-hub__grid">
+                @for (section of hubSections(); track trackById($index, section); let i = $index) {
+                <app-hub-navigation-card [section]="section" [index]="i"></app-hub-navigation-card>
+                }
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ MEMBERSHIP TEASER STRIP ════════════════════════════════════════════ -->
+    <div class="btfl-loyalty-strip">
+        <div class="btfl-loyalty-strip__inner">
+            <div class="btfl-loyalty-strip__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+            </div>
+            <div class="btfl-loyalty-strip__text">
+                <h3 class="btfl-loyalty-strip__title">Unlock Premium Lounge Access</h3>
+                <p class="btfl-loyalty-strip__desc">
+                    Join the Asiaporeair Voyager programme and enjoy elevated ground privileges
+                    from your very first qualifying flight.
+                </p>
+            </div>
+            <a class="btfl-loyalty-strip__cta" routerLink="/loyalty/join">
+                Join Voyager
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
+</div>

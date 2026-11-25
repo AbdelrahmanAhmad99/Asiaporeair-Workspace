@@ -1,0 +1,49 @@
+<!-- sticky-price-bar.component.html -->
+<div class="sticky-bar" role="complementary" aria-label="Cart summary and checkout">
+
+    <div class="bar-inner">
+
+        <!-- Cart count -->
+        <div class="bar-count">
+            <span class="count-badge" aria-hidden="true">{{ cartItemCount }}</span>
+            <div class="count-text">
+                <span class="count-label">{{ cartItemCount === 1 ? 'Service' : 'Services' }} selected</span>
+                <span *ngIf="!isPaymentRequired" class="count-sub">No additional charge</span>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="bar-divider" aria-hidden="true"></div>
+
+        <!-- Delta price -->
+        <div *ngIf="isPaymentRequired" class="bar-price"
+            aria-label="Additional amount due: {{ currency }} {{ formatPrice(deltaAmount) }}">
+            <span class="price-label">Additional Due</span>
+            <div class="price-value-group">
+                <span class="price-curr">{{ currency }}</span>
+                <span class="price-val">{{ formatPrice(deltaAmount) }}</span>
+            </div>
+        </div>
+
+        <div *ngIf="!isPaymentRequired" class="bar-free">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            No extra charge
+        </div>
+
+        <!-- CTA -->
+        <button class="bar-cta" (click)="proceedToPayment.emit()"
+            aria-label="Proceed to confirm {{ cartItemCount }} service additions">
+            <span *ngIf="isPaymentRequired">Proceed to Payment</span>
+            <span *ngIf="!isPaymentRequired">Confirm Enhancements</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+        </button>
+
+    </div>
+
+</div>

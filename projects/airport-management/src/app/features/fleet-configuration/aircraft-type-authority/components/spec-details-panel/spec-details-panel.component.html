@@ -1,0 +1,99 @@
+<section class="spec-panel" aria-label="Technical specifications">
+
+    <!-- ── Panel Heading ────────────────────────────────────────── -->
+    <div class="spec-panel__heading">
+        <svg class="spec-panel__heading__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c
+               0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065
+               .21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25
+               0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15
+               1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m
+               0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75
+               c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75
+               12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+        </svg>
+        <h3 class="spec-panel__heading__text">Technical Specifications</h3>
+
+        @if (!loading()) {
+        <span class="spec-panel__revision" aria-label="Revision number">
+            Rev. {{ revision() }}
+        </span>
+        }
+    </div>
+
+    <!-- ── Shimmer State ────────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="spec-panel__grid">
+        @for (g of shimmerGroups; track $index) {
+        <div class="spec-group spec-group--shimmer" aria-hidden="true">
+            <div class="spec-group__shimmer-title"></div>
+            @for (i of shimmerItems; track $index) {
+            <div class="spec-item spec-item--shimmer">
+                <div class="spec-item__shimmer-icon"></div>
+                <div class="spec-item__shimmer-body">
+                    <div class="spec-item__shimmer-label"></div>
+                    <div class="spec-item__shimmer-value"></div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Spec Groups Grid ─────────────────────────────────────── -->
+    @if (!loading() && aircraftType()) {
+    <div class="spec-panel__grid" @specCards>
+        @for (group of specGroups(); track group.id) {
+        <div class="spec-group" [attr.data-group]="group.id">
+
+            <!-- Group Header -->
+            <div class="spec-group__header">
+                <div class="spec-group__header__icon-wrap" aria-hidden="true">
+                    <svg class="spec-group__header__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="group.iconPath" />
+                    </svg>
+                </div>
+                <h4 class="spec-group__title">{{ group.title }}</h4>
+            </div>
+
+            <!-- Spec Items -->
+            <div class="spec-group__items">
+                @for (item of group.items; track item.label) {
+                <div class="spec-item" [class.spec-item--empty]="item.isEmpty">
+
+                    <!-- Item icon -->
+                    <div class="spec-item__icon-wrap" aria-hidden="true">
+                        <svg class="spec-item__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="item.iconPath" />
+                        </svg>
+                    </div>
+
+                    <!-- Item data -->
+                    <div class="spec-item__data">
+                        <span class="spec-item__label">{{ item.label }}</span>
+
+                        <div class="spec-item__value-row">
+                            <span class="spec-item__value-primary">{{ item.valuePrimary }}</span>
+
+                            @if (item.valueSecondary) {
+                            <span class="spec-item__value-secondary">
+                                {{ item.valueSecondary }}
+                            </span>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+                }
+            </div>
+
+        </div>
+        }
+    </div>
+    }
+
+</section>

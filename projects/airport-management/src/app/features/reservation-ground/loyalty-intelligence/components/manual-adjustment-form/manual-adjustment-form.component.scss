@@ -1,0 +1,508 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Form Shell ─────────────────────────────────────────────────────────
+ .maf-form {
+     position: relative;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.12);
+     box-shadow: 0 4px 20px rgba($midnight, 0.2);
+     overflow: hidden;
+     transition: border-color $t-base, box-shadow $t-base;
+
+     // Success flash state
+     &--success {
+         border-color: rgba($emerald, 0.4);
+         box-shadow: 0 4px 20px rgba($midnight, 0.2), 0 0 20px rgba($emerald, 0.08);
+     }
+
+     &__accent {
+         height: 3px;
+         background: linear-gradient(to right, transparent, rgba($gold, 0.5), rgba($champagne, 0.85), rgba($gold, 0.5), transparent);
+     }
+
+     &__inner {
+         padding: 1.125rem 1.25rem 1.25rem;
+         display: flex;
+         flex-direction: column;
+         gap: 0.875rem;
+     }
+
+     &__title {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: $champagne;
+     }
+
+     &__title-icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── 2. Success Flash ──────────────────────────────────────────────────────
+ .maf-success-flash {
+     position: absolute;
+     inset: 0;
+     z-index: 10;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.625rem;
+     background: rgba($midnight, 0.92);
+     backdrop-filter: blur(4px);
+     font-size: 1rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     color: lighten($emerald, 38%);
+     animation: maf-success-in 200ms ease forwards;
+
+     svg {
+         width: 1.5rem;
+         height: 1.5rem;
+         color: lighten($emerald, 35%);
+     }
+
+     &::after {
+         content: '';
+         position: absolute;
+         inset: 0;
+         animation: maf-success-fade 1.6s ease forwards 0.2s;
+     }
+ }
+
+ // ── 3. Field Layout ───────────────────────────────────────────────────────
+ .maf-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+ }
+
+ .maf-label {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     font-size: 9.5px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: rgba($champagne, 0.45);
+
+     &__required {
+         color: lighten($ruby, 25%);
+         font-size: 11px;
+     }
+
+     &__optional {
+         color: rgba($champagne, 0.25);
+         font-weight: 400;
+         text-transform: none;
+         font-size: 9px;
+     }
+
+     &__hint {
+         color: rgba($champagne, 0.3);
+         font-weight: 400;
+         text-transform: none;
+         font-size: 9px;
+         margin-left: auto;
+     }
+ }
+
+ // ── 4. Type Toggle ────────────────────────────────────────────────────────
+ .maf-type-toggle {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 0.375rem;
+ }
+
+ .maf-type-toggle__btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.375rem;
+     height: 2.375rem;
+     border-radius: 6px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     cursor: pointer;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+     }
+
+     // Add — Gold accent
+     &--add {
+         border: 1.5px solid rgba($gold, 0.25);
+         background: rgba($gold, 0.06);
+         color: rgba($champagne, 0.55);
+
+         &:hover:not(:disabled):not(&--active) {
+             border-color: rgba($gold, 0.45);
+             color: $champagne;
+         }
+
+         &.maf-type-toggle__btn--active {
+             border-color: $gold;
+             background: rgba($gold, 0.14);
+             color: $champagne;
+             box-shadow: 0 0 12px rgba($gold, 0.2);
+         }
+     }
+
+     // Subtract — Amber accent
+     &--subtract {
+         border: 1.5px solid rgba($amber, 0.2);
+         background: rgba($amber, 0.05);
+         color: rgba($champagne, 0.45);
+
+         &:hover:not(:disabled):not(&--active) {
+             border-color: rgba($amber, 0.4);
+             color: rgba($champagne, 0.75);
+         }
+
+         &.maf-type-toggle__btn--active {
+             border-color: rgba($amber, 0.6);
+             background: rgba($amber, 0.12);
+             color: lighten($amber, 22%);
+             box-shadow: 0 0 10px rgba($amber, 0.15);
+         }
+     }
+ }
+
+ // ── 5. Amount Input ───────────────────────────────────────────────────────
+ .maf-amount-wrap {
+     display: flex;
+     align-items: center;
+     border-radius: 6px;
+     border: 1.5px solid rgba($champagne, 0.18);
+     background: rgba(255, 255, 255, 0.03);
+     overflow: hidden;
+     transition: border-color $t-fast, box-shadow $t-fast;
+
+     &:focus-within {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.15);
+     }
+
+     &__prefix {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2.5rem;
+         font-size: 1.375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: lighten($emerald, 32%);
+         flex-shrink: 0;
+         border-right: 1px solid rgba($champagne, 0.08);
+         height: 3rem;
+         transition: color $t-fast;
+
+         &--subtract {
+             color: lighten($amber, 18%);
+         }
+     }
+
+     &__unit {
+         display: flex;
+         align-items: center;
+         padding: 0 0.75rem;
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba($champagne, 0.3);
+         flex-shrink: 0;
+         border-left: 1px solid rgba($champagne, 0.08);
+         height: 3rem;
+     }
+ }
+
+ .maf-amount-input {
+     flex: 1;
+     height: 3rem;
+     padding: 0 0.875rem;
+     background: transparent;
+     border: none;
+     outline: none;
+     font-size: 1.5rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     font-variant-numeric: tabular-nums;
+     color: $champagne;
+     // -moz-appearance: textfield;
+
+     &::-webkit-inner-spin-button,
+     &::-webkit-outer-spin-button {
+         -webkit-appearance: none;
+     }
+
+     &::placeholder {
+         color: rgba($champagne, 0.2);
+     }
+
+     &:disabled {
+         cursor: not-allowed;
+     }
+ }
+
+ // ── 6. Select ─────────────────────────────────────────────────────────────
+ .maf-select-wrap {
+     position: relative;
+
+     &__caret {
+         position: absolute;
+         right: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         color: rgba($champagne, 0.4);
+         pointer-events: none;
+     }
+ }
+
+ .maf-select {
+     width: 100%;
+     height: 2.375rem;
+     padding: 0 2.25rem 0 0.875rem;
+     border-radius: 6px;
+     border: 1.5px solid rgba($champagne, 0.18);
+     background: rgba(255, 255, 255, 0.03);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 500;
+     color: rgba($champagne, 0.75);
+     cursor: pointer;
+     outline: none;
+     -webkit-appearance: none;
+     appearance: none;
+     transition: border-color $t-fast, box-shadow $t-fast;
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.13);
+     }
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+     }
+
+     option {
+         background: $midnight;
+         color: rgba(255, 255, 255, 0.8);
+     }
+ }
+
+ // ── 7. Textarea ───────────────────────────────────────────────────────────
+ .maf-textarea {
+     width: 100%;
+     resize: none;
+     padding: 0.625rem 0.875rem;
+     border-radius: 6px;
+     border: 1.5px solid rgba($champagne, 0.18);
+     background: rgba(255, 255, 255, 0.03);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 400;
+     color: rgba($champagne, 0.75);
+     outline: none;
+     transition: border-color $t-fast, box-shadow $t-fast;
+     line-height: 1.5;
+
+     &::placeholder {
+         color: rgba($champagne, 0.25);
+     }
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.12);
+     }
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+     }
+ }
+
+ // ── 8. Actions ────────────────────────────────────────────────────────────
+ .maf-actions {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     margin-top: 0.25rem;
+ }
+
+ .maf-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+         transform: none !important;
+         box-shadow: none !important;
+     }
+
+     // Reset — ghost
+     &--reset {
+         padding: 0.5rem 0.875rem;
+         border: 1px solid rgba($champagne, 0.2);
+         background: transparent;
+         color: rgba($champagne, 0.45);
+
+         &:hover:not(:disabled) {
+             border-color: rgba($champagne, 0.4);
+             color: rgba($champagne, 0.75);
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // Submit Add — Royal Gold gradient with glow on hover (the premium CTA)
+     &--submit {
+         flex: 1;
+         justify-content: center;
+         padding: 0.625rem 1.25rem;
+         border: none;
+         font-size: 0.9375rem;
+         letter-spacing: 0.02em;
+         position: relative;
+         overflow: hidden;
+
+         // Shimmer sweep pseudo-element
+         &::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: -75%;
+             width: 50%;
+             height: 100%;
+             background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.28) 50%, transparent 100%);
+             transform: skewX(-20deg);
+             transition: left 600ms ease;
+         }
+
+         &:hover:not(:disabled)::before {
+             left: 125%;
+         }
+     }
+
+     // Add variant — Royal Gold gradient
+     &--submit-add {
+         background: linear-gradient(135deg, lighten($gold, 8%) 0%, $gold 50%, darken($gold, 6%) 100%);
+         color: $midnight;
+         box-shadow: 0 4px 16px rgba($gold, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+
+         &:hover:not(:disabled) {
+             box-shadow: 0 6px 24px rgba($gold, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+             transform: translateY(-2px);
+         }
+     }
+
+     // Subtract variant — Amber tint
+     &--submit-subtract {
+         background: linear-gradient(135deg, lighten($amber, 8%) 0%, $amber 50%, darken($amber, 6%) 100%);
+         color: #fff;
+         box-shadow: 0 4px 16px rgba($amber, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+         &:hover:not(:disabled) {
+             box-shadow: 0 6px 22px rgba($amber, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+             transform: translateY(-2px);
+         }
+     }
+
+     &__spin {
+         animation: maf-spin 1s linear infinite;
+     }
+ }
+
+ // ── 9. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes maf-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes maf-success-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes maf-success-fade {
+     0% {
+         opacity: 1;
+     }
+
+     60% {
+         opacity: 1;
+     }
+
+     100% {
+         opacity: 0;
+         pointer-events: none;
+     }
+ }

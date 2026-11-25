@@ -1,0 +1,229 @@
+<!-- ============================================================================
+     cancellation.component.html
+     Asiaporeair | "Initiate Refund Process" — Cancellation Page
+     ============================================================================ -->
+
+<div class="cancel-shell">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HEADER
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="cancel-header" [@pageEnter] role="banner">
+        <div class="header-inner">
+
+            <button class="back-link" (click)="onBack()" aria-label="Return to booking details"
+                [disabled]="isCancelling()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Booking Details
+            </button>
+
+            <div class="header-title-block">
+                <span class="header-eyebrow" aria-hidden="true">ASIAPOREAIR · JOURNEY MANAGEMENT</span>
+                <h1 class="header-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    Initiate Refund Process
+                </h1>
+                <p class="header-subtitle" *ngIf="pnrDisplay()">
+                    Booking <strong>{{ pnrDisplay() }}</strong>
+                    — please review the refund policy before proceeding.
+                </p>
+            </div>
+
+            <div class="gold-rule" aria-hidden="true"></div>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         LOADING
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="isLoadingDetail()" class="loading-body" aria-busy="true">
+        <div class="page-inner">
+            <div class="skeleton-layout">
+                <div class="skeleton-col">
+                    <div class="skel-card">
+                        <div class="skel skel--title"></div>
+                        <div class="skel skel--body"></div>
+                        <div class="skel skel--body"></div>
+                    </div>
+                    <div class="skel-card">
+                        <div class="skel skel--title"></div>
+                        <div class="skel skel--field"></div>
+                    </div>
+                </div>
+                <div class="skeleton-aside">
+                    <div class="skel-card">
+                        <div class="skel skel--title"></div>
+                        <div class="skel skel--body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         LOAD ERROR
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="loadError() && !isLoadingDetail()" class="page-inner error-body" [@fadeIn]>
+        <div class="alert-error" role="alert">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ loadError() }}
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         SUCCESS STATE
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="cancelSucceeded()" class="success-body" [@successPop] role="status" aria-live="polite"
+        aria-atomic="true">
+        <div class="success-card">
+            <div class="success-icon-ring" aria-hidden="true">
+                <div class="success-ring success-ring--outer"></div>
+                <div class="success-ring success-ring--inner"></div>
+                <div class="success-check">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1.5">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                </div>
+            </div>
+            <h2 class="success-title">Cancellation Confirmed</h2>
+            <p class="success-desc">
+                Your booking <strong>{{ pnrDisplay() }}</strong> has been successfully cancelled.
+                Your refund will be processed according to the applicable policy.
+            </p>
+            <p class="success-redirect">Redirecting you to your booking details…</p>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN CANCELLATION FLOW
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main *ngIf="isReady() && !cancelSucceeded()" class="cancel-body" role="main" [@sectionsStagger]>
+
+        <div class="page-inner">
+
+            <!-- Cancellation API error banner -->
+            <div *ngIf="cancelFailed() && cancellationError()" class="alert-error alert-error--api" role="alert"
+                aria-live="assertive">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <div class="alert-body">
+                    <span>{{ cancellationError() }}</span>
+                    <button class="retry-link" (click)="onRetry()" aria-label="Retry cancellation">Try again</button>
+                </div>
+            </div>
+
+            <!-- ── Already-cancelled notice ──────────────────────────────────────── -->
+            <div *ngIf="detail()?.isCancelled" class="already-cancelled-banner" role="note" [@fadeIn]>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                This booking has already been cancelled. No further action is required.
+            </div>
+
+            <div class="cancel-grid">
+
+                <!-- ── LEFT COLUMN ────────────────────────────────────────── -->
+                <div class="main-col">
+
+                    <!-- 1. Refund Policy -->
+                    <div class="stagger-section">
+                        <app-refund-policy-panel [totalPrice]="totalRefundable()" [currency]="'SGD'"
+                            [departureDateTime]="detail()?.flightDepartureTime ?? ''">
+                        </app-refund-policy-panel>
+                    </div>
+
+                    <!-- 2. Reason Form (only if not already cancelled) -->
+                    <div class="stagger-section" *ngIf="!detail()?.isCancelled">
+                        <app-cancellation-reason-form [disabled]="isCancelling()"
+                            (reasonChange)="onReasonChange($event)">
+                        </app-cancellation-reason-form>
+                    </div>
+
+                    <!-- 3. CTA + processing state -->
+                    <div class="stagger-section cta-section" *ngIf="!detail()?.isCancelled">
+
+                        <div *ngIf="isCancelling()" class="processing-state" aria-busy="true"
+                            aria-label="Processing cancellation">
+                            <div class="processing-track">
+                                <div class="processing-fill"></div>
+                            </div>
+                            <span class="processing-label">Processing your request…</span>
+                        </div>
+
+                        <div *ngIf="!isCancelling()" class="cta-group">
+                            <button class="btn-keep" (click)="onBack()"
+                                aria-label="Keep this booking and return to details">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" aria-hidden="true">
+                                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                                </svg>
+                                Keep My Booking
+                            </button>
+                            <button class="btn-cancel-proceed" [disabled]="!canProceed()"
+                                (click)="onRequestCancellation()"
+                                [attr.aria-label]="canProceed() ? 'Request journey termination for booking ' + pnrDisplay() : 'Please provide a reason before proceeding'">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" aria-hidden="true">
+                                    <path
+                                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                    <line x1="12" y1="9" x2="12" y2="13" />
+                                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                                </svg>
+                                Request Journey Termination
+                            </button>
+                        </div>
+
+                        <p *ngIf="!canProceed() && !isCancelling()" class="cta-hint">
+                            Please describe the nature of your change in plans (minimum 10 characters) to proceed.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- ── RIGHT COLUMN: Sticky summary ──────────────────────── -->
+                <aside class="aside-col" role="complementary" aria-label="Booking being cancelled">
+                    <app-cancellation-summary-card *ngIf="detail()" [detail]="detail()!" [currency]="'SGD'"
+                        [cancellationStatus]="cancellationStatus()">
+                    </app-cancellation-summary-card>
+                </aside>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         CONFIRMATION MODAL
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="modalOpen()" class="modal-backdrop" [@fadeIn] role="dialog" aria-modal="true"
+        aria-labelledby="cancel-modal-title" (click)="onDismissModal()">
+        <div (click)="$event.stopPropagation()">
+            <app-cancellation-modal [detail]="detail()!" [reason]="pendingReason()" [totalPrice]="totalRefundable()"
+                [currency]="'SGD'" (keepBooking)="onDismissModal()" (confirmCancellation)="onConfirmCancellation()">
+            </app-cancellation-modal>
+        </div>
+    </div>
+
+</div>

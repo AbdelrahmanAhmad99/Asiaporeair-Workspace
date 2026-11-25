@@ -1,0 +1,699 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+ $t: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ── Page Shell ────────────────────────────────────────────────────────────
+ .erd-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ── Sticky Header ─────────────────────────────────────────────────────────
+ .erd-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     flex-wrap: wrap;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+         flex-wrap: wrap;
+         justify-content: flex-end;
+     }
+ }
+
+ .erd-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     flex-wrap: wrap;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.4;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .erd-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+ }
+
+ .erd-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     color: var(--aoms-text-primary);
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .erd-subtitle-badge {
+     padding: 0.1875rem 0.625rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     color: var(--aoms-text-muted);
+     background: rgba($midnight, 0.05);
+     border: 1px solid rgba($champagne, 0.14);
+ }
+
+ .erd-stale-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: $amber;
+
+     &__dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         background: $amber;
+         animation: erd-pulse-amber 1.4s ease-in-out infinite;
+     }
+ }
+
+ // ── Time Range Selector ────────────────────────────────────────────────────
+ .erd-range-selector {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.1875rem;
+     border-radius: 8px;
+     background: rgba($midnight, 0.04);
+     border: 1px solid rgba($champagne, 0.16);
+ }
+
+ .erd-range-btn {
+     padding: 0.375rem 0.75rem;
+     border-radius: 6px;
+     border: none;
+     background: transparent;
+     color: var(--aoms-text-muted);
+     font-family: var(--aoms-font-body);
+     font-size: 0.75rem;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all $t;
+     white-space: nowrap;
+
+     &:hover:not(:disabled):not(.erd-range-btn--active) {
+         color: var(--aoms-text-secondary);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--active {
+         background: $gold;
+         color: $midnight;
+         font-weight: 800;
+         box-shadow: 0 2px 8px rgba($gold, 0.35);
+     }
+ }
+
+ // ── Nav / Icon Buttons ──────────────────────────────────────────────────────
+ .erd-nav-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0 0.875rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all $t;
+     white-space: nowrap;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:hover {
+         border-color: $champagne;
+         color: $champagne;
+         background: rgba($champagne, 0.06);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         border-color: rgba($gold, 0.35);
+         color: $gold;
+
+         &:hover {
+             background: rgba($gold, 0.08);
+             border-color: $gold;
+         }
+     }
+ }
+
+ .erd-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all $t;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: erd-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── Page Body ─────────────────────────────────────────────────────────────
+ .erd-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ // ── Error Banner ──────────────────────────────────────────────────────────
+ .erd-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.9375rem 1.125rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.09);
+     border: 1px solid rgba($ruby, 0.26);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 26%);
+     animation: erd-error-enter 260ms ease forwards, erd-shake 420ms ease 260ms;
+
+     &__icon {
+         width: 1.25rem;
+         height: 1.25rem;
+         flex-shrink: 0;
+         margin-top: 0.0625rem;
+     }
+
+     &__content {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         gap: 0.125rem;
+         min-width: 0;
+     }
+
+     &__title {
+         font-size: 0.6875rem;
+         font-weight: 900;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: lighten($ruby, 32%);
+     }
+
+     &__message {
+         line-height: 1.5;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+     }
+
+     &__btn {
+         padding: 0.375rem 0.875rem;
+         border-radius: 4px;
+         border: 1px solid rgba($ruby, 0.35);
+         background: transparent;
+         color: lighten($ruby, 30%);
+         font-family: var(--aoms-font-body);
+         font-size: 0.75rem;
+         font-weight: 700;
+         cursor: pointer;
+         transition: all $t;
+
+         &:hover {
+             background: rgba($ruby, 0.14);
+         }
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         border-radius: 4px;
+         border: none;
+         background: transparent;
+         color: rgba(255, 255, 255, 0.4);
+         cursor: pointer;
+         transition: all $t;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             background: rgba($ruby, 0.15);
+             color: rgba(255, 255, 255, 0.75);
+         }
+     }
+ }
+
+ // ── KPI Row ───────────────────────────────────────────────────────────────
+ .erd-kpi-row {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 1.125rem;
+
+     @media (max-width: 900px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ .erd-kpi-item {
+     animation: erd-widget-in 460ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+ }
+
+ // ── Visualization Row ───────────────────────────────────────────────────────
+ .erd-viz-row {
+     display: grid;
+     grid-template-columns: 2fr 1fr;
+     gap: 1.125rem;
+     align-items: stretch;
+
+     @media (max-width: 980px) {
+         grid-template-columns: 1fr;
+     }
+
+     &__chart,
+     &__meter {
+         min-width: 0;
+         display: flex;
+     }
+ }
+
+ // ── Audited Revenue Transactions Ledger ──────────────────────────────────
+ .erd-ledger-section {
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+     margin-top: 0.5rem;
+ }
+
+ .erd-ledger-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     flex-wrap: wrap;
+ }
+
+ .erd-ledger-title-wrap {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+ }
+
+ .erd-ledger-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.0625rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     color: var(--aoms-text-primary);
+     margin: 0;
+     letter-spacing: -0.01em;
+ }
+
+ .erd-ledger-icon {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: $gold;
+     flex-shrink: 0;
+ }
+
+ .erd-ledger-badge {
+     padding: 0.1875rem 0.5rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     color: $gold;
+     background: rgba($gold, 0.08);
+     border: 1px solid rgba($gold, 0.2);
+ }
+
+ .erd-view-all-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     font-family: var(--aoms-font-body);
+     font-size: 0.75rem;
+     font-weight: 700;
+     color: $gold;
+     background: transparent;
+     border: 1px solid rgba($gold, 0.25);
+     padding: 0.375rem 0.75rem;
+     border-radius: 6px;
+     cursor: pointer;
+     transition: all $t;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+         transition: transform $t;
+     }
+
+     &:hover {
+         background: rgba($gold, 0.1);
+         border-color: $gold;
+
+         svg {
+             transform: translateX(2px);
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── Footer Note ───────────────────────────────────────────────────────────
+ .erd-footer-note {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     text-align: center;
+     margin: 0;
+     opacity: 0.7;
+ }
+
+ // ── Champagne Gold Skeleton (initial load) ────────────────────────────────
+ .erd-skeleton {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+
+     &__kpi-row {
+         display: grid;
+         grid-template-columns: repeat(3, 1fr);
+         gap: 1.125rem;
+
+         @media (max-width: 900px) {
+             grid-template-columns: 1fr;
+         }
+     }
+
+     &__viz-row {
+         display: grid;
+         grid-template-columns: 2fr 1fr;
+         gap: 1.125rem;
+
+         @media (max-width: 980px) {
+             grid-template-columns: 1fr;
+         }
+     }
+ }
+
+ .erd-sk-card {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+     padding: 1.375rem 1.5rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.16);
+     background: var(--aoms-bg-card);
+     box-shadow: 0 6px 24px rgba($midnight, 0.06);
+
+     &--chart,
+     &--meter {
+         padding: 1.5rem;
+         min-height: 280px;
+         justify-content: center;
+     }
+ }
+
+ // Explicitly Champagne Gold toned shimmer, per spec's "Champagne Gold skeleton loader"
+ .erd-sk {
+     display: block;
+     border-radius: 6px;
+     background: linear-gradient(90deg,
+             rgba($champagne, 0.08) 0%,
+             rgba($champagne, 0.3) 50%,
+             rgba($champagne, 0.08) 100%);
+     background-size: 200% 100%;
+     animation: erd-champagne-shimmer 1.6s ease-in-out infinite;
+
+     &--icon {
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 10px;
+     }
+
+     &--label {
+         width: 55%;
+         height: 11px;
+     }
+
+     &--value {
+         width: 75%;
+         height: 26px;
+     }
+
+     &--chart {
+         width: 100%;
+         height: 100%;
+         min-height: 220px;
+         border-radius: 10px;
+     }
+
+     &--meter {
+         width: 220px;
+         height: 140px;
+         border-radius: 220px 220px 0 0;
+         margin: 0 auto;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes erd-error-enter {
+     from {
+         opacity: 0;
+         transform: translateY(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes erd-shake {
+
+     0%,
+     100% {
+         transform: translateX(0);
+     }
+
+     20% {
+         transform: translateX(-4px);
+     }
+
+     40% {
+         transform: translateX(4px);
+     }
+
+     60% {
+         transform: translateX(-3px);
+     }
+
+     80% {
+         transform: translateX(3px);
+     }
+ }
+
+ @keyframes erd-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes erd-pulse-amber {
+
+     0%,
+     100% {
+         opacity: 1;
+     }
+
+     50% {
+         opacity: 0.3;
+     }
+ }
+
+ // Staggered widget entrance — driven by inline animation-delay per card
+ @keyframes erd-widget-in {
+     from {
+         opacity: 0;
+         transform: translateY(14px) scale(0.98);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }
+
+ @keyframes erd-champagne-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .erd-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .erd-error-banner {
+         background: rgba($ruby, 0.15);
+         border-color: rgba($ruby, 0.3);
+         color: #fca5a5;
+     }
+
+     .erd-range-selector {
+         background: rgba(255, 255, 255, 0.04);
+     }
+ }

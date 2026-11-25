@@ -1,0 +1,594 @@
+// ============================================================================
+// ancillaries.component.scss
+// Asiaporeair | "Personalise Your Journey"
+// ============================================================================
+
+@use "sass:color";
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --ivory: #F8F9FA;
+    --charcoal: #101056;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --border-subtle: rgba(182, 143, 36, 0.15);
+    --glass-border: rgba(182, 143, 36, 0.12);
+    --shadow-soft: 0 10px 30px rgba(5, 25, 55, 0.08);
+    --shadow-card: 0 4px 20px rgba(5, 25, 55, 0.06);
+    --radius-card: 12px;
+    --radius-btn: 4px;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --transition: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    display: block;
+    font-family: var(--font);
+    background: var(--ivory);
+    min-height: 100vh;
+    letter-spacing: -0.01em;
+}
+
+// ── Context Bar ───────────────────────────────────────────────────────────────
+.context-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--midnight);
+    box-shadow: 0 2px 20px rgba(5, 25, 55, 0.35);
+}
+
+.context-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.context-journey {
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+}
+
+.context-label {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(226, 199, 128, 0.65);
+}
+
+.context-route {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
+
+// Stepper
+.progress-stepper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.4;
+    transition: opacity var(--transition);
+
+    &--active {
+        opacity: 1;
+
+        .step-num {
+            background: var(--royal-gold);
+            color: var(--midnight);
+            border-color: var(--royal-gold);
+            font-weight: 700;
+        }
+
+        .step-name {
+            color: #fff;
+            font-weight: 600;
+        }
+    }
+
+    &--done {
+        opacity: 0.8;
+
+        .step-num {
+            background: rgba(182, 143, 36, 0.2);
+            border-color: var(--royal-gold);
+            color: var(--champagne);
+        }
+
+        .step-name {
+            color: rgba(255, 255, 255, 0.65);
+        }
+    }
+}
+
+.step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    flex-shrink: 0;
+    transition: all var(--transition);
+}
+
+.step-name {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.step-line {
+    width: 28px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid rgba(182, 143, 36, 0.35);
+    border-radius: var(--radius-btn);
+    background: transparent;
+    color: var(--champagne);
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+
+    &:hover {
+        background: rgba(182, 143, 36, 0.1);
+        border-color: var(--royal-gold);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--champagne);
+        outline-offset: 2px;
+    }
+}
+
+// ── Journey Band ──────────────────────────────────────────────────────────────
+.journey-band {
+    background: rgba(5, 25, 55, 0.96);
+    border-bottom: 1px solid rgba(182, 143, 36, 0.15);
+}
+
+.journey-band-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.journey-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.journey-route-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--champagne);
+}
+
+.journey-dot {
+    color: rgba(226, 199, 128, 0.3);
+}
+
+.journey-detail {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+.journey-pax-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+}
+
+// ── Content Grid ──────────────────────────────────────────────────────────────
+.content-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+    align-items: start;
+
+    @media (max-width: 1100px) {
+        grid-template-columns: 1fr;
+
+        .summary-aside {
+            display: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+}
+
+// ── Page Header ───────────────────────────────────────────────────────────────
+.main-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.04em;
+    margin: 0;
+}
+
+.page-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 600px;
+}
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.skeleton-cat-card {
+    background: #fff;
+    border: 1px solid rgba(5, 25, 55, 0.07);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.skel {
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+
+    &--icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    &--title {
+        height: 14px;
+        width: 60%;
+    }
+
+    &--desc {
+        height: 10px;
+        width: 85%;
+    }
+}
+
+// ── Error / Booking Error Banners ─────────────────────────────────────────────
+.error-banner,
+.booking-error-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+.error-banner {
+    background: rgba(245, 158, 11, 0.06);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    color: #92400e;
+}
+
+.booking-error-banner {
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #991b1b;
+}
+
+// ── Categories Grid ───────────────────────────────────────────────────────────
+.categories-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+// ── Product Panel ─────────────────────────────────────────────────────────────
+.product-panel {
+    background: rgba(5, 25, 55, 0.02);
+    border: 1px solid var(--border-subtle);
+    border-top: none;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    overflow: hidden;
+}
+
+// Passenger Tabs
+.pax-tabs {
+    display: flex;
+    gap: 0;
+    background: rgba(5, 25, 55, 0.04);
+    border-bottom: 1px solid var(--border-subtle);
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.pax-tab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+
+    &:hover {
+        color: var(--charcoal);
+        background: rgba(5, 25, 55, 0.03);
+    }
+
+    &--active {
+        color: var(--charcoal);
+        font-weight: 700;
+        border-bottom-color: var(--royal-gold);
+        background: rgba(182, 143, 36, 0.04);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: -2px;
+    }
+}
+
+// Product Items Grid
+.product-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+}
+
+// ── Empty State ───────────────────────────────────────────────────────────────
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: 4rem 2rem;
+    background: #fff;
+    border-radius: var(--radius-card);
+    border: 1px dashed rgba(182, 143, 36, 0.25);
+}
+
+.empty-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(182, 143, 36, 0.05);
+    border: 1px solid rgba(182, 143, 36, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.empty-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+// ── Bottom CTA Row ────────────────────────────────────────────────────────────
+.bottom-cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.5rem;
+
+    @media (max-width: 560px) {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+}
+
+.back-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    font-family: var(--font);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0;
+    transition: color var(--transition);
+
+    &:hover {
+        color: var(--charcoal);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+}
+
+.confirm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 28px;
+    background: var(--midnight);
+    color: var(--champagne);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition);
+
+    &:hover:not(.btn--loading) {
+        background: var(--royal-gold);
+        color: var(--midnight);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(182, 143, 36, 0.25);
+    }
+
+    &.btn--loading {
+        opacity: 0.75;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: 2px;
+    }
+}
+
+.btn-loading-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(226, 199, 128, 0.3);
+    border-top-color: var(--champagne);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ── Summary Aside ─────────────────────────────────────────────────────────────
+.summary-aside {
+    position: sticky;
+    top: 80px;
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 900px) {
+    .step-name {
+        display: none;
+    }
+
+    .context-inner {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .progress-stepper {
+        display: none;
+    }
+
+    .journey-band-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}

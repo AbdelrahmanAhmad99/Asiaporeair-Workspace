@@ -1,0 +1,98 @@
+<div class="fhl-card">
+
+    <div class="fhl-card__header">
+        <div class="fhl-card__header__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="fhl-card__header__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="fhl-card__title">Flight Hour Entry</h3>
+            <p class="fhl-card__sub">
+                Log completed flight hours
+                @if (currentTotal() != null) {
+                <span class="fhl-card__current-total">· Current total: <strong>{{ currentTotal()!.toLocaleString() }}
+                        hrs</strong></span>
+                }
+            </p>
+        </div>
+    </div>
+
+    <div class="fhl-card__body">
+
+        <!-- Step increment buttons -->
+        <div class="fhl-steps" role="group" aria-label="Quick-add flight hour increments">
+            <span class="fhl-steps__label">Quick Add</span>
+            @for (step of STEP_OPTIONS; track step) {
+            <button class="fhl-step-btn" type="button" [disabled]="isProcessing()" (click)="addStep(step)"
+                [attr.aria-label]="'Add ' + step + ' hours'">
+                +{{ step }}h
+            </button>
+            }
+        </div>
+
+        <!-- Numeric input -->
+        <div class="fhl-input-row">
+            <div class="fhl-input-wrap" [class.fhl-input-wrap--valid]="isValid()"
+                [class.fhl-input-wrap--invalid]="!!validationMessage()">
+
+                <input class="fhl-input" type="number" id="fhl-hours" [(ngModel)]="hours" [ngModel]="hours()"
+                    (ngModelChange)="hours.set($event)" min="0.1" [max]="MAX_HOURS" step="0.1" placeholder="0.0"
+                    [disabled]="isProcessing()" aria-label="Hours to log"
+                    [attr.aria-describedby]="validationMessage() ? 'fhl-error' : null" />
+
+                <span class="fhl-input__unit">hrs</span>
+
+                <!-- Valid checkmark -->
+                @if (isValid()) {
+                <svg class="fhl-input__state-icon fhl-input__state-icon--valid" fill="none" stroke="currentColor"
+                    stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                }
+
+            </div>
+
+            <!-- Submit button -->
+            <button class="fhl-submit-btn" type="button" [disabled]="!isValid() || isProcessing()" (click)="onSubmit()"
+                aria-label="Submit flight hours to log">
+
+                @if (!isProcessing()) {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="fhl-submit-btn__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                Submit to Log
+                }
+
+                @if (isProcessing()) {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="fhl-submit-btn__icon fhl-submit-btn__icon--spin" aria-busy="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                     3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                     13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Synchronizing…
+                }
+
+            </button>
+        </div>
+
+        <!-- Validation error -->
+        @if (validationMessage()) {
+        <span class="fhl-error" id="fhl-error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="fhl-error__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{ validationMessage() }}
+        </span>
+        }
+
+    </div>
+
+</div>

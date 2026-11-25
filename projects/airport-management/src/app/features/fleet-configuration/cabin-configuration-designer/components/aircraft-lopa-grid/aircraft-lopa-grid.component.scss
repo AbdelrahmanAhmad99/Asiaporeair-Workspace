@@ -1,0 +1,609 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── Grid column widths ────────────────────────────────────────────────────
+ $col-tail: 120px;
+ $col-model: 1fr;
+ $col-status: 140px;
+ $col-config: 1fr;
+ $col-pax: 90px;
+ $col-actions: 150px;
+ $grid: $col-tail $col-model $col-status $col-config $col-pax $col-actions;
+
+ // ============================================================================
+ // 1. Card Wrapper
+ // ============================================================================
+ .alg-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 4px 20px rgba(5, 25, 55, 0.08);
+     transition: background-color $t-base, border-color $t-base, box-shadow $t-base;
+ }
+
+ // ============================================================================
+ // 2. Header — Midnight Sapphire base
+ // ============================================================================
+ .alg-header {
+     display: grid;
+     grid-template-columns: $grid;
+     background: $midnight;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+     min-width: 820px;
+
+     &__cell {
+         padding: 0.875rem 1rem;
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: $champagne;
+         white-space: nowrap;
+         user-select: none;
+     }
+ }
+
+ // ============================================================================
+ // 3. Body
+ // ============================================================================
+ .alg-body {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+
+     &::-webkit-scrollbar {
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba(182, 143, 36, 0.22);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 4. Rows
+ // ============================================================================
+ .alg-row {
+     display: grid;
+     grid-template-columns: $grid;
+     align-items: center;
+     min-width: 820px;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.07);
+     transition: background $t-fast;
+
+     &--even {
+         background: var(--aoms-bg-card);
+     }
+
+     &--odd {
+         background: rgba(248, 249, 250, 0.5);
+     }
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     &:hover:not(.alg-row--shimmer) {
+         background: rgba(226, 199, 128, 0.055) !important;
+     }
+
+     // Rows with no config — very subtle left amber warning stripe
+     &--no-config {
+         border-left: 2px solid rgba(180, 83, 9, 0.25);
+     }
+
+     // Cell base padding
+     >div {
+         padding: 0.875rem 1rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Cell Content
+ // ============================================================================
+ .alg__tail {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+ }
+
+ .alg-col--model {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+ }
+
+ .alg__model {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+ }
+
+ .alg__airline {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     transition: color $t-fast;
+ }
+
+ .alg__config {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-secondary);
+     transition: color $t-fast;
+ }
+
+ .alg__config-count {
+     display: inline-block;
+     margin-left: 0.375rem;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: $gold;
+     background: rgba(182, 143, 36, 0.1);
+     border: 1px solid rgba(182, 143, 36, 0.2);
+     border-radius: 100px;
+     padding: 0 0.3125rem;
+ }
+
+ .alg__config-none {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-style: italic;
+     color: $amber;
+     opacity: 0.8;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .alg__pax {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     font-variant-numeric: tabular-nums;
+     color: var(--aoms-text-secondary);
+ }
+
+ // Actions column
+ .alg-col--actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+ }
+
+ // ============================================================================
+ // 6. Status Badges
+ // ============================================================================
+ .status-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.1875rem 0.5625rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     border: 1px solid;
+     white-space: nowrap;
+
+     &__dot,
+     &__pulse {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         flex-shrink: 0;
+     }
+
+     &.sb--active {
+         color: $emerald;
+         background: rgba(6, 78, 59, 0.08);
+         border-color: rgba(6, 78, 59, 0.22);
+
+         .status-badge__dot {
+             background: $emerald;
+         }
+     }
+
+     &.sb--maintenance {
+         color: $amber;
+         background: rgba(180, 83, 9, 0.08);
+         border-color: rgba(180, 83, 9, 0.22);
+
+         .status-badge__dot {
+             background: $amber;
+         }
+     }
+
+     &.sb--grounded,
+     &.sb--aog {
+         color: $ruby;
+         background: rgba(113, 13, 6, 0.08);
+         border-color: rgba(113, 13, 6, 0.22);
+
+         .status-badge__pulse {
+             background: $ruby;
+             animation: sb-pulse 1.2s ease-in-out infinite;
+         }
+     }
+
+     &.sb--aog {
+         font-weight: 800;
+         box-shadow: 0 0 0 2px rgba(113, 13, 6, 0.1);
+     }
+
+     &.sb--reserve {
+         color: var(--aoms-text-muted);
+         background: rgba(5, 25, 55, 0.05);
+         border-color: rgba(5, 25, 55, 0.12);
+
+         .status-badge__dot {
+             background: var(--aoms-text-muted);
+             opacity: 0.6;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. "Manage LOPA" Button — Royal Gold + expanding golden underline
+ // ============================================================================
+ .alg__manage-btn {
+     position: relative;
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.4375rem 0.875rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: $gold;
+     background: transparent;
+     border: 1px solid rgba(182, 143, 36, 0.28);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     overflow: hidden; // clips the expanding underline
+     transition: all $t-fast;
+
+     // Expanding golden underline
+     &::after {
+         content: '';
+         position: absolute;
+         bottom: 0;
+         left: 50%;
+         transform: translateX(-50%);
+         width: 0;
+         height: 2px;
+         background: linear-gradient(to right, transparent, $gold, transparent);
+         transition: width 220ms ease;
+     }
+
+     &:hover {
+         color: darken($gold, 8%);
+         border-color: rgba(182, 143, 36, 0.5);
+         background: rgba(182, 143, 36, 0.06);
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.1);
+
+         &::after {
+             width: 100%;
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &__label {
+         position: relative;
+         z-index: 1;
+     }
+ }
+
+ // ============================================================================
+ // 8. Shimmer Skeleton
+ // ============================================================================
+ .alg-row--shimmer {
+     pointer-events: none;
+ }
+
+ .alg-sh {
+     height: 0.875rem;
+     border-radius: 4px;
+     background: rgba(182, 143, 36, 0.07);
+     animation: alg-pulse 1.5s ease-in-out infinite;
+     width: 75%;
+
+     &--md {
+         width: 80px;
+     }
+
+     &--sm {
+         width: 50px;
+     }
+
+     &--sub {
+         height: 0.625rem;
+         width: 55%;
+         margin-top: 0.25rem;
+         animation-delay: 0.1s;
+     }
+
+     &--pill {
+         height: 1.5rem;
+         width: 90px;
+         border-radius: 100px;
+         animation-delay: 0.1s;
+     }
+
+     &--btn {
+         height: 1.875rem;
+         width: 110px;
+         border-radius: 4px;
+         animation-delay: 0.15s;
+     }
+ }
+
+ // ============================================================================
+ // 9. Empty State
+ // ============================================================================
+ .alg-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 4rem 1.5rem;
+     text-align: center;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3.5rem;
+         height: 3.5rem;
+         border-radius: 12px;
+         background: rgba(182, 143, 36, 0.08);
+         color: $gold;
+         margin-bottom: 0.25rem;
+     }
+
+     &__icon {
+         width: 1.75rem;
+         height: 1.75rem;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-secondary);
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         max-width: 340px;
+         line-height: 1.5;
+     }
+ }
+
+ // ============================================================================
+ // 10. Pagination Footer
+ // ============================================================================
+ .alg-pagination {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.75rem 1.25rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.1);
+     background: rgba(248, 249, 250, 0.45);
+     flex-wrap: wrap;
+     transition: background $t-base;
+
+     &__info {
+         font-size: 12px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+
+         strong {
+             font-weight: 600;
+             color: var(--aoms-text-secondary);
+         }
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.25rem;
+     }
+
+     &__btn {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 4px;
+         border: 1px solid rgba(226, 199, 128, 0.2);
+         background: transparent;
+         color: var(--aoms-text-secondary);
+         cursor: pointer;
+         outline: none;
+         transition: all $t-fast;
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             background: rgba(226, 199, 128, 0.08);
+         }
+
+         &:disabled {
+             opacity: 0.35;
+             cursor: not-allowed;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         &__icon {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+     }
+
+     &__page {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         min-width: 2rem;
+         height: 2rem;
+         padding: 0 0.25rem;
+         border-radius: 4px;
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-secondary);
+         background: transparent;
+         border: 1px solid transparent;
+         cursor: pointer;
+         outline: none;
+         transition: all $t-fast;
+
+         &:hover:not(&--active) {
+             background: rgba(226, 199, 128, 0.07);
+             border-color: rgba(226, 199, 128, 0.2);
+         }
+
+         &--active {
+             background: rgba(182, 143, 36, 0.12);
+             border-color: rgba(182, 143, 36, 0.35);
+             color: darken($gold, 8%);
+             font-weight: 700;
+             cursor: default;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     &__ellipsis {
+         font-size: 0.8125rem;
+         color: var(--aoms-text-muted);
+         padding: 0 0.125rem;
+     }
+ }
+
+ // ============================================================================
+ // 11. Keyframes
+ // ============================================================================
+ @keyframes sb-pulse {
+
+     0%,
+     100% {
+         opacity: 1;
+         transform: scale(1);
+         box-shadow: 0 0 0 0 rgba(113, 13, 6, 0.4);
+     }
+
+     50% {
+         opacity: 0.7;
+         transform: scale(1.2);
+         box-shadow: 0 0 0 4px rgba(113, 13, 6, 0);
+     }
+ }
+
+ @keyframes alg-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 12. Dark Mode (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .alg-card {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+     }
+
+     .alg-row--odd {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .alg-row:hover:not(.alg-row--shimmer) {
+         background: rgba(226, 199, 128, 0.04) !important;
+     }
+
+     .alg-pagination {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .alg-sh {
+         background: rgba(226, 199, 128, 0.06);
+     }
+
+     .status-badge {
+         &.sb--active {
+             color: #34d399;
+             background: rgba(52, 211, 153, 0.08);
+             border-color: rgba(52, 211, 153, 0.2);
+         }
+
+         &.sb--grounded,
+         &.sb--aog {
+             color: #fca5a5;
+             background: rgba(252, 165, 165, 0.08);
+             border-color: rgba(252, 165, 165, 0.2);
+         }
+     }
+
+     .alg__manage-btn {
+         &:hover {
+             background: rgba(182, 143, 36, 0.07);
+         }
+     }
+ }

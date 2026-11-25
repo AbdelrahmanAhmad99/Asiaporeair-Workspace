@@ -1,0 +1,91 @@
+<!-- duty-event-strip.component.html -->
+
+<div class="des"
+     [attr.data-type]="event().raw.type"
+     [class.des--compact]="compact()"
+     [class.des--multiday]="event().isMultiDay"
+     (mouseenter)="onMouseEnter()"
+     (mouseleave)="onMouseLeave()"
+     (click)="eventClicked.emit(event())"
+     role="button"
+     tabindex="0"
+     [attr.aria-label]="meta().label + ': ' + event().raw.title">
+
+  <!-- Event accent line -->
+  <div class="des__accent" aria-hidden="true"></div>
+
+  <!-- Compact view (weekly / small cell) -->
+  @if (compact()) {
+    <div class="des__compact-body">
+      <span class="des__short-code">{{ meta().shortCode }}</span>
+      @if (event().raw.flightNo) {
+        <span class="des__flight-no">{{ event().raw.flightNo }}</span>
+      }
+    </div>
+  }
+
+  <!-- Full view (monthly cell or sidebar) -->
+  @if (!compact()) {
+    <div class="des__body">
+      <div class="des__header-row">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5"
+             viewBox="0 0 24 24" class="des__icon" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="meta().iconPath" />
+        </svg>
+        <span class="des__label">{{ meta().label }}</span>
+        @if (event().isMultiDay) {
+          <span class="des__multiday-badge" aria-label="{{ event().spanDays }} day event">
+            {{ event().spanDays }}d
+          </span>
+        }
+      </div>
+
+      @if (event().raw.flightNo) {
+        <span class="des__flight-no">{{ event().raw.flightNo }}</span>
+      }
+
+      @if (routeLabel()) {
+        <span class="des__route">{{ routeLabel() }}</span>
+      }
+
+      <span class="des__time">{{ timeRange() }}</span>
+    </div>
+  }
+
+  <!-- Status indicator dot -->
+  <span class="des__status-dot"
+        [class.des__status-dot--cancelled]="event().raw.status === 'Cancelled'"
+        [class.des__status-dot--completed]="event().raw.status === 'Completed'"
+        aria-hidden="true"></span>
+
+  <!-- Tooltip -->
+  @if (isTooltipVisible() && showTooltip()) {
+    <div class="des__tooltip" role="tooltip">
+      <div class="des__tooltip__glass" aria-hidden="true"></div>
+      <p class="des__tooltip__type">{{ meta().label }}</p>
+      @if (event().raw.flightNo) {
+        <p class="des__tooltip__flight">{{ event().raw.flightNo }}</p>
+      }
+      @if (routeLabel()) {
+        <p class="des__tooltip__route">{{ routeLabel() }}</p>
+      }
+      <p class="des__tooltip__time">{{ timeRange() }}</p>
+      <p class="des__tooltip__dur">Duration: {{ durationLabel() }}</p>
+      @if (event().raw.aircraftTailNo) {
+        <p class="des__tooltip__tail">Aircraft: {{ event().raw.aircraftTailNo }}</p>
+      }
+      @if (event().raw.status) {
+        <p class="des__tooltip__status"
+           [class.des__tooltip__status--ok]="event().raw.status === 'Completed'"
+           [class.des__tooltip__status--warn]="event().raw.status === 'Standby'"
+           [class.des__tooltip__status--err]="event().raw.status === 'Cancelled'">
+          Status: {{ event().raw.status }}
+        </p>
+      }
+      @if (event().raw.notes) {
+        <p class="des__tooltip__notes">{{ event().raw.notes }}</p>
+      }
+    </div>
+  }
+
+</div>

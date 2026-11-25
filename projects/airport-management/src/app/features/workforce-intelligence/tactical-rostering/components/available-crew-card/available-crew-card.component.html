@@ -1,0 +1,118 @@
+<!-- available-crew-card.component.html -->
+
+<div class="acc"
+     [class.acc--selected]="isSelected()"
+     [class.acc--unavailable]="crew().availabilityStatus === 'unavailable'"
+     [attr.data-status]="crew().availabilityStatus"
+     (click)="cardClicked.emit(crew().employeeId)"
+     role="article"
+     [attr.aria-label]="crew().fullName + ', ' + statusLabel()">
+
+  <!-- Status glow layer -->
+  <div class="acc__glow" aria-hidden="true"></div>
+
+  <!-- ── Top: Avatar + Identity ──────────────────────────────── -->
+  <div class="acc__top">
+
+    <div class="acc__avatar-wrap">
+      <div class="acc__avatar"
+           [class.acc__avatar--pilot]="crew().rank === 'captain' || crew().rank === 'first-officer'"
+           [class.acc__avatar--crew]="crew().rank !== 'captain' && crew().rank !== 'first-officer'"
+           [class.acc__avatar--unavailable]="crew().availabilityStatus === 'unavailable'"
+           aria-hidden="true">
+        {{ initials() }}
+      </div>
+      <!-- Rank badge overlaid on avatar -->
+      <span class="acc__rank-badge" aria-label="Rank: {{ crew().position }}">{{ rankDisplayLabel() }}</span>
+    </div>
+
+    <div class="acc__identity">
+      <p class="acc__name">{{ crew().fullName }}</p>
+      <p class="acc__position">{{ crew().position || crew().rank }}</p>
+      <p class="acc__email">{{ crew().email }}</p>
+    </div>
+
+    <!-- Base Airport -->
+    <div class="acc__base-wrap" aria-label="Base airport: {{ crew().baseAirportIata }}">
+      <svg fill="none" stroke="currentColor" stroke-width="1.5"
+           viewBox="0 0 24 24" class="acc__base-icon" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z" />
+      </svg>
+      <span class="acc__base-iata">{{ crew().baseAirportIata }}</span>
+    </div>
+
+  </div>
+
+  <!-- ── Status + Availability ───────────────────────────────── -->
+  <div class="acc__status-row">
+    <span class="acc__status-badge"
+          [class.acc__status-badge--ready]="crew().availabilityStatus === 'ready'"
+          [class.acc__status-badge--limited]="crew().availabilityStatus === 'limited'"
+          [class.acc__status-badge--unavailable]="crew().availabilityStatus === 'unavailable'">
+      <span class="acc__status-badge__dot" aria-hidden="true"></span>
+      {{ statusLabel() }}
+    </span>
+    @if (!crew().isActive) {
+      <span class="acc__inactive-tag">Inactive Account</span>
+    }
+  </div>
+
+  <!-- ── Duty Hours Progress Bar ──────────────────────────────── -->
+  <div class="acc__duty" aria-label="Remaining duty hours: {{ crew().remainingDutyHours }} of {{ crew().maxDutyHours }}">
+
+    <div class="acc__duty__header">
+      <span class="acc__duty__label">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5"
+             viewBox="0 0 24 24" class="acc__duty__icon" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+        </svg>
+        Remaining Duty Hours
+      </span>
+      <span class="acc__duty__value">
+        <strong>{{ crew().remainingDutyHours }}</strong> / {{ crew().maxDutyHours }} hrs
+      </span>
+    </div>
+
+    <div class="acc__duty__track" aria-hidden="true">
+      <div class="acc__duty__fill" [ngClass]="dutyBarColor()"
+           [style.width.%]="100 - crew().dutyHoursPercent"></div>
+    </div>
+
+    <!-- Ticks at 25%, 50%, 75% -->
+    <div class="acc__duty__ticks" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+
+  </div>
+
+  <!-- ── Action Button ─────────────────────────────────────────── -->
+  <button class="acc__select-btn"
+          type="button"
+          [disabled]="isProcessing() || crew().availabilityStatus === 'unavailable'"
+          [class.acc__select-btn--selected]="isSelected()"
+          [class.acc__select-btn--pulsing]="!isSelected() && crew().availabilityStatus === 'ready'"
+          (click)="$event.stopPropagation(); selectClicked.emit(crew().employeeId)"
+          [attr.aria-label]="(isSelected() ? 'Deselect ' : 'Select ') + crew().fullName + ' for roster'">
+    @if (isSelected()) {
+      <svg fill="none" stroke="currentColor" stroke-width="2"
+           viewBox="0 0 24 24" class="acc__select-btn__icon" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+      </svg>
+      Selected
+    }
+    @if (!isSelected() && crew().availabilityStatus !== 'unavailable') {
+      <svg fill="none" stroke="currentColor" stroke-width="1.5"
+           viewBox="0 0 24 24" class="acc__select-btn__icon" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Select for Roster
+    }
+    @if (crew().availabilityStatus === 'unavailable' && !isSelected()) {
+      Unavailable
+    }
+  </button>
+
+</div>

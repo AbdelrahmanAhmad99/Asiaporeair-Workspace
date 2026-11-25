@@ -1,0 +1,55 @@
+<div class="oc">
+
+    <!-- Header -->
+    <div class="oc__header">
+        <div class="oc__eyebrow">
+            <span class="oc__eyebrow-line"></span>
+            Exclusive Offers
+            <span class="oc__eyebrow-line"></span>
+        </div>
+        <h2 class="oc__title">Curated <strong>Journeys</strong></h2>
+        <p class="oc__sub">Member-exclusive fares. Savings that reward loyalty.</p>
+    </div>
+
+    <!-- Offer cards -->
+    <div class="oc__grid">
+        @for (offer of offers; track offer.id; let i = $index) {
+        <article class="oc-card" [style.animation-delay]="(i * 90) + 'ms'" [attr.aria-label]="offer.title">
+            <!-- Image -->
+            <div class="oc-card__img-wrap">
+                <img class="oc-card__img" [src]="offer.imageUrl" [alt]="offer.title" loading="lazy" />
+                <div class="oc-card__img-overlay" aria-hidden="true"></div>
+
+                @if (offer.badge) {
+                <span class="oc-card__badge">{{ offer.badge }}</span>
+                }
+            </div>
+
+            <!-- Body -->
+            <div class="oc-card__body">
+                @if (offer.validUntil) {
+                <p class="oc-card__validity">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    Offer valid until {{ offer.validUntil | date:'d MMM yyyy' }}
+                </p>
+                }
+                <h3 class="oc-card__title">{{ offer.title }}</h3>
+                <p class="oc-card__sub">{{ offer.subtitle }}</p>
+                <a class="oc-card__cta" [routerLink]="offer.ctaRoute">
+                    {{ offer.ctaLabel }}
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </a>
+            </div>
+        </article>
+        }
+    </div>
+
+</div>

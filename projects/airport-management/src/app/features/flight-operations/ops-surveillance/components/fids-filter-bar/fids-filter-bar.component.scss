@@ -1,0 +1,368 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Panel — Midnight Sapphire background per spec
+ // ============================================================================
+ .ffb-panel {
+     display: flex;
+     align-items: center;
+     gap: 1.5rem;
+     padding: 0.875rem 1.5rem;
+     background: $midnight;
+     border-bottom: 1px solid rgba($champagne, 0.12);
+     flex-wrap: wrap;
+     row-gap: 0.625rem;
+ }
+
+ // ============================================================================
+ // 2. View toggle buttons — Gold-bordered glass per spec
+ // ============================================================================
+ .ffb-view-toggle {
+     display: flex;
+     border-radius: 8px;
+     border: 1px solid rgba($gold, 0.28);
+     overflow: hidden;
+     background: rgba($gold, 0.04);
+ }
+
+ .ffb-view-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.5rem 1.125rem;
+     border: none;
+     border-right: 1px solid rgba($gold, 0.2);
+     background: transparent;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     color: rgba($champagne, 0.55);
+     cursor: pointer;
+     transition: all 200ms $ease;
+     position: relative;
+
+     &:last-child {
+         border-right: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+     }
+
+     // Inactive hover
+     &:hover:not(.ffb-view-btn--active) {
+         background: rgba($champagne, 0.06);
+         color: $champagne;
+     }
+
+     // Active state — Royal Gold per spec
+     &--active {
+         background: rgba($gold, 0.14);
+         color: $gold;
+         font-weight: 700;
+         box-shadow: inset 0 -2px 0 $gold;
+     }
+
+     &__badge {
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         min-width: 1.25rem;
+         height: 1.25rem;
+         padding: 0 0.3rem;
+         border-radius: 4px;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9.5px;
+         font-weight: 800;
+         letter-spacing: 0.04em;
+
+         &--boarding {
+             background: rgba(59, 130, 246, .2);
+             color: #60a5fa;
+         }
+
+         &--delayed {
+             background: rgba($ruby, 0.2);
+             color: lighten($ruby, 12%);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Airport input
+ // ============================================================================
+ .ffb-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     flex-shrink: 0;
+ }
+
+ .ffb-airport-wrap {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.375rem 0.75rem;
+     border-radius: 6px;
+     border: 1px solid rgba($champagne, 0.15);
+     background: rgba(255, 255, 255, 0.04);
+     transition: border-color 180ms $ease;
+
+     &:focus-within {
+         border-color: $champagne;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: rgba($champagne, 0.4);
+         flex-shrink: 0;
+     }
+ }
+
+ .ffb-airport-input {
+     background: transparent;
+     border: none;
+     outline: none;
+     width: 2.75rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 800;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: $champagne;
+
+     &::placeholder {
+         color: rgba($champagne, 0.3);
+     }
+ }
+
+ // ============================================================================
+ // 4. Filter controls
+ // ============================================================================
+ .ffb-filters {
+     display: flex;
+     align-items: flex-end;
+     gap: 0.875rem;
+     flex: 1;
+     flex-wrap: wrap;
+     row-gap: 0.5rem;
+ }
+
+ .ffb-filter-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+ }
+
+ .ffb-filter-label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: rgba($champagne, 0.4);
+ }
+
+ .ffb-filter-input {
+     appearance: none;
+     outline: none;
+     height: 2.125rem;
+     padding: 0 0.75rem;
+     border-radius: 6px;
+     border: 1px solid rgba($champagne, 0.15);
+     background: rgba(255, 255, 255, 0.04);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 500;
+     color: rgba($champagne, 0.85);
+     min-width: 7rem;
+     transition: border-color 180ms $ease, box-shadow 180ms $ease;
+
+     &::placeholder {
+         color: rgba($champagne, 0.28);
+     }
+
+     &:focus {
+         border-color: $champagne;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.12);
+     }
+ }
+
+ .ffb-select-wrap {
+     position: relative;
+ }
+
+ .ffb-select {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     height: 2.125rem;
+     padding: 0 2.125rem 0 0.75rem;
+     border-radius: 6px;
+     border: 1px solid rgba($champagne, 0.15);
+     background: rgba(255, 255, 255, 0.04);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 500;
+     color: rgba($champagne, 0.85);
+     cursor: pointer;
+     min-width: 9rem;
+     transition: border-color 180ms $ease, box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $champagne;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.12);
+     }
+
+     option {
+         background: darken($midnight, 2%);
+         color: rgba($champagne, 0.85);
+     }
+ }
+
+ .ffb-select-wrap__chev {
+     position: absolute;
+     right: 0.5rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 0.875rem;
+     height: 0.875rem;
+     pointer-events: none;
+     color: rgba($champagne, 0.4);
+ }
+
+ .ffb-clear-btn {
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 700;
+     color: rgba($champagne, 0.5);
+     cursor: pointer;
+     text-decoration: underline;
+     text-underline-offset: 2px;
+     text-decoration-color: rgba($champagne, 0.25);
+     align-self: flex-end;
+     transition: all 150ms $ease;
+
+     &:hover {
+         color: $champagne;
+         text-decoration-color: $champagne;
+         border-color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 5. Right: Ticker + refresh
+ // ============================================================================
+ .ffb-right {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+     margin-left: auto;
+ }
+
+ .ffb-ticker {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-end;
+     gap: 0.1rem;
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 8.5px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.3);
+     }
+
+     &__time {
+         font-family: 'Courier New', monospace;
+         font-size: 11px;
+         font-weight: 700;
+         color: $champagne;
+         letter-spacing: 0.04em;
+         text-shadow: 0 0 6px rgba($champagne, 0.2);
+     }
+ }
+
+ .ffb-refresh-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.18);
+     background: transparent;
+     color: rgba($champagne, 0.45);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.3;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: ffb-spin 0.9s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Keyframes
+ // ============================================================================
+ @keyframes ffb-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }

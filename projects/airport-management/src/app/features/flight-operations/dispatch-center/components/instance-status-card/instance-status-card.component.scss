@@ -1,0 +1,447 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Card — Glassmorphism + Midnight Sapphire (Instrument Cluster)
+ // ============================================================================
+ .isc-card {
+     position: relative;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow:
+         0 8px 32px rgba($midnight, 0.42),
+         0 1px 0 rgba($champagne, 0.1) inset;
+     display: flex;
+     flex-direction: column;
+     overflow: hidden;
+     animation: isc-enter 380ms $luxury both;
+
+     // Royal Gold accent strip on left edge
+     &__accent-strip {
+         position: absolute;
+         left: 0;
+         top: 0;
+         bottom: 0;
+         width: 3px;
+         background: linear-gradient(180deg, $gold 0%, rgba($gold, 0.25) 100%);
+     }
+ }
+
+ // Dividers
+ .isc-divider {
+     height: 1px;
+     background: rgba($champagne, 0.08);
+     margin: 0 1.25rem;
+ }
+
+ // ============================================================================
+ // 2. Hero section — Flight No + status pill
+ // ============================================================================
+ .isc-hero {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+     padding: 1.125rem 1.25rem 0.875rem 1.5rem; // 1.5 left for accent strip
+
+     &__left {
+         display: flex;
+         align-items: baseline;
+         gap: 0.625rem;
+     }
+ }
+
+ .isc-flight-no {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.75rem;
+     font-weight: 900;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: $gold;
+     text-shadow: 0 0 20px rgba($gold, 0.25);
+     line-height: 1;
+ }
+
+ .isc-instance-id {
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     font-weight: 700;
+     color: rgba($champagne, 0.4);
+     letter-spacing: 0.04em;
+ }
+
+ // Status pill
+ .isc-status-pill {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.3rem 0.75rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     &__dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         flex-shrink: 0;
+         background: currentColor;
+     }
+
+     &--scheduled {
+         background: rgba($amber, 0.15);
+         color: $amber;
+     }
+
+     &--delayed {
+         background: rgba($ruby, 0.15);
+         color: lighten($ruby, 10%);
+     }
+
+     &--boarding {
+         background: rgba(59, 130, 246, .15);
+         color: #60a5fa;
+
+         .isc-status-pill__dot {
+             animation: isc-dot-pulse 1.5s ease-in-out infinite;
+         }
+     }
+
+     &--inflight {
+         background: rgba($emerald, 0.15);
+         color: #34d399;
+
+         .isc-status-pill__dot {
+             animation: isc-dot-pulse 1.5s ease-in-out infinite;
+         }
+     }
+
+     &--arrived {
+         background: rgba(108, 117, 125, .15);
+         color: rgba($champagne, 0.55);
+     }
+
+     &--cancelled {
+         background: rgba($ruby, 0.1);
+         color: rgba($ruby, 0.7);
+     }
+
+     &--diverted {
+         background: rgba($amber, 0.12);
+         color: $amber;
+     }
+
+     &--unknown {
+         background: rgba(108, 117, 125, .1);
+         color: rgba($champagne, 0.35);
+     }
+ }
+
+ // ============================================================================
+ // 3. O-D Corridor
+ // ============================================================================
+ .isc-corridor {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.5rem;
+     padding: 1rem 1.25rem 0.875rem 1.5rem;
+ }
+
+ .isc-hub {
+     display: flex;
+     flex-direction: column;
+     gap: 0.2rem;
+     min-width: 5rem;
+
+     &--dest {
+         align-items: flex-end;
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.4);
+     }
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 2rem;
+         font-weight: 900;
+         letter-spacing: 0.12em;
+         text-transform: uppercase;
+         line-height: 1;
+
+         &--gold {
+             color: $gold;
+             text-shadow: 0 0 18px rgba($gold, 0.28);
+         }
+
+         &--champagne {
+             color: $champagne;
+             text-shadow: 0 0 12px rgba($champagne, 0.2);
+         }
+     }
+
+     &__time {
+         font-family: 'Courier New', monospace;
+         font-size: 1rem;
+         font-weight: 700;
+         letter-spacing: 0.06em;
+         color: rgba($champagne, 0.75);
+     }
+
+     &__date {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9.5px;
+         color: rgba($champagne, 0.35);
+         letter-spacing: 0.04em;
+     }
+
+     &__gate {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.3rem;
+         margin-top: 0.2rem;
+         padding: 0.2rem 0.55rem;
+         border-radius: 4px;
+         background: rgba($gold, 0.08);
+         border: 1px solid rgba($gold, 0.18);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9.5px;
+         font-weight: 700;
+         letter-spacing: 0.06em;
+         color: rgba($champagne, 0.65);
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+             color: $gold;
+             flex-shrink: 0;
+         }
+     }
+
+     &__city-group {
+         display: flex;
+         align-items: baseline;
+         gap: 0.5rem;
+     }
+
+     &__city {
+         font-family: 'Montserrat', sans-serif;
+         font-weight: 600;
+         font-size: 13px;
+         color: $gold;
+         letter-spacing: 0.02em;
+     }
+
+     &__airport-name {
+         font-size: 10px;
+         color: rgba($champagne, 0.45);
+         max-width: 25ch;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         margin-top: -0.15rem;
+     }
+
+     &__times-wrap {
+         display: flex;
+         align-items: baseline;
+         gap: 0.5rem;
+         margin-top: 0.2rem;
+     }
+ }
+
+ // Flight path connector
+ .isc-flight-path {
+     display: flex;
+     align-items: center;
+     flex: 1;
+     gap: 0.375rem;
+     padding-top: 1.25rem; // align with IATA text centre
+
+     &__line {
+         flex: 1;
+         height: 1px;
+         background: linear-gradient(90deg, rgba($gold, 0.3), rgba($champagne, 0.5), rgba($gold, 0.3));
+     }
+
+     &__icon {
+         flex-shrink: 0;
+         width: 1.25rem;
+         height: 1.25rem;
+         color: $gold;
+     }
+ }
+
+ // ============================================================================
+ // 4. Assignment row
+ // ============================================================================
+ .isc-assignment-row {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 0.875rem 1.25rem 0.875rem 1.5rem;
+     flex-wrap: wrap;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 6px;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.2);
+         flex-shrink: 0;
+
+         svg {
+             width: 0.9375rem;
+             height: 0.9375rem;
+             color: $gold;
+         }
+     }
+
+     &__label {
+         display: block;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.4);
+         margin-bottom: 0.15rem;
+     }
+
+     &__tail {
+         display: block;
+         font-family: 'Courier New', monospace;
+         font-size: 1.125rem;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         color: $champagne;
+
+         &--unassigned {
+             color: $amber;
+             font-family: 'Montserrat', sans-serif;
+             font-size: 0.9375rem;
+             font-weight: 700;
+             letter-spacing: 0.04em;
+             font-style: italic;
+         }
+     }
+ }
+
+ .isc-baggage {
+     margin-left: auto;
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0.3rem 0.625rem;
+     border-radius: 4px;
+     background: rgba($champagne, 0.07);
+     border: 1px solid rgba($champagne, 0.15);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 600;
+     color: rgba($champagne, 0.55);
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         color: $champagne;
+     }
+ }
+
+ // ============================================================================
+ // 5. Skeleton
+ // ============================================================================
+ .isc-skeleton {
+     padding: 1.25rem 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+ }
+
+ .isc-sk {
+     border-radius: 4px;
+     background: rgba($champagne, 0.07);
+     animation: isc-pulse 1.5s ease-in-out infinite;
+
+     &--hero {
+         height: 2.5rem;
+         width: 45%;
+     }
+
+     &--sub {
+         height: 0.75rem;
+         width: 65%;
+     }
+
+     &--col {
+         height: 3rem;
+         flex: 1;
+     }
+ }
+
+ .isc-sk-row {
+     display: flex;
+     gap: 1.5rem;
+ }
+
+ // ============================================================================
+ // 6. Keyframes
+ // ============================================================================
+ @keyframes isc-enter {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes isc-pulse {
+
+     0%,
+     100% {
+         opacity: 0.4;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ @keyframes isc-dot-pulse {
+
+     0%,
+     100% {
+         opacity: 1;
+     }
+
+     50% {
+         opacity: 0.3;
+     }
+ }

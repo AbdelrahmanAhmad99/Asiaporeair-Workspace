@@ -1,0 +1,45 @@
+<div class="rsw-card" [ngClass]="'rsw-card--' + accent()">
+    <div class="rsw-card__glow" aria-hidden="true"></div>
+
+    @if (isLoading()) {
+    <div class="rsw-skeleton" aria-hidden="true">
+        <div class="rsw-sk rsw-sk--icon"></div>
+        <div class="rsw-sk rsw-sk--label"></div>
+        <div class="rsw-sk rsw-sk--value"></div>
+    </div>
+    } @else {
+
+    <div class="rsw-card__top">
+        @if (iconPath()) {
+        <div class="rsw-icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="iconPath()" />
+            </svg>
+        </div>
+        }
+
+        @if (trend()) {
+        <span class="rsw-trend" [class]="'rsw-trend--' + trend()!.direction">
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="trendIconPath()" />
+            </svg>
+            {{ trend()!.value > 0 ? '+' : '' }}{{ trend()!.value.toFixed(1) }}%
+        </span>
+        }
+    </div>
+
+    <span class="rsw-label">{{ label() }}</span>
+    <span class="rsw-value">{{ formattedValue() }}</span>
+
+    @if (caveat()) {
+    <span class="rsw-caveat" [title]="caveat()!">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+        </svg>
+        {{ caveat() }}
+    </span>
+    }
+
+    }
+</div>

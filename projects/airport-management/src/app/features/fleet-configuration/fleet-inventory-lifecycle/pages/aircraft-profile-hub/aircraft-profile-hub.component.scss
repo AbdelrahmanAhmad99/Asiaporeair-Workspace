@@ -1,0 +1,566 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .hub-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ============================================================================
+ // 2. Toast notification
+ // ============================================================================
+ .hub-toast {
+     position: fixed;
+     bottom: 1.5rem;
+     right: 1.5rem;
+     z-index: 100;
+     display: flex;
+     align-items: flex-start;
+     gap: 0.625rem;
+     padding: 0.875rem 1rem;
+     border-radius: 10px;
+     max-width: 420px;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     line-height: 1.4;
+     box-shadow: 0 8px 24px rgba(5, 25, 55, 0.2);
+     animation: hub-toast-in 350ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     &--success {
+         color: $emerald;
+         background: rgba(6, 78, 59, 0.09);
+         border: 1px solid rgba(6, 78, 59, 0.28);
+     }
+
+     &--error {
+         color: $ruby;
+         background: rgba(113, 13, 6, 0.08);
+         border: 1px solid rgba(113, 13, 6, 0.25);
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+         margin-top: 1px;
+     }
+
+     &__message {
+         flex: 1;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: none;
+         cursor: pointer;
+         outline: none;
+         color: inherit;
+         opacity: 0.6;
+         flex-shrink: 0;
+         margin-top: 1px;
+         transition: opacity $t-fast;
+
+         &:hover {
+             opacity: 1;
+         }
+
+         svg {
+             width: 100%;
+             height: 100%;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Sticky Header
+ // ============================================================================
+ .hub-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.15);
+     box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     transition: background-color $t-base, box-shadow $t-base;
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+     }
+ }
+
+ .hub-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.25rem;
+
+     &__back {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.3125rem;
+         padding: 0;
+         border: none;
+         background: none;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-secondary);
+         cursor: pointer;
+         outline: none;
+         transition: color $t-fast;
+
+         &:hover {
+             color: $midnight;
+
+             .hub-breadcrumb__back__arrow {
+                 transform: translateX(-3px);
+             }
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 3px;
+             border-radius: 3px;
+         }
+
+         &__arrow {
+             width: 0.875rem;
+             height: 0.875rem;
+             flex-shrink: 0;
+             transition: transform $t-fast;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .hub-title {
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+ }
+
+ .hub-edit-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.5rem 1rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     background: transparent;
+     border: 1px solid rgba(226, 199, 128, 0.22);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     &:hover {
+         color: $midnight;
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.07);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .hub-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.07);
+         color: $midnight;
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: hub-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 4. Page Body
+ // ============================================================================
+ .hub-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ // ============================================================================
+ // 5. Error Banner
+ // ============================================================================
+ .hub-error {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1.125rem;
+     border-radius: 8px;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: $ruby;
+     background: rgba(113, 13, 6, 0.08);
+     border: 1px solid rgba(113, 13, 6, 0.2);
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 6. Two-Column Action Grid
+ // ============================================================================
+ .hub-actions-grid {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 1.25rem;
+
+     @media (min-width: 768px) {
+         grid-template-columns: 1fr 1fr;
+     }
+ }
+
+ // ============================================================================
+ // 7. Cabin Configurations Card
+ // ============================================================================
+ .hub-configs-card {
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07);
+     overflow: hidden;
+     transition: background-color $t-base, border-color $t-base;
+
+     &__header {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         padding: 0.875rem 1.125rem;
+         background: rgba(5, 25, 55, 0.03);
+         border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__title {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary);
+     }
+
+     &__count {
+         margin-left: auto;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: $gold;
+         padding: 0.125rem 0.5rem;
+         background: rgba(182, 143, 36, 0.1);
+         border: 1px solid rgba(182, 143, 36, 0.2);
+         border-radius: 100px;
+     }
+ }
+
+ .hub-configs-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+     gap: 1rem;
+     padding: 1.125rem;
+ }
+
+ .hub-config-item {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba(5, 25, 55, 0.02);
+     border: 1px solid rgba(226, 199, 128, 0.1);
+     transition: background $t-fast, border-color $t-fast;
+
+     &:hover {
+         background: rgba(226, 199, 128, 0.04);
+         border-color: rgba(226, 199, 128, 0.2);
+     }
+
+     &__name {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-primary);
+     }
+
+     &__seats {
+         font-size: 12px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-secondary);
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__classes {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 0.3125rem;
+         margin-top: 0.25rem;
+     }
+
+     &__class-chip {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-muted);
+         padding: 0.125rem 0.5rem;
+         background: rgba(182, 143, 36, 0.07);
+         border: 1px solid rgba(182, 143, 36, 0.15);
+         border-radius: 100px;
+         white-space: nowrap;
+     }
+ }
+
+ // ============================================================================
+ // 8. Danger Zone
+ // ============================================================================
+ .hub-danger-zone {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 1rem 1.25rem;
+     border-radius: 8px;
+     background: rgba(113, 13, 6, 0.04);
+     border: 1px solid rgba(113, 13, 6, 0.18);
+     flex-wrap: wrap;
+
+     &__info {
+         display: flex;
+         flex-direction: column;
+         gap: 0.125rem;
+     }
+
+     &__title {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: #710d06;
+     }
+
+     &__desc {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         max-width: 480px;
+     }
+ }
+
+ .hub-danger-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.5625rem 1.125rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: $ruby;
+     background: transparent;
+     border: 1.5px solid rgba(113, 13, 6, 0.3);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         background: rgba(113, 13, 6, 0.07);
+         border-color: rgba(113, 13, 6, 0.55);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid rgba(113, 13, 6, 0.4);
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 9. Keyframes
+ // ============================================================================
+ @keyframes hub-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes hub-toast-in {
+     from {
+         opacity: 0;
+         transform: translateY(12px) scale(0.95);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }
+
+ // ============================================================================
+ // 10. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .hub-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .hub-breadcrumb__back:hover {
+         color: $champagne;
+     }
+
+     .hub-icon-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .hub-error {
+         background: rgba(113, 13, 6, 0.15);
+         border-color: rgba(113, 13, 6, 0.4);
+         color: #fca5a5;
+     }
+
+     .hub-danger-zone {
+         background: rgba(113, 13, 6, 0.07);
+     }
+
+     .hub-danger-btn {
+         color: #fca5a5;
+         border-color: rgba(252, 165, 165, 0.25);
+     }
+
+     .hub-toast {
+         &--success {
+             color: #34d399;
+             background: rgba(52, 211, 153, 0.09);
+             border-color: rgba(52, 211, 153, 0.25);
+         }
+
+         &--error {
+             color: #fca5a5;
+             background: rgba(252, 165, 165, 0.08);
+             border-color: rgba(252, 165, 165, 0.2);
+         }
+     }
+ }

@@ -1,0 +1,136 @@
+<!-- account-status-toggle.component.html -->
+
+<!-- Deactivation Confirmation Modal -->
+@if (showModal()) {
+<div class="ast-bd" (click)="onModalCancel()" aria-hidden="true"></div>
+
+<div class="ast-modal" role="alertdialog" aria-modal="true" aria-labelledby="ast-modal-title">
+    <div class="ast-modal__rule" aria-hidden="true"></div>
+
+    <div class="ast-modal__icon-wrap" aria-hidden="true">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ast-modal__icon">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+    </div>
+
+    <div class="ast-modal__body">
+        <h2 class="ast-modal__title" id="ast-modal-title">Critical Action: Confirm Decommission</h2>
+        @if (employeeName()) {
+        <p class="ast-modal__name">{{ employeeName() }}</p>
+        }
+        <p class="ast-modal__copy">
+            Deactivating this profile will revoke all system access immediately.
+            The employee will be unable to log in or perform any operational functions.
+            This action takes effect upon confirmation.
+        </p>
+
+        <div class="ast-modal__consequences">
+            <div class="ast-modal__cons-item">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="ast-modal__cons-icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                All active sessions will be terminated immediately.
+            </div>
+            <div class="ast-modal__cons-item">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="ast-modal__cons-icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                Flight roster assignments must be manually reassigned.
+            </div>
+            <div class="ast-modal__cons-item ast-modal__cons-item--note">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="ast-modal__cons-icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+                The profile record will be retained for audit and compliance purposes.
+            </div>
+        </div>
+    </div>
+
+    <div class="ast-modal__actions">
+        <button class="ast-modal__btn ast-modal__btn--cancel" type="button" (click)="onModalCancel()">Cancel</button>
+        <button class="ast-modal__btn ast-modal__btn--confirm" type="button" (click)="onModalConfirm()">Confirm
+            Decommission</button>
+    </div>
+
+</div>
+}
+
+<!-- ── Status Card ──────────────────────────────────────────── -->
+<div class="ast" [class.ast--active]="isActive()" [class.ast--inactive]="!isActive()">
+
+    <div class="ast__header">
+        <div class="ast__header__icon-wrap" aria-hidden="true">
+            @if (isActive()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ast__header__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75m-10.5.75a8.25 8.25 0 1 1 16.5 0 8.25 8.25 0 0 1-16.5 0z" />
+            </svg>
+            } @else {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ast__header__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+            }
+        </div>
+        <div>
+            <p class="ast__header__label">Account Lifecycle</p>
+            <p class="ast__header__sub">System access & operational status</p>
+        </div>
+    </div>
+
+    <!-- Status indicator -->
+    <div class="ast__status-display">
+        <div class="ast__status-glow" aria-hidden="true"></div>
+        <span class="ast__status-dot" aria-hidden="true"></span>
+        <span class="ast__status-label">{{ statusLabel() }}</span>
+    </div>
+
+    <!-- Action button -->
+    @if (isActive()) {
+    <button class="ast__action-btn ast__action-btn--deactivate" type="button" [disabled]="isProcessing()"
+        (click)="onDeactivateClick()">
+        @if (!isProcessing()) {
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ast__action-btn__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+        </svg>
+        Deactivate Account
+        } @else {
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            class="ast__action-btn__icon ast__action-btn__icon--spin" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        Processing…
+        }
+    </button>
+    }
+
+    @if (!isActive()) {
+    <button class="ast__action-btn ast__action-btn--reactivate" type="button" [disabled]="isProcessing()"
+        [class.ast__action-btn--pulsing]="isProcessing()" (click)="onReactivate()">
+        @if (!isProcessing()) {
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ast__action-btn__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        Reactivate Account
+        } @else {
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            class="ast__action-btn__icon ast__action-btn__icon--spin" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        Activating…
+        }
+    </button>
+    }
+
+</div>

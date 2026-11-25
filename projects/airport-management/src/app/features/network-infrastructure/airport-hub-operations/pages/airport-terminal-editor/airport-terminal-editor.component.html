@@ -1,0 +1,145 @@
+<div class="ate-page">
+
+    <!-- ══ Sticky Command Header ═════════════════════════════════════ -->
+    <header class="ate-header">
+
+        <!-- Left: back + breadcrumb + title -->
+        <div class="ate-header-left">
+            <button class="ate-back-btn" (click)="goBack()" [disabled]="isProcessing()"
+                aria-label="Back to Airport Dashboard" title="Back to Hub Dashboard">
+                <svg class="ate-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <nav class="ate-breadcrumb" aria-label="Breadcrumb">
+                    <span class="ate-breadcrumb__section">Network &amp; Infrastructure</span>
+                    <svg class="ate-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <button class="ate-breadcrumb__link" (click)="goBack()">Airport Hub</button>
+                    <svg class="ate-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="ate-breadcrumb__current">{{ breadcrumbLabel() }}</span>
+                </nav>
+                <h1 class="ate-title">{{ pageTitle() }}</h1>
+            </div>
+        </div>
+
+        <!-- Right: mode badge -->
+        <div class="ate-header-right">
+            <span class="ate-mode-badge" [class.ate-mode-badge--create]="!isEditMode()"
+                [class.ate-mode-badge--edit]="isEditMode()">
+                <svg class="ate-mode-badge__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    @if (isEditMode()) {
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582
+                     16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1
+                     1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                    } @else {
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    }
+                </svg>
+                {{ isEditMode() ? 'Configuration Edit' : 'New Node Registration' }}
+            </span>
+        </div>
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="ate-body">
+
+        <!-- ── Fetch Error (edit mode: record not found) ─────────────── -->
+        @if (fetchError()) {
+        <div class="ate-error-banner" role="alert">
+            <svg class="ate-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                   0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="ate-error-banner__body">
+                <strong class="ate-error-banner__title">Record not found</strong>
+                <span class="ate-error-banner__msg">{{ fetchError() }}</span>
+            </div>
+            <button class="ate-error-banner__action" (click)="goBack()">Return to Hub</button>
+        </div>
+        }
+
+        <!-- ── Processing/save error (from store) ────────────────────── -->
+        @if (processingError() && !fetchError()) {
+        <div class="ate-error-banner ate-error-banner--save" role="alert">
+            <svg class="ate-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                   0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="ate-error-banner__body">
+                <strong class="ate-error-banner__title">Save failed</strong>
+                <span class="ate-error-banner__msg">{{ processingError() }}</span>
+            </div>
+        </div>
+        }
+
+        <!-- ── Loading Skeleton (fetching record in edit mode) ────────── -->
+        @if (isFetching()) {
+        <div class="ate-skeleton-wrap" aria-busy="true" aria-label="Loading airport data">
+            <div class="ate-skeleton ate-skeleton--main">
+                <div class="ate-skeleton__header">
+                    <div class="ate-skeleton__icon"></div>
+                    <div class="ate-skeleton__text">
+                        <div class="ate-skeleton__line ate-skeleton__line--title"></div>
+                        <div class="ate-skeleton__line ate-skeleton__line--sub"></div>
+                    </div>
+                </div>
+                <div class="ate-skeleton__grid">
+                    <div class="ate-skeleton__field"></div>
+                    <div class="ate-skeleton__field"></div>
+                    <div class="ate-skeleton__field ate-skeleton__field--wide"></div>
+                    <div class="ate-skeleton__field"></div>
+                    <div class="ate-skeleton__field"></div>
+                </div>
+            </div>
+            <div class="ate-skeleton ate-skeleton--side">
+                <div class="ate-skeleton__line ate-skeleton__line--side-title"></div>
+                @for (n of [1,2,3]; track n) {
+                <div class="ate-skeleton__field ate-skeleton__field--tax"></div>
+                }
+            </div>
+        </div>
+        }
+
+        <!-- ══ Main Editor Grid ═════════════════════════════════════════ -->
+        @if (!isFetching() && !fetchError()) {
+        <div class="ate-grid">
+
+            <!-- Left column: base form (identity + location) -->
+            <div class="ate-grid__primary">
+                <aoms-airport-base-form [initialData]="initialData()" [availableCountries]="availableCountries()"
+                    [isLoading]="isProcessing()" [isEditMode]="isEditMode()" [existingIataCodes]="existingIataCodes()"
+                    [saveError]="processingError()" (onSave)="onSave($event)" (onCancel)="onCancel()" />
+            </div>
+
+            <!-- Right column: tax form + lifecycle toggle -->
+            <div class="ate-grid__secondary">
+
+                <!-- Financial Configuration -->
+                <aoms-airport-tax-form [isLoading]="isProcessing()" />
+
+                <!-- Lifecycle Control (Edit mode only — hidden in Create) -->
+                <aoms-airport-status-toggle [iataCode]="iataCode()" [airportName]="initialData()?.name ?? ''"
+                    [isProcessing]="isProcessing()" [isEditMode]="isEditMode()"
+                    (deactivateConfirmed)="onDeactivateConfirmed()" />
+
+            </div>
+
+        </div>
+        }
+
+    </main>
+</div>

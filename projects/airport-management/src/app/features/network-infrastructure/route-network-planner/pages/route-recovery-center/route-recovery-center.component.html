@@ -1,0 +1,259 @@
+<div class="rrc-page">
+
+    <!-- ══ Sticky Command Header ═══════════════════════════════════ -->
+    <header class="rrc-header">
+
+        <!-- Left: back + breadcrumb + title -->
+        <div class="rrc-header-left">
+            <button class="rrc-back-btn" (click)="exitAuditCenter()" aria-label="Exit Audit Center"
+                title="Exit Audit Center">
+                <svg class="rrc-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <nav class="rrc-breadcrumb" aria-label="Breadcrumb">
+                    <span class="rrc-breadcrumb__section">Network &amp; Infrastructure</span>
+                    <svg class="rrc-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <button class="rrc-breadcrumb__link" (click)="goToExplorer()">Route Explorer</button>
+                    <svg class="rrc-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="rrc-breadcrumb__current">Recovery Center</span>
+                </nav>
+                <h1 class="rrc-title">Network Sovereignty Recovery</h1>
+            </div>
+        </div>
+
+        <!-- Right: command bar + archive count -->
+        <div class="rrc-header-right">
+
+            <!-- Archive count badge -->
+            @if (!loading()) {
+            <span class="rrc-archive-badge">
+                <strong>{{ archivedCount() }}</strong> archived
+            </span>
+            }
+
+            <!-- Live Network Map icon link — Champagne ghost icon button -->
+            <button class="rrc-icon-btn" type="button" (click)="goToExplorer()" title="Live Network Map"
+                aria-label="View live network map">
+                <svg class="rrc-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006
+                   V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006
+                   0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27
+                   3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69
+                   -.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+                </svg>
+            </button>
+
+            <!-- Refresh icon -->
+            <button class="rrc-icon-btn" (click)="refresh()" [disabled]="loading()" aria-label="Refresh archived routes"
+                title="Refresh">
+                <svg class="rrc-icon-btn__icon" [class.rrc-icon-btn__icon--spin]="loading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Separator -->
+            <div class="rrc-sep" aria-hidden="true"></div>
+
+            <!-- Network Explorer — Champagne Gold ghost -->
+            <button class="rrc-btn rrc-btn--ghost" type="button" (click)="goToExplorer()"
+                aria-label="Navigate to Network Explorer">
+                <svg class="rrc-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+                Network Explorer
+            </button>
+
+            <!-- Exit Audit Center — Sapphire outline -->
+            <button class="rrc-btn rrc-btn--outline" type="button" (click)="exitAuditCenter()"
+                aria-label="Exit Audit Center">
+                <svg class="rrc-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25
+                   2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                </svg>
+                Exit Audit Center
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="rrc-body">
+
+        <!-- Audit error banner (Ruby) -->
+        @if (auditError()) {
+        <div class="rrc-error-banner" role="alert">
+            <div class="rrc-error-banner__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                     0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                     0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <div class="rrc-error-banner__body">
+                <strong class="rrc-error-banner__title">Restoration Blocked</strong>
+                <span class="rrc-error-banner__msg">{{ auditError() }}</span>
+            </div>
+            <button class="rrc-error-banner__dismiss" type="button" (click)="dismissError()" aria-label="Dismiss error">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- Search bar -->
+        <div class="rrc-search">
+            <div class="rrc-search__icon" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                </svg>
+            </div>
+            <input class="rrc-search__input" type="text" [value]="searchQuery()"
+                (input)="onSearchInput($any($event.target).value)" placeholder="Search IATA, airport name, or city…"
+                aria-label="Search archived corridors" autocomplete="off">
+            @if (searchQuery()) {
+            <button class="rrc-search__clear" type="button" (click)="clearSearch()" aria-label="Clear search">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+            }
+        </div>
+
+        <!-- Audit table -->
+        <aoms-route-audit-table [routes]="archivedRoutes()" [loading]="loading()" [restoringId]="restoringId()"
+            [isProcessing]="isProcessing()" (onRestore)="openRestorationModal($event)" />
+
+    </main>
+
+    <!-- ══ Golden Restoration Modal ════════════════════════════════ -->
+    @if (showModal()) {
+    <div class="rrc-backdrop" (click)="closeRestorationModal()" aria-hidden="true"></div>
+
+    <div class="rrc-modal" role="dialog" aria-modal="true"
+        [attr.aria-label]="'Confirm restoration of ' + (targetRoute()?.originAirportIataCode ?? '') + ' to ' + (targetRoute()?.destinationAirportIataCode ?? '')">
+
+        <!-- Royal Gold accent bar -->
+        <div class="rrc-modal__gold-bar" aria-hidden="true"></div>
+
+        <!-- Header -->
+        <div class="rrc-modal__header">
+            <div class="rrc-modal__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                     0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                     0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="rrc-modal__title">Confirm Corridor Restoration</h2>
+                <p class="rrc-modal__subtitle">This action will reinstate the corridor to active operations.</p>
+            </div>
+        </div>
+
+        <!-- Corridor display strip -->
+        @if (targetRoute(); as route) {
+        <div class="rrc-modal__corridor">
+            <span class="rrc-modal__iata rrc-modal__iata--origin">
+                {{ route.originAirportIataCode }}
+            </span>
+            <svg class="rrc-modal__arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+            </svg>
+            <span class="rrc-modal__iata rrc-modal__iata--dest">
+                {{ route.destinationAirportIataCode }}
+            </span>
+            <span class="rrc-modal__dist">{{ route.distanceKm.toLocaleString() }} km</span>
+        </div>
+
+        <p class="rrc-modal__detail">
+            <strong>{{ route.originAirportName }}</strong> to
+            <strong>{{ route.destinationAirportName }}</strong>
+            <span class="rrc-modal__cities">({{ route.originCity }} → {{ route.destinationCity }})</span>
+        </p>
+        }
+
+        <p class="rrc-modal__warning">
+            Restoring this corridor will make it available for new schedule assignments and
+            operator allocation. Ensure both hub airports are currently operational before
+            confirming.
+        </p>
+
+        <!-- Modal actions -->
+        <div class="rrc-modal__actions">
+            <button class="rrc-modal-btn rrc-modal-btn--cancel" type="button" [disabled]="isRestoring()"
+                (click)="closeRestorationModal()" autofocus>
+                Cancel
+            </button>
+            <button class="rrc-modal-btn rrc-modal-btn--confirm" type="button" [disabled]="isRestoring()"
+                (click)="confirmRestore()">
+                @if (isRestoring()) {
+                <svg class="rrc-modal-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                       0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                       0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Restoring…
+                } @else {
+                <svg class="rrc-modal-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                Confirm Restoration
+                }
+            </button>
+        </div>
+
+    </div>
+    }
+
+    <!-- ══ Toast Stack ════════════════════════════════════════════ -->
+    <div class="rrc-toast-stack" role="region" aria-live="polite">
+        @for (toast of toasts(); track toast.id) {
+        <div class="rrc-toast" [class.rrc-toast--success]="toast.type === 'success'"
+            [class.rrc-toast--error]="toast.type === 'error'" role="status">
+            <div class="rrc-toast__icon-wrap" aria-hidden="true">
+                @if (toast.type === 'success') {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                }
+            </div>
+            <p class="rrc-toast__msg">{{ toast.message }}</p>
+            <button class="rrc-toast__dismiss" type="button" (click)="dismissToast(toast.id)" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+    </div>
+
+</div>

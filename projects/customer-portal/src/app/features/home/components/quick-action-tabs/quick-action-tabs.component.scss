@@ -1,0 +1,80 @@
+  :host {
+      display: block;
+  }
+
+  $royal-gold : #B68F24;
+  $champagne : #E2C780;
+  $white : #FFFFFF;
+  $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+  .qat {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5px;
+  }
+
+  .qat__tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      border-radius: 8px 8px 0 0;
+      border: 1px solid rgba($royal-gold, 0.15);
+      border-bottom: none;
+      background: rgba(5, 25, 55, 0.55);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      font-family: 'Montserrat', 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: rgba($white, 0.55);
+      position: relative;
+      transition: background 240ms $ease, color 240ms $ease;
+
+      &:hover:not(.qat__tab--active) {
+          background: rgba(5, 25, 55, 0.72);
+          color: rgba($white, 0.85);
+      }
+
+      &--active {
+          background: rgba(5, 25, 55, 0.85);
+          color: $champagne;
+          border-color: rgba($royal-gold, 0.25);
+
+          .qat__underline {
+              transform: scaleX(1);
+          }
+      }
+
+      &:focus-visible {
+          outline: 2px solid $royal-gold;
+          outline-offset: 2px;
+      }
+  }
+
+  .qat__icon {
+      flex-shrink: 0;
+  }
+
+  .qat__underline {
+      position: absolute;
+      bottom: 0;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: $royal-gold;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 260ms $ease;
+  }
+
+  @media (max-width: 640px) {
+      .qat__label {
+          display: none;
+      }
+
+      .qat__tab {
+          padding: 10px 14px;
+      }
+  }

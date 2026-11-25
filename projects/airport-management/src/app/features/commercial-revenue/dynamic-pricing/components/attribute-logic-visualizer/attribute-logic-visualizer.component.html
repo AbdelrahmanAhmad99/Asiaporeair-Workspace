@@ -1,0 +1,177 @@
+<div class="alv-panel">
+
+    <!-- ── Panel Header ──────────────────────────────────────────── -->
+    <div class="alv-header">
+        <div class="alv-header__left">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="alv-header__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+            <div>
+                <h3 class="alv-header__title">Logic Path</h3>
+                <p class="alv-header__sub">IF → THEN decision tree</p>
+            </div>
+        </div>
+        @if (selectedRule()) {
+        <span class="alv-rule-chip">#{{ selectedRule()!.attributeId }}</span>
+        }
+    </div>
+
+    <!-- ── SVG Canvas ────────────────────────────────────────────── -->
+    <div class="alv-canvas-wrap">
+
+        <!-- Idle / No Rule Selected -->
+        @if (!simulationRan() || !selectedRule()) {
+        <div class="alv-placeholder" aria-live="polite">
+            <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+            <p>
+                @if (!simulationRan()) {
+                Run a simulation to visualize logic.
+                } @else {
+                Select a matched rule to see its decision path.
+                }
+            </p>
+        </div>
+        }
+
+        <!-- Simulating pulse state -->
+        @if (isSimulating()) {
+        <div class="alv-simulating" aria-live="polite" aria-busy="true">
+            <div class="alv-simulating__pulse" aria-hidden="true"></div>
+            <p>Evaluating logic paths…</p>
+        </div>
+        }
+
+        <!-- SVG Flowchart -->
+        @if (selectedRule() && !isSimulating() && flowNodes().length > 0) {
+        <svg class="alv-svg" [attr.viewBox]="'0 0 ' + svgWidth + ' ' + svgHeight" [attr.width]="svgWidth"
+            [attr.height]="svgHeight" xmlns="http://www.w3.org/2000/svg" role="img"
+            [attr.aria-label]="'Logic flowchart for rule ' + selectedRule()!.attributeId">
+
+            <!-- ── Gradient Definitions ───────────────────────────────── -->
+            <defs>
+                <!-- Background gradient: Midnight Sapphire → near-black -->
+                <linearGradient id="alv-bg-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#051937" />
+                    <stop offset="100%" stop-color="#020d1d" />
+                </linearGradient>
+
+                <!-- Node fill gradients by type -->
+                <linearGradient id="alv-trigger-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0a2a50" />
+                    <stop offset="100%" stop-color="#051937" />
+                </linearGradient>
+
+                <linearGradient id="alv-condition-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#1a1206" />
+                    <stop offset="100%" stop-color="#0e0b03" />
+                </linearGradient>
+
+                <linearGradient id="alv-modifier-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0b2217" />
+                    <stop offset="100%" stop-color="#061610" />
+                </linearGradient>
+
+                <linearGradient id="alv-output-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#1c1206" />
+                    <stop offset="100%" stop-color="#0e0b03" />
+                </linearGradient>
+
+                <!-- Glow filter for active nodes -->
+                <filter id="alv-glow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+
+                <!-- Arrow marker -->
+                <marker id="alv-arrow" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#E2C780" fill-opacity="0.7" />
+                </marker>
+            </defs>
+
+            <!-- SVG background -->
+            <rect width="100%" height="100%" fill="url(#alv-bg-gradient)" />
+
+            <!-- ── Edges (connecting lines) ──────────────────────────── -->
+            @for (edge of flowEdges(); track trackById($index, edge)) {
+            <g class="alv-edge">
+                <!-- Line -->
+                <line [attr.x1]="edge.x1" [attr.y1]="edge.y1" [attr.x2]="edge.x2" [attr.y2]="edge.y2 - 6"
+                    stroke="#E2C780" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="4 3"
+                    marker-end="url(#alv-arrow)" />
+
+                <!-- Edge label (MATCH ✓) -->
+                @if (edge.label) {
+                <rect [attr.x]="edge.x2 - 30" [attr.y]="(edge.y1 + edge.y2) / 2 - 9" width="60" height="18" rx="4"
+                    fill="#0e0b03" stroke="#E2C780" stroke-opacity="0.3" stroke-width="1" />
+                <text [attr.x]="edge.x2" [attr.y]="(edge.y1 + edge.y2) / 2 + 5" text-anchor="middle" font-size="9"
+                    font-family="'Inter', sans-serif" font-weight="700" fill="#E2C780" fill-opacity="0.8"
+                    letter-spacing="0.04em">
+                    {{ edge.label }}
+                </text>
+                }
+            </g>
+            }
+
+            <!-- ── Nodes ─────────────────────────────────────────────── -->
+            @for (node of flowNodes(); track trackById($index, node); let i = $index) {
+            <g [class]="nodeClass(node)" [style.animation-delay]="(i * 80) + 'ms'">
+
+                <!-- Node shadow / glow -->
+                <rect [attr.x]="node.x + 2" [attr.y]="node.y + 4" [attr.width]="node.width" [attr.height]="node.height"
+                    [attr.rx]="8" fill="rgba(0,0,0,0.4)" class="alv-node-shadow" />
+
+                <!-- Node body -->
+                <rect [attr.x]="node.x" [attr.y]="node.y" [attr.width]="node.width" [attr.height]="node.height"
+                    [attr.rx]="8" [attr.fill]="'url(#alv-' + node.type + '-fill)'" class="alv-node-body" />
+
+                <!-- Node border -->
+                <rect [attr.x]="node.x" [attr.y]="node.y" [attr.width]="node.width" [attr.height]="node.height"
+                    [attr.rx]="8" fill="none" class="alv-node-border" />
+
+                <!-- Left accent bar -->
+                <rect [attr.x]="node.x" [attr.y]="node.y + 10" width="3" [attr.height]="node.height - 20" [attr.rx]="2"
+                    class="alv-node-accent" />
+
+                <!-- Primary label -->
+                <text [attr.x]="node.x + 18" [attr.y]="node.y + 22" font-size="11"
+                    font-family="'Montserrat', sans-serif" font-weight="700" class="alv-node-label"
+                    letter-spacing="0.02em">
+                    {{ node.label }}
+                </text>
+
+                <!-- Sub-label -->
+                @if (node.sublabel) {
+                <text [attr.x]="node.x + 18" [attr.y]="node.y + 37" font-size="9" font-family="'Inter', sans-serif"
+                    font-weight="500" class="alv-node-sublabel" letter-spacing="0.01em">
+                    {{ node.sublabel }}
+                </text>
+                }
+
+                <!-- Type icon indicator (right side) -->
+                <circle [attr.cx]="node.x + node.width - 16" [attr.cy]="node.y + node.height / 2" r="5"
+                    class="alv-node-indicator" />
+
+            </g>
+            }
+
+        </svg>
+        }
+
+    </div>
+
+    <!-- ── Legend ─────────────────────────────────────────────────── -->
+    @if (selectedRule() && !isSimulating()) {
+    <div class="alv-legend">
+        <span class="alv-legend__item alv-legend__item--trigger">Trigger</span>
+        <span class="alv-legend__item alv-legend__item--condition">Condition</span>
+        <span class="alv-legend__item alv-legend__item--modifier">Modifier</span>
+        <span class="alv-legend__item alv-legend__item--output">Output</span>
+    </div>
+    }
+
+</div>

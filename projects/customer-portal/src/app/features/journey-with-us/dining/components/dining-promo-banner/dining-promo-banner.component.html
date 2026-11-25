@@ -1,0 +1,56 @@
+<!-- ============================================================================
+     dining-promo-banner.component.html
+     Asiaporeair | Dining Promo Banner — Cinematic Full-Bleed Banner
+     ============================================================================ -->
+
+<section class="dpb" aria-label="Dining hero banner">
+
+    <!-- Background image layer -->
+    <div class="dpb__bg" aria-hidden="true">
+        <img class="dpb__bg-image" [src]="imagePath" alt="" loading="eager" />
+        <!-- Multi-stop overlay: bottom-heavy for legibility, hints of gold at top -->
+        <div class="dpb__overlay"></div>
+        <!-- Horizontal gold rule at bottom -->
+        <div class="dpb__gold-rule"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="dpb__content">
+
+        <!-- Breadcrumb -->
+        @if (breadcrumbs.length) {
+        <nav class="dpb__breadcrumb" aria-label="Breadcrumb">
+            @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+            @if (!last) {
+            <a [href]="crumb.route ?? '#'" class="dpb__bc-link">{{ crumb.label }}</a>
+            <span class="dpb__bc-sep" aria-hidden="true">›</span>
+            } @else {
+            <span class="dpb__bc-cur">{{ crumb.label }}</span>
+            }
+            }
+        </nav>
+        }
+
+        <!-- Pre-line + eyebrow -->
+        <div class="dpb__pre-block" aria-hidden="true">
+            <div class="dpb__pre-line"></div>
+            <span class="dpb__eyebrow">{{ eyebrow }}</span>
+        </div>
+
+        <!-- Main copy -->
+        <h1 class="dpb__headline">{{ headline }}</h1>
+        <p class="dpb__subheadline">{{ subheadline }}</p>
+
+        <!-- CTA -->
+        <a class="dpb__cta" [href]="ctaRoute" aria-label="{{ ctaLabel }}">
+            <span class="dpb__cta-label">{{ ctaLabel }}</span>
+            <svg class="dpb__cta-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+            </svg>
+        </a>
+
+    </div>
+
+</section>

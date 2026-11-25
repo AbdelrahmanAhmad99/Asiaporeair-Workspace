@@ -1,0 +1,247 @@
+ // ----------------------------------------------------------------------------
+ // 1. Filter Bar Container
+ // ----------------------------------------------------------------------------
+ .filter-bar {
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+   gap: 0.75rem;
+   padding: 1rem;
+   border-radius: 12px;
+   background-color: var(--aoms-bg-card);
+   border: 1px solid rgba(226, 199, 128, 0.2);
+   box-shadow: 0 4px 20px rgba(5, 25, 55, 0.06);
+   transition:
+     background-color var(--aoms-transition-base),
+     border-color var(--aoms-transition-base),
+     box-shadow var(--aoms-transition-base);
+
+   @media (min-width: 640px) {
+     flex-direction: row;
+     align-items: center;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Search Input Wrapper
+ // ----------------------------------------------------------------------------
+ .filter-bar__search {
+   position: relative;
+   flex: 1;
+   min-width: 0; // allow flex shrinking
+
+   &__icon {
+     position: absolute;
+     left: 0.75rem;
+     top: 50%;
+     transform: translateY(-50%);
+     pointer-events: none;
+     color: var(--aoms-text-muted);
+     width: 1rem;
+     height: 1rem;
+     transition: color var(--aoms-transition-fast);
+   }
+
+   &__input {
+     width: 100%;
+     padding: 0.625rem 1rem 0.625rem 2.25rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-primary);
+     background: transparent;
+     border: 1px solid rgba(226, 199, 128, 0.25);
+     border-radius: 4px; // Squircle button
+     outline: none;
+     transition:
+       border-color var(--aoms-transition-fast),
+       box-shadow var(--aoms-transition-fast),
+       color var(--aoms-transition-fast);
+
+     &::placeholder {
+       color: var(--aoms-text-muted);
+     }
+
+     &:focus {
+       border-color: transparent;
+       box-shadow: 0 0 0 2px var(--aoms-champagne);
+     }
+   }
+
+   // When focused, tint the search icon slightly
+   &:focus-within .filter-bar__search__icon {
+     color: var(--aoms-champagne);
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Continent Dropdown
+ // ----------------------------------------------------------------------------
+ .filter-bar__continent {
+   position: relative;
+   flex-shrink: 0;
+
+   &__select {
+     appearance: none;
+     -webkit-appearance: none;
+     padding: 0.625rem 2.25rem 0.625rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-primary);
+     background-color: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.25);
+     border-radius: 4px;
+     min-width: 160px;
+     cursor: pointer;
+     outline: none;
+     transition:
+       border-color var(--aoms-transition-fast),
+       box-shadow var(--aoms-transition-fast),
+       background-color var(--aoms-transition-fast),
+       color var(--aoms-transition-fast);
+
+     &:focus {
+       border-color: transparent;
+       box-shadow: 0 0 0 2px var(--aoms-champagne);
+     }
+
+     option {
+       background-color: var(--aoms-bg-card);
+       color: var(--aoms-text-primary);
+     }
+   }
+
+   // Custom chevron icon overlay
+   &__chevron {
+     position: absolute;
+     right: 0.75rem;
+     top: 50%;
+     transform: translateY(-50%);
+     pointer-events: none;
+     color: var(--aoms-text-muted);
+     width: 0.875rem;
+     height: 0.875rem;
+     transition: color var(--aoms-transition-fast);
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Divider (visible only on ≥ sm breakpoint)
+ // ----------------------------------------------------------------------------
+ .filter-bar__divider {
+   display: none;
+   width: 1px;
+   height: 2rem;
+   background: rgba(226, 199, 128, 0.2);
+   flex-shrink: 0;
+
+   @media (min-width: 640px) {
+     display: block;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Reset / Clear Filters Button
+ // ----------------------------------------------------------------------------
+ .filter-bar__reset-btn {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.625rem 1rem;
+   font-size: 0.875rem;
+   font-family: var(--aoms-font-body);
+   font-weight: 400;
+   color: var(--aoms-text-secondary);
+   background: transparent;
+   border: 1px solid rgba(226, 199, 128, 0.25);
+   border-radius: 4px;
+   flex-shrink: 0;
+   cursor: pointer;
+   outline: none;
+   transition: all var(--aoms-transition-fast);
+
+   &:hover {
+     color: var(--aoms-text-primary);
+     border-color: var(--aoms-champagne);
+     background: rgba(226, 199, 128, 0.08);
+   }
+
+   &:focus-visible {
+     outline: 2px solid var(--aoms-champagne);
+     outline-offset: 2px;
+   }
+
+   &__icon {
+     width: 0.875rem;
+     height: 0.875rem;
+     flex-shrink: 0;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Add Country CTA Button
+ // ----------------------------------------------------------------------------
+ .filter-bar__add-btn {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   padding: 0.625rem 1.25rem;
+   font-size: 0.875rem;
+   font-family: var(--aoms-font-body);
+   font-weight: 600;
+   color: #ffffff;
+   background: var(--aoms-gold);
+   border: none;
+   border-radius: 4px;
+   flex-shrink: 0;
+   cursor: pointer;
+   outline: none;
+   box-shadow: 0 4px 12px rgba(182, 143, 36, 0.35);
+   transition: all var(--aoms-transition-fast);
+
+   &:hover {
+     background: #c8a030;
+     box-shadow: 0 6px 16px rgba(182, 143, 36, 0.45);
+     transform: translateY(-1px);
+   }
+
+   &:active {
+     background: #a07820;
+     box-shadow: 0 2px 8px rgba(182, 143, 36, 0.3);
+     transform: translateY(0);
+   }
+
+   &:focus-visible {
+     outline: 2px solid var(--aoms-champagne);
+     outline-offset: 2px;
+   }
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+     flex-shrink: 0;
+   }
+ }
+
+ // ============================================================================
+ // 7. Dark Mode Overrides  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+   .filter-bar {
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+   }
+
+   .filter-bar__search__input,
+   .filter-bar__continent__select {
+     border-color: rgba(226, 199, 128, 0.18);
+   }
+
+   .filter-bar__add-btn {
+     box-shadow: 0 4px 12px rgba(182, 143, 36, 0.25);
+
+     &:hover {
+       box-shadow: 0 6px 16px rgba(182, 143, 36, 0.35);
+     }
+   }
+ }

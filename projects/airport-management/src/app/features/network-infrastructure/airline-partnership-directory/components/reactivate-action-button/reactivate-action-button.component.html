@@ -1,0 +1,47 @@
+<button class="rab2-btn" [class.rab2-btn--restoring]="phase() === 'restoring'"
+    [class.rab2-btn--error]="phase() === 'error'"
+    [class.rab2-btn--globally-disabled]="isAnyRestoring() && phase() !== 'restoring'" type="button"
+    [disabled]="disabled() || (isAnyRestoring() && phase() !== 'restoring') || phase() === 'error'"
+    (click)="onReactivate()" [attr.aria-label]="phase() === 'restoring'
+    ? 'Restoring ' + iataCode() + ', please wait'
+    : phase() === 'error'
+    ? 'Restoration of ' + iataCode() + ' failed. Retrying shortly.'
+    : 'Restore partner airline ' + iataCode()" [attr.title]="phase() === 'restoring'
+    ? 'Restoring ' + iataCode() + '…'
+    : phase() === 'error'
+    ? 'Restoration failed — retrying in a moment'
+    : 'Restore ' + iataCode()">
+
+    <!-- ── Phase: Restoring (spinner) ─────────────────────────────── -->
+    @if (phase() === 'restoring') {
+    <svg class="rab2-btn__icon rab2-btn__icon--spin" fill="none" stroke="currentColor" stroke-width="1.5"
+        viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+               0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+               0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+    </svg>
+    <span class="rab2-btn__label">Restoring…</span>
+    }
+
+    <!-- ── Phase: Error (ruby pulse) ──────────────────────────────── -->
+    @if (phase() === 'error') {
+    <svg class="rab2-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+    </svg>
+    <span class="rab2-btn__label">Error</span>
+    }
+
+    <!-- ── Phase: Idle ────────────────────────────────────────────── -->
+    @if (phase() === 'idle') {
+    <svg class="rab2-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+               0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+               0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+    </svg>
+    <span class="rab2-btn__label">Restore</span>
+    }
+
+</button>

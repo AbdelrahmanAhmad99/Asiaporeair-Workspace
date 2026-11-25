@@ -1,0 +1,833 @@
+ // ── CSS custom properties (per spec: --primary-midnight, --royal-gold) ────
+ :host {
+     --primary-midnight: #051937;
+     --royal-gold: #B68F24;
+     --champagne: #E2C780;
+     --off-white: #F8F9FA;
+     --charcoal: #101056;
+     --error: #9f1239;
+     --emerald: #064E3B;
+ }
+
+ // ── SCSS shorthand vars ───────────────────────────────────────────────────
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $error: #9f1239;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Form shell
+ // ============================================================================
+ .rcf-form {
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     animation: rcf-enter 380ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. Cross-field / backend error banners
+ // ============================================================================
+ .rcf-cross-error,
+ .rcf-backend-error {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($error, 0.07);
+     border: 1px solid rgba($error, 0.2);
+     border-left: 4px solid $error;
+     animation: rcf-error-in 200ms $luxury both;
+
+     svg {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+         color: $error;
+         margin-top: 0.1rem;
+     }
+
+     span {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 500;
+         color: $error;
+         line-height: 1.5;
+     }
+ }
+
+ .rcf-backend-error {
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.2rem;
+         flex: 1;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 700;
+         color: $error;
+     }
+
+     &__msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: rgba($error, 0.78);
+         line-height: 1.5;
+     }
+ }
+
+ // ============================================================================
+ // 3. Glassmorphism Card — squircle 12px
+ // ============================================================================
+ .rcf-card {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.2);
+     box-shadow:
+         0 4px 24px rgba($midnight, 0.07),
+         0 0 0 1px rgba($champagne, 0.06);
+     overflow: visible; // allow dropdowns to overflow
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 4. Section header
+ // ============================================================================
+ .rcf-section-header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 1.5rem 1.75rem 0;
+     margin-bottom: 1.5rem;
+
+     // Royal Gold left accent line
+     position: relative;
+
+     &::before {
+         content: '';
+         position: absolute;
+         left: 0;
+         top: 1.25rem;
+         bottom: -0.5rem;
+         width: 3px;
+         background: linear-gradient(180deg, $gold 0%, rgba($gold, 0.15) 100%);
+         border-radius: 0 3px 3px 0;
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 8px;
+         background: $midnight;
+         border: 1px solid rgba($champagne, 0.18);
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $champagne;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary, $charcoal);
+         margin: 0 0 0.2rem;
+     }
+
+     &__subtitle {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+ }
+
+ .rcf-locked-badge {
+     margin-left: auto;
+     flex-shrink: 0;
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3rem;
+     padding: 0.2rem 0.6rem;
+     border-radius: 3px;
+     background: rgba($champagne, 0.08);
+     border: 1px solid rgba($champagne, 0.2);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     color: $champagne;
+
+     svg {
+         width: 0.7rem;
+         height: 0.7rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 5. Field grid — corridor definition (origin | arrow | dest)
+ // ============================================================================
+ .rcf-fields {
+     padding: 0 1.75rem 1.75rem;
+     display: grid;
+     grid-template-columns: 1fr auto 1fr;
+     gap: 0.875rem;
+     align-items: start;
+
+     @media (max-width: 768px) {
+         grid-template-columns: 1fr;
+
+         .rcf-corridor-arrow {
+             display: none;
+         }
+     }
+
+     &--metrics {
+         grid-template-columns: 1fr 1fr;
+
+         @media (max-width: 640px) {
+             grid-template-columns: 1fr;
+         }
+     }
+ }
+
+ // Directional arrow between hub fields
+ .rcf-corridor-arrow {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding-top: 2.125rem; // align with the hub-wrap
+     color: rgba($champagne, 0.4);
+     flex-shrink: 0;
+
+     svg {
+         width: 1.25rem;
+         height: 1.25rem;
+     }
+ }
+
+ // ============================================================================
+ // 6. Hub field wrapper
+ // ============================================================================
+ .rcf-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+     position: relative;
+
+     &--locked {
+         opacity: 0.75;
+         pointer-events: none;
+     }
+
+     &--readonly {
+         opacity: 0.8;
+     }
+
+     &--error {
+         .rcf-hub-wrap {
+             border-color: $error !important;
+             box-shadow: 0 0 0 3px rgba($error, 0.1) !important;
+         }
+
+         .rcf-hub-label {
+             color: $error !important;
+         }
+
+         .rcf-input {
+             border-color: $error !important;
+         }
+     }
+ }
+
+ .rcf-hub-label {
+     display: flex;
+     align-items: center;
+     gap: 0.25rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     color: var(--aoms-text-muted);
+     transition: color 150ms $ease;
+
+     &__req {
+         color: $error;
+     }
+ }
+
+ // ── Hub input wrapper ─────────────────────────────────────────────────────
+ .rcf-hub-wrap {
+     display: flex;
+     align-items: center;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+     background: $off-white;
+     overflow: visible;
+     position: relative;
+     transition:
+         border-color 180ms $ease,
+         box-shadow 180ms $ease,
+         background 180ms $ease;
+
+     &:focus-within {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow:
+             0 0 0 3px rgba($champagne, 0.15),
+             0 0 14px rgba($champagne, 0.07);
+     }
+
+     &--locked {
+         background: rgba($midnight, 0.04);
+         cursor: not-allowed;
+     }
+
+     &__icon {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.5rem;
+         height: 3rem;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+         transition: color 180ms $ease;
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+         }
+     }
+
+     &__spin {
+         width: 1rem;
+         height: 1rem;
+         animation: rcf-spin 0.85s linear infinite;
+         color: $champagne;
+     }
+
+     &:focus-within &__icon {
+         color: $champagne;
+     }
+ }
+
+ // IATA confirmed badge inside the hub wrap
+ .rcf-iata-badge {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.5rem;
+     border-radius: 3px;
+     flex-shrink: 0;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 800;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     margin-right: 0.375rem;
+
+     &--origin {
+         color: $gold;
+         background: rgba($gold, 0.09);
+         border: 1px solid rgba($gold, 0.22);
+     }
+
+     &--dest {
+         color: $champagne;
+         background: rgba($champagne, 0.07);
+         border: 1px solid rgba($champagne, 0.18);
+     }
+ }
+
+ // Hub input text box
+ .rcf-hub-input {
+     flex: 1;
+     height: 3rem;
+     padding: 0 0.5rem;
+     border: none;
+     background: transparent;
+     outline: none;
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+         font-weight: 400;
+         font-size: 12px;
+     }
+
+     &:disabled {
+         cursor: not-allowed;
+         opacity: 0.6;
+     }
+ }
+
+ // Clear X button
+ .rcf-hub-clear {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     margin-right: 0.25rem;
+     border: none;
+     background: transparent;
+     cursor: pointer;
+     color: var(--aoms-text-muted);
+     border-radius: 4px;
+     flex-shrink: 0;
+     transition: color 150ms $ease;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+     }
+
+     &:hover {
+         color: $error;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── Hub dropdown panel ────────────────────────────────────────────────────
+ .rcf-hub-panel {
+     position: absolute;
+     top: calc(100% + 4px);
+     left: 0;
+     right: 0;
+     z-index: 50;
+     list-style: none;
+     margin: 0;
+     padding: 0.375rem 0;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.25);
+     border-radius: 10px;
+     box-shadow:
+         0 12px 36px rgba($midnight, 0.15),
+         0 0 0 1px rgba($champagne, 0.08);
+     max-height: 17rem;
+     overflow-y: auto;
+     animation: rcf-panel-drop 180ms $luxury both;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.3);
+         border-radius: 2px;
+     }
+ }
+
+ .rcf-hub-option {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.625rem 1rem;
+     cursor: pointer;
+     transition: background 120ms $ease;
+
+     &:hover {
+         background: rgba($champagne, 0.07);
+     }
+
+     &--selected {
+         background: rgba($gold, 0.05);
+     }
+
+     &__iata {
+         flex-shrink: 0;
+         display: inline-flex;
+         align-items: center;
+         padding: 0.2rem 0.5rem;
+         border-radius: 4px;
+         background: rgba($gold, 0.09);
+         border: 1px solid rgba($gold, 0.22);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 800;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: $gold;
+         min-width: 2.75rem;
+         justify-content: center;
+
+         &--dest {
+             background: rgba($champagne, 0.07);
+             border-color: rgba($champagne, 0.18);
+             color: $champagne;
+         }
+     }
+
+     &__details {
+         display: flex;
+         flex-direction: column;
+         gap: 0.1rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__name {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 500;
+         color: var(--aoms-text-primary, $charcoal);
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+     }
+
+     &__loc {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: var(--aoms-text-muted);
+     }
+
+     &__check {
+         flex-shrink: 0;
+         width: 1.125rem;
+         height: 1.125rem;
+         color: #059669;
+     }
+ }
+
+ // ============================================================================
+ // 7. Distance + derived time inputs
+ // ============================================================================
+ .rcf-input {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+
+     width: 100%;
+     height: 3.5rem;
+     padding: 1.45rem 1rem 0.45rem;
+
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+
+     background: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+
+     transition:
+         border-color 180ms $ease,
+         background 180ms $ease,
+         box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.15), 0 0 14px rgba($champagne, 0.07);
+     }
+
+     // Derived read-only display
+     &--derived {
+         display: flex;
+         align-items: flex-end;
+         padding-bottom: 0.6rem;
+         background: rgba($midnight, 0.03);
+         border-color: rgba($charcoal, 0.08);
+         color: var(--aoms-text-secondary);
+         font-size: 1.25rem;
+         font-weight: 700;
+         font-family: 'Montserrat', sans-serif;
+         letter-spacing: -0.02em;
+         cursor: default;
+         pointer-events: none;
+     }
+ }
+
+ // Floating label
+ .rcf-label {
+     position: absolute;
+     top: 50%;
+     left: 1rem;
+     transform: translateY(-50%);
+     pointer-events: none;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+
+     transition:
+         top 180ms $ease,
+         font-size 180ms $ease,
+         font-weight 180ms $ease,
+         color 180ms $ease,
+         letter-spacing 180ms $ease,
+         transform 180ms $ease;
+
+     &__unit {
+         font-size: 0.85em;
+         opacity: 0.7;
+         margin-left: 0.25em;
+     }
+
+     &__req {
+         color: $error;
+         margin-left: 0.2rem;
+         font-size: 0.9em;
+     }
+
+     // Float when focused or non-empty
+     .rcf-input:focus~&,
+     .rcf-input:not(:placeholder-shown)~& {
+         top: 0.45rem;
+         transform: translateY(0);
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: $champagne;
+     }
+
+     &--floated {
+         top: 0.45rem;
+         transform: translateY(0);
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: var(--aoms-text-muted);
+         position: absolute;
+         left: 1rem;
+         pointer-events: none;
+     }
+ }
+
+ .rcf-hint {
+     display: block;
+     margin-top: 0.275rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     color: var(--aoms-text-muted);
+     opacity: 0.65;
+ }
+
+ // ============================================================================
+ // 8. Inline validation errors
+ // ============================================================================
+ .rcf-field-error {
+     display: block;
+     margin-top: 0.3rem;
+     padding: 0.275rem 0.625rem;
+     border-radius: 4px;
+     background: rgba($error, 0.05);
+     border-left: 2px solid $error;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 500;
+     color: $error;
+     animation: rcf-error-in 180ms $luxury both;
+ }
+
+ // ============================================================================
+ // 9. Form actions
+ // ============================================================================
+ .rcf-actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+ }
+
+ .rcf-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.5rem;
+     padding: 0 1.25rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 180ms $ease;
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon,
+     &__spin {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+
+     &__spin {
+         animation: rcf-spin 1s linear infinite;
+     }
+
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($midnight, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     &--save {
+         background: linear-gradient(135deg, $gold 0%, darken($gold, 8%) 100%);
+         border: 1px solid $gold;
+         color: #ffffff;
+         font-weight: 700;
+
+         &:hover:not(:disabled) {
+             background: linear-gradient(135deg, $champagne 0%, $gold 100%);
+             border-color: $champagne;
+             box-shadow: 0 4px 16px rgba($gold, 0.38);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 10. Keyframes
+ // ============================================================================
+ @keyframes rcf-enter {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rcf-error-in {
+     from {
+         opacity: 0;
+         transform: translateX(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes rcf-panel-drop {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rcf-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================================
+ // 11. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .rcf-card {
+         background: rgba(255, 255, 255, 0.03);
+         box-shadow: 0 4px 28px rgba(0, 0, 0, 0.3);
+     }
+
+     .rcf-input {
+         background: rgba($midnight, 0.5);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.88);
+
+         &:focus {
+             background: rgba($midnight, 0.8);
+         }
+
+         &--derived {
+             background: rgba(255, 255, 255, 0.04);
+             color: rgba(255, 255, 255, 0.55);
+         }
+     }
+
+     .rcf-hub-wrap {
+         background: rgba($midnight, 0.55);
+         border-color: rgba(255, 255, 255, 0.1);
+
+         &:focus-within {
+             background: rgba($midnight, 0.8);
+         }
+     }
+
+     .rcf-hub-input {
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .rcf-hub-panel {
+         background: #0d1f35;
+         border-color: rgba($champagne, 0.15);
+     }
+
+     .rcf-hub-option__name {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .rcf-btn--cancel {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+ }

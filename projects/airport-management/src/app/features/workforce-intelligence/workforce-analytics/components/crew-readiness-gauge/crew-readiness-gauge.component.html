@@ -1,0 +1,93 @@
+<!-- crew-readiness-gauge.component.html -->
+
+<div class="cg" [attr.data-status]="kpis().readinessStatus">
+
+    <!-- ── Loading Shimmer ─────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="cg__shimmer" aria-busy="true">
+        <div class="cg-sh cg-sh--ring"></div>
+    </div>
+    }
+
+    <!-- ── Live Gauge ─────────────────────────────────────────── -->
+    @if (!loading()) {
+    <div class="cg__wrap">
+
+        <svg class="cg__svg" viewBox="0 0 120 120" aria-label="Crew readiness gauge: {{ kpis().readinessPct }}%"
+            role="img">
+
+            <!-- SVG filter definitions: glow per status -->
+            <defs>
+                <filter [attr.id]="glowId()" x="-50%" y="-50%" width="200%" height="200%">
+                    <feDropShadow stdDeviation="3" [attr.flood-color]="statusColour()" flood-opacity="0.65" dx="0"
+                        dy="0" />
+                </filter>
+                <linearGradient id="cg-arc-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" [attr.stop-color]="statusColour()" stop-opacity="0.8" />
+                    <stop offset="100%" [attr.stop-color]="statusColour()" stop-opacity="1" />
+                </linearGradient>
+                <radialGradient id="cg-centre-grad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="rgba(5,25,55,0.0)" />
+                    <stop offset="100%" stop-color="rgba(5,25,55,0.9)" />
+                </radialGradient>
+            </defs>
+
+            <!-- Outer bezel ring -->
+            <circle cx="60" cy="60" r="58" fill="none" stroke="rgba(226,199,128,0.12)" stroke-width="1.5" />
+
+            <!-- Tick marks -->
+            @for (tick of ticks; track $index) {
+            <line [attr.x1]="tick.x1" [attr.y1]="tick.y1" [attr.x2]="tick.x2" [attr.y2]="tick.y2"
+                [attr.stroke]="tick.major ? 'rgba(226,199,128,0.35)' : 'rgba(226,199,128,0.15)'"
+                [attr.stroke-width]="tick.major ? '1.5' : '0.75'" stroke-linecap="round" />
+            }
+
+            <!-- Track arc (background) -->
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(226,199,128,0.08)" stroke-width="8"
+                stroke-dasharray="326.73" stroke-dashoffset="0" />
+
+            <!-- Readiness arc — pre-computed path from store -->
+            <path class="cg__arc" [attr.d]="kpis().gaugeArcPath" fill="none" stroke="url(#cg-arc-grad)" stroke-width="8"
+                stroke-linecap="round" [attr.filter]="'url(#' + glowId() + ')'" />
+
+            <!-- Digital sweep animation overlay -->
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(226,199,128,0.06)" stroke-width="8"
+                class="cg__sweep" />
+
+            <!-- Centre fill + radial vignette -->
+            <circle cx="60" cy="60" r="43" fill="rgba(5,25,55,0.95)" />
+            <circle cx="60" cy="60" r="43" fill="url(#cg-centre-grad)" />
+            <circle cx="60" cy="60" r="41" fill="none" stroke="rgba(226,199,128,0.07)" stroke-width="1" />
+
+            <!-- Centre dot — tip of needle concept -->
+            <circle cx="60" cy="60" r="3" [attr.fill]="statusColour()" />
+
+            <!-- Readout: percentage -->
+            <text x="60" y="55" text-anchor="middle" dominant-baseline="middle" class="cg__pct-text"
+                font-family="var(--aoms-font-heading)" font-size="18" font-weight="800">
+                {{ readoutLabel() }}
+            </text>
+
+            <!-- Readout: READY label -->
+            <text x="60" y="67" text-anchor="middle" dominant-baseline="middle" class="cg__ready-text"
+                font-family="var(--aoms-font-body)" font-size="6" font-weight="600" letter-spacing="0.15">
+                READY
+            </text>
+
+        </svg>
+
+        <!-- Status label below gauge -->
+        <div class="cg__status-label" [attr.data-status]="kpis().readinessStatus">
+            <span class="cg__status-label__dot" aria-hidden="true"></span>
+            {{ kpis().readinessLabel }}
+        </div>
+
+        <!-- Crew count footnote -->
+        <p class="cg__footnote">
+            {{ kpis().availableCrew | number }} available · {{ kpis().totalCrew | number }} total
+        </p>
+
+    </div>
+    }
+
+</div>

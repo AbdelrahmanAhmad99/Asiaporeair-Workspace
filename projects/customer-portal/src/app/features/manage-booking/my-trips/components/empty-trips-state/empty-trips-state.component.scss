@@ -1,0 +1,170 @@
+// empty-trips-state.component.scss
+
+$midnight-sapphire : #051937;
+$royal-gold : #B68F24;
+$champagne-gold : #E2C780;
+$pure-white : #FFFFFF;
+$font-stack : 'Inter',
+'Montserrat',
+-apple-system,
+sans-serif;
+$ease-luxury : cubic-bezier(0.4, 0, 0.2, 1);
+$t-fast : 180ms $ease-luxury;
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    gap: 1.25rem;
+    font-family: $font-stack;
+    animation: fadeInUp 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── Plane Orbit ───────────────────────────────────────────────────────────────
+.plane-orbit {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba($champagne-gold, 0.15);
+    animation: orbit-pulse 3s ease-in-out infinite;
+
+    &--outer {
+        inset: 0;
+        animation-delay: 0s;
+    }
+
+    &--inner {
+        inset: 16px;
+        animation-delay: 0.6s;
+    }
+}
+
+@keyframes orbit-pulse {
+
+    0%,
+    100% {
+        opacity: 0.15;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.50;
+        transform: scale(1.05);
+    }
+}
+
+.plane-wrapper {
+    position: relative;
+    z-index: 1;
+    animation: plane-float 4s ease-in-out infinite;
+}
+
+@keyframes plane-float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-6px) rotate(2deg);
+    }
+}
+
+.plane-svg {
+    filter: drop-shadow(0 2px 8px rgba($royal-gold, 0.25));
+}
+
+// ── Copy ──────────────────────────────────────────────────────────────────────
+.empty-heading {
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: $midnight-sapphire;
+    margin: 0;
+}
+
+.empty-subtext {
+    font-size: 0.875rem;
+    color: rgba($midnight-sapphire, 0.50);
+    margin: 0;
+    max-width: 320px;
+    line-height: 1.5;
+}
+
+// ── CTA Button ────────────────────────────────────────────────────────────────
+.btn-begin-journey {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-top: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, $royal-gold 0%, darken($royal-gold, 10%) 100%);
+    border: 1px solid rgba($champagne-gold, 0.25);
+    border-radius: 4px;
+    font-family: $font-stack;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $midnight-sapphire;
+    cursor: pointer;
+    transition: all $t-fast;
+    box-shadow: 0 4px 16px rgba($royal-gold, 0.30);
+
+    &:hover {
+        background: linear-gradient(135deg, $champagne-gold 0%, $royal-gold 100%);
+        box-shadow: 0 8px 28px rgba($royal-gold, 0.45);
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $champagne-gold;
+        outline-offset: 3px;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .empty-state,
+    .orbit-ring,
+    .plane-wrapper {
+        animation: none !important;
+    }
+
+    .btn-begin-journey {
+        transition: none !important;
+
+        &:hover {
+            transform: none;
+        }
+    }
+}

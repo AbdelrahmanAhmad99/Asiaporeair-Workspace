@@ -1,0 +1,92 @@
+<footer class="footer">
+  <div class="footer__container">
+    <!-- Main Footer Grid -->
+    <div class="footer__grid">
+
+      <!-- Column 1: Brand & Vision -->
+      <div class="footer__column footer__column--brand">
+        <div class="footer__brand">
+          <span class="footer__logo">ASIAPOREAIR</span>
+          <p class="footer__description">
+            Experience the pinnacle of aviation. Every detail of our service is crafted to provide a modern concierge
+            experience, elevating your journey beyond expectation.
+          </p>
+        </div>
+
+        <!-- Social Icons -->
+        <div class="footer__socials">
+          <a href="#" class="footer__social-link" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+              <rect x="2" y="9" width="4" height="12" />
+              <circle cx="4" cy="4" r="2" />
+            </svg>
+          </a>
+          <a href="#" class="footer__social-link" aria-label="X">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+            </svg>
+          </a>
+          <a href="#" class="footer__social-link" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+          </a>
+          <a href="#" class="footer__social-link" aria-label="YouTube">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="m22.54 6.42-2.18-.06c-2.43-.07-4.85-.12-7.28-.12-2.43 0-4.85.05-7.28.12l-2.18.06C2.2 6.51 1 8.71 1 11.23v1.54c0 2.52 1.2 4.72 2.62 4.81l2.18.06c2.43.07 4.85.12 7.28.12 2.43 0 4.85-.05 7.28-.12l2.18-.06c1.42-.09 2.62-2.29 2.62-4.81v-1.54c0-2.52-1.2-4.72-2.62-4.81z" />
+              <path d="m9.75 15.02 5.75-3.02-5.75-3.02z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Columns 2-5: Dynamic Sections -->
+      <div class="footer__column" *ngFor="let section of footerSections">
+        <h3 class="footer__heading">{{ section.title }}</h3>
+        <ul class="footer__links">
+          <li *ngFor="let link of section.links">
+            <a class="footer__link" [routerLink]="link.url">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Column 6: Newsletter (Part of the grid or separate?) -->
+      <div class="footer__column footer__column--newsletter">
+        <h3 class="footer__heading">Stay Journey-Ready</h3>
+        <p class="footer__subheading">Subscribe for exclusive travel offers and aviation insights.</p>
+        <form class="footer__newsletter" (submit)="onSubscribe(emailInput.value, $event)">
+          <div class="footer__input-group">
+            <input #emailInput type="email" class="footer__input" placeholder="Your email address" required>
+            <button type="submit" class="footer__subscribe-btn">
+              Join
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Bottom Utility Bar -->
+    <div class="footer__bottom">
+      <div class="footer__copyright">
+        &copy; {{ currentYear }} Asiaporeair. All Rights Reserved.
+      </div>
+      <div class="footer__legal">
+        <a routerLink="/privacy" class="footer__legal-link">Privacy Policy</a>
+        <span class="footer__divider">|</span>
+        <a routerLink="/terms" class="footer__legal-link">Terms & Conditions</a>
+        <span class="footer__divider">|</span>
+        <a routerLink="/cookie-policy" class="footer__legal-link">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>

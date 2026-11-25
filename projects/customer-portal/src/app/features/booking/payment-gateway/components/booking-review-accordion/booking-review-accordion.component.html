@@ -1,0 +1,150 @@
+<!-- booking-review-accordion.component.html -->
+
+<div class="accordion-wrapper" role="list" aria-label="Booking review sections">
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SECTION 1: ITINERARY
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="accordion-section" role="listitem">
+        <button class="section-header" [class.section-header--open]="isOpen('itinerary')"
+            (click)="toggleSection('itinerary')" [attr.aria-expanded]="isOpen('itinerary')"
+            aria-controls="section-itinerary">
+            <div class="header-left">
+                <span class="section-num">1</span>
+                <div class="header-title-group">
+                    <span class="section-title">Itinerary</span>
+                    <span class="section-meta">{{ bookingDetail().flightNumber }} · {{ bookingDetail().fareDescription
+                        }}</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="section-subtotal">{{ currency() }} {{ formatPrice(fareCost()) }}</span>
+                <svg class="chevron" [class.chevron--open]="isOpen('itinerary')" width="14" height="14"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+            </div>
+        </button>
+
+        <div *ngIf="isOpen('itinerary')" [@accordionExpand] id="section-itinerary" role="region"
+            aria-label="Itinerary details">
+            <app-itinerary-summary-card [bookingDetail]="bookingDetail()" [currency]="currency()">
+            </app-itinerary-summary-card>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SECTION 2: PASSENGERS & ADD-ONS
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="accordion-section" role="listitem">
+        <button class="section-header" [class.section-header--open]="isOpen('passengers')"
+            (click)="toggleSection('passengers')" [attr.aria-expanded]="isOpen('passengers')"
+            aria-controls="section-passengers">
+            <div class="header-left">
+                <span class="section-num">2</span>
+                <div class="header-title-group">
+                    <span class="section-title">Passengers &amp; Add-ons</span>
+                    <span class="section-meta">{{ bookingDetail().passengers.length }} traveller{{
+                        bookingDetail().passengers.length !== 1 ? 's' : '' }} · seats &amp; enhancements</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="section-subtotal">{{ currency() }} {{ formatPrice(ancillariesTotalCost()) }}</span>
+                <svg class="chevron" [class.chevron--open]="isOpen('passengers')" width="14" height="14"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+            </div>
+        </button>
+
+        <div *ngIf="isOpen('passengers')" [@accordionExpand] id="section-passengers" role="region"
+            aria-label="Passengers and add-ons">
+            <div class="section-body">
+                <!-- Per-Passenger detail block -->
+                <div *ngFor="let pax of bookingDetail().passengers" class="pax-detail-block">
+                    <div class="pax-name-row">
+                        <div class="pax-avatar" aria-hidden="true">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                        <span class="pax-full-name">{{ pax.firstName }} {{ pax.lastName }}</span>
+                    </div>
+
+                    <!-- Seat -->
+                    <div class="pax-item-row">
+                        <div class="item-icon" aria-hidden="true">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1">
+                                <path d="M6 3v11M18 3v11" />
+                                <path d="M6 14a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4" />
+                                <line x1="6" y1="21" x2="6" y2="18" />
+                                <line x1="18" y1="21" x2="18" y2="18" />
+                            </svg>
+                        </div>
+                        <div class="item-content">
+                            <span class="item-label">Seat</span>
+                            <span class="item-value"
+                                [class.item-value--muted]="getSeatForPassenger(pax.passengerId) === 'Not selected'">
+                                {{ getSeatForPassenger(pax.passengerId) }}
+                                <span *ngIf="getSeatForPassenger(pax.passengerId) !== 'Not selected'"
+                                    class="item-tag">{{ pax.cabinClassName }}</span>
+                            </span>
+                        </div>
+                        <span class="item-cost">0.00</span>
+                    </div>
+
+                    <!-- Ancillary Sales for this passenger -->
+                    <ng-container *ngFor="let sale of bookingDetail().ancillarySales">
+                        <div class="pax-item-row" *ngIf="true">
+                            <div class="item-icon" aria-hidden="true">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1">
+                                    <rect x="6" y="8" width="12" height="13" rx="2" />
+                                    <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+                                </svg>
+                            </div>
+                            <div class="item-content">
+                                <span class="item-label">{{ sale.productName }}</span>
+                                <span class="item-value">Qty: {{ sale.quantity }}</span>
+                            </div>
+                            <span class="item-cost">{{ formatPrice(sale.pricePaid * sale.quantity) }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SECTION 3: COST BREAKDOWN
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="accordion-section accordion-section--last" role="listitem">
+        <button class="section-header section-header--grand" [class.section-header--open]="isOpen('cost')"
+            (click)="toggleSection('cost')" [attr.aria-expanded]="isOpen('cost')" aria-controls="section-cost">
+            <div class="header-left">
+                <span class="section-num">3</span>
+                <div class="header-title-group">
+                    <span class="section-title">Cost Breakdown by Passenger</span>
+                    <span class="section-meta">Full fare &amp; tax detail</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="section-subtotal section-subtotal--grand">{{ currency() }} {{
+                    formatPrice(bookingDetail().totalPrice) }}</span>
+                <svg class="chevron" [class.chevron--open]="isOpen('cost')" width="14" height="14" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+            </div>
+        </button>
+
+        <div *ngIf="isOpen('cost')" [@accordionExpand] id="section-cost" role="region" aria-label="Full cost breakdown">
+            <app-cost-breakdown-table [bookingDetail]="bookingDetail()" [currency]="currency()">
+            </app-cost-breakdown-table>
+        </div>
+    </div>
+
+</div>

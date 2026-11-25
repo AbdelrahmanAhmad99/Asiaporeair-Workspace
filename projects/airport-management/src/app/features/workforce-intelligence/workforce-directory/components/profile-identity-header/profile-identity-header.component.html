@@ -1,0 +1,92 @@
+<!-- profile-identity-header.component.html -->
+
+<div class="pih" [attr.data-active]="employee().isActive">
+
+    <!-- Decorative corner ornament -->
+    <div class="pih__ornament" aria-hidden="true">
+        <svg viewBox="0 0 120 120" fill="none">
+            <circle cx="120" cy="0" r="80" stroke="rgba(226,199,128,0.08)" stroke-width="1" fill="none" />
+            <circle cx="120" cy="0" r="50" stroke="rgba(182,143,36,0.06)" stroke-width="1" fill="none" />
+        </svg>
+    </div>
+
+    <!-- ── Avatar ──────────────────────────────────────────────── -->
+    <div class="pih__avatar-wrap" aria-hidden="true">
+        @if (employee().profilePictureUrl) {
+        <img class="pih__avatar pih__avatar--photo" [src]="employee().profilePictureUrl" [alt]="fullName()"
+            loading="eager" />
+        } @else {
+        <div class="pih__avatar pih__avatar--monogram">
+            {{ initials() }}
+        </div>
+        }
+        <!-- Active status ring -->
+        <span class="pih__avatar-ring" [class.pih__avatar-ring--active]="employee().isActive"
+            [class.pih__avatar-ring--inactive]="!employee().isActive" aria-hidden="true"></span>
+    </div>
+
+    <!-- ── Identity Block ─────────────────────────────────────── -->
+    <div class="pih__identity">
+
+        <!-- Role badge -->
+        <div class="pih__role-badge">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="pih__role-badge__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="roleMeta().iconPath" />
+            </svg>
+            {{ roleMeta().label }}
+        </div>
+
+        <!-- Full Name -->
+        <h2 class="pih__name">{{ fullName() }}</h2>
+
+        <!-- ID + Department row -->
+        <div class="pih__meta-row">
+            <span class="pih__id-pill" [attr.aria-label]="'Employee ID ' + employee().employeeId">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="pih__id-pill__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0z" />
+                </svg>
+                EMP-{{ employee().employeeId }}
+            </span>
+
+            @if (employee().department) {
+            <span class="pih__sep" aria-hidden="true">·</span>
+            <span class="pih__dept">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="pih__dept__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                </svg>
+                {{ employee().department }}
+            </span>
+            }
+
+            <span class="pih__sep" aria-hidden="true">·</span>
+            <span class="pih__hire-date">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="pih__hire-date__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+                Joined {{ hireDateLabel() }}
+            </span>
+        </div>
+
+        <!-- Email -->
+        <a class="pih__email" [href]="'mailto:' + employee().email">
+            {{ employee().email }}
+        </a>
+
+    </div>
+
+    <!-- ── Status Chip ─────────────────────────────────────────── -->
+    <div class="pih__status-chip" [class.pih__status-chip--active]="employee().isActive"
+        [class.pih__status-chip--inactive]="!employee().isActive"
+        [attr.aria-label]="employee().isActive ? 'Account active' : 'Account inactive'">
+        <span class="pih__status-chip__dot" aria-hidden="true"></span>
+        {{ employee().isActive ? 'Active' : 'Inactive' }}
+    </div>
+
+</div>

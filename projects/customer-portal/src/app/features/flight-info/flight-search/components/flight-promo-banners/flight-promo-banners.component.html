@@ -1,0 +1,125 @@
+<!-- ============================================================================
+     flight-promo-banners.component.html
+     Asiaporeair | Promotional Banner Carousel
+     ============================================================================ -->
+
+<section class="promo-section" aria-label="Promotional offers">
+
+    <div class="promo-header">
+        <div class="promo-header__eyebrow" aria-hidden="true">
+            <div class="promo-header__line"></div>
+            <span>Exclusive Offers</span>
+            <div class="promo-header__line"></div>
+        </div>
+        <h2 class="promo-header__title">
+            Loyalty <span class="promo-header__title-accent">Privileges</span>
+        </h2>
+    </div>
+
+    @if (banners.length > 0 && activeBanner()) {
+    <div class="promo-carousel" [class.transitioning]="isTransitioning()" role="region"
+        aria-label="Promotional banners carousel">
+
+        <!-- Main banner -->
+        <div class="promo-banner" [style.--banner-gradient]="activeBanner()!.imageGradient"
+            [attr.aria-label]="activeBanner()!.headline" role="img">
+
+            <!-- Background gradient -->
+            <div class="promo-banner__bg" aria-hidden="true"></div>
+
+            <!-- Dark sapphire overlay (40% per guidelines) -->
+            <div class="promo-banner__overlay" aria-hidden="true"></div>
+
+            <!-- Geometric decorative lines -->
+            <div class="promo-banner__deco" aria-hidden="true">
+                <div class="promo-deco__line promo-deco__line--1"></div>
+                <div class="promo-deco__line promo-deco__line--2"></div>
+                <div class="promo-deco__circle"></div>
+            </div>
+
+            <!-- Content -->
+            <div class="promo-banner__content">
+
+                <!-- Tag + discount code row -->
+                <div class="promo-banner__meta">
+                    <span class="promo-tag">
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            aria-hidden="true">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        {{ activeBanner()!.tag }}
+                    </span>
+                    <span class="promo-code" aria-label="Discount code: {{ activeBanner()!.discountCode }}">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                            <line x1="7" y1="7" x2="7.01" y2="7" />
+                        </svg>
+                        {{ activeBanner()!.discountCode }}
+                    </span>
+                </div>
+
+                <!-- Headline -->
+                <h3 class="promo-banner__headline">{{ activeBanner()!.headline }}</h3>
+
+                <!-- Subline -->
+                <p class="promo-banner__subline">{{ activeBanner()!.subline }}</p>
+
+                <!-- Footer: validity + CTA -->
+                <div class="promo-banner__footer">
+                    <span class="promo-valid">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        Valid until {{ activeBanner()!.validUntil }}
+                    </span>
+
+                    <button class="promo-cta" type="button" (click)="bannerCtaClicked.emit(activeBanner()!)"
+                        [attr.aria-label]="activeBanner()!.ctaLabel + ' — ' + activeBanner()!.headline">
+                        {{ activeBanner()!.ctaLabel }}
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Prev / Next arrows -->
+            @if (banners.length > 1) {
+            <button class="promo-arrow promo-arrow--prev" type="button" (click)="prev()" aria-label="Previous offer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            </button>
+
+            <button class="promo-arrow promo-arrow--next" type="button" (click)="next()" aria-label="Next offer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <polyline points="9 18 15 12 9 6" />
+                </svg>
+            </button>
+            }
+
+        </div>
+
+        <!-- Dot indicators -->
+        @if (banners.length > 1) {
+        <div class="promo-dots" role="tablist" aria-label="Banner navigation">
+            @for (banner of banners; track banner.id; let i = $index) {
+            <button class="promo-dot" role="tab" [class.promo-dot--active]="activeIndex() === i" type="button"
+                (click)="onDotClick(i)" [attr.aria-selected]="activeIndex() === i"
+                [attr.aria-label]="'Go to offer: ' + banner.headline">
+            </button>
+            }
+        </div>
+        }
+
+    </div>
+    }
+
+</section>

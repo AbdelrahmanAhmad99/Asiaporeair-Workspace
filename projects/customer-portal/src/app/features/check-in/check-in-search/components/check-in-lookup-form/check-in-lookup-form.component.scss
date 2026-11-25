@@ -1,0 +1,318 @@
+// ============================================================================
+// check-in-lookup-form.component.scss
+// Asiaporeair | Floating-Label Luxury Form
+// ============================================================================
+
+$midnight  : #051937;
+$gold      : #B68F24;
+$champagne : #E2C780;
+$ivory     : #F8F9FA;
+$white     : #FFFFFF;
+$charcoal  : #101056;
+$error     : #d95f5f;
+$muted     : #718096;
+$font      : 'Montserrat', 'Inter', -apple-system, sans-serif;
+$ease      : cubic-bezier(0.4, 0, 0.2, 1);
+$t         : 240ms $ease;
+
+:host { display: block; }
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+@keyframes shimmer-gold {
+    0%   { background-position: -300% center; }
+    100% { background-position:  300% center; }
+}
+
+.form-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+.skel {
+    border-radius: 6px;
+    background: linear-gradient(
+        90deg,
+        rgba($gold, 0.06) 0%,
+        rgba($champagne, 0.18) 50%,
+        rgba($gold, 0.06) 100%
+    );
+    background-size: 300% 100%;
+    animation: shimmer-gold 1.8s ease infinite;
+
+    &--label    { height: 12px; width: 140px; }
+    &--label-sm { width: 100px; }
+    &--input    { height: 52px; }
+    &--btn      { height: 52px; border-radius: 4px; margin-top: 0.5rem; }
+}
+
+.skel-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: $font;
+    font-size: 0.65rem;
+    color: rgba($gold, 0.55);
+    letter-spacing: 0.04em;
+}
+
+// ── Section divider label ─────────────────────────────────────────────────────
+.form-section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
+
+    &__line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($gold, 0.25));
+
+        &:last-child {
+            background: linear-gradient(to left, transparent, rgba($gold, 0.25));
+        }
+    }
+
+    &__text {
+        font-family: $font;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba($gold, 0.65);
+        white-space: nowrap;
+    }
+}
+
+// ── Field wrapper ─────────────────────────────────────────────────────────────
+.field-wrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+// ── Floating label ────────────────────────────────────────────────────────────
+.float-label {
+    position: absolute;
+    top: 50%;
+    left: 3rem; // offset for icon
+    transform: translateY(-50%);
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: $muted;
+    pointer-events: none;
+    transition: top $t, font-size $t, color $t, transform $t;
+    letter-spacing: 0.01em;
+    line-height: 1;
+}
+
+// Float up when filled or focused
+.field-wrapper--filled .float-label,
+.input-shell:focus-within ~ .float-label,
+.input-shell:focus-within + .float-label {
+    top: -0.55rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: $gold;
+    transform: translateY(0);
+    left: 0.1rem;
+}
+
+// Label floats even without :focus-within when input is filled
+.field-wrapper--filled .float-label {
+    top: -0.55rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: rgba($gold, 0.75);
+    transform: translateY(0);
+    left: 0.1rem;
+}
+
+// ── Input shell (icon + input together) ──────────────────────────────────────
+.input-shell {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba($charcoal, 0.15);
+    border-radius: 4px;
+    background: $white;
+    transition: border-color $t, box-shadow $t;
+    overflow: hidden;
+
+    &:focus-within {
+        border-color: $gold;
+        box-shadow: 0 0 0 3px rgba($gold, 0.10), 0 1px 8px rgba($midnight, 0.06);
+    }
+
+    .field-wrapper--error & {
+        border-color: rgba($error, 0.55);
+
+        &:focus-within {
+            box-shadow: 0 0 0 3px rgba($error, 0.10);
+        }
+    }
+}
+
+// ── Icon ─────────────────────────────────────────────────────────────────────
+.input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 100%;
+    flex-shrink: 0;
+    color: rgba($charcoal, 0.28);
+    transition: color $t;
+
+    .input-shell:focus-within & { color: $gold; }
+}
+
+// ── Actual input ──────────────────────────────────────────────────────────────
+.luxury-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: $font;
+    font-size: 0.88rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: $charcoal;
+    padding: 0.95rem 0.85rem 0.95rem 0;
+    min-width: 0;
+
+    // Hide placeholder visually (float-label acts as placeholder)
+    &::placeholder { color: transparent; }
+
+    // Uppercase PNR visual
+    &#pnr-input {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+}
+
+// ── Error text ────────────────────────────────────────────────────────────────
+.field-error {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: $font;
+    font-size: 0.68rem;
+    color: $error;
+    margin: 0.35rem 0 0;
+    line-height: 1.4;
+}
+
+// ── Hint text ─────────────────────────────────────────────────────────────────
+.field-hint {
+    font-family: $font;
+    font-size: 0.65rem;
+    color: $muted;
+    margin: 0.3rem 0 0 0.1rem;
+    line-height: 1.5;
+
+    .field-wrapper--error & { display: none; }
+}
+
+// ── Server error banner ───────────────────────────────────────────────────────
+.server-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    padding: 0.875rem 1rem;
+    background: rgba($error, 0.06);
+    border: 1px solid rgba($error, 0.25);
+    border-radius: 8px;
+    font-family: $font;
+    font-size: 0.77rem;
+    color: $error;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    animation: slideIn 250ms cubic-bezier(0.22, 1, 0.36, 1);
+
+    svg { flex-shrink: 0; margin-top: 1px; }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Submit Button ─────────────────────────────────────────────────────────────
+.submit-btn {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: $midnight;
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: background $t, box-shadow $t, transform $t, border-color $t;
+    margin-top: 0.5rem;
+
+    &:hover:not(:disabled) {
+        background: lighten($midnight, 6%);
+        border-color: rgba($gold, 0.4);
+        box-shadow: 0 6px 24px rgba($midnight, 0.25), 0 0 0 1px rgba($gold, 0.2);
+        transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $gold;
+        outline-offset: 3px;
+    }
+}
+
+.submit-btn__content,
+.submit-btn__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.spin-icon {
+    animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// ── Privacy note ──────────────────────────────────────────────────────────────
+.privacy-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: $font;
+    font-size: 0.62rem;
+    color: rgba($muted, 0.6);
+    margin: 0.875rem 0 0;
+    letter-spacing: 0.02em;
+
+    svg { flex-shrink: 0; }
+}
+
+// ── Reduced motion ────────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+    .skel { animation: none !important; }
+    .spin-icon { animation: none !important; }
+    .submit-btn { transition: none !important; }
+}

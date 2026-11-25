@@ -1,0 +1,58 @@
+<div class="ljb" aria-label="Join the Voyager loyalty programme">
+    <div class="ljb__inner">
+
+        <div class="ljb__content">
+            <div class="ljb__star" aria-hidden="true">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+            </div>
+            <div class="ljb__text">
+                <p class="ljb__eyebrow">Asiaporeair Voyager</p>
+                <h2 class="ljb__title">Miles That Take You Further</h2>
+                <p class="ljb__body">
+                    Join over 12 million Voyager members. Earn miles on flights, hotels, and everyday purchases.
+                    Redeem for award flights, suite upgrades, and exclusive experiences.
+                </p>
+                <ul class="ljb__perks" aria-label="Voyager benefits">
+                    <li>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Earn miles from your very first flight
+                    </li>
+                    <li>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Priority check-in and lounge access from Gold tier
+                    </li>
+                    <li>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Exclusive members-only fare promotions
+                    </li>
+                </ul>
+                <div class="ljb__actions">
+                    <a class="ljb__cta ljb__cta--primary" routerLink="/loyalty/join">Join Voyager — It's Free</a>
+                    <a class="ljb__cta ljb__cta--secondary" routerLink="/loyalty">Learn More</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="ljb__tiers" aria-label="Loyalty tiers">
+            @for (tier of tiers; track tier.name) {
+            <div class="ljb__tier" [style.--tier-color]="tier.color">
+                <span class="ljb__tier-name">{{ tier.name }}</span>
+                <span class="ljb__tier-miles">{{ tier.miles }}+ miles</span>
+            </div>
+            }
+        </div>
+
+    </div>
+</div>

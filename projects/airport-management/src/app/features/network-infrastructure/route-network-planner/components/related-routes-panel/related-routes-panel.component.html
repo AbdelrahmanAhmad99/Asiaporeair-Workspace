@@ -1,0 +1,166 @@
+<div class="rrp-panel">
+
+    <!-- ══ Outgoing Alternatives ════════════════════════════════════ -->
+    <div class="rrp-pane">
+
+        <!-- Pane Header -->
+        <header class="rrp-pane__header">
+            <div class="rrp-pane__icon-wrap rrp-pane__icon-wrap--origin" aria-hidden="true">
+                <svg class="rrp-pane__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 11.25l1.5 1.5.75-.75V8.758l2.276-.61a3 3 0 1 0-3.675-3.675l-.61 2.277H12l-.75.75 1.5 1.5M15 11.25l-8.47 8.47c-.34.34-.8.53-1.28.53s-.94.19-1.28.53l-.97.97-.75-.75.97-.97c.34-.34.53-.8.53-1.28s.19-.94.53-1.28L12.75 9M15 11.25L12.75 9" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="rrp-pane__title">Outgoing Alternatives</h3>
+                <p class="rrp-pane__subtitle">
+                    Other routes from
+                    <span class="rrp-pane__subtitle-iata">{{ currentOrigin() }}</span>
+                </p>
+            </div>
+            @if (!loading()) {
+            <span class="rrp-pane__count">{{ filteredOrigin().length }}</span>
+            }
+        </header>
+
+        <!-- Loading -->
+        @if (loading()) {
+        <ul class="rrp-list" aria-busy="true" aria-label="Loading outgoing routes">
+            @for (s of shimmerRows; track $index) {
+            <li class="rrp-row rrp-row--shimmer">
+                <div class="rrp-shimmer rrp-shimmer--iata"></div>
+                <div class="rrp-shimmer rrp-shimmer--arrow"></div>
+                <div class="rrp-shimmer rrp-shimmer--iata"></div>
+                <div class="rrp-shimmer rrp-shimmer--dist"></div>
+            </li>
+            }
+        </ul>
+        }
+
+        <!-- Route rows -->
+        @if (!loading()) {
+        @if (filteredOrigin().length > 0) {
+        <ul class="rrp-list" role="list" aria-label="Outgoing alternative corridors">
+            @for (route of filteredOrigin(); track route.routeId; let i = $index) {
+            <li class="rrp-row" [class.rrp-row--inactive]="!route.isActive" [style.animation-delay]="(i * 30) + 'ms'"
+                role="listitem">
+
+                <!-- IATA badges -->
+                <span class="rrp-iata rrp-iata--origin">{{ route.originAirportIataCode }}</span>
+                <svg class="rrp-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+                <span class="rrp-iata rrp-iata--dest">{{ route.destinationAirportIataCode }}</span>
+
+                <!-- Distance -->
+                <span class="rrp-dist">{{ formatDistance(route.distanceKm) }}</span>
+
+                <!-- Status dot -->
+                <span class="rrp-dot" [class.rrp-dot--active]="route.isActive"
+                    [class.rrp-dot--inactive]="!route.isActive" [attr.title]="route.isActive ? 'Active' : 'Inactive'"
+                    aria-hidden="true">
+                </span>
+
+                <!-- Analyze quick-jump -->
+                <button class="rrp-analyze-btn" type="button" (click)="analyzeRoute.emit(route.routeId)"
+                    [attr.aria-label]="'Analyze route ' + route.originAirportIataCode + ' to ' + route.destinationAirportIataCode">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                </button>
+
+            </li>
+            }
+        </ul>
+        } @else {
+        <div class="rrp-empty">
+            <p class="rrp-empty__text">No alternative outgoing corridors from this hub.</p>
+        </div>
+        }
+        }
+
+    </div>
+
+    <!-- Vertical divider -->
+    <div class="rrp-divider" aria-hidden="true"></div>
+
+    <!-- ══ Incoming Alternatives ════════════════════════════════════ -->
+    <div class="rrp-pane">
+
+        <!-- Pane Header -->
+        <header class="rrp-pane__header">
+            <div class="rrp-pane__icon-wrap rrp-pane__icon-wrap--dest" aria-hidden="true">
+                <svg class="rrp-pane__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                   0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="rrp-pane__title">Incoming Alternatives</h3>
+                <p class="rrp-pane__subtitle">
+                    Other routes to
+                    <span class="rrp-pane__subtitle-iata">{{ currentDest() }}</span>
+                </p>
+            </div>
+            @if (!loading()) {
+            <span class="rrp-pane__count">{{ filteredDest().length }}</span>
+            }
+        </header>
+
+        <!-- Loading -->
+        @if (loading()) {
+        <ul class="rrp-list" aria-busy="true" aria-label="Loading incoming routes">
+            @for (s of shimmerRows; track $index) {
+            <li class="rrp-row rrp-row--shimmer">
+                <div class="rrp-shimmer rrp-shimmer--iata"></div>
+                <div class="rrp-shimmer rrp-shimmer--arrow"></div>
+                <div class="rrp-shimmer rrp-shimmer--iata"></div>
+                <div class="rrp-shimmer rrp-shimmer--dist"></div>
+            </li>
+            }
+        </ul>
+        }
+
+        <!-- Route rows -->
+        @if (!loading()) {
+        @if (filteredDest().length > 0) {
+        <ul class="rrp-list" role="list" aria-label="Incoming alternative corridors">
+            @for (route of filteredDest(); track route.routeId; let i = $index) {
+            <li class="rrp-row" [class.rrp-row--inactive]="!route.isActive" [style.animation-delay]="(i * 30) + 'ms'"
+                role="listitem">
+
+                <span class="rrp-iata rrp-iata--origin">{{ route.originAirportIataCode }}</span>
+                <svg class="rrp-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+                <span class="rrp-iata rrp-iata--dest">{{ route.destinationAirportIataCode }}</span>
+
+                <span class="rrp-dist">{{ formatDistance(route.distanceKm) }}</span>
+
+                <span class="rrp-dot" [class.rrp-dot--active]="route.isActive"
+                    [class.rrp-dot--inactive]="!route.isActive" [attr.title]="route.isActive ? 'Active' : 'Inactive'"
+                    aria-hidden="true">
+                </span>
+
+                <button class="rrp-analyze-btn" type="button" (click)="analyzeRoute.emit(route.routeId)"
+                    [attr.aria-label]="'Analyze route ' + route.originAirportIataCode + ' to ' + route.destinationAirportIataCode">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                </button>
+
+            </li>
+            }
+        </ul>
+        } @else {
+        <div class="rrp-empty">
+            <p class="rrp-empty__text">No alternative incoming corridors to this hub.</p>
+        </div>
+        }
+        }
+
+    </div>
+
+</div>

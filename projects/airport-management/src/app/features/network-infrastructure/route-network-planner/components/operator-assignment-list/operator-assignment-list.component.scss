@@ -1,0 +1,481 @@
+ // ── Design tokens (BEM variable convention per spec) ──────────────────────
+ $primary-midnight: #051937;
+ $royal-gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Card (squircle 12px) — Midnight Sapphire
+ // ============================================================================
+ .oal-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: $primary-midnight;
+     border: 1px solid rgba($royal-gold, 0.14);
+     box-shadow:
+         0 8px 32px rgba($primary-midnight, 0.32),
+         0 1px 0 rgba($champagne, 0.1) inset;
+     animation: oal-card-enter 360ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. Scroll container
+ // ============================================================================
+ .oal-scroll {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+
+     &::-webkit-scrollbar {
+         height: 3px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.2);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 3. Table
+ // ============================================================================
+ .oal-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 13px;
+ }
+
+ // ============================================================================
+ // 4. Sticky header — deeper Midnight with Champagne Gold labels
+ // ============================================================================
+ .oal-head {
+     background: darken($primary-midnight, 3%);
+     position: sticky;
+     top: 0;
+     z-index: 2;
+ }
+
+ .oal-th {
+     padding: 0.8125rem 1rem;
+     text-align: left;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Data rows — Champagne Gold dividers
+ // ============================================================================
+ .oal-tr {
+     border-bottom: 1px solid rgba($champagne, 0.07);
+     transition:
+         background-color 120ms $ease,
+         opacity 200ms $ease;
+
+     &:hover {
+         background: rgba($champagne, 0.04);
+     }
+
+     // Row being revoked — dim + pointer-events off
+     &--revoking {
+         opacity: 0.45;
+         pointer-events: none;
+     }
+ }
+
+ // ============================================================================
+ // 6. Cells
+ // ============================================================================
+ .oal-td {
+     padding: 0.75rem 1rem;
+     vertical-align: middle;
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+
+     &--logo {
+         width: 3rem;
+     }
+
+     &--actions {
+         text-align: right;
+     }
+ }
+
+ // ============================================================================
+ // 7. Logo circle
+ // ============================================================================
+ .oal-logo {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 50%;
+     background: rgba($royal-gold, 0.12);
+     border: 1px solid rgba($royal-gold, 0.28);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 800;
+     letter-spacing: 0.06em;
+     color: $champagne;
+     user-select: none;
+     flex-shrink: 0;
+
+     &--inactive {
+         background: rgba($champagne, 0.05);
+         border-color: rgba($champagne, 0.12);
+         opacity: 0.5;
+     }
+ }
+
+ // ============================================================================
+ // 8. Airline identity cell
+ // ============================================================================
+ .oal-airline {
+     display: flex;
+     flex-direction: column;
+     gap: 0.15rem;
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 800;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: $royal-gold;
+
+         // Royal Gold text-shadow glow
+         text-shadow: 0 0 16px rgba($royal-gold, 0.2);
+
+         &--inactive {
+             color: rgba($champagne, 0.4);
+             text-shadow: none;
+         }
+     }
+
+     &__name {
+         font-family: 'Inter', 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: rgba($champagne, 0.55);
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         max-width: 18rem;
+     }
+ }
+
+ // ============================================================================
+ // 9. Type pills — Primary / Codeshare
+ // ============================================================================
+ .oal-type-pill {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.55rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.07em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     &--primary {
+         background: rgba($emerald, 0.18);
+         border: 1px solid rgba($emerald, 0.38);
+         color: #6ee7b7;
+     }
+
+     &--codeshare {
+         background: rgba($champagne, 0.1);
+         border: 1px solid rgba($champagne, 0.22);
+         color: $champagne;
+     }
+ }
+
+ // ============================================================================
+ // 10. Region text
+ // ============================================================================
+ .oal-region {
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: rgba($champagne, 0.4);
+     white-space: nowrap;
+ }
+
+ // ============================================================================
+ // 11. Status pills
+ // ============================================================================
+ .oal-status-pill {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.55rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.07em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     &--active {
+         background: rgba($emerald, 0.12);
+         border: 1px solid rgba($emerald, 0.28);
+         color: #6ee7b7;
+     }
+
+     &--inactive {
+         background: rgba(108, 117, 125, 0.12);
+         border: 1px solid rgba(108, 117, 125, 0.22);
+         color: rgba(200, 210, 220, 0.55);
+     }
+ }
+
+ // ============================================================================
+ // 12. Action buttons
+ // ============================================================================
+ .oal-actions {
+     display: flex;
+     align-items: center;
+     gap: 0.25rem;
+     justify-content: flex-end;
+ }
+
+ .oal-action-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     border-radius: 4px;
+     border: 1px solid transparent;
+     background: transparent;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.3;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+     }
+
+     // Edit — Champagne ghost
+     &--edit {
+         color: rgba($champagne, 0.55);
+
+         &:hover:not(:disabled) {
+             color: $champagne;
+             border-color: rgba($champagne, 0.3);
+             background: rgba($champagne, 0.08);
+         }
+     }
+
+     // Revoke — Ruby ghost
+     &--revoke {
+         color: rgba($ruby, 0.6);
+
+         &:hover:not(:disabled) {
+             color: lighten($ruby, 10%);
+             border-color: rgba($ruby, 0.38);
+             background: rgba($ruby, 0.1);
+         }
+     }
+ }
+
+ // Revoke spinner
+ .oal-spinner {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     margin-left: auto;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: rgba($champagne, 0.5);
+         animation: oal-spin 0.9s linear infinite;
+     }
+ }
+
+ // ============================================================================
+ // 13. Responsive
+ // ============================================================================
+ .oal-col--md-hidden {
+     @media (max-width: 767px) {
+         display: none;
+     }
+ }
+
+ // ============================================================================
+ // 14. Shimmer
+ // ============================================================================
+ .oal-shimmer {
+     height: 0.75rem;
+     border-radius: 3px;
+     background: rgba($champagne, 0.07);
+     animation: oal-pulse 1.5s ease-in-out infinite;
+
+     &--circle {
+         width: 2.125rem;
+         height: 2.125rem;
+         border-radius: 50%;
+     }
+ }
+
+ // ============================================================================
+ // 15. Empty state
+ // ============================================================================
+ .oal-empty {
+     padding: 4rem 1.5rem;
+     text-align: center;
+ }
+
+ .oal-empty__inner {
+     display: inline-flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+ }
+
+ .oal-empty__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3rem;
+     height: 3rem;
+     border-radius: 10px;
+     background: rgba($royal-gold, 0.08);
+     border: 1px solid rgba($royal-gold, 0.16);
+ }
+
+ .oal-empty__icon {
+     width: 1.375rem;
+     height: 1.375rem;
+     color: rgba($champagne, 0.45);
+ }
+
+ .oal-empty__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     color: rgba($champagne, 0.65);
+     margin: 0;
+ }
+
+ .oal-empty__sub {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: rgba($champagne, 0.3);
+     max-width: 28ch;
+     text-align: center;
+     line-height: 1.6;
+     margin: 0;
+ }
+
+ // ============================================================================
+ // 16. Footer
+ // ============================================================================
+ .oal-footer {
+     display: flex;
+     align-items: center;
+     padding: 0.625rem 1.25rem;
+     border-top: 1px solid rgba($champagne, 0.08);
+     background: rgba($champagne, 0.02);
+ }
+
+ .oal-footer__label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: rgba($champagne, 0.38);
+
+     strong {
+         font-weight: 700;
+         color: rgba($champagne, 0.65);
+     }
+ }
+
+ // ============================================================================
+ // 17. Keyframes
+ // ============================================================================
+ @keyframes oal-card-enter {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes oal-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes oal-pulse {
+
+     0%,
+     100% {
+         opacity: 0.45;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 18. Dark Mode — card is already Midnight-first; deepen shadows
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .oal-card {
+         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+     }
+ }

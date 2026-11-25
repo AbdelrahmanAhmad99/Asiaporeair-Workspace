@@ -1,0 +1,181 @@
+<!-- ============================================================================
+     trip-card.component.html
+     Asiaporeair | Trip Card — Luxury Midnight Design
+     ============================================================================ -->
+
+<article class="trip-card" [class.trip-card--flown]="isFlown">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         TOP ROW — Status + PNR
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="card-top-row">
+
+        <app-booking-status-badge [status]="booking.status"></app-booking-status-badge>
+
+        <div class="pnr-meta">
+            <span class="pnr-code" aria-label="Booking reference {{ booking.pnrCode }}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <line x1="2" y1="10" x2="22" y2="10" />
+                </svg>
+                {{ booking.pnrCode }}
+            </span>
+            <span class="pnr-sep" aria-hidden="true">·</span>
+            <span class="booked-date">
+                Booked: {{ formatBookingDate(booking.bookingDate) }}
+            </span>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         FLIGHT ROUTE ROW
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="route-row" role="group"
+        [attr.aria-label]="booking.originCode + ' to ' + booking.destinationCode + ', ' + durationLabel">
+
+        <!-- Origin -->
+        <div class="endpoint">
+            <span class="iata-code">{{ booking.originCode }}</span>
+            <span class="city-name">{{ booking.originCity }}</span>
+            <span class="time">{{ formatTime(booking.departureDateTime) }}</span>
+            <span class="date">{{ formatDate(booking.departureDateTime) }}</span>
+        </div>
+
+        <!-- Path Visual -->
+        <div class="flight-path" aria-hidden="true">
+            <div class="path-line path-line--left"></div>
+            <div class="path-centre">
+                <svg class="plane-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"
+                    aria-hidden="true">
+                    <path
+                        d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                </svg>
+                <span class="duration">{{ durationLabel }}</span>
+                <span class="flight-num">{{ booking.flightNumber }} · {{ cabinLabel }}</span>
+            </div>
+            <div class="path-line path-line--right"></div>
+        </div>
+
+        <!-- Destination -->
+        <div class="endpoint endpoint--right">
+            <span class="iata-code">{{ booking.destinationCode }}</span>
+            <span class="city-name">{{ booking.destinationCity }}</span>
+            <span class="time">
+                {{ formatTime(booking.arrivalDateTime) }}
+                <sup *ngIf="isNextDay(booking.departureDateTime, booking.arrivalDateTime)" class="next-day"
+                    aria-label="arrives next day">+1</sup>
+            </span>
+            <span class="date">{{ formatDate(booking.arrivalDateTime) }}</span>
+        </div>
+
+    </div>
+
+    <!-- Return flight banner -->
+    <div *ngIf="booking.isRoundTrip && booking.returnDepartureDateTime" class="return-banner"
+        aria-label="Return flight">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            aria-hidden="true">
+            <path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3" />
+        </svg>
+        Return: {{ booking.destinationCode }} → {{ booking.originCode }}
+        · {{ formatDate(booking.returnDepartureDateTime) }}
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         META ROW — Passengers / Price / Countdown
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="meta-row" role="list" aria-label="Booking details">
+
+        <div class="meta-item" role="listitem">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            <span>{{ booking.passengerCount }}
+                {{ booking.passengerCount === 1 ? 'Passenger' : 'Passengers' }}</span>
+        </div>
+
+        <div class="meta-item" role="listitem">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+            <span>{{ formatCurrency(booking.totalAmount, booking.currency) }}</span>
+        </div>
+
+        <div *ngIf="isUpcoming && daysUntilFlight >= 0" class="meta-item meta-item--countdown" role="listitem"
+            [attr.aria-label]="daysUntilFlight + ' days until departure'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span *ngIf="daysUntilFlight === 0">Departing today</span>
+            <span *ngIf="daysUntilFlight === 1">1 day to departure</span>
+            <span *ngIf="daysUntilFlight > 1">{{ daysUntilFlight }} days to departure</span>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         GOLD DIVIDER
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="card-divider" aria-hidden="true"></div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ACTION HUB
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="action-hub" role="group" aria-label="Booking actions">
+
+        <!-- View Details — always visible, primary -->
+        <button class="btn-primary" (click)="viewDetails.emit(booking)"
+            aria-label="View details for booking {{ booking.pnrCode }}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+            View Details
+        </button>
+
+        <!-- Modify — conditional -->
+        <button *ngIf="booking.canModify" class="btn-ghost" (click)="modify.emit(booking.pnrCode)"
+            aria-label="Modify booking {{ booking.pnrCode }}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Modify
+        </button>
+
+        <!-- Add Services — not shown for Flown -->
+        <button *ngIf="!isFlown" class="btn-ghost" (click)="addServices.emit(booking.pnrCode)"
+            aria-label="Add services to booking {{ booking.pnrCode }}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+            </svg>
+            Add Services
+        </button>
+
+        <!-- Check-In — conditional -->
+        <button *ngIf="booking.canCheckIn" class="btn-checkin" (click)="checkIn.emit(booking.pnrCode)"
+            aria-label="Check in for booking {{ booking.pnrCode }}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M9 11l3 3L22 4" />
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+            Boarding &amp; Services
+        </button>
+
+    </div>
+
+</article>

@@ -1,0 +1,846 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #710D06;
+ $ruby-mid: #9f1239;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .adv-page {
+     min-height: 100%;
+     background-color: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Sticky Command Header
+ // ============================================================================
+ .adv-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.9375rem 1.5rem;
+     background-color: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 14px rgba($midnight, 0.07);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ .adv-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // ── Back button ────────────────────────────────────────────────────────────
+ .adv-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast, 150ms ease);
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+         transform: translateX(-2px);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // ── Breadcrumb ────────────────────────────────────────────────────────────
+ .adv-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__link {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color 150ms $ease;
+
+         &:hover {
+             color: $gold;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .adv-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 32ch;
+     transition: color 150ms $ease;
+ }
+
+ // ── Action Suite ───────────────────────────────────────────────────────────
+ .adv-action-suite {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+ }
+
+ .adv-action-sep {
+     width: 1px;
+     height: 1.5rem;
+     background: rgba($champagne, 0.2);
+     flex-shrink: 0;
+ }
+
+ // ── Icon-only button (Refresh) ─────────────────────────────────────────────
+ .adv-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: adv-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── Action buttons ─────────────────────────────────────────────────────────
+ .adv-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     // Ghost (Audit Trail)
+     &--ghost {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // Primary Gold (Modify Configuration)
+     &--primary {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+
+         &:hover:not(:disabled) {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 14px rgba($gold, 0.35);
+         }
+     }
+
+     // Luxury Ruby (Network Deactivation)
+     &--deactivate {
+         background: transparent;
+         border: 1px solid rgba($ruby-mid, 0.35);
+         color: $ruby-mid;
+
+         &:hover:not(:disabled) {
+             background: rgba($ruby-mid, 0.07);
+             border-color: $ruby-mid;
+             box-shadow: 0 2px 10px rgba($ruby-mid, 0.15);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .adv-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+     overflow-y: auto;
+     max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+ }
+
+ // ============================================================================
+ // 4. Error Banner
+ // ============================================================================
+ .adv-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 1rem 1.125rem;
+     border-radius: 8px;
+     background: rgba($ruby-mid, 0.07);
+     border: 1px solid rgba($ruby-mid, 0.2);
+     flex-wrap: wrap;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+         color: $ruby-mid;
+         margin-top: 0.1rem;
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.2rem;
+         flex: 1;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 700;
+         color: $ruby-mid;
+     }
+
+     &__msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: rgba($ruby-mid, 0.8);
+         line-height: 1.5;
+     }
+
+     &__dismiss {
+         flex-shrink: 0;
+         background: none;
+         border: 1px solid rgba($ruby-mid, 0.3);
+         border-radius: 4px;
+         color: $ruby-mid;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 600;
+         padding: 0.35rem 0.75rem;
+         cursor: pointer;
+         transition: all 150ms $ease;
+         white-space: nowrap;
+
+         &:hover {
+             background: rgba($ruby-mid, 0.08);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Loading Skeleton
+ // ============================================================================
+ .adv-skeleton-layout {
+     display: grid;
+     grid-template-columns: 1fr 320px;
+     gap: 1.5rem;
+
+     @media (max-width: 1024px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ .adv-skeleton {
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.15);
+     overflow: hidden;
+     animation: adv-pulse 1.6s ease-in-out infinite;
+
+     // Hero
+     &--hero {
+         background: $midnight;
+         padding: 2.5rem 2.75rem;
+         display: flex;
+         flex-direction: column;
+         gap: 1rem;
+     }
+
+     // Nearby
+     &--nearby {
+         background: var(--aoms-bg-card, #ffffff);
+         padding: 1.25rem;
+         display: flex;
+         flex-direction: column;
+         gap: 0.75rem;
+     }
+ }
+
+ .adv-skeleton__line {
+     border-radius: 6px;
+     background: rgba($champagne, 0.08);
+
+     &--iata {
+         width: 35%;
+         height: 4.5rem;
+     }
+
+     &--name {
+         width: 70%;
+         height: 1.5rem;
+     }
+
+     &--loc {
+         width: 40%;
+         height: 1rem;
+     }
+
+     &--nm {
+         width: 80%;
+         height: 0.75rem;
+     }
+
+     &--co {
+         width: 55%;
+         height: 0.625rem;
+     }
+ }
+
+ .adv-skeleton__badges {
+     display: flex;
+     gap: 1.5rem;
+     margin-top: 0.5rem;
+ }
+
+ .adv-skeleton__badge {
+     height: 2.25rem;
+     flex: 1;
+     border-radius: 4px;
+     background: rgba($champagne, 0.06);
+ }
+
+ .adv-skeleton__card-row {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.5rem 0;
+     border-bottom: 1px solid rgba($champagne, 0.07);
+ }
+
+ .adv-skeleton__mini-badge {
+     width: 3rem;
+     height: 2.25rem;
+     border-radius: 6px;
+     background: rgba($champagne, 0.08);
+     flex-shrink: 0;
+ }
+
+ .adv-skeleton__mini-body {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+     flex: 1;
+ }
+
+ // ============================================================================
+ // 6. Main Content Grid
+ // ============================================================================
+ .adv-grid {
+     display: grid;
+     grid-template-columns: 1fr 320px;
+     gap: 1.5rem;
+     align-items: start;
+
+     @media (max-width: 1200px) {
+         grid-template-columns: 1fr 280px;
+     }
+
+     @media (max-width: 1024px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ // .adv-grid__primary {
+ //   // Identity hero fills the left column
+ // }
+
+ .adv-grid__secondary {
+     // Navigator fills the right column; becomes a row below on mobile
+     position: sticky;
+     top: calc(var(--aoms-topbar-height, 64px) + 1.5rem);
+
+     @media (max-width: 1024px) {
+         position: static;
+     }
+ }
+
+ // ============================================================================
+ // 7. Deactivation Modal — Backdrop
+ // ============================================================================
+ .adv-modal-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 40;
+     background: rgba($midnight, 0.65);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+     animation: adv-fade-in 200ms $ease both;
+ }
+
+ // ============================================================================
+ // 8. Deactivation Modal — Panel
+ // ============================================================================
+ .adv-modal {
+     position: fixed;
+     z-index: 50;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: min(480px, calc(100vw - 2rem));
+
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($ruby-mid, 0.2);
+     box-shadow:
+         0 24px 64px rgba($midnight, 0.35),
+         0 0 0 1px rgba($ruby-mid, 0.08);
+
+     overflow: hidden;
+     animation: adv-modal-enter 280ms $luxury both;
+
+     // Ruby accent line at top
+     &::before {
+         content: '';
+         display: block;
+         height: 3px;
+         background: linear-gradient(90deg, $ruby, $ruby-mid 50%, transparent 100%);
+     }
+ }
+
+ .adv-modal__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 1rem;
+     padding: 1.5rem 1.5rem 1rem;
+ }
+
+ .adv-modal__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.75rem;
+     height: 2.75rem;
+     border-radius: 8px;
+     background: rgba($ruby-mid, 0.08);
+     border: 1px solid rgba($ruby-mid, 0.2);
+ }
+
+ .adv-modal__icon {
+     width: 1.25rem;
+     height: 1.25rem;
+     color: $ruby-mid;
+ }
+
+ .adv-modal__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 16px;
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.2rem;
+ }
+
+ .adv-modal__subtitle {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     margin: 0;
+ }
+
+ // Airport summary inside the modal
+ .adv-modal__target {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     margin: 0 1.5rem;
+     padding: 1rem;
+     border-radius: 8px;
+     background: rgba($midnight, 0.04);
+     border: 1px solid rgba($champagne, 0.15);
+ }
+
+ .adv-modal__iata {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.75rem;
+     font-weight: 900;
+     letter-spacing: -0.03em;
+     color: $gold;
+     flex-shrink: 0;
+     text-shadow: 0 0 20px rgba($gold, 0.3);
+ }
+
+ .adv-modal__target-name {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.2rem;
+ }
+
+ .adv-modal__target-loc {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     margin: 0;
+ }
+
+ // Warning copy
+ .adv-modal__warning {
+     margin: 1.25rem 1.5rem;
+     padding: 0.875rem 1rem;
+     border-radius: 6px;
+     background: rgba($ruby-mid, 0.05);
+     border-left: 3px solid rgba($ruby-mid, 0.4);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     line-height: 1.6;
+     color: var(--aoms-text-secondary);
+
+     strong {
+         color: $ruby-mid;
+         font-weight: 700;
+     }
+ }
+
+ // Modal actions
+ .adv-modal__actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding: 1rem 1.5rem 1.375rem;
+     border-top: 1px solid rgba($champagne, 0.12);
+     background: rgba($off-white, 0.5);
+ }
+
+ .adv-modal-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.25rem;
+     padding: 0 1.125rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__spin {
+         width: 0.9rem;
+         height: 0.9rem;
+         animation: adv-spin 1s linear infinite;
+     }
+
+     // Cancel — ghost
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($charcoal, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // Confirm — Luxury Ruby fill
+     &--confirm {
+         background: $ruby-mid;
+         border: 1px solid $ruby-mid;
+         color: #ffffff;
+
+         &:hover:not(:disabled) {
+             background: $ruby;
+             border-color: $ruby;
+             box-shadow: 0 4px 14px rgba($ruby-mid, 0.35);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 9. Keyframes
+ // ============================================================================
+ @keyframes adv-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes adv-pulse {
+
+     0%,
+     100% {
+         opacity: 0.65;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ @keyframes adv-fade-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes adv-modal-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px));
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%);
+     }
+ }
+
+ // ============================================================================
+ // 10. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .adv-header {
+         box-shadow: 0 2px 18px rgba(0, 0, 0, 0.32);
+     }
+
+     .adv-back-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .adv-btn--ghost:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .adv-btn--deactivate {
+         border-color: rgba(248, 113, 113, 0.3);
+         color: #f87171;
+
+         &:hover:not(:disabled) {
+             background: rgba(248, 113, 113, 0.08);
+             border-color: #f87171;
+         }
+     }
+
+     .adv-error-banner {
+         background: rgba($ruby-mid, 0.14);
+         border-color: rgba($ruby-mid, 0.32);
+
+         &__title,
+         &__icon {
+             color: #f43f5e;
+         }
+
+         &__msg {
+             color: rgba(244, 63, 94, 0.8);
+         }
+
+         &__dismiss {
+             color: #f43f5e;
+             border-color: rgba(244, 63, 94, 0.3);
+         }
+     }
+
+     .adv-skeleton--nearby {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     .adv-skeleton__line,
+     .adv-skeleton__badge,
+     .adv-skeleton__mini-badge {
+         background: rgba($champagne, 0.05);
+     }
+
+     .adv-modal {
+         background: #0d1f35;
+         border-color: rgba($ruby-mid, 0.3);
+         box-shadow:
+             0 28px 72px rgba(0, 0, 0, 0.55),
+             0 0 0 1px rgba($ruby-mid, 0.12);
+     }
+
+     .adv-modal__title {
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .adv-modal__subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .adv-modal__target {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .adv-modal__target-name {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .adv-modal__target-loc {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .adv-modal__warning {
+         background: rgba($ruby-mid, 0.1);
+         border-left-color: rgba($ruby-mid, 0.5);
+         color: rgba(255, 255, 255, 0.65);
+     }
+
+     .adv-modal__actions {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+
+     .adv-modal-btn--cancel {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+ }

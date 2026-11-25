@@ -1,0 +1,890 @@
+ // ── Design Tokens (CSS variable references + SCSS fallbacks) ──────────────
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $error: #9f1239;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Form shell
+ // ============================================================================
+ .aff-form {
+     width: 100%;
+     animation: aff-enter 380ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. Card — squircle 12px, Champagne Gold border
+ // ============================================================================
+ .aff-card {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.2);
+     box-shadow: 0 4px 24px rgba($midnight, 0.07);
+     overflow: hidden;
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 3. Section layout
+ // ============================================================================
+ .aff-section {
+     padding: 1.75rem 2rem;
+
+     @media (max-width: 640px) {
+         padding: 1.25rem 1rem;
+     }
+ }
+
+ .aff-section__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     margin-bottom: 1.625rem;
+ }
+
+ .aff-section__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.5rem;
+     height: 2.5rem;
+     border-radius: 8px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.18);
+
+     // Gold variant for Strategic Hub section — distinguishes it visually
+     &--gold {
+         background: rgba($gold, 0.08);
+         border-color: rgba($gold, 0.3);
+
+         .aff-section__icon {
+             color: $gold;
+         }
+     }
+ }
+
+ .aff-section__icon {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: $champagne;
+ }
+
+ .aff-section__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.2rem;
+     transition: color 150ms $ease;
+ }
+
+ .aff-section__subtitle {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     margin: 0;
+ }
+
+ // Locked badge shown next to section header in edit mode
+ .aff-locked-badge {
+     margin-left: auto;
+     flex-shrink: 0;
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3rem;
+     padding: 0.2rem 0.6rem;
+     border-radius: 3px;
+     background: rgba($champagne, 0.08);
+     border: 1px solid rgba($champagne, 0.2);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     color: $champagne;
+
+     svg {
+         width: 0.7rem;
+         height: 0.7rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 4. Two-column field grid
+ // ============================================================================
+ .aff-fields {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 1.25rem;
+
+     @media (max-width: 768px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ // ============================================================================
+ // 5. Individual field wrapper
+ // ============================================================================
+ .aff-field {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+
+     &--wide {
+         grid-column: 1 / -1;
+     }
+
+     // &--select {}
+
+     // slight padding adjustment handled by select styles
+     // &--hub {}
+
+     // autocomplete — positioned relative for dropdown
+
+     // ── Error state ────────────────────────────────────────────────────────
+     &--error {
+
+         .aff-input,
+         .aff-select,
+         .aff-hub-input-wrap {
+             border-color: $error !important;
+         }
+
+         .aff-input:focus,
+         .aff-select:focus {
+             box-shadow: 0 0 0 3px rgba($error, 0.12) !important;
+         }
+
+         .aff-label {
+             color: $error !important;
+         }
+
+         .aff-hub-input-wrap {
+             box-shadow: 0 0 0 3px rgba($error, 0.1);
+         }
+     }
+
+     // ── Locked (edit mode, IATA) ───────────────────────────────────────────
+     &--locked .aff-input {
+         cursor: not-allowed;
+         opacity: 0.6;
+         background: rgba($midnight, 0.04);
+     }
+ }
+
+ // ============================================================================
+ // 6. Text inputs — floating label pattern
+ // ============================================================================
+ .aff-input {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     border: none;
+     background: none;
+
+     width: 100%;
+     height: 3.5rem;
+     padding: 1.45rem 1rem 0.45rem;
+
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+
+     background: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+
+     transition:
+         border-color 180ms $ease,
+         background 180ms $ease,
+         box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow:
+             0 0 0 3px rgba($champagne, 0.15),
+             0 0 14px rgba($champagne, 0.07);
+     }
+
+     // Hub variant (no top/bottom padding, controlled by wrapper)
+     &--hub {
+         padding: 0.625rem 3rem 0.625rem 2.5rem;
+         height: 3rem;
+         border: none;
+         border-radius: 0;
+         background: transparent;
+         box-shadow: none;
+         flex: 1;
+
+         &:focus {
+             box-shadow: none;
+             border: none;
+         }
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+             font-weight: 400;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. Floating label
+ // ============================================================================
+ .aff-label {
+     position: absolute;
+     top: 50%;
+     left: 1rem;
+     transform: translateY(-50%);
+     pointer-events: none;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+
+     transition:
+         top 180ms $ease,
+         font-size 180ms $ease,
+         font-weight 180ms $ease,
+         color 180ms $ease,
+         letter-spacing 180ms $ease,
+         transform 180ms $ease;
+
+     // Float — triggered by focus or non-empty value
+     .aff-input:focus~&,
+     .aff-input:not(:placeholder-shown)~& {
+         top: 0.45rem;
+         transform: translateY(0);
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: $champagne;
+     }
+
+     // Select variant — always floated
+     &--select {
+         top: 0.45rem;
+         transform: translateY(0);
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: var(--aoms-text-muted);
+     }
+
+     // Hub autocomplete variant — separate positioning
+     &--hub {
+         position: static;
+         transform: none;
+         display: block;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: var(--aoms-text-muted);
+         padding: 0.4rem 1rem 0;
+         pointer-events: none;
+     }
+
+     &__req {
+         color: $error;
+         margin-left: 0.2rem;
+     }
+ }
+
+ // Focus: gold label
+ .aff-input:focus~.aff-label,
+ .aff-select:focus~.aff-label--select {
+     color: $champagne !important;
+ }
+
+ // ============================================================================
+ // 8. Lock icon in IATA field
+ // ============================================================================
+ .aff-field__lock-icon {
+     position: absolute;
+     right: 0.75rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 1rem;
+     height: 1rem;
+     color: var(--aoms-text-muted);
+     opacity: 0.4;
+     pointer-events: none;
+
+     svg {
+         width: 100%;
+         height: 100%;
+     }
+ }
+
+ // ============================================================================
+ // 9. Region select
+ // ============================================================================
+ .aff-select {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+
+     width: 100%;
+     height: 3.5rem;
+     padding: 1.45rem 2.25rem 0.45rem 1rem;
+
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+     cursor: pointer;
+
+     background: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+
+     transition:
+         border-color 180ms $ease,
+         background 180ms $ease,
+         box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow:
+             0 0 0 3px rgba($champagne, 0.15),
+             0 0 14px rgba($champagne, 0.07);
+     }
+
+     option {
+         background: #ffffff;
+         color: $charcoal;
+     }
+ }
+
+ .aff-select__chevron {
+     position: absolute;
+     right: 1rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 1rem;
+     height: 1rem;
+     pointer-events: none;
+     color: var(--aoms-text-muted);
+     transition: color 180ms $ease;
+
+     svg {
+         width: 100%;
+         height: 100%;
+     }
+ }
+
+ .aff-field--select:focus-within .aff-select__chevron {
+     color: $champagne;
+ }
+
+ // ============================================================================
+ // 10. Hub autocomplete input wrapper
+ // ============================================================================
+ .aff-hub-input-wrap {
+     display: flex;
+     align-items: center;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+     background: $off-white;
+     overflow: visible; // allows dropdown to overflow
+     transition:
+         border-color 180ms $ease,
+         box-shadow 180ms $ease,
+         background 180ms $ease;
+
+     &:focus-within {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow:
+             0 0 0 3px rgba($champagne, 0.15),
+             0 0 14px rgba($champagne, 0.07);
+     }
+
+     &__icon {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.5rem;
+         height: 3rem;
+         color: var(--aoms-text-muted);
+         transition: color 180ms $ease;
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+         }
+     }
+
+     &__spin {
+         width: 1rem;
+         height: 1rem;
+         animation: aff-spin 0.85s linear infinite;
+         color: $champagne;
+     }
+
+     // Highlight icon on focus
+     .aff-hub-input-wrap:focus-within &__icon {
+         color: $champagne;
+     }
+ }
+
+ // Confirmed IATA badge (shown inside the input row)
+ .aff-hub-confirmed {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     flex-shrink: 0;
+     padding: 0.2rem 0.5rem;
+     margin-left: 0.25rem;
+     border-radius: 3px;
+     background: rgba($emerald, 0.1);
+     border: 1px solid rgba($emerald, 0.3);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: #059669;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+     }
+ }
+
+ // Clear "×" button inside hub field
+ .aff-hub-clear {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2rem;
+     height: 2rem;
+     margin-right: 0.25rem;
+     border: none;
+     background: transparent;
+     color: var(--aoms-text-muted);
+     cursor: pointer;
+     border-radius: 4px;
+     transition: color 150ms $ease;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+     }
+
+     &:hover {
+         color: $error;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 11. Autocomplete dropdown panel
+ // ============================================================================
+ .aff-hub-panel {
+     position: absolute;
+     top: calc(100% + 4px);
+     left: 0;
+     right: 0;
+     z-index: 50;
+     list-style: none;
+     margin: 0;
+     padding: 0.375rem 0;
+
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.25);
+     border-radius: 10px;
+     box-shadow:
+         0 12px 32px rgba($midnight, 0.15),
+         0 0 0 1px rgba($champagne, 0.08);
+
+     max-height: 16rem;
+     overflow-y: auto;
+     animation: aff-panel-enter 180ms $luxury both;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.3);
+         border-radius: 2px;
+     }
+ }
+
+ .aff-hub-option {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.625rem 1rem;
+     cursor: pointer;
+     transition: background 120ms $ease;
+
+     &:hover,
+     &:focus {
+         background: rgba($champagne, 0.07);
+     }
+
+     &--selected {
+         background: rgba($gold, 0.05);
+     }
+
+     // IATA code pill
+     &__iata {
+         flex-shrink: 0;
+         display: inline-flex;
+         align-items: center;
+         padding: 0.2rem 0.5rem;
+         border-radius: 4px;
+         background: rgba($gold, 0.09);
+         border: 1px solid rgba($gold, 0.22);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 800;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: $gold;
+         min-width: 2.75rem;
+         justify-content: center;
+     }
+
+     // Details block
+     &__details {
+         display: flex;
+         flex-direction: column;
+         gap: 0.1rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__name {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 500;
+         color: var(--aoms-text-primary, $charcoal);
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+     }
+
+     &__loc {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: var(--aoms-text-muted);
+     }
+
+     // Check icon
+     &__check {
+         flex-shrink: 0;
+         width: 1.125rem;
+         height: 1.125rem;
+         color: #059669;
+     }
+ }
+
+ // No-results notice
+ .aff-hub-no-results {
+     margin-top: 4px;
+     padding: 0.75rem 1rem;
+     border: 1px solid rgba($champagne, 0.18);
+     border-radius: 8px;
+     background: rgba($champagne, 0.04);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     font-style: italic;
+ }
+
+ // ============================================================================
+ // 12. Validation errors
+ // ============================================================================
+ .aff-error {
+     display: block;
+     margin-top: 0.325rem;
+     padding: 0.275rem 0.625rem;
+     border-radius: 4px;
+     background: rgba($error, 0.05);
+     border-left: 2px solid $error;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 500;
+     color: $error;
+     animation: aff-error-in 180ms $luxury both;
+ }
+
+ .aff-hint {
+     display: block;
+     margin-top: 0.275rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     opacity: 0.7;
+     letter-spacing: 0.01em;
+ }
+
+ // ============================================================================
+ // 13. Section divider
+ // ============================================================================
+ .aff-divider {
+     height: 1px;
+     background: linear-gradient(90deg,
+             transparent 0%,
+             rgba($champagne, 0.2) 20%,
+             rgba($champagne, 0.2) 80%,
+             transparent 100%);
+     margin: 0 2rem;
+ }
+
+ // ============================================================================
+ // 14. Form actions footer
+ // ============================================================================
+ .aff-actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding: 1.375rem 2rem;
+     background: rgba($off-white, 0.6);
+     border-top: 1px solid rgba($champagne, 0.12);
+     flex-wrap: wrap;
+ }
+
+ // Save error
+ .aff-save-error {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex: 1;
+     padding: 0.5rem 0.75rem;
+     border-radius: 6px;
+     background: rgba($error, 0.06);
+     border: 1px solid rgba($error, 0.2);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: $error;
+     animation: aff-error-in 180ms $luxury both;
+
+     svg {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 15. Buttons
+ // ============================================================================
+ .aff-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.5rem;
+     padding: 0 1.25rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 180ms $ease;
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon,
+     &__spin {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+
+     &__spin {
+         animation: aff-spin 1s linear infinite;
+     }
+
+     // Cancel — Midnight Sapphire outline
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($midnight, 0.22);
+         color: var(--aoms-text-secondary, $charcoal);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // Save — Royal Gold gradient solid (primary CTA)
+     &--save {
+         background: linear-gradient(135deg, $gold 0%, darken($gold, 8%) 100%);
+         border: 1px solid $gold;
+         color: #ffffff;
+
+         &:hover:not(:disabled) {
+             background: linear-gradient(135deg, $champagne 0%, $gold 100%);
+             border-color: $champagne;
+             box-shadow: 0 4px 16px rgba($gold, 0.38);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 16. Keyframes
+ // ============================================================================
+ @keyframes aff-enter {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes aff-error-in {
+     from {
+         opacity: 0;
+         transform: translateX(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes aff-panel-enter {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes aff-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================================
+ // 17. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .aff-card {
+         background: rgba(255, 255, 255, 0.03);
+         box-shadow: 0 4px 28px rgba(0, 0, 0, 0.3);
+     }
+
+     .aff-section__title {
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .aff-section__subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .aff-input,
+     .aff-select {
+         background: rgba($midnight, 0.55);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.88);
+
+         &:focus {
+             background: rgba($midnight, 0.8);
+         }
+
+         option {
+             background: #0d1f35;
+             color: rgba(255, 255, 255, 0.88);
+         }
+     }
+
+     .aff-hub-input-wrap {
+         background: rgba($midnight, 0.55);
+         border-color: rgba(255, 255, 255, 0.1);
+
+         &:focus-within {
+             background: rgba($midnight, 0.8);
+         }
+     }
+
+     .aff-hub-panel {
+         background: #0d1f35;
+         border-color: rgba($champagne, 0.15);
+         box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+     }
+
+     .aff-hub-option__name {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .aff-hub-option:hover {
+         background: rgba($champagne, 0.05);
+     }
+
+     .aff-actions {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+
+     .aff-btn--cancel {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+ }

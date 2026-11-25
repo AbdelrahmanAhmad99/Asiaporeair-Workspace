@@ -1,0 +1,97 @@
+@use './gateway-tokens' as t;
+
+:host {
+    @include t.gw-tokens;
+    display: block;
+    container-type: inline-size;
+    container-name: gateway-grid;
+    font-family: var(--gw-font-body);
+}
+
+// Midnight Sapphire panel with two faint glows, so the glass cards have something to refract.
+.panel {
+    padding: 1.25rem 1.5rem 1.5rem;
+    background-color: var(--gw-sapphire);
+    background-image:
+        radial-gradient(60rem 26rem at 90% -12%, rgba(182, 143, 36, 0.16), transparent 62%),
+        radial-gradient(46rem 24rem at -6% 108%, rgba(226, 199, 128, 0.09), transparent 58%);
+    color: var(--gw-ivory);
+}
+
+.panel__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--gw-champagne-hairline);
+}
+
+.panel__title {
+    margin: 0;
+    font-family: var(--gw-font-heading);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.panel__meta {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--gw-ivory-muted);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.grid__item {
+    min-width: 0;
+}
+
+.grid__empty {
+    grid-column: 1 / -1;
+    padding: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--gw-ivory-muted);
+    text-align: center;
+    border: 1px dashed var(--gw-champagne-hairline);
+    border-radius: var(--gw-radius-card);
+}
+
+@container gateway-grid (min-width: 720px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@container gateway-grid (min-width: 1100px) {
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+
+@container gateway-grid (min-width: 2400px) {
+    .panel {
+        padding: 1.5rem 2.5rem 1.75rem;
+    }
+
+    .grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@container gateway-grid (max-width: 719px) {
+    .panel {
+        padding-inline: 1rem;
+    }
+}

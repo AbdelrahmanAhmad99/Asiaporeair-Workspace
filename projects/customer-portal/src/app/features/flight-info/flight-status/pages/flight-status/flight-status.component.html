@@ -1,0 +1,275 @@
+<!-- ============================================================================
+     flight-status.component.html
+     Asiaporeair | "Track Your Journey" — Flight Status Smart Page
+     ============================================================================ -->
+
+<div class="fs-page">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HERO HEADER — Midnight Sapphire
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="fs-hero" [@heroFade] role="banner">
+
+        <!-- Ambient particles -->
+        <div class="fs-hero__particles" aria-hidden="true">
+            @for (p of [1,2,3,4,5,6,7,8,9,10]; track p) {
+            <span class="fs-particle"></span>
+            }
+        </div>
+
+        <!-- Geometric accent arc -->
+        <div class="fs-hero__arc" aria-hidden="true"></div>
+
+        <div class="fs-hero__inner">
+
+            <!-- Top navigation row -->
+            <div class="fs-hero__nav-row">
+                <a class="fs-brand" href="/flight-info/search" aria-label="Asiaporeair home">
+                    ASIAPOREAIR
+                </a>
+                <nav class="fs-hero__quick-nav" aria-label="Section navigation">
+                    <a class="fs-nav-link" href="/flight-info/search">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
+                        Flight Search
+                    </a>
+                    <a class="fs-nav-link" href="/flight-info/fares">Fare Directory</a>
+                    <a class="fs-nav-link fs-nav-link--active" href="/flight-info/status" aria-current="page">Flight
+                        Status</a>
+                </nav>
+            </div>
+
+            <!-- Gold rule -->
+            <div class="fs-hero__rule" aria-hidden="true"></div>
+
+            <!-- Title block -->
+            <div class="fs-hero__title-block">
+
+                <!-- Pulsing status icon ring -->
+                <div class="fs-hero__icon-ring" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                        stroke-linecap="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                        <circle cx="12" cy="12" r="3" fill="rgba(226,199,128,0.15)" />
+                    </svg>
+                </div>
+
+                <h1 class="fs-hero__title">
+                    Track Your <span class="fs-hero__title-accent">Journey</span>
+                </h1>
+
+                <p class="fs-hero__subtitle">
+                    Real-time flight tracking with live departure boards and status updates.
+                    Enter your flight number and travel date below.
+                </p>
+
+                <!-- Info badges -->
+                <div class="fs-hero__badges" aria-label="Service features">
+                    <div class="fs-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                            aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        Live Data
+                    </div>
+                    <div class="fs-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                            aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        Real-time Updates
+                    </div>
+                    <div class="fs-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                            aria-hidden="true">
+                            <path
+                                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                        </svg>
+                        All Asiaporeair Flights
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN BODY — Pure White / Ivory
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="fs-body" role="main">
+        <div class="fs-container">
+            <div class="fs-layout">
+
+                <!-- ── LEFT COLUMN: Search card ─────────────────────── -->
+                <section class="fs-search-col" aria-label="Flight status search">
+
+                    <div class="fs-card" [@cardReveal]>
+
+                        <!-- Gold top accent bar -->
+                        <div class="fs-card__bar" aria-hidden="true"></div>
+
+                        <!-- Card header -->
+                        <div class="fs-card__header">
+                            <div class="fs-card__header-icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                    stroke-width="1" stroke-linecap="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                            </div>
+                            <div class="fs-card__header-text">
+                                <h2 class="fs-card__title">Journey Tracker</h2>
+                                <p class="fs-card__subtitle">
+                                    Enter your flight details to retrieve live status and schedule information.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- ── Status Search Form (Dumb Component) ──── -->
+                        <div class="fs-card__body">
+                            <app-status-search-form [isSearching]="isSearching()"
+                                [initialFlightNumber]="initialFlightNumber()" [initialDate]="initialDate()"
+                                (formSubmit)="onSearchSubmit($event)" (clearSearch)="onClearSearch()">
+                            </app-status-search-form>
+                        </div>
+
+                    </div>
+
+                    <!-- ── Error display (shown below card) ──────────── -->
+                    @if (statusChainError() && !isSearching()) {
+                    <div class="fs-error-card" [@fadeIn] role="alert" aria-live="assertive">
+
+                        <div class="fs-error-card__icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1" stroke-linecap="round">
+                                <path
+                                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                        </div>
+
+                        <div class="fs-error-card__content">
+                            <p class="fs-error-card__title">
+                                Journey Not Located
+                            </p>
+                            <p class="fs-error-card__message">
+                                {{ statusChainError() }}
+                            </p>
+                            @if (lastSearchedFlight()) {
+                            <p class="fs-error-card__searched">
+                                Searched:
+                                <strong>{{ lastSearchedFlight() }}</strong>
+                                @if (formattedSearchDate()) {
+                                · <span>{{ formattedSearchDate() }}</span>
+                                }
+                            </p>
+                            }
+                        </div>
+
+                        <a class="fs-error-card__help" href="/contact"
+                            aria-label="Contact Asiaporeair concierge support">
+                            Contact Concierge
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </a>
+
+                    </div>
+                    }
+
+                </section>
+
+                <!-- ── RIGHT COLUMN: Informational sidebar ──────────── -->
+                <aside class="fs-sidebar" aria-label="Status information" [@infoReveal]>
+
+                    <!-- How it works card -->
+                    <div class="fs-info-card info-block">
+                        <h3 class="fs-info-card__title">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                stroke-width="1" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            How to Track
+                        </h3>
+                        <ol class="fs-info-steps">
+                            <li class="fs-info-step">
+                                <span class="fs-info-step__num">1</span>
+                                <span>Enter your <strong>flight number</strong> as shown on your booking confirmation
+                                    (e.g. ASP101).</span>
+                            </li>
+                            <li class="fs-info-step">
+                                <span class="fs-info-step__num">2</span>
+                                <span>Select the <strong>date of departure</strong> from the calendar.</span>
+                            </li>
+                            <li class="fs-info-step">
+                                <span class="fs-info-step__num">3</span>
+                                <span>Click <strong>"Track Your Journey"</strong> to retrieve live status.</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Status legend card -->
+                    <div class="fs-info-card info-block">
+                        <h3 class="fs-info-card__title">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                stroke-width="1" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            Status Indicators
+                        </h3>
+                        <ul class="fs-legend">
+                            <li class="fs-legend-item">
+                                <span class="fs-legend-dot fs-legend-dot--green"></span>
+                                <span class="fs-legend-label">On Time</span>
+                            </li>
+                            <li class="fs-legend-item">
+                                <span class="fs-legend-dot fs-legend-dot--amber"></span>
+                                <span class="fs-legend-label">Delayed</span>
+                            </li>
+                            <li class="fs-legend-item">
+                                <span class="fs-legend-dot fs-legend-dot--blue"></span>
+                                <span class="fs-legend-label">Boarding</span>
+                            </li>
+                            <li class="fs-legend-item">
+                                <span class="fs-legend-dot fs-legend-dot--gold"></span>
+                                <span class="fs-legend-label">Departed / Arrived</span>
+                            </li>
+                            <li class="fs-legend-item">
+                                <span class="fs-legend-dot fs-legend-dot--red"></span>
+                                <span class="fs-legend-label">Cancelled</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact note -->
+                    <div class="fs-contact-note info-block">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                            aria-hidden="true">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17z" />
+                        </svg>
+                        <span>
+                            Need assistance? Our concierge team is available 24/7 at
+                            <a href="tel:+6561234567" class="fs-contact-link">+65 6123 4567</a>
+                        </span>
+                    </div>
+
+                </aside>
+
+            </div>
+        </div>
+    </main>
+
+</div>

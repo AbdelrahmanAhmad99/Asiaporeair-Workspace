@@ -1,0 +1,96 @@
+<section class="aln-panel" aria-label="Nearby airport nodes">
+
+    <!-- ── Panel Header ──────────────────────────────────────────── -->
+    <header class="aln-header">
+        <div class="aln-header__icon-wrap" aria-hidden="true">
+            <svg class="aln-header__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+            </svg>
+        </div>
+
+        <div class="aln-header__text">
+            <h3 class="aln-header__title">Regional Network</h3>
+            @if (!loading() && nearbyAirports().length > 0) {
+            <p class="aln-header__subtitle">
+                {{ sameCityCount() }} co-located · {{ sameCountryCount() }} in {{ activeCountry() }}
+            </p>
+            } @else if (!loading()) {
+            <p class="aln-header__subtitle">No nearby nodes registered</p>
+            } @else {
+            <p class="aln-header__subtitle">Loading nearby nodes…</p>
+            }
+        </div>
+    </header>
+
+    <!-- ── Loading Shimmer ───────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="aln-list" aria-busy="true" aria-label="Loading nearby airports">
+        @for (s of shimmerCards; track $index) {
+        <div class="aln-card aln-card--shimmer">
+            <div class="aln-shimmer aln-shimmer--iata"></div>
+            <div class="aln-shimmer--body">
+                <div class="aln-shimmer aln-shimmer--name"></div>
+                <div class="aln-shimmer aln-shimmer--coord"></div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Nearby Airport Cards ──────────────────────────────────── -->
+    @if (!loading() && nearbyAirports().length > 0) {
+    <div class="aln-list" role="list">
+        @for (airport of nearbyAirports(); track airport.iataCode; let i = $index) {
+        <button class="aln-card" role="listitem" [class.aln-card--co-located]="isSameCity(airport)"
+            [style.animation-delay]="(i * 50) + 'ms'" (click)="selectAirport(airport.iataCode)"
+            [attr.aria-label]="airport.name + ' — ' + airport.iataCode + (isSameCity(airport) ? ' (same city)' : '')">
+
+            <!-- IATA Badge -->
+            <span class="aln-card__iata">{{ airport.iataCode }}</span>
+
+            <!-- Body: name + coords -->
+            <div class="aln-card__body">
+                <span class="aln-card__name">{{ airport.name }}</span>
+                <span class="aln-card__coord">{{ formatCoords(airport) }}</span>
+            </div>
+
+            <!-- Co-located pill -->
+            @if (isSameCity(airport)) {
+            <span class="aln-card__pill">
+                <svg class="aln-card__pill-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z" />
+                </svg>
+                Co-located
+            </span>
+            }
+
+            <!-- Right arrow — navigate indicator -->
+            <svg class="aln-card__arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+
+        </button>
+        }
+    </div>
+    }
+
+    <!-- ── Empty State ───────────────────────────────────────────── -->
+    @if (!loading() && nearbyAirports().length === 0) {
+    <div class="aln-empty" role="status">
+        <div class="aln-empty__icon-wrap" aria-hidden="true">
+            <svg class="aln-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+            </svg>
+        </div>
+        <p class="aln-empty__title">No regional nodes found</p>
+        <p class="aln-empty__sub">No other airports are currently registered in this city or country.</p>
+    </div>
+    }
+
+</section>

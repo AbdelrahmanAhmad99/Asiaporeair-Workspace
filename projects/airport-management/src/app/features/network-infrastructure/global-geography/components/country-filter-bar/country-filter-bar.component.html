@@ -1,0 +1,57 @@
+<div class="filter-bar">
+
+  <!-- ── Search Input ──────────────────────────────────────────── -->
+  <div class="filter-bar__search">
+    <svg class="filter-bar__search__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+      aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+    </svg>
+
+    <input class="filter-bar__search__input" type="text" placeholder="Search by country name or ISO code…"
+      aria-label="Search countries" [(ngModel)]="searchValue" (ngModelChange)="onSearchChange($event)" />
+  </div>
+
+  <!-- ── Continent Dropdown ────────────────────────────────────── -->
+  <div class="filter-bar__continent">
+    <select class="filter-bar__continent__select" aria-label="Filter by continent" [(ngModel)]="continentValue"
+      (ngModelChange)="onContinentChange($event)">
+
+      <option value="">All Continents</option>
+
+      @for (continent of continents(); track continent) {
+      <option [value]="continent">{{ continent }}</option>
+      }
+    </select>
+
+    <!-- Custom chevron icon -->
+    <svg class="filter-bar__continent__chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+      aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+    </svg>
+  </div>
+
+  <!-- ── Vertical Divider (sm+ only) ──────────────────────────── -->
+  <div class="filter-bar__divider" aria-hidden="true"></div>
+
+  <!-- ── Reset Filters (only when filters are active) ─────────── -->
+  @if (hasActiveFilters()) {
+  <button class="filter-bar__reset-btn" (click)="onReset()" aria-label="Clear all filters">
+    <svg class="filter-bar__reset-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+      aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+    </svg>
+    Clear
+  </button>
+  }
+
+  <!-- ── Add Country CTA ──────────────────────────────────────── -->
+  <button class="filter-bar__add-btn" (click)="addCountry.emit()" aria-label="Add new country">
+    <svg class="filter-bar__add-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+      aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+    Add Country
+  </button>
+
+</div>

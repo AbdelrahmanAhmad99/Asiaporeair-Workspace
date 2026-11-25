@@ -1,0 +1,589 @@
+// ============================================================================
+// cancellation.component.scss
+// Asiaporeair | "Initiate Refund Process"
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold: #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$charcoal : #101056;
+$white : #FFFFFF;
+$error : #d95f5f;
+$success : #2E7D52;
+$warning : #B87333;
+$text-sec : #4a5568;
+$text-muted: #718096;
+$font : 'Inter',
+'Montserrat',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.cancel-header {
+    background: $midnight;
+    padding: 2rem 2rem 2.5rem;
+    border-bottom: 1px solid rgba($champagne, 0.10);
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($royal-gold, 0.3), transparent);
+    }
+}
+
+.header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    background: none;
+    border: none;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba($white, 0.50);
+    cursor: pointer;
+    padding: 0;
+    transition: color $t;
+
+    &:hover:not(:disabled) {
+        color: $champagne;
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        border-radius: 2px;
+    }
+}
+
+.header-eyebrow {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: rgba($champagne, 0.55);
+    text-transform: uppercase;
+}
+
+.header-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.7rem;
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    color: $white;
+    margin: 0;
+    line-height: 1.1;
+
+    svg {
+        color: rgba($champagne, 0.55);
+        flex-shrink: 0;
+    }
+}
+
+.header-subtitle {
+    font-size: 0.78rem;
+    color: rgba($white, 0.50);
+    margin: 0;
+    line-height: 1.5;
+
+    strong {
+        color: $champagne;
+        font-weight: 700;
+    }
+}
+
+.gold-rule {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba($royal-gold, 0.25), $royal-gold, $champagne, $royal-gold, rgba($royal-gold, 0.25), transparent);
+}
+
+// ── Layout ────────────────────────────────────────────────────────────────────
+.page-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+}
+
+// ── Loading Skeleton ──────────────────────────────────────────────────────────
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// .loading-body {}
+
+.skeleton-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.skeleton-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+// .skeleton-aside {}
+
+.skel-card {
+    background: $white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid rgba($charcoal, 0.07);
+}
+
+.skel {
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f0f0f0 0%, #e4e4e4 50%, #f0f0f0 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s $ease infinite;
+
+    &--title {
+        height: 18px;
+        width: 50%;
+    }
+
+    &--body {
+        height: 60px;
+    }
+
+    &--field {
+        height: 44px;
+    }
+}
+
+// ── Error states ──────────────────────────────────────────────────────────────
+// .error-body {}
+
+.alert-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 0.875rem 1rem;
+    border-radius: 8px;
+    background: rgba($error, 0.08);
+    border: 1px solid rgba($error, 0.25);
+    font-size: 0.78rem;
+    color: lighten($error, 15%);
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+        stroke: $error;
+    }
+
+    &--api {
+        margin-bottom: 1rem;
+    }
+}
+
+.alert-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.retry-link {
+    background: none;
+    border: none;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: lighten($error, 20%);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+        color: lighten($error, 30%);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $error;
+        border-radius: 2px;
+    }
+}
+
+// Already cancelled notice
+.already-cancelled-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.875rem 1rem;
+    margin-bottom: 1rem;
+    background: rgba($success, 0.06);
+    border: 1px solid rgba($success, 0.2);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    color: darken($success, 5%);
+    font-weight: 500;
+
+    svg {
+        flex-shrink: 0;
+        color: darken($success, 5%);
+    }
+}
+
+// ── Grid ──────────────────────────────────────────────────────────────────────
+// .cancel-body {}
+
+.cancel-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+    align-items: start;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.main-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.aside-col {
+    position: sticky;
+    top: 1.5rem;
+}
+
+// ── CTA Section ───────────────────────────────────────────────────────────────
+// .cta-section {}
+
+.cta-group {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+    padding-top: 0.25rem;
+}
+
+.btn-keep {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    background: $white;
+    border: 1.5px solid rgba($charcoal, 0.15);
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: $charcoal;
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($charcoal, 0.35);
+        background: rgba($charcoal, 0.03);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.btn-cancel-proceed {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1.75rem;
+    border-radius: 4px;
+    background: rgba($error, 0.1);
+    border: 1.5px solid rgba($error, 0.4);
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: lighten($error, 8%);
+    cursor: pointer;
+    transition: all $t;
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    &:hover:not(:disabled) {
+        background: rgba($error, 0.18);
+        border-color: rgba($error, 0.65);
+        box-shadow: 0 4px 16px rgba($error, 0.15);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba($error, 0.6);
+        outline-offset: 2px;
+    }
+}
+
+.cta-hint {
+    font-size: 0.68rem;
+    color: $text-muted;
+    font-style: italic;
+    margin: 0;
+}
+
+// Processing bar
+@keyframes sweep {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(200%);
+    }
+}
+
+.processing-state {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 1rem 0;
+}
+
+.processing-track {
+    height: 3px;
+    background: rgba($charcoal, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.processing-fill {
+    height: 100%;
+    width: 40%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    animation: sweep 1.4s $ease infinite;
+}
+
+.processing-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $royal-gold;
+}
+
+// ── Success State ─────────────────────────────────────────────────────────────
+.success-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 2rem;
+}
+
+.success-card {
+    background: $midnight;
+    border: 1px solid rgba($champagne, 0.2);
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    box-shadow: 0 24px 64px rgba($midnight, 0.35);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($champagne, 0.4), transparent);
+        border-radius: 12px 12px 0 0;
+    }
+}
+
+.success-icon-ring {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba($champagne, 0.2);
+    animation: pulse-ring 2.5s ease-in-out infinite;
+
+    &--outer {
+        inset: 0;
+        animation-delay: 0s;
+    }
+
+    &--inner {
+        inset: 14px;
+        animation-delay: 0.45s;
+    }
+}
+
+@keyframes pulse-ring {
+
+    0%,
+    100% {
+        opacity: 0.2;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.55;
+        transform: scale(1.06);
+    }
+}
+
+.success-check {
+    position: relative;
+    z-index: 1;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba($royal-gold, 0.1);
+    border: 1.5px solid rgba($champagne, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba($royal-gold, 0.2);
+}
+
+.success-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: $white;
+    letter-spacing: -0.03em;
+    margin: 0;
+}
+
+.success-desc {
+    font-size: 0.8rem;
+    color: rgba($white, 0.60);
+    line-height: 1.6;
+    margin: 0;
+
+    strong {
+        color: $champagne;
+    }
+}
+
+.success-redirect {
+    font-size: 0.68rem;
+    color: rgba($white, 0.35);
+    font-style: italic;
+    margin: 0;
+}
+
+// ── Modal backdrop ────────────────────────────────────────────────────────────
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba($midnight, 0.78);
+    backdrop-filter: blur(15px) saturate(160%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+    .cancel-header {
+        padding: 1.5rem 1rem 2rem;
+    }
+
+    .header-title {
+        font-size: 1.3rem;
+    }
+
+    .page-inner {
+        padding: 1.25rem 0.875rem 4rem;
+    }
+
+    .cta-group {
+        flex-direction: column;
+        width: 100%;
+
+        .btn-keep,
+        .btn-cancel-proceed {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .skel,
+    .processing-fill,
+    .success-ring {
+        animation: none !important;
+    }
+
+    .btn-keep,
+    .btn-cancel-proceed {
+        transition: none !important;
+    }
+}

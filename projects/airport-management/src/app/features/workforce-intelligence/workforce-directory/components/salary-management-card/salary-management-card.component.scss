@@ -1,0 +1,441 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+
+ .smc {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.17);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07);
+     transition: background $t, border-color $t, box-shadow $t;
+
+     &--editing {
+         border-color: rgba(182, 143, 36, 0.35);
+         box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07), 0 0 0 3px rgba(182, 143, 36, 0.07);
+     }
+ }
+
+ // ── Header ────────────────────────────────────────────────────────────────
+ .smc__header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0.75rem;
+     }
+
+     &__icon-wrap {
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 8px;
+         background: rgba(182, 143, 36, 0.1);
+         border: 1px solid rgba(182, 143, 36, 0.2);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+     }
+
+     &__label {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: var(--aoms-text-primary);
+         letter-spacing: -0.01em;
+         transition: color $t;
+     }
+
+     &__sub {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         transition: color $t;
+     }
+ }
+
+ .smc__edit-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.3125rem 0.75rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: $gold;
+     background: transparent;
+     border: 1px solid rgba(182, 143, 36, 0.28);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:hover {
+         border-color: rgba(182, 143, 36, 0.5);
+         background: rgba(182, 143, 36, 0.07);
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.1);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Display Mode ──────────────────────────────────────────────────────────
+ .smc__display {
+     display: flex;
+     align-items: baseline;
+     gap: 0.375rem;
+
+     &--loading {
+         opacity: 0.5;
+     }
+ }
+
+ .smc__currency {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-muted);
+     transition: color $t;
+ }
+
+ .smc__amount {
+     font-size: 2.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 800;
+     letter-spacing: -0.04em;
+     font-variant-numeric: tabular-nums;
+     color: var(--aoms-text-primary);
+     line-height: 1;
+     transition: color $t;
+ }
+
+ .smc__period {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     transition: color $t;
+ }
+
+ .smc__saving-indicator {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: $gold;
+     animation: smc-fadein 200ms ease forwards;
+
+     &__spinner {
+         width: 0.875rem;
+         height: 0.875rem;
+         animation: smc-spin 1s linear infinite;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Edit Mode ─────────────────────────────────────────────────────────────
+ .smc__edit-form {
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+     animation: smc-fadein 200ms ease forwards;
+ }
+
+ .smc__field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3125rem;
+ }
+
+ .smc__field__label {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-muted);
+     transition: color $t;
+ }
+
+ .smc__field__req {
+     color: #B45309;
+     margin-left: 2px;
+ }
+
+ .smc__field__error {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: $ruby;
+     animation: smc-fadein 150ms ease forwards;
+ }
+
+ .smc__input-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+
+     &__prefix {
+         position: absolute;
+         left: 0.875rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+     }
+ }
+
+ .smc__input {
+     width: 100%;
+     padding: 0.6875rem 1rem;
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-primary);
+     background: var(--aoms-bg-card);
+     border: 1.5px solid rgba(226, 199, 128, 0.25);
+     border-radius: 8px;
+     outline: none;
+     appearance: none;
+     -moz-appearance: textfield;
+     transition: border-color $t, box-shadow $t, background $t;
+
+     &::-webkit-outer-spin-button,
+     &::-webkit-inner-spin-button {
+         -webkit-appearance: none;
+     }
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+     }
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+     }
+
+     .smc__input-wrap & {
+         padding-left: 3.25rem;
+     }
+
+     // leave room for prefix
+ }
+
+ // Comparison row
+ .smc__comparison {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.5625rem 0.875rem;
+     border-radius: 7px;
+     background: rgba(182, 143, 36, 0.06);
+     border: 1px solid rgba(182, 143, 36, 0.14);
+     animation: smc-fadein 200ms ease forwards;
+
+     &__from {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__arrow {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__to {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         font-variant-numeric: tabular-nums;
+
+         &--up {
+             color: lighten($emerald, 35%);
+         }
+
+         &--down {
+             color: lighten($ruby, 28%);
+         }
+     }
+
+     &__delta {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         padding: 0.125rem 0.4375rem;
+         border-radius: 100px;
+         margin-left: auto;
+
+         &--up {
+             color: lighten($emerald, 35%);
+             background: rgba(6, 78, 59, 0.1);
+         }
+
+         &--down {
+             color: lighten($ruby, 28%);
+             background: rgba(113, 13, 6, 0.1);
+         }
+     }
+ }
+
+ // Action buttons
+ .smc__edit-actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding-top: 0.25rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.1);
+ }
+
+ .smc__cancel-btn {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.5rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     background: transparent;
+     border: none;
+     cursor: pointer;
+     outline: none;
+     transition: color $t;
+
+     &:hover {
+         color: var(--aoms-text-secondary);
+         text-decoration: underline;
+         text-underline-offset: 3px;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+         border-radius: 3px;
+     }
+ }
+
+ .smc__save-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.5625rem 1.25rem;
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: #fff;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     box-shadow: 0 4px 14px rgba(182, 143, 36, 0.38);
+     transition: all $t;
+
+     &:hover:not(:disabled) {
+         background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+         box-shadow: 0 6px 20px rgba(182, 143, 36, 0.52);
+         transform: translateY(-1px);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // Pulse while saving — micro-interaction
+     &--pulsing {
+         animation: smc-btn-pulse 1s ease-in-out infinite;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: smc-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes smc-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes smc-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes smc-btn-pulse {
+
+     0%,
+     100% {
+         box-shadow: 0 4px 14px rgba(182, 143, 36, 0.38);
+     }
+
+     50% {
+         box-shadow: 0 4px 24px rgba(182, 143, 36, 0.7);
+         transform: translateY(-1px);
+     }
+ }
+
+ :host-context(.aoms-dark) {
+     .smc__input {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.18);
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .smc {
+         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+     }
+ }

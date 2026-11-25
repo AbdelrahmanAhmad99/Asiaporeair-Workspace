@@ -1,0 +1,201 @@
+// sticky-price-bar.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$white: #FFFFFF;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$t: 260ms cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.sticky-bar {
+    background: rgba($midnight, 0.96);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-top: 1px solid rgba($champagne, 0.18);
+    box-shadow: 0 -8px 32px rgba($midnight, 0.30);
+    padding: 0.875rem 2rem;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($champagne, 0.4), transparent);
+    }
+}
+
+.bar-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.bar-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.count-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: $royal-gold;
+    color: $midnight;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.count-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.count-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $white;
+}
+
+.count-sub {
+    font-size: 0.6rem;
+    color: rgba($white, 0.50);
+}
+
+.bar-divider {
+    width: 1px;
+    height: 32px;
+    background: rgba($champagne, 0.2);
+    flex-shrink: 0;
+}
+
+.bar-price {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.price-label {
+    font-size: 0.57rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba($champagne, 0.55);
+}
+
+.price-value-group {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.price-curr {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: rgba($champagne, 0.7);
+    align-self: flex-start;
+    margin-top: 2px;
+}
+
+.price-val {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: $champagne;
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.bar-free {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #86efac;
+
+    svg {
+        color: #4ade80;
+        flex-shrink: 0;
+    }
+}
+
+.bar-cta {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, $royal-gold 0%, darken($royal-gold, 10%) 100%);
+    border: none;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: $midnight;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all $t;
+    box-shadow: 0 4px 16px rgba($royal-gold, 0.3);
+
+    &:hover {
+        background: linear-gradient(135deg, $champagne 0%, $royal-gold 100%);
+        box-shadow: 0 6px 24px rgba($royal-gold, 0.45);
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $champagne;
+        outline-offset: 2px;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 560px) {
+    .sticky-bar {
+        padding: 0.75rem 1rem;
+    }
+
+    .bar-inner {
+        gap: 0.75rem;
+    }
+
+    .bar-cta {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.75rem;
+    }
+
+    .bar-divider {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bar-cta {
+        transition: none !important;
+
+        &:hover {
+            transform: none;
+        }
+    }
+}

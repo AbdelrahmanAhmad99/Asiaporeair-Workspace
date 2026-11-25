@@ -1,0 +1,137 @@
+<div class="ltv-container" role="img" [attr.aria-label]="segments().length > 0
+       ? 'Flight leg timeline with ' + segments().length + ' legs'
+       : 'No legs defined'">
+
+    <!-- ── Loading skeleton ──────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="ltv-skeleton" aria-hidden="true">
+        <div class="ltv-skeleton__track">
+            @for (s of shimmerRows; track $index) {
+            <div class="ltv-skeleton__seg" [style.flex]="$index % 2 === 0 ? '2' : '1.2'"></div>
+            @if ($index < 2) { <div class="ltv-skeleton__node">
+        </div> }
+        }
+    </div>
+</div>
+}
+
+<!-- ── Empty state ───────────────────────────────────────────── -->
+@if (!loading() && segments().length === 0) {
+<div class="ltv-empty">
+    <div class="ltv-empty__dashes" aria-hidden="true">
+        <div class="ltv-empty__node ltv-empty__node--origin"></div>
+        <div class="ltv-empty__line"></div>
+        <div class="ltv-empty__node ltv-empty__node--dest"></div>
+    </div>
+    <p class="ltv-empty__label">No flight legs defined yet.</p>
+    <p class="ltv-empty__sub">Use "Add Leg" to begin architecting the corridor.</p>
+</div>
+}
+
+<!-- ── Timeline ──────────────────────────────────────────────── -->
+@if (!loading() && segments().length > 0) {
+<div class="ltv-timeline">
+
+    <!-- Conflict warning banner -->
+    @if (hasTimeConflict()) {
+    <div class="ltv-conflict-banner" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                     2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                     16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        Time overlap detected — review leg departure times to clear conflict.
+    </div>
+    }
+
+    <!-- Track: nodes + segments -->
+    <div class="ltv-track" role="list">
+
+        <!-- Origin node (first leg's departure) -->
+        <div class="ltv-node ltv-node--origin" role="listitem"
+            [attr.aria-label]="segments()[0].leg.departureAirportIataCode + ' departure hub'">
+            <span class="ltv-node__iata ltv-node__iata--gold">
+                {{ segments()[0].leg.departureAirportIataCode }}
+            </span>
+            <div class="ltv-node__dot ltv-node__dot--gold" aria-hidden="true"></div>
+            <span class="ltv-node__time">
+                {{ segments()[0].leg.departureTimeLocal }}
+                @if (segments()[0].leg.departureOffsetDays > 0) {
+                <span class="ltv-node__offset">+{{ segments()[0].leg.departureOffsetDays }}</span>
+                }
+            </span>
+        </div>
+
+        @for (seg of segments(); track trackByLeg($index, seg)) {
+
+        <!-- Flight segment bar -->
+        <div class="ltv-segment" role="listitem" [class.ltv-segment--conflict]="seg.isConflict"
+            [style.flex]="seg.widthPercent"
+            [attr.aria-label]="seg.leg.departureAirportIataCode + ' to ' + seg.leg.arrivalAirportIataCode + ', ' + formatDuration(seg)"
+            (click)="onLegClick.emit(seg.leg.legDefId)" tabindex="0"
+            (keydown.enter)="onLegClick.emit(seg.leg.legDefId)">
+
+            <!-- The gold flight path line -->
+            <div class="ltv-segment__line" aria-hidden="true">
+                <div class="ltv-segment__glow" aria-hidden="true"></div>
+            </div>
+
+            <!-- Duration label above the line -->
+            <div class="ltv-segment__label" aria-hidden="true">
+                <span class="ltv-segment__duration">{{ formatDuration(seg) }}</span>
+                <span class="ltv-segment__leg-no">SEG {{ seg.leg.segmentNumber }}</span>
+            </div>
+
+            <!-- Plane icon on the path -->
+            <div class="ltv-segment__plane" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                         0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+            </div>
+
+        </div>
+
+        <!-- Intermediate / arrival node -->
+        <div class="ltv-node" [class.ltv-node--dest]="$last" role="listitem"
+            [attr.aria-label]="($last ? 'Arrival' : 'Intermediate') + ' hub ' + seg.leg.arrivalAirportIataCode">
+
+            <span class="ltv-node__iata" [class.ltv-node__iata--gold]="$last"
+                [class.ltv-node__iata--champagne]="!$last">
+                {{ seg.leg.arrivalAirportIataCode }}
+            </span>
+
+            <div class="ltv-node__dot" [class.ltv-node__dot--gold]="$last" [class.ltv-node__dot--champagne]="!$last"
+                aria-hidden="true">
+            </div>
+
+            <span class="ltv-node__time">
+                {{ seg.leg.arrivalTimeLocal }}
+                @if (seg.leg.arrivalOffsetDays > 0) {
+                <span class="ltv-node__offset">+{{ seg.leg.arrivalOffsetDays }}</span>
+                }
+            </span>
+
+        </div>
+
+        }
+
+    </div><!-- /ltv-track -->
+
+    <!-- Day reference scale (0 → max days) -->
+    <div class="ltv-day-scale" aria-hidden="true">
+        <span class="ltv-day-scale__label">Day 0</span>
+        @if (segments().length > 0) {
+        @let lastSeg = segments()[segments().length - 1];
+        @if (lastSeg.leg.arrivalOffsetDays > 0) {
+        <span class="ltv-day-scale__label ltv-day-scale__label--right">
+            Day +{{ lastSeg.leg.arrivalOffsetDays }}
+        </span>
+        }
+        }
+    </div>
+
+</div><!-- /ltv-timeline -->
+}
+
+</div>

@@ -1,0 +1,113 @@
+<div class="phg-container">
+
+    <!-- Header -->
+    <header class="phg-header">
+        <h2 class="phg-header__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="phg-header__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            Transaction Audit Ledger
+        </h2>
+        @if (hasHistory()) {
+        <span class="phg-count-badge">{{ history().length }} record{{ history().length !== 1 ? 's' : '' }}</span>
+        }
+    </header>
+
+    <!-- Empty state -->
+    @if (!hasHistory()) {
+    <div class="phg-empty" role="status">
+        <svg class="phg-empty__icon" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.2"
+            aria-hidden="true">
+            <rect x="4" y="12" width="56" height="28" rx="3" stroke-opacity="0.3" />
+            <line x1="12" y1="22" x2="52" y2="22" stroke-opacity="0.2" />
+            <line x1="12" y1="30" x2="40" y2="30" stroke-opacity="0.15" />
+        </svg>
+        <p class="phg-empty__title">No Transactions Recorded</p>
+        <p class="phg-empty__sub">This member has no adjustment history yet.</p>
+    </div>
+    }
+
+    <!-- Data table -->
+    @if (hasHistory()) {
+    <div class="phg-table-shell">
+
+        <!-- Sticky header -->
+        <div class="phg-thead-row" role="row">
+            <div class="phg-th phg-th--date" role="columnheader">Date</div>
+            <div class="phg-th phg-th--type" role="columnheader">Type</div>
+            <div class="phg-th phg-th--amount" role="columnheader">Amount</div>
+            <div class="phg-th phg-th--reason" role="columnheader">Reason</div>
+            <div class="phg-th phg-th--admin" role="columnheader">Admin</div>
+        </div>
+
+        @if (useVirtual()) {
+        <cdk-virtual-scroll-viewport class="phg-viewport" [itemSize]="rowHeight" [style.height]="viewportHeight()"
+            role="rowgroup">
+            <div *cdkVirtualFor="let record of history(); trackBy: trackById; templateCacheSize: 20" class="phg-row"
+                [class.phg-row--credit]="record.type === 'add'" [class.phg-row--debit]="record.type === 'subtract'"
+                role="row">
+                <ng-container *ngTemplateOutlet="rowTemplate; context: { record: record }"></ng-container>
+            </div>
+        </cdk-virtual-scroll-viewport>
+        } @else {
+        <div class="phg-plain-list" role="rowgroup">
+            @for (record of history(); track trackById($index, record)) {
+            <div class="phg-row" [class.phg-row--credit]="record.type === 'add'"
+                [class.phg-row--debit]="record.type === 'subtract'" role="row">
+                <ng-container *ngTemplateOutlet="rowTemplate; context: { record: record }"></ng-container>
+            </div>
+            }
+        </div>
+        }
+
+    </div>
+    }
+
+</div>
+
+<!-- Shared Row Template -->
+<ng-template #rowTemplate let-record="record">
+
+    <div class="phg-cell phg-cell--date" role="cell">
+        <span class="phg-date">{{ formatDate(record.date) }}</span>
+    </div>
+
+    <div class="phg-cell phg-cell--type" role="cell">
+        @if (record.type === 'add') {
+        <span class="phg-type-badge phg-type-badge--credit">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Credit
+        </span>
+        } @else {
+        <span class="phg-type-badge phg-type-badge--debit">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+            </svg>
+            Debit
+        </span>
+        }
+    </div>
+
+    <div class="phg-cell phg-cell--amount" role="cell">
+        <span class="phg-amount" [class.phg-amount--credit]="record.type === 'add'"
+            [class.phg-amount--debit]="record.type === 'subtract'">
+            {{ formatAmount(record) }}
+        </span>
+    </div>
+
+    <div class="phg-cell phg-cell--reason" role="cell">
+        <span class="phg-reason">{{ record.reason }}</span>
+        @if (record.comments) {
+        <span class="phg-comments" [title]="record.comments">{{ record.comments }}</span>
+        }
+    </div>
+
+    <div class="phg-cell phg-cell--admin" role="cell">
+        <span class="phg-admin">{{ record.adminId || 'System' }}</span>
+    </div>
+
+</ng-template>

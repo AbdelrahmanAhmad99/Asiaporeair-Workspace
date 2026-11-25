@@ -1,0 +1,154 @@
+<!-- ============================================================================
+     my-trips.component.html
+     Asiaporeair | "My Trips" — Manage Booking Dashboard
+     ============================================================================ -->
+
+<div class="page-wrapper">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         A. PAGE HEADER
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="page-header" role="banner">
+        <div class="header-inner">
+
+            <!-- Brand wordmark -->
+            <span class="brand-wordmark" aria-hidden="true">ASIAPOREAIR</span>
+
+            <!-- Gold divider -->
+            <div class="gold-rule" aria-hidden="true"></div>
+
+            <!-- Title row -->
+            <div class="title-row">
+                <h1 class="page-title">
+                    My <span class="accent">Trips</span>
+                </h1>
+                <div *ngIf="upcomingCount() > 0" class="trip-count-badge"
+                    aria-label="{{ upcomingCount() }} upcoming trips">
+                    {{ upcomingCount() }} upcoming
+                </div>
+            </div>
+
+            <p class="page-subtitle">
+                Manage your bookings, view details, and enhance your travel experience.
+            </p>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         B. FILTER TAB BAR
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <nav class="filter-tabs-wrapper" aria-label="Filter bookings">
+        <div class="filter-tabs" role="tablist">
+            <button *ngFor="let tab of filterTabs; trackBy: trackByFilter" class="filter-tab"
+                [class.filter-tab--active]="activeFilter() === tab.key" role="tab"
+                [attr.aria-selected]="activeFilter() === tab.key" [attr.aria-label]="tab.label"
+                (click)="onFilterChange(tab.key)">
+                {{ tab.label }}
+            </button>
+        </div>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ERROR BANNER
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="errorMessage() && !isLoading()" class="alert-error" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span>{{ errorMessage() }}</span>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="bookings-list" role="main" aria-label="Your bookings">
+
+        <!-- ── C. LOADING SKELETONS ────────────────────────────────────────── -->
+        <ng-container *ngIf="isLoading()">
+            <div *ngFor="let i of skeletonItems" class="skeleton-card" aria-busy="true" aria-label="Loading booking"
+                role="status">
+                <div class="skel-row">
+                    <div class="skel skel--badge"></div>
+                    <div class="skel skel--pnr"></div>
+                </div>
+                <div class="skel-route">
+                    <div class="skel skel--iata"></div>
+                    <div class="skel skel--track"></div>
+                    <div class="skel skel--iata"></div>
+                </div>
+                <div class="skel-row skel-row--meta">
+                    <div class="skel skel--meta"></div>
+                    <div class="skel skel--meta"></div>
+                </div>
+                <div class="skel skel--divider"></div>
+                <div class="skel-row skel-row--actions">
+                    <div class="skel skel--action-primary"></div>
+                    <div class="skel skel--action-ghost"></div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- ── D. EMPTY STATE ──────────────────────────────────────────────── -->
+        <app-empty-trips-state *ngIf="isEmpty() && !isLoading()" [filter]="activeFilter()"
+            (beginJourney)="onBeginJourney()">
+        </app-empty-trips-state>
+
+        <!-- ── E. BOOKINGS LIST ────────────────────────────────────────────── -->
+        <ng-container *ngIf="!isLoading() && !isEmpty()">
+            <app-trip-card *ngFor="let booking of bookings(); let i = index; trackBy: trackByPnr" [booking]="booking"
+                [style.animation-delay]="(i * 80) + 'ms'" class="trip-card-animate"
+                (viewDetails)="onViewDetails($event)" (modify)="onModify($event)" (cancel)="onCancel($event)"
+                (addServices)="onAddServices($event)" (checkIn)="onCheckIn($event)"
+                [attr.aria-label]="'Booking ' + booking.pnrCode + ', ' + booking.originCode + ' to ' + booking.destinationCode">
+            </app-trip-card>
+        </ng-container>
+
+    </main>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         F. PAGINATION CONTROLS
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <nav *ngIf="totalPages() > 1 && !isLoading()" class="pagination" aria-label="Pagination controls">
+
+        <button class="pagination-btn pagination-btn--prev" [disabled]="!hasPrevious()"
+            [attr.aria-disabled]="!hasPrevious()" (click)="onPageChange(currentPage() - 1)"
+            aria-label="Go to previous page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Previous
+        </button>
+
+        <span class="page-indicator" aria-live="polite" aria-atomic="true"
+            [attr.aria-label]="'Page ' + currentPage() + ' of ' + totalPages()">
+            Page {{ currentPage() }} of {{ totalPages() }}
+        </span>
+
+        <button class="pagination-btn pagination-btn--next" [disabled]="!hasNext()" [attr.aria-disabled]="!hasNext()"
+            (click)="onPageChange(currentPage() + 1)" aria-label="Go to next page">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+        </button>
+
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         G. PAGE FOOTER NOTE
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <footer class="footer-note" aria-label="Booking history note">
+        <p>
+            Showing bookings from the last 24 months.
+            For older records, contact our concierge.
+        </p>
+    </footer>
+
+</div>

@@ -1,0 +1,222 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $t: 180ms ease;
+
+ // ── Card ──────────────────────────────────────────────────────────────────
+ .rpc-card {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 1.5rem;
+     border-radius: 12px;
+     background: linear-gradient(145deg, $midnight, darken($midnight, 5%));
+     border: 1px solid rgba($champagne, 0.16);
+     box-shadow: 0 8px 28px rgba($midnight, 0.35);
+     height: 100%;
+ }
+
+ // ── Header ────────────────────────────────────────────────────────────────
+ .rpc-header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     flex-wrap: wrap;
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 700;
+         color: #fff;
+         margin: 0;
+         letter-spacing: -0.01em;
+     }
+
+     &__sub {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.4);
+         margin: 0.125rem 0 0;
+     }
+
+     &__stats {
+         display: flex;
+         align-items: center;
+         gap: 1.25rem;
+     }
+ }
+
+ .rpc-stat {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-end;
+     gap: 0.0625rem;
+
+     &__label {
+         font-size: 9px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba(255, 255, 255, 0.3);
+     }
+
+     &__value {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 800;
+         font-variant-numeric: tabular-nums;
+         color: rgba(255, 255, 255, 0.85);
+
+         &--gold {
+             color: $gold;
+         }
+     }
+ }
+
+ // ── Chart Wrapper ─────────────────────────────────────────────────────────
+ .rpc-chart-wrap {
+     width: 100%;
+     aspect-ratio: 680 / 260;
+     flex: 1;
+ }
+
+ .rpc-svg {
+     width: 100%;
+     height: 100%;
+     display: block;
+     overflow: visible;
+ }
+
+ // ── Gridlines ─────────────────────────────────────────────────────────────
+ .rpc-gridline {
+     line {
+         stroke: rgba(255, 255, 255, 0.06);
+         stroke-width: 1;
+         stroke-dasharray: 4 4;
+     }
+
+     text {
+         font-size: 10px;
+         font-family: var(--aoms-font-body, sans-serif);
+         fill: rgba(255, 255, 255, 0.28);
+         dominant-baseline: middle;
+     }
+ }
+
+ // ── Area / Line ───────────────────────────────────────────────────────────
+ .rpc-line {
+     stroke-width: 2.5;
+     stroke-linejoin: round;
+     stroke-linecap: round;
+     filter: drop-shadow(0 0 6px rgba($champagne, 0.35));
+ }
+
+ // ── Data Points ───────────────────────────────────────────────────────────
+ .rpc-point {
+     &__halo {
+         r: 6;
+         fill: rgba($champagne, 0.1);
+     }
+
+     &__dot {
+         r: 2.75;
+         fill: $midnight;
+         stroke: $champagne;
+         stroke-width: 1.75;
+     }
+
+     &--current {
+         .rpc-point__halo {
+             r: 10;
+             fill: rgba($gold, 0.18);
+         }
+
+         .rpc-point__dot {
+             r: 4.5;
+             fill: $gold;
+             stroke: $champagne;
+             stroke-width: 2;
+             filter: drop-shadow(0 0 6px rgba($gold, 0.6));
+         }
+     }
+ }
+
+ // ── X-Axis Labels ─────────────────────────────────────────────────────────
+ .rpc-x-label {
+     font-size: 10px;
+     font-family: var(--aoms-font-body, sans-serif);
+     fill: rgba(255, 255, 255, 0.32);
+     text-anchor: middle;
+     font-weight: 600;
+     letter-spacing: 0.02em;
+ }
+
+ // ── Current Value Callout ──────────────────────────────────────────────────
+ .rpc-callout {
+     font-size: 12px;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 800;
+     fill: $champagne;
+     text-anchor: middle;
+ }
+
+ // ── Empty State ───────────────────────────────────────────────────────────
+ .rpc-empty {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     gap: 0.5rem;
+     padding: 2.5rem 1rem;
+     text-align: center;
+
+     svg {
+         width: 2.5rem;
+         height: 2.5rem;
+         color: rgba($champagne, 0.18);
+     }
+
+     p {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.4);
+         margin: 0;
+     }
+ }
+
+ // ── Skeleton Loading ──────────────────────────────────────────────────────
+ .rpc-skeleton {
+     flex: 1;
+     width: 100%;
+     display: flex;
+ }
+
+ .rpc-sk {
+     display: block;
+     border-radius: 8px;
+     background: linear-gradient(90deg,
+             rgba(255, 255, 255, 0.03) 0%,
+             rgba($champagne, 0.09) 50%,
+             rgba(255, 255, 255, 0.03) 100%);
+     background-size: 200% 100%;
+     animation: rpc-shimmer 1.5s ease-in-out infinite;
+
+     &--chart {
+         width: 100%;
+         aspect-ratio: 680 / 260;
+     }
+ }
+
+ @keyframes rpc-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }

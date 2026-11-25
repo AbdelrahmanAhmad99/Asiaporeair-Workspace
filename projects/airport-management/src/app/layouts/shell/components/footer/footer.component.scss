@@ -1,0 +1,149 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AOMS Footer — Minimalist Technical Status Bar
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host {
+  display: block;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--aoms-footer-height);
+  padding: 0 24px;
+  background: var(--aoms-bg-sidebar);
+  border-top: 1px solid rgba(var(--aoms-champagne-rgb), 0.08);
+  font-size: 11px;
+  color: var(--aoms-text-on-dark-muted);
+
+  // ── Section Container ─────────────────────────────────────────────────
+  &__section {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &--center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &--right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+  }
+
+  // ── Label & Value ─────────────────────────────────────────────────────
+  &__label {
+    font-family: var(--aoms-font-heading);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: rgba(var(--aoms-champagne-rgb), 0.6);
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+
+  &__value {
+    font-family: var(--aoms-font-body);
+    color: rgba(var(--aoms-champagne-rgb), 0.5);
+    font-weight: 500;
+    font-size: 10px;
+  }
+
+  // ── Copyright ─────────────────────────────────────────────────────────
+  &__copyright {
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  // ── Server Status ─────────────────────────────────────────────────────
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--operational {
+      background: var(--aoms-emerald);
+      box-shadow: 0 0 6px rgba(6, 78, 59, 0.6);
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    &--degraded {
+      background: var(--aoms-amber);
+      box-shadow: 0 0 6px rgba(180, 83, 9, 0.6);
+      animation: statusPulse 1.5s ease-in-out infinite;
+    }
+
+    &--down {
+      background: var(--aoms-ruby);
+      box-shadow: 0 0 6px rgba(113, 13, 6, 0.6);
+      animation: statusPulse 1s ease-in-out infinite;
+    }
+  }
+
+  &__status-text {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  // ── Separator ─────────────────────────────────────────────────────────
+  &__separator {
+    width: 1px;
+    height: 14px;
+    background: rgba(var(--aoms-champagne-rgb), 0.12);
+  }
+
+  // ── Clock ─────────────────────────────────────────────────────────────
+  &__clock {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__clock-icon {
+    width: 13px;
+    height: 13px;
+    color: rgba(var(--aoms-champagne-rgb), 0.4);
+  }
+
+  &__clock-time {
+    font-family: 'Inter', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(var(--aoms-champagne-rgb), 0.65);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__clock-tz {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: rgba(var(--aoms-champagne-rgb), 0.35);
+    text-transform: uppercase;
+  }
+}
+
+// ── Animation ───────────────────────────────────────────────────────────────
+@keyframes statusPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+}

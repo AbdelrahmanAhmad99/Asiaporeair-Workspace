@@ -1,0 +1,61 @@
+:host {
+    display: block;
+    font-family: 'Montserrat', 'Inter', sans-serif;
+    background: #F8F9FA;
+}
+
+.cl-section {
+    padding: 64px 0 80px;
+    background: #F8F9FA;
+}
+
+.cl-section__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+@media (max-width: 768px) {
+    .cl-section__inner {
+        padding: 0 20px;
+    }
+}
+
+.cl-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 44px;
+}
+
+.cl-header__line {
+    width: 3px;
+    min-height: 64px;
+    background: linear-gradient(#B68F24, #E2C780);
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.cl-header__eyebrow {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #B68F24;
+    margin: 0 0 6px;
+}
+
+.cl-header__title {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #101056;
+    margin: 0;
+}
+
+.cl-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}

@@ -1,0 +1,101 @@
+<!-- ============================================================================
+     retrieval-helper-card.component.html
+     Asiaporeair | Informational Helper Card — PNR vs Ticket Reference
+     ============================================================================ -->
+
+<div class="rhc-card">
+
+  <!-- ── Card Header ──────────────────────────────────────────────────────── -->
+  <header class="rhc-header">
+    <div class="rhc-header__icon-wrap" aria-hidden="true">
+      <!-- Info / light-bulb icon (1px line art) -->
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <div>
+      <h3 class="rhc-header__title">Which reference do I use?</h3>
+      <p class="rhc-header__sub">Booking Reference vs Ticket Number explained</p>
+    </div>
+  </header>
+
+  <!-- ── Divider ──────────────────────────────────────────────────────────── -->
+  <div class="rhc-divider" aria-hidden="true"></div>
+
+  <!-- ── Comparison Rows ──────────────────────────────────────────────────── -->
+  <ul class="rhc-list" role="list">
+
+    <!-- Booking Reference (PNR) -->
+    <li class="rhc-item">
+      <div class="rhc-item__badge rhc-item__badge--pnr">PNR</div>
+      <div class="rhc-item__content">
+        <span class="rhc-item__label">Booking Reference</span>
+        <span class="rhc-item__desc">
+          A 6-character alphanumeric code (e.g.&nbsp;<code>QR7K2M</code>).
+          Use this on the <strong>Retrieve Booking</strong> page to access all passengers
+          associated with a reservation.
+        </span>
+      </div>
+    </li>
+
+    <!-- Ticket Number -->
+    <li class="rhc-item">
+      <div class="rhc-item__badge rhc-item__badge--ticket">E-TKT</div>
+      <div class="rhc-item__content">
+        <span class="rhc-item__label">Ticket Reference</span>
+        <span class="rhc-item__desc">
+          A unique 6–13 character code (e.g.&nbsp;<code>0172344567890</code>).
+          This is your <strong>individual electronic ticket</strong> and is found on your
+          e-ticket confirmation email — one per passenger per flight segment.
+        </span>
+      </div>
+    </li>
+
+  </ul>
+
+  <!-- ── Expand Toggle ────────────────────────────────────────────────────── -->
+  <button
+    class="rhc-toggle"
+    type="button"
+    (click)="toggleExpand()"
+    [attr.aria-expanded]="isExpanded"
+    aria-controls="rhc-expanded-section">
+    <span>{{ isExpanded ? 'Show less' : 'Where do I find my ticket reference?' }}</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true"
+         [style.transform]="isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'"
+         style="transition: transform 0.25s ease">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </button>
+
+  <!-- ── Expanded: Where to Find It ─────────────────────────────────────── -->
+  @if (isExpanded) {
+    <div id="rhc-expanded-section" class="rhc-expanded" [@accordionExpand]>
+      <p class="rhc-expanded__text">
+        Your Ticket Reference appears in the following locations:
+      </p>
+
+      <ol class="rhc-steps">
+        <li class="rhc-steps__item">
+          <span class="rhc-steps__num">01</span>
+          <span>Your <strong>E-Ticket confirmation email</strong> from Asiaporeair — look for the label
+            "Ticket Number" or "E-Ticket".</span>
+        </li>
+        <li class="rhc-steps__item">
+          <span class="rhc-steps__num">02</span>
+          <span>The <strong>Booking Details</strong> page under "My Trips" when signed in to your account.</span>
+        </li>
+        <li class="rhc-steps__item">
+          <span class="rhc-steps__num">03</span>
+          <span>Your printed <strong>boarding pass</strong> — below the barcode section.</span>
+        </li>
+      </ol>
+    </div>
+  }
+
+</div>

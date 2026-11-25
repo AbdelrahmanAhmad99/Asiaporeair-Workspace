@@ -1,0 +1,246 @@
+<div class="erd-page">
+
+    <!-- ══ Transaction Detail Drawer ═════════════════════════════════════ -->
+    @if (store.isDrawerOpen() && store.selectedTransaction()) {
+    <aoms-transaction-detail-view [transaction]="store.selectedTransaction()!" (closed)="onDrawerClosed()" />
+    }
+
+    <!-- ══ Sticky Page Header ════════════════════════════════════════════ -->
+    <header class="erd-header">
+
+        <div class="erd-header__left">
+            <nav class="erd-breadcrumb" aria-label="Breadcrumb">
+                <span class="erd-breadcrumb__section">Commercial</span>
+                <svg class="erd-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="erd-breadcrumb__section">Financial Audit Hub</span>
+                <svg class="erd-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="erd-breadcrumb__current">Executive Financial Intelligence</span>
+            </nav>
+
+            <div class="erd-title-row">
+                <h1 class="erd-title">
+                    <svg class="erd-title__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                    </svg>
+                    Financial Nerve Center
+                </h1>
+                <span class="erd-subtitle-badge">Executive Revenue Dashboard</span>
+
+                @if (store.isDataStale()) {
+                <span class="erd-stale-badge" aria-label="Refreshing in background">
+                    <span class="erd-stale-badge__dot" aria-hidden="true"></span>
+                    Refreshing…
+                </span>
+                }
+            </div>
+        </div>
+
+        <div class="erd-header__controls">
+
+            <!-- Time Range Selector -->
+            <div class="erd-range-selector" role="tablist" aria-label="Select time range">
+                @for (opt of store.timeRangeOptions(); track opt.value) {
+                <button class="erd-range-btn" type="button" role="tab"
+                    [class.erd-range-btn--active]="store.timeRange() === opt.value"
+                    [attr.aria-selected]="store.timeRange() === opt.value" [disabled]="store.isLoadingExecutiveReport()"
+                    (click)="onSelectRange(opt.value)">
+                    {{ opt.label }}
+                </button>
+                }
+            </div>
+
+            <!-- Refresh -->
+            <button class="erd-icon-btn" type="button" (click)="onRefresh()"
+                [disabled]="store.isLoadingExecutiveReport() || store.isDataStale()"
+                aria-label="Refresh dashboard data">
+                <svg class="erd-icon-btn__icon" [class.erd-icon-btn__icon--spin]="store.isDataStale()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Deep Audit -->
+            <button class="erd-nav-btn" type="button" (click)="onDeepAudit()" aria-label="Open deep audit log">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11m16-11v11M9 14v3m6-3v3" />
+                </svg>
+                Deep Audit
+            </button>
+
+            <!-- Manage Refunds -->
+            <button class="erd-nav-btn erd-nav-btn--gold" type="button" (click)="onManageRefunds()"
+                aria-label="Manage refunds">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                Manage Refunds
+            </button>
+
+            <!-- Dark Mode -->
+            <button class="erd-icon-btn erd-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+                @if (isDarkMode()) {
+                <svg class="erd-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="erd-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ═════════════════════════════════════════════════════ -->
+    <main class="erd-body">
+
+        <!-- Error Banner -->
+        @if (store.executiveReportError()) {
+        <div class="erd-error-banner" [attr.key]="store.executiveReportError()" role="alert">
+            <svg class="erd-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="erd-error-banner__content">
+                <span class="erd-error-banner__title">Reporting Error</span>
+                <span class="erd-error-banner__message">{{ store.executiveReportError() }}</span>
+            </div>
+            <div class="erd-error-banner__actions">
+                <button class="erd-error-banner__btn" type="button" (click)="onRetry()">Retry</button>
+                <button class="erd-error-banner__dismiss" type="button" (click)="onDismissError()" aria-label="Dismiss">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- ══ Champagne Gold Skeleton — initial full-page loading ══════════ -->
+        @if (showInitialSkeleton()) {
+        <div class="erd-skeleton" aria-busy="true" aria-label="Loading financial intelligence…">
+            <div class="erd-skeleton__kpi-row">
+                @for (i of [1,2,3]; track i) {
+                <div class="erd-sk-card">
+                    <div class="erd-sk erd-sk--icon"></div>
+                    <div class="erd-sk erd-sk--label"></div>
+                    <div class="erd-sk erd-sk--value"></div>
+                </div>
+                }
+            </div>
+            <div class="erd-skeleton__viz-row">
+                <div class="erd-sk-card erd-sk-card--chart">
+                    <div class="erd-sk erd-sk--chart"></div>
+                </div>
+                <div class="erd-sk-card erd-sk-card--meter">
+                    <div class="erd-sk erd-sk--meter"></div>
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- ══ Dashboard Content ═══════════════════════════════════════════ -->
+        @if (!showInitialSkeleton()) {
+
+        <!-- KPI Row — staggered entrance -->
+        <div class="erd-kpi-row">
+
+            <div class="erd-kpi-item" style="animation-delay: 0ms">
+                <aoms-revenue-summary-widget label="Net Revenue" [value]="store.netRevenueAmount()" format="currency"
+                    currency="SGD" accent="gold"
+                    iconPath="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"
+                    [trend]="netRevenueTrend()"
+                    [isLoading]="store.isLoadingExecutiveReport() && !store.hasExecutiveData()" />
+            </div>
+
+            <div class="erd-kpi-item" style="animation-delay: 90ms">
+                <aoms-revenue-summary-widget label="Total Refunds" [value]="store.totalRefunds()" format="currency"
+                    currency="SGD" accent="ruby" iconPath="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+                    [caveat]="refundsCaveat()"
+                    [isLoading]="store.isLoadingExecutiveReport() && !store.hasExecutiveData()" />
+            </div>
+
+            <div class="erd-kpi-item" style="animation-delay: 180ms">
+                <aoms-revenue-summary-widget label="Transaction Success Rate"
+                    [value]="store.transactionSuccessRate() ?? 0" format="percent" accent="emerald"
+                    iconPath="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"
+                    [caveat]="successRateCaveat()"
+                    [isLoading]="store.isLoadingExecutiveReport() && !store.hasExecutiveData()" />
+            </div>
+
+        </div>
+
+        <!-- Visualization Row -->
+        <div class="erd-viz-row">
+            <div class="erd-viz-row__chart">
+                <aoms-revenue-performance-chart [data]="store.dailyRevenueData()"
+                    [loading]="store.isLoadingExecutiveReport() && !store.hasExecutiveData()"
+                    [rangeLabel]="store.currentRangeLabel()" />
+            </div>
+            <div class="erd-viz-row__meter">
+                <aoms-financial-health-meter [value]="store.netProfitMargin()" [target]="20"
+                    [loading]="store.isLoadingExecutiveReport() && !store.hasExecutiveData()" />
+            </div>
+        </div>
+
+        <!-- ══ Audited Revenue Transactions Ledger ══════════════════════════ -->
+        <section class="erd-ledger-section">
+            <div class="erd-ledger-header">
+                <div class="erd-ledger-title-wrap">
+                    <h2 class="erd-ledger-title">
+                        <svg class="erd-ledger-icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+                        </svg>
+                        Audited Financial Transactions
+                    </h2>
+                    <span class="erd-ledger-badge">
+                        {{ store.payments().length }} Transactions Settled
+                    </span>
+                </div>
+                <button class="erd-view-all-btn" type="button" (click)="onDeepAudit()" aria-label="Open Deep Audit Log">
+                    Open Audit Command Center
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Transaction Data Grid -->
+            <aoms-payment-data-grid [payments]="store.payments()" [loading]="store.isAuditing()"
+                [isLoadingMore]="store.isLoadingMore()" [hasMore]="store.hasMore()"
+                [hasActiveFilters]="store.hasActiveFilters()"
+                [selectedPaymentId]="store.selectedTransaction()?.paymentId ?? null" (rowClicked)="onRowClicked($event)"
+                (loadMoreTriggered)="onLoadMore()" (resetFiltersRequested)="onResetFilters()" />
+        </section>
+
+        <!-- Last refreshed footer -->
+        @if (store.lastRefreshedAt()) {
+        <p class="erd-footer-note">
+            Last refreshed {{ store.lastRefreshedAt() | date:'medium' }} · {{ store.currentRangeLabel() }}
+        </p>
+        }
+
+        }
+
+    </main>
+</div>

@@ -1,0 +1,446 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #9f1239;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // Stagger delays for entrance animation groups
+ $s1: 0ms;
+ $s2: 70ms;
+ $s3: 140ms;
+ $s4: 210ms;
+ $s5: 280ms;
+
+ // ============================================================================
+ // 1. Hero container — Midnight Sapphire with layered gold gradients
+ // ============================================================================
+ .aph-hero {
+     position: relative;
+     border-radius: 12px;
+     background: $midnight;
+     overflow: hidden;
+
+     // Three gradient layers: gold shimmer + directional vignette + depth
+     background-image:
+         linear-gradient(140deg,
+             rgba($gold, 0.1) 0%,
+             transparent 45%),
+         linear-gradient(240deg,
+             rgba(16, 16, 86, 0.55) 0%,
+             transparent 65%);
+
+     // Thin champagne highlights on top and left (premium edge treatment)
+     border-top: 1px solid rgba($champagne, 0.2);
+     border-left: 1px solid rgba($champagne, 0.08);
+     border-right: 1px solid rgba($champagne, 0.05);
+     border-bottom: 1px solid rgba($champagne, 0.04);
+
+     // Layered coloured shadows — no black per spec
+     box-shadow:
+         0 12px 48px rgba($midnight, 0.28),
+         0 1px 0 rgba($champagne, 0.14) inset;
+
+     animation: aph-hero-enter 480ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. Ghost watermark — large text behind content for depth
+ // ============================================================================
+ .aph-watermark {
+     position: absolute;
+     top: 50%;
+     right: -0.05em;
+     transform: translateY(-50%);
+     font-family: 'Montserrat', sans-serif;
+     font-weight: 900;
+     font-size: clamp(7rem, 18vw, 13rem);
+     line-height: 1;
+     letter-spacing: -0.06em;
+     color: transparent;
+     -webkit-text-stroke: 1px rgba($champagne, 0.055);
+     // text-stroke: 1px rgba($champagne, 0.055);
+     user-select: none;
+     pointer-events: none;
+     white-space: nowrap;
+     animation: aph-watermark-enter 600ms $luxury 60ms both;
+ }
+
+ // ============================================================================
+ // 3. Content wrapper
+ // ============================================================================
+ .aph-content {
+     position: relative;
+     z-index: 1;
+     padding: 2.25rem 2.5rem 2rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+
+     @media (max-width: 640px) {
+         padding: 1.75rem 1.25rem 1.5rem;
+     }
+ }
+
+ // ============================================================================
+ // 4. Top row — Status Badge + Region Tag
+ // ============================================================================
+ .aph-top-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     margin-bottom: 1.5rem;
+     animation: aph-slide-up 360ms $luxury $s1 both;
+ }
+
+ // Status badge
+ .aph-status-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.28rem 0.75rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+
+     &__dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         flex-shrink: 0;
+     }
+
+     // Active — emerald glow
+     &--active {
+         background: rgba($emerald, 0.25);
+         border: 1px solid rgba($emerald, 0.45);
+         color: #6ee7b7;
+
+         .aph-status-badge__dot {
+             background: #6ee7b7;
+             animation: aph-pulse-emerald 2.2s ease-in-out infinite;
+         }
+     }
+
+     // Inactive — ruby
+     &--inactive {
+         background: rgba($ruby, 0.2);
+         border: 1px solid rgba($ruby, 0.35);
+         color: #fca5a5;
+
+         .aph-status-badge__dot {
+             background: #fca5a5;
+         }
+     }
+ }
+
+ // Region tag
+ .aph-region-tag {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0.28rem 0.75rem;
+     border-radius: 4px;
+     background: rgba($champagne, 0.1);
+     border: 1px solid rgba($champagne, 0.22);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     color: $champagne;
+
+     &__icon {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 5. Identity row — Squircle logo + Name block
+ // ============================================================================
+ .aph-identity-row {
+     display: flex;
+     align-items: flex-start;
+     gap: 1.375rem;
+     margin-bottom: 1rem;
+     animation: aph-slide-up 380ms $luxury $s2 both;
+ }
+
+ // Squircle logo avatar — 1px Gold border per spec
+ .aph-logo {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 4.5rem;
+     height: 4.5rem;
+     border-radius: 12px; // squircle per design spec
+     background: rgba(255, 255, 255, 0.07);
+     border: 1px solid rgba($gold, 0.45);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.25rem;
+     font-weight: 900;
+     letter-spacing: 0.04em;
+     color: $champagne;
+     user-select: none;
+     box-shadow:
+         0 0 0 1px rgba($gold, 0.12),
+         0 4px 16px rgba($midnight, 0.4);
+ }
+
+ // Name block
+ .aph-name-block {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+     padding-top: 0.25rem;
+     min-width: 0;
+ }
+
+ .aph-airline-name {
+     font-family: 'Montserrat', sans-serif;
+     font-weight: 700;
+     font-size: clamp(1.5rem, 4vw, 2.5rem);
+     letter-spacing: -0.02em;
+     line-height: 1.05;
+     color: rgba($off-white, 0.94);
+     margin: 0;
+     text-shadow: 0 2px 16px rgba($midnight, 0.4);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 40ch;
+ }
+
+ // IATA + Callsign row
+ .aph-codes-row {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+ }
+
+ .aph-iata-code {
+     font-family: 'Montserrat', sans-serif;
+     font-weight: 800;
+     font-size: 1.125rem;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: $gold;
+     text-shadow: 0 0 24px rgba($gold, 0.3);
+ }
+
+ .aph-code-sep {
+     color: rgba($champagne, 0.4);
+     font-size: 1rem;
+ }
+
+ .aph-callsign {
+     font-family: 'Courier New', monospace;
+     font-size: 14px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     color: $champagne;
+     opacity: 0.75;
+ }
+
+ // ============================================================================
+ // 6. Divider
+ // ============================================================================
+ .aph-divider {
+     height: 1px;
+     background: linear-gradient(90deg,
+             rgba($champagne, 0.22) 0%,
+             rgba($champagne, 0.05) 100%);
+     margin-bottom: 1.5rem;
+     animation: aph-slide-up 360ms $luxury $s3 both;
+ }
+
+ // ============================================================================
+ // 7. Metadata + fleet stats grid
+ // ============================================================================
+ .aph-meta-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+     gap: 0.375rem 2rem;
+     margin: 0;
+     animation: aph-slide-up 380ms $luxury $s4 both;
+ }
+
+ .aph-meta-item {
+     display: grid;
+     grid-template-rows: auto auto auto;
+     gap: 0.15rem;
+ }
+
+ .aph-meta-item__label {
+     display: flex;
+     align-items: center;
+     gap: 0.35rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: rgba($off-white, 0.3);
+ }
+
+ .aph-meta-item__icon {
+     width: 0.75rem;
+     height: 0.75rem;
+     flex-shrink: 0;
+ }
+
+ .aph-meta-item__value {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.5rem;
+     font-weight: 700;
+     letter-spacing: -0.03em;
+     line-height: 1;
+     color: rgba($off-white, 0.88);
+
+     // Gold variant — fleet total
+     &--gold {
+         color: $champagne;
+     }
+
+     // Emerald — active aircraft
+     &--emerald {
+         color: #6ee7b7;
+     }
+
+     // Amber — maintenance
+     &--amber {
+         color: #FCD34D;
+     }
+
+     // IATA code format
+     &--iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 1.25rem;
+         font-weight: 800;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: $champagne;
+     }
+ }
+
+ .aph-meta-item__sub {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 400;
+     color: rgba($off-white, 0.28);
+     letter-spacing: 0.03em;
+ }
+
+ // Coloured status dots (used in label row)
+ .aph-dot {
+     display: inline-block;
+     width: 6px;
+     height: 6px;
+     border-radius: 50%;
+     flex-shrink: 0;
+
+     &--active {
+         background: #6ee7b7;
+     }
+
+     &--maintenance {
+         background: #FCD34D;
+     }
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes aph-hero-enter {
+     from {
+         opacity: 0;
+         transform: translateY(14px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes aph-watermark-enter {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes aph-slide-up {
+     from {
+         opacity: 0;
+         transform: translateY(12px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes aph-pulse-emerald {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.45);
+     }
+
+     50% {
+         box-shadow: 0 0 0 4px rgba(110, 231, 183, 0);
+     }
+ }
+
+ // ============================================================================
+ // 9. Responsive
+ // ============================================================================
+ @media (max-width: 640px) {
+     .aph-meta-grid {
+         grid-template-columns: 1fr 1fr;
+     }
+
+     .aph-watermark {
+         font-size: 7rem;
+     }
+
+     .aph-identity-row {
+         gap: 0.875rem;
+     }
+
+     .aph-logo {
+         width: 3.5rem;
+         height: 3.5rem;
+         font-size: 1rem;
+     }
+ }
+
+ // ============================================================================
+ // 10. Dark Mode — hero is dark-first; deepen shadows
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .aph-hero {
+         box-shadow:
+             0 16px 56px rgba(0, 0, 0, 0.5),
+             0 1px 0 rgba($champagne, 0.1) inset;
+     }
+ }

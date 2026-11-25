@@ -1,0 +1,377 @@
+<!-- ============================================================================
+     passenger-details.component.html
+     Asiaporeair | "Traveller Profiles" — Passenger Details Smart Page
+     ============================================================================ -->
+
+<div class="details-shell" [@pageEnter]>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       TOP CONTEXT BAR — Sticky progress header
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="context-bar" role="banner" aria-label="Booking progress">
+        <div class="context-inner">
+
+            <!-- Journey Label -->
+            <div class="context-journey">
+                <span class="context-label">Your Journey</span>
+                <span class="context-route" [attr.aria-label]="'Route: ' + journeyLabel()">
+                    {{ journeyLabel() || 'Booking Flow' }}
+                </span>
+            </div>
+
+            <!-- Progress Stepper -->
+            <nav class="progress-stepper" aria-label="Booking steps">
+                <div class="step step--done">
+                    <span class="step-num" aria-hidden="true">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </span>
+                    <span class="step-name">Flights</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step step--active" aria-current="step">
+                    <span class="step-num">2</span>
+                    <span class="step-name">Passengers</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">3</span>
+                    <span class="step-name">Seats</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-name">Enhancements</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-name">Payment</span>
+                </div>
+            </nav>
+
+            <!-- Back Button -->
+            <button class="back-btn" (click)="onBack()" aria-label="Return to flight selection">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back to Flights
+            </button>
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       JOURNEY BAND — Compact flight summary below header
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="journey-band" *ngIf="flightSummaryLabel()" role="region" aria-label="Selected flight summary">
+        <div class="journey-band-inner">
+            <div class="journey-detail-row">
+                <span class="journey-route-pill">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="#B68F24" aria-hidden="true">
+                        <path
+                            d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                    {{ flightSummaryLabel()!.route }}
+                </span>
+                <span class="journey-dot" aria-hidden="true">·</span>
+                <span class="journey-airline">{{ flightSummaryLabel()!.airline }}</span>
+                <span class="journey-dot" aria-hidden="true">·</span>
+                <span class="journey-cabin">{{ flightSummaryLabel()!.cabinClass }}</span>
+                <span class="journey-dot" aria-hidden="true">·</span>
+                <span class="journey-fare">{{ flightSummaryLabel()!.fareName }}</span>
+            </div>
+            <div class="journey-passenger-count" aria-label="{{ totalPassengerCount() }} passengers">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                {{ totalPassengerCount() }} {{ totalPassengerCount() === 1 ? 'Traveller' : 'Travellers' }}
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT GRID
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="content-grid">
+
+        <!-- ── LEFT: Passenger Forms Column ──────────────────────────────────── -->
+        <main class="forms-column" role="main" aria-label="Passenger details forms">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-top">
+                    <h1 class="page-title">Traveller Profiles</h1>
+                    <div class="completion-badge" [class.badge--complete]="allFormsValid()" role="status"
+                        [attr.aria-label]="completedCount() + ' of ' + totalPassengerCount() + ' profiles complete'">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <polyline *ngIf="allFormsValid()" points="20 6 9 17 4 12" />
+                            <circle *ngIf="!allFormsValid()" cx="12" cy="12" r="10" />
+                        </svg>
+                        {{ completedCount() }}/{{ totalPassengerCount() }} Complete
+                    </div>
+                </div>
+                <p class="page-subtitle">
+                    All names must appear exactly as shown on your passport. Asiaporeair is not liable
+                    for denied boarding due to document discrepancies.
+                </p>
+                <p class="page-note">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    Fields marked with an asterisk (<span aria-hidden="true">*</span>) are required.
+                </p>
+            </div>
+
+            <!-- Loyalty Banner -->
+            <div class="loyalty-banner" role="complementary" aria-label="Asiaporeair loyalty programme">
+                <div class="loyalty-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                </div>
+                <div class="loyalty-text">
+                    <span class="loyalty-heading">Asiaporeair Prestige Member?</span>
+                    <span class="loyalty-desc">Earn miles and unlock complimentary cabin upgrades on this
+                        journey.</span>
+                </div>
+                <button class="loyalty-cta" aria-label="Access your Asiaporeair suite account">
+                    Access Your Suite
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="form-progress" role="progressbar" [attr.aria-valuenow]="getProgressPercent()" aria-valuemin="0"
+                aria-valuemax="100" [attr.aria-label]="getProgressPercent() + '% of passenger profiles complete'">
+                <div class="form-progress-track">
+                    <div class="form-progress-fill" [style.width.%]="getProgressPercent()"></div>
+                </div>
+                <span class="form-progress-label">Profile Completion</span>
+            </div>
+
+            <!-- Passenger Forms -->
+            <div class="passenger-forms" [@formStagger]="passengerSlots().length" role="list">
+                <div *ngFor="let slot of passengerSlots(); trackBy: trackBySlot" class="passenger-slot"
+                    [class.slot--active]="activePassengerIndex() === slot.index" [class.slot--complete]="slot.isValid"
+                    [class.slot--invalid]="formSubmitAttempted() && !slot.isValid" role="listitem">
+
+                    <!-- Slot Header (collapsible) -->
+                    <button class="slot-header" (click)="setActivePassenger(slot.index)"
+                        [attr.aria-expanded]="activePassengerIndex() === slot.index"
+                        [attr.aria-controls]="'passenger-form-' + slot.index"
+                        [attr.aria-label]="slot.label + (slot.isValid ? ', profile complete' : ', profile required')">
+
+                        <!-- Passenger Icon + Label -->
+                        <div class="slot-identity">
+                            <div class="slot-avatar" [class.avatar--complete]="slot.isValid" aria-hidden="true">
+                                <ng-container *ngIf="!slot.isValid">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                </ng-container>
+                                <ng-container *ngIf="slot.isValid">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                </ng-container>
+                            </div>
+                            <div class="slot-labels">
+                                <span class="slot-type-badge slot-type-badge--{{ slot.type }}" aria-hidden="true">
+                                    {{ slot.type | titlecase }}
+                                </span>
+                                <span class="slot-name">
+                                    <ng-container *ngIf="slot.formValue?.firstName; else slotDefault">
+                                        {{ slot.formValue!.firstName }} {{ slot.formValue!.lastName }}
+                                    </ng-container>
+                                    <ng-template #slotDefault>{{ slot.label }}</ng-template>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Expand Chevron -->
+                        <div class="slot-actions" aria-hidden="true">
+                            <span *ngIf="slot.isValid" class="slot-complete-tag">Profile Complete</span>
+                            <span *ngIf="formSubmitAttempted() && !slot.isValid" class="slot-error-tag">Required</span>
+                            <svg class="slot-chevron" [class.chevron--open]="activePassengerIndex() === slot.index"
+                                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </div>
+                    </button>
+
+                    <!-- Passenger Form (expandable) -->
+                    <div [id]="'passenger-form-' + slot.index" class="slot-form-body"
+                        [class.is-open]="activePassengerIndex() === slot.index" role="region"
+                        [attr.aria-label]="'Details for ' + slot.label">
+
+                        <app-passenger-form *ngIf="activePassengerIndex() === slot.index" [passengerIndex]="slot.index"
+                            [passengerType]="slot.type" [submitAttempted]="formSubmitAttempted()"
+                            (formValueChange)="onPassengerFormChange(slot.index, $event)"
+                            (validityChange)="onPassengerFormValidityChange(slot.index, $event)" [@fadeIn]>
+                        </app-passenger-form>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom CTA -->
+            <div class="bottom-cta-row">
+                <button class="back-link-btn" (click)="onBack()" aria-label="Go back to flight selection">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back to Flights
+                </button>
+
+                <button class="continue-btn" (click)="onContinue()"
+                    [class.btn--disabled]="formSubmitAttempted() && !allFormsValid()"
+                    aria-label="Continue to seat selection and enhancements">
+                    <span>Continue to Enhancements</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Validation Error Message -->
+            <div *ngIf="formSubmitAttempted() && !allFormsValid()" class="validation-error-banner" role="alert"
+                aria-live="assertive">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                Please complete all required traveller profiles before proceeding.
+            </div>
+
+        </main>
+
+        <!-- ── RIGHT: Price Summary Sidebar ─────────────────────────────────── -->
+        <aside class="summary-sidebar" aria-label="Booking price summary" [@summarySlide]>
+            <div class="summary-glass">
+
+                <!-- Flight Info Card -->
+                <div class="summary-flight-card" *ngIf="flightSummaryLabel()">
+                    <div class="summary-flight-header">
+                        <span class="summary-section-label">Selected Journey</span>
+                    </div>
+                    <div class="summary-flight-route">
+                        <span class="summary-route-iata">{{ flightSummaryLabel()!.route }}</span>
+                    </div>
+                    <div class="summary-flight-meta">
+                        <span class="summary-meta-item">{{ flightSummaryLabel()!.airline }}</span>
+                        <span class="summary-meta-dot" aria-hidden="true">·</span>
+                        <span class="summary-meta-item">{{ flightSummaryLabel()!.cabinClass }}</span>
+                    </div>
+                    <div class="summary-fare-badge">{{ flightSummaryLabel()!.fareName }}</div>
+                </div>
+
+                <div class="summary-divider" aria-hidden="true"></div>
+
+                <!-- Passenger Breakdown -->
+                <div class="summary-pax-section">
+                    <span class="summary-section-label">Travellers</span>
+                    <ul class="summary-pax-list" aria-label="Passenger list">
+                        <li *ngFor="let slot of passengerSlots(); trackBy: trackBySlot" class="summary-pax-item"
+                            [class.pax--complete]="slot.isValid">
+                            <div class="pax-status-dot" [class.dot--complete]="slot.isValid" aria-hidden="true"></div>
+                            <span class="pax-slot-label">{{ slot.label }}</span>
+                            <span *ngIf="slot.isValid" class="pax-name">
+                                {{ slot.formValue?.firstName }} {{ slot.formValue?.lastName }}
+                            </span>
+                            <span *ngIf="!slot.isValid" class="pax-pending">Pending</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="summary-divider" aria-hidden="true"></div>
+
+                <!-- Price Breakdown -->
+                <div class="summary-price-section" *ngIf="selectedFare()">
+                    <span class="summary-section-label">Fare Summary</span>
+                    <div class="summary-price-rows">
+                        <div class="summary-price-row" *ngIf="searchCriteria()?.passengers?.adults">
+                            <span class="summary-price-label">
+                                {{ searchCriteria()!.passengers.adults }}x Adult
+                            </span>
+                            <span class="summary-price-value">
+                                {{ currency() }} {{ formatPrice(selectedFare()!.pricePerAdult *
+                                searchCriteria()!.passengers.adults) }}
+                            </span>
+                        </div>
+                        <div class="summary-price-row" *ngIf="searchCriteria()?.passengers?.children">
+                            <span class="summary-price-label">
+                                {{ searchCriteria()!.passengers.children }}x Child
+                            </span>
+                            <span class="summary-price-value">
+                                {{ currency() }} {{ formatPrice(selectedFare()!.pricePerChild *
+                                searchCriteria()!.passengers.children) }}
+                            </span>
+                        </div>
+                        <div class="summary-price-row" *ngIf="searchCriteria()?.passengers?.infants">
+                            <span class="summary-price-label">
+                                {{ searchCriteria()!.passengers.infants }}x Infant
+                            </span>
+                            <span class="summary-price-value">
+                                {{ currency() }} {{ formatPrice(selectedFare()!.pricePerInfant *
+                                searchCriteria()!.passengers.infants) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="summary-divider summary-divider--light" aria-hidden="true"></div>
+
+                    <div class="summary-total">
+                        <span class="summary-total-label">Estimated Total</span>
+                        <div class="summary-total-amount" aria-label="{{ currency() }} {{ formatPrice(totalPrice()) }}">
+                            <span class="summary-total-currency">{{ currency() }}</span>
+                            <span class="summary-total-num">{{ formatPrice(totalPrice()) }}</span>
+                        </div>
+                        <p class="summary-tax-note">Includes all taxes &amp; surcharges</p>
+                    </div>
+                </div>
+
+                <!-- Continue CTA -->
+                <button class="summary-continue-btn" (click)="onContinue()"
+                    [disabled]="formSubmitAttempted() && !allFormsValid()" aria-label="Continue to enhancements">
+                    <span>Continue to Enhancements</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <!-- Guarantee Note -->
+                <p class="summary-guarantee">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#718096" stroke-width="1"
+                        aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    Fare subject to availability. Confirmed upon full payment.
+                </p>
+
+            </div>
+        </aside>
+
+    </div>
+    <!-- /content-grid -->
+
+</div>
+<!-- /details-shell -->

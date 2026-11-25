@@ -1,0 +1,510 @@
+// ============================================================================
+// ticket-viewer.component.scss
+// Asiaporeair | E-Ticket Viewer — Paperless Luxury
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold: #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$charcoal : #101056;
+$white : #FFFFFF;
+$error : #d95f5f;
+$text-sec : #4a5568;
+$text-muted: #718096;
+$font : 'Inter',
+'Montserrat',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+}
+
+// ── Page Header (screen only) ─────────────────────────────────────────────────
+.tv-header {
+    background: $midnight;
+    border-bottom: 1px solid rgba($champagne, 0.12);
+    padding: 0.875rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba($midnight, 0.3);
+}
+
+.tv-header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba($white, 0.50);
+    cursor: pointer;
+    padding: 0;
+    transition: color $t;
+
+    &:hover:not(:disabled) {
+        color: $champagne;
+    }
+
+    &:disabled {
+        opacity: 0.4;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        border-radius: 2px;
+    }
+}
+
+.header-middle {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    align-items: center;
+    text-align: center;
+}
+
+.header-eyebrow {
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: rgba($champagne, 0.5);
+    text-transform: uppercase;
+}
+
+.header-code {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: $champagne;
+    letter-spacing: 0.1em;
+    font-family: 'Courier New', monospace;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+// Ghost action buttons
+%ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.68rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all $t;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.btn-wallet {
+    @extend %ghost-btn;
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.2);
+    color: rgba($white, 0.55);
+
+    &:hover {
+        border-color: rgba($champagne, 0.4);
+        color: $champagne;
+    }
+}
+
+.btn-pdf {
+    @extend %ghost-btn;
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.2);
+    color: rgba($white, 0.55);
+
+    &:hover {
+        border-color: rgba($champagne, 0.4);
+        color: $champagne;
+    }
+}
+
+.btn-print {
+    @extend %ghost-btn;
+    background: $royal-gold;
+    border: 1px solid rgba($champagne, 0.25);
+    color: $midnight;
+    font-weight: 700;
+
+    &:hover {
+        background: $champagne;
+        box-shadow: 0 3px 12px rgba($royal-gold, 0.4);
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// ── Loading Skeleton ──────────────────────────────────────────────────────────
+@keyframes shimmer-gold {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.ticket-skeleton {
+    max-width: 700px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+}
+
+.skeleton-document {
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 24px rgba($midnight, 0.08);
+}
+
+.skel-gold-bar {
+    height: 4px;
+    margin: -1.5rem -1.5rem 0;
+    background: linear-gradient(90deg, $royal-gold, $champagne, $royal-gold);
+    background-size: 200% 100%;
+    animation: shimmer-gold 2s ease infinite;
+}
+
+.skel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.skel-route {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.skel {
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba($royal-gold, 0.05) 0%, rgba($royal-gold, 0.15) 50%, rgba($royal-gold, 0.05) 100%);
+    background-size: 200% 100%;
+    animation: shimmer-gold 1.8s ease infinite;
+
+    &--logo {
+        width: 120px;
+        height: 24px;
+    }
+
+    &--code {
+        width: 80px;
+        height: 18px;
+        border-radius: 10px;
+    }
+
+    &--divider {
+        height: 1px;
+        background: rgba($royal-gold, 0.15);
+        animation: none;
+    }
+
+    &--iata {
+        width: 56px;
+        height: 36px;
+        border-radius: 6px;
+    }
+
+    &--track {
+        flex: 1;
+        height: 2px;
+        background: rgba($royal-gold, 0.12);
+        animation: none;
+    }
+
+    &--row {
+        height: 28px;
+    }
+}
+
+// ── Error State ───────────────────────────────────────────────────────────────
+.ticket-error {
+    max-width: 440px;
+    margin: 4rem auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+}
+
+.error-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba($error, 0.08);
+    border: 1px solid rgba($error, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-msg {
+    font-size: 0.82rem;
+    color: $text-sec;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.btn-back-error {
+    padding: 0.625rem 1.5rem;
+    border-radius: 4px;
+    background: $midnight;
+    border: 1px solid rgba($champagne, 0.25);
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: $champagne;
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        background: lighten($midnight, 6%);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+    }
+}
+
+// ── Ticket Document ───────────────────────────────────────────────────────────
+.ticket-document {
+    max-width: 700px;
+    margin: 2rem auto 0;
+    padding: 0 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transform-origin: top center;
+}
+
+.ticket-section {
+    background: $white;
+    border-left: 1px solid rgba($charcoal, 0.08);
+    border-right: 1px solid rgba($charcoal, 0.08);
+    border-bottom: 1px solid rgba($charcoal, 0.06);
+
+    &:first-child {
+        border-top: 1px solid rgba($charcoal, 0.08);
+        border-radius: 12px 12px 0 0;
+    }
+
+    &:last-child {
+        border-radius: 0 0 12px 12px;
+        border-bottom-width: 1px;
+    }
+
+    &:first-child:last-child {
+        border-radius: 12px;
+    }
+}
+
+.ticket-section--flight {
+    background: rgba($midnight, 0.03);
+    border-left-color: rgba($royal-gold, 0.15);
+    border-right-color: rgba($royal-gold, 0.15);
+}
+
+.ticket-grid {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 0;
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ticket-grid-main {
+    border-right: 1px solid rgba($charcoal, 0.07);
+
+    @media (max-width: 560px) {
+        border-right: none;
+        border-bottom: 1px solid rgba($charcoal, 0.07);
+    }
+}
+
+.ticket-grid-qr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+// Print watermark (hidden on screen)
+.print-watermark {
+    display: none;
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+.tv-footer {
+    max-width: 700px;
+    margin: 1rem auto 0;
+    padding: 0 1.5rem 2.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-view-booking {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.625rem 1.25rem;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($charcoal, 0.15);
+    font-family: $font;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $text-sec;
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: $royal-gold;
+        color: $charcoal;
+        background: rgba($royal-gold, 0.04);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+    .tv-header-inner {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .ticket-document {
+        padding: 0 0.875rem 2rem;
+    }
+
+    .btn-wallet {
+        display: none;
+    }
+
+    // hide lower priority on mobile
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PRINT STYLES — The ticket document, no chrome
+// ══════════════════════════════════════════════════════════════════════════════
+
+@media print {
+
+    // Hide all screen chrome
+    .screen-only,
+    .tv-header,
+    .tv-footer {
+        display: none !important;
+    }
+
+    // Reset page background
+    :host {
+        background: #fff !important;
+    }
+
+    // Remove outer page padding
+    .ticket-document {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    // Solid borders for print
+    .ticket-section {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+    }
+
+    // Grid stays horizontal on print
+    .ticket-grid {
+        grid-template-columns: 1fr 180px !important;
+    }
+
+    // Reveal watermark on print
+    .print-watermark {
+        display: block !important;
+        text-align: center;
+        font-size: 0.55rem;
+        letter-spacing: 0.15em;
+        color: rgba(0, 0, 0, 0.2);
+        padding: 8px 0;
+        border-top: 1px solid #f0f0f0;
+        margin-top: 4px;
+        page-break-before: avoid;
+    }
+
+    @page {
+        margin: 15mm 10mm;
+        size: A4 portrait;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .skel,
+    .skel-gold-bar {
+        animation: none !important;
+    }
+
+    .btn-print {
+        transition: none !important;
+
+        &:hover {
+            transform: none;
+        }
+    }
+}

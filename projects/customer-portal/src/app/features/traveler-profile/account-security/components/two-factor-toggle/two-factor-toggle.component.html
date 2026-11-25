@@ -1,0 +1,103 @@
+<!-- ============================================================================
+     two-factor-toggle.component.html
+     Asiaporeair | 2FA Toggle — Gold active state, luxury descriptors
+     ============================================================================ -->
+
+<div class="tft-card">
+
+    <div class="tft-card__header">
+        <div class="tft-card__title-block">
+            <div class="tft-card__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <polyline points="9 12 11 14 15 10" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="tft-card__title">Two-Factor Authentication</h3>
+                <p class="tft-card__subtitle">Add a second layer of protection to your suite</p>
+            </div>
+        </div>
+
+        <!-- Toggle switch -->
+        @if (isLoading) {
+        <div class="tft-skeleton" aria-hidden="true"></div>
+        } @else {
+        <button class="tft-toggle" type="button" [class.tft-toggle--on]="isEnabled"
+            [class.tft-toggle--toggling]="isToggling" [attr.aria-pressed]="isEnabled"
+            [attr.aria-label]="isEnabled ? 'Disable two-factor authentication' : 'Enable two-factor authentication'"
+            [disabled]="isToggling" (click)="onToggle()">
+            <span class="tft-toggle__track">
+                @if (isToggling) {
+                <span class="tft-toggle__spinner" aria-hidden="true"></span>
+                }
+            </span>
+            <span class="tft-toggle__thumb">
+                @if (isEnabled && !isToggling) {
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                }
+            </span>
+            <span class="tft-toggle__label" aria-hidden="true">
+                {{ isEnabled ? 'ON' : 'OFF' }}
+            </span>
+        </button>
+        }
+    </div>
+
+    <div class="tft-card__rule" aria-hidden="true"></div>
+
+    <!-- Status badge + description -->
+    <div class="tft-body">
+
+        <div class="tft-status-row">
+            @if (isLoading) {
+            <div class="tft-skeleton tft-skeleton--badge" aria-hidden="true"></div>
+            } @else if (isEnabled) {
+            <span class="tft-badge tft-badge--active">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Active — Enhanced Security
+            </span>
+            } @else {
+            <span class="tft-badge tft-badge--inactive">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                Not Enabled
+            </span>
+            }
+        </div>
+
+        <p class="tft-description">
+            Two-Factor Authentication requires a one-time verification code from your authenticator
+            app each time you access your suite. This prevents unauthorised logins even if your
+            password is compromised.
+        </p>
+
+        <!-- Feature highlights -->
+        <ul class="tft-features" aria-label="2FA benefits">
+            <li class="tft-feature">
+                <span class="tft-feature__dot" aria-hidden="true"></span>
+                Protects against credential theft and phishing attacks
+            </li>
+            <li class="tft-feature">
+                <span class="tft-feature__dot" aria-hidden="true"></span>
+                Compatible with Google Authenticator, Authy, and 1Password
+            </li>
+            <li class="tft-feature">
+                <span class="tft-feature__dot" aria-hidden="true"></span>
+                Instant alerts on unrecognised login attempts
+            </li>
+        </ul>
+
+    </div>
+
+</div>

@@ -1,0 +1,123 @@
+<div class="search-hub">
+
+    <!-- ── Top Row: Tail + Status + Type ──────────────────────── -->
+    <div class="search-hub__primary-row">
+
+        <!-- Tail Number — floating label input -->
+        <div class="search-hub__field search-hub__field--wide">
+            <div class="fl-input-wrap">
+                <svg class="fl-input-wrap__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                </svg>
+
+                <input class="fl-input-wrap__input" id="fil-tail" type="text" placeholder=" " autocomplete="off"
+                    aria-label="Search by tail number" [(ngModel)]="tailValue" (ngModelChange)="onTailChange($event)" />
+
+                <label class="fl-input-wrap__label" for="fil-tail">
+                    Tail Number
+                </label>
+            </div>
+        </div>
+
+        <!-- Operational Status -->
+        <div class="search-hub__field">
+            <div class="select-wrap">
+                <select class="select-wrap__select" aria-label="Filter by operational status" [(ngModel)]="statusValue">
+                    @for (opt of statusOptions; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                </select>
+                <svg class="select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+            </div>
+            <span class="search-hub__field__label">Operational Status</span>
+        </div>
+
+        <!-- Aircraft Type -->
+        <div class="search-hub__field">
+            <div class="select-wrap">
+                <select class="select-wrap__select" aria-label="Filter by aircraft type" [(ngModel)]="typeValue">
+                    <option value="">All Aircraft Types</option>
+                    @for (t of aircraftTypeOptions(); track t.id) {
+                    <option [value]="t.id.toString()">{{ t.label }}</option>
+                    }
+                </select>
+                <svg class="select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+            </div>
+            <span class="search-hub__field__label">Aircraft Type</span>
+        </div>
+
+    </div>
+
+    <!-- ── Second Row: Flight Hours + Actions ─────────────────── -->
+    <div class="search-hub__secondary-row">
+
+        <!-- Min Flight Hours -->
+        <div class="search-hub__field search-hub__field--hours">
+            <div class="fl-input-wrap">
+                <input class="fl-input-wrap__input fl-input-wrap__input--with-unit" id="fil-min-hours" type="number"
+                    placeholder=" " min="0" aria-label="Minimum flight hours" [(ngModel)]="minHoursValue" />
+                <label class="fl-input-wrap__label" for="fil-min-hours">Min Flight Hours</label>
+                <span class="fl-input-wrap__unit">hrs</span>
+            </div>
+        </div>
+
+        <!-- Max Flight Hours -->
+        <div class="search-hub__field search-hub__field--hours">
+            <div class="fl-input-wrap">
+                <input class="fl-input-wrap__input fl-input-wrap__input--with-unit" id="fil-max-hours" type="number"
+                    placeholder=" " min="0" aria-label="Maximum flight hours" [(ngModel)]="maxHoursValue" />
+                <label class="fl-input-wrap__label" for="fil-max-hours">Max Flight Hours</label>
+                <span class="fl-input-wrap__unit">hrs</span>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="search-hub__spacer"></div>
+
+        <!-- Reset -->
+        @if (hasActiveFilters()) {
+        <button class="search-hub__reset-btn" type="button" (click)="onReset()" aria-label="Clear all filters">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="search-hub__reset-btn__icon" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            Clear
+        </button>
+        }
+
+        <!-- Apply Filters CTA -->
+        <button class="search-hub__apply-btn" type="button" [disabled]="isLoading()" (click)="onApplyFilters()"
+            aria-label="Apply fleet filters">
+            @if (!isLoading()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="search-hub__apply-btn__icon" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25
+                   2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927
+                   a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0
+                   0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917
+                   -1.096A48.32 48.32 0 0 1 12 3z" />
+            </svg>
+            Apply Filters
+            }
+            @if (isLoading()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="search-hub__apply-btn__icon search-hub__apply-btn__icon--spin" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                   3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                   13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Filtering…
+            }
+        </button>
+
+    </div>
+
+</div>

@@ -1,0 +1,477 @@
+// ============================================================================
+// flight-search.component.scss
+// Asiaporeair | "Explore Global Suites" — Flight Discovery Landing Page
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ── §1 Page shell ─────────────────────────────────────────────────────────────
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+}
+
+.fs-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+// ── §2 Hero header ────────────────────────────────────────────────────────────
+.fs-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+    padding: 0 0 5rem; // extra bottom padding swallowed by engine overlap
+
+    // Subtle noise texture
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        opacity: 0.45;
+    }
+
+    // Bottom golden border
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right,
+                transparent, rgba($royal-gold, 0.3), $champagne,
+                rgba($royal-gold, 0.3), transparent);
+    }
+
+    &__particles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    // Diagonal geometric accent
+    &__geo {
+        position: absolute;
+        top: -30%;
+        right: -5%;
+        width: 600px;
+        height: 600px;
+        border: 1px solid rgba($royal-gold, 0.05);
+        border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+        transform: rotate(20deg);
+        pointer-events: none;
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 40px;
+            border: 1px solid rgba($royal-gold, 0.04);
+            border-radius: inherit;
+        }
+    }
+
+    &__inner {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 1.75rem 2rem 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    &__brand {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(to right,
+                transparent, rgba($royal-gold, 0.2) 10%,
+                $royal-gold, $champagne, $royal-gold,
+                rgba($royal-gold, 0.2) 90%, transparent);
+        margin-bottom: 2.5rem;
+    }
+
+    &__title-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        text-align: center;
+        padding-bottom: 1rem;
+    }
+
+    &__eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: $font;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba($champagne, 0.65);
+    }
+
+    &__title {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 300;
+        letter-spacing: -0.04em;
+        color: $white;
+        margin: 0;
+        line-height: 1.1;
+    }
+
+    &__title-accent {
+        font-weight: 800;
+        background: linear-gradient(90deg, $royal-gold, $champagne, $royal-gold);
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: goldShimmer 4s ease-in-out infinite;
+    }
+
+    &__subtitle {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        color: rgba($white, 0.45);
+        max-width: 560px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    &__quick-nav {
+        display: flex;
+        align-items: center;
+        gap: 0;
+    }
+}
+
+@keyframes goldShimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── §3 Brand elements ─────────────────────────────────────────────────────────
+.fs-brand-text {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.fs-brand-divider {
+    color: rgba($champagne, 0.2);
+    font-size: 0.75rem;
+}
+
+.fs-brand-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    color: rgba($white, 0.3);
+    letter-spacing: 0.04em;
+}
+
+// ── §4 Quick nav ──────────────────────────────────────────────────────────────
+.fs-quick-link {
+    font-family: $font;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba($white, 0.45);
+    text-decoration: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 3px;
+    transition: color $t, background $t;
+
+    &:hover {
+        color: $champagne;
+        background: rgba($champagne, 0.05);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &--highlight {
+        border: 1px solid rgba($champagne, 0.18);
+        color: rgba($champagne, 0.65);
+        margin-left: 0.25rem;
+
+        &:hover {
+            color: $champagne;
+            border-color: rgba($champagne, 0.4);
+        }
+    }
+}
+
+// ── §5 Eyebrow line ───────────────────────────────────────────────────────────
+.fs-eyebrow-line {
+    flex: 0 0 28px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba($champagne, 0.35));
+
+    &:last-child {
+        background: linear-gradient(to left, transparent, rgba($champagne, 0.35));
+    }
+}
+
+// ── §6 Trust badges ───────────────────────────────────────────────────────────
+.fs-trust-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.fs-trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba($champagne, 0.45);
+}
+
+// ── §7 Ambient particles ──────────────────────────────────────────────────────
+.fs-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($champagne, 0.14);
+    animation: twinkle 3s ease-in-out infinite;
+
+    @for $i from 1 through 12 {
+        &:nth-child(#{$i}) {
+            width: #{2 + ($i % 3)}px;
+            height: #{2 + ($i % 3)}px;
+            // top: #{5 + ($i * 8) % 88}%;
+            // left: #{3 + ($i * 9) % 95}%;
+            animation-delay: #{$i * 0.25}s;
+            animation-duration: #{2.5 + $i * 0.18}s;
+        }
+    }
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.06;
+    }
+
+    50% {
+        opacity: 0.65;
+    }
+}
+
+// ── §8 Search engine wrapper (overlaps hero bottom + body top) ────────────────
+.fs-engine-wrapper {
+    position: relative;
+    z-index: 10;
+    margin-top: -3.5rem; // pull up over the hero bottom padding
+    padding: 0 2rem;
+}
+
+.fs-engine-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    box-shadow: 0 16px 48px rgba($midnight, 0.2);
+    border-radius: 12px;
+}
+
+// ── §9 Body ───────────────────────────────────────────────────────────────────
+.fs-body {
+    flex: 1;
+    padding: 4rem 0 0;
+    background: $ivory;
+}
+
+.fs-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section-block {
+    padding: 3rem 0;
+}
+
+// ── §10 Patch toast ───────────────────────────────────────────────────────────
+.fs-patch-toast {
+    max-width: 1140px;
+    margin: 0 auto 1.5rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($royal-gold, 0.2);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: darken($royal-gold, 8%);
+    padding: 0.75rem 1.25rem;
+
+    strong {
+        font-weight: 700;
+    }
+}
+
+// ── §11 Section divider ───────────────────────────────────────────────────────
+.fs-divider {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &__line {
+        flex: 1;
+        height: 1px;
+        background: rgba($charcoal, 0.08);
+    }
+
+    &__icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.06);
+        border: 1px solid rgba($royal-gold, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+}
+
+// ── §12 Footer note ───────────────────────────────────────────────────────────
+.fs-footer {
+    background: rgba($charcoal, 0.04);
+    border-top: 1px solid rgba($charcoal, 0.08);
+    padding: 1.5rem 2rem;
+    margin-top: 3rem;
+
+    &__note {
+        max-width: 1140px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.68rem;
+        color: rgba($muted, 0.65);
+        line-height: 1.6;
+        text-align: center;
+    }
+}
+
+// ── §13 Responsive ────────────────────────────────────────────────────────────
+@media (max-width: 900px) {
+    .fs-hero__inner {
+        padding: 1.5rem 1.25rem 0;
+    }
+
+    .fs-engine-wrapper {
+        padding: 0 1.25rem;
+        margin-top: -2.5rem;
+    }
+
+    .fs-container {
+        padding: 0 1.25rem;
+    }
+
+    .fs-hero__quick-nav {
+        display: none;
+    }
+
+    // hide on smaller screens
+}
+
+@media (max-width: 640px) {
+    .fs-hero__inner {
+        padding: 1.25rem 1rem 0;
+    }
+
+    .fs-engine-wrapper {
+        padding: 0 0.75rem;
+        margin-top: -2rem;
+    }
+
+    .fs-container {
+        padding: 0 1rem;
+    }
+
+    .section-block {
+        padding: 2rem 0;
+    }
+
+    .fs-trust-row {
+        gap: 0.875rem;
+    }
+}
+
+// ── §14 Focus styles ──────────────────────────────────────────────────────────
+:focus-visible {
+    outline: 2px solid $royal-gold;
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+// ── §15 Reduced motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+    .fs-hero__title-accent {
+        animation: none !important;
+    }
+
+    .fs-particle {
+        animation: none !important;
+    }
+
+    .fs-patch-toast {
+        animation: none !important;
+    }
+}

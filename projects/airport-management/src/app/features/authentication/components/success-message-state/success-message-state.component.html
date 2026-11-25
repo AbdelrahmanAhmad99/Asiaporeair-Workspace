@@ -1,0 +1,45 @@
+<div class="sms" role="status" aria-live="polite" aria-label="Email sent successfully">
+
+    <!-- Animated checkmark -->
+    <div class="sms__icon-wrap" aria-hidden="true">
+        <svg class="sms__check" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+            <circle class="sms__check-circle" cx="26" cy="26" r="24" stroke-width="2" />
+            <polyline class="sms__check-tick" points="14 27 22 35 38 19" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+    </div>
+
+    <h2 class="sms__title">Check Your Inbox</h2>
+
+    <p class="sms__body">
+        @if (message) {
+        {{ message }}
+        } @else {
+        A recovery link has been sent to your email. Please check your inbox and follow the instructions to reset your
+        password.
+        }
+    </p>
+
+    @if (email) {
+    <div class="sms__email-pill" aria-label="Recovery sent to">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+        </svg>
+        {{ email }}
+    </div>
+    }
+
+    <p class="sms__hint">
+        Didn't receive it? Check your spam folder or
+        <button class="sms__retry-btn" type="button" (click)="retry.emit()">
+            try another email address
+        </button>.
+    </p>
+
+    <a class="sms__login-btn" routerLink="/auth/login" aria-label="Return to sign in">
+        Back to Sign In
+    </a>
+
+</div>

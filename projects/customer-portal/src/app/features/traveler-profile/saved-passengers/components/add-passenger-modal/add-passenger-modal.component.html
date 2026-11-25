@@ -1,0 +1,130 @@
+<!-- ============================================================================
+     add-passenger-modal.component.html
+     Asiaporeair | Add / Edit Passenger Modal — Premium Floating Label Form
+     ============================================================================ -->
+
+@if (isOpen) {
+<div class="modal-backdrop" role="dialog" [attr.aria-modal]="true" [attr.aria-label]="modalTitle"
+    (click)="onBackdropClick($event)">
+    <div class="modal" [@modalEnter]>
+
+        <!-- Modal Header -->
+        <div class="modal__header">
+
+            <div class="modal__title-block">
+                <div class="modal__icon" aria-hidden="true">
+                    @if (isEditMode) {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                    } @else {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <line x1="19" y1="8" x2="19" y2="14" />
+                        <line x1="22" y1="11" x2="16" y2="11" />
+                    </svg>
+                    }
+                </div>
+                <div>
+                    <h2 class="modal__title">{{ modalTitle }}</h2>
+                    <p class="modal__subtitle">Details must match official travel documents</p>
+                </div>
+            </div>
+
+            <button class="modal__close-btn" type="button" (click)="close()" [disabled]="isSaving"
+                aria-label="Close modal">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+
+        </div>
+
+        <!-- Gold divider -->
+        <div class="modal__rule" aria-hidden="true"></div>
+
+        <!-- Form -->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="modal__form" autocomplete="off">
+
+            <!-- First Name + Last Name (2-col) -->
+            <div class="modal-form__row modal-form__row--2col">
+
+                <div class="modal-field" [class.is-active]="hasValue('firstName')"
+                    [class.has-error]="hasError('firstName', 'required') || hasError('firstName', 'minlength')">
+                    <input id="modal-firstName" class="modal-field__input" type="text" formControlName="firstName"
+                        placeholder=" " autocomplete="given-name" aria-required="true" />
+                    <label class="modal-field__label" for="modal-firstName">First Name *</label>
+                    <div class="modal-field__border" aria-hidden="true"></div>
+                    @if (hasError('firstName', 'required')) {
+                    <span class="modal-field__error" role="alert">Required</span>
+                    }
+                </div>
+
+                <div class="modal-field" [class.is-active]="hasValue('lastName')"
+                    [class.has-error]="hasError('lastName', 'required')">
+                    <input id="modal-lastName" class="modal-field__input" type="text" formControlName="lastName"
+                        placeholder=" " autocomplete="family-name" aria-required="true" />
+                    <label class="modal-field__label" for="modal-lastName">Last Name *</label>
+                    <div class="modal-field__border" aria-hidden="true"></div>
+                    @if (hasError('lastName', 'required')) {
+                    <span class="modal-field__error" role="alert">Required</span>
+                    }
+                </div>
+
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="modal-field modal-field--date" [class.is-active]="hasValue('dateOfBirth')">
+                <input id="modal-dob" class="modal-field__input" type="date" formControlName="dateOfBirth"
+                    placeholder=" " autocomplete="bday" />
+                <label class="modal-field__label modal-field__label--date" for="modal-dob">Date of Birth</label>
+                <div class="modal-field__border" aria-hidden="true"></div>
+            </div>
+
+            <!-- Passport Number -->
+            <div class="modal-field" [class.is-active]="hasValue('passportNumber')"
+                [class.has-error]="hasError('passportNumber', 'pattern')">
+                <input id="modal-passport" class="modal-field__input modal-field__input--mono" type="text"
+                    formControlName="passportNumber" placeholder=" " maxlength="9" style="text-transform: uppercase;"
+                    autocomplete="off" />
+                <label class="modal-field__label" for="modal-passport">Passport Number</label>
+                <div class="modal-field__border" aria-hidden="true"></div>
+                @if (hasError('passportNumber', 'pattern')) {
+                <span class="modal-field__error" role="alert">6–9 alphanumeric characters</span>
+                }
+            </div>
+
+            <!-- Submit + Cancel row -->
+            <div class="modal-form__actions">
+                <button class="modal-btn modal-btn--secondary" type="button" (click)="close()" [disabled]="isSaving">
+                    Cancel
+                </button>
+                <button class="modal-btn modal-btn--primary" type="submit" [disabled]="form.invalid || isSaving"
+                    [class.is-saving]="isSaving">
+                    @if (isSaving) {
+                    <span class="modal-btn__spinner" aria-hidden="true"></span>
+                    Saving…
+                    } @else {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        @if (!isEditMode) {
+                        <line x1="19" y1="8" x2="19" y2="14" />
+                        <line x1="22" y1="11" x2="16" y2="11" />
+                        }
+                    </svg>
+                    {{ submitLabel }}
+                    }
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+}

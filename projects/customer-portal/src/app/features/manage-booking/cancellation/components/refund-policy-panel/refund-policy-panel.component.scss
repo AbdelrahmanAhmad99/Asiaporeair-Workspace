@@ -1,0 +1,345 @@
+// refund-policy-panel.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$success: #2E7D52;
+$warning: #B87333;
+$error: #d95f5f;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$t: 240ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.policy-panel {
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.09);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba($midnight, 0.06);
+}
+
+.panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 1.125rem 1.25rem;
+    border-bottom: 1px solid rgba($charcoal, 0.07);
+}
+
+.panel-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    background: rgba($charcoal, 0.05);
+    border: 1px solid rgba($charcoal, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+}
+
+.panel-title {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: -0.03em;
+    margin: 0 0 2px;
+}
+
+.panel-sub {
+    font-size: 0.62rem;
+    color: $text-muted;
+    margin: 0;
+}
+
+.applicable-chip {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+
+    &.chip--full {
+        background: rgba($success, 0.08);
+        border: 1px solid rgba($success, 0.25);
+        color: darken($success, 5%);
+
+        .chip-dot {
+            background: darken($success, 5%);
+        }
+    }
+
+    &.chip--partial {
+        background: rgba($royal-gold, 0.08);
+        border: 1px solid rgba($royal-gold, 0.25);
+        color: darken($royal-gold, 10%);
+
+        .chip-dot {
+            background: $royal-gold;
+        }
+    }
+
+    &.chip--minimal {
+        background: rgba($warning, 0.08);
+        border: 1px solid rgba($warning, 0.25);
+        color: darken($warning, 8%);
+
+        .chip-dot {
+            background: $warning;
+        }
+    }
+
+    &.chip--none {
+        background: rgba($error, 0.08);
+        border: 1px solid rgba($error, 0.25);
+        color: $error;
+
+        .chip-dot {
+            background: $error;
+        }
+    }
+}
+
+.chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.gold-rule {
+    height: 1px;
+    margin: 0;
+    background: linear-gradient(to right, transparent, rgba($royal-gold, 0.2), transparent);
+}
+
+.tiers-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.tier-item {
+    border-bottom: 1px solid rgba($charcoal, 0.05);
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    // Left accent color bar
+    position: relative;
+
+    &.tier--full &::before {
+        content: '';
+    }
+
+    &.tier--full {
+        --accent: #{$success};
+    }
+
+    &.tier--partial {
+        --accent: #{$royal-gold};
+    }
+
+    &.tier--minimal {
+        --accent: #{$warning};
+    }
+
+    &.tier--none {
+        --accent: #{$error};
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--accent, #{$charcoal});
+        opacity: 0.4;
+    }
+}
+
+.tier-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.875rem 1.25rem 0.875rem 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: $font;
+    text-align: left;
+    transition: background $t;
+
+    &:hover {
+        background: rgba($charcoal, 0.02);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: -2px;
+    }
+}
+
+.tier-rate-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+
+    .tier--full & {
+        background: rgba($success, 0.10);
+        color: darken($success, 5%);
+        border: 1px solid rgba($success, 0.2);
+    }
+
+    .tier--partial & {
+        background: rgba($royal-gold, 0.10);
+        color: darken($royal-gold, 10%);
+        border: 1px solid rgba($royal-gold, 0.2);
+    }
+
+    .tier--minimal & {
+        background: rgba($warning, 0.10);
+        color: darken($warning, 8%);
+        border: 1px solid rgba($warning, 0.2);
+    }
+
+    .tier--none & {
+        background: rgba($error, 0.08);
+        color: $error;
+        border: 1px solid rgba($error, 0.2);
+    }
+}
+
+.tier-label-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tier-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: $charcoal;
+    letter-spacing: -0.01em;
+}
+
+.tier-timeframe {
+    font-size: 0.62rem;
+    color: $text-muted;
+}
+
+.tier-amount-col {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.tier-amount-curr {
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: $text-muted;
+    align-self: flex-start;
+    margin-top: 2px;
+}
+
+.tier-amount-val {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: -0.03em;
+}
+
+.tier-chevron {
+    color: $text-muted;
+    transition: transform $t;
+    flex-shrink: 0;
+
+    &--open {
+        transform: rotate(180deg);
+        color: $royal-gold;
+    }
+}
+
+.tier-body {
+    padding: 0 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+}
+
+.tier-description {
+    font-size: 0.72rem;
+    color: $text-sec;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.tier-applicable-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: darken($success, 5%);
+    padding: 3px 8px;
+    background: rgba($success, 0.06);
+    border-radius: 100px;
+    border: 1px solid rgba($success, 0.2);
+    margin: 0;
+    width: fit-content;
+
+    svg {
+        color: darken($success, 5%);
+        flex-shrink: 0;
+    }
+}
+
+.policy-footnote {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid rgba($charcoal, 0.06);
+    font-size: 0.62rem;
+    color: $text-muted;
+    line-height: 1.5;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tier-chevron {
+        transition: none !important;
+    }
+}

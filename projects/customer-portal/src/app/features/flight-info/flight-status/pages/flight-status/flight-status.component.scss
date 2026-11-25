@@ -1,0 +1,722 @@
+// ============================================================================
+// flight-status.component.scss
+// Asiaporeair | "Track Your Journey" — Flight Status Page
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$error : #C53030;
+$success : #1E6E45;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ── §1 Page shell ─────────────────────────────────────────────────────────────
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+}
+
+.fs-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+// ── §2 Hero header ────────────────────────────────────────────────────────────
+.fs-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba($champagne, 0.08);
+
+    // Noise texture overlay
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+
+    // Bottom gold rule
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1.5px;
+        background: linear-gradient(to right,
+                transparent, rgba($royal-gold, 0.3), $champagne,
+                rgba($royal-gold, 0.3), transparent);
+    }
+
+    &__particles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    // Large decorative arc
+    &__arc {
+        position: absolute;
+        right: -120px;
+        top: -120px;
+        width: 480px;
+        height: 480px;
+        border-radius: 50%;
+        border: 1px solid rgba($royal-gold, 0.06);
+        pointer-events: none;
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 50px;
+            border-radius: 50%;
+            border: 1px solid rgba($royal-gold, 0.04);
+        }
+    }
+
+    &__inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 1.75rem 2rem 3rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    &__quick-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(to right,
+                transparent, rgba($royal-gold, 0.2) 10%,
+                $royal-gold 40%, $champagne 60%, $royal-gold 80%,
+                rgba($royal-gold, 0.2) 90%, transparent);
+        margin-bottom: 2.25rem;
+    }
+
+    &__title-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    &__icon-ring {
+        width: 74px;
+        height: 74px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.07);
+        border: 1.5px solid rgba($champagne, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: iconPulse 3.5s ease-in-out infinite;
+        box-shadow: 0 0 24px rgba($royal-gold, 0.1);
+    }
+
+    &__title {
+        font-size: clamp(1.6rem, 4vw, 2.6rem);
+        font-weight: 300;
+        letter-spacing: -0.04em;
+        color: $white;
+        margin: 0;
+        line-height: 1.1;
+    }
+
+    &__title-accent {
+        font-weight: 800;
+        background: linear-gradient(90deg, $royal-gold, $champagne, $royal-gold);
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: goldShimmer 4s ease-in-out infinite;
+    }
+
+    &__subtitle {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.88rem;
+        color: rgba($white, 0.45);
+        max-width: 520px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    &__badges {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba($royal-gold, 0.08);
+    }
+
+    50% {
+        box-shadow: 0 0 36px rgba($royal-gold, 0.24);
+    }
+}
+
+@keyframes goldShimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── §3 Brand wordmark ─────────────────────────────────────────────────────────
+.fs-brand {
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+}
+
+// ── §4 Nav links ──────────────────────────────────────────────────────────────
+.fs-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: $font;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: rgba($white, 0.4);
+    text-decoration: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 3px;
+    transition: color $t, background $t;
+
+    &:hover {
+        color: $champagne;
+        background: rgba($champagne, 0.05);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &--active {
+        color: $champagne;
+        background: rgba($champagne, 0.07);
+        border: 1px solid rgba($champagne, 0.15);
+    }
+}
+
+// ── §5 Hero badges ────────────────────────────────────────────────────────────
+.fs-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: $font;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba($champagne, 0.45);
+}
+
+// ── §6 Ambient particles ──────────────────────────────────────────────────────
+.fs-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($champagne, 0.12);
+    animation: twinkle 3s ease-in-out infinite;
+
+    @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+            width: #{2 + ($i % 3)}px;
+            height: #{2 + ($i % 3)}px;
+            // top: #{5 + ($i * 9) % 88}%;
+            // left: #{3 + ($i * 11) % 95}%;
+            animation-delay: #{$i * 0.28}s;
+            animation-duration: #{2.5 + $i * 0.2}s;
+        }
+    }
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.05;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+// ── §7 Body layout ────────────────────────────────────────────────────────────
+.fs-body {
+    flex: 1;
+    padding: 3rem 2rem 4rem;
+    background: $ivory;
+}
+
+.fs-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.fs-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2rem;
+    align-items: start;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── §8 Search card ────────────────────────────────────────────────────────────
+.fs-search-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.fs-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.09);
+    box-shadow:
+        0 4px 8px rgba($midnight, 0.05),
+        0 12px 32px rgba($midnight, 0.06);
+    overflow: visible; // allows calendar dropdown to bleed out
+    transition: box-shadow $t;
+
+    &:hover {
+        box-shadow:
+            0 6px 16px rgba($midnight, 0.07),
+            0 16px 40px rgba($midnight, 0.08);
+    }
+
+    // Gold top accent bar
+    &__bar {
+        height: 3px;
+        background: linear-gradient(90deg, $royal-gold, $champagne, $royal-gold);
+        background-size: 200% 100%;
+        animation: barShimmer 4s ease-in-out infinite;
+        border-radius: 12px 12px 0 0;
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.875rem;
+        padding: 1.5rem 1.75rem 0;
+    }
+
+    &__header-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.07);
+        border: 1px solid rgba($champagne, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    &__header-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: $charcoal;
+        margin: 0;
+    }
+
+    &__subtitle {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.78rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.55;
+    }
+
+    &__body {
+        padding: 1.5rem 1.75rem 1.75rem;
+    }
+}
+
+@keyframes barShimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── §9 Error card ─────────────────────────────────────────────────────────────
+.fs-error-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($error, 0.2);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    box-shadow: 0 4px 16px rgba($midnight, 0.06);
+    animation: errReveal 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+
+    &__icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba($error, 0.07);
+        border: 1px solid rgba($error, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: $error;
+    }
+
+    &__content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: $error;
+        margin: 0;
+    }
+
+    &__message {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.77rem;
+        color: $muted;
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    &__searched {
+        font-family: $font;
+        font-size: 0.65rem;
+        color: rgba($charcoal, 0.5);
+        margin: 0;
+        letter-spacing: 0.02em;
+
+        strong {
+            color: $charcoal;
+            font-weight: 700;
+        }
+    }
+
+    &__help {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-family: $font;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: $royal-gold;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        margin-top: auto;
+        flex-shrink: 0;
+        align-self: flex-end;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            border-radius: 2px;
+        }
+    }
+}
+
+@keyframes errReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── §10 Sidebar ───────────────────────────────────────────────────────────────
+.fs-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 1.5rem;
+}
+
+// ── §11 Info cards ────────────────────────────────────────────────────────────
+.fs-info-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.08);
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba($midnight, 0.05);
+
+    &__title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: $font;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: $charcoal;
+        margin: 0 0 1rem;
+
+        svg {
+            flex-shrink: 0;
+        }
+    }
+}
+
+// How-to steps
+.fs-info-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    counter-reset: none;
+}
+
+.fs-info-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.73rem;
+    color: $muted;
+    line-height: 1.55;
+
+    &__num {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.08);
+        border: 1px solid rgba($royal-gold, 0.2);
+        font-family: $font;
+        font-size: 0.6rem;
+        font-weight: 700;
+        color: $royal-gold;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    strong {
+        color: $charcoal;
+        font-weight: 600;
+    }
+}
+
+// Status legend
+.fs-legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.fs-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.fs-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--green {
+        background: #22c55e;
+    }
+
+    &--amber {
+        background: #f59e0b;
+    }
+
+    &--blue {
+        background: #3b82f6;
+    }
+
+    &--gold {
+        background: $royal-gold;
+    }
+
+    &--red {
+        background: $error;
+    }
+}
+
+.fs-legend-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: $muted;
+}
+
+// Contact note
+.fs-contact-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.07);
+    border-radius: 10px;
+    padding: 0.875rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    color: rgba($muted, 0.7);
+    line-height: 1.6;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+}
+
+.fs-contact-link {
+    font-weight: 700;
+    color: $royal-gold;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        border-radius: 2px;
+    }
+}
+
+// ── §12 Responsive ────────────────────────────────────────────────────────────
+@media (max-width: 900px) {
+    .fs-hero__inner {
+        padding: 1.5rem 1.25rem 2.5rem;
+    }
+
+    .fs-hero__quick-nav {
+        display: none;
+    }
+
+    .fs-body {
+        padding: 2rem 1.25rem 3rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .fs-hero__inner {
+        padding: 1.25rem 1rem 2rem;
+    }
+
+    .fs-body {
+        padding: 1.5rem 1rem 3rem;
+    }
+
+    .fs-card__header {
+        padding: 1.25rem 1.25rem 0;
+    }
+
+    .fs-card__body {
+        padding: 1.25rem;
+    }
+}
+
+// ── §13 Focus styles ──────────────────────────────────────────────────────────
+:focus-visible {
+    outline: 2px solid $royal-gold;
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+// ── §14 Reduced motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+
+    .fs-hero__icon-ring,
+    .fs-hero__title-accent,
+    .fs-card__bar,
+    .fs-particle {
+        animation: none !important;
+    }
+
+    .fs-nav-link,
+    .fs-error-card {
+        transition: none !important;
+    }
+}

@@ -1,0 +1,28 @@
+<div class="sts-wrapper" [class.sts-wrapper--disabled]="disabled()" [attr.aria-disabled]="disabled() ? 'true' : null">
+
+    <!-- Field label (e.g., "Country Status") -->
+    <span class="sts-field-label">{{ label() }}</span>
+
+    <!-- Toggle group: track + descriptive state label -->
+    <div class="sts-group">
+
+        <!-- The toggle track + thumb -->
+        <button type="button" role="switch" class="sts-track" [class.sts-track--on]="checked()"
+            [class.sts-track--off]="!checked()" [attr.aria-checked]="checked()"
+            [attr.aria-label]="label() + ': ' + (checked() ? labelOn() : labelOff())" [disabled]="disabled() || null"
+            (click)="toggle()">
+
+            <!-- Thumb -->
+            <span class="sts-thumb" [class.sts-thumb--on]="checked()" aria-hidden="true">
+            </span>
+
+        </button>
+
+        <!-- State label: Active / Inactive -->
+        <span class="sts-state-label" [class.sts-state-label--on]="checked()" [class.sts-state-label--off]="!checked()">
+            {{ checked() ? labelOn() : labelOff() }}
+        </span>
+
+    </div>
+
+</div>

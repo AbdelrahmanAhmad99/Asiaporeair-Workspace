@@ -1,0 +1,110 @@
+<div class="ccf">
+
+    <div class="ccf__header">
+        <div class="ccf__header__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ccf__header__icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="ccf__title">Add Cabin Zone</h3>
+            <p class="ccf__sub">Define a new passenger accommodation zone</p>
+        </div>
+    </div>
+
+    <!-- Error Banner -->
+    @if (errorMessage()) {
+    <div class="ccf__error-banner" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ccf__error-banner__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <span class="ccf__error-banner__text">{{ errorMessage() }}</span>
+    </div>
+    }
+
+    <div class="ccf__fields">
+
+        <!-- Class Type Dropdown -->
+        <div class="ccf__field" [class.ccf__field--error]="!!typeError()">
+            <label class="ccf__label" for="ccf-type">
+                Cabin Class Type <span class="ccf__required" aria-hidden="true">*</span>
+            </label>
+            <div class="ccf__select-wrap" [class.ccf__select-wrap--selected]="!!selectedType()">
+                <!-- Color preview swatch for selected type -->
+                @if (selectedVisual(); as visual) {
+                <span class="ccf__select-swatch" [style.background]="visual.badgeColor" aria-hidden="true"></span>
+                }
+                <select class="ccf__select" id="ccf-type" [ngModel]="selectedType()"
+                    (ngModelChange)="selectedType.set($event)" [disabled]="isProcessing()" aria-required="true"
+                    [attr.aria-invalid]="!!typeError()">
+                    <option value="" disabled>Select cabin type…</option>
+                    @for (t of types; track t.value) {
+                    <option [value]="t.value">{{ t.label }}</option>
+                    }
+                </select>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="ccf__select-wrap__chevron" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+            </div>
+            @if (typeError()) {
+            <span class="ccf__field-error" role="alert">{{ typeError() }}</span>
+            }
+        </div>
+
+        <!-- Zone Name/Code -->
+        <div class="ccf__field">
+            <label class="ccf__label" for="ccf-zone">
+                Zone Code / Label
+                <span class="ccf__optional">(optional)</span>
+            </label>
+            <div class="ccf__fl-wrap">
+                <input class="ccf__fl-wrap__input" id="ccf-zone" type="text" placeholder=" " [ngModel]="zoneName()"
+                    (ngModelChange)="zoneName.set($event)" [disabled]="isProcessing()" autocomplete="off" maxlength="60"
+                    aria-describedby="ccf-zone-hint" />
+                <label class="ccf__fl-wrap__label" for="ccf-zone">e.g. Zone A — Forward Deck</label>
+            </div>
+            <p class="ccf__field-hint" id="ccf-zone-hint">
+                Leave blank to use the class type name directly.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Name Preview -->
+    @if (previewName()) {
+    <div class="ccf__preview" aria-live="polite">
+        <span class="ccf__preview__label">Zone name preview:</span>
+        <span class="ccf__preview__value">{{ previewName() }}</span>
+    </div>
+    }
+
+    <!-- Actions -->
+    <div class="ccf__actions">
+        <button class="ccf__cancel-btn" type="button" (click)="onCancel()">
+            Cancel
+        </button>
+        <button class="ccf__submit-btn" type="button" [disabled]="!isValid() || isProcessing()" (click)="onSubmit()">
+            @if (!isProcessing()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ccf__submit-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add Zone to Layout
+            }
+            @if (isProcessing()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="ccf__submit-btn__icon ccf__submit-btn__icon--spin" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                   3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                   13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Adding Zone…
+            }
+        </button>
+    </div>
+
+</div>

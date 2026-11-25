@@ -1,0 +1,512 @@
+ // ── CSS custom properties per spec ────────────────────────────────────────
+ :host {
+     --primary-midnight: #051937;
+     --royal-gold: #B68F24;
+ }
+
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Card (squircle 12px)
+ // ============================================================================
+ .rat-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow:
+         0 4px 22px rgba($midnight, 0.07),
+         0 1px 0 rgba($champagne, 0.08) inset;
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+     animation: rat-card-enter 360ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. Scroll container
+ // ============================================================================
+ .rat-scroll {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+
+     &::-webkit-scrollbar {
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.28);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 3. Table
+ // ============================================================================
+ .rat-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 12px;
+ }
+
+ // ============================================================================
+ // 4. Sticky Midnight Sapphire header
+ // ============================================================================
+ .rat-head {
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 2;
+ }
+
+ .rat-th {
+     padding: 0.8125rem 0.875rem;
+     text-align: left;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+         text-align: right;
+     }
+ }
+
+ // ============================================================================
+ // 5. Archived rows — Ghost Overlay + Midnight Zebra-stripe
+ // ============================================================================
+ .rat-tr {
+     border-bottom: 1px solid rgba($champagne, 0.07);
+
+     // Ghost overlay — all archived rows are inherently semi-transparent
+     // This signals their "not live" state at a glance
+     opacity: 0.72;
+
+     transition:
+         background-color 130ms $ease,
+         opacity 400ms $ease; // Luxury Fade on leave
+
+     &:hover {
+         opacity: 0.9;
+         background: rgba($champagne, 0.05) !important;
+     }
+
+     // Even rows — pure white (standard)
+     &--even {
+         background: var(--aoms-bg-card, #ffffff);
+     }
+
+     // Odd rows — faint Midnight tint (Zebra-stripe per spec)
+     &--odd {
+         background: rgba($midnight, 0.025);
+     }
+
+     // Row being restored — even more faded, no pointer events
+     &--restoring {
+         opacity: 0.35;
+         pointer-events: none;
+     }
+ }
+
+ // ============================================================================
+ // 6. Cells
+ // ============================================================================
+ .rat-td {
+     padding: 0.75rem 0.875rem;
+     vertical-align: middle;
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+
+     &--arrow {
+         width: 2.25rem;
+         padding: 0;
+         text-align: center;
+     }
+
+     &--action {
+         text-align: right;
+     }
+ }
+
+ // ============================================================================
+ // 7. Route ID
+ // ============================================================================
+ .rat-id {
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     letter-spacing: 0.06em;
+     color: rgba($champagne, 0.45);
+ }
+
+ // ============================================================================
+ // 8. Hub — IATA badge + airport name (Montserrat per spec)
+ // ============================================================================
+ .rat-hub {
+     display: flex;
+     flex-direction: column;
+     gap: 0.15rem;
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 800;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         display: inline-block;
+         padding: 0.2rem 0.55rem;
+         border-radius: 4px;
+
+         &--origin {
+             color: $gold;
+             background: rgba($gold, 0.08);
+             border: 1px solid rgba($gold, 0.2);
+         }
+
+         &--dest {
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+             border: 1px solid rgba($champagne, 0.16);
+         }
+     }
+
+     &__name {
+         font-family: 'Inter', 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: var(--aoms-text-muted);
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         max-width: 14rem;
+     }
+ }
+
+ // Route arrow
+ .rat-route-arrow {
+     width: 1rem;
+     height: 1rem;
+     color: rgba($champagne, 0.3);
+ }
+
+ // ============================================================================
+ // 9. Distance + corridor city pair
+ // ============================================================================
+ .rat-distance {
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-secondary);
+ }
+
+ .rat-corridor {
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+ }
+
+ // ============================================================================
+ // 10. Deactivated status pill
+ // ============================================================================
+ .rat-status-pill {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.55rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.07em;
+     text-transform: uppercase;
+     white-space: nowrap;
+     background: rgba(108, 117, 125, 0.1);
+     border: 1px solid rgba(108, 117, 125, 0.22);
+     color: #6C757D;
+ }
+
+ // ============================================================================
+ // 11. Restore button — Royal Gold solid per spec
+ // ============================================================================
+ .rat-restore-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     height: 2rem;
+     padding: 0 0.75rem;
+     border-radius: 4px;
+
+     background: $gold;
+     border: 1px solid $gold;
+     color: $midnight;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     text-transform: uppercase;
+     cursor: pointer;
+     white-space: nowrap;
+
+     transition:
+         background 180ms $ease,
+         border-color 180ms $ease,
+         box-shadow 200ms $ease,
+         transform 150ms $ease;
+
+     &:hover:not(:disabled) {
+         background: $champagne;
+         border-color: $champagne;
+         box-shadow:
+             0 0 14px rgba($gold, 0.35),
+             0 4px 14px rgba($gold, 0.22);
+         transform: translateY(-1px);
+     }
+
+     &:active:not(:disabled) {
+         transform: translateY(0);
+     }
+
+     &:disabled {
+         opacity: 0.35;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 12. Restore spinner (replaces button while processing)
+ // ============================================================================
+ .rat-spinner {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     color: rgba($champagne, 0.55);
+
+     &__icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         animation: rat-spin 0.85s linear infinite;
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 600;
+         letter-spacing: 0.04em;
+         text-transform: uppercase;
+     }
+ }
+
+ // ============================================================================
+ // 13. Responsive column hiding
+ // ============================================================================
+ .rat-col--md-hidden {
+     @media (max-width: 767px) {
+         display: none;
+     }
+ }
+
+ .rat-col--lg-hidden {
+     @media (max-width: 1023px) {
+         display: none;
+     }
+ }
+
+ // ============================================================================
+ // 14. Shimmer skeleton
+ // ============================================================================
+ .rat-shimmer {
+     height: 0.75rem;
+     border-radius: 3px;
+     background: rgba($champagne, 0.08);
+     animation: rat-pulse 1.5s ease-in-out infinite;
+ }
+
+ // ============================================================================
+ // 15. Empty state
+ // ============================================================================
+ .rat-empty {
+     padding: 4rem 1.5rem;
+     text-align: center;
+ }
+
+ .rat-empty__inner {
+     display: inline-flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+ }
+
+ .rat-empty__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3.25rem;
+     height: 3.25rem;
+     border-radius: 12px;
+     background: rgba($gold, 0.07);
+     border: 1px solid rgba($gold, 0.15);
+ }
+
+ .rat-empty__icon {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: var(--aoms-text-muted);
+ }
+
+ .rat-empty__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     margin: 0;
+ }
+
+ .rat-empty__sub {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     max-width: 30ch;
+     margin: 0;
+     line-height: 1.6;
+ }
+
+ // ============================================================================
+ // 16. Footer
+ // ============================================================================
+ .rat-footer {
+     display: flex;
+     align-items: center;
+     padding: 0.75rem 1.25rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     background: rgba($off-white, 0.5);
+ }
+
+ .rat-footer__label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+
+     strong {
+         font-weight: 700;
+         color: var(--aoms-text-secondary);
+     }
+ }
+
+ // ============================================================================
+ // 17. Keyframes
+ // ============================================================================
+ @keyframes rat-card-enter {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rat-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes rat-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 18. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .rat-card {
+         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+     }
+
+     .rat-tr--even {
+         background: rgba(255, 255, 255, 0.025);
+     }
+
+     .rat-tr--odd {
+         background: rgba($midnight, 0.4);
+     }
+
+     .rat-tr:hover {
+         background: rgba($champagne, 0.04) !important;
+     }
+
+     .rat-hub__name {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .rat-distance {
+         color: rgba(255, 255, 255, 0.45);
+     }
+
+     .rat-corridor {
+         color: rgba(255, 255, 255, 0.35);
+     }
+
+     .rat-spinner {
+         color: rgba($champagne, 0.45);
+     }
+
+     .rat-footer {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+ }

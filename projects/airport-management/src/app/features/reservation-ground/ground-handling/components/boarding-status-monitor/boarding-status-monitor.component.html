@@ -1,0 +1,64 @@
+<!-- boarding-status-monitor.component.html -->
+
+<div class="bsm-bar" [class.bsm-bar--complete]="isComplete()">
+
+    <!-- Circular Progress Ring -->
+    <div class="bsm-ring-wrap" aria-hidden="true">
+        <svg class="bsm-ring" viewBox="0 0 96 96" fill="none">
+            <!-- Background track -->
+            <circle cx="48" cy="48" r="42" stroke-width="6" class="bsm-ring__track" />
+            <!-- Progress arc -->
+            <circle cx="48" cy="48" r="42" stroke-width="6" stroke-linecap="round" class="bsm-ring__fill"
+                [class.bsm-ring__fill--complete]="isComplete()" [style.stroke-dasharray]="circumference"
+                [style.stroke-dashoffset]="strokeDashoffset()" transform="rotate(-90 48 48)" />
+        </svg>
+        <!-- Center percentage -->
+        <div class="bsm-ring__center">
+            <span class="bsm-ring__pct" [class.bsm-ring__pct--complete]="isComplete()">
+                {{ stats().percentageBoarded }}%
+            </span>
+        </div>
+    </div>
+
+    <!-- Stat widgets -->
+    <div class="bsm-stats">
+
+        <div class="bsm-stat bsm-stat--total">
+            <p class="bsm-stat__value">{{ stats().total }}</p>
+            <p class="bsm-stat__label">Expected</p>
+        </div>
+
+        <div class="bsm-divider" aria-hidden="true"></div>
+
+        <div class="bsm-stat bsm-stat--boarded">
+            <p class="bsm-stat__value">{{ stats().boarded }}</p>
+            <p class="bsm-stat__label">Boarded</p>
+        </div>
+
+        <div class="bsm-divider" aria-hidden="true"></div>
+
+        <div class="bsm-stat bsm-stat--remaining" [class.bsm-stat--zero]="stats().remaining === 0">
+            <p class="bsm-stat__value">{{ stats().remaining }}</p>
+            <p class="bsm-stat__label">Remaining</p>
+        </div>
+
+    </div>
+
+    <!-- Linear progress bar -->
+    <div class="bsm-linear-wrap" role="progressbar" [attr.aria-valuenow]="stats().percentageBoarded" aria-valuemin="0"
+        aria-valuemax="100" [attr.aria-label]="stats().percentageBoarded + '% boarded'">
+        <div class="bsm-linear-track">
+            <div class="bsm-linear-fill" [class.bsm-linear-fill--complete]="isComplete()"
+                [style.width.%]="stats().percentageBoarded">
+                @if (!isComplete() && stats().percentageBoarded > 0) {
+                <div class="bsm-linear-fill__shimmer" aria-hidden="true"></div>
+                }
+            </div>
+        </div>
+        <span class="bsm-linear-label">
+            @if (isComplete()) { Boarding Complete }
+            @else { Boarding in progress }
+        </span>
+    </div>
+
+</div>

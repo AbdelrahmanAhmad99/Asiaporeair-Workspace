@@ -1,0 +1,190 @@
+<!-- booking-confirmation-modal.component.html -->
+
+<div class="modal-backdrop" [@backdropFade] (click)="onBackdropClick($event)" role="dialog" aria-modal="true"
+    aria-label="Booking confirmed" aria-live="assertive">
+
+    <div class="modal-container" [@modalSlide]>
+
+        <!-- ── Decorative Header Band ────────────────────────────────────────── -->
+        <div class="modal-header-band" aria-hidden="true">
+            <div class="band-noise"></div>
+            <div class="band-lines">
+                <div class="band-line" *ngFor="let i of [1,2,3,4,5]"></div>
+            </div>
+        </div>
+
+        <!-- ── Close Button ─────────────────────────────────────────────────── -->
+        <button class="close-btn" (click)="onDismiss()" aria-label="Close and proceed to seat selection">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+
+        <!-- ── Success Icon ──────────────────────────────────────────────────── -->
+        <div class="success-badge" aria-hidden="true">
+            <div class="badge-ring badge-ring--outer"></div>
+            <div class="badge-ring badge-ring--inner"></div>
+            <div class="badge-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- ── Title ────────────────────────────────────────────────────────── -->
+        <div class="modal-title-group">
+            <h2 class="modal-title">Your Journey is Confirmed</h2>
+            <p class="modal-subtitle">
+                A confirmation has been sent to your registered email.
+                Your booking reference is:
+            </p>
+        </div>
+
+        <!-- ── PNR Ticker ────────────────────────────────────────────────────── -->
+        <div class="pnr-block" aria-label="Booking reference: {{ booking().bookingReference }}">
+            <span class="pnr-label">Booking Reference</span>
+            <div class="pnr-chars" [class.pnr--visible]="tickerVisible()">
+                <span *ngFor="let char of pnrChars(); let i = index; trackBy: trackByIdx" class="pnr-char"
+                    [style.animation-delay]="(i * 60) + 'ms'">
+                    {{ char }}
+                </span>
+            </div>
+        </div>
+
+        <div class="modal-divider" aria-hidden="true"></div>
+
+        <!-- ── Flight Details ────────────────────────────────────────────────── -->
+        <div class="details-section" [@detailStagger]>
+
+            <div class="detail-row">
+                <div class="detail-icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path
+                            d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                </div>
+                <div class="detail-content">
+                    <span class="detail-label">Route</span>
+                    <span class="detail-value detail-value--route">
+                        {{ booking().originAirportCode }}
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                        {{ booking().destinationAirportCode }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                </div>
+                <div class="detail-content">
+                    <span class="detail-label">Departure</span>
+                    <span class="detail-value">{{ departureDate() }}</span>
+                    <span class="detail-sub">{{ departureTime() }}</span>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </div>
+                <div class="detail-content">
+                    <span class="detail-label">Passengers</span>
+                    <div class="pax-chips">
+                        <span *ngFor="let pax of booking().passengers" class="pax-chip">
+                            {{ pax.firstName }} {{ pax.lastName }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <line x1="12" y1="1" x2="12" y2="23" />
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                </div>
+                <div class="detail-content">
+                    <span class="detail-label">Total Charged</span>
+                    <span class="detail-value detail-value--price">
+                        {{ currency() }} {{ formatPrice(booking().totalPrice) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                </div>
+                <div class="detail-content">
+                    <span class="detail-label">Booked On</span>
+                    <span class="detail-value">{{ bookingDate() }}</span>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                </div>
+                <div class="detail-content">
+                    <span class="detail-label">Payment Status</span>
+                    <span class="detail-value detail-value--status">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        {{ booking().paymentStatus }}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal-divider" aria-hidden="true"></div>
+
+        <!-- ── Next Step Prompt ──────────────────────────────────────────────── -->
+        <div class="next-step-row">
+            <div class="next-step-info">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                    aria-hidden="true">
+                    <rect x="1" y="3" width="15" height="13" rx="1" />
+                    <path d="M16 8h4l3 3v5h-7V8zM5 17v4" />
+                    <circle cx="5" cy="21" r="1" />
+                    <path d="M18 17v4" />
+                    <circle cx="18" cy="21" r="1" />
+                </svg>
+                <div class="next-step-text">
+                    <span class="next-step-label">Your next step</span>
+                    <span class="next-step-desc">Choose your perfect seat in your Private Suite</span>
+                </div>
+            </div>
+            <button class="proceed-btn" (click)="onDismiss()" aria-label="Proceed to seat selection">
+                Proceed to Seat Selection
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+
+    </div>
+    <!-- /modal-container -->
+
+</div>
+<!-- /modal-backdrop -->

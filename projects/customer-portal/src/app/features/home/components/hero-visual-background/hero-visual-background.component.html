@@ -1,0 +1,19 @@
+<div class="hvb" aria-hidden="true">
+
+    <!-- Cinematic video (muted, autoplay, loop — accessibility-safe) -->
+    @if (isBrowser) {
+    <video class="hvb__video" [src]="videoSrc" autoplay muted loop playsinline preload="auto"
+        (error)="videoFailed.set(true)"></video>
+    }
+
+    <!-- Fallback poster / image -->
+    <div class="hvb__poster" [style.background-image]="'url(' + posterSrc + ')'"
+        [class.hvb__poster--visible]="!isBrowser || videoFailed()"></div>
+
+    <!-- Multi-layered overlay for text legibility -->
+    <div class="hvb__overlay"></div>
+
+    <!-- Animated gradient orbs for cinematic depth -->
+    <div class="hvb__orb hvb__orb--1"></div>
+    <div class="hvb__orb hvb__orb--2"></div>
+</div>

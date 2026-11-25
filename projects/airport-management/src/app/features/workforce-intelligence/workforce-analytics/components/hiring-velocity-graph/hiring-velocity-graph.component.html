@@ -1,0 +1,154 @@
+<div class="hvg">
+
+    <!-- ── Header ─────────────────────────────────────────────── -->
+    <div class="hvg__header">
+        <div class="hvg__header__left">
+            <div class="hvg__header__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="hvg__header__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+                </svg>
+            </div>
+            <div>
+                <p class="hvg__title">Hiring Velocity</p>
+                <p class="hvg__subtitle">New hires per calendar month</p>
+            </div>
+        </div>
+        @if (report().hasData) {
+        <div class="hvg__kpis">
+            <div class="hvg__kpi">
+                <span class="hvg__kpi__val">{{ report().totalHired | number }}</span>
+                <span class="hvg__kpi__label">Total Hired</span>
+            </div>
+            <div class="hvg__kpi">
+                <span class="hvg__kpi__val">{{ report().avgPerMonth | number:'1.0-1' }}</span>
+                <span class="hvg__kpi__label">Avg / Month</span>
+            </div>
+            @if (report().peakMonth) {
+            <div class="hvg__kpi hvg__kpi--peak">
+                <span class="hvg__kpi__val">{{ report().peakMonth!.count | number }}</span>
+                <span class="hvg__kpi__label">Peak ({{ report().peakMonth!.label }})</span>
+            </div>
+            }
+        </div>
+        }
+    </div>
+
+    <!-- ── Loading Shimmer ────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="hvg__shimmer" aria-busy="true">
+        <div class="hvg-sh hvg-sh--chart"></div>
+        <div class="hvg-sh hvg-sh--axis"></div>
+    </div>
+    }
+
+    <!-- ── No Data ────────────────────────────────────────────── -->
+    @if (!loading() && !report().hasData) {
+    <div class="hvg__empty" role="status">
+        <svg fill="none" stroke="currentColor" stroke-width="0.75" viewBox="0 0 24 24" class="hvg__empty__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+        </svg>
+        <p class="hvg__empty__title">No Hiring Data</p>
+        <p class="hvg__empty__sub">No recruitment records found for the selected period. Try expanding the date range.
+        </p>
+    </div>
+    }
+
+    <!-- ── SVG Line Chart ─────────────────────────────────────── -->
+    @if (!loading() && report().hasData) {
+    <div class="hvg__chart-wrap" role="img" aria-label="Hiring velocity line chart">
+
+        <!-- Y-axis labels -->
+        <div class="hvg__y-axis" aria-hidden="true">
+            @for (tick of yTicks(); track tick.val) {
+            <span class="hvg__y-label" [style.bottom.%]="((SVG_H - PAD - tick.y) / (SVG_H - PAD * 2)) * 100">
+                {{ tick.val }}
+            </span>
+            }
+        </div>
+
+        <div class="hvg__svg-wrap">
+            <svg class="hvg__svg" [attr.viewBox]="'0 0 ' + SVG_W + ' ' + SVG_H" preserveAspectRatio="none"
+                xmlns="http://www.w3.org/2000/svg">
+
+                <!-- Gradient & filter defs -->
+                <defs>
+                    <linearGradient id="hvg-area-grad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#B68F24" stop-opacity="0.35" />
+                        <stop offset="100%" stop-color="#B68F24" stop-opacity="0.02" />
+                    </linearGradient>
+                    <filter id="hvg-glow" x="-30%" y="-30%" width="160%" height="160%">
+                        <feDropShadow stdDeviation="0.8" flood-color="#B68F24" flood-opacity="0.7" dx="0" dy="0" />
+                    </filter>
+                    <filter id="hvg-dot-glow" x="-100%" y="-100%" width="300%" height="300%">
+                        <feDropShadow stdDeviation="1.2" flood-color="#E2C780" flood-opacity="0.8" dx="0" dy="0" />
+                    </filter>
+                </defs>
+
+                <!-- Horizontal grid lines -->
+                @for (tick of yTicks(); track tick.val) {
+                <line [attr.x1]="PAD" [attr.y1]="tick.y" [attr.x2]="SVG_W - PAD" [attr.y2]="tick.y"
+                    stroke="rgba(226,199,128,0.08)" stroke-width="0.3" />
+                }
+
+                <!-- Area fill -->
+                <path class="hvg__area" [attr.d]="smoothAreaPath()" fill="url(#hvg-area-grad)" />
+
+                <!-- Main golden line — draws in via CSS -->
+                <path class="hvg__line" [attr.d]="smoothPath()" fill="none" stroke="#B68F24" stroke-width="0.9"
+                    stroke-linecap="round" stroke-linejoin="round" filter="url(#hvg-glow)" />
+
+                <!-- Data point circles -->
+                @for (pt of report().monthPoints; track trackByKey($index, pt); let i = $index) {
+                <g class="hvg__point-group" [class.hvg__point-group--hovered]="hoveredIndex() === i"
+                    (mouseenter)="onPointHover(i)" (mouseleave)="onPointLeave()">
+                    <!-- Hit zone -->
+                    <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="3" fill="transparent" class="hvg__hit-zone" />
+                    <!-- Outer ring (shows on hover) -->
+                    <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="1.8" fill="rgba(182,143,36,0.15)"
+                        stroke="rgba(182,143,36,0.25)" stroke-width="0.4" class="hvg__point-ring" />
+                    <!-- Core dot -->
+                    <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="0.9" fill="#E2C780" filter="url(#hvg-dot-glow)"
+                        class="hvg__point-core" />
+
+                    <!-- Tooltip — rendered in SVG foreignObject for HTML richness -->
+                    @if (hoveredIndex() === i) {
+                    <foreignObject [attr.x]="pt.x < SVG_W * 0.65 ? pt.x + 1.5 : pt.x - 20"
+                        [attr.y]="pt.y < SVG_H * 0.5 ? pt.y + 1.5 : pt.y - 13" width="18" height="11"
+                        class="hvg__tooltip-fo">
+                        <div class="hvg__tooltip">
+                            <p class="hvg__tooltip__month">{{ pt.label }}</p>
+                            <p class="hvg__tooltip__count">{{ pt.count | number }} hired</p>
+                        </div>
+                    </foreignObject>
+                    }
+                </g>
+                }
+
+                <!-- Peak annotation -->
+                @if (report().peakMonth) {
+                <line [attr.x1]="report().peakMonth!.x" y1="5" [attr.x2]="report().peakMonth!.x"
+                    [attr.y2]="report().peakMonth!.y - 1.5" stroke="rgba(226,199,128,0.2)" stroke-width="0.3"
+                    stroke-dasharray="0.8 0.8" />
+                }
+
+            </svg>
+        </div>
+
+        <!-- X-axis month labels -->
+        <div class="hvg__x-axis" aria-hidden="true">
+            @for (pt of report().monthPoints; track trackByKey($index, pt); let i = $index) {
+            @if (visibleLabels()[i]) {
+            <span class="hvg__x-label" [style.left.%]="((pt.x - PAD) / (SVG_W - PAD * 2)) * 100">
+                {{ pt.label }}
+            </span>
+            }
+            }
+        </div>
+
+    </div>
+    }
+
+</div>

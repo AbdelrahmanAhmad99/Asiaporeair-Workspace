@@ -1,0 +1,58 @@
+<!-- passenger-manifest.component.html -->
+<div class="manifest-wrap">
+    <div class="manifest-table" role="table" aria-label="Passenger manifest">
+        <div class="table-head" role="rowgroup">
+            <div class="table-row table-row--header" role="row">
+                <div class="th" role="columnheader">#</div>
+                <div class="th" role="columnheader">Passenger</div>
+                <div class="th" role="columnheader">Date of Birth</div>
+                <div class="th" role="columnheader">Passport</div>
+                <div class="th" role="columnheader">Seat</div>
+                <div class="th" role="columnheader">Cabin</div>
+            </div>
+        </div>
+        <div class="table-body" role="rowgroup">
+            <div *ngFor="let pax of passengers; let i = index; trackBy: trackByPax" class="table-row" role="row"
+                [attr.aria-label]="pax.firstName + ' ' + pax.lastName">
+                <div class="td td--num" role="cell">
+                    <span class="pax-num" aria-hidden="true">{{ i + 1 }}</span>
+                </div>
+                <div class="td" role="cell">
+                    <div class="pax-name-block">
+                        <div class="pax-avatar" aria-hidden="true">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="pax-full-name">{{ pax.firstName }} {{ pax.lastName }}</span>
+                            <span class="pax-id-label">ID: {{ pax.passengerId }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="td" role="cell">
+                    <span class="cell-value">{{ formatDob(pax.dateOfBirth) }}</span>
+                </div>
+                <div class="td" role="cell">
+                    <span class="passport-value"
+                        [attr.aria-label]="'Passport ending ' + (pax.passportNumber?.slice(-4) || 'not on file')">
+                        {{ maskPassport(pax.passportNumber) }}
+                    </span>
+                </div>
+                <div class="td" role="cell">
+                    <span *ngIf="pax.assignedSeatNumber" class="seat-pill"
+                        aria-label="Seat {{ pax.assignedSeatNumber }}">
+                        {{ pax.assignedSeatNumber }}
+                    </span>
+                    <span *ngIf="!pax.assignedSeatNumber" class="tba-pill">TBA</span>
+                </div>
+                <div class="td" role="cell">
+                    <span class="cabin-chip" *ngIf="pax.cabinClassName">{{ pax.cabinClassName }}</span>
+                    <span *ngIf="!pax.cabinClassName" class="cell-value cell-value--muted">—</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

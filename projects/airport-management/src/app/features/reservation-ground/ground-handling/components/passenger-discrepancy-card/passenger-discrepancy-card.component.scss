@@ -1,0 +1,339 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Container ──────────────────────────────────────────────────────────
+ .pdc-container {
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 10px rgba($midnight, 0.05);
+     padding: 1rem 1.125rem;
+     height: 100%;
+ }
+
+ // ── 2. Header ─────────────────────────────────────────────────────────────
+ .pdc-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.5rem;
+
+     &__title {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         color: $amber;
+         flex-shrink: 0;
+     }
+ }
+
+ .pdc-count-badge {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     min-width: 1.5rem;
+     height: 1.5rem;
+     padding: 0 0.4375rem;
+     border-radius: 100px;
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     color: lighten($ruby, 25%);
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.25);
+ }
+
+ // ── 3. Loading Shimmer ────────────────────────────────────────────────────
+ .pdc-shimmer-list {
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+ }
+
+ .pdc-shimmer-card {
+     height: 96px;
+     border-radius: 8px;
+     background: linear-gradient(90deg, rgba($midnight, 0.05) 25%, rgba($midnight, 0.1) 50%, rgba($midnight, 0.05) 75%);
+     background-size: 200% 100%;
+     animation: pdc-shimmer 1.4s infinite;
+ }
+
+ // ── 4. Success State ──────────────────────────────────────────────────────
+ .pdc-success {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     gap: 0.625rem;
+     padding: 2rem 1rem;
+     flex: 1;
+     justify-content: center;
+
+     &__icon-wrap {
+         width: 3rem;
+         height: 3rem;
+         border-radius: 50%;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         background: rgba($emerald, 0.12);
+         border: 1.5px solid rgba($emerald, 0.35);
+         color: lighten($emerald, 35%);
+
+         svg {
+             width: 1.5rem;
+             height: 1.5rem;
+         }
+     }
+
+     &__title {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__sub {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         max-width: 220px;
+         line-height: 1.5;
+     }
+ }
+
+ // ── 5. Card List ──────────────────────────────────────────────────────────
+ .pdc-list {
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+     overflow-y: auto;
+     max-height: 560px;
+     padding-right: 0.25rem;
+
+     scrollbar-width: thin;
+     scrollbar-color: rgba($gold, 0.2) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($gold, 0.18);
+         border-radius: 2px;
+     }
+ }
+
+ // ── 6. Discrepancy Card ───────────────────────────────────────────────────
+ .pdc-card {
+     position: relative;
+     display: flex;
+     border-radius: 8px;
+     overflow: hidden;
+
+     // Glassmorphism — subtle frosted amber-tinted panel
+     background: linear-gradient(135deg,
+             rgba($amber, 0.05) 0%,
+             rgba($midnight, 0.02) 100%);
+     border: 1px solid rgba($amber, 0.18);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     box-shadow: 0 2px 8px rgba($midnight, 0.04);
+     transition: all $t-fast;
+
+     &:hover {
+         box-shadow: 0 4px 14px rgba($amber, 0.12);
+         transform: translateY(-1px);
+     }
+ }
+
+ // Amber/Gold left accent border — the key spec requirement
+ .pdc-card__accent {
+     width: 4px;
+     flex-shrink: 0;
+     background: linear-gradient(to bottom, $gold, $amber);
+ }
+
+ .pdc-card__body {
+     flex: 1;
+     padding: 0.75rem 0.875rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+     min-width: 0;
+ }
+
+ // ── 7. Identity Row ───────────────────────────────────────────────────────
+ .pdc-card__identity {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.5rem;
+     flex-wrap: wrap;
+ }
+
+ .pdc-card__name {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+ }
+
+ .pdc-card__doc-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     font-size: 9.5px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     padding: 0.125rem 0.4375rem;
+     border-radius: 100px;
+     color: lighten($emerald, 30%);
+     background: rgba($emerald, 0.08);
+     border: 1px solid rgba($emerald, 0.2);
+     white-space: nowrap;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+     }
+
+     &--missing {
+         color: lighten($ruby, 25%);
+         background: rgba($ruby, 0.08);
+         border-color: rgba($ruby, 0.22);
+     }
+ }
+
+ // ── 8. Detail Row ─────────────────────────────────────────────────────────
+ .pdc-card__details {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 1rem;
+ }
+
+ .pdc-detail {
+     display: flex;
+     flex-direction: column;
+     gap: 0.0625rem;
+
+     &--passport {
+         flex: 1;
+         min-width: 100px;
+     }
+
+     &__key {
+         font-size: 8.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__val {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-secondary);
+
+         &--seat {
+             font-family: var(--aoms-font-heading);
+             font-size: 0.9375rem;
+             font-weight: 700;
+             color: $gold;
+         }
+
+         &--mono {
+             font-family: 'Courier New', monospace;
+             font-size: 0.8125rem;
+             letter-spacing: 0.04em;
+         }
+     }
+ }
+
+ // ── 9. Locate Button ──────────────────────────────────────────────────────
+ .pdc-locate-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.375rem;
+     padding: 0.4375rem 0.875rem;
+     border-radius: 4px;
+     border: 1px solid rgba($gold, 0.35);
+     background: rgba($gold, 0.06);
+     color: $gold;
+     font-family: var(--aoms-font-body);
+     font-size: 0.75rem;
+     font-weight: 700;
+     cursor: pointer;
+     align-self: flex-start;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:hover {
+         background: $gold;
+         color: $midnight;
+         border-color: $gold;
+         box-shadow: 0 2px 8px rgba($gold, 0.35);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $gold;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── 10. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes pdc-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── 11. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .pdc-card {
+         background: linear-gradient(135deg, rgba($amber, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+     }
+
+     .pdc-shimmer-card {
+         background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+         background-size: 200% 100%;
+     }
+ }

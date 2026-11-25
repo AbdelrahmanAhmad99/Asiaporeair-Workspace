@@ -1,0 +1,488 @@
+// ============================================================================
+// contact-details-form.component.scss
+// Asiaporeair | Contact Details — Email Verified Badge + Phone Selector
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$text-muted : #718096;
+$verified : #276749;
+$error : #c53030;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes shimmer-gold {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+.cdf-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($champagne, 0.22);
+    padding: 28px 32px 32px;
+    box-shadow: 0 4px 24px rgba($midnight, 0.06);
+
+    @media (max-width: 600px) {
+        padding: 22px 18px 24px;
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        gap: 12px;
+    }
+
+    &__title-block {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    &__icon-wrap {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba($royal-gold, 0.08);
+        border: 1px solid rgba($royal-gold, 0.2);
+        color: $royal-gold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: $charcoal;
+        margin: 0 0 3px;
+    }
+
+    &__subtitle {
+        font-family: $font;
+        font-size: 0.72rem;
+        color: $text-muted;
+        margin: 0;
+    }
+
+    &__edit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: none;
+        border: 1px solid rgba($charcoal, 0.15);
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: $font;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: rgba($charcoal, 0.6);
+        padding: 6px 14px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: all $t;
+
+        &:hover {
+            border-color: $royal-gold;
+            color: $royal-gold;
+        }
+
+        &.is-editing {
+            border-color: rgba($error, 0.3);
+            color: $error;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 2px;
+        }
+    }
+}
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+.cdf-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    &__row {
+        height: 52px;
+        border-radius: 6px;
+        background: linear-gradient(90deg,
+                rgba($champagne, 0.1) 0%,
+                rgba($champagne, 0.25) 50%,
+                rgba($champagne, 0.1) 100%);
+        background-size: 200% 100%;
+        animation: shimmer-gold 1.8s ease infinite;
+
+        &--short {
+            width: 65%;
+        }
+    }
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────
+.cdf-body {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+// ── Field ─────────────────────────────────────────────────────────────────────
+.cdf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &__label-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__static-label {
+        font-family: $font;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: $text-muted;
+    }
+
+    &__static-value {
+        font-family: $font;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: $charcoal;
+        padding: 2px 0;
+    }
+
+    &__hint {
+        font-family: $font;
+        font-size: 0.65rem;
+        color: $text-muted;
+        margin: 0;
+        font-style: italic;
+    }
+}
+
+// ── Verified Badge ────────────────────────────────────────────────────────────
+.cdf-verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba($verified, 0.08);
+    border: 1px solid rgba($verified, 0.25);
+    color: $verified;
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.cdf-unverified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($royal-gold, 0.3);
+    color: $royal-gold;
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background $t;
+
+    &:hover {
+        background: rgba($royal-gold, 0.15);
+    }
+}
+
+// ── Phone Row ─────────────────────────────────────────────────────────────────
+.cdf-phone-row {
+    display: flex;
+    gap: 0;
+    border: 1px solid rgba($charcoal, 0.14);
+    border-radius: 6px;
+    background: $ivory;
+    overflow: visible;
+    transition: border-color $t, box-shadow $t;
+
+    &:focus-within {
+        border-color: $royal-gold;
+        box-shadow: 0 0 0 3px rgba($royal-gold, 0.12);
+        background: $white;
+    }
+}
+
+// ── Country Code Selector ─────────────────────────────────────────────────────
+.cdf-country-select {
+    position: relative;
+    flex-shrink: 0;
+
+    &__trigger {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: none;
+        border: none;
+        border-right: 1px solid rgba($charcoal, 0.1);
+        height: 52px;
+        padding: 0 12px 0 14px;
+        cursor: pointer;
+        font-family: $font;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: $charcoal;
+        white-space: nowrap;
+        transition: background $t;
+        border-radius: 6px 0 0 6px;
+
+        &:hover:not(:disabled) {
+            background: rgba($royal-gold, 0.05);
+        }
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.75;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: -2px;
+        }
+    }
+
+    &__flag {
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    &__dial {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: $charcoal;
+    }
+
+    &__chevron {
+        color: $text-muted;
+        transition: transform 200ms $ease;
+
+        &.rotated {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__dropdown {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        min-width: 180px;
+        max-height: 220px;
+        overflow-y: auto;
+        z-index: 200;
+
+        background: $white;
+        border: 1px solid rgba($champagne, 0.3);
+        border-radius: 8px;
+        box-shadow: 0 12px 36px rgba($midnight, 0.14);
+        padding: 4px 0;
+        list-style: none;
+        margin: 0;
+
+        scrollbar-width: thin;
+        scrollbar-color: rgba($royal-gold, 0.3) transparent;
+
+        animation: dropdownOpen 160ms $ease forwards;
+    }
+
+    &__option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        cursor: pointer;
+        font-family: $font;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: $charcoal;
+        transition: background $t;
+
+        &:hover,
+        &.is-selected {
+            background: rgba($royal-gold, 0.06);
+        }
+
+        &.is-selected {
+            color: $royal-gold;
+            font-weight: 700;
+        }
+    }
+
+    &__option-dial {
+        color: $text-muted;
+        font-size: 0.72rem;
+        margin-left: auto;
+    }
+}
+
+@keyframes dropdownOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── Phone Input ───────────────────────────────────────────────────────────────
+.cdf-phone-input-wrap {
+    flex: 1;
+    position: relative;
+    height: 52px;
+
+    &.is-active .cdf-phone-label,
+    .cdf-phone-input:focus~.cdf-phone-label {
+        top: 8px;
+        font-size: 0.6rem;
+        color: $royal-gold;
+        letter-spacing: 0.08em;
+        transform: none;
+    }
+}
+
+.cdf-phone-input {
+    width: 100%;
+    height: 100%;
+    padding: 20px 14px 8px;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: $font;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $charcoal;
+    border-radius: 0 6px 6px 0;
+
+    &::placeholder {
+        color: transparent;
+    }
+
+    &:disabled {
+        cursor: default;
+        color: rgba($charcoal, 0.7);
+    }
+}
+
+.cdf-phone-label {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: $text-muted;
+    pointer-events: none;
+    transition: top $t, font-size $t, color $t, letter-spacing $t;
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+.cdf-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 12px;
+}
+
+.cdf-save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 24px;
+    border-radius: 4px;
+    background: $midnight;
+    border: 1px solid rgba($royal-gold, 0.3);
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover:not(:disabled) {
+        background: $royal-gold;
+        border-color: $royal-gold;
+        color: $midnight;
+        box-shadow: 0 4px 16px rgba($royal-gold, 0.3);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+
+    &__spinner {
+        width: 13px;
+        height: 13px;
+        border: 1.5px solid rgba($champagne, 0.3);
+        border-top-color: $champagne;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .cdf-skeleton__row,
+    .cdf-save-btn__spinner {
+        animation: none !important;
+    }
+}

@@ -1,0 +1,246 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 180ms ease;
+
+ // ── Card Container ────────────────────────────────────────────────────────
+ .ptc-card {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+     padding: 1.5rem;
+     border-radius: 12px;
+     background: linear-gradient(145deg, $midnight, darken($midnight, 5%));
+     border: 1px solid rgba($champagne, 0.14);
+     box-shadow: 0 8px 28px rgba($midnight, 0.35);
+ }
+
+ // ── Header ────────────────────────────────────────────────────────────────
+ .ptc-header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     flex-wrap: wrap;
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 700;
+         color: #fff;
+         margin: 0;
+         letter-spacing: -0.01em;
+     }
+
+     &__sub {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.4);
+         margin: 0.125rem 0 0;
+     }
+ }
+
+ // ── Trend Badge ───────────────────────────────────────────────────────────
+ .ptc-trend {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.25rem 0.625rem;
+     border-radius: 100px;
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     font-variant-numeric: tabular-nums;
+     white-space: nowrap;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+     }
+
+     &--up {
+         color: lighten($ruby, 28%);
+         background: rgba($ruby, 0.12);
+         border: 1px solid rgba($ruby, 0.25);
+     }
+
+     &--down {
+         color: lighten($emerald, 40%);
+         background: rgba($emerald, 0.12);
+         border: 1px solid rgba($emerald, 0.25);
+     }
+
+     &--flat {
+         color: rgba($champagne, 0.7);
+         background: rgba($champagne, 0.08);
+         border: 1px solid rgba($champagne, 0.18);
+     }
+ }
+
+ // ── Chart Wrapper ─────────────────────────────────────────────────────────
+ .ptc-chart-wrap {
+     width: 100%;
+     aspect-ratio: 640 / 220;
+ }
+
+ .ptc-svg {
+     width: 100%;
+     height: 100%;
+     display: block;
+     overflow: visible;
+ }
+
+ // ── Gridlines ─────────────────────────────────────────────────────────────
+ .ptc-gridline {
+     line {
+         stroke: rgba(255, 255, 255, 0.06);
+         stroke-width: 1;
+         stroke-dasharray: 4 4;
+     }
+
+     text {
+         font-size: 11px;
+         font-family: var(--aoms-font-body, sans-serif);
+         fill: rgba(255, 255, 255, 0.28);
+         dominant-baseline: middle;
+     }
+ }
+
+ // ── Area Fill ─────────────────────────────────────────────────────────────
+ // .ptc-area {
+ //     // gradient fill applied via <linearGradient> in template
+ // }
+
+ // ── Trend Line — Champagne Gold stroke ────────────────────────────────────
+ .ptc-line {
+     stroke-width: 2.5;
+     stroke-linejoin: round;
+     stroke-linecap: round;
+     filter: drop-shadow(0 0 6px rgba($champagne, 0.35));
+ }
+
+ // ── Data Points ───────────────────────────────────────────────────────────
+ .ptc-point {
+     &__halo {
+         r: 8;
+         fill: rgba($champagne, 0.12);
+         transition: r $t;
+     }
+
+     &__dot {
+         r: 3.5;
+         fill: $midnight;
+         stroke: $champagne;
+         stroke-width: 2;
+         transition: r $t;
+     }
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body, sans-serif);
+         fill: rgba(255, 255, 255, 0.32);
+         text-anchor: middle;
+         font-weight: 600;
+         letter-spacing: 0.03em;
+     }
+
+     &__price {
+         font-size: 11px;
+         font-family: var(--aoms-font-body, sans-serif);
+         text-anchor: middle;
+         font-weight: 800;
+
+         &--current {
+             fill: $champagne;
+         }
+     }
+
+     // Current (final) point — Royal Gold emphasis with larger halo
+     &--current {
+         .ptc-point__halo {
+             r: 11;
+             fill: rgba($gold, 0.18);
+         }
+
+         .ptc-point__dot {
+             r: 5;
+             fill: $gold;
+             stroke: $champagne;
+             stroke-width: 2;
+             filter: drop-shadow(0 0 6px rgba($gold, 0.6));
+         }
+
+         .ptc-point__label {
+             fill: $champagne;
+             font-weight: 800;
+         }
+     }
+ }
+
+ // ── Empty State ───────────────────────────────────────────────────────────
+ .ptc-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 2.5rem 1rem;
+     text-align: center;
+
+     svg {
+         width: 2.5rem;
+         height: 2.5rem;
+         color: rgba($champagne, 0.18);
+     }
+
+     p {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.4);
+         margin: 0;
+     }
+ }
+
+ // ── Disclaimer ────────────────────────────────────────────────────────────
+ .ptc-disclaimer {
+     font-size: 0.6875rem;
+     font-family: var(--aoms-font-body);
+     color: rgba(255, 255, 255, 0.22);
+     margin: 0;
+     text-align: right;
+     font-style: italic;
+ }
+
+ // ── Skeleton Loading ──────────────────────────────────────────────────────
+ .ptc-skeleton {
+     width: 100%;
+ }
+
+ .ptc-sk {
+     display: block;
+     border-radius: 8px;
+     background: linear-gradient(90deg,
+             rgba(255, 255, 255, 0.03) 0%,
+             rgba($champagne, 0.08) 50%,
+             rgba(255, 255, 255, 0.03) 100%);
+     background-size: 200% 100%;
+     animation: ptc-shimmer 1.5s ease-in-out infinite;
+
+     &--chart {
+         width: 100%;
+         aspect-ratio: 640 / 220;
+     }
+ }
+
+ @keyframes ptc-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }

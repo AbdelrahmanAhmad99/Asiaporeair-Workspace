@@ -1,0 +1,472 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .amf-page {
+     min-height: 100%;
+     background: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Sticky Command Header
+ // ============================================================================
+ .amf-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.9375rem 1.5rem;
+     background: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 14px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ .amf-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // Back arrow
+ .amf-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+         transform: translateX(-2px);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // Breadcrumb
+ .amf-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__link {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color 150ms $ease;
+
+         &:hover {
+             color: $gold;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .amf-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 36ch;
+     transition: color 150ms $ease;
+ }
+
+ // ============================================================================
+ // 3. Three-button Action Bar
+ // ============================================================================
+ .amf-action-bar {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+ }
+
+ .amf-sep {
+     width: 1px;
+     height: 1.5rem;
+     background: rgba($champagne, 0.2);
+     flex-shrink: 0;
+ }
+
+ // Shared button base
+ .amf-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &__spin {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         animation: amf-spin 1s linear infinite;
+     }
+
+     // Text-only — Gold label, no border
+     &--text {
+         background: transparent;
+         border: 1px solid transparent;
+         color: var(--aoms-text-muted);
+         padding: 0 0.5rem;
+
+         &:hover:not(:disabled) {
+             color: $gold;
+             border-color: transparent;
+             background: rgba($gold, 0.05);
+         }
+     }
+
+     // Gold outline
+     &--outline {
+         background: transparent;
+         border: 1px solid rgba($gold, 0.4);
+         color: $gold;
+
+         &:hover:not(:disabled) {
+             border-color: $gold;
+             background: rgba($gold, 0.07);
+             box-shadow: 0 2px 8px rgba($gold, 0.15);
+         }
+     }
+
+     // Solid Royal Gold — primary CTA
+     &--primary {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+         font-weight: 700;
+
+         &:hover:not(:disabled) {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 14px rgba($gold, 0.38);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 4. Page Body
+ // ============================================================================
+ .amf-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     max-width: 900px; // Cap form width for readability on ultra-wide
+     margin: 0 auto;
+
+     @media (max-width: 960px) {
+         max-width: 100%;
+     }
+ }
+
+ // ============================================================================
+ // 5. Mode Strip — badge + IATA watermark (Edit mode)
+ // ============================================================================
+ .amf-mode-strip {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     animation: amf-fade-in 300ms $luxury both;
+ }
+
+ .amf-mode-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.3rem 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     // Create — Gold tinted
+     &--create {
+         background: rgba($gold, 0.09);
+         border: 1px solid rgba($gold, 0.25);
+         color: $gold;
+     }
+
+     // Edit — sapphire tinted
+     &--edit {
+         background: rgba($midnight, 0.06);
+         border: 1px solid rgba($midnight, 0.15);
+         color: $charcoal;
+     }
+ }
+
+ // Large greyed-out IATA code shown in edit mode (decorative watermark-style)
+ .amf-iata-watermark {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.375rem;
+     font-weight: 900;
+     letter-spacing: 0.15em;
+     color: transparent;
+     -webkit-text-stroke: 1px rgba($champagne, 0.35);
+     // text-stroke: 1px rgba($champagne, 0.35);
+     user-select: none;
+     pointer-events: none;
+ }
+
+ // ============================================================================
+ // 6. Loading Skeleton (Edit mode — fetching existing airline)
+ // ============================================================================
+ .amf-skeleton {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.18);
+     padding: 1.75rem 2rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+     animation: amf-pulse 1.6s ease-in-out infinite;
+ }
+
+ .amf-sk {
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+     }
+
+     &__icon-wrap {
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 8px;
+         background: rgba($champagne, 0.1);
+         flex-shrink: 0;
+     }
+
+     &__lines {
+         display: flex;
+         flex-direction: column;
+         gap: 0.5rem;
+         flex: 1;
+         padding-top: 0.2rem;
+     }
+
+     &__line {
+         border-radius: 4px;
+         background: rgba($champagne, 0.08);
+
+         &--title {
+             width: 40%;
+             height: 0.875rem;
+         }
+
+         &--sub {
+             width: 60%;
+             height: 0.625rem;
+         }
+     }
+
+     &__grid {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         gap: 1.25rem;
+
+         @media (max-width: 768px) {
+             grid-template-columns: 1fr;
+         }
+     }
+
+     &__field {
+         height: 3.5rem;
+         border-radius: 8px;
+         background: rgba($champagne, 0.07);
+
+         &--wide {
+             grid-column: 1 / -1;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. Keyframes
+ // ============================================================================
+ @keyframes amf-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes amf-fade-in {
+     from {
+         opacity: 0;
+         transform: translateY(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes amf-pulse {
+
+     0%,
+     100% {
+         opacity: 0.65;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 8. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .amf-header {
+         box-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+     }
+
+     .amf-back-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .amf-btn--text:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .amf-btn--outline {
+         border-color: rgba($champagne, 0.3);
+         color: $champagne;
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             background: rgba($champagne, 0.07);
+         }
+     }
+
+     .amf-mode-badge--edit {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.55);
+     }
+
+     .amf-skeleton {
+         background: rgba(255, 255, 255, 0.03);
+         border-color: rgba($champagne, 0.08);
+     }
+
+     .amf-sk__line,
+     .amf-sk__field,
+     .amf-sk__icon-wrap {
+         background: rgba($champagne, 0.05);
+     }
+ }

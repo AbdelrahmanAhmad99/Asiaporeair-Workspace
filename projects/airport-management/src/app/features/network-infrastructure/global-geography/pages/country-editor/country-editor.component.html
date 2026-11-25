@@ -1,0 +1,122 @@
+<div class="ce-page">
+
+    <!-- ══ Sticky Page Header ════════════════════════════════════════ -->
+    <header class="ce-header">
+
+        <div class="ce-header-left">
+
+            <!-- Back Button -->
+            <button class="ce-back-btn" (click)="goBack()" [disabled]="isSaving()"
+                aria-label="Back to Country Inventory" title="Back to Inventory">
+                <svg class="ce-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <!-- Breadcrumb -->
+                <nav class="ce-breadcrumb" aria-label="Breadcrumb">
+                    <span class="ce-breadcrumb__section">Network &amp; Infrastructure</span>
+                    <svg class="ce-breadcrumb__separator" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <button class="ce-breadcrumb__link" (click)="goBack()">Global Geography</button>
+                    <svg class="ce-breadcrumb__separator" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="ce-breadcrumb__current">{{ breadcrumbCurrent() }}</span>
+                </nav>
+
+                <!-- Page Title -->
+                <h1 class="ce-title">{{ pageTitle() }}</h1>
+            </div>
+        </div>
+
+        <!-- Right: mode badge -->
+        <div class="ce-header-right">
+            <span class="ce-mode-badge" [class.ce-mode-badge--edit]="isEditMode()"
+                [class.ce-mode-badge--create]="!isEditMode()">
+                <svg class="ce-mode-badge__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    @if (isEditMode()) {
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582
+                     16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1
+                     1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                    } @else {
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    }
+                </svg>
+                {{ isEditMode() ? 'Edit Mode' : 'Create Mode' }}
+            </span>
+        </div>
+
+    </header>
+
+    <!-- ══ Page Body ═════════════════════════════════════════════════ -->
+    <main class="ce-body">
+
+        <!-- ── API Save Error Banner ─────────────────────────────────── -->
+        @if (saveError()) {
+        <div class="ce-error-banner" role="alert">
+            <svg class="ce-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71
+                   c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="ce-error-banner__body">
+                <strong class="ce-error-banner__title">Save failed</strong>
+                <span class="ce-error-banner__message">{{ saveError() }}</span>
+            </div>
+        </div>
+        }
+
+        <!-- ── Fetch Error (Edit mode: record not found) ─────────────── -->
+        @if (fetchError()) {
+        <div class="ce-error-banner ce-error-banner--full" role="alert">
+            <svg class="ce-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71
+                   c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="ce-error-banner__body">
+                <strong class="ce-error-banner__title">Record not found</strong>
+                <span class="ce-error-banner__message">{{ fetchError() }}</span>
+            </div>
+            <button class="ce-error-banner__action" (click)="goBack()">
+                Return to Inventory
+            </button>
+        </div>
+        }
+
+        <!-- ── Skeleton while fetching record in Edit mode ───────────── -->
+        @if (isFetchingRecord()) {
+        <div class="ce-form-skeleton" aria-busy="true" aria-label="Loading country data">
+            <div class="ce-skeleton__header">
+                <div class="ce-skeleton__line ce-skeleton__line--icon"></div>
+                <div>
+                    <div class="ce-skeleton__line ce-skeleton__line--title"></div>
+                    <div class="ce-skeleton__line ce-skeleton__line--sub"></div>
+                </div>
+            </div>
+            <div class="ce-skeleton__fields">
+                <div class="ce-skeleton__field"></div>
+                <div class="ce-skeleton__field ce-skeleton__field--wide"></div>
+                <div class="ce-skeleton__field ce-skeleton__field--wide"></div>
+            </div>
+        </div>
+        }
+
+        <!-- ── The actual form ───────────────────────────────────────── -->
+        @if (!isFetchingRecord() && !fetchError()) {
+        <aoms-country-form-ui [initialData]="initialData()" [isLoading]="isSaving()" [isEditMode]="isEditMode()"
+            [existingIsoCodes]="existingIsoCodes()" (onSave)="onSave($event)" (onCancel)="onCancel()" />
+        }
+
+    </main>
+
+</div>

@@ -1,0 +1,418 @@
+ // ----------------------------------------------------------------------------
+ // 1. Page Shell
+ // ----------------------------------------------------------------------------
+ .cd-page {
+     min-height: 100%;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color var(--aoms-transition-base);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Sticky Page Header
+ // ----------------------------------------------------------------------------
+ .cd-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 1rem 1.5rem;
+     background-color: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.15);
+     box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ // 2a. Left cluster: back btn + breadcrumb/title
+ .cd-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // 2b. Back button
+ .cd-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.25rem;
+     height: 2.25rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast);
+
+     &:hover {
+         border-color: var(--aoms-champagne);
+         background: rgba(226, 199, 128, 0.08);
+         color: var(--aoms-midnight);
+         transform: translateX(-2px);
+     }
+
+     &:focus-visible {
+         outline: 2px solid var(--aoms-champagne);
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // 2c. Breadcrumb
+ .cd-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__link {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color var(--aoms-transition-fast);
+
+         &:hover {
+             color: var(--aoms-gold);
+         }
+     }
+
+     &__separator {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-gold);
+     }
+ }
+
+ // 2d. Page title
+ .cd-title {
+     font-size: 20px;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 28ch;
+     transition: color var(--aoms-transition-fast);
+ }
+
+ // 2e. Header right-side controls
+ .cd-header-controls {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-shrink: 0;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Icon Button (Refresh)
+ // ----------------------------------------------------------------------------
+ .cd-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.25rem;
+     height: 2.25rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.25);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast);
+
+     &:hover {
+         border-color: var(--aoms-champagne);
+         background: rgba(226, 199, 128, 0.08);
+         color: var(--aoms-midnight);
+     }
+
+     &:focus-visible {
+         outline: 2px solid var(--aoms-champagne);
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spinning {
+             animation: cd-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Action Buttons (Primary Gold · Danger Outlined)
+ // ----------------------------------------------------------------------------
+ .cd-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4rem;
+     padding: 0 0.875rem;
+     height: 2.25rem;
+     border-radius: 4px;
+     font-size: 13px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast);
+     white-space: nowrap;
+
+     &__icon {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+     }
+
+     // ── Primary (Royal Gold fill) ──
+     &--primary {
+         background-color: var(--aoms-gold);
+         border: 1px solid var(--aoms-gold);
+         color: var(--aoms-midnight);
+
+         &:hover {
+             background-color: var(--aoms-champagne);
+             border-color: var(--aoms-champagne);
+         }
+
+         &:focus-visible {
+             outline: 2px solid var(--aoms-champagne);
+             outline-offset: 2px;
+         }
+     }
+
+     // ── Danger (Deep Ruby outlined) ──
+     &--danger {
+         background: transparent;
+         border: 1px solid rgba(113, 13, 6, 0.3);
+         color: #710d06;
+
+         &:hover {
+             background: rgba(113, 13, 6, 0.06);
+             border-color: #710d06;
+         }
+
+         &:focus-visible {
+             outline: 2px solid rgba(113, 13, 6, 0.4);
+             outline-offset: 2px;
+         }
+
+         &:disabled {
+             opacity: 0.45;
+             cursor: not-allowed;
+         }
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Page Body
+ // ----------------------------------------------------------------------------
+ .cd-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+     overflow-y: auto;
+     max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Error Banner
+ // ----------------------------------------------------------------------------
+ .cd-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba(113, 13, 6, 0.08);
+     border: 1px solid rgba(113, 13, 6, 0.2);
+     color: #710d06;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     flex-wrap: wrap;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+
+     &__action {
+         margin-left: auto;
+         background: none;
+         border: 1px solid rgba(113, 13, 6, 0.3);
+         border-radius: 4px;
+         color: #710d06;
+         font-size: 12px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         padding: 0.25rem 0.625rem;
+         cursor: pointer;
+         transition: all var(--aoms-transition-fast);
+
+         &:hover {
+             background: rgba(113, 13, 6, 0.08);
+         }
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 7. Loading Skeleton — Hero Placeholder
+ // ----------------------------------------------------------------------------
+ .cd-hero-skeleton {
+     border-radius: 12px;
+     background: var(--aoms-midnight);
+     padding: 3rem 2.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+ }
+
+ .cd-skeleton__line {
+     border-radius: 6px;
+     background: rgba(226, 199, 128, 0.08);
+     animation: cd-pulse 1.6s ease-in-out infinite;
+
+     &--title {
+         width: 38%;
+         height: 2.5rem;
+     }
+
+     &--subtitle {
+         width: 22%;
+         height: 1.25rem;
+     }
+ }
+
+ .cd-skeleton__badges {
+     display: flex;
+     gap: 0.75rem;
+     margin-top: 0.5rem;
+ }
+
+ .cd-skeleton__badge {
+     width: 6rem;
+     height: 2rem;
+     border-radius: 4px;
+     background: rgba(226, 199, 128, 0.06);
+     animation: cd-pulse 1.6s ease-in-out infinite;
+
+     &:nth-child(2) {
+         animation-delay: 0.15s;
+     }
+
+     &:nth-child(3) {
+         animation-delay: 0.3s;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 8. Keyframes
+ // ----------------------------------------------------------------------------
+ @keyframes cd-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes cd-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode Overrides  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .cd-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .cd-back-btn:hover {
+         color: var(--aoms-champagne);
+     }
+
+     .cd-icon-btn:hover {
+         color: var(--aoms-champagne);
+     }
+
+     .cd-btn--danger {
+         color: #f87171;
+         border-color: rgba(248, 113, 113, 0.3);
+
+         &:hover {
+             background: rgba(248, 113, 113, 0.08);
+             border-color: #f87171;
+         }
+     }
+
+     .cd-error-banner {
+         background: rgba(113, 13, 6, 0.14);
+         border-color: rgba(113, 13, 6, 0.35);
+         color: #f87171;
+
+         &__action {
+             color: #f87171;
+             border-color: rgba(248, 113, 113, 0.3);
+         }
+     }
+
+     .cd-hero-skeleton {
+         background: rgba(5, 25, 55, 0.7);
+     }
+ }

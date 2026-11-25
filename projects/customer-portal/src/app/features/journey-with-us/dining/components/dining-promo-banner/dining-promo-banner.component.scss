@@ -1,0 +1,272 @@
+// ============================================================================
+// dining-promo-banner.component.scss
+// Asiaporeair | Dining Promo Banner — Cinematic Luxury Banner
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$white : #FFFFFF;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 320ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes lineExpand {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+
+    to {
+        width: 48px;
+        opacity: 1;
+    }
+}
+
+// ── Shell ─────────────────────────────────────────────────────────────────────
+.dpb {
+    position: relative;
+    width: 100%;
+    height: 72vh;
+    min-height: 460px;
+    max-height: 680px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+
+    @media (max-width: 768px) {
+        height: 60vh;
+        min-height: 380px;
+    }
+}
+
+// ── Background ────────────────────────────────────────────────────────────────
+.dpb__bg {
+    position: absolute;
+    inset: 0;
+}
+
+.dpb__bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    display: block;
+    transition: transform 12s ease;
+
+    .dpb:hover & {
+        transform: scale(1.02);
+    }
+}
+
+.dpb__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to top,
+            rgba($midnight, 0.92) 0%,
+            rgba($midnight, 0.55) 35%,
+            rgba($midnight, 0.2) 65%,
+            rgba($midnight, 0.05) 100%);
+}
+
+.dpb__gold-rule {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, $royal-gold 25%, $champagne 55%, transparent 100%);
+    opacity: 0.6;
+}
+
+// ── Content ───────────────────────────────────────────────────────────────────
+.dpb__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px 52px;
+
+    @media (max-width: 768px) {
+        padding: 0 24px 36px;
+    }
+}
+
+// ── Breadcrumb ────────────────────────────────────────────────────────────────
+.dpb__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 18px;
+    animation: fadeInUp 500ms $ease both;
+    animation-delay: 80ms;
+}
+
+.dpb__bc-link {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba($white, 0.45);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 200ms;
+
+    &:hover {
+        color: $champagne;
+    }
+}
+
+.dpb__bc-sep {
+    font-size: 12px;
+    color: rgba($white, 0.2);
+}
+
+.dpb__bc-cur {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba($champagne, 0.7);
+    letter-spacing: 0.04em;
+}
+
+// ── Pre-block (line + eyebrow) ────────────────────────────────────────────────
+.dpb__pre-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    animation: fadeInUp 550ms $ease both;
+    animation-delay: 160ms;
+}
+
+.dpb__pre-line {
+    height: 1px;
+    width: 48px;
+    background: $royal-gold;
+    animation: lineExpand 600ms $ease both;
+    animation-delay: 220ms;
+}
+
+.dpb__eyebrow {
+    font-family: $font;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $royal-gold;
+}
+
+// ── Headline ──────────────────────────────────────────────────────────────────
+.dpb__headline {
+    font-family: $font;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    color: $white;
+    line-height: 1.08;
+    margin: 0 0 16px;
+    max-width: 680px;
+    animation: fadeInUp 600ms $ease both;
+    animation-delay: 260ms;
+}
+
+.dpb__subheadline {
+    font-family: $font;
+    font-size: clamp(0.8rem, 1.4vw, 0.98rem);
+    font-weight: 400;
+    color: rgba($white, 0.62);
+    line-height: 1.7;
+    margin: 0 0 28px;
+    max-width: 500px;
+    animation: fadeInUp 600ms $ease both;
+    animation-delay: 340ms;
+}
+
+// ── CTA ───────────────────────────────────────────────────────────────────────
+.dpb__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 26px;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($royal-gold, 0.6);
+    text-decoration: none;
+    transition: background $t, border-color $t, box-shadow $t;
+    animation: fadeInUp 600ms $ease both;
+    animation-delay: 420ms;
+
+    &:hover {
+        background: $royal-gold;
+        border-color: $royal-gold;
+        box-shadow: 0 8px 24px rgba($royal-gold, 0.3);
+
+        .dpb__cta-label {
+            color: $midnight;
+        }
+
+        .dpb__cta-arrow {
+            color: $midnight;
+            transform: translateX(5px);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+}
+
+.dpb__cta-label {
+    font-family: $font;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $champagne;
+    transition: color $t;
+}
+
+.dpb__cta-arrow {
+    color: $champagne;
+    transition: color $t, transform 260ms $ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dpb__headline,
+    .dpb__subheadline,
+    .dpb__pre-block,
+    .dpb__breadcrumb,
+    .dpb__cta {
+        animation: none;
+    }
+
+    .dpb__pre-line {
+        animation: none;
+        width: 48px;
+    }
+
+    .dpb__bg-image {
+        transition: none;
+    }
+}

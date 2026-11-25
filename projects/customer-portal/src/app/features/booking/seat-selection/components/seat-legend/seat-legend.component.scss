@@ -1,0 +1,191 @@
+// seat-legend.component.scss
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    display: block;
+}
+
+.legend-card {
+    background: #fff;
+    border: 1px solid rgba(5, 25, 55, 0.08);
+    border-radius: 12px;
+    padding: 1rem 1.125rem;
+    box-shadow: 0 4px 16px rgba(5, 25, 55, 0.05);
+    font-family: var(--font);
+}
+
+.legend-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+
+    svg {
+        color: var(--royal-gold);
+    }
+}
+
+.legend-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+// Swatch base
+.legend-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 5px 5px 3px 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    // Pseudo headrests
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        top: -3px;
+        width: 7px;
+        height: 4px;
+        background: inherit;
+        border-radius: 2px 2px 0 0;
+    }
+
+    &::before {
+        left: 3px;
+    }
+
+    &::after {
+        right: 3px;
+    }
+}
+
+.swatch--available {
+    background: rgba(5, 25, 55, 0.07);
+    border: 1px solid rgba(5, 25, 55, 0.15);
+}
+
+.swatch--exit {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+
+    &::before,
+    &::after {
+        background: rgba(245, 158, 11, 0.08);
+    }
+}
+
+.swatch--selected-you {
+    background: var(--midnight);
+    border: 1px solid rgba(226, 199, 128, 0.4);
+    color: var(--champagne);
+
+    &::before,
+    &::after {
+        background: var(--midnight);
+    }
+}
+
+.swatch--selected-other {
+    background: rgba(182, 143, 36, 0.18);
+    border: 1px solid rgba(182, 143, 36, 0.4);
+
+    &::before,
+    &::after {
+        background: rgba(182, 143, 36, 0.18);
+    }
+}
+
+.swatch--occupied {
+    background: rgba(5, 25, 55, 0.04);
+    border: 1px solid rgba(5, 25, 55, 0.08);
+    color: rgba(5, 25, 55, 0.25);
+
+    &::before,
+    &::after {
+        background: rgba(5, 25, 55, 0.04);
+    }
+}
+
+.swatch--window {
+    background: rgba(5, 25, 55, 0.07);
+    border: 1px solid rgba(5, 25, 55, 0.15);
+}
+
+.swatch-num {
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--charcoal);
+}
+
+.window-pip {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(182, 143, 36, 0.55);
+}
+
+.legend-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.legend-name {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    letter-spacing: -0.01em;
+}
+
+.legend-sub {
+    font-size: 0.57rem;
+    color: var(--text-muted);
+}
+
+// Feature row
+.feature-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(5, 25, 55, 0.06);
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    font-weight: 600;
+
+    svg {
+        color: var(--text-muted);
+        flex-shrink: 0;
+    }
+}

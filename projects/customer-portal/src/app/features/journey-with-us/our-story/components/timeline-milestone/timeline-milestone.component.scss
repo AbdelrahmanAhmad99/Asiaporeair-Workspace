@@ -1,0 +1,293 @@
+// ============================================================================
+// timeline-milestone.component.scss
+// Asiaporeair | Heritage Timeline — Luxury Vertical Node
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 300ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes nodeGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 4px rgba($royal-gold, 0.12);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba($royal-gold, 0.22);
+    }
+}
+
+// ── Root ─────────────────────────────────────────────────────────────────────
+.tlm {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0 24px;
+    position: relative;
+    padding: 0 0 52px;
+
+    animation: fadeInRight 560ms $ease both;
+    animation-delay: var(--delay, 0ms);
+
+    // When flipped left (for alternating layout on wide viewport)
+    &--left {
+        grid-template-columns: 1fr 80px;
+        animation-name: fadeInLeft;
+
+        .tlm__spine {
+            order: 2;
+        }
+
+        .tlm__panel {
+            order: 1;
+            text-align: right;
+        }
+
+        .tlm__badge {
+            margin-left: auto;
+        }
+
+        .tlm__divider {
+            margin-left: auto;
+        }
+
+        .tlm__photo-wrap {
+            margin-left: auto;
+        }
+    }
+
+    // Highlight variant — slightly larger panel and gold tint
+    &--highlight {
+        .tlm__panel {
+            background: $white;
+            border: 1px solid rgba($royal-gold, 0.2);
+            border-radius: 12px;
+            padding: 22px 24px;
+            box-shadow: 0 4px 24px rgba($midnight, 0.07);
+        }
+
+        .tlm__node {
+            width: 64px;
+            height: 64px;
+            background: $royal-gold;
+
+            .tlm__year {
+                color: $midnight;
+                font-size: 0.72rem;
+            }
+        }
+
+        .tlm__node-ring {
+            width: 80px;
+            height: 80px;
+            animation: nodeGlow 3s ease-in-out infinite;
+        }
+
+        .tlm__title {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+        }
+    }
+}
+
+// ── Spine ─────────────────────────────────────────────────────────────────────
+.tlm__spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.tlm__spine-line {
+    width: 1px;
+    flex: 1;
+    background: linear-gradient($royal-gold, rgba($royal-gold, 0.2));
+
+    &--top {
+        background: linear-gradient(rgba($royal-gold, 0.2), $royal-gold);
+        min-height: 16px;
+    }
+
+    &--bottom {
+        background: linear-gradient($royal-gold, rgba($royal-gold, 0.1));
+    }
+}
+
+.tlm__node {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: $midnight;
+    border: 2px solid $royal-gold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 2;
+    transition: background $t, transform $t;
+
+    .tlm:hover & {
+        background: $royal-gold;
+        transform: scale(1.08);
+
+        .tlm__year {
+            color: $midnight;
+        }
+    }
+}
+
+.tlm__node-ring {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    border: 1px solid rgba($royal-gold, 0.2);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.tlm__year {
+    font-family: $font;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: $champagne;
+    line-height: 1;
+    transition: color $t;
+}
+
+// ── Content panel ─────────────────────────────────────────────────────────────
+.tlm__panel {
+    padding: 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.tlm__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: rgba($royal-gold, 0.09);
+    border: 1px solid rgba($royal-gold, 0.25);
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: darken($royal-gold, 5%);
+    margin-bottom: 8px;
+    width: fit-content;
+}
+
+.tlm__title {
+    font-family: $font;
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: $charcoal;
+    margin: 0 0 10px;
+    line-height: 1.25;
+}
+
+.tlm__divider {
+    width: 32px;
+    height: 2px;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    border-radius: 1px;
+    margin-bottom: 10px;
+    transition: width 380ms $ease;
+
+    .tlm:hover & {
+        width: 52px;
+    }
+}
+
+.tlm__desc {
+    font-family: $font;
+    font-size: 0.8rem;
+    color: $muted;
+    line-height: 1.7;
+    margin: 0 0 14px;
+}
+
+// ── Optional vintage photo ────────────────────────────────────────────────────
+.tlm__photo-wrap {
+    width: 100%;
+    max-width: 340px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba($champagne, 0.3);
+    box-shadow: 0 3px 12px rgba($midnight, 0.1);
+}
+
+.tlm__photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+    filter: sepia(20%) contrast(1.05);
+    transition: filter 380ms $ease, transform 400ms $ease;
+
+    .tlm__photo-wrap:hover & {
+        filter: sepia(0%) contrast(1);
+        transform: scale(1.03);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tlm {
+        animation: none;
+    }
+
+    .tlm__node {
+        transition: none;
+    }
+
+    .tlm__divider,
+    .tlm__photo {
+        transition: none;
+    }
+}

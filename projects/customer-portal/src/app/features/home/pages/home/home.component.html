@@ -1,0 +1,84 @@
+<div class="home">
+
+  <!-- ══ ADVISORY ALERTS ═══════════════════════════════════════════════════ -->
+  @if (visibleAlerts().length) {
+  <app-advisory-alert-bar [alerts]="visibleAlerts()" (alertDismissed)="onAlertDismissed($event)" />
+  }
+
+  <!-- ══ I. HERO & BOOKING HUB ═════════════════════════════════════════════ -->
+  <section id="hero-booking-section" class="home__hero" aria-label="Flight Booking Hub">
+
+    <!-- Cinematic background -->
+    <app-hero-visual-background />
+
+    <!-- Hero content layer -->
+    <div class="home__hero-content">
+
+      <!-- Brand headline -->
+      <header class="home__hero-headline">
+        <p class="home__hero-eyebrow">The Art of Flying</p>
+        <h1 class="home__hero-title">Experience the<br /><span>Exceptional</span></h1>
+      </header>
+
+      <!-- Quick action tabs + booking widget -->
+      <div class="home__booking-hub" id="main-booking-hub">
+        <app-quick-action-tabs [activeTab]="activeTab()" (tabChange)="onTabChange($event)" />
+        <app-booking-widget [activeTab]="activeTab()" [pendingPatch]="pendingPatch()"
+          (patchApplied)="onPatchApplied()" />
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- ══ IV. EXCLUSIVE OFFERS CAROUSEL ════════════════════════════════════ -->
+  <section class="home__section home__section--white" aria-labelledby="offers-heading">
+    <div class="home__container">
+      <app-offer-carousel [offers]="offers" />
+    </div>
+  </section>
+
+  <!-- ══ V. DESTINATION EXPLORER ══════════════════════════════════════════ -->
+  <section class="home__section home__section--ivory" aria-labelledby="destinations-heading">
+    <div class="home__container">
+      <app-destination-explorer [destinations]="destinations" [isLoading]="destinationsLoading()"
+        (destinationSelected)="onDestinationSelected($event)" />
+    </div>
+  </section>
+
+  <!-- ══ VI. EXPERIENCE FEATURE BLOCKS ════════════════════════════════════ -->
+  <section class="home__section home__section--white home__section--tight" aria-label="The Asiaporeair experience">
+    @for (feature of experienceFeatures; track feature.id) {
+    <app-experience-feature-block [feature]="feature" />
+    }
+  </section>
+
+  <!-- ══ VII. LOYALTY JOIN BANNER ═════════════════════════════════════════ -->
+  <section class="home__section home__section--no-pad" aria-label="Join Voyager loyalty programme">
+    <app-loyalty-join-banner />
+  </section>
+
+  <!-- ══ IX. PROMO CODE BANNER ════════════════════════════════════════════ -->
+  <app-promo-code-banner />
+
+  <!-- ══ II. SERVICE ICON BAR ═══════════════════════════════════════════════ -->
+  <section class="home__section home__section--ivory" aria-label="In-flight services">
+    <div class="home__container">
+      <app-service-icon-bar [icons]="serviceIcons" />
+    </div>
+  </section>
+
+  <!-- ══ VIII. LATEST NEWS ════════════════════════════════════════════════ -->
+  <section class="home__section home__section--ivory" aria-labelledby="news-heading">
+    <div class="home__container">
+      <h2 id="news-heading" class="sr-only">Latest News</h2>
+      <div class="home__news-grid">
+        @for (article of news; track article.id) {
+        <app-news-card [article]="article" />
+        }
+      </div>
+    </div>
+  </section>
+
+</div>

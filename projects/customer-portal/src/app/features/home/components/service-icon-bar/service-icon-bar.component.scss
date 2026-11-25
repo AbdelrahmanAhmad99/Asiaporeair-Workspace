@@ -1,0 +1,79 @@
+  :host {
+      display: block;
+  }
+
+  $royal-gold : #B68F24;
+  $champagne : #E2C780;
+  $charcoal : #101056;
+  $muted : #718096;
+  $font : 'Montserrat',
+  'Inter',
+  sans-serif;
+  $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+  .sib {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+
+      @media(max-width:900px) {
+          grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media(max-width:480px) {
+          grid-template-columns: repeat(2, 1fr);
+      }
+  }
+
+  .sib__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      padding: 20px 12px;
+      border-radius: 12px;
+      transition: background 240ms $ease, transform 240ms $ease;
+      cursor: default;
+
+      &:hover {
+          background: rgba($royal-gold, .06);
+          transform: translateY(-3px);
+
+          .sib__icon-circle {
+              border-color: rgba($royal-gold, .4);
+          }
+      }
+  }
+
+  .sib__icon-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: rgba($royal-gold, .07);
+      border: 1px solid rgba($royal-gold, .18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 240ms $ease;
+  }
+
+  .sib__icon {
+      stroke: rgba($royal-gold, .7);
+  }
+
+  .sib__label {
+      font-family: $font;
+      font-size: 12px;
+      font-weight: 700;
+      color: $charcoal;
+      margin: 0;
+      line-height: 1.3;
+  }
+
+  .sib__sub {
+      font-size: 10px;
+      color: $muted;
+      margin: 0;
+      line-height: 1.4;
+  }

@@ -1,0 +1,212 @@
+<!-- ============================================================================
+     modify-booking.component.html
+     Asiaporeair | "Update Your Suite Manifest" — Modify Booking Page
+     ============================================================================ -->
+
+<div class="modify-shell">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HEADER — Midnight Sapphire
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="modify-header" [@pageEnter] role="banner">
+        <div class="header-inner">
+
+            <button class="back-link" (click)="onBack()" aria-label="Return to booking details">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Booking Details
+            </button>
+
+            <div class="header-title-block">
+                <span class="header-eyebrow" aria-hidden="true">ASIAPOREAIR · PASSENGER SERVICES</span>
+                <h1 class="header-title">Update Your Suite Manifest</h1>
+                <p class="header-subtitle" *ngIf="pnrDisplay()">
+                    Booking reference <strong>{{ pnrDisplay() }}</strong>
+                    — update passenger travel documentation below.
+                </p>
+            </div>
+
+            <div class="gold-rule" aria-hidden="true"></div>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         LOADING STATE
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="flowState() === 'loading'" class="loading-body" aria-busy="true">
+        <div class="page-inner">
+            <div class="skeleton-layout">
+                <div class="skeleton-main">
+                    <div class="skel-card" *ngFor="let i of [1,2]">
+                        <div class="skel skel--header"></div>
+                        <div class="skel skel--field"></div>
+                        <div class="skel skel--field"></div>
+                        <div class="skel skel--field skel--field-half"></div>
+                    </div>
+                </div>
+                <div class="skeleton-aside">
+                    <div class="skel-card">
+                        <div class="skel skel--header"></div>
+                        <div class="skel skel--field"></div>
+                        <div class="skel skel--field"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ERROR STATE
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="flowState() === 'error'" class="error-body" [@fadeSlide]>
+        <div class="page-inner">
+            <div class="alert-error" role="alert">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {{ modifyError() }}
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN EDITING LAYOUT
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main *ngIf="flowState() === 'editing' && detail()" class="modify-body" role="main">
+
+        <div class="page-inner">
+
+            <!-- Error banner (non-fatal save errors) -->
+            <div *ngIf="modifyError() && flowState() !== 'loading'" class="alert-error alert-error--inline" role="alert"
+                aria-live="polite">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {{ modifyError() }}
+            </div>
+
+            <!-- Success banner (floating) -->
+            <div *ngIf="updateSuccess()" class="success-banner" [@fadeIn] role="status" aria-live="polite">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Passenger details updated successfully.
+                <button class="dismiss-btn" (click)="onDismissSuccess()" aria-label="Dismiss success message">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modify-grid">
+
+                <!-- ── LEFT COLUMN: Passenger tabs + edit forms ──────────── -->
+                <div class="main-col">
+
+                    <!-- Passenger selector tabs -->
+                    <div class="pax-selector" role="tablist" aria-label="Select passenger to edit"
+                        *ngIf="passengerDrafts().length > 1">
+
+                        <button *ngFor="let draft of passengerDrafts(); trackBy: trackByDraft" class="pax-tab"
+                            [class.pax-tab--active]="activePassengerId() === draft.passengerId"
+                            [class.pax-tab--dirty]="draft.isDirty" [class.pax-tab--saved]="draft.savedAt !== null"
+                            role="tab" [attr.aria-selected]="activePassengerId() === draft.passengerId"
+                            [attr.aria-label]="draft.firstName + ' ' + draft.lastName + (draft.isDirty ? ', unsaved changes' : '') + (draft.savedAt ? ', saved' : '')"
+                            (click)="onSelectPassenger(draft.passengerId)">
+
+                            <div class="pax-tab-avatar" aria-hidden="true">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </div>
+
+                            <div class="pax-tab-info">
+                                <span class="pax-tab-name">{{ draft.firstName }} {{ draft.lastName }}</span>
+                                <span class="pax-tab-status" *ngIf="draft.isDirty">Unsaved</span>
+                                <span class="pax-tab-status pax-tab-status--saved" *ngIf="draft.savedAt">Saved ✓</span>
+                            </div>
+
+                            <span *ngIf="draft.isSaving" class="pax-tab-spinner" aria-label="Saving…">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" class="spin-icon">
+                                    <path
+                                        d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                                </svg>
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                    <!-- Active passenger form -->
+                    <div [@formsStagger] class="forms-area">
+                        <div *ngFor="let draft of passengerDrafts(); trackBy: trackByDraft" class="form-stagger"
+                            [class.form-hidden]="draft.passengerId !== activePassengerId()">
+                            <app-passenger-edit-form *ngIf="draft.passengerId === activePassengerId()" [draft]="draft"
+                                [passengerIndex]="passengerDrafts().indexOf(draft) + 1"
+                                (requestSave)="onRequestSave($event)">
+                            </app-passenger-edit-form>
+                        </div>
+                    </div>
+
+                    <!-- All-saved action area -->
+                    <div *ngIf="allSaved()" class="all-saved-bar" [@fadeSlide]>
+                        <div class="all-saved-msg">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            All passenger details updated successfully.
+                        </div>
+                        <button class="btn-return" (click)="onSaveAllAndReturn()"
+                            aria-label="Return to booking details">
+                            Return to Booking
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- ── RIGHT COLUMN: Sticky summary card ─────────────────── -->
+                <aside class="aside-col" role="complementary" aria-label="Booking summary">
+                    <app-modification-summary-card *ngIf="detail()" [detail]="detail()!" [drafts]="passengerDrafts()"
+                        [hasUnsaved]="hasUnsaved()">
+                    </app-modification-summary-card>
+                </aside>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         CONFIRMATION MODAL
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="confirmModalOpen()" class="modal-backdrop" [@fadeIn] role="dialog" aria-modal="true"
+        aria-labelledby="confirm-modal-title" (click)="onCancelConfirm()">
+        <div (click)="$event.stopPropagation()">
+            <app-action-confirmation-modal [pendingDto]="pendingUpdateDto()" [draft]="activePassengerDraft()"
+                (confirm)="onConfirmSave()" (cancel)="onCancelConfirm()">
+            </app-action-confirmation-modal>
+        </div>
+    </div>
+
+</div>

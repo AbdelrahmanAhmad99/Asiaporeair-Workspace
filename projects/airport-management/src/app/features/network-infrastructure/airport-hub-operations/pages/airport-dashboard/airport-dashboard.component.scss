@@ -1,0 +1,247 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .ad-page {
+     min-height: 100%;
+     background-color: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Sticky Page Header
+ // ============================================================================
+ .ad-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.9375rem 1.5rem;
+     background-color: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 14px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ .ad-header-left {
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+ }
+
+ // ── Breadcrumb ────────────────────────────────────────────────────────────
+ .ad-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .ad-title {
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color var(--aoms-transition-fast, 150ms ease);
+ }
+
+ // ── Header controls ────────────────────────────────────────────────────────
+ .ad-header-controls {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-shrink: 0;
+ }
+
+ // ── Archive text button ────────────────────────────────────────────────────
+ .ad-header-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0 0.75rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.02em;
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast, 150ms ease);
+     white-space: nowrap;
+
+     &:hover {
+         border-color: $champagne;
+         color: $gold;
+         background: rgba($champagne, 0.06);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Icon-only square buttons ───────────────────────────────────────────────
+ .ad-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast, 150ms ease);
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     // Gold accent variant (theme toggle)
+     &--gold {
+         color: $gold;
+
+         &:hover {
+             background: rgba($gold, 0.1);
+         }
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: ad-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .ad-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+     max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+ }
+
+ // ============================================================================
+ // 4. Error Banner
+ // ============================================================================
+ .ad-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba(159, 18, 57, 0.07);
+     border: 1px solid rgba(159, 18, 57, 0.2);
+     color: #9f1239;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 0.875rem;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 5. Keyframes
+ // ============================================================================
+ @keyframes ad-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================================
+ // 6. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .ad-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.32);
+     }
+
+     .ad-icon-btn:hover {
+         color: $champagne;
+     }
+
+     .ad-header-btn:hover {
+         color: $champagne;
+     }
+
+     .ad-error-banner {
+         background: rgba(159, 18, 57, 0.14);
+         border-color: rgba(159, 18, 57, 0.32);
+         color: #f43f5e;
+     }
+ }

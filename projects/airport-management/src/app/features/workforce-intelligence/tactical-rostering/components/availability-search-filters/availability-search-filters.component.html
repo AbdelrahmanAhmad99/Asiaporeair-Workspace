@@ -1,0 +1,193 @@
+<!-- availability-search-filters.component.html -->
+
+<div class="asf">
+
+    <!-- Glass backdrop layer -->
+    <div class="asf__glass" aria-hidden="true"></div>
+
+    <!-- ── Mode Toggle ─────────────────────────────────────────── -->
+    <div class="asf__mode-toggle" role="group" aria-label="Search mode">
+        <button class="asf__mode-btn" [class.asf__mode-btn--active]="mode() === 'freeform'" type="button"
+            (click)="mode.set('freeform')">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="asf__mode-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            Free Search
+        </button>
+        <button class="asf__mode-btn" [class.asf__mode-btn--active]="mode() === 'flight'" type="button"
+            (click)="mode.set('flight')">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="asf__mode-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+            Flight Availability
+        </button>
+    </div>
+
+    <!-- ── Fields ──────────────────────────────────────────────── -->
+    <div class="asf__fields">
+
+        <!-- Flight mode: Flight Instance ID -->
+        @if (isFlightMode()) {
+        <div class="asf__field asf__field--flight" role="group">
+            <label class="asf__label" for="asf-fid">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="asf__label__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+                Flight Instance ID (Optional)
+            </label>
+            <input class="asf__input" id="asf-fid" type="number" min="1" placeholder="e.g. 1042" [ngModel]="flightId()"
+                (ngModelChange)="flightId.set($event)" />
+        </div>
+
+        <div class="asf__field">
+            <label class="asf__label" for="asf-dep">
+                Departure Time
+                <span class="asf__req" aria-hidden="true">*</span>
+            </label>
+            <input class="asf__input" id="asf-dep" type="datetime-local" [ngModel]="flightDepartureTime()"
+                (ngModelChange)="flightDepartureTime.set($event)" aria-required="true" />
+        </div>
+        
+        <div class="asf__field">
+            <label class="asf__label" for="asf-arr">
+                Arrival Time
+                <span class="asf__req" aria-hidden="true">*</span>
+            </label>
+            <input class="asf__input" id="asf-arr" type="datetime-local" [ngModel]="flightArrivalTime()"
+                (ngModelChange)="flightArrivalTime.set($event)" aria-required="true" />
+        </div>
+        
+        <div class="asf__field">
+            <label class="asf__label" for="asf-req-pos">Position</label>
+            <select class="asf__input" id="asf-req-pos" [ngModel]="requiredPosition()"
+                (ngModelChange)="requiredPosition.set($event)">
+                <option value="">Any</option>
+                <option value="Pilot">Pilot</option>
+                <option value="Attendant">Attendant</option>
+            </select>
+        </div>
+        
+        <div class="asf__field">
+            <label class="asf__label" for="asf-req-base">Base Airport (IATA)</label>
+            <input class="asf__input asf__input--iata" id="asf-req-base" type="text" placeholder="SIN"
+                maxlength="3" [ngModel]="requiredBaseAirportIata()" (ngModelChange)="requiredBaseAirportIata.set($event.toUpperCase())" />
+        </div>
+        
+        <div class="asf__field">
+            <label class="asf__label" for="asf-req-ac">Aircraft Type ID</label>
+            <input class="asf__input" id="asf-req-ac" type="number" min="1" placeholder="e.g. 1" [ngModel]="requiredAircraftTypeId()"
+                (ngModelChange)="requiredAircraftTypeId.set($event)" />
+        </div>
+        }
+
+        <!-- Free-form fields -->
+        @if (!isFlightMode()) {
+
+        <!-- Base Airport -->
+        <div class="asf__field">
+            <label class="asf__label" for="asf-base">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="asf__label__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z" />
+                </svg>
+                Base Airport (IATA)
+            </label>
+            <input class="asf__input asf__input--iata" id="asf-base" type="text" placeholder="SIN, CGK, BKK…"
+                maxlength="3" [ngModel]="baseAirport()" (ngModelChange)="baseAirport.set($event.toUpperCase())" />
+        </div>
+
+        <!-- Date -->
+        <div class="asf__field">
+            <label class="asf__label" for="asf-date">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="asf__label__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+                Search Date
+            </label>
+            <input class="asf__input" id="asf-date" type="date" [ngModel]="searchDate()"
+                (ngModelChange)="searchDate.set($event)" />
+        </div>
+
+        }
+
+        <!-- Rank selector — both modes -->
+        <div class="asf__field">
+            <label class="asf__label" for="asf-rank">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="asf__label__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                Crew Rank
+            </label>
+
+            <!-- Custom rank grid selector -->
+            <div class="asf__rank-grid" role="group" aria-label="Select crew rank">
+                @for (opt of rankOptions; track opt.value) {
+                <button class="asf__rank-opt" type="button" [class.asf__rank-opt--active]="selectedRank() === opt.value"
+                    (click)="selectedRank.set(opt.value)" [attr.aria-pressed]="selectedRank() === opt.value"
+                    [attr.aria-label]="opt.label">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="asf__rank-opt__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="opt.iconPath" />
+                    </svg>
+                    <span class="asf__rank-opt__label">{{ opt.label }}</span>
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- Include inactive toggle -->
+        <div class="asf__field asf__field--toggle">
+            <button class="asf__toggle" type="button" [class.asf__toggle--on]="showInactive()"
+                (click)="showInactive.set(!showInactive())" [attr.aria-pressed]="showInactive()"
+                aria-label="Include inactive crew members">
+                <span class="asf__toggle__thumb"></span>
+            </button>
+            <span class="asf__toggle-label">Include inactive crew</span>
+        </div>
+
+    </div>
+
+    <!-- ── Actions ─────────────────────────────────────────────── -->
+    <div class="asf__actions">
+        <button class="asf__reset-btn" type="button" (click)="onReset()">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="asf__reset-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Reset
+        </button>
+
+        <button class="asf__search-btn" type="button" [disabled]="!isValid() || isLoading()"
+            [class.asf__search-btn--loading]="isLoading()" (click)="onSubmit()">
+            @if (!isLoading()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="asf__search-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            Execute Search
+            }
+            @if (isLoading()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="asf__search-btn__icon asf__search-btn__icon--spin" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Searching…
+            }
+        </button>
+    </div>
+
+</div>

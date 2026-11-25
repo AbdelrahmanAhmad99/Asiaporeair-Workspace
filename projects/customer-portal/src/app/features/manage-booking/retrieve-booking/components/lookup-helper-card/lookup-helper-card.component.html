@@ -1,0 +1,92 @@
+<!-- lookup-helper-card.component.html -->
+
+<aside class="helper-card" aria-label="How to find your booking reference">
+
+    <!-- Header -->
+    <div class="helper-header">
+        <div class="helper-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+        </div>
+        <h3 class="helper-title">Where to find your reference</h3>
+    </div>
+
+    <div class="gold-rule" aria-hidden="true"></div>
+
+    <!-- Sources list -->
+    <ul class="sources-list" role="list">
+
+        <li class="source-item" role="listitem">
+            <div class="source-icon" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                </svg>
+            </div>
+            <div class="source-body">
+                <span class="source-label">Booking Confirmation Email</span>
+                <span class="source-desc">Look for "Booking Reference" or "PNR" near the top of your confirmation email
+                    from Asiaporeair.</span>
+            </div>
+        </li>
+
+        <li class="source-item" role="listitem">
+            <div class="source-icon" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                </svg>
+            </div>
+            <div class="source-body">
+                <span class="source-label">Printed or Digital Itinerary</span>
+                <span class="source-desc">The 6-character alphanumeric code appears in the header section of your travel
+                    itinerary document.</span>
+            </div>
+        </li>
+
+        <li class="source-item" role="listitem">
+            <div class="source-icon" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                    <line x1="12" y1="18" x2="12.01" y2="18" />
+                </svg>
+            </div>
+            <div class="source-body">
+                <span class="source-label">Travel Agency Confirmation</span>
+                <span class="source-desc">If booked through a travel agent, your booking reference will appear on the
+                    agency's booking receipt.</span>
+            </div>
+        </li>
+
+    </ul>
+
+    <div class="gold-rule" aria-hidden="true"></div>
+
+    <!-- Reference format example -->
+    <div class="format-example">
+        <span class="format-label">Reference Format</span>
+        <div class="format-mock" aria-label="Example reference: ABCD12 or longer D40584A4">
+            <span class="format-char" *ngFor="let ch of ['A','B','C','D','1','2']">{{ ch }}</span>
+            <span class="format-sep" aria-hidden="true">or up to</span>
+            <span class="format-char" *ngFor="let ch of ['D','4','0','5','8','4','A','4']">{{ ch }}</span>
+        </div>
+    </div>
+
+    <!-- Help link -->
+    <div class="help-cta">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+            aria-hidden="true">
+            <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.28 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9" />
+        </svg>
+        <span>Can't find your reference?
+            <a href="mailto:concierge@asiaporeair.com" class="help-link" aria-label="Contact our concierge team">
+                Contact our concierge
+            </a>
+        </span>
+    </div>
+
+</aside>

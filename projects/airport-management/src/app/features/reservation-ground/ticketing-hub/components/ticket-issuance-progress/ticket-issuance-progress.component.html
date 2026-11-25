@@ -1,0 +1,107 @@
+<div class="tip-container" [class.tip-container--complete]="isComplete()" [class.tip-container--failed]="isFailed()">
+
+    <!-- Gold accent strip -->
+    <div class="tip-container__accent" aria-hidden="true"></div>
+
+    <!-- ── Header: Status + Description ──────────────────────────── -->
+    <div class="tip-header">
+        <div class="tip-header__left">
+            <!-- Animated status icon -->
+            <div class="tip-status-icon" [class.tip-status-icon--active]="isActive()"
+                [class.tip-status-icon--complete]="isComplete()" [class.tip-status-icon--failed]="isFailed()"
+                aria-hidden="true">
+
+                @if (isComplete()) {
+                <!-- Checkmark -->
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                } @else if (isFailed()) {
+                <!-- X -->
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                } @else if (isActive()) {
+                <!-- Spinner ring -->
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="tip-spinner">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                } @else {
+                <!-- Ticket icon (idle) -->
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                </svg>
+                }
+            </div>
+
+            <div>
+                <p class="tip-status-label" [attr.aria-live]="isActive() ? 'polite' : null">
+                    {{ currentLabel() }}
+                </p>
+                <p class="tip-status-desc">{{ currentDescription() }}</p>
+            </div>
+        </div>
+
+        <!-- Progress percentage -->
+        <div class="tip-percent" [class.tip-percent--complete]="isComplete()" [class.tip-percent--failed]="isFailed()"
+            aria-label="{{ progressBarWidth() }}% complete">
+            {{ isComplete() ? '100' : isFailed() ? '—' : progressBarWidth() | number:'1.0-0' }}%
+        </div>
+    </div>
+
+    <!-- ── Linear Progress Bar ────────────────────────────────────── -->
+    <div class="tip-bar-track" role="progressbar" [attr.aria-valuenow]="progressBarWidth()" aria-valuemin="0"
+        aria-valuemax="100" [attr.aria-label]="currentLabel()">
+        <div class="tip-bar-fill" [class.tip-bar-fill--complete]="isComplete()"
+            [class.tip-bar-fill--failed]="isFailed()" [style.width.%]="progressBarWidth()">
+
+            <!-- Animated shimmer on fill when active -->
+            @if (isActive()) {
+            <div class="tip-bar-fill__shimmer" aria-hidden="true"></div>
+            }
+        </div>
+    </div>
+
+    <!-- ── Stage Nodes ────────────────────────────────────────────── -->
+    <ol class="tip-stages" aria-label="Issuance pipeline stages">
+        @for (stage of stages(); track stage.id; let last = $last) {
+        <li class="tip-stage" [class]="'tip-stage--' + stage.stageState">
+
+            <!-- Connector line -->
+            @if (!last) {
+            <div class="tip-stage__connector" [class]="'tip-stage__connector--' + stage.stageState" aria-hidden="true">
+            </div>
+            }
+
+            <!-- Node circle -->
+            <div class="tip-stage__node" [class]="'tip-stage__node--' + stage.stageState"
+                [attr.aria-label]="stage.label + ': ' + stage.stageState" aria-hidden="true">
+
+                @if (stage.stageState === 'completed') {
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                }
+
+                @if (stage.stageState === 'active') {
+                <span class="tip-stage__node-pulse"></span>
+                }
+
+                @if (stage.stageState === 'error') {
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                }
+
+            </div>
+
+            <!-- Stage label -->
+            <span class="tip-stage__label">{{ stage.label }}</span>
+
+        </li>
+        }
+    </ol>
+
+</div>

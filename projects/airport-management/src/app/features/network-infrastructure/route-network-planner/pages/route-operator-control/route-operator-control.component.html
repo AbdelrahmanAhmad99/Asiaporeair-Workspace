@@ -1,0 +1,238 @@
+<div class="roc-page">
+
+    <!-- ══ Sticky Command Header ═══════════════════════════════════ -->
+    <header class="roc-header">
+
+        <!-- Left: back + breadcrumb + title -->
+        <div class="roc-header-left">
+            <button class="roc-back-btn" (click)="goToExplorer()" aria-label="Back to Network Explorer"
+                title="Network Explorer">
+                <svg class="roc-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <nav class="roc-breadcrumb" aria-label="Breadcrumb">
+                    <span class="roc-breadcrumb__section">Network &amp; Infrastructure</span>
+                    <svg class="roc-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <button class="roc-breadcrumb__link" (click)="goToExplorer()">Route Explorer</button>
+                    <svg class="roc-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="roc-breadcrumb__current">Operator Control</span>
+                </nav>
+                <h1 class="roc-title">{{ pageTitle() }}</h1>
+            </div>
+        </div>
+
+        <!-- Right: tactical nav bar -->
+        <div class="roc-toolbar">
+
+            <!-- Analyze Route — Champagne ghost -->
+            <button class="roc-btn roc-btn--ghost" type="button" (click)="goToAnalysis()"
+                aria-label="Analyze this route">
+                <svg class="roc-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638
+                   0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12
+                   19.5c-4.638 0-8.573-3.007-9.963-7.178z M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                </svg>
+                Analyze Route
+            </button>
+
+            <!-- Refresh icon -->
+            <button class="roc-icon-btn" (click)="refresh()" [disabled]="loading()" aria-label="Refresh operator list"
+                title="Refresh">
+                <svg class="roc-icon-btn__icon" [class.roc-icon-btn__icon--spin]="loading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Separator -->
+            <div class="roc-sep" aria-hidden="true"></div>
+
+            <!-- Network Explorer — Gold outline -->
+            <button class="roc-btn roc-btn--outline" type="button" (click)="goToExplorer()"
+                aria-label="Return to Network Explorer">
+                <svg class="roc-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+                Explorer
+            </button>
+
+            <!-- Assign New Operator — Royal Gold solid (primary CTA) -->
+            <button class="roc-btn roc-btn--primary" type="button" [disabled]="loading() || unassigned().length === 0"
+                (click)="openAssignModal()" aria-label="Assign a new airline operator to this corridor">
+                <svg class="roc-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Assign New Operator
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="roc-body">
+
+        <!-- Error banner -->
+        @if (opError()) {
+        <div class="roc-error-banner" role="alert">
+            <svg class="roc-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                   0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="roc-error-banner__body">
+                <strong class="roc-error-banner__title">Operator Registry Error</strong>
+                <span class="roc-error-banner__msg">{{ opError() }}</span>
+            </div>
+            <button class="roc-error-banner__dismiss" type="button" (click)="dismissError()" aria-label="Dismiss error">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- Summary metrics strip -->
+        @if (!loading() && operators().length > 0) {
+        <div class="roc-metrics">
+            <div class="roc-metric">
+                <span class="roc-metric__value">{{ operators().length }}</span>
+                <span class="roc-metric__label">Total Operators</span>
+            </div>
+            <div class="roc-metric-sep" aria-hidden="true"></div>
+            <div class="roc-metric">
+                <span class="roc-metric__value roc-metric__value--emerald">{{ activeCount() }}</span>
+                <span class="roc-metric__label">Active</span>
+            </div>
+            <div class="roc-metric-sep" aria-hidden="true"></div>
+            <div class="roc-metric">
+                <span class="roc-metric__value roc-metric__value--champagne">{{ codeshareCount() }}</span>
+                <span class="roc-metric__label">Codeshare</span>
+            </div>
+            <div class="roc-metric-sep" aria-hidden="true"></div>
+            <div class="roc-metric">
+                <span class="roc-metric__value roc-metric__value--muted">{{ unassigned().length }}</span>
+                <span class="roc-metric__label">Available to Assign</span>
+            </div>
+        </div>
+        }
+
+        <!-- Operator assignment list -->
+        <aoms-operator-assignment-list [operators]="operators()" [airlines]="airlines()" [loading]="loading()"
+            [isProcessing]="isProcessing()" [revokingIata]="revokingIata()" (onEdit)="openEditModal($event)"
+            (onRevoke)="openRevokeGuard($event)" />
+
+    </main>
+
+    <!-- ══ Assign / Edit Modal ════════════════════════════════════ -->
+    @if (configModalOpen()) {
+    <aoms-operator-config-modal [routeId]="routeId()" [availableAirlines]="unassigned()" [editTarget]="editTarget()"
+        [isProcessing]="isProcessing()" [availabilityLoading]="airlinesLoading()" [formError]="modalFormError()"
+        (onAssign)="onAssign($event)" (onUpdate)="onUpdate($event)" (onClose)="closeConfigModal()" />
+    }
+
+    <!-- ══ Revocation Confirmation Guard ═════════════════════════ -->
+    @if (revokeGuardOpen()) {
+    <div class="roc-guard-backdrop" (click)="closeRevokeGuard()" aria-hidden="true"></div>
+
+    <div class="roc-guard" role="dialog" aria-modal="true"
+        [attr.aria-label]="'Confirm revocation of ' + (revokeTarget()?.airlineIataCode ?? '') + ' operator rights'">
+
+        <!-- Ruby accent bar -->
+        <div class="roc-guard__ruby-bar" aria-hidden="true"></div>
+
+        <div class="roc-guard__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636
+                   m12.728 12.728L5.636 5.636" />
+            </svg>
+        </div>
+
+        <h2 class="roc-guard__title">Revoke Operator Rights</h2>
+
+        <p class="roc-guard__body">
+            You are about to revoke all corridor operating rights for
+            <strong class="roc-guard__iata">{{ revokeTarget()?.airlineIataCode }}</strong>.
+            This will immediately suspend their ability to operate scheduled services on this corridor.
+            This action can be reversed by re-assigning the operator.
+        </p>
+
+        @if (revokeTarget()?.isCodeshare) {
+        <div class="roc-guard__warning" role="note">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            This is a codeshare operator. Codeshare ticket sales through this airline will also be suspended.
+        </div>
+        }
+
+        <div class="roc-guard__actions">
+            <button class="roc-guard-btn roc-guard-btn--cancel" type="button" (click)="closeRevokeGuard()"
+                [disabled]="isProcessing()" autofocus>
+                Cancel
+            </button>
+            <button class="roc-guard-btn roc-guard-btn--confirm" type="button" (click)="confirmRevoke()"
+                [disabled]="isProcessing()">
+                @if (isProcessing()) {
+                <svg class="roc-guard-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                       0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                       0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Revoking…
+                } @else {
+                Confirm Revocation
+                }
+            </button>
+        </div>
+
+    </div>
+    }
+
+    <!-- ══ Toast Stack ════════════════════════════════════════════ -->
+    <div class="roc-toast-stack" role="region" aria-live="polite">
+        @for (toast of toasts(); track toast.id) {
+        <div class="roc-toast" [class.roc-toast--success]="toast.type === 'success'"
+            [class.roc-toast--error]="toast.type === 'error'" role="status">
+            <div class="roc-toast__icon-wrap" aria-hidden="true">
+                @if (toast.type === 'success') {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                }
+            </div>
+            <p class="roc-toast__msg">{{ toast.message }}</p>
+            <button class="roc-toast__dismiss" type="button" (click)="dismissToast(toast.id)" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+    </div>
+
+</div>

@@ -1,0 +1,301 @@
+// ============================================================================
+// action-buttons-group.component.scss
+// Asiaporeair | Action Bar — Download · Email · Navigate
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$success : #1E6E45;
+$error : #C53030;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 240ms $ease;
+
+:host {
+    display: block;
+}
+
+.abg-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    max-width: 520px;
+    width: 100%;
+}
+
+// ── Rows ──────────────────────────────────────────────────────────────────────
+.abg-row {
+    display: flex;
+    gap: 0.75rem;
+
+    // &--primary {}
+
+    &--nav {
+        flex-wrap: wrap;
+    }
+}
+
+// ── Base button ───────────────────────────────────────────────────────────────
+.abg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.77rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.75rem 1.375rem;
+    transition: background $t, box-shadow $t, transform $t, color $t, border-color $t;
+    white-space: nowrap;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+    // ── Primary: Gold background ──
+    &--primary {
+        flex: 1;
+        background: $royal-gold;
+        border: 1px solid transparent;
+        color: $ivory;
+
+        &:hover:not(:disabled) {
+            background: darken($royal-gold, 6%);
+            box-shadow: 0 4px 20px rgba($royal-gold, 0.4);
+            transform: translateY(-1px);
+        }
+    }
+
+    // ── Secondary: dark border, transparent bg ──
+    &--secondary {
+        flex: 1;
+        background: transparent;
+        border: 1px solid rgba($charcoal, 0.18);
+        color: $charcoal;
+
+        &:hover:not(:disabled) {
+            border-color: $royal-gold;
+            color: $royal-gold;
+            background: rgba($royal-gold, 0.04);
+        }
+
+        &--active {
+            border-color: $royal-gold;
+            color: $royal-gold;
+            background: rgba($royal-gold, 0.06);
+        }
+    }
+
+    // ── Ghost: minimal text link style ──
+    &--ghost {
+        background: transparent;
+        border: 1px solid rgba($charcoal, 0.12);
+        color: rgba($charcoal, 0.6);
+        font-size: 0.7rem;
+        padding: 0.6rem 1rem;
+
+        &:hover:not(:disabled) {
+            border-color: rgba($midnight, 0.25);
+            color: $midnight;
+            background: rgba($midnight, 0.03);
+        }
+    }
+
+    // ── Home: midnight bg ──
+    &--home {
+        background: $midnight;
+        border: 1px solid rgba($champagne, 0.2);
+        color: $champagne;
+        flex: 1;
+
+        &:hover:not(:disabled) {
+            background: lighten($midnight, 6%);
+            border-color: rgba($champagne, 0.4);
+            box-shadow: 0 4px 16px rgba($midnight, 0.3);
+            transform: translateY(-1px);
+        }
+    }
+}
+
+.abg-spin {
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ── Email panel ───────────────────────────────────────────────────────────────
+.abg-email-panel {
+    background: rgba($charcoal, 0.03);
+    border: 1px solid rgba($charcoal, 0.1);
+    border-radius: 10px;
+    padding: 1rem 1.125rem;
+    animation: dropIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dropIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// .abg-email-form {}
+
+.abg-email-label {
+    display: block;
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($charcoal, 0.5);
+    margin-bottom: 0.5rem;
+}
+
+.abg-email-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+
+    &--error .abg-email-input-row {
+        border-color: rgba($error, 0.5);
+    }
+}
+
+.abg-email-input-row {
+    display: flex;
+    border: 1px solid rgba($charcoal, 0.15);
+    border-radius: 4px;
+    overflow: hidden;
+    background: $white;
+    transition: border-color $t, box-shadow $t;
+
+    &:focus-within {
+        border-color: $royal-gold;
+        box-shadow: 0 0 0 3px rgba($royal-gold, 0.1);
+    }
+}
+
+.abg-email-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: $charcoal;
+    padding: 0.65rem 0.875rem;
+    min-width: 0;
+
+    &::placeholder {
+        color: rgba($muted, 0.55);
+    }
+}
+
+.abg-email-submit {
+    width: 42px;
+    border: none;
+    background: $midnight;
+    color: $champagne;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background $t;
+
+    &:hover {
+        background: lighten($midnight, 8%);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: -2px;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.abg-email-error {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.67rem;
+    color: $error;
+    margin: 0;
+}
+
+.abg-email-sent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $success;
+    animation: fadeIn 300ms ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// ── Print: hide everything ────────────────────────────────────────────────────
+@media print {
+    :host {
+        display: none !important;
+    }
+}
+
+// ── Reduced motion ────────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+    .abg-email-panel {
+        animation: none !important;
+    }
+
+    .abg-spin {
+        animation: none !important;
+    }
+
+    .abg-btn {
+        transition: none !important;
+    }
+}

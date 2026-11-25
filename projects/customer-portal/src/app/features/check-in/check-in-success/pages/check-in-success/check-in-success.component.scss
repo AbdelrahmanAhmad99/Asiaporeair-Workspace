@@ -1,0 +1,514 @@
+// ============================================================================
+// check-in-success.component.scss
+// Asiaporeair | Step 3 — "Your Journey is Confirmed"
+// Covers: screen / hover / @media print
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$success : #1E6E45;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ── §1 Host / Shell ───────────────────────────────────────────────────────────
+:host {
+    display: block;
+    font-family: $font;
+    min-height: 100vh;
+    background: $ivory;
+}
+
+.success-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+// ── §2 Hero ───────────────────────────────────────────────────────────────────
+.success-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba($champagne, 0.1);
+
+    // Noise texture
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        opacity: 0.4;
+    }
+
+    // Bottom golden rule
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(to right,
+                transparent, rgba($royal-gold, 0.35), $champagne,
+                rgba($royal-gold, 0.35), transparent);
+    }
+
+    &__particles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    &__inner {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1.75rem 2rem 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    &__nav-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(to right,
+                transparent,
+                rgba($royal-gold, 0.25) 15%,
+                $royal-gold, $champagne, $royal-gold,
+                rgba($royal-gold, 0.25) 85%,
+                transparent);
+        margin-bottom: 2rem;
+    }
+
+    &__title-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        text-align: center;
+        padding-bottom: 0.5rem;
+    }
+
+    &__title {
+        font-size: clamp(1.5rem, 3.5vw, 2.3rem);
+        font-weight: 300;
+        letter-spacing: -0.03em;
+        color: $white;
+        margin: 0;
+        line-height: 1.15;
+    }
+
+    &__title-accent {
+        font-weight: 700;
+        color: $champagne;
+    }
+
+    &__greeting {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        color: rgba($white, 0.55);
+        margin: 0;
+        letter-spacing: 0.01em;
+    }
+}
+
+// ── §3 Brand wordmark & back button ──────────────────────────────────────────
+.success-brand {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.success-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 3px;
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.18);
+    font-family: $font;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: rgba($white, 0.5);
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($champagne, 0.4);
+        color: $champagne;
+        background: rgba($champagne, 0.05);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §4 Flight pill ────────────────────────────────────────────────────────────
+.success-flight-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 1rem;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($champagne, 0.2);
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    color: rgba($white, 0.6);
+    flex-wrap: wrap;
+    justify-content: center;
+
+    &__pnr {
+        font-family: $font;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: $champagne;
+    }
+
+    &__flight {
+        font-weight: 600;
+        color: rgba($white, 0.85);
+    }
+}
+
+// ── §5 Particles ──────────────────────────────────────────────────────────────
+.s-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($champagne, 0.15);
+    animation: twinkle 3s ease-in-out infinite;
+
+    @for $i from 1 through 14 {
+        &:nth-child(#{$i}) {
+            width: #{2 + ($i % 3)}px;
+            height: #{2 + ($i % 3)}px;
+            // top: #{5 + ($i * 7) % 88}%;
+            // left: #{3 + ($i * 9) % 95}%;
+            animation-delay: #{$i * 0.22}s;
+            animation-duration: #{2 + $i * 0.2}s;
+        }
+    }
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.05;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+// ── §6 Main body ──────────────────────────────────────────────────────────────
+.success-body {
+    flex: 1;
+    padding: 2.5rem 2rem 4rem;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.success-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+    align-items: start;
+
+    @media (max-width: 860px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── §7 Pass column ────────────────────────────────────────────────────────────
+.success-pass-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+// ── §8 Multi-pass tabs ────────────────────────────────────────────────────────
+.pass-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pass-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.45rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba($charcoal, 0.12);
+    background: $white;
+    font-family: $font;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba($charcoal, 0.55);
+    cursor: pointer;
+    transition: all $t;
+
+    &__seat {
+        font-weight: 700;
+        color: $royal-gold;
+    }
+
+    &--active {
+        background: $midnight;
+        border-color: rgba($champagne, 0.25);
+        color: $champagne;
+
+        .pass-tab__seat {
+            color: $champagne;
+        }
+    }
+
+    &:hover:not(&--active) {
+        border-color: rgba($royal-gold, 0.3);
+        color: $royal-gold;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §9 Sidebar ────────────────────────────────────────────────────────────────
+.success-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 1.5rem;
+}
+
+// ── §10 Journey secured info card ─────────────────────────────────────────────
+.success-info-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.09);
+    box-shadow: 0 2px 8px rgba($midnight, 0.05);
+    overflow: hidden;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 1rem 1.25rem 0.75rem;
+        border-bottom: 1px solid rgba($royal-gold, 0.12);
+    }
+
+    &__icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.08);
+        border: 1px solid rgba($champagne, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        color: $charcoal;
+    }
+}
+
+// ── §11 Tips list ─────────────────────────────────────────────────────────────
+.success-tips {
+    list-style: none;
+    margin: 0;
+    padding: 0.875rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.success-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: $muted;
+    line-height: 1.55;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    strong {
+        color: $charcoal;
+        font-weight: 600;
+    }
+}
+
+// ── §12 Contact strip ─────────────────────────────────────────────────────────
+.success-contact {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    color: rgba($muted, 0.7);
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.07);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+
+    &__link {
+        font-weight: 700;
+        color: $royal-gold;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            border-radius: 2px;
+        }
+    }
+}
+
+// ── §13 Guard / empty state ───────────────────────────────────────────────────
+.success-guard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 4rem 2rem;
+    text-align: center;
+
+    p {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        color: $muted;
+        line-height: 1.65;
+        max-width: 380px;
+    }
+
+    button {
+        background: none;
+        border: none;
+        color: $royal-gold;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: inherit;
+        font-family: inherit;
+    }
+}
+
+// ── §14 Responsive ────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+    .success-hero__inner {
+        padding: 1.25rem 1rem 0;
+    }
+
+    .success-body {
+        padding: 1.5rem 1rem 3rem;
+    }
+}
+
+// ── §15 Focus styles (WCAG AA) ────────────────────────────────────────────────
+:focus-visible {
+    outline: 2px solid $royal-gold;
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+// ── §16 Print ─────────────────────────────────────────────────────────────────
+@media print {
+
+    // Hide all chrome except the boarding pass itself
+    .success-hero,
+    .success-sidebar,
+    .pass-tabs,
+    .success-guard {
+        display: none !important;
+    }
+
+    .success-body {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .success-layout {
+        display: block !important;
+        padding: 0;
+    }
+
+    .success-pass-col {
+        align-items: center;
+        padding: 0;
+    }
+
+    :host {
+        background: white !important;
+        min-height: auto !important;
+    }
+}
+
+// ── §17 Reduced motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+    .s-particle {
+        animation: none !important;
+    }
+
+    .success-back-btn {
+        transition: none !important;
+    }
+
+    .pass-tab {
+        transition: none !important;
+    }
+}

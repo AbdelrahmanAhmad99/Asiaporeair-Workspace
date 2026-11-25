@@ -1,0 +1,23 @@
+// --------------------------------------------------------------------------------
+// NOTE: ADD THESE CSS CLASSES TO YOUR GLOBAL STYLES.SCSS
+// --------------------------------------------------------------------------------
+
+.success-snackbar {
+    background-color: #4CAF50 !important; // Green
+    color: white;
+}
+
+.error-snackbar {
+    background-color: #F44336 !important; // Red
+    color: white;
+}
+
+.info-snackbar {
+    background-color: #2196F3 !important; // Blue
+    color: white;
+}
+
+.warning-snackbar {
+    background-color: #FF9800 !important; // Orange
+    color: white;
+}

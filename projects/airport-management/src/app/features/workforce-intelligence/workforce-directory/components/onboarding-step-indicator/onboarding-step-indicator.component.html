@@ -1,0 +1,40 @@
+<div class="osi" aria-label="Onboarding progress" role="navigation">
+    @for (step of steps; track step.index; let last = $last) {
+
+    <div class="osi__step" [class.osi__step--active]="isActive(step)" [class.osi__step--completed]="isCompleted(step)"
+        [class.osi__step--pending]="isPending(step)" [attr.aria-current]="isActive(step) ? 'step' : null">
+
+        <!-- Node circle -->
+        <div class="osi__node" aria-hidden="true">
+            @if (isCompleted(step)) {
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="osi__node__check">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            } @else {
+            <span class="osi__node__num">{{ step.index + 1 }}</span>
+            }
+        </div>
+
+        <!-- Step label -->
+        <div class="osi__label">
+            <span class="osi__label__title">{{ step.label }}</span>
+            <span class="osi__label__sub">
+                @if (isActive(step) && step.index === 0 && selectedRole()) {
+                {{ selectedRole() }} selected
+                } @else {
+                {{ step.sublabel }}
+                }
+            </span>
+        </div>
+
+    </div>
+
+    <!-- Connector line (not after last) -->
+    @if (!last) {
+    <div class="osi__connector" [class.osi__connector--done]="currentStep() > step.index" aria-hidden="true">
+        <div class="osi__connector__fill"></div>
+    </div>
+    }
+
+    }
+</div>

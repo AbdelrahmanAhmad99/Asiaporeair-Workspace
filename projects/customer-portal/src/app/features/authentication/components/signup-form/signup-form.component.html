@@ -1,0 +1,183 @@
+<form class="sf" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+
+    <!-- ── Name row ─────────────────────────────────────────────────────── -->
+    <div class="sf__row sf__row--2col">
+
+        <!-- First Name -->
+        <div class="sf__field" [class.sf__field--error]="isInvalid('firstName')">
+            <input class="sf__input" id="firstName" type="text" formControlName="firstName" placeholder=" "
+                autocomplete="given-name" [attr.aria-describedby]="isInvalid('firstName') ? 'fn-err' : null"
+                [attr.aria-invalid]="isInvalid('firstName')" />
+            <label class="sf__label" for="firstName">First Name</label>
+            <div class="sf__border-bar"></div>
+            @if (isInvalid('firstName')) {
+            <span class="sf__error" id="fn-err" role="alert">{{ errorFor('firstName') }}</span>
+            }
+        </div>
+
+        <!-- Last Name -->
+        <div class="sf__field" [class.sf__field--error]="isInvalid('lastName')">
+            <input class="sf__input" id="lastName" type="text" formControlName="lastName" placeholder=" "
+                autocomplete="family-name" [attr.aria-describedby]="isInvalid('lastName') ? 'ln-err' : null"
+                [attr.aria-invalid]="isInvalid('lastName')" />
+            <label class="sf__label" for="lastName">Last Name</label>
+            <div class="sf__border-bar"></div>
+            @if (isInvalid('lastName')) {
+            <span class="sf__error" id="ln-err" role="alert">{{ errorFor('lastName') }}</span>
+            }
+        </div>
+
+    </div>
+
+    <!-- ── Email ─────────────────────────────────────────────────────────── -->
+    <div class="sf__field" [class.sf__field--error]="isInvalid('email')">
+        <input class="sf__input" id="email" type="email" formControlName="email" placeholder=" " autocomplete="email"
+            [attr.aria-invalid]="isInvalid('email')" />
+        <label class="sf__label" for="email">Email Address</label>
+        <div class="sf__border-bar"></div>
+        @if (isInvalid('email')) {
+        <span class="sf__error" role="alert">{{ errorFor('email') }}</span>
+        }
+    </div>
+
+    <!-- ── Phone (optional) ──────────────────────────────────────────────── -->
+    <div class="sf__field" [class.sf__field--error]="isInvalid('phoneNumber')">
+        <input class="sf__input" id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder=" "
+            autocomplete="tel" [attr.aria-invalid]="isInvalid('phoneNumber')" />
+        <label class="sf__label" for="phoneNumber">Phone Number <span class="sf__optional">(optional)</span></label>
+        <div class="sf__border-bar"></div>
+        @if (isInvalid('phoneNumber')) {
+        <span class="sf__error" role="alert">{{ errorFor('phoneNumber') }}</span>
+        }
+    </div>
+
+    <!-- ── Date of Birth (optional) ──────────────────────────────────────── -->
+    <div class="sf__field" [class.sf__field--error]="isInvalid('dateOfBirth')">
+        <input class="sf__input" id="dateOfBirth" type="date" formControlName="dateOfBirth" placeholder=" "
+            autocomplete="bday" [attr.aria-invalid]="isInvalid('dateOfBirth')" />
+        <label class="sf__label" for="dateOfBirth">Date of Birth <span class="sf__optional">(optional)</span></label>
+        <div class="sf__border-bar"></div>
+        @if (isInvalid('dateOfBirth')) {
+        <span class="sf__error" role="alert">{{ errorFor('dateOfBirth') }}</span>
+        }
+    </div>
+
+    <!-- ── Address (optional) ────────────────────────────────────────────── -->
+    <div class="sf__field" [class.sf__field--error]="isInvalid('address')">
+        <input class="sf__input" id="address" type="text" formControlName="address" placeholder=" "
+            autocomplete="street-address" [attr.aria-invalid]="isInvalid('address')" />
+        <label class="sf__label" for="address">Address <span class="sf__optional">(optional)</span></label>
+        <div class="sf__border-bar"></div>
+        @if (isInvalid('address')) {
+        <span class="sf__error" role="alert">{{ errorFor('address') }}</span>
+        }
+    </div>
+
+    <!-- ── Frequent Flyer Row ────────────────────────────────────────────── -->
+    <div class="sf__row sf__row--2col">
+        <!-- Frequent Flyer ID -->
+        <div class="sf__field" [class.sf__field--error]="isInvalid('frequentFlyerId')">
+            <input class="sf__input" id="frequentFlyerId" type="text" formControlName="frequentFlyerId" placeholder=" "
+                autocomplete="off" [attr.aria-invalid]="isInvalid('frequentFlyerId')" />
+            <label class="sf__label" for="frequentFlyerId">Frequent Flyer ID <span
+                    class="sf__optional">(optional)</span></label>
+            <div class="sf__border-bar"></div>
+            @if (isInvalid('frequentFlyerId')) {
+            <span class="sf__error" role="alert">{{ errorFor('frequentFlyerId') }}</span>
+            }
+        </div>
+
+        <!-- KrisFlyer Tier -->
+        <div class="sf__field" [class.sf__field--error]="isInvalid('krisFlyerTier')">
+            <select class="sf__input sf__input--select" id="krisFlyerTier" formControlName="krisFlyerTier"
+                [attr.aria-invalid]="isInvalid('krisFlyerTier')" [class.has-value]="form.get('krisFlyerTier')?.value">
+                <option value="" disabled hidden></option>
+                <option value="Solitaire PPS Club">Solitaire PPS Club</option>
+                <option value="KrisFlyer Elite Gold">KrisFlyer Elite Gold</option>
+                <option value="KrisFlyer Elite Silver">KrisFlyer Elite Silver</option>
+                <option value="KrisFlyer">KrisFlyer</option>
+                <option value="PPS Club">PPS Club</option>
+            </select>
+            <label class="sf__label" for="krisFlyerTier">KrisFlyer Tier <span
+                    class="sf__optional">(optional)</span></label>
+            <div class="sf__border-bar"></div>
+            <svg class="sf__select-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+            @if (isInvalid('krisFlyerTier')) {
+            <span class="sf__error" role="alert">{{ errorFor('krisFlyerTier') }}</span>
+            }
+        </div>
+    </div>
+
+    <!-- ── Password ──────────────────────────────────────────────────────── -->
+    <div class="sf__field" [class.sf__field--error]="isInvalid('password')">
+        <input class="sf__input" id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            placeholder=" " autocomplete="new-password" [attr.aria-invalid]="isInvalid('password')" />
+        <label class="sf__label" for="password">Password</label>
+        <div class="sf__border-bar"></div>
+        <button class="sf__eye-btn" type="button" (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            @if (showPassword) {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+            </svg>
+            } @else {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+            }
+        </button>
+        @if (isInvalid('password')) {
+        <span class="sf__error" role="alert">{{ errorFor('password') }}</span>
+        }
+    </div>
+
+    <!-- ── Confirm Password ───────────────────────────────────────────────── -->
+    <div class="sf__field" [class.sf__field--error]="isInvalid('confirmPassword') || mismatch">
+        <input class="sf__input" id="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword" placeholder=" " autocomplete="new-password"
+            [attr.aria-invalid]="isInvalid('confirmPassword') || mismatch" />
+        <label class="sf__label" for="confirmPassword">Confirm Password</label>
+        <div class="sf__border-bar"></div>
+        <button class="sf__eye-btn" type="button" (click)="showConfirmPassword = !showConfirmPassword"
+            [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
+            @if (showConfirmPassword) {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+            </svg>
+            } @else {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+            }
+        </button>
+        @if (mismatch) {
+        <span class="sf__error" role="alert">Passwords do not match.</span>
+        } @else if (isInvalid('confirmPassword')) {
+        <span class="sf__error" role="alert">{{ errorFor('confirmPassword') }}</span>
+        }
+    </div>
+
+    <!-- ── Helper content (e.g., password meter) ──────────────────────────── -->
+    <ng-content></ng-content>
+
+    <!-- ── Submit ─────────────────────────────────────────────────────────── -->
+    <button class="sf__submit" type="submit" [disabled]="isLoading" [class.sf__submit--loading]="isLoading"
+        aria-label="Create your Asiaporeair account">
+        @if (isLoading) {
+        <span class="sf__spinner" aria-hidden="true"></span>
+        Creating Account…
+        } @else {
+        Begin Your Journey
+        }
+    </button>
+
+</form>

@@ -1,0 +1,57 @@
+<!-- cancellation-summary-card.component.html -->
+<div class="summary-card" role="complementary" aria-label="Booking being cancelled">
+    <div class="card-pnr" aria-label="Booking reference: {{ detail.bookingReference }}">
+        <span class="pnr-label">Booking to Remove</span>
+        <span class="pnr-value">{{ detail.bookingReference }}</span>
+    </div>
+    <div class="gold-rule" aria-hidden="true"></div>
+    <div class="card-flight">
+        <span class="flight-num">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path
+                    d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            {{ detail.flightNumber }}
+        </span>
+        <div class="route-strip">
+            <div class="rp"><span class="iata">{{ detail.originAirportCode }}</span><span class="city">{{
+                    detail.originAirportName }}</span></div>
+            <span class="arrow" aria-hidden="true">→</span>
+            <div class="rp rp--right"><span class="iata">{{ detail.destinationAirportCode }}</span><span class="city">{{
+                    detail.destinationAirportName }}</span></div>
+        </div>
+        <div class="dep-row">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span>{{ depDate }}</span><span class="dot" aria-hidden="true">·</span><span class="dep-time">{{ depTime
+                }}</span>
+        </div>
+    </div>
+    <div class="gold-rule" aria-hidden="true"></div>
+    <div class="amount-row" aria-label="Booking value: {{ currency }} {{ formatPrice(detail.totalPrice) }}">
+        <span class="amount-label">Booking Value</span>
+        <div class="amount-group">
+            <span class="amount-curr">{{ currency }}</span>
+            <span class="amount-val">{{ formatPrice(detail.totalPrice) }}</span>
+        </div>
+    </div>
+    <!-- Status indicator -->
+    <div *ngIf="isPending" class="status-row status-row--pending" aria-live="polite">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            class="spin-icon" aria-hidden="true">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" />
+        </svg>
+        Processing…
+    </div>
+    <div *ngIf="isSuccess" class="status-row status-row--success" aria-live="polite">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+        </svg>
+        Cancelled
+    </div>
+</div>

@@ -1,0 +1,134 @@
+<div class="rcd-modal" role="alertdialog" aria-modal="true" aria-labelledby="rcd-title">
+
+    <!-- ── Royal Gold Accent Rule ─────────────────────────────────── -->
+    <div class="rcd-rule" aria-hidden="true"></div>
+
+    <!-- ════════════════════════════════════════════════════════════
+       CONFIRMATION STATE (default)
+  ════════════════════════════════════════════════════════════ -->
+    @if (!isProcessing()) {
+
+    <!-- Restoration Icon -->
+    <div class="rcd-icon-wrap" aria-hidden="true">
+        <svg class="rcd-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+    </div>
+
+    <!-- Body -->
+    <div class="rcd-body">
+
+        <!-- Header -->
+        <h2 class="rcd-title" id="rcd-title">Rule Restoration Protocol</h2>
+
+        <!-- Rule Identity Block -->
+        <div class="rcd-identity">
+            <div class="rcd-identity__row">
+                <span class="rcd-identity__id" aria-label="Rule ID">#{{ ruleId() }}</span>
+                @if (ruleType()) {
+                <span class="rcd-identity__type">{{ ruleType() }}</span>
+                }
+            </div>
+
+            @if (timeUntilDeparture() !== null && timeUntilDeparture() !== undefined) {
+            <p class="rcd-identity__target">
+                Time Until Departure: <strong>{{ timeUntilDeparture() }} days</strong>
+            </p>
+            }
+            @if (lengthOfStay() !== null && lengthOfStay() !== undefined) {
+            <p class="rcd-identity__target">
+                Length of Stay: <strong>{{ lengthOfStay() }} days</strong>
+            </p>
+            }
+            @if (competitorFares()) {
+            <p class="rcd-identity__target">
+                Competitor Fares: <strong>{{ competitorFares() }}</strong>
+            </p>
+            }
+
+            @if (ruleTarget()) {
+            <p class="rcd-identity__target">
+                Target: <strong>{{ ruleTarget() }}</strong>
+            </p>
+            }
+
+            <!-- Impact badge (Willingness to Pay or Modifier) -->
+            @if (willingnessToPay() !== null && willingnessToPay() !== undefined) {
+            <div class="rcd-impact-wrap" aria-label="Willingness to Pay">
+                <span class="rcd-impact rcd-impact--positive">
+                    ${{ willingnessToPay() }}
+                </span>
+                <span class="rcd-impact__label">Willingness to Pay</span>
+            </div>
+            } @else if (modifierPercentage()) {
+            <div class="rcd-impact-wrap" aria-label="Pricing modifier">
+                <span class="rcd-impact" [ngClass]="modifierClass">
+                    {{ modifierLabel }}
+                </span>
+                <span class="rcd-impact__label">Price Modifier</span>
+            </div>
+            }
+        </div>
+
+        <!-- Copy -->
+        <p class="rcd-copy">
+            Restoring this pricing rule will immediately re-publish it to the live pricing engine.
+            The pricing rule will be applied to all qualifying fare calculations from this moment forward.
+        </p>
+
+        <!-- Info pill -->
+        <div class="rcd-info-pill">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            Impact is immediate — active fare calculations will include this modifier upon confirmation.
+        </div>
+
+    </div>
+
+    <!-- Error state -->
+    @if (error()) {
+    <div class="rcd-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        {{ error() }}
+    </div>
+    }
+
+    <!-- Action Buttons -->
+    <div class="rcd-actions">
+        <button class="rcd-btn rcd-btn--cancel" type="button" (click)="cancelled.emit()">
+            Cancel
+        </button>
+        <button class="rcd-btn rcd-btn--confirm" type="button" (click)="confirmed.emit()"
+            aria-label="Confirm rule restoration">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Confirm Restoration
+        </button>
+    </div>
+
+    }
+
+    <!-- ════════════════════════════════════════════════════════════
+       PROCESSING STATE
+  ════════════════════════════════════════════════════════════ -->
+    @if (isProcessing()) {
+    <div class="rcd-loading" aria-live="polite" aria-busy="true">
+        <svg class="rcd-loading__spinner" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        <p>Restoring Rule <strong>#{{ ruleId() }}</strong></p>
+        <span>Re-publishing to live pricing engine…</span>
+    </div>
+    }
+
+</div>

@@ -1,0 +1,162 @@
+<div class="aft-wrapper">
+
+    <!-- ── Section Header ──────────────────────────────────────── -->
+    <header class="aft-section-header">
+        <div class="aft-section-header__icon-wrap" aria-hidden="true">
+            <svg class="aft-section-header__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="aft-section-header__title">Fleet Inventory</h3>
+            @if (!loading() && totalFleet() > 0) {
+            <p class="aft-section-header__subtitle">
+                {{ totalFleet() }} registered · {{ activeCount() }} operational
+            </p>
+            } @else if (!loading()) {
+            <p class="aft-section-header__subtitle">No aircraft registered to this partner</p>
+            } @else {
+            <p class="aft-section-header__subtitle">Loading fleet data…</p>
+            }
+        </div>
+    </header>
+
+    <!-- ── Card + Scroll ───────────────────────────────────────── -->
+    <div class="aft-card">
+        <div class="aft-scroll">
+            <table class="aft-table" role="grid" aria-label="Partner fleet inventory">
+
+                <!-- ── Sticky Sapphire Header ────────────────────────── -->
+                <thead class="aft-head">
+                    <tr>
+                        @for (col of columns; track col.key) {
+                        <th class="aft-th" [class.aft-col--md-hidden]="col.hideOnMd"
+                            [class.aft-col--lg-hidden]="col.hideOnLg" scope="col">
+                            {{ col.label }}
+                        </th>
+                        }
+                    </tr>
+                </thead>
+
+                <!-- ── Loading Shimmer ────────────────────────────────── -->
+                @if (loading()) {
+                <tbody aria-busy="true" aria-label="Loading fleet data">
+                    @for (row of shimmerRows; track $index) {
+                    <tr class="aft-tr aft-tr--even">
+                        @for (col of columns; track col.key) {
+                        <td class="aft-td aft-td--compact" [class.aft-col--md-hidden]="col.hideOnMd"
+                            [class.aft-col--lg-hidden]="col.hideOnLg">
+                            @if (col.key === 'icon') {
+                            <div class="aft-shimmer aft-shimmer--icon"></div>
+                            } @else {
+                            <div class="aft-shimmer" [style.width]="col.shimmerWidth"></div>
+                            }
+                        </td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+                }
+
+                <!-- ── Data Rows ──────────────────────────────────────── -->
+                @if (!loading()) {
+                <tbody [@fleetAnim]="fleet().length">
+
+                    @for (aircraft of fleet(); track aircraft.tailNumber; let even = $even) {
+                    <tr class="aft-tr" [class.aft-tr--even]="even" [class.aft-tr--odd]="!even"
+                        [attr.aria-label]="aircraft.tailNumber + ' — ' + aircraft.aircraftTypeModel">
+
+                        <!-- Aircraft Icon -->
+                        <td class="aft-td aft-td--compact aft-td--icon">
+                            <div class="aft-aircraft-icon" aria-hidden="true">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12
+                               59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                                </svg>
+                            </div>
+                        </td>
+
+                        <!-- Registration / Tail Number — Royal Gold monospace -->
+                        <td class="aft-td aft-td--compact">
+                            <span class="aft-reg">{{ aircraft.tailNumber }}</span>
+                        </td>
+
+                        <!-- Aircraft Type Name -->
+                        <td class="aft-td aft-td--compact">
+                            <span class="aft-type">{{ aircraft.aircraftTypeModel }}</span>
+                        </td>
+
+                        <!-- Manufacturer -->
+                        <td class="aft-td aft-td--compact aft-col--md-hidden">
+                            <span class="aft-meta">{{ aircraft.acquisitionDate | date: 'yyyy-MM-dd' }}</span>
+                        </td>
+
+                        <!-- Configuration -->
+                        <td class="aft-td aft-td--compact">
+                            <span class="aft-config">—</span>
+                        </td>
+
+                        <!-- Age -->
+                        <td class="aft-td aft-td--compact aft-col--lg-hidden">
+                            <span class="aft-numeric">{{ getAge(aircraft.acquisitionDate) }}</span>
+                        </td>
+
+                        <!-- Seat Capacity -->
+                        <td class="aft-td aft-td--compact aft-col--md-hidden">
+                            <span class="aft-numeric">—</span>
+                        </td>
+
+                        <!-- Flight Hours -->
+                        <td class="aft-td aft-td--compact aft-col--lg-hidden">
+                            <span class="aft-numeric">{{ formatHours(aircraft.totalFlightHours) }}</span>
+                        </td>
+
+                        <!-- Status Pill -->
+                        <td class="aft-td aft-td--compact">
+                            <span class="aft-status-pill" [class]="'aft-status-pill ' + statusClass(aircraft.status)">
+                                {{ aircraft.status }}
+                            </span>
+                        </td>
+
+                    </tr>
+                    }
+
+                    <!-- ── Empty State ──────────────────────────────── -->
+                    @if (fleet().length === 0) {
+                    <tr>
+                        <td [attr.colspan]="columns.length" class="aft-empty">
+                            <div class="aft-empty__inner">
+                                <div class="aft-empty__icon-wrap" aria-hidden="true">
+                                    <svg class="aft-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12
+                                 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                                    </svg>
+                                </div>
+                                <p class="aft-empty__title">No fleet registered.</p>
+                                <p class="aft-empty__sub">This partner airline has no aircraft assigned to its registry
+                                    yet.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+                }
+
+            </table>
+        </div>
+
+        <!-- ── Table Footer ────────────────────────────────────────── -->
+        @if (!loading() && fleet().length > 0) {
+        <div class="aft-footer">
+            <span class="aft-footer__label">
+                <strong>{{ totalFleet() }}</strong> aircraft · <strong>{{ activeCount() }}</strong> operational
+            </span>
+        </div>
+        }
+
+    </div>
+</div>

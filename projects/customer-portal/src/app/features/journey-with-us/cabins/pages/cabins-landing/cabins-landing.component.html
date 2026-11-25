@@ -1,0 +1,28 @@
+<div class="cl-shell">
+
+    <app-hero-video-banner posterImage="assets/images/journey-with-us/cabins-hero-poster.png"
+        videoSrc="assets/videos/cabins-hero.mp4" headline="Your Private Sanctuary in the Sky"
+        subheadline="Five distinct cabin classes, each crafted to elevate your experience from the moment you step aboard."
+        [breadcrumbs]="breadcrumbs"></app-hero-video-banner>
+
+    <section class="cl-section">
+        <div class="cl-section__inner">
+
+            <header class="cl-header">
+                <div class="cl-header__line" aria-hidden="true"></div>
+                <div>
+                    <p class="cl-header__eyebrow">Select Your Experience</p>
+                    <h2 class="cl-header__title">Cabins</h2>
+                </div>
+            </header>
+
+            <div class="cl-cards">
+                @for (cabin of cabins(); track cabin.id; let i = $index) {
+                <app-cabin-feature-card [cabin]="cabin" [index]="i" [flipped]="i % 2 !== 0"></app-cabin-feature-card>
+                }
+            </div>
+
+        </div>
+    </section>
+
+</div>

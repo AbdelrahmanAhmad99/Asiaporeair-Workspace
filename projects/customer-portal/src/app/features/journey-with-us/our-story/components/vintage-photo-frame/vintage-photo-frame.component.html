@@ -1,0 +1,24 @@
+<figure class="vpf" [style.--delay]="animDelay + 'ms'">
+
+    <!-- Outer ornamental frame -->
+    <div class="vpf__outer-frame" aria-hidden="true">
+        <div class="vpf__corner vpf__corner--tl"></div>
+        <div class="vpf__corner vpf__corner--tr"></div>
+        <div class="vpf__corner vpf__corner--bl"></div>
+        <div class="vpf__corner vpf__corner--br"></div>
+    </div>
+
+    <!-- Photo -->
+    <div class="vpf__photo-mount">
+        <img class="vpf__photo" [src]="photo.imagePath" [alt]="photo.altText" loading="lazy" />
+        <!-- Sepia/vignette overlay -->
+        <div class="vpf__vignette" aria-hidden="true"></div>
+    </div>
+
+    <!-- Caption plate -->
+    <figcaption class="vpf__caption-plate">
+        <span class="vpf__year">{{ photo.year }}</span>
+        <span class="vpf__caption-text">{{ photo.caption }}</span>
+    </figcaption>
+
+</figure>

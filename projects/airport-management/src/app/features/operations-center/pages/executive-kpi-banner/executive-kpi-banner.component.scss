@@ -1,0 +1,67 @@
+@use './kpi-tokens' as t;
+
+:host {
+    @include t.kb-tokens;
+    display: block;
+    container-type: inline-size;
+    container-name: kpi-banner;
+    font-family: var(--kb-font);
+}
+
+.visually-hidden {
+    @include t.kb-visually-hidden;
+}
+
+.banner {
+    padding: 1rem 1.5rem 1.25rem;
+    background: var(--kb-sapphire);
+    border-bottom: 1px solid var(--kb-champagne-hairline);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.grid__item {
+    min-width: 0;
+}
+
+@container kpi-banner (min-width: 560px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@container kpi-banner (min-width: 900px) {
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+// One row of six on workstations and wall displays.
+@container kpi-banner (min-width: 1480px) {
+    .grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+}
+
+@container kpi-banner (min-width: 2400px) {
+    .banner {
+        padding: 1.5rem 2.5rem 1.75rem;
+    }
+
+    .grid {
+        gap: 1.5rem;
+    }
+}
+
+@container kpi-banner (max-width: 559px) {
+    .banner {
+        padding-inline: 1rem;
+    }
+}

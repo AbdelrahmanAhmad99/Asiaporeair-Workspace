@@ -1,0 +1,175 @@
+<div class="fpf-card">
+
+    <!-- ── Section Stepper / Nav ──────────────────────────────────────── -->
+    <div class="fpf-stepper" role="tablist" aria-label="Form sections">
+
+        <button class="fpf-stepper__step" type="button" role="tab"
+            [class.fpf-stepper__step--active]="activeSection() === 1" [attr.aria-selected]="activeSection() === 1"
+            (click)="navigateTo(1)" aria-controls="fpf-section-1">
+            <span class="fpf-stepper__num">01</span>
+            <span class="fpf-stepper__label">General Info</span>
+        </button>
+
+        <div class="fpf-stepper__connector" aria-hidden="true"></div>
+
+        <button class="fpf-stepper__step" type="button" role="tab"
+            [class.fpf-stepper__step--active]="activeSection() === 2" [attr.aria-selected]="activeSection() === 2"
+            (click)="navigateTo(2)" aria-controls="fpf-section-2">
+            <span class="fpf-stepper__num">02</span>
+            <span class="fpf-stepper__label">Policy Rules</span>
+        </button>
+
+    </div>
+
+    <!-- ── Form Body ──────────────────────────────────────────────────── -->
+    @if (isLoading()) {
+
+    <!-- Skeleton Loading State -->
+    <div class="fpf-skeleton-wrap" aria-hidden="true">
+        @for (i of skeletonFields; track i) {
+        <div class="fpf-skeleton-field">
+            <span class="fpf-skeleton fpf-skeleton--label"></span>
+            <span class="fpf-skeleton fpf-skeleton--input"></span>
+        </div>
+        }
+    </div>
+
+    } @else {
+
+    <form class="fpf-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- ── Section 1: General Info ────────────────────────────────── -->
+        <div class="fpf-section" [class.fpf-section--visible]="activeSection() === 1" id="fpf-section-1" role="tabpanel"
+            aria-labelledby="fpf-section-1-tab">
+
+            <!-- Fare Code (locked in edit mode) -->
+            <div class="fpf-field">
+                <label class="fpf-label" for="fpf-code">
+                    Fare Basis Code
+                    @if (!isEditMode()) {
+                    <span class="fpf-label__required" aria-label="required">*</span>
+                    }
+                    @if (isEditMode()) {
+                    <span class="fpf-label__locked" aria-label="field locked">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                        </svg>
+                        Locked — code is immutable after creation
+                    </span>
+                    }
+                </label>
+                <div class="fpf-input-wrap">
+                    <input id="fpf-code" class="fpf-input" [class.fpf-input--error]="isInvalid('code')"
+                        [class.fpf-input--locked]="isEditMode()" type="text" formControlName="code"
+                        placeholder="e.g. YECOWP21" autocomplete="off" spellcheck="false"
+                        [attr.aria-describedby]="isInvalid('code') ? 'fpf-code-err' : null"
+                        style="text-transform: uppercase;" />
+                    @if (isEditMode()) {
+                    <svg class="fpf-input-wrap__lock-icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                    </svg>
+                    }
+                </div>
+                @if (isInvalid('code')) {
+                <p class="fpf-error" id="fpf-code-err" role="alert">{{ getError('code') }}</p>
+                }
+                @if (!isEditMode()) {
+                <p class="fpf-hint">2–10 characters. Uppercase letters and numbers only (e.g. YECOWP21).</p>
+                }
+            </div>
+
+            <!-- Description -->
+            <div class="fpf-field">
+                <label class="fpf-label" for="fpf-desc">
+                    Description <span class="fpf-label__required" aria-label="required">*</span>
+                </label>
+                <input id="fpf-desc" class="fpf-input" [class.fpf-input--error]="isInvalid('description')" type="text"
+                    formControlName="description" placeholder="e.g. Economy — Non-refundable, 23kg baggage"
+                    autocomplete="off" [attr.aria-describedby]="isInvalid('description') ? 'fpf-desc-err' : null" />
+                @if (isInvalid('description')) {
+                <p class="fpf-error" id="fpf-desc-err" role="alert">{{ getError('description') }}</p>
+                }
+                <p class="fpf-hint">A clear, operator-facing summary of this fare basis code.</p>
+            </div>
+
+            <!-- Section 1 → Next -->
+            <div class="fpf-section__footer">
+                <button class="fpf-btn fpf-btn--next" type="button" (click)="navigateTo(2)">
+                    Next: Policy Rules
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- ── Section 2: Policy Rules ────────────────────────────────── -->
+        <div class="fpf-section" [class.fpf-section--visible]="activeSection() === 2" id="fpf-section-2" role="tabpanel"
+            aria-labelledby="fpf-section-2-tab">
+
+            <!-- Rules narrative -->
+            <div class="fpf-field">
+                <label class="fpf-label" for="fpf-rules">
+                    Operational Rules &amp; Conditions
+                    <span class="fpf-label__required" aria-label="required">*</span>
+                </label>
+                <textarea id="fpf-rules" class="fpf-textarea" [class.fpf-textarea--error]="isInvalid('rules')"
+                    formControlName="rules"
+                    placeholder="Describe the full operational rules for this fare basis code…&#10;&#10;e.g. Non-refundable after ticketing. Changes permitted with SGD 150 fee. Valid for travel on Asiaporeair operated flights only. No upgrades permitted. Advance purchase: 7 days. Minimum stay: Saturday night."
+                    rows="10" [attr.aria-describedby]="isInvalid('rules') ? 'fpf-rules-err' : null"></textarea>
+                @if (isInvalid('rules')) {
+                <p class="fpf-error" id="fpf-rules-err" role="alert">{{ getError('rules') }}</p>
+                }
+                <p class="fpf-hint">
+                    Describe the complete fare conditions — refund policy, change fees, baggage rules, advance
+                    purchase requirements, and any restrictions.
+                </p>
+            </div>
+
+            <!-- Section 2 Action Row -->
+            <div class="fpf-section__footer fpf-section__footer--actions">
+
+                <!-- Back -->
+                <button class="fpf-btn fpf-btn--ghost" type="button" (click)="navigateTo(1)">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                    Back
+                </button>
+
+                <!-- Cancel -->
+                <button class="fpf-btn fpf-btn--outline" type="button" (click)="onCancel()">
+                    Cancel
+                </button>
+
+                <!-- Save -->
+                <button class="fpf-btn fpf-btn--save" type="submit" [disabled]="isSaving()">
+                    @if (isSaving()) {
+                    <svg class="fpf-btn__spinner" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Committing…
+                    } @else {
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                    </svg>
+                    {{ isEditMode() ? 'Save Changes' : 'Create Fare Code' }}
+                    }
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    }
+
+</div>

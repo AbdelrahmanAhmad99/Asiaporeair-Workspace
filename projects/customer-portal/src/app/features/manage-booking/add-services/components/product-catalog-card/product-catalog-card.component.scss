@@ -1,0 +1,283 @@
+// product-catalog-card.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$ivory: #F8F9FA;
+$charcoal: #101056;
+$white: #FFFFFF;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$t-smooth: 280ms $ease;
+
+:host {
+    display: block;
+}
+
+.catalog-card {
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.09);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    font-family: $font;
+    position: relative;
+    overflow: hidden;
+    transition: border-color $t-smooth, box-shadow $t-smooth, transform $t-smooth;
+    box-shadow: 0 2px 10px rgba($midnight, 0.06);
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.35);
+        box-shadow: 0 6px 24px rgba($midnight, 0.10);
+        transform: translateY(-2px);
+    }
+
+    &--in-cart {
+        border-color: rgba($royal-gold, 0.40);
+        background: linear-gradient(160deg, rgba($royal-gold, 0.03) 0%, $white 100%);
+    }
+
+    &--unavailable {
+        opacity: 0.55;
+        pointer-events: none;
+    }
+}
+
+.unavail-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: rgba($charcoal, 0.07);
+    color: $text-muted;
+    border: 1px solid rgba($charcoal, 0.12);
+}
+
+.in-cart-ribbon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    background: rgba($royal-gold, 0.10);
+    color: darken($royal-gold, 10%);
+    border: 1px solid rgba($royal-gold, 0.25);
+
+    svg {
+        color: $royal-gold;
+    }
+}
+
+.card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    background: rgba($midnight, 0.05);
+    border: 1px solid rgba($midnight, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+    margin-top: 0.5rem; // give space to ribbons above
+
+    ::ng-deep svg {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.card-name {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.card-desc {
+    font-size: 0.7rem;
+    color: $text-sec;
+    line-height: 1.5;
+    margin: 0;
+}
+
+// Glassmorphism price overlay
+.price-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0.625rem 0.875rem;
+    background: rgba($midnight, 0.04);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba($midnight, 0.08);
+    border-radius: 8px;
+}
+
+.price-left {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.price-currency {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: rgba($charcoal, 0.55);
+    letter-spacing: 0.04em;
+    align-self: flex-start;
+    margin-top: 3px;
+}
+
+.price-amount {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: -0.03em;
+}
+
+.price-uom {
+    font-size: 0.6rem;
+    color: $text-muted;
+    font-weight: 500;
+    text-align: right;
+}
+
+// Actions
+.card-actions {
+    display: flex;
+}
+
+.btn-add {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    background: linear-gradient(135deg, $royal-gold 0%, darken($royal-gold, 10%) 100%);
+    border: none;
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: $midnight;
+    cursor: pointer;
+    transition: all $t-smooth;
+
+    &:hover:not(:disabled) {
+        background: linear-gradient(135deg, $champagne 0%, $royal-gold 100%);
+        box-shadow: 0 4px 16px rgba($royal-gold, 0.35);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// Quantity Stepper
+.qty-stepper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba($midnight, 0.04);
+    border: 1.5px solid rgba($royal-gold, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.step-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: $charcoal;
+    transition: background $t-smooth;
+
+    &:hover:not(:disabled) {
+        background: rgba($royal-gold, 0.08);
+    }
+
+    &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+    }
+
+    &--minus {
+        border-right: 1px solid rgba($royal-gold, 0.2);
+    }
+
+    &--plus {
+        border-left: 1px solid rgba($royal-gold, 0.2);
+    }
+}
+
+.qty-value {
+    flex: 1;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: -0.02em;
+}
+
+.max-note {
+    font-size: 0.6rem;
+    color: $text-muted;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .catalog-card {
+        transition: none !important;
+
+        &:hover {
+            transform: none;
+        }
+    }
+
+    .btn-add {
+        transition: none !important;
+    }
+}

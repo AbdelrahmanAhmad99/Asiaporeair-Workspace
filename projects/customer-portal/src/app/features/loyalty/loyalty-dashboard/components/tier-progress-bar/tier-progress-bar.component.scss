@@ -1,0 +1,255 @@
+// ============================================================================
+// tier-progress-bar.component.scss
+// Asiaporeair | Tier Upgrade Progress Bar — "Luxury Midnight" Design System
+// ============================================================================
+
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+$midnight-sapphire : #051937;
+$royal-gold        : #B68F24;
+$champagne-gold    : #E2C780;
+$off-white         : #F8F9FA;
+$charcoal-navy     : #101056;
+
+// ── Keyframes ─────────────────────────────────────────────────────────────────
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes expandWidth {
+  from { width: 0%; }
+}
+
+// ── Widget Container ──────────────────────────────────────────────────────────
+.progress-bar-widget {
+  background   : linear-gradient(145deg, #0f1e38 0%, #08122a 100%);
+  border-radius: 12px;
+  padding      : 28px 28px 24px;
+  box-shadow   : 0 12px 40px rgba(5, 25, 55, 0.22),
+                 0 1px 0 rgba(255,255,255,0.04) inset;
+  animation    : fadeSlideIn 0.5s 0.1s ease both;
+  position     : relative;
+  overflow     : hidden;
+
+  &::before {
+    content   : '';
+    position  : absolute;
+    top: 0; left: 0; right: 0;
+    height    : 2px;
+    background: linear-gradient(90deg, transparent, $royal-gold, transparent);
+    opacity   : 0.7;
+  }
+}
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+.progress-bar-widget__skeleton {
+  display       : flex;
+  flex-direction: column;
+  gap           : 16px;
+}
+
+%shimmer-base {
+  border-radius: 6px;
+  background   : linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 400px 100%;
+  animation      : shimmer 1.4s infinite linear;
+}
+
+.skeleton-track {
+  @extend %shimmer-base;
+  height       : 10px;
+  border-radius: 99px;
+  width        : 100%;
+}
+
+.skeleton-row {
+  display        : flex;
+  justify-content: space-between;
+}
+
+.skeleton-line {
+  @extend %shimmer-base;
+  height: 12px;
+
+  &--wide   { width: 100%; }
+  &--medium { width: 60%; }
+  &--narrow { width: 28%; }
+}
+
+// ── Header row ────────────────────────────────────────────────────────────────
+.progress-bar-widget__header {
+  margin-bottom: 20px;
+}
+
+.progress-bar-widget__tiers {
+  display    : flex;
+  align-items: center;
+  gap        : 10px;
+  margin-bottom: 8px;
+}
+
+.tier-badge {
+  font-family   : 'Montserrat', sans-serif;
+  font-size     : 0.72rem;
+  font-weight   : 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding       : 4px 12px;
+  border-radius : 4px;
+
+  &--current {
+    background: rgba(182, 143, 36, 0.15);
+    color     : $champagne-gold;
+    border    : 1px solid rgba(182, 143, 36, 0.3);
+  }
+
+  &--next {
+    background: rgba(255,255,255,0.06);
+    color     : rgba(255,255,255,0.6);
+    border    : 1px solid rgba(255,255,255,0.12);
+  }
+}
+
+.tiers-arrow {
+  color  : rgba(255,255,255,0.25);
+}
+
+.progress-bar-widget__tagline {
+  font-size  : 0.82rem;
+  color      : rgba(255,255,255,0.4);
+  margin     : 0;
+  letter-spacing: 0.01em;
+
+  strong {
+    color      : rgba(226,199,128,0.75);
+    font-weight: 600;
+  }
+}
+
+// ── Track & Fill ──────────────────────────────────────────────────────────────
+.progress-bar-widget__track-wrap {
+  margin-bottom: 14px;
+}
+
+.progress-bar-widget__track {
+  position     : relative;
+  height       : 10px;
+  border-radius: 99px;
+  background   : rgba(255,255,255,0.07);
+  overflow     : hidden;
+}
+
+.progress-bar-widget__fill {
+  position     : absolute;
+  top          : 0;
+  left         : 0;
+  height       : 100%;
+  border-radius: 99px;
+  background   : linear-gradient(90deg, $royal-gold, $champagne-gold);
+  box-shadow   : 0 0 12px rgba(182, 143, 36, 0.5);
+  // Animate width from 0 on page load
+  animation    : expandWidth 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  display      : flex;
+  align-items  : center;
+  justify-content: flex-end;
+  min-width    : 20px;   // always show a sliver
+}
+
+.progress-bar-widget__pct-label {
+  font-size     : 0.58rem;
+  font-weight   : 700;
+  color         : $midnight-sapphire;
+  padding-right : 5px;
+  white-space   : nowrap;
+  letter-spacing: 0;
+}
+
+// ── Point labels ──────────────────────────────────────────────────────────────
+.progress-bar-widget__labels {
+  display        : flex;
+  justify-content: space-between;
+  margin-bottom  : 14px;
+}
+
+.point-label {
+  display       : flex;
+  flex-direction: column;
+  gap           : 2px;
+
+  &--right {
+    text-align: right;
+  }
+}
+
+.point-label__value {
+  font-family   : 'Montserrat', sans-serif;
+  font-size     : 0.95rem;
+  font-weight   : 700;
+  letter-spacing: -0.01em;
+  color         : rgba(255,255,255,0.88);
+}
+
+.point-label__desc {
+  font-size : 0.7rem;
+  color     : rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+// ── Remaining notice ──────────────────────────────────────────────────────────
+.progress-bar-widget__remaining {
+  font-size  : 0.82rem;
+  color      : rgba(255,255,255,0.45);
+  margin     : 0;
+  line-height: 1.5;
+  padding-top: 4px;
+  border-top : 1px solid rgba(255,255,255,0.06);
+
+  strong {
+    color      : $champagne-gold;
+    font-weight: 700;
+  }
+}
+
+// ── Apex (Platinum) state ─────────────────────────────────────────────────────
+.progress-bar-widget__apex {
+  display    : flex;
+  align-items: flex-start;
+  gap        : 16px;
+}
+
+.apex-icon {
+  color      : $champagne-gold;
+  flex-shrink: 0;
+  filter     : drop-shadow(0 0 8px rgba(226,199,128,0.55));
+  margin-top : 2px;
+}
+
+.apex-title {
+  font-family   : 'Montserrat', sans-serif;
+  font-size     : 1.1rem;
+  font-weight   : 700;
+  letter-spacing: -0.02em;
+  margin        : 0 0 6px;
+  background    : linear-gradient(135deg, $royal-gold, $champagne-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.apex-sub {
+  font-size  : 0.83rem;
+  color      : rgba(255,255,255,0.5);
+  margin     : 0;
+  line-height: 1.5;
+}

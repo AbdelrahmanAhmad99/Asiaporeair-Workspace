@@ -1,0 +1,161 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $ruby: #8B0000;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Button base — Royal Gold outline (idle)
+ // ============================================================================
+ .rab2-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2rem;
+     padding: 0 0.75rem;
+     border-radius: 4px;
+
+     background: transparent;
+     border: 1px solid rgba($gold, 0.45);
+     color: $gold;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     text-transform: uppercase;
+     cursor: pointer;
+     white-space: nowrap;
+
+     transition:
+         background 180ms $ease,
+         border-color 180ms $ease,
+         color 180ms $ease,
+         box-shadow 200ms $ease,
+         transform 150ms $ease;
+
+     // ── Hover: Gold FILLS the button ────────────────────────────────────────
+     &:hover:not(:disabled):not(.rab2-btn--globally-disabled):not(.rab2-btn--error) {
+         background: $gold;
+         border-color: $gold;
+         color: $midnight;
+         box-shadow:
+             0 0 12px rgba($gold, 0.3),
+             0 4px 14px rgba($gold, 0.2);
+         transform: translateY(-1px);
+     }
+
+     &:active:not(:disabled) {
+         transform: translateY(0);
+         box-shadow: 0 0 6px rgba($gold, 0.2);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // ── Restoring state — golden spinner, muted fill ─────────────────────────
+     &--restoring {
+         background: rgba($gold, 0.08);
+         border-color: rgba($gold, 0.4);
+         color: rgba($gold, 0.75);
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     // ── Error state — ruby pulse for 3s then resets ──────────────────────────
+     &--error {
+         background: rgba($ruby, 0.08);
+         border-color: rgba($ruby, 0.45);
+         color: lighten($ruby, 20%);
+         cursor: not-allowed;
+         pointer-events: none;
+         animation: rab2-error-pulse 0.8s ease-in-out 3;
+     }
+
+     // ── Globally disabled (another row is restoring) ─────────────────────────
+     &--globally-disabled {
+         opacity: 0.28;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     // ── Native disabled ───────────────────────────────────────────────────────
+     &:disabled {
+         opacity: 0.3;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+ }
+
+ // ============================================================================
+ // 2. Icon
+ // ============================================================================
+ .rab2-btn__icon {
+     width: 0.875rem;
+     height: 0.875rem;
+     flex-shrink: 0;
+
+     &--spin {
+         animation: rab2-spin 0.85s linear infinite;
+     }
+ }
+
+ // ============================================================================
+ // 3. Label
+ // ============================================================================
+ .rab2-btn__label {
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     text-transform: uppercase;
+ }
+
+ // ============================================================================
+ // 4. Keyframes
+ // ============================================================================
+ @keyframes rab2-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes rab2-error-pulse {
+
+     0%,
+     100% {
+         background: rgba($ruby, 0.08);
+         border-color: rgba($ruby, 0.45);
+         box-shadow: none;
+     }
+
+     50% {
+         background: rgba($ruby, 0.16);
+         border-color: $ruby;
+         box-shadow: 0 0 10px rgba($ruby, 0.3);
+     }
+ }
+
+ // ============================================================================
+ // 5. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .rab2-btn {
+         border-color: rgba($champagne, 0.35);
+         color: $champagne;
+
+         &:hover:not(:disabled):not(.rab2-btn--globally-disabled):not(.rab2-btn--error) {
+             background: $gold;
+             border-color: $gold;
+             color: $midnight;
+         }
+     }
+ }

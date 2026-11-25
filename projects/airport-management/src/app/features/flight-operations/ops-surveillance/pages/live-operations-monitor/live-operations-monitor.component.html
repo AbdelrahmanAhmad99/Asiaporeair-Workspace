@@ -1,0 +1,240 @@
+<div class="lom-page">
+
+    <!-- ══ Sticky Digital Tower Header ═════════════════════════════ -->
+    <header class="lom-header">
+
+        <div class="lom-header__left">
+            <!-- Back to Dispatch -->
+            <button class="lom-back-btn" type="button" (click)="goToDispatch()"
+                aria-label="Return to Dispatch Control Room">
+                <svg class="lom-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <nav class="lom-breadcrumb" aria-label="Breadcrumb">
+                    <span class="lom-breadcrumb__section">Flight Operations</span>
+                    <svg class="lom-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="lom-breadcrumb__current">Live Monitor</span>
+                </nav>
+                <h1 class="lom-title">
+                    Digital Tower
+                    <!-- Polling indicator -->
+                    @if (isPolling()) {
+                    <span class="lom-title__poll-dot" title="Auto-refresh active"
+                        aria-label="Auto-refresh every 60 seconds"></span>
+                    }
+                </h1>
+            </div>
+        </div>
+
+        <!-- Status badge strip -->
+        <div class="lom-status-strip" role="region" aria-label="Live flight status summary">
+            <div class="lom-badge lom-badge--scheduled">
+                <span class="lom-badge__n">{{ statusCounts().scheduled }}</span>
+                <span class="lom-badge__l">Scheduled</span>
+            </div>
+            <div class="lom-badge lom-badge--delayed">
+                <span class="lom-badge__n">{{ statusCounts().delayed }}</span>
+                <span class="lom-badge__l">Delayed</span>
+            </div>
+            <div class="lom-badge lom-badge--boarding">
+                <span class="lom-badge__n">{{ statusCounts().boarding }}</span>
+                <span class="lom-badge__l">Boarding</span>
+            </div>
+            <div class="lom-badge lom-badge--inflight">
+                <span class="lom-badge__n">{{ statusCounts().inFlight }}</span>
+                <span class="lom-badge__l">Airborne</span>
+            </div>
+            @if (criticalCount() > 0) {
+            <div class="lom-badge lom-badge--critical" role="alert">
+                <span class="lom-badge__n">{{ criticalCount() }}</span>
+                <span class="lom-badge__l">Critical</span>
+            </div>
+            }
+        </div>
+
+        <!-- Right: last updated + refresh -->
+        <div class="lom-header__right">
+            <!-- Last updated ticker — Champagne Gold per spec -->
+            <div class="lom-ticker" aria-live="polite" role="status">
+                <svg class="lom-ticker__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                <span class="lom-ticker__label">Updated</span>
+                <span class="lom-ticker__time">{{ lastRefreshed() }}</span>
+            </div>
+
+            <!-- FIDS Console Button -->
+            <button class="lom-btn lom-btn--fids" type="button" (click)="goToFids()"
+                title="Open FIDS Management Console" aria-label="Navigate to FIDS Console">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"
+                    style="width: 1.125rem; height: 1.125rem;">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z" />
+                </svg>
+                FIDS Console
+            </button>
+
+            <button class="lom-icon-btn" type="button" (click)="manualRefresh()" [disabled]="isLoading()"
+                title="Refresh" aria-label="Manually refresh flight data">
+                <svg class="lom-icon-btn__icon" [class.lom-icon-btn__icon--spin]="isLoading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+        </div>
+
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="lom-body">
+
+        <!-- Error banner -->
+        @if (errorLog()) {
+        <div class="lom-error-banner" role="alert">
+            <div class="lom-error-banner__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636
+                     5.636m12.728 12.728L5.636 5.636" />
+                </svg>
+            </div>
+            <div class="lom-error-banner__body">
+                <strong class="lom-error-banner__title">Operations Alert</strong>
+                <span class="lom-error-banner__msg">{{ errorLog() }}</span>
+            </div>
+            <button class="lom-error-banner__dismiss" type="button" (click)="dismissError()" aria-label="Dismiss alert">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- Filter bar -->
+        <div class="lom-filter-bar" role="search" aria-label="Flight search filters">
+
+            <div class="lom-filter-group lom-filter-group--date">
+                <input class="lom-filter-input lom-filter-input--date" type="date" [value]="dateFromFilter()"
+                    (change)="onDateFromChange($any($event.target).value)" aria-label="From date">
+                <svg class="lom-filter-sep-arrow" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+                <input class="lom-filter-input lom-filter-input--date" type="date" [value]="dateToFilter()"
+                    (change)="onDateToChange($any($event.target).value)" aria-label="To date">
+            </div>
+
+            <div class="lom-filter-sep" aria-hidden="true"></div>
+
+            <input class="lom-filter-input lom-filter-input--flight" type="text" [value]="flightNoFilter()"
+                (input)="onFlightNoInput($any($event.target).value)" placeholder="Flight No." maxlength="8"
+                aria-label="Filter by flight number">
+
+            <input class="lom-filter-input lom-filter-input--iata" type="text" [value]="originFilter()"
+                (input)="onOriginInput($any($event.target).value)" placeholder="Origin" maxlength="4"
+                aria-label="Filter by origin IATA">
+
+            <input class="lom-filter-input lom-filter-input--iata" type="text" [value]="destFilter()"
+                (input)="onDestInput($any($event.target).value)" placeholder="Dest." maxlength="4"
+                aria-label="Filter by destination IATA">
+
+            <div class="lom-status-select-wrap">
+                <select class="lom-status-select" [value]="statusFilter()"
+                    (change)="onStatusChange($any($event.target).value)" aria-label="Filter by status">
+                    @for (s of ALL_STATUSES; track s.value) {
+                    <option [value]="s.value">{{ s.label }}</option>
+                    }
+                </select>
+                <svg class="lom-status-select-wrap__chev" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+            </div>
+
+            <div class="lom-filter-grow" aria-hidden="true"></div>
+
+            @if (hasFilter()) {
+            <button class="lom-reset-btn" type="button" (click)="resetFilters()" aria-label="Reset all filters">
+                Reset
+            </button>
+            }
+
+        </div>
+
+        <!-- Live Flight Grid -->
+        <aoms-live-flight-grid [flights]="flights()" [loading]="isLoading()" [isUpdating]="isUpdating()"
+            [selectedFlightId]="selectedFlightId()" [recordLabel]="recordLabel()"
+            [validTransitions]="validTransitions()" (onSelect)="onFlightSelect($event)"
+            (onStatusChange)="onGridStatusChange($event)" (onAdjustTime)="openTimeAdjustment($event)" />
+
+        <!-- Pagination -->
+        @if (!isLoading() && pagination().totalPages > 1) {
+        <div class="lom-pagination" role="navigation" aria-label="Flight pagination">
+            <button class="lom-page-btn" type="button" [disabled]="!canGoPrev()" (click)="prevPage()"
+                aria-label="Previous page">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+                Prev
+            </button>
+            <span class="lom-page-info">
+                Page <strong>{{ pagination().pageNumber }}</strong>
+                of <strong>{{ pagination().totalPages }}</strong>
+            </span>
+            <button class="lom-page-btn" type="button" [disabled]="!canGoNext()" (click)="nextPage()"
+                aria-label="Next page">
+                Next
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+        </div>
+        }
+
+    </main>
+
+    <!-- ══ Time Adjustment Tool Modal ═══════════════════════════════ -->
+    @if (timeToolOpen() && timeToolFlight()) {
+    <aoms-time-adjustment-tool [flight]="timeToolFlight()!" [isUpdating]="isUpdating()" [apiError]="timeToolError()"
+        (onSave)="onTimeSave($event)" (onDismiss)="closeTimeAdjustment()" />
+    }
+
+    <!-- ══ Toast Stack ════════════════════════════════════════════ -->
+    <div class="lom-toast-stack" role="region" aria-live="polite">
+        @for (toast of toasts(); track toast.id) {
+        <div class="lom-toast" [class.lom-toast--success]="toast.type === 'success'"
+            [class.lom-toast--error]="toast.type === 'error'" role="status">
+            <div class="lom-toast__icon-wrap" aria-hidden="true">
+                @if (toast.type === 'success') {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                }
+            </div>
+            <p class="lom-toast__msg">{{ toast.message }}</p>
+            <button class="lom-toast__dismiss" type="button" (click)="dismissToast(toast.id)" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+    </div>
+
+</div>

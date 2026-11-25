@@ -1,0 +1,114 @@
+<div class="pdc-container">
+
+    <!-- ── Section Header ───────────────────────────────────────────── -->
+    <header class="pdc-header">
+        <h2 class="pdc-header__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="pdc-header__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            Boarding Discrepancies
+        </h2>
+        @if (hasAny()) {
+        <span class="pdc-count-badge" [attr.aria-label]="count() + ' no-shows'">
+            {{ count() }}
+        </span>
+        }
+    </header>
+
+    <!-- ── Loading shimmer ──────────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="pdc-shimmer-list" aria-busy="true">
+        @for (i of [1,2,3]; track i) {
+        <div class="pdc-shimmer-card"></div>
+        }
+    </div>
+    }
+
+    <!-- ── All Boarded — Success State ─────────────────────────────── -->
+    @if (!loading() && !hasAny()) {
+    <div class="pdc-success" role="status">
+        <div class="pdc-success__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+        </div>
+        <p class="pdc-success__title">All Passengers Accounted For</p>
+        <p class="pdc-success__sub">No discrepancies detected. The manifest is ready for closure.</p>
+    </div>
+    }
+
+    <!-- ── Discrepancy Cards ────────────────────────────────────────── -->
+    @if (!loading() && hasAny()) {
+    <div class="pdc-list" role="list" aria-label="No-show passengers">
+        @for (passenger of noShows(); track trackById($index, passenger)) {
+        <article class="pdc-card" role="listitem">
+
+            <!-- Amber/Gold left accent border -->
+            <div class="pdc-card__accent" aria-hidden="true"></div>
+
+            <div class="pdc-card__body">
+
+                <!-- Passenger identity -->
+                <div class="pdc-card__identity">
+                    <p class="pdc-card__name">{{ fullName(passenger) }}</p>
+                    @if (hasDocument(passenger)) {
+                    <span class="pdc-card__doc-badge" title="Travel document on file">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3" />
+                        </svg>
+                        Doc Verified
+                    </span>
+                    } @else {
+                    <span class="pdc-card__doc-badge pdc-card__doc-badge--missing" title="No travel document on file">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                        Doc Missing
+                    </span>
+                    }
+                </div>
+
+                <!-- Seat & Cabin detail row -->
+                <div class="pdc-card__details">
+                    <div class="pdc-detail">
+                        <span class="pdc-detail__key">Seat</span>
+                        <span class="pdc-detail__val pdc-detail__val--seat">
+                            {{ passenger.assignedSeatNumber || '—' }}
+                        </span>
+                    </div>
+                    <div class="pdc-detail">
+                        <span class="pdc-detail__key">Cabin</span>
+                        <span class="pdc-detail__val">{{ passenger.cabinClassName || '—' }}</span>
+                    </div>
+                    @if (passenger.passportNumber) {
+                    <div class="pdc-detail pdc-detail--passport">
+                        <span class="pdc-detail__key">Passport</span>
+                        <span class="pdc-detail__val pdc-detail__val--mono">{{ passenger.passportNumber }}</span>
+                    </div>
+                    }
+                </div>
+
+                <!-- Locate action -->
+                <button class="pdc-locate-btn" type="button" (click)="onLocate(passenger)">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z" />
+                    </svg>
+                    Locate Passenger
+                </button>
+
+            </div>
+        </article>
+        }
+    </div>
+    }
+
+</div>

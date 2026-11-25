@@ -1,0 +1,230 @@
+<form class="cfu-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off"
+    aria-label="Country editor form">
+
+    <!-- ══ Form Card ════════════════════════════════════════════════════ -->
+    <div class="cfu-card">
+
+        <!-- ── Section: Core Identity ──────────────────────────────────── -->
+        <section class="cfu-section" aria-labelledby="section-identity">
+            <header class="cfu-section__header">
+                <div class="cfu-section__icon-wrap" aria-hidden="true">
+                    <svg class="cfu-section__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0
+                     1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0
+                     18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0
+                     1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953
+                     11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959
+                     8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="section-identity" class="cfu-section__title">Core Identity</h3>
+                    <p class="cfu-section__subtitle">ISO code, name, and continental region</p>
+                </div>
+            </header>
+
+            <div class="cfu-fields">
+
+                <!-- ISO Code -->
+                <div class="cfu-field" [class.cfu-field--error]="isFieldInvalid('isoCode') || isDuplicateIso()"
+                    [class.cfu-field--locked]="isEditMode()">
+                    <input id="isoCode" class="cfu-input" type="text" formControlName="isoCode" maxlength="3"
+                        placeholder=" "
+                        [attr.aria-describedby]="(isFieldInvalid('isoCode') || isDuplicateIso()) ? 'isoCode-error' : null"
+                        [attr.aria-invalid]="(isFieldInvalid('isoCode') || isDuplicateIso()) ? 'true' : 'false'">
+                    <label class="cfu-label" for="isoCode">
+                        ISO Code
+                        <span class="cfu-label__required" aria-hidden="true">*</span>
+                    </label>
+                    @if (isEditMode()) {
+                    <div class="cfu-field__lock-icon" aria-label="Field locked in edit mode"
+                        title="ISO Code cannot be changed">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5
+                         a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75
+                         a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                        </svg>
+                    </div>
+                    }
+                    <!-- Validation messages -->
+                    @if (isFieldInvalid('isoCode')) {
+                    <span id="isoCode-error" class="cfu-error" role="alert">
+                        @if (isoCodeCtrl.hasError('required')) {
+                        ISO Code is required.
+                        } @else if (isoCodeCtrl.hasError('minlength') || isoCodeCtrl.hasError('maxlength')) {
+                        Must be exactly 2 or 3 characters.
+                        } @else if (isoCodeCtrl.hasError('uppercaseOnly')) {
+                        Only uppercase letters are allowed (e.g. SG, SGP).
+                        }
+                    </span>
+                    }
+                    @if (isDuplicateIso() && !isFieldInvalid('isoCode')) {
+                    <span class="cfu-error" role="alert">
+                        This ISO code already exists in the system.
+                    </span>
+                    }
+                    <span class="cfu-hint">2–3 uppercase letters &middot; e.g. SG or SGP</span>
+                </div>
+
+                <!-- Country Name -->
+                <div class="cfu-field cfu-field--wide" [class.cfu-field--error]="isFieldInvalid('name')">
+                    <input id="name" class="cfu-input" type="text" formControlName="name" maxlength="100"
+                        placeholder=" " [attr.aria-describedby]="isFieldInvalid('name') ? 'name-error' : null"
+                        [attr.aria-invalid]="isFieldInvalid('name') ? 'true' : 'false'">
+                    <label class="cfu-label" for="name">
+                        Country Name
+                        <span class="cfu-label__required" aria-hidden="true">*</span>
+                    </label>
+                    @if (isFieldInvalid('name')) {
+                    <span id="name-error" class="cfu-error" role="alert">
+                        @if (nameCtrl.hasError('required')) {
+                        Country Name is required.
+                        } @else if (nameCtrl.hasError('minlength')) {
+                        Name must be at least 3 characters.
+                        } @else if (nameCtrl.hasError('maxlength')) {
+                        Name cannot exceed 100 characters.
+                        }
+                    </span>
+                    }
+                </div>
+
+                <!-- Continent -->
+                <div class="cfu-field cfu-field--wide" [class.cfu-field--error]="isFieldInvalid('continent')">
+                    <select id="continent" class="cfu-select" formControlName="continent"
+                        [attr.aria-describedby]="isFieldInvalid('continent') ? 'continent-error' : null"
+                        [attr.aria-invalid]="isFieldInvalid('continent') ? 'true' : 'false'">
+                        <option value="" disabled hidden></option>
+                        @for (cont of continents; track cont) {
+                        <option [value]="cont">{{ cont }}</option>
+                        }
+                    </select>
+                    <label class="cfu-label cfu-label--select" for="continent">
+                        Continent
+                        <span class="cfu-label__required" aria-hidden="true">*</span>
+                    </label>
+                    <!-- Custom dropdown chevron -->
+                    <div class="cfu-select__chevron" aria-hidden="true">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                        </svg>
+                    </div>
+                    @if (isFieldInvalid('continent')) {
+                    <span id="continent-error" class="cfu-error" role="alert">
+                        Please select a continent.
+                    </span>
+                    }
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Divider ──────────────────────────────────────────────────── -->
+        <div class="cfu-divider" role="separator" aria-hidden="true"></div>
+
+        <!-- ── Section: Financial & Contact Identifiers ────────────────── -->
+        <section class="cfu-section" aria-labelledby="section-identifiers">
+            <header class="cfu-section__header">
+                <div class="cfu-section__icon-wrap" aria-hidden="true">
+                    <svg class="cfu-section__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342
+                     1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375
+                     c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0
+                     .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125
+                     1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75
+                     0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125
+                     V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0
+                     3 3 0 0 1 6 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="section-identifiers" class="cfu-section__title">Financial &amp; Contact</h3>
+                    <p class="cfu-section__subtitle">Optional but recommended for operations</p>
+                </div>
+            </header>
+
+            <div class="cfu-fields">
+
+                <!-- Currency Code -->
+                <div class="cfu-field" [class.cfu-field--error]="isFieldInvalid('currencyCode')">
+                    <input id="currencyCode" class="cfu-input" type="text" formControlName="currencyCode" maxlength="3"
+                        placeholder=" "
+                        [attr.aria-describedby]="isFieldInvalid('currencyCode') ? 'currency-error' : null"
+                        [attr.aria-invalid]="isFieldInvalid('currencyCode') ? 'true' : 'false'">
+                    <label class="cfu-label" for="currencyCode">Currency Code</label>
+                    @if (isFieldInvalid('currencyCode')) {
+                    <span id="currency-error" class="cfu-error" role="alert">
+                        @if (currencyCtrl.hasError('minlength') || currencyCtrl.hasError('maxlength')) {
+                        Must be exactly 3 letters (e.g. SGD, USD).
+                        } @else if (currencyCtrl.hasError('uppercaseOnly')) {
+                        Only uppercase letters (e.g. SGD).
+                        }
+                    </span>
+                    }
+                    <span class="cfu-hint">ISO 4217 &middot; e.g. SGD, USD, EUR</span>
+                </div>
+
+                <!-- Phone Dial Code -->
+                <div class="cfu-field" [class.cfu-field--error]="isFieldInvalid('phoneCode')">
+                    <div class="cfu-input-prefix-wrap">
+                        <span class="cfu-input-prefix" aria-hidden="true">+</span>
+                        <input id="phoneCode" class="cfu-input cfu-input--prefixed" type="text"
+                            formControlName="phoneCode" maxlength="7" placeholder=" " inputmode="numeric"
+                            [attr.aria-describedby]="isFieldInvalid('phoneCode') ? 'phone-error' : null"
+                            [attr.aria-invalid]="isFieldInvalid('phoneCode') ? 'true' : 'false'">
+                        <label class="cfu-label cfu-label--prefixed" for="phoneCode">Dial Code</label>
+                    </div>
+                    @if (isFieldInvalid('phoneCode')) {
+                    <span id="phone-error" class="cfu-error" role="alert">
+                        @if (phoneCtrl.hasError('digitsOnly')) {
+                        Only numeric digits allowed (e.g. 65, 1, 44).
+                        } @else if (phoneCtrl.hasError('maxlength')) {
+                        Maximum 7 digits.
+                        }
+                    </span>
+                    }
+                    <span class="cfu-hint">Numeric only &middot; e.g. 65 for +65 (Singapore)</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Divider ──────────────────────────────────────────────────── -->
+        <div class="cfu-divider" role="separator" aria-hidden="true"></div>
+
+        <!-- ── Form Actions ────────────────────────────────────────────── -->
+        <footer class="cfu-actions">
+
+            <!-- Cancel -->
+            <button type="button" class="cfu-btn cfu-btn--cancel" (click)="cancel()" [disabled]="isLoading()">
+                Cancel
+            </button>
+
+            <!-- Save -->
+            <button type="submit" class="cfu-btn cfu-btn--save" [disabled]="isLoading()">
+
+                @if (isLoading()) {
+                <!-- Spinner -->
+                <svg class="cfu-btn__spinner" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                     0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                     0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Saving…
+                } @else {
+                <svg class="cfu-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                {{ isEditMode() ? 'Save Changes' : 'Create Country' }}
+                }
+            </button>
+
+        </footer>
+
+    </div>
+
+</form>

@@ -1,0 +1,796 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .red-page {
+   min-height: 100%;
+   background: var(--aoms-bg-primary, $off-white);
+   transition: background-color var(--aoms-transition-base, 250ms ease);
+   position: relative;
+ }
+
+ // ============================================================================
+ // 2. Sticky Command Header
+ // ============================================================================
+ .red-header {
+   position: sticky;
+   top: 0;
+   z-index: 20;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 1rem;
+   padding: 0.9375rem 1.5rem;
+   background: var(--aoms-bg-card, #ffffff);
+   border-bottom: 1px solid rgba($champagne, 0.15);
+   box-shadow: 0 2px 14px rgba($midnight, 0.06);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+ }
+
+ .red-header-left {
+   display: flex;
+   flex-direction: column;
+   gap: 0.2rem;
+ }
+
+ .red-breadcrumb {
+   display: flex;
+   align-items: center;
+   gap: 0.375rem;
+
+   &__section {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 400;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: var(--aoms-text-muted);
+   }
+
+   &__sep {
+     width: 0.75rem;
+     height: 0.75rem;
+     color: var(--aoms-text-muted);
+     flex-shrink: 0;
+   }
+
+   &__current {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: $gold;
+   }
+ }
+
+ .red-title {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 20px;
+   font-weight: 700;
+   letter-spacing: -0.02em;
+   line-height: 1;
+   color: var(--aoms-text-primary, $charcoal);
+   transition: color 150ms $ease;
+ }
+
+ // ── Executive Toolbar ──────────────────────────────────────────────────────
+ .red-toolbar {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   flex-shrink: 0;
+ }
+
+ .red-sep {
+   width: 1px;
+   height: 1.5rem;
+   background: rgba($champagne, 0.2);
+   flex-shrink: 0;
+ }
+
+ .red-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.375rem;
+   height: 2.125rem;
+   padding: 0 0.875rem;
+   border-radius: 4px;
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   font-weight: 600;
+   letter-spacing: 0.01em;
+   cursor: pointer;
+   white-space: nowrap;
+   transition: all 150ms $ease;
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &__icon {
+     width: 0.875rem;
+     height: 0.875rem;
+     flex-shrink: 0;
+   }
+
+   &--ghost {
+     background: transparent;
+     border: 1px solid transparent;
+     color: var(--aoms-text-muted);
+
+     &:hover {
+       color: $gold;
+       background: rgba($gold, 0.05);
+     }
+   }
+
+   &--outline {
+     background: transparent;
+     border: 1px solid rgba($gold, 0.4);
+     color: $gold;
+
+     &:hover {
+       border-color: $gold;
+       background: rgba($gold, 0.07);
+       box-shadow: 0 2px 8px rgba($gold, 0.15);
+     }
+   }
+
+   &--primary {
+     background: $gold;
+     border: 1px solid $gold;
+     color: $midnight;
+     font-weight: 700;
+
+     &:hover {
+       background: $champagne;
+       border-color: $champagne;
+       box-shadow: 0 4px 14px rgba($gold, 0.38);
+     }
+   }
+ }
+
+ .red-icon-btn {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 2.125rem;
+   height: 2.125rem;
+   border-radius: 4px;
+   border: 1px solid rgba($champagne, 0.2);
+   background: transparent;
+   color: var(--aoms-text-secondary);
+   cursor: pointer;
+   transition: all 150ms $ease;
+
+   &:hover:not(:disabled) {
+     border-color: $champagne;
+     background: rgba($champagne, 0.08);
+   }
+
+   &:disabled {
+     opacity: 0.4;
+     cursor: not-allowed;
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+
+     &--spin {
+       animation: red-spin 1s linear infinite;
+     }
+   }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .red-body {
+   padding: 1.5rem;
+   display: flex;
+   flex-direction: column;
+   gap: 1.25rem;
+   overflow-y: auto;
+   max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+ }
+
+ // ============================================================================
+ // 4. Error banner
+ // ============================================================================
+ .red-error-banner {
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+   padding: 0.875rem 1rem;
+   border-radius: 8px;
+   background: rgba($ruby, 0.07);
+   border: 1px solid rgba($ruby, 0.2);
+   color: $ruby;
+   font-family: 'Montserrat', sans-serif;
+   font-size: 13px;
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+     flex-shrink: 0;
+   }
+
+   &__msg {
+     flex: 1;
+     line-height: 1.5;
+   }
+
+   &__dismiss {
+     flex-shrink: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.25rem;
+     height: 1.25rem;
+     border: none;
+     background: transparent;
+     cursor: pointer;
+     color: rgba($ruby, 0.5);
+     border-radius: 3px;
+     transition: color 150ms $ease;
+
+     svg {
+       width: 0.7rem;
+       height: 0.7rem;
+     }
+
+     &:hover {
+       color: $ruby;
+     }
+   }
+ }
+
+ // ============================================================================
+ // 5. Pagination bar
+ // ============================================================================
+ .red-pagination {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 1rem;
+ }
+
+ .red-page-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.35rem;
+   height: 2.125rem;
+   padding: 0 0.875rem;
+   border-radius: 4px;
+   border: 1px solid rgba($champagne, 0.2);
+   background: transparent;
+   color: var(--aoms-text-secondary);
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 150ms $ease;
+
+   svg {
+     width: 0.875rem;
+     height: 0.875rem;
+   }
+
+   &:hover:not(:disabled) {
+     border-color: $champagne;
+     color: $gold;
+     background: rgba($champagne, 0.06);
+   }
+
+   &:disabled {
+     opacity: 0.35;
+     cursor: not-allowed;
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+ }
+
+ .red-page-info {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   color: var(--aoms-text-muted);
+
+   strong {
+     font-weight: 700;
+     color: var(--aoms-text-secondary);
+   }
+ }
+
+ // ============================================================================
+ // 6. Deactivation Modal — Glassmorphism backdrop + Ruby accent
+ // ============================================================================
+ .red-backdrop {
+   position: fixed;
+   inset: 0;
+   z-index: 40;
+   background: rgba($midnight, 0.6);
+   backdrop-filter: blur(8px);
+   -webkit-backdrop-filter: blur(8px);
+   animation: red-fade-in 200ms $ease both;
+ }
+
+ .red-modal {
+   position: fixed;
+   z-index: 50;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: min(520px, calc(100vw - 2rem));
+
+   border-radius: 12px;
+   background: var(--aoms-bg-card, #ffffff);
+   border: 1px solid rgba($ruby, 0.22);
+   box-shadow:
+     0 24px 64px rgba($midnight, 0.3),
+     0 0 0 1px rgba($ruby, 0.08);
+   overflow: hidden;
+   animation: red-modal-enter 280ms $luxury both;
+
+   &__ruby-bar {
+     height: 3px;
+     background: linear-gradient(90deg, $ruby-deep 0%, $ruby 60%, transparent 100%);
+   }
+
+   &__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 1rem;
+     padding: 1.5rem 1.5rem 0.875rem;
+   }
+
+   &__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.75rem;
+     height: 2.75rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.09);
+     border: 1px solid rgba($ruby, 0.22);
+   }
+
+   &__icon {
+     width: 1.25rem;
+     height: 1.25rem;
+     color: $ruby;
+   }
+
+   &__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 16px;
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.2rem;
+   }
+
+   &__subtitle {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     margin: 0;
+   }
+
+   &__route-strip {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     margin: 0 1.5rem;
+     padding: 1rem 1.125rem;
+     border-radius: 8px;
+     background: rgba($midnight, 0.04);
+     border: 1px solid rgba($champagne, 0.15);
+   }
+
+   &__iata {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.5rem;
+     font-weight: 800;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+
+     &--origin {
+       color: $gold;
+     }
+
+     &--dest {
+       color: $champagne;
+     }
+   }
+
+   &__route-arrow {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: rgba($champagne, 0.5);
+     flex-shrink: 0;
+   }
+
+   &__distance {
+     font-family: 'Courier New', monospace;
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     margin-left: auto;
+   }
+
+   &__warning {
+     margin: 1.25rem 1.5rem;
+     padding: 0.875rem 1rem;
+     border-radius: 6px;
+     background: rgba($ruby, 0.04);
+     border-left: 3px solid rgba($ruby, 0.35);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     line-height: 1.65;
+     color: var(--aoms-text-secondary);
+
+     strong {
+       font-weight: 700;
+       color: $ruby;
+     }
+   }
+
+   &__error {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     margin: 0 1.5rem;
+     padding: 0.625rem 0.875rem;
+     border-radius: 6px;
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.2);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: $ruby;
+     animation: red-fade-in 180ms $ease both;
+
+     svg {
+       width: 0.875rem;
+       height: 0.875rem;
+       flex-shrink: 0;
+       color: $ruby;
+     }
+   }
+
+   &__actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding: 1rem 1.5rem 1.375rem;
+     border-top: 1px solid rgba($champagne, 0.12);
+     background: rgba($off-white, 0.5);
+   }
+ }
+
+ .red-modal-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.375rem;
+   height: 2.25rem;
+   padding: 0 1.125rem;
+   border-radius: 4px;
+   font-family: 'Montserrat', sans-serif;
+   font-size: 13px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 150ms $ease;
+
+   &:disabled {
+     opacity: 0.5;
+     cursor: not-allowed;
+     pointer-events: none;
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &__spin {
+     width: 0.9rem;
+     height: 0.9rem;
+     animation: red-spin 1s linear infinite;
+   }
+
+   &--cancel {
+     background: transparent;
+     border: 1px solid rgba($charcoal, 0.2);
+     color: var(--aoms-text-secondary);
+
+     &:hover:not(:disabled) {
+       border-color: $champagne;
+       color: $gold;
+       background: rgba($champagne, 0.06);
+     }
+   }
+
+   &--confirm {
+     background: $ruby;
+     border: 1px solid $ruby;
+     color: #ffffff;
+
+     &:hover:not(:disabled) {
+       background: $ruby-deep;
+       border-color: $ruby-deep;
+       box-shadow: 0 4px 14px rgba($ruby, 0.4);
+     }
+   }
+ }
+
+ // ============================================================================
+ // 7. Toast stack
+ // ============================================================================
+ .red-toast-stack {
+   position: fixed;
+   bottom: 1.5rem;
+   right: 1.5rem;
+   z-index: 100;
+   display: flex;
+   flex-direction: column;
+   gap: 0.625rem;
+   pointer-events: none;
+   width: min(360px, calc(100vw - 3rem));
+ }
+
+ .red-toast {
+   pointer-events: auto;
+   display: flex;
+   align-items: flex-start;
+   gap: 0.75rem;
+   padding: 0.875rem 1rem;
+   border-radius: 10px;
+   box-shadow: 0 8px 32px rgba($midnight, 0.18);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+   animation: red-toast-in 260ms $luxury both;
+
+   &__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 1.875rem;
+     height: 1.875rem;
+     border-radius: 6px;
+
+     svg {
+       width: 1.125rem;
+       height: 1.125rem;
+     }
+   }
+
+   &__msg {
+     flex: 1;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12.5px;
+     font-weight: 500;
+     line-height: 1.5;
+     margin: 0;
+   }
+
+   &__dismiss {
+     flex-shrink: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.25rem;
+     height: 1.25rem;
+     border: none;
+     background: transparent;
+     cursor: pointer;
+     border-radius: 3px;
+     opacity: 0.4;
+     transition: opacity 150ms $ease;
+
+     svg {
+       width: 0.7rem;
+       height: 0.7rem;
+     }
+
+     &:hover {
+       opacity: 1;
+     }
+   }
+
+   &--success {
+     background: rgba(236, 253, 245, 0.97);
+     border: 1px solid rgba(6, 78, 59, 0.3);
+
+     .red-toast__icon-wrap {
+       background: rgba(6, 78, 59, 0.12);
+       border: 1px solid rgba(6, 78, 59, 0.25);
+     }
+
+     .red-toast__icon-wrap svg {
+       color: #059669;
+     }
+
+     .red-toast__msg,
+     .red-toast__dismiss {
+       color: #065F46;
+     }
+   }
+
+   &--error {
+     background: rgba(255, 241, 242, 0.97);
+     border: 1px solid rgba($ruby, 0.3);
+
+     .red-toast__icon-wrap {
+       background: rgba($ruby, 0.1);
+       border: 1px solid rgba($ruby, 0.22);
+     }
+
+     .red-toast__icon-wrap svg {
+       color: $ruby;
+     }
+
+     .red-toast__msg,
+     .red-toast__dismiss {
+       color: $ruby-deep;
+     }
+   }
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes red-spin {
+   from {
+     transform: rotate(0deg);
+   }
+
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ @keyframes red-fade-in {
+   from {
+     opacity: 0;
+   }
+
+   to {
+     opacity: 1;
+   }
+ }
+
+ @keyframes red-modal-enter {
+   from {
+     opacity: 0;
+     transform: translate(-50%, calc(-50% + 16px));
+   }
+
+   to {
+     opacity: 1;
+     transform: translate(-50%, -50%);
+   }
+ }
+
+ @keyframes red-toast-in {
+   from {
+     opacity: 0;
+     transform: translateX(18px) scale(0.97);
+   }
+
+   to {
+     opacity: 1;
+     transform: translateX(0) scale(1);
+   }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+   .red-header {
+     box-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+   }
+
+   .red-btn--ghost {
+     &:hover {
+       color: $champagne;
+     }
+   }
+
+   .red-btn--outline {
+     border-color: rgba($champagne, 0.3);
+     color: $champagne;
+
+     &:hover {
+       border-color: $champagne;
+       background: rgba($champagne, 0.07);
+     }
+   }
+
+   .red-error-banner {
+     background: rgba($ruby, 0.12);
+     border-color: rgba($ruby, 0.3);
+     color: #f43f5e;
+
+     &__icon {
+       color: #f43f5e;
+     }
+   }
+
+   .red-modal {
+     background: #0d1f35;
+     border-color: rgba($ruby, 0.3);
+     box-shadow: 0 28px 72px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba($ruby, 0.12);
+   }
+
+   .red-modal__title {
+     color: rgba(255, 255, 255, 0.9);
+   }
+
+   .red-modal__route-strip {
+     background: rgba(255, 255, 255, 0.04);
+     border-color: rgba($champagne, 0.1);
+   }
+
+   .red-modal__warning {
+     background: rgba($ruby, 0.1);
+     border-left-color: rgba($ruby, 0.5);
+     color: rgba(255, 255, 255, 0.65);
+   }
+
+   .red-modal__actions {
+     background: rgba(255, 255, 255, 0.02);
+     border-top-color: rgba($champagne, 0.08);
+   }
+
+   .red-modal-btn--cancel {
+     border-color: rgba(255, 255, 255, 0.15);
+     color: rgba(255, 255, 255, 0.6);
+
+     &:hover:not(:disabled) {
+       border-color: $champagne;
+       color: $champagne;
+     }
+   }
+
+   .red-toast--success {
+     background: rgba(6, 78, 59, 0.92);
+
+     .red-toast__msg,
+     .red-toast__dismiss {
+       color: #6ee7b7;
+     }
+   }
+
+   .red-toast--error {
+     background: rgba(127, 29, 29, 0.9);
+
+     .red-toast__msg,
+     .red-toast__dismiss {
+       color: #fca5a5;
+     }
+   }
+ }

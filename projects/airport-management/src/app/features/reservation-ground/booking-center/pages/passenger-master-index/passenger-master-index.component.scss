@@ -1,0 +1,635 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ivory: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Page Shell ─────────────────────────────────────────────────────────
+ .pmi-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary, $ivory);
+     transition: background-color $t-base;
+     position: relative;
+ }
+
+ // ── 2. Sticky Header ──────────────────────────────────────────────────────
+ .pmi-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card, #fff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         margin-top: 0.25rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .pmi-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .pmi-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+ }
+
+ .pmi-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color $t-fast;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .pmi-count-badge {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-muted);
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     background: rgba($midnight, 0.05);
+     border: 1px solid rgba($champagne, 0.12);
+ }
+
+ // Toast
+ .pmi-toast {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.375rem 0.875rem;
+     border-radius: 6px;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     animation: pmi-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &--success {
+         color: $emerald;
+         background: rgba($emerald, 0.08);
+         border: 1px solid rgba($emerald, 0.2);
+     }
+ }
+
+ // Icon buttons
+ .pmi-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: pmi-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── 3. Body: Split View ───────────────────────────────────────────────────
+ .pmi-body {
+     flex: 1;
+     display: flex;
+     gap: 0;
+     overflow: hidden;
+     min-height: 0;
+ }
+
+ // Left panel: always visible
+ .pmi-left-panel {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 1.5rem 1.75rem;
+     overflow-y: auto;
+     min-width: 0;
+     transition: flex $t-base;
+
+     .pmi-page--split & {
+         flex: 0 0 55%;
+         border-right: 1px solid rgba($champagne, 0.12);
+
+         @media (max-width: 1024px) {
+             flex: 0 0 50%;
+         }
+
+         @media (max-width: 768px) {
+             display: none; // Mobile: detail takes full screen
+         }
+     }
+ }
+
+ // Right panel: detail form
+ .pmi-right-panel {
+     flex: 0 0 45%;
+     display: flex;
+     flex-direction: column;
+     overflow-y: auto;
+     background: var(--aoms-bg-primary, $ivory);
+     border-left: 1px solid rgba($champagne, 0.1);
+     animation: pmi-slide-in 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+     @media (max-width: 1024px) {
+         flex: 0 0 50%;
+     }
+
+     @media (max-width: 768px) {
+         flex: 1;
+         border-left: none;
+     }
+ }
+
+ // ── 4. Error Banner ───────────────────────────────────────────────────────
+ .pmi-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.75rem 1rem;
+     border-radius: 8px;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 15%);
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.18);
+     animation: pmi-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── 5. Pagination ─────────────────────────────────────────────────────────
+ .pmi-pagination {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.75rem;
+
+     &__btn {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: transparent;
+         color: var(--aoms-text-secondary);
+         cursor: pointer;
+         transition: all $t-fast;
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+         }
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             background: rgba($champagne, 0.07);
+             color: $gold;
+         }
+
+         &:disabled {
+             opacity: 0.3;
+             cursor: not-allowed;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     &__info {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-family: var(--aoms-font-body);
+         font-size: 0.8125rem;
+     }
+
+     &__current {
+         font-weight: 700;
+         color: $gold;
+     }
+
+     &__sep {
+         color: var(--aoms-text-muted);
+     }
+
+     &__total {
+         font-weight: 500;
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ── 6. Delete Confirmation Modal ──────────────────────────────────────────
+ .pmi-modal-bd {
+     position: fixed;
+     inset: 0;
+     z-index: 49;
+     background: rgba($midnight, 0.78);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+     animation: pmi-fade 200ms ease forwards;
+ }
+
+ .pmi-modal {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 50;
+     width: min(500px, calc(100vw - 2rem));
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 0 0 1.5rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($ruby, 0.4);
+     box-shadow:
+         0 24px 60px rgba(0, 0, 0, 0.6),
+         0 0 0 1px rgba($ruby, 0.06) inset;
+     overflow: hidden;
+     animation: pmi-modal-enter 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     >*:not(.pmi-modal__rule) {
+         padding-left: 1.5rem;
+         padding-right: 1.5rem;
+     }
+
+     &__rule {
+         height: 3px;
+         flex-shrink: 0;
+         background: linear-gradient(to right,
+                 rgba($ruby, 0.35), lighten($ruby, 18%), rgba($ruby, 0.35));
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3rem;
+         height: 3rem;
+         border-radius: 50%;
+         background: rgba($ruby, 0.14);
+         border: 1px solid rgba($ruby, 0.35);
+         color: lighten($ruby, 28%);
+         margin-top: 0.75rem;
+
+         svg {
+             width: 1.5rem;
+             height: 1.5rem;
+         }
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.5rem;
+     }
+
+     &__title {
+         font-size: 1.1875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     &__target {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: 0.02em;
+         color: $champagne;
+         font-style: italic;
+     }
+
+     &__copy {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         line-height: 1.6;
+         color: rgba(255, 255, 255, 0.5);
+
+         strong {
+             color: rgba(255, 255, 255, 0.75);
+             font-weight: 700;
+         }
+     }
+
+     &__confirm-field {
+         display: flex;
+         flex-direction: column;
+         gap: 0.375rem;
+         margin-top: 0.25rem;
+     }
+
+     &__confirm-label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba($champagne, 0.5);
+     }
+
+     &__confirm-keyword {
+         font-family: 'Courier New', monospace;
+         color: lighten($ruby, 25%);
+         font-weight: 700;
+         letter-spacing: 0.1em;
+     }
+
+     &__confirm-input {
+         height: 2.375rem;
+         padding: 0 0.75rem;
+         border-radius: 4px;
+         border: 1px solid rgba($ruby, 0.3);
+         background: rgba($ruby, 0.06);
+         font-family: 'Courier New', monospace;
+         font-size: 0.9375rem;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         color: lighten($ruby, 28%);
+         text-transform: uppercase;
+         outline: none;
+         transition: border-color $t-fast;
+
+         &::placeholder {
+             color: rgba(lighten($ruby, 15%), 0.3);
+         }
+
+         &:focus {
+             border-color: rgba($ruby, 0.65);
+             background: rgba($ruby, 0.1);
+         }
+     }
+
+     &__error {
+         padding: 0.625rem 0.875rem;
+         border-radius: 6px;
+         background: rgba($ruby, 0.1);
+         border: 1px solid rgba($ruby, 0.22);
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: lighten($ruby, 30%);
+         line-height: 1.4;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding-top: 0.25rem;
+         border-top: 1px solid rgba(255, 255, 255, 0.06);
+     }
+
+     &__btn {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.375rem;
+         padding: 0.5625rem 1.125rem;
+         border-radius: 4px;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         cursor: pointer;
+         outline: none;
+         white-space: nowrap;
+         transition: all $t-fast;
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         // Keep Record — neutral ghost
+         &--keep {
+             color: rgba(255, 255, 255, 0.45);
+             background: transparent;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+
+             &:hover {
+                 color: rgba(255, 255, 255, 0.75);
+                 border-color: rgba(255, 255, 255, 0.22);
+                 background: rgba(255, 255, 255, 0.05);
+             }
+         }
+
+         // Confirm Deletion — Ruby + Gold border (Asiaporeair spec)
+         &--delete {
+             color: #fff;
+             background: $ruby;
+             border: 1px solid rgba($gold, 0.45);
+             box-shadow: 0 4px 16px rgba($ruby, 0.5);
+
+             &:hover:not(:disabled) {
+                 background: lighten($ruby, 8%);
+                 border-color: $gold;
+                 box-shadow: 0 6px 20px rgba($ruby, 0.65), 0 0 0 1px rgba($gold, 0.3);
+                 transform: translateY(-1px);
+             }
+
+             &:disabled {
+                 opacity: 0.35;
+                 cursor: not-allowed;
+                 transform: none;
+                 box-shadow: none;
+             }
+         }
+     }
+
+     &__spin {
+         width: 0.875rem;
+         height: 0.875rem;
+         animation: pmi-spin 1s linear infinite;
+     }
+ }
+
+ // ── 7. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes pmi-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes pmi-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes pmi-modal-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px)) scale(0.93);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%) scale(1);
+     }
+ }
+
+ @keyframes pmi-slide-in {
+     from {
+         opacity: 0;
+         transform: translateX(20px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes pmi-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ── 8. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .pmi-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .pmi-icon-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .pmi-error-banner {
+         background: rgba($ruby, 0.15);
+         border-color: rgba($ruby, 0.3);
+         color: #fca5a5;
+     }
+
+     .pmi-right-panel {
+         border-left-color: rgba($champagne, 0.07);
+     }
+ }

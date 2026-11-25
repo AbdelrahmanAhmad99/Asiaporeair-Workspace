@@ -1,0 +1,167 @@
+<!-- employee-inventory-dashboard.component.html -->
+
+<div class="eid-page">
+
+    <!-- ══ Deactivation Modal ════════════════════════════════════ -->
+    @if (showDeactivateModal()) {
+    <div class="eid-modal-bd" (click)="onDeactivateCancelled()" aria-hidden="true"></div>
+
+    <div class="eid-modal" role="alertdialog" aria-modal="true" aria-labelledby="eid-modal-title">
+
+        <div class="eid-modal__rule" aria-hidden="true"></div>
+
+        @if (!store.actionProcessing()) {
+        <div class="eid-modal__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="eid-modal__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+        </div>
+
+        <div class="eid-modal__body">
+            <h2 class="eid-modal__title" id="eid-modal-title">Deactivate Account?</h2>
+            <p class="eid-modal__name">{{ pendingDeactivateName() }}</p>
+            <p class="eid-modal__copy">
+                Deactivating this employee account will immediately revoke their system access and
+                remove them from active operational rosters. Their records will be preserved in the archive.
+            </p>
+        </div>
+
+        @if (store.actionError()) {
+        <div class="eid-modal__error" role="alert">{{ store.actionError() }}</div>
+        }
+
+        <div class="eid-modal__actions">
+            <button class="eid-modal__btn eid-modal__btn--cancel" type="button"
+                (click)="onDeactivateCancelled()">Cancel</button>
+            <button class="eid-modal__btn eid-modal__btn--confirm" type="button"
+                (click)="onDeactivateConfirmed()">Deactivate Account</button>
+        </div>
+
+        } @else {
+
+        <div class="eid-modal__loading" aria-live="polite" aria-busy="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="eid-modal__loading__spinner">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            <p>Deactivating employee account…</p>
+        </div>
+
+        }
+
+    </div>
+    }
+
+    <!-- ══ Header ════════════════════════════════════════════════ -->
+    <header class="eid-header">
+        <div class="eid-header__left">
+            <nav class="eid-breadcrumb" aria-label="Breadcrumb">
+                <span class="eid-breadcrumb__section">Workforce Intelligence</span>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="eid-breadcrumb__sep"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="eid-breadcrumb__current">Workforce Directory</span>
+            </nav>
+
+            <div class="eid-title-row">
+                <h1 class="eid-title">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="eid-title__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0z" />
+                    </svg>
+                    Workforce Inventory
+                </h1>
+                @if (store.pagination().total > 0) {
+                <span class="eid-total-badge" [attr.aria-label]="store.pagination().total + ' employees'">
+                    {{ store.pagination().total }} personnel
+                </span>
+                }
+            </div>
+        </div>
+
+        <div class="eid-header__controls">
+
+            @if (store.actionSuccess()) {
+            <div class="eid-success-toast" role="status">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="eid-success-toast__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                {{ store.actionSuccess() }}
+            </div>
+            }
+
+            <button class="eid-icon-btn" type="button" [disabled]="store.loading()" (click)="store.loadEmployees()"
+                aria-label="Refresh workforce data">
+                <svg class="eid-icon-btn__icon" [class.eid-icon-btn__icon--spin]="store.loading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <button class="eid-icon-btn eid-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Light mode' : 'Dark mode'">
+                @if (isDarkMode()) {
+                <svg class="eid-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="eid-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Body ══════════════════════════════════════════════════ -->
+    <main class="eid-body">
+
+        <!-- KPI Bar -->
+        <aoms-workforce-kpi-bar [analytics]="store.analytics() ?? emptyAnalytics"
+            [loading]="store.analyticsLoading()" />
+
+        <!-- Analytics error -->
+        @if (store.analyticsError()) {
+        <div class="eid-inline-error" role="alert">{{ store.analyticsError() }}</div>
+        }
+
+        <!-- Filter Bar -->
+        <aoms-directory-filter-bar [currentFilters]="store.filters()" [loading]="store.loading()"
+            (filtersChanged)="onFiltersChanged($event)" (resetTriggered)="onFiltersReset()"
+            (onboardClicked)="onOnboardEmployee()" />
+
+        <!-- Load error -->
+        @if (store.error()) {
+        <div class="eid-inline-error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="eid-inline-error__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{ store.error() }}
+        </div>
+        }
+
+        <!-- Executive Ledger -->
+        <aoms-employee-data-grid [employees]="store.employees()" [pagination]="store.pagination()"
+            [loading]="store.loading()" [processingId]="store.focusedEmployeeId()"
+            (manageClicked)="onManageEmployee($event)" (accessManagerClicked)="onAccessManagerRequested($event)"
+            (deactivateClicked)="onDeactivateRequested($event)"
+            (reactivateClicked)="onReactivateEmployee($event)" (nextPage)="onNextPage()" (prevPage)="onPrevPage()"
+            (pageChanged)="onPageChanged($event)" />
+
+    </main>
+
+</div>

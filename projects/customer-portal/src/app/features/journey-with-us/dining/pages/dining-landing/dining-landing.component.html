@@ -1,0 +1,102 @@
+<!-- ============================================================================
+     dining-landing.component.html
+     Asiaporeair | Dining Landing — Hub Page
+     ============================================================================ -->
+
+<div class="dl-shell">
+
+    <!-- ══ PROMO BANNER ══════════════════════════════════════════════════════ -->
+    <app-dining-promo-banner [breadcrumbs]="breadcrumbs" headline="Cuisine at Altitude"
+        subheadline="Award-winning menus crafted by our International Culinary Panel — served at your pace, at your seat, on your terms."
+        eyebrow="Dining" ctaLabel="Begin Your Culinary Journey"
+        ctaRoute="/journey-with-us/dining/book-the-cook"></app-dining-promo-banner>
+
+    <!-- ══ HUB NAVIGATION CARDS ══════════════════════════════════════════════ -->
+    <section class="dl-hub" aria-labelledby="dl-hub-title">
+        <div class="dl-hub__inner">
+
+            <header class="dl-hub__header">
+                <div class="dl-hub__header-line" aria-hidden="true"></div>
+                <div>
+                    <p class="dl-hub__eyebrow">Explore Dining</p>
+                    <h2 class="dl-hub__title" id="dl-hub-title">Your Table is Set</h2>
+                    <p class="dl-hub__subtitle">
+                        From pre-ordering a signature chef's dish to previewing every course before you board —
+                        dining with Asiaporeair begins long before take-off.
+                    </p>
+                </div>
+            </header>
+
+            <div class="dl-hub__grid">
+                @for (section of diningHubSections(); track trackById($index, section); let i = $index) {
+                <app-hub-navigation-card [section]="section" [index]="i"></app-hub-navigation-card>
+                }
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ MENU CLASS PREVIEWS ═══════════════════════════════════════════════ -->
+    <section class="dl-menus" aria-labelledby="dl-menus-title">
+        <div class="dl-menus__inner">
+
+            <header class="dl-menus__header">
+                <div class="dl-menus__header-line" aria-hidden="true"></div>
+                <div>
+                    <p class="dl-menus__eyebrow">Menu Previews</p>
+                    <h2 class="dl-menus__title" id="dl-menus-title">Dining by Cabin Class</h2>
+                </div>
+            </header>
+
+            <div class="dl-menus__grid">
+                @for (group of menuGroups(); track trackById($index, group)) {
+                <a class="dl-menu-card" [routerLink]="group.route"
+                    [attr.aria-label]="'Browse ' + group.menuLabel + ' menus'">
+                    <div class="dl-menu-card__img-wrap">
+                        <img class="dl-menu-card__img" [src]="group.imagePath" [alt]="group.menuLabel + ' menu preview'"
+                            loading="lazy" />
+                        <div class="dl-menu-card__overlay" aria-hidden="true"></div>
+                    </div>
+                    <div class="dl-menu-card__body">
+                        <span class="dl-menu-card__cabin">{{ group.cabinClass }}</span>
+                        <h3 class="dl-menu-card__label">{{ group.menuLabel }}</h3>
+                        <p class="dl-menu-card__desc">{{ group.description }}</p>
+                        <div class="dl-menu-card__cta">
+                            <span>View Menu</span>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5" aria-hidden="true">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+                }
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ SPECIAL MEALS STRIP ════════════════════════════════════════════════ -->
+    <div class="dl-special-strip">
+        <div class="dl-special-strip__inner">
+            <div class="dl-special-strip__text">
+                <p class="dl-special-strip__eyebrow">Dietary Requirements</p>
+                <h3 class="dl-special-strip__title">Special Meal Requests</h3>
+                <p class="dl-special-strip__desc">
+                    We offer over 20 medically approved and culturally sensitive meal types.
+                    Request your special meal at booking or up to 24 hours before departure.
+                </p>
+            </div>
+            <a class="dl-special-strip__cta" routerLink="/journey-with-us/dining/inflight-menus">
+                Browse Special Meals
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,1113 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ivory: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Page Shell ─────────────────────────────────────────────────────────
+ .bps-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary, $ivory);
+     transition: background-color $t-base;
+ }
+
+ // ── 2. Sticky Header ──────────────────────────────────────────────────────
+ .bps-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card, #fff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+     }
+ }
+
+ .bps-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .bps-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     flex-wrap: wrap;
+ }
+
+ .bps-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color $t-fast;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .bps-clearance-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3rem;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: $champagne;
+     padding: 0.125rem 0.5625rem;
+     border-radius: 100px;
+     background: rgba($gold, 0.1);
+     border: 1px solid rgba($gold, 0.28);
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+     }
+ }
+
+ // Toast
+ .bps-toast {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.375rem 0.875rem;
+     border-radius: 6px;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     max-width: 380px;
+     animation: bps-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         opacity: 0.6;
+         color: inherit;
+         border-radius: 2px;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             opacity: 1;
+         }
+     }
+
+     &--success {
+         color: lighten($emerald, 30%);
+         background: rgba($emerald, 0.08);
+         border: 1px solid rgba($emerald, 0.2);
+     }
+ }
+
+ .bps-nav-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0 0.75rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     font-weight: 600;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     &:hover {
+         border-color: $champagne;
+         color: $gold;
+         background: rgba($champagne, 0.06);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .bps-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: bps-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── 3. Body ───────────────────────────────────────────────────────────────
+ .bps-body {
+     flex: 1;
+     padding: 1.25rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     overflow-y: auto;
+ }
+
+ // ── 4. Error Banner ───────────────────────────────────────────────────────
+ .bps-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.75rem 1rem;
+     border-radius: 8px;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 20%);
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.2);
+     animation: bps-fadein 200ms ease forwards;
+
+     // Gold border on left per "gold-bordered luxury" error spec
+     border-left: 3px solid $gold;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+         color: $gold;
+     }
+
+     &__msg {
+         flex: 1;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         border: none;
+         background: transparent;
+         color: rgba($champagne, 0.55);
+         cursor: pointer;
+         flex-shrink: 0;
+         border-radius: 3px;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             color: $champagne;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 1px;
+         }
+     }
+ }
+
+ // ── 5. Workspace: Grid left + Inspection right ────────────────────────────
+ .bps-workspace {
+     display: grid;
+     grid-template-columns: 1fr 320px;
+     gap: 1.25rem;
+     align-items: start;
+     flex: 1;
+
+     @media (max-width: 1024px) {
+         grid-template-columns: 1fr;
+     }
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.75rem;
+         min-width: 0;
+     }
+
+     &__inspection {
+         position: sticky;
+         top: calc(var(--aoms-topbar-height, 64px) + 1.25rem);
+
+         @media (max-width: 1024px) {
+             position: static;
+         }
+     }
+ }
+
+ // ── 6. Filter Bar ─────────────────────────────────────────────────────────
+ .bps-filter-bar {
+     display: flex;
+     flex-wrap: wrap;
+     align-items: flex-end;
+     gap: 0.625rem;
+     padding: 0.875rem 1.125rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 8px rgba($midnight, 0.04);
+ }
+
+ .bps-filter-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3rem;
+     flex: 1 1 140px;
+
+     &--wide {
+         flex: 2 1 200px;
+     }
+
+     &--narrow {
+         flex: 0 1 100px;
+         min-width: 80px;
+     }
+
+     &__label {
+         font-size: 9.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+         padding-left: 0.25rem;
+     }
+
+     &__wrap {
+         position: relative;
+         display: flex;
+         align-items: center;
+
+         &:focus-within .bps-filter-field__icon {
+             color: $gold;
+         }
+     }
+
+     &__icon {
+         position: absolute;
+         left: 0.625rem;
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.7;
+         pointer-events: none;
+         transition: color $t-fast;
+     }
+
+     &__input {
+         width: 100%;
+         height: 2.125rem;
+         padding: 0 0.75rem 0 2.125rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: rgba($midnight, 0.025);
+         font-family: var(--aoms-font-body);
+         font-size: 0.8125rem;
+         font-weight: 500;
+         color: var(--aoms-text-primary, $charcoal);
+         outline: none;
+         transition: border-color $t-fast, box-shadow $t-fast;
+         -webkit-appearance: none;
+         appearance: none;
+
+         &[type='number'] {
+             // -moz-appearance: textfield;
+
+             &::-webkit-inner-spin-button,
+             &::-webkit-outer-spin-button {
+                 -webkit-appearance: none;
+             }
+         }
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+             opacity: 0.55;
+         }
+
+         &:hover:not(:disabled) {
+             border-color: rgba($champagne, 0.4);
+         }
+
+         &:focus:not(:disabled) {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba($gold, 0.12);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+
+         &--mono {
+             font-family: 'Courier New', monospace;
+             font-size: 0.875rem;
+             font-weight: 600;
+             letter-spacing: 0.04em;
+         }
+     }
+ }
+
+ // ── 7. Filter Pill Toggles ────────────────────────────────────────────────
+ .bps-filter-pills {
+     display: flex;
+     align-items: center;
+     gap: 0.25rem;
+     align-self: flex-end;
+     margin-bottom: 0.0625rem;
+ }
+
+ .bps-pill {
+     padding: 0 0.625rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body);
+     font-size: 11.5px;
+     font-weight: 600;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.06);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--active {
+         background: rgba($gold, 0.12);
+         border-color: rgba($gold, 0.4);
+         color: $gold;
+     }
+
+     &--boarded.bps-pill--active {
+         background: rgba($emerald, 0.1);
+         border-color: rgba($emerald, 0.35);
+         color: lighten($emerald, 25%);
+     }
+
+     &--pending.bps-pill--active {
+         background: rgba($amber, 0.1);
+         border-color: rgba($amber, 0.35);
+         color: lighten($amber, 20%);
+     }
+ }
+
+ // ── 8. Include Deleted Toggle ─────────────────────────────────────────────
+ .bps-filter-toggle-wrap {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3rem;
+     align-self: flex-end;
+ }
+
+ .bps-filter-toggle {
+     position: relative;
+     width: 38px;
+     height: 22px;
+     border-radius: 100px;
+     border: 1.5px solid rgba($champagne, 0.25);
+     background: rgba($midnight, 0.06);
+     cursor: pointer;
+     transition: all $t-base;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &__thumb {
+         position: absolute;
+         top: 2px;
+         left: 2px;
+         width: 14px;
+         height: 14px;
+         border-radius: 50%;
+         background: rgba($champagne, 0.4);
+         transition: transform $t-base, background $t-base;
+     }
+
+     &--on {
+         background: rgba($gold, 0.15);
+         border-color: $gold;
+
+         .bps-filter-toggle__thumb {
+             transform: translateX(16px);
+             background: $gold;
+         }
+     }
+ }
+
+ .bps-filter-toggle__label {
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+ }
+
+ // ── 9. Search + Clear Buttons ─────────────────────────────────────────────
+ .bps-search-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: none;
+     background: $gold;
+     color: $midnight;
+     cursor: pointer;
+     align-self: flex-end;
+     box-shadow: 0 3px 10px rgba($gold, 0.35);
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         background: lighten($gold, 6%);
+         box-shadow: 0 4px 14px rgba($gold, 0.5);
+         transform: translateY(-1px);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         transform: none;
+         box-shadow: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+ }
+
+ .bps-clear-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.25);
+     background: transparent;
+     color: var(--aoms-text-muted);
+     cursor: pointer;
+     align-self: flex-end;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         color: var(--aoms-text-secondary);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+ }
+
+ // ── 10. Result Count ──────────────────────────────────────────────────────
+ .bps-result-count {
+     font-size: 11.5px;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     padding-left: 0.25rem;
+     animation: bps-fadein 180ms ease forwards;
+
+     &--empty {
+         font-style: italic;
+     }
+ }
+
+ // ── 11. Pagination ────────────────────────────────────────────────────────
+ .bps-pagination {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.75rem;
+     padding-top: 0.25rem;
+
+     &__btn {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: transparent;
+         color: var(--aoms-text-secondary);
+         cursor: pointer;
+         transition: all $t-fast;
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+         }
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             background: rgba($champagne, 0.07);
+             color: $gold;
+         }
+
+         &:disabled {
+             opacity: 0.3;
+             cursor: not-allowed;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     &__info {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+
+         strong {
+             color: $gold;
+         }
+     }
+ }
+
+ // ── 12. No Inspection State ───────────────────────────────────────────────
+ .bps-no-inspection {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 2.5rem 1.5rem;
+     text-align: center;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px dashed rgba($champagne, 0.12);
+
+     &__icon {
+         width: 64px;
+         height: 64px;
+         color: rgba($champagne, 0.25);
+         margin-bottom: 0.25rem;
+     }
+
+     &__label {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: rgba($champagne, 0.45);
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+     }
+
+     &__hint {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: rgba($champagne, 0.25);
+         line-height: 1.5;
+         max-width: 220px;
+     }
+ }
+
+ // ── 13. Inspection Shimmer ────────────────────────────────────────────────
+ .bps-inspection-shimmer {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.12);
+     padding: 1.25rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+ }
+
+ .bps-shimmer {
+     border-radius: 4px;
+     background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+     background-size: 200% 100%;
+     animation: bps-shimmer 1.4s infinite;
+
+     &--header {
+         height: 48px;
+         border-radius: 8px;
+     }
+
+     &--body {
+         height: 160px;
+         border-radius: 8px;
+     }
+
+     &--footer {
+         height: 36px;
+         border-radius: 4px;
+     }
+ }
+
+ // ── 14. Inspection Card ───────────────────────────────────────────────────
+ .bps-inspection-card {
+     position: relative;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 4px 20px rgba($midnight, 0.25);
+     overflow: hidden;
+     padding: 0 1.25rem 1.25rem;
+     animation: bps-fadein 240ms ease forwards;
+
+     &__accent {
+         height: 3px;
+         margin: 0 -1.25rem;
+         margin-bottom: 1.125rem;
+         background: linear-gradient(to right, transparent, rgba($gold, 0.5), rgba($champagne, 0.8), rgba($gold, 0.5), transparent);
+     }
+
+     &__close {
+         position: absolute;
+         top: 0.875rem;
+         right: 1rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.75rem;
+         height: 1.75rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.15);
+         background: transparent;
+         color: rgba($champagne, 0.45);
+         cursor: pointer;
+         transition: all $t-fast;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             border-color: rgba($champagne, 0.4);
+             color: $champagne;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     &__header {
+         margin-bottom: 1rem;
+     }
+
+     &__label-micro {
+         font-size: 9px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: rgba($champagne, 0.35);
+         margin-bottom: 0.1875rem;
+     }
+
+     &__name {
+         font-size: 1.0625rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: $champagne;
+         line-height: 1.15;
+     }
+
+     &__pass-id {
+         font-size: 10px;
+         font-family: 'Courier New', monospace;
+         color: rgba($champagne, 0.35);
+         letter-spacing: 0.06em;
+         margin-top: 0.125rem;
+     }
+
+     &__actions {
+         margin-top: 1.125rem;
+         padding-top: 1rem;
+         border-top: 1px solid rgba($champagne, 0.07);
+     }
+ }
+
+ // Pre-check badge
+ .bps-precheck-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: lighten($emerald, 35%);
+     padding: 0.1875rem 0.5rem;
+     border-radius: 100px;
+     background: rgba($emerald, 0.12);
+     border: 1px solid rgba($emerald, 0.25);
+     position: absolute;
+     top: 1rem;
+     right: 3.5rem;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+     }
+ }
+
+ // Route panel (glassmorphism)
+ .bps-route-panel {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.875rem;
+     border-radius: 8px;
+     background: rgba($champagne, 0.04);
+     border: 1px solid rgba($champagne, 0.07);
+     margin-bottom: 1rem;
+     backdrop-filter: blur(8px);
+ }
+
+ .bps-route-node {
+     flex: 1;
+     text-align: left;
+
+     &--right {
+         text-align: right;
+     }
+
+     &__iata {
+         font-size: 1.75rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: 0.04em;
+         background: linear-gradient(135deg, $champagne, lighten($gold, 12%));
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         background-clip: text;
+         line-height: 1;
+     }
+ }
+
+ .bps-route-plane {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.25rem;
+     flex-shrink: 0;
+
+     svg {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+     }
+ }
+
+ .bps-route-flight {
+     font-size: 9px;
+     font-family: 'Courier New', monospace;
+     font-weight: 700;
+     letter-spacing: 0.06em;
+     color: rgba($champagne, 0.4);
+ }
+
+ // Detail grid
+ .bps-detail-grid {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 0.625rem;
+ }
+
+ .bps-kv {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+
+     &--full {
+         grid-column: 1 / -1;
+     }
+
+     &__key {
+         font-size: 8.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: rgba($champagne, 0.35);
+     }
+
+     &__val {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: rgba(255, 255, 255, 0.75);
+
+         &--seat {
+             font-family: var(--aoms-font-heading);
+             font-size: 1rem;
+             font-weight: 700;
+             color: $gold;
+         }
+
+         &--mono {
+             font-family: 'Courier New', monospace;
+             font-size: 0.8125rem;
+             letter-spacing: 0.05em;
+             color: $champagne;
+         }
+     }
+ }
+
+ // Void trigger button
+ .bps-void-trigger {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.4375rem;
+     width: 100%;
+     padding: 0.625rem 1rem;
+     border-radius: 4px;
+     border: 1px solid rgba($ruby, 0.4);
+     background: rgba($ruby, 0.08);
+     color: lighten($ruby, 28%);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     cursor: pointer;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:hover:not(:disabled) {
+         background: $ruby;
+         border-color: $ruby;
+         color: #fff;
+         box-shadow: 0 4px 14px rgba($ruby, 0.45);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid rgba($ruby, 0.6);
+         outline-offset: 2px;
+     }
+ }
+
+ // ── 15. Shared Keyframes ──────────────────────────────────────────────────
+ .bps-spin {
+     animation: bps-spin 1s linear infinite;
+ }
+
+ @keyframes bps-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes bps-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes bps-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── 16. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .bps-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .bps-filter-bar {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     .bps-filter-field__input {
+         background: rgba(255, 255, 255, 0.04);
+         color: rgba(255, 255, 255, 0.85);
+
+         &:focus:not(:disabled) {
+             background: rgba($gold, 0.04);
+         }
+     }
+ }

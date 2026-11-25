@@ -1,0 +1,169 @@
+<div class="oal-card">
+    <div class="oal-scroll">
+        <table class="oal-table" role="grid" aria-label="Corridor operator registry">
+
+            <!-- Sticky Midnight Sapphire header -->
+            <thead class="oal-head">
+                <tr>
+                    @for (col of columns; track col.key) {
+                    <th class="oal-th" [class.oal-col--md-hidden]="col.hideMd" scope="col">
+                        {{ col.label }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+
+            <!-- Loading shimmer -->
+            @if (loading()) {
+            <tbody aria-busy="true" aria-label="Loading operators">
+                @for (row of shimmerRows; track $index) {
+                <tr class="oal-tr">
+                    @for (col of columns; track col.key) {
+                    <td class="oal-td" [class.oal-col--md-hidden]="col.hideMd">
+                        @if (col.key === 'logo') {
+                        <div class="oal-shimmer oal-shimmer--circle"></div>
+                        } @else {
+                        <div class="oal-shimmer" [style.width]="col.shimmerWidth"></div>
+                        }
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- Data rows -->
+            @if (!loading()) {
+            <tbody [@opList]="operators().length">
+
+                @for (op of operators(); track op.airlineIataCode) {
+
+                <tr class="oal-tr" [class.oal-tr--revoking]="isBeingRevoked(op.airlineIataCode)"
+                    [attr.aria-label]="airlineName(op.airlineIataCode) + ' operator row'">
+
+                    <!-- Logo circle -->
+                    <td class="oal-td oal-td--logo">
+                        <div class="oal-logo" [class.oal-logo--inactive]="!op.isActive"
+                            [attr.aria-label]="airlineName(op.airlineIataCode)">
+                            {{ logoInitials(op.airlineIataCode) }}
+                        </div>
+                    </td>
+
+                    <!-- Airline name + IATA -->
+                    <td class="oal-td">
+                        <div class="oal-airline">
+                            <span class="oal-airline__iata" [class.oal-airline__iata--inactive]="!op.isActive">
+                                {{ op.airlineIataCode }}
+                            </span>
+                            <span class="oal-airline__name">{{ airlineName(op.airlineIataCode) }}</span>
+                        </div>
+                    </td>
+
+                    <!-- Codeshare / Primary pill -->
+                    <td class="oal-td">
+                        @if (op.isCodeshare) {
+                        <span class="oal-type-pill oal-type-pill--codeshare">Codeshare</span>
+                        } @else {
+                        <span class="oal-type-pill oal-type-pill--primary">Primary</span>
+                        }
+                    </td>
+
+                    <!-- Operating region -->
+                    <td class="oal-td oal-col--md-hidden">
+                        <span class="oal-region">{{ airlineRegion(op.airlineIataCode) }}</span>
+                    </td>
+
+                    <!-- Status -->
+                    <td class="oal-td">
+                        @if (op.isActive) {
+                        <span class="oal-status-pill oal-status-pill--active">Active</span>
+                        } @else {
+                        <span class="oal-status-pill oal-status-pill--inactive">Inactive</span>
+                        }
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="oal-td oal-td--actions">
+                        @if (isBeingRevoked(op.airlineIataCode)) {
+                        <!-- Revoke spinner -->
+                        <div class="oal-spinner" aria-label="Revoking..." aria-hidden="true">
+                            <svg class="oal-spinner__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992
+                               m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031
+                               9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                        </div>
+                        } @else {
+                        <div class="oal-actions">
+
+                            <!-- Edit Parameters -->
+                            <button class="oal-action-btn oal-action-btn--edit" type="button"
+                                [disabled]="isProcessing()" (click)="onEdit.emit(op)"
+                                [attr.aria-label]="'Edit parameters for ' + op.airlineIataCode" title="Edit Parameters">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652
+                                 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8
+                                 -2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0
+                                 L19.5 7.125" />
+                                </svg>
+                            </button>
+
+                            <!-- Revoke Rights -->
+                            <button class="oal-action-btn oal-action-btn--revoke" type="button"
+                                [disabled]="isProcessing()" (click)="onRevoke.emit(op)"
+                                [attr.aria-label]="'Revoke rights for ' + op.airlineIataCode" title="Revoke Rights">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728
+                                 A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                                </svg>
+                            </button>
+
+                        </div>
+                        }
+                    </td>
+
+                </tr>
+                }
+
+                <!-- Empty state -->
+                @if (operators().length === 0) {
+                <tr>
+                    <td [attr.colspan]="columns.length" class="oal-empty">
+                        <div class="oal-empty__inner">
+                            <div class="oal-empty__icon-wrap" aria-hidden="true">
+                                <svg class="oal-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75
+                               12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v
+                               -4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504
+                               1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75
+                               M8.25 21h8.25" />
+                                </svg>
+                            </div>
+                            <p class="oal-empty__title">No operators assigned to this corridor.</p>
+                            <p class="oal-empty__sub">Use "Assign New Operator" to add the first airline.</p>
+                        </div>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+            }
+
+        </table>
+    </div>
+
+    <!-- Footer count -->
+    @if (!loading() && operators().length > 0) {
+    <div class="oal-footer">
+        <span class="oal-footer__label">
+            <strong>{{ operators().length }}</strong>
+            operator{{ operators().length !== 1 ? 's' : '' }} assigned to this corridor
+        </span>
+    </div>
+    }
+
+</div>

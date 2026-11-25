@@ -1,0 +1,760 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 160ms ease;
+ $t-base: 240ms ease;
+
+ .rpt-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ .rpt-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+         flex-wrap: wrap;
+         justify-content: flex-end;
+     }
+ }
+
+ .rpt-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     flex-wrap: wrap;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.4;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .rpt-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     flex-wrap: wrap;
+ }
+
+ .rpt-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     color: var(--aoms-text-primary);
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $ruby;
+         flex-shrink: 0;
+     }
+ }
+
+ .rpt-security-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.1875rem 0.625rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 800;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     color: $gold;
+     background: rgba($gold, 0.1);
+     border: 1px solid rgba($gold, 0.28);
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .rpt-nav-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0 0.875rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all $t;
+     white-space: nowrap;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:hover {
+         border-color: $champagne;
+         color: $champagne;
+         background: rgba($champagne, 0.06);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         border-color: rgba($gold, 0.35);
+         color: $gold;
+
+         &:hover {
+             background: rgba($gold, 0.08);
+             border-color: $gold;
+         }
+     }
+ }
+
+ .rpt-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all $t;
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ .rpt-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ .rpt-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.9375rem 1.125rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.09);
+     border: 1px solid rgba($ruby, 0.26);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 26%);
+     animation: rpt-error-enter 260ms ease forwards, rpt-shake 420ms ease 260ms;
+
+     &--full {
+         align-items: center;
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 50%;
+         background: rgba($ruby, 0.14);
+         flex-shrink: 0;
+
+         svg {
+             width: 1.125rem;
+             height: 1.125rem;
+         }
+     }
+
+     &__content {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         gap: 0.125rem;
+         min-width: 0;
+     }
+
+     &__title {
+         font-size: 0.6875rem;
+         font-weight: 900;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: lighten($ruby, 32%);
+     }
+
+     &__message {
+         line-height: 1.5;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+     }
+
+     &__btn {
+         padding: 0.375rem 0.875rem;
+         border-radius: 4px;
+         border: 1px solid rgba($ruby, 0.35);
+         background: transparent;
+         color: lighten($ruby, 30%);
+         font-family: var(--aoms-font-body);
+         font-size: 0.75rem;
+         font-weight: 700;
+         cursor: pointer;
+         transition: all $t;
+         white-space: nowrap;
+
+         &:hover {
+             background: rgba($ruby, 0.14);
+         }
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         border-radius: 4px;
+         border: none;
+         background: transparent;
+         color: rgba(255, 255, 255, 0.4);
+         cursor: pointer;
+         transition: all $t;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             background: rgba($ruby, 0.15);
+             color: rgba(255, 255, 255, 0.75);
+         }
+     }
+ }
+
+ .rpt-success-receipt {
+     display: flex;
+     flex-direction: column;
+     border-radius: 12px;
+     overflow: hidden;
+     background: linear-gradient(145deg, rgba($emerald, 0.06), var(--aoms-bg-card));
+     border: 1.5px solid rgba($emerald, 0.3);
+     box-shadow: 0 8px 28px rgba($emerald, 0.1);
+     animation: rpt-receipt-enter 380ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     &__rule {
+         height: 3px;
+         background: linear-gradient(to right, rgba($emerald, 0.3), lighten($emerald, 20%), rgba($emerald, 0.3));
+     }
+
+     &__body {
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+         padding: 1.5rem 1.5rem 1rem;
+     }
+
+     &__icon {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3rem;
+         height: 3rem;
+         border-radius: 50%;
+         background: rgba($emerald, 0.14);
+         border: 1px solid rgba($emerald, 0.32);
+         color: lighten($emerald, 40%);
+         flex-shrink: 0;
+
+         svg {
+             width: 1.5rem;
+             height: 1.5rem;
+         }
+     }
+
+     &__text {
+         display: flex;
+         flex-direction: column;
+         gap: 0.125rem;
+     }
+
+     &__title {
+         font-size: 1.125rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 800;
+         color: var(--aoms-text-primary);
+         margin: 0;
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+
+     &__meta {
+         display: flex;
+         flex-direction: column;
+         gap: 0.625rem;
+         padding: 1rem 1.5rem;
+         background: rgba($midnight, 0.03);
+         border-top: 1px solid rgba($emerald, 0.15);
+         border-bottom: 1px solid rgba($emerald, 0.15);
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding: 1rem 1.5rem;
+     }
+ }
+
+ .rpt-receipt-row {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+
+     &__label {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__value {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: var(--aoms-text-secondary);
+         text-align: right;
+     }
+
+     &__value--mono {
+         font-family: 'Courier New', monospace;
+         font-size: 0.8125rem;
+         color: $gold;
+     }
+
+     &__value--amount {
+         font-size: 1.125rem;
+         font-weight: 900;
+         color: lighten($emerald, 8%);
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__value--date {
+         font-size: 0.8125rem;
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ .rpt-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0 1.25rem;
+     height: 2.75rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     border-radius: 4px;
+     cursor: pointer;
+     transition: all $t;
+     white-space: nowrap;
+
+     svg {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--ghost {
+         color: var(--aoms-text-secondary);
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.25);
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     &--gold {
+         color: $midnight;
+         background: $gold;
+         border: none;
+         box-shadow: 0 4px 16px rgba($gold, 0.4);
+
+         &:hover {
+             background: lighten($gold, 6%);
+             box-shadow: 0 6px 22px rgba($gold, 0.55);
+             transform: translateY(-1px);
+         }
+
+         &:active {
+             transform: translateY(0);
+         }
+     }
+ }
+
+ .rpt-workspace {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 1.5rem;
+     align-items: start;
+
+     @media (max-width: 920px) {
+         grid-template-columns: 1fr;
+     }
+
+     &__left,
+     &__right {
+         display: flex;
+         flex-direction: column;
+         gap: 0.875rem;
+         min-width: 0;
+     }
+ }
+
+ .rpt-section-label {
+     display: flex;
+     align-items: center;
+     gap: 0.4375rem;
+     font-size: 11px;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 800;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: var(--aoms-text-muted);
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .rpt-ineligible-notice {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.5rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.06);
+     border: 1px solid rgba($ruby, 0.2);
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 15%);
+     line-height: 1.5;
+
+     svg {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+         margin-top: 0.0625rem;
+     }
+ }
+
+ .rpt-form-card {
+     position: relative;
+     padding: 1.5rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1.5px solid rgba($gold, 0.32);
+     box-shadow: 0 4px 20px rgba($midnight, 0.06), 0 0 0 1px rgba($gold, 0.06) inset;
+
+     &--disabled {
+         opacity: 0.55;
+         pointer-events: none;
+     }
+
+     &__overlay {
+         position: absolute;
+         inset: 0;
+         z-index: 5;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         gap: 0.5rem;
+         background: rgba(255, 255, 255, 0.6);
+         backdrop-filter: blur(2px);
+         border-radius: 12px;
+         pointer-events: auto;
+
+         svg {
+             width: 2.5rem;
+             height: 2.5rem;
+             color: rgba($ruby, 0.4);
+         }
+
+         span {
+             font-size: 0.8125rem;
+             font-family: var(--aoms-font-body);
+             font-weight: 700;
+             color: rgba($ruby, 0.6);
+             text-transform: uppercase;
+             letter-spacing: 0.06em;
+         }
+     }
+ }
+
+ .rpt-sk-card {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 1.5rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.14);
+     background: var(--aoms-bg-card);
+ }
+
+ .rpt-sk {
+     display: block;
+     border-radius: 8px;
+     background: linear-gradient(90deg, rgba($midnight, 0.05) 0%, rgba($champagne, 0.11) 50%, rgba($midnight, 0.05) 100%);
+     background-size: 200% 100%;
+     animation: rpt-shimmer 1.5s ease-in-out infinite;
+
+     &--title {
+         width: 55%;
+         height: 16px;
+     }
+
+     &--amount {
+         width: 70%;
+         height: 32px;
+     }
+
+     &--row {
+         width: 100%;
+         height: 14px;
+     }
+
+     &--input {
+         width: 100%;
+         height: 44px;
+         border-radius: 12px;
+     }
+
+     &--btn {
+         width: 100%;
+         height: 48px;
+         border-radius: 4px;
+         margin-top: 0.5rem;
+     }
+ }
+
+ .rpt-empty-state {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 4.5rem 1.5rem;
+     text-align: center;
+
+     &__icon {
+         width: 7rem;
+         height: 7rem;
+         margin-bottom: 0.25rem;
+     }
+
+     &__title {
+         font-size: 1.125rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 800;
+         color: var(--aoms-text-secondary);
+         margin: 0;
+     }
+
+     &__message {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         max-width: 440px;
+         line-height: 1.6;
+         margin: 0 0 0.5rem;
+     }
+ }
+
+ @keyframes rpt-error-enter {
+     from {
+         opacity: 0;
+         transform: translateY(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rpt-shake {
+
+     0%,
+     100% {
+         transform: translateX(0);
+     }
+
+     20% {
+         transform: translateX(-4px);
+     }
+
+     40% {
+         transform: translateX(4px);
+     }
+
+     60% {
+         transform: translateX(-3px);
+     }
+
+     80% {
+         transform: translateX(3px);
+     }
+ }
+
+ @keyframes rpt-receipt-enter {
+     from {
+         opacity: 0;
+         transform: translateY(10px) scale(0.98);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }
+
+ @keyframes rpt-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ :host-context(.aoms-dark) {
+     .rpt-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .rpt-error-banner {
+         background: rgba($ruby, 0.15);
+         border-color: rgba($ruby, 0.3);
+         color: #fca5a5;
+     }
+
+     .rpt-success-receipt {
+         background: linear-gradient(145deg, rgba($emerald, 0.1), var(--aoms-bg-card));
+     }
+
+     .rpt-form-card__overlay {
+         background: rgba(5, 25, 55, 0.7);
+     }
+ }

@@ -1,0 +1,250 @@
+// action-hub-footer.component.scss
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --radius: 12px;
+    --radius-btn: 4px;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --trans: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
+}
+
+.action-hub {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    font-family: var(--font);
+    padding-bottom: 3rem;
+
+    &.print-hide {
+        display: none !important;
+    }
+}
+
+// ── Primary Actions ───────────────────────────────────────────────────────────
+.primary-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--trans);
+    text-align: left;
+    border: 1.5px solid transparent;
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: 2px;
+    }
+
+    &--primary {
+        background: var(--midnight);
+        border-color: rgba(182, 143, 36, 0.2);
+        box-shadow: 0 8px 24px rgba(5, 25, 55, 0.18);
+
+        .btn-icon {
+            background: rgba(182, 143, 36, 0.12);
+            border-color: rgba(182, 143, 36, 0.2);
+            color: var(--champagne);
+        }
+
+        .btn-label {
+            color: #fff;
+        }
+
+        .btn-sub {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-arrow {
+            color: var(--champagne);
+            opacity: 0.6;
+        }
+
+        &:hover {
+            background: rgba(5, 25, 55, 0.92);
+            border-color: rgba(182, 143, 36, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 36px rgba(5, 25, 55, 0.25);
+
+            .btn-arrow {
+                opacity: 1;
+                transform: translateX(3px);
+            }
+        }
+    }
+
+    &--ghost {
+        background: #fff;
+        border-color: rgba(5, 25, 55, 0.1);
+        box-shadow: 0 4px 14px rgba(5, 25, 55, 0.05);
+
+        .btn-icon {
+            background: rgba(5, 25, 55, 0.04);
+            border-color: rgba(5, 25, 55, 0.1);
+            color: var(--royal-gold);
+        }
+
+        .btn-label {
+            color: var(--charcoal);
+        }
+
+        .btn-sub {
+            color: var(--text-muted);
+        }
+
+        .btn-arrow {
+            color: var(--text-muted);
+        }
+
+        &:hover {
+            border-color: rgba(182, 143, 36, 0.35);
+            box-shadow: 0 6px 20px rgba(5, 25, 55, 0.08);
+            transform: translateY(-1px);
+
+            .btn-arrow {
+                color: var(--royal-gold);
+                transform: translateX(3px);
+            }
+        }
+    }
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--trans);
+}
+
+.btn-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.btn-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.btn-sub {
+    font-size: 0.58rem;
+    font-weight: 500;
+}
+
+.btn-arrow {
+    flex-shrink: 0;
+    transition: transform var(--trans), color var(--trans);
+}
+
+// ── Divider ───────────────────────────────────────────────────────────────────
+.hub-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    &::before,
+    &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(5, 25, 55, 0.08);
+    }
+}
+
+.divider-text {
+    font-size: 0.58rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+// ── Secondary Actions ─────────────────────────────────────────────────────────
+.secondary-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    background: transparent;
+    border: 1px solid rgba(5, 25, 55, 0.1);
+    border-radius: var(--radius-btn);
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-sec);
+    cursor: pointer;
+    transition: all var(--trans);
+    white-space: nowrap;
+
+    svg {
+        color: var(--text-muted);
+        transition: color var(--trans);
+    }
+
+    &:hover {
+        border-color: rgba(182, 143, 36, 0.35);
+        color: var(--charcoal);
+        background: rgba(182, 143, 36, 0.03);
+
+        svg {
+            color: var(--royal-gold);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: 2px;
+    }
+}
+
+// ── Brand Sign-off ────────────────────────────────────────────────────────────
+.brand-signoff {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding-top: 0.5rem;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.5;
+
+    strong {
+        color: var(--charcoal);
+        font-weight: 700;
+    }
+}

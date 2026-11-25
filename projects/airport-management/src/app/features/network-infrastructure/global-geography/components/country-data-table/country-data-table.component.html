@@ -1,0 +1,150 @@
+<div class="data-table-card">
+
+  <div class="data-table-scroll">
+    <table class="data-table" role="grid" aria-label="Country inventory">
+
+      <!-- ── Table Head ──────────────────────────────────────────── -->
+      <thead class="data-table__head">
+        <tr>
+          @for (col of columns; track col.key) {
+          <th class="data-table__th" [class.data-table__th--md-hidden]="col.hideOnMd"
+            [class.data-table__th--lg-hidden]="col.hideOnLg" scope="col">
+            {{ col.label }}
+          </th>
+          }
+        </tr>
+      </thead>
+
+      <!-- ── Loading Shimmer ─────────────────────────────────────── -->
+      @if (loading()) {
+      <tbody>
+        @for (row of shimmerRows; track row) {
+        <tr class="data-table__tr data-table__tr--even">
+          @for (col of columns; track col.key) {
+          <td class="data-table__shimmer-cell" [class.data-table__td--md-hidden]="col.hideOnMd"
+            [class.data-table__td--lg-hidden]="col.hideOnLg">
+            <div class="data-table__shimmer-bar" [style.width]="col.shimmerWidth">
+            </div>
+          </td>
+          }
+        </tr>
+        }
+      </tbody>
+      }
+
+      <!-- ── Data Rows ───────────────────────────────────────────── -->
+      @if (!loading()) {
+      <tbody [@tableAnimation]="countries().length">
+
+        @for (country of countries(); track country.isoCode; let even = $even) {
+        <tr class="data-table__tr" [class.data-table__tr--even]="even" [class.data-table__tr--odd]="!even">
+
+          <!-- ISO Code -->
+          <td class="data-table__td">
+            <span class="data-table__badge--iso">{{ country.isoCode }}</span>
+          </td>
+
+          <!-- Country Name -->
+          <td class="data-table__td">
+            <span class="data-table__td--name-text">{{ country.name }}</span>
+          </td>
+
+          <!-- Continent -->
+          <td class="data-table__td data-table__td--continent">
+            {{ country.continent }}
+          </td>
+
+          <!-- Currency (hidden on mobile) -->
+          <td class="data-table__td data-table__td--currency data-table__td--md-hidden">
+            {{ country.currencyCode ?? '—' }}
+          </td>
+
+          <!-- Phone Code (hidden on tablet) -->
+          <td class="data-table__td data-table__td--phone data-table__td--lg-hidden">
+            {{ country.phoneCode ? '+' + country.phoneCode : '—' }}
+          </td>
+
+          <!-- Row Actions -->
+          <td class="data-table__td">
+            <div class="data-table__actions">
+
+              <!-- View Details -->
+              <button class="action-btn" (click)="onAction('view', country.isoCode)"
+                [attr.aria-label]="'View details for ' + country.name" title="View Details">
+                <svg class="action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5
+                               12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639
+                               C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z
+                               M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                </svg>
+              </button>
+
+              <!-- Edit -->
+              <button class="action-btn" (click)="onAction('edit', country.isoCode)"
+                [attr.aria-label]="'Edit ' + country.name" title="Edit">
+                <svg class="action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652
+                               L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5
+                               4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                </svg>
+              </button>
+
+              <!-- Deactivate / Delete -->
+              <button class="action-btn action-btn--danger" (click)="onAction('delete', country.isoCode)"
+                [attr.aria-label]="'Deactivate ' + country.name" title="Deactivate">
+                <svg class="action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107
+                               1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244
+                               2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456
+                               0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114
+                               1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916
+                               c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32
+                               0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667
+                               48.667 0 0 0-7.5 0" />
+                </svg>
+              </button>
+
+            </div>
+          </td>
+
+        </tr>
+        }
+
+        <!-- ── Empty State ────────────────────────────────────── -->
+        @if (countries().length === 0) {
+        <tr>
+          <td [attr.colspan]="columns.length" class="data-table__empty">
+            <div class="data-table__empty-inner">
+              <div class="data-table__empty-icon-wrap">
+                <svg class="data-table__empty-icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                  viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                </svg>
+              </div>
+              <p class="data-table__empty-title">No countries match your filters.</p>
+              <p class="data-table__empty-subtitle">Adjust the search criteria or reset all filters.</p>
+            </div>
+          </td>
+        </tr>
+        }
+
+      </tbody>
+      }
+
+    </table>
+  </div>
+
+  <!-- ── Table Footer ─────────────────────────────────────────── -->
+  @if (!loading() && countries().length > 0) {
+  <div class="data-table__footer">
+    <span class="data-table__footer-text">
+      Showing <strong>{{ countries().length }}</strong> records
+    </span>
+  </div>
+  }
+
+</div>

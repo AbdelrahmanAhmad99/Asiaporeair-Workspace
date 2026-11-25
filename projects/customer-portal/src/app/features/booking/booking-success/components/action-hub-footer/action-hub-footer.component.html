@@ -1,0 +1,97 @@
+<!-- action-hub-footer.component.html -->
+
+<div class="action-hub" role="navigation" aria-label="Post-booking actions" [class.print-hide]="isPrintMode()">
+
+    <!-- Primary Actions -->
+    <div class="primary-actions">
+
+        <!-- Manage My Journey — Primary CTA -->
+        <button class="action-btn action-btn--primary" (click)="manageJourney.emit()"
+            aria-label="Manage your journey details">
+            <span class="btn-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="1" y="3" width="15" height="13" rx="1" />
+                    <path d="M16 8h4l3 3v5h-7V8z" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                </svg>
+            </span>
+            <div class="btn-text">
+                <span class="btn-label">Manage My Journey</span>
+                <span class="btn-sub">View boarding pass, add services</span>
+            </div>
+            <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+        </button>
+
+        <!-- Print Receipt -->
+        <button class="action-btn action-btn--ghost" (click)="printReceipt.emit()"
+            aria-label="Print your booking receipt">
+            <span class="btn-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <polyline points="6 9 6 2 18 2 18 9" />
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                    <rect x="6" y="14" width="12" height="8" />
+                </svg>
+            </span>
+            <div class="btn-text">
+                <span class="btn-label">Print Receipt</span>
+                <span class="btn-sub">Save a copy for your records</span>
+            </div>
+            <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+        </button>
+
+    </div>
+
+    <!-- Divider -->
+    <div class="hub-divider" aria-hidden="true">
+        <span class="divider-text">or</span>
+    </div>
+
+    <!-- Secondary Actions -->
+    <div class="secondary-actions">
+
+        <button class="secondary-btn" (click)="viewProfile.emit()" aria-label="Access your traveller profile">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            Access Your Profile
+        </button>
+
+        <button class="secondary-btn" (click)="beginNewJourney.emit()" aria-label="Begin a new journey search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path
+                    d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            Begin New Journey
+        </button>
+
+        <button class="secondary-btn" (click)="returnHome.emit()" aria-label="Return to Asiaporeair home">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            Return to Home
+        </button>
+
+    </div>
+
+    <!-- Brand Sign-off -->
+    <div class="brand-signoff" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="0.8">
+            <path
+                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+        </svg>
+        <span>Thank you for flying with <strong>Asiaporeair</strong>. We wish you an extraordinary journey.</span>
+    </div>
+
+</div>

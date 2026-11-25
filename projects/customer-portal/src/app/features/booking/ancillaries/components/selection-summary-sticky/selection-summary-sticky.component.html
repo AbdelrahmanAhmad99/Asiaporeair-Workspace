@@ -1,0 +1,138 @@
+<!-- selection-summary-sticky.component.html -->
+
+<div class="summary-card" aria-label="Booking cost summary" role="complementary">
+
+    <!-- ── Card Header ──────────────────────────────────────────────────────── -->
+    <div class="summary-header">
+        <div class="header-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <line x1="9" y1="9" x2="15" y2="9" />
+                <line x1="9" y1="13" x2="15" y2="13" />
+                <line x1="9" y1="17" x2="12" y2="17" />
+            </svg>
+        </div>
+        <div class="header-text">
+            <span class="header-label">Journey Summary</span>
+            <span class="header-sub">Cost Breakdown</span>
+        </div>
+    </div>
+
+    <!-- ── Flight Card ──────────────────────────────────────────────────────── -->
+    <div class="flight-chip" *ngIf="flightSummary()" aria-label="Selected flight">
+        <div class="flight-chip-route">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#B68F24" aria-hidden="true">
+                <path
+                    d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            {{ flightSummary()!.route }}
+        </div>
+        <div class="flight-chip-meta">
+            {{ flightSummary()!.cabinClass }} · {{ flightSummary()!.fareName }}
+        </div>
+    </div>
+
+    <div class="summary-divider" aria-hidden="true"></div>
+
+    <!-- ── Base Fare Row ────────────────────────────────────────────────────── -->
+    <div class="cost-section">
+        <div class="cost-row">
+            <span class="cost-label">Base Fare</span>
+            <span class="cost-value">{{ currency() }} {{ formatPrice(baseFareTotal()) }}</span>
+        </div>
+    </div>
+
+    <!-- ── Enhancements Section ─────────────────────────────────────────────── -->
+    <ng-container *ngIf="hasSelections(); else noSelections">
+
+        <div class="summary-divider" aria-hidden="true"></div>
+
+        <div class="enhancements-section" aria-label="Selected enhancements">
+            <span class="section-label">Enhancements</span>
+
+            <div *ngFor="let group of groupedItems(); trackBy: trackByCategory" class="item-group">
+                <span class="group-label">{{ getCategoryLabel(group.category) }}</span>
+
+                <div *ngFor="let item of group.items; trackBy: trackByItem" class="line-item">
+                    <div class="line-name">
+                        <span class="line-pax-dot" aria-hidden="true">·</span>
+                        <span class="line-text">{{ item.productName }}</span>
+                        <span *ngIf="item.quantity > 1" class="line-qty">×{{ item.quantity }}</span>
+                        <span class="line-pax-label">{{ item.passengerLabel }}</span>
+                    </div>
+                    <span class="line-cost" [attr.aria-label]="currency() + ' ' + formatPrice(item.lineTotal)">
+                        {{ currency() }} {{ formatPrice(item.lineTotal) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="subtotal-row">
+                <span class="subtotal-label">Enhancements Subtotal</span>
+                <span class="subtotal-value">+ {{ currency() }} {{ formatPrice(ancillariesTotalCost()) }}</span>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-template #noSelections>
+        <div class="no-selections" role="status">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <span>No enhancements selected yet. Browse the options on the left to personalise your journey.</span>
+        </div>
+    </ng-template>
+
+    <div class="summary-divider summary-divider--bold" aria-hidden="true"></div>
+
+    <!-- ── Grand Total ──────────────────────────────────────────────────────── -->
+    <div class="grand-total-row" aria-label="Total price">
+        <div class="grand-total-label">
+            <span class="total-text">Total Due</span>
+            <span class="total-note">Including all enhancements</span>
+        </div>
+        <div class="grand-total-price">
+            <span class="total-currency">{{ currency() }}</span>
+            <span class="total-amount">{{ formatPrice(grandTotal()) }}</span>
+        </div>
+    </div>
+
+    <!-- ── CTA Button ───────────────────────────────────────────────────────── -->
+    <button class="confirm-cta" (click)="onConfirm()" [class.cta--loading]="isBookingLoading()"
+        [attr.aria-busy]="isBookingLoading()" aria-label="Confirm booking and proceed to seat selection">
+
+        <ng-container *ngIf="!isBookingLoading()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Confirm & Book
+        </ng-container>
+
+        <ng-container *ngIf="isBookingLoading()">
+            <span class="spinner" aria-hidden="true"></span>
+            Processing…
+        </ng-container>
+    </button>
+
+    <!-- Trust Badges -->
+    <div class="trust-row" aria-label="Security assurances">
+        <div class="trust-item">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span>Secure booking</span>
+        </div>
+        <div class="trust-item">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            <span>Instant confirmation</span>
+        </div>
+    </div>
+
+</div>

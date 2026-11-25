@@ -1,0 +1,153 @@
+<!-- ============================================================================
+     cabin-detail.component.html
+     Asiaporeair | Cabin Detail Page — Gallery + Amenity Grid + Related Links
+     ============================================================================ -->
+
+<div class="cd-shell" @fadeUp>
+
+    @if (isLoading()) {
+    <!-- Skeleton -->
+    <div class="cd-skeleton" aria-busy="true" aria-label="Loading cabin details">
+        <div class="cd-skeleton__hero"></div>
+        <div class="cd-skeleton__body">
+            <div class="cd-skeleton__line cd-skeleton__line--title"></div>
+            <div class="cd-skeleton__line cd-skeleton__line--sub"></div>
+            <div class="cd-skeleton__gallery"></div>
+        </div>
+    </div>
+    }
+
+    @if (!isLoading() && cabinDetail()) {
+    <!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
+    <app-hero-video-banner [posterImage]="cabinDetail()!.heroImage"
+        [videoSrc]="'assets/videos/cabin-' + cabinDetail()!.key + '.mp4'" [headline]="cabinDetail()!.title"
+        [subheadline]="cabinDetail()!.subtitle" [breadcrumbs]="breadcrumbs()"></app-hero-video-banner>
+
+    <!-- ══ AIRCRAFT STRIP ════════════════════════════════════════════════════ -->
+    <div class="cd-aircraft-strip">
+        <div class="cd-aircraft-strip__inner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.29 6.29l1.62-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+            <span>Available on {{ cabinDetail()!.aircraft }}</span>
+            <span class="cd-aircraft-strip__sep" aria-hidden="true">◆</span>
+            <a routerLink="/journey-with-us/cabins" class="cd-aircraft-strip__link">
+                View all Cabins
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <polyline points="9 18 15 12 9 6" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- ══ GALLERY SECTION ═══════════════════════════════════════════════════ -->
+    <section class="cd-gallery-section" aria-labelledby="cd-gallery-title">
+        <div class="cd-section-inner">
+            <header class="cd-section-header">
+                <div class="cd-section-header__line" aria-hidden="true"></div>
+                <div>
+                    <p class="cd-section-header__eyebrow">Visual Tour</p>
+                    <h2 class="cd-section-header__title" id="cd-gallery-title">
+                        Experience the {{ cabinDetail()!.title }}
+                    </h2>
+                </div>
+            </header>
+
+            <div class="cd-gallery-wrap">
+                <app-image-gallery-slider [images]="cabinDetail()!.galleryImages"></app-image-gallery-slider>
+
+                <!-- Virtual Tour CTA -->
+                <div class="cd-tour-cta">
+                    <app-virtual-tour-button [label]="cabinDetail()!.virtualTourLabel"
+                        (clicked)="onVirtualTour()"></app-virtual-tour-button>
+
+                    @if (showTourInfo()) {
+                    <p class="cd-tour-note" @fadeUp>
+                        Virtual tours are available through the Asiaporeair app. Download the app
+                        to experience an immersive 360° walkthrough of this cabin.
+                    </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ AMENITIES SECTION ══════════════════════════════════════════════════ -->
+    <section class="cd-amenities-section" aria-labelledby="cd-amenities-title">
+
+        <div class="cd-section-inner cd-section-inner--header-only">
+            <header class="cd-section-header">
+                <div class="cd-section-header__line" aria-hidden="true"></div>
+                <div>
+                    <p class="cd-section-header__eyebrow">The Details</p>
+                    <h2 class="cd-section-header__title" id="cd-amenities-title">
+                        What Awaits You
+                    </h2>
+                </div>
+            </header>
+        </div>
+
+        <!-- Alternating full-bleed amenity blocks -->
+        <div class="cd-amenities-list">
+            @for (amenity of cabinDetail()!.amenities; track trackById($index, amenity); let i = $index) {
+            <app-amenity-grid-item [amenity]="amenity" [imageLeft]="i % 2 !== 0">
+                <!-- Project the amenity image -->
+                <img amenityImage [src]="cabinDetail()!.galleryImages[i % cabinDetail()!.galleryImages.length]"
+                    [alt]="amenity.title" loading="lazy" />
+            </app-amenity-grid-item>
+            }
+        </div>
+
+    </section>
+
+    <!-- ══ DISCLAIMER ═════════════════════════════════════════════════════════ -->
+    <div class="cd-disclaimer">
+        <p>
+            Cabin configurations may vary by aircraft type and route. Features described
+            are available on select aircraft and are subject to change without notice.
+        </p>
+    </div>
+
+    <!-- ══ RELATED CABINS ════════════════════════════════════════════════════ -->
+    @if (relatedCabins().length) {
+    <section class="cd-related" aria-labelledby="cd-related-title">
+        <div class="cd-section-inner">
+            <header class="cd-section-header">
+                <div class="cd-section-header__line" aria-hidden="true"></div>
+                <div>
+                    <p class="cd-section-header__eyebrow">Also Explore</p>
+                    <h2 class="cd-section-header__title" id="cd-related-title">Related Cabins</h2>
+                </div>
+            </header>
+
+            <div class="cd-related__grid">
+                @for (related of relatedCabins(); track related.id) {
+                <a class="cd-related-card" [routerLink]="related.route" [attr.aria-label]="'Explore ' + related.title">
+                    <div class="cd-related-card__img-wrap">
+                        <img [src]="related.imagePath" [alt]="related.title" loading="lazy" />
+                    </div>
+                    <div class="cd-related-card__body">
+                        <p class="cd-related-card__tagline">{{ related.tagline }}</p>
+                        <h3 class="cd-related-card__title">{{ related.title }}</h3>
+                        <div class="cd-related-card__cta">
+                            <span>Explore</span>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5" aria-hidden="true">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+                }
+            </div>
+        </div>
+    </section>
+    }
+
+    }
+
+</div>

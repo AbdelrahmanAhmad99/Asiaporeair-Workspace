@@ -1,0 +1,119 @@
+<div class="aal-panel" aria-label="Aircraft 7-day availability timeline">
+
+    <!-- Header -->
+    <div class="aal-panel__header">
+        <svg class="aal-panel__header-icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25
+               2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0
+               21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+        </svg>
+        <div>
+            <h3 class="aal-panel__title">Aircraft Schedule</h3>
+            <p class="aal-panel__subtitle">±3 day operational window</p>
+        </div>
+    </div>
+
+    <div class="aal-divider" aria-hidden="true"></div>
+
+    <!-- Loading -->
+    @if (loading()) {
+    <div class="aal-timeline aal-timeline--loading" aria-busy="true" aria-label="Loading timeline">
+        @for (s of shimmerRows; track $index) {
+        <div class="aal-item aal-item--shimmer">
+            <div class="aal-item__track">
+                <div class="aal-shimmer aal-shimmer--node"></div>
+                @if ($index < shimmerRows.length - 1) { <div class="aal-shimmer aal-shimmer--line">
+            </div>
+            }
+        </div>
+        <div class="aal-item__content">
+            <div class="aal-shimmer aal-shimmer--title"></div>
+            <div class="aal-shimmer aal-shimmer--sub"></div>
+        </div>
+    </div>
+    }
+</div>
+}
+
+<!-- Empty state -->
+@if (!loading() && sortedTimeline().length === 0) {
+<div class="aal-empty">
+    <div class="aal-empty__track" aria-hidden="true">
+        <div class="aal-empty__node"></div>
+        <div class="aal-empty__dash-line"></div>
+        <div class="aal-empty__node"></div>
+    </div>
+    <p class="aal-empty__label">No assignments in 7-day window</p>
+    <p class="aal-empty__sub">This aircraft is clear for the operational period.</p>
+</div>
+}
+
+<!-- Timeline items -->
+@if (!loading() && sortedTimeline().length > 0) {
+<div class="aal-timeline" role="list">
+    @for (inst of sortedTimeline(); track inst.instanceId; let last = $last) {
+
+    <div class="aal-item" [class.aal-item--target]="isTarget(inst)" role="listitem"
+        [attr.aria-label]="inst.flightNo + ' — ' + statusLabel(inst.status)">
+
+        <!-- Vertical track: node + connector line -->
+        <div class="aal-item__track" aria-hidden="true">
+            <div class="aal-node" [ngClass]="nodeClass(inst)">
+                @if (isTarget(inst)) {
+                <div class="aal-node__ring" aria-hidden="true"></div>
+                }
+            </div>
+            @if (!last) {
+            <div class="aal-connector" [class.aal-connector--after-target]="isTarget(inst)">
+            </div>
+            }
+        </div>
+
+        <!-- Flight info -->
+        <div class="aal-item__content">
+
+            <div class="aal-item__header">
+                <span class="aal-flight-no" [class.aal-flight-no--target]="isTarget(inst)">
+                    {{ inst.flightNo }}
+                </span>
+                <span class="aal-status-badge" [ngClass]="'aal-status-badge--' + inst.status.toLowerCase()">
+                    {{ statusLabel(inst.status) }}
+                </span>
+            </div>
+
+            <div class="aal-item__od">
+                <span class="aal-iata aal-iata--origin">{{ inst.originIata }}</span>
+                <svg class="aal-item__arrow" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+                <span class="aal-iata aal-iata--dest">{{ inst.destinationIata }}</span>
+            </div>
+
+            <div class="aal-item__times">
+                <span class="aal-time">{{ inst.scheduledDeparture | date:'HH:mm' }}</span>
+                <span class="aal-time-sep" aria-hidden="true">→</span>
+                <span class="aal-time">{{ inst.scheduledArrival | date:'HH:mm' }}</span>
+                <span class="aal-date">{{ inst.scheduledDeparture | date:'dd MMM' }}</span>
+            </div>
+
+            @if (isTarget(inst)) {
+            <div class="aal-target-label" aria-label="This is the target flight">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z" />
+                </svg>
+                Target Flight
+            </div>
+            }
+
+        </div>
+    </div>
+
+    }
+</div>
+}
+
+</div>

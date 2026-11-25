@@ -1,0 +1,663 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .rad-page {
+     min-height: 100%;
+     background: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Sticky Tactical Header
+ // ============================================================================
+ .rad-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.9375rem 1.5rem;
+     background: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 14px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ .rad-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // Back arrow
+ .rad-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+         transform: translateX(-2px);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // Breadcrumb
+ .rad-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__link {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color 150ms $ease;
+
+         &:hover {
+             color: $gold;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .rad-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 30ch;
+     transition: color 150ms $ease;
+ }
+
+ // ── 4-button Tactical Nav Bar ─────────────────────────────────────────────
+ .rad-nav-bar {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+ }
+
+ .rad-sep {
+     width: 1px;
+     height: 1.5rem;
+     background: rgba($champagne, 0.2);
+     flex-shrink: 0;
+ }
+
+ .rad-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: rad-spin 1s linear infinite;
+         }
+     }
+ }
+
+ .rad-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 150ms $ease;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     // Champagne gold ghost (Manage Operators)
+     &--ghost {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.25);
+         color: $champagne;
+
+         &:hover {
+             background: rgba($champagne, 0.08);
+             border-color: $champagne;
+         }
+     }
+
+     // Luxury Ruby ghost (Deactivate)
+     &--ruby {
+         background: transparent;
+         border: 1px solid rgba($ruby, 0.35);
+         color: $ruby;
+
+         &:hover {
+             background: rgba($ruby, 0.07);
+             border-color: $ruby;
+             box-shadow: 0 2px 10px rgba($ruby, 0.15);
+         }
+     }
+
+     // Royal Gold solid (Edit Parameters)
+     &--primary {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+         font-weight: 700;
+
+         &:hover {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 14px rgba($gold, 0.38);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .rad-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+     overflow-y: auto;
+     max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+ }
+
+ // ============================================================================
+ // 4. Error Banner
+ // ============================================================================
+ .rad-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 1rem 1.125rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.2);
+     flex-wrap: wrap;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+         color: $ruby;
+         margin-top: 0.1rem;
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.2rem;
+         flex: 1;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 700;
+         color: $ruby;
+     }
+
+     &__msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: rgba($ruby, 0.8);
+         line-height: 1.5;
+     }
+
+     &__action {
+         flex-shrink: 0;
+         background: none;
+         border: 1px solid rgba($ruby, 0.3);
+         border-radius: 4px;
+         color: $ruby;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 600;
+         padding: 0.35rem 0.75rem;
+         cursor: pointer;
+         transition: all 150ms $ease;
+         white-space: nowrap;
+
+         &:hover {
+             background: rgba($ruby, 0.08);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Operators Section
+ // ============================================================================
+ .rad-operators-section {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 4px 18px rgba($midnight, 0.06);
+     overflow: hidden;
+     animation: rad-fade-in 360ms $luxury 100ms both;
+
+     &__header {
+         display: flex;
+         align-items: center;
+         gap: 0.875rem;
+         padding: 1.125rem 1.375rem;
+         border-bottom: 1px solid rgba($champagne, 0.1);
+         background: linear-gradient(135deg, rgba($champagne, 0.04) 0%, transparent 60%);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.375rem;
+         height: 2.375rem;
+         border-radius: 8px;
+         background: $midnight;
+         border: 1px solid rgba($champagne, 0.18);
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $champagne;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary, $charcoal);
+         margin: 0 0 0.2rem;
+     }
+
+     &__subtitle {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+ }
+
+ .rad-operators-grid {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.625rem;
+     padding: 1.125rem 1.375rem;
+ }
+
+ .rad-operator-chip {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.35rem 0.75rem;
+     border-radius: 6px;
+     border: 1px solid;
+     transition: border-color 150ms $ease, background 150ms $ease;
+
+     &--active {
+         background: rgba($gold, 0.07);
+         border-color: rgba($gold, 0.22);
+     }
+
+     &--inactive {
+         background: rgba(108, 117, 125, 0.06);
+         border-color: rgba(108, 117, 125, 0.18);
+         opacity: 0.65;
+     }
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 800;
+         letter-spacing: 0.08em;
+         text-transform: uppercase;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &--active &__iata {
+         color: $gold;
+     }
+
+     &__codeshare {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.08em;
+         text-transform: uppercase;
+         padding: 0.1rem 0.35rem;
+         border-radius: 2px;
+         background: rgba($champagne, 0.1);
+         border: 1px solid rgba($champagne, 0.2);
+         color: $champagne;
+     }
+
+     &__dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         flex-shrink: 0;
+
+         &--active {
+             background: #059669;
+             box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.18);
+         }
+
+         &:not(.rad-operator-chip__dot--active) {
+             background: #6C757D;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Loading Skeleton
+ // ============================================================================
+ .rad-skeleton {
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+     animation: rad-pulse 1.6s ease-in-out infinite;
+ }
+
+ .rad-sk {
+     &__card {
+         border-radius: 12px;
+         background: $midnight;
+         border: 1px solid rgba($gold, 0.1);
+         padding: 1.75rem 2rem 0;
+         overflow: hidden;
+     }
+
+     &__top-strip {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         margin-bottom: 2rem;
+     }
+
+     &__pill {
+         width: 100px;
+         height: 1.25rem;
+         border-radius: 4px;
+         background: rgba($champagne, 0.1);
+     }
+
+     &__id {
+         width: 60px;
+         height: 0.75rem;
+         border-radius: 3px;
+         background: rgba($champagne, 0.07);
+     }
+
+     &__corridor {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         margin-bottom: 1.5rem;
+     }
+
+     &__iata {
+         width: 80px;
+         height: 3.5rem;
+         border-radius: 6px;
+         background: rgba($champagne, 0.1);
+     }
+
+     &__link-line {
+         flex: 1;
+         height: 1px;
+         background: rgba($gold, 0.15);
+     }
+
+     &__disc {
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 50%;
+         background: rgba($gold, 0.1);
+         flex-shrink: 0;
+     }
+
+     &__badge-strip {
+         display: flex;
+         border-top: 1px solid rgba($champagne, 0.08);
+         padding: 1rem 0;
+         gap: 0;
+         justify-content: center;
+     }
+
+     &__badge-metric {
+         flex: 1;
+         height: 3rem;
+         margin: 0 0.5rem;
+         border-radius: 6px;
+         background: rgba($champagne, 0.06);
+     }
+
+     &__panel {
+         border-radius: 12px;
+         background: $midnight;
+         border: 1px solid rgba($gold, 0.1);
+         overflow: hidden;
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+     }
+
+     &__pane {
+         padding: 1rem 1.25rem;
+     }
+
+     &__pane-header {
+         height: 2.5rem;
+         border-radius: 6px;
+         background: rgba($champagne, 0.08);
+         margin-bottom: 0.875rem;
+     }
+
+     &__row {
+         height: 2.25rem;
+         border-radius: 6px;
+         background: rgba($champagne, 0.05);
+         margin-bottom: 0.5rem;
+     }
+ }
+
+ // ============================================================================
+ // 7. Keyframes
+ // ============================================================================
+ @keyframes rad-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes rad-fade-in {
+     from {
+         opacity: 0;
+         transform: translateY(6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rad-pulse {
+
+     0%,
+     100% {
+         opacity: 0.65;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 8. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .rad-header {
+         box-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+     }
+
+     .rad-back-btn:hover {
+         color: $champagne;
+     }
+
+     .rad-icon-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .rad-btn--ghost:hover {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .rad-btn--ruby {
+         border-color: rgba(248, 113, 113, 0.3);
+         color: #f87171;
+     }
+
+     .rad-error-banner {
+         background: rgba($ruby, 0.12);
+         border-color: rgba($ruby, 0.3);
+
+         &__title {
+             color: #f43f5e;
+         }
+
+         &__msg {
+             color: rgba(244, 63, 94, 0.8);
+         }
+     }
+
+     .rad-operators-section {
+         background: rgba(255, 255, 255, 0.03);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .rad-operator-chip__iata {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .rad-operator-chip--active .rad-operator-chip__iata {
+         color: $champagne;
+     }
+ }

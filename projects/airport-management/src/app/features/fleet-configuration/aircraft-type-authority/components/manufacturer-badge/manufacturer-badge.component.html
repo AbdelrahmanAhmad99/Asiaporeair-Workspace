@@ -1,0 +1,52 @@
+<div class="mfr-card" [attr.data-oem]="oem()" aria-label="Manufacturer profile">
+
+    <!-- ── Gold accent corner ornament ──────────────────────────── -->
+    <div class="mfr-card__ornament" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0 L40 0 L40 40" stroke="rgba(182,143,36,0.35)" stroke-width="1" fill="none" />
+        </svg>
+    </div>
+
+    @if (loading()) {
+    <!-- Shimmer state -->
+    <div class="mfr-card__shimmer-mono" aria-hidden="true"></div>
+    <div class="mfr-card__shimmer-oem" aria-hidden="true"></div>
+    <div class="mfr-card__shimmer-model" aria-hidden="true"></div>
+    <div class="mfr-card__shimmer-badge" aria-hidden="true"></div>
+    }
+
+    @if (!loading() && aircraftType()) {
+    <!-- ── Monogram Circle ──────────────────────────────────── -->
+    <div class="mfr-card__monogram" [attr.data-oem]="oem()" aria-hidden="true">
+        {{ monogram() }}
+    </div>
+
+    <!-- ── OEM Full Name ───────────────────────────────────── -->
+    <p class="mfr-card__oem-label">{{ oemLabel() }}</p>
+
+    <!-- ── Aircraft Model ─────────────────────────────────── -->
+    <h2 class="mfr-card__model">{{ aircraftType()!.model }}</h2>
+
+    <!-- ── Verified Badge ─────────────────────────────────── -->
+    <div class="mfr-card__verified" role="status" aria-label="Verified Technical Profile">
+        <svg class="mfr-card__verified__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745
+                 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c
+                 -1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745
+                 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745
+                 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1
+                 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746
+                 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12z" />
+        </svg>
+        Verified Technical Profile
+    </div>
+
+    <!-- ── Type ID chip ────────────────────────────────────── -->
+    <div class="mfr-card__type-id">
+        <span class="mfr-card__type-id__label">Type ID</span>
+        <span class="mfr-card__type-id__value">#{{ aircraftType()!.typeId }}</span>
+    </div>
+    }
+
+</div>

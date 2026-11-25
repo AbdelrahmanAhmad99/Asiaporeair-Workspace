@@ -1,0 +1,416 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ $row-h: 40px;
+ $t-fast: 150ms ease;
+
+ // ── 1. Container ──────────────────────────────────────────────────────────
+ .mct-container {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 10px rgba($midnight, 0.05);
+     overflow: hidden;
+     height: 100%;
+     display: flex;
+     flex-direction: column;
+ }
+
+ // ── 2. Loading Shimmer ────────────────────────────────────────────────────
+ .mct-shimmer-list {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .mct-shimmer-row {
+     display: grid;
+     grid-template-columns: 40px 50px 1.6fr 70px 110px 130px 130px 90px;
+     align-items: center;
+     gap: 0.5rem;
+     height: $row-h;
+     padding: 0 1rem;
+     border-bottom: 1px solid rgba($champagne, 0.06);
+ }
+
+ .mct-shimmer {
+     height: 12px;
+     border-radius: 4px;
+     background: linear-gradient(90deg, rgba($midnight, 0.05) 25%, rgba($midnight, 0.1) 50%, rgba($midnight, 0.05) 75%);
+     background-size: 200% 100%;
+     animation: mct-shimmer 1.4s infinite;
+
+     &--icon {
+         width: 16px;
+         height: 16px;
+         border-radius: 50%;
+     }
+
+     &--name {
+         width: 70%;
+     }
+
+     &--seat {
+         width: 60%;
+     }
+
+     &--class {
+         width: 80%;
+     }
+
+     &--ticket {
+         width: 75%;
+     }
+
+     &--status {
+         width: 60px;
+         height: 18px;
+         border-radius: 100px;
+     }
+ }
+
+ // ── 3. Empty State ────────────────────────────────────────────────────────
+ .mct-empty {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     text-align: center;
+     gap: 0.625rem;
+     padding: 3rem 1.5rem;
+
+     &__icon {
+         width: 80px;
+         height: 60px;
+         color: var(--aoms-text-muted);
+         opacity: 0.35;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ── 4. Table Shell ────────────────────────────────────────────────────────
+ .mct-table-shell {
+     display: flex;
+     flex-direction: column;
+     height: 100%;
+ }
+
+ // ── 5. Sticky Header — Midnight Sapphire / Champagne Gold ─────────────────
+ .mct-header-row {
+     display: grid;
+     grid-template-columns: 40px 50px 1.6fr 70px 110px 130px 130px 90px;
+     align-items: center;
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 1;
+ }
+
+ .mct-th {
+     padding: 0 1rem;
+     height: 36px;
+     display: flex;
+     align-items: center;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 2px solid rgba($champagne, 0.1);
+
+     &--status {
+         padding: 0 0 0 1rem;
+     }
+ }
+
+ // ── 6. Virtual Scroll Viewport ────────────────────────────────────────────
+ .mct-viewport {
+     flex: 1;
+     scrollbar-width: thin;
+     scrollbar-color: rgba($gold, 0.2) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($gold, 0.18);
+         border-radius: 2px;
+     }
+ }
+
+ .mct-plain-list {
+     flex: 1;
+     overflow-y: auto;
+
+     scrollbar-width: thin;
+     scrollbar-color: rgba($gold, 0.2) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($gold, 0.18);
+         border-radius: 2px;
+     }
+ }
+
+ // ── 7. Data Rows ──────────────────────────────────────────────────────────
+ .mct-row {
+     display: grid;
+     grid-template-columns: 40px 50px 1.6fr 70px 110px 130px 130px 90px;
+     align-items: center;
+     height: $row-h;
+     border-bottom: 1px solid rgba($champagne, 0.06);
+     font-family: var(--aoms-font-body); // Inter for data grids
+     transition: background $t-fast;
+
+     &:nth-child(even) {
+         background: rgba($midnight, 0.018);
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.07);
+     }
+
+     // Boarded rows — subtle emerald tint
+     &--boarded {
+         border-left: 3px solid transparent;
+
+         &:hover {
+             background: rgba($emerald, 0.05);
+         }
+     }
+
+     // No-show rows — ruby tint, more prominent
+     &--noshow {
+         background: rgba($ruby, 0.025);
+         border-left: 3px solid rgba($ruby, 0.3);
+
+         &:nth-child(even) {
+             background: rgba($ruby, 0.04);
+         }
+
+         &:hover {
+             background: rgba($ruby, 0.07);
+         }
+     }
+ }
+
+ // ── 8. Cells ──────────────────────────────────────────────────────────────
+ .mct-cell {
+     padding: 0 1rem;
+     display: flex;
+     align-items: center;
+     white-space: nowrap;
+     overflow: hidden;
+
+     &--name {
+         flex-direction: column;
+         align-items: flex-start;
+         justify-content: center;
+         gap: 0.0625rem;
+     }
+ }
+
+ // ── 9. Status Icon ────────────────────────────────────────────────────────
+ .mct-status-icon {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 22px;
+     height: 22px;
+     border-radius: 50%;
+     flex-shrink: 0;
+
+     svg {
+         width: 12px;
+         height: 12px;
+     }
+
+     // Boarded — Emerald checkmark
+     &--boarded {
+         background: rgba($emerald, 0.12);
+         color: lighten($emerald, 35%);
+         border: 1px solid rgba($emerald, 0.25);
+     }
+
+     // No-show — Ruby X
+     &--noshow {
+         background: rgba($ruby, 0.1);
+         color: lighten($ruby, 22%);
+         border: 1px solid rgba($ruby, 0.22);
+     }
+ }
+
+ // ── 10. Sequence ──────────────────────────────────────────────────────────
+ .mct-seq {
+     font-size: 0.8125rem;
+     font-weight: 600;
+     font-variant-numeric: tabular-nums;
+     color: var(--aoms-text-secondary);
+
+     &--empty {
+         color: var(--aoms-text-muted);
+         opacity: 0.4;
+     }
+ }
+
+ // ── 11. Passenger Name ────────────────────────────────────────────────────
+ .mct-name {
+     font-size: 0.8125rem;
+     font-weight: 600;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 100%;
+
+     &--noshow {
+         color: lighten($ruby, 8%);
+     }
+ }
+
+ .mct-passport {
+     font-size: 10px;
+     font-family: 'Courier New', monospace;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.04em;
+ }
+
+ // ── 12. Seat ──────────────────────────────────────────────────────────────
+ .mct-seat {
+     font-family: var(--aoms-font-heading);
+     font-size: 0.875rem;
+     font-weight: 700;
+     color: $gold;
+
+     &--noshow {
+         color: var(--aoms-text-muted);
+         opacity: 0.6;
+     }
+ }
+
+ // ── 13. Cabin Class Badge ─────────────────────────────────────────────────
+ .mct-class-badge {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     color: var(--aoms-text-secondary);
+     background: rgba($midnight, 0.05);
+     border: 1px solid rgba($champagne, 0.12);
+     white-space: nowrap;
+
+     &--first {
+         color: $gold;
+         background: rgba($gold, 0.1);
+         border-color: rgba($gold, 0.25);
+     }
+
+     &--business {
+         color: lighten($emerald, 25%);
+         background: rgba($emerald, 0.08);
+         border-color: rgba($emerald, 0.2);
+     }
+
+     &--economy {
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ── 14. Monospace fields ──────────────────────────────────────────────────
+ .mct-mono {
+     font-family: 'Courier New', monospace;
+     font-size: 0.75rem;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-secondary);
+ }
+
+ // ── 15. State Badge ───────────────────────────────────────────────────────
+ .mct-state-badge {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.1875rem 0.5625rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+
+     &--boarded {
+         color: lighten($emerald, 35%);
+         background: rgba($emerald, 0.12);
+         border: 1px solid rgba($emerald, 0.25);
+     }
+
+     &--noshow {
+         color: lighten($ruby, 22%);
+         background: rgba($ruby, 0.1);
+         border: 1px solid rgba($ruby, 0.25);
+     }
+ }
+
+ // ── 16. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes mct-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── 17. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .mct-row:nth-child(even) {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .mct-row:hover {
+         background: rgba($champagne, 0.06);
+     }
+
+     .mct-row--noshow {
+         background: rgba($ruby, 0.06);
+     }
+
+     .mct-row--noshow:nth-child(even) {
+         background: rgba($ruby, 0.08);
+     }
+
+     .mct-shimmer {
+         background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+         background-size: 200% 100%;
+     }
+ }

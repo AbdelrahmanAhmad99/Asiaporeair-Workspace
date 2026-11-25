@@ -1,0 +1,378 @@
+ // ── Design tokens ──────────────────────────────────────────────────────────
+ $sapphire: #051937;
+ $sapphire-l: #0a2347;
+ $sapphire-ll: #0e2f5e;
+ $royal-gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $text-dim: rgba(226, 199, 128, 0.55);
+ $text-mid: rgba(226, 199, 128, 0.8);
+ $text-bright: #E2C780;
+ $surface-card: rgba(255, 255, 255, 0.035);
+
+ // ── Panel Container ──────────────────────────────────────────────────────
+ .cfp-panel {
+   background: $sapphire;
+   border: 1px solid rgba($champagne, 0.28);
+   border-radius: 12px;
+   padding: 18px 24px 20px;
+   display: flex;
+   flex-direction: column;
+   gap: 16px;
+   box-shadow:
+     0 4px 24px rgba(5, 25, 55, 0.45),
+     0 1px 0 rgba($champagne, 0.08) inset;
+   position: relative;
+   overflow: hidden;
+
+   // Subtle top edge highlight
+   &::before {
+     content: '';
+     position: absolute;
+     top: 0;
+     left: 24px;
+     right: 24px;
+     height: 1px;
+     background: linear-gradient(90deg, transparent, rgba($champagne, 0.4), transparent);
+   }
+ }
+
+ // ── Panel Header ──────────────────────────────────────────────────────────
+ .cfp-panel__header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 12px;
+ }
+
+ .cfp-header__left {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+ }
+
+ .cfp-icon-wrap {
+   width: 32px;
+   height: 32px;
+   border-radius: 8px;
+   background: rgba($champagne, 0.1);
+   border: 1px solid rgba($champagne, 0.2);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-shrink: 0;
+
+   svg {
+     width: 16px;
+     height: 16px;
+     color: $champagne;
+   }
+ }
+
+ .cfp-title {
+   display: block;
+   font-family: 'Montserrat', 'Segoe UI', sans-serif;
+   font-size: 12px;
+   font-weight: 700;
+   letter-spacing: 1.2px;
+   text-transform: uppercase;
+   color: $champagne;
+   line-height: 1.2;
+ }
+
+ .cfp-subtitle {
+   display: block;
+   font-family: 'Inter', 'Segoe UI', sans-serif;
+   font-size: 10.5px;
+   font-weight: 400;
+   color: rgba($champagne, 0.5);
+   margin-top: 2px;
+   letter-spacing: 0.3px;
+ }
+
+ // ── Active Filter Badge ────────────────────────────────────────────────────
+ .cfp-active-badge {
+   display: flex;
+   align-items: center;
+   gap: 6px;
+   padding: 4px 10px 4px 8px;
+   background: rgba($royal-gold, 0.12);
+   border: 1px solid rgba($royal-gold, 0.35);
+   border-radius: 20px;
+   font-family: 'Inter', sans-serif;
+   font-size: 11px;
+   font-weight: 600;
+   color: $champagne;
+   letter-spacing: 0.3px;
+
+   &__dot {
+     width: 6px;
+     height: 6px;
+     border-radius: 50%;
+     background: $royal-gold;
+     box-shadow: 0 0 6px rgba($royal-gold, 0.7);
+     animation: dotPulse 2s ease-in-out infinite;
+   }
+ }
+
+ @keyframes dotPulse {
+
+   0%,
+   100% {
+     opacity: 1;
+   }
+
+   50% {
+     opacity: 0.4;
+   }
+ }
+
+ // ── Divider ───────────────────────────────────────────────────────────────
+ .cfp-divider {
+   height: 1px;
+   background: linear-gradient(90deg, transparent, rgba($champagne, 0.2), transparent);
+   margin: 0 -24px;
+ }
+
+ // ── Fields Row ────────────────────────────────────────────────────────────
+ .cfp-fields {
+   display: flex;
+   gap: 14px;
+   align-items: flex-end;
+   flex-wrap: wrap;
+ }
+
+ .cfp-field {
+   display: flex;
+   flex-direction: column;
+   gap: 6px;
+   flex: 1;
+   min-width: 180px;
+
+   &--search {
+     min-width: 220px;
+     flex: 1.5;
+   }
+
+   &--base {
+     min-width: 150px;
+     flex: 0.8;
+   }
+ }
+
+ // ── Labels ────────────────────────────────────────────────────────────────
+ .cfp-label {
+   display: flex;
+   align-items: center;
+   gap: 5px;
+   font-family: 'Inter', sans-serif;
+   font-size: 10.5px;
+   font-weight: 600;
+   letter-spacing: 0.8px;
+   text-transform: uppercase;
+   color: rgba($champagne, 0.65);
+   user-select: none;
+
+   svg {
+     width: 12px;
+     height: 12px;
+     flex-shrink: 0;
+   }
+ }
+
+ // ── Input Wrapper ─────────────────────────────────────────────────────────
+ .cfp-input-wrap {
+   position: relative;
+ }
+
+ // ── Text Input ────────────────────────────────────────────────────────────
+ .cfp-input {
+   width: 100%;
+   padding: 9px 12px;
+   background: rgba(255, 255, 255, 0.04);
+   border: 1px solid rgba($champagne, 0.2);
+   border-radius: 6px;
+   font-family: 'Inter', sans-serif;
+   font-size: 13px;
+   color: $off-white;
+   outline: none;
+   transition:
+     border-color 200ms ease,
+     box-shadow 200ms ease,
+     background 200ms ease;
+   box-sizing: border-box;
+
+   &::placeholder {
+     color: rgba($champagne, 0.3);
+     font-size: 12.5px;
+   }
+
+   &:focus {
+     border-color: rgba($champagne, 0.55);
+     background: rgba(255, 255, 255, 0.07);
+     box-shadow: 0 0 0 3px rgba($royal-gold, 0.12), 0 1px 4px rgba(5, 25, 55, 0.5);
+   }
+
+   &:disabled {
+     opacity: 0.4;
+     cursor: not-allowed;
+   }
+
+   &--mono {
+     font-family: 'Roboto Mono', 'Courier New', monospace;
+     letter-spacing: 1.5px;
+     font-size: 13px;
+     text-transform: uppercase;
+   }
+ }
+
+ // Airport inline badge
+ .cfp-input__badge {
+   position: absolute;
+   right: 10px;
+   top: 50%;
+   transform: translateY(-50%);
+   font-family: 'Roboto Mono', monospace;
+   font-size: 10px;
+   font-weight: 700;
+   letter-spacing: 1px;
+   padding: 2px 6px;
+   border-radius: 4px;
+   background: rgba($royal-gold, 0.15);
+   border: 1px solid rgba($royal-gold, 0.35);
+   color: $champagne;
+   pointer-events: none;
+ }
+
+ // ── Select Wrapper ────────────────────────────────────────────────────────
+ .cfp-select-wrap {
+   position: relative;
+ }
+
+ .cfp-select {
+   width: 100%;
+   padding: 9px 36px 9px 12px;
+   background: rgba(255, 255, 255, 0.04);
+   border: 1px solid rgba($champagne, 0.2);
+   border-radius: 6px;
+   font-family: 'Inter', sans-serif;
+   font-size: 13px;
+   color: $off-white;
+   outline: none;
+   appearance: none;
+   cursor: pointer;
+   transition:
+     border-color 200ms ease,
+     box-shadow 200ms ease,
+     background 200ms ease;
+   box-sizing: border-box;
+
+   option {
+     background: $sapphire-l;
+     color: $off-white;
+     padding: 6px;
+   }
+
+   &:focus {
+     border-color: rgba($champagne, 0.55);
+     background: rgba(255, 255, 255, 0.07);
+     box-shadow: 0 0 0 3px rgba($royal-gold, 0.12), 0 1px 4px rgba(5, 25, 55, 0.5);
+   }
+
+   &:disabled {
+     opacity: 0.4;
+     cursor: not-allowed;
+   }
+ }
+
+ .cfp-select__chevron {
+   position: absolute;
+   right: 10px;
+   top: 50%;
+   transform: translateY(-50%);
+   width: 16px;
+   height: 16px;
+   color: rgba($champagne, 0.5);
+   pointer-events: none;
+   transition: color 200ms ease;
+ }
+
+ .cfp-select-wrap:focus-within .cfp-select__chevron {
+   color: $champagne;
+ }
+
+ // ── Reset Button ──────────────────────────────────────────────────────────
+ .cfp-reset-btn {
+   display: flex;
+   align-items: center;
+   gap: 6px;
+   padding: 9px 16px;
+   background: rgba($royal-gold, 0.08);
+   border: 1px solid rgba($royal-gold, 0.25);
+   border-radius: 6px;
+   font-family: 'Inter', sans-serif;
+   font-size: 12px;
+   font-weight: 600;
+   color: rgba($champagne, 0.7);
+   cursor: pointer;
+   white-space: nowrap;
+   align-self: flex-end;
+   transition:
+     background 200ms ease,
+     border-color 200ms ease,
+     color 200ms ease,
+     box-shadow 200ms ease;
+   letter-spacing: 0.3px;
+
+   svg {
+     width: 14px;
+     height: 14px;
+     flex-shrink: 0;
+   }
+
+   &:hover:not(:disabled) {
+     background: rgba($royal-gold, 0.18);
+     border-color: rgba($champagne, 0.5);
+     color: $champagne;
+     box-shadow: 0 0 12px rgba($royal-gold, 0.15);
+   }
+
+   &:disabled {
+     opacity: 0.3;
+     cursor: not-allowed;
+   }
+ }
+
+ // ── Screen-reader utility ─────────────────────────────────────────────────
+ .sr-only {
+   position: absolute;
+   width: 1px;
+   height: 1px;
+   padding: 0;
+   margin: -1px;
+   overflow: hidden;
+   clip: rect(0, 0, 0, 0);
+   white-space: nowrap;
+   border-width: 0;
+ }
+
+ // ── Responsive ────────────────────────────────────────────────────────────
+ @media (max-width: 900px) {
+   .cfp-fields {
+     flex-direction: column;
+     gap: 10px;
+   }
+
+   .cfp-field,
+   .cfp-field--search,
+   .cfp-field--base {
+     min-width: unset;
+     flex: unset;
+   }
+
+   .cfp-reset-btn {
+     align-self: stretch;
+     justify-content: center;
+   }
+ }

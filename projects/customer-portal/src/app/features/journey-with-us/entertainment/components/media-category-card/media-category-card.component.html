@@ -1,0 +1,75 @@
+<article class="mcc" [class.mcc--new]="category.isNew" [style.--delay]="animDelay + 'ms'"
+    [attr.aria-label]="category.title + ' — ' + category.itemCount + ' titles'">
+
+    <!-- Background image -->
+    <div class="mcc__bg-wrap" aria-hidden="true">
+        <img class="mcc__bg" [src]="category.imagePath" [alt]="''" loading="lazy" />
+        <div class="mcc__overlay"></div>
+    </div>
+
+    <!-- Type icon -->
+    <div class="mcc__type-icon" aria-hidden="true">
+        @switch (category.type) {
+        @case ('movies') {
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+            <line x1="7" y1="2" x2="7" y2="22" />
+            <line x1="17" y1="2" x2="17" y2="22" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <line x1="2" y1="7" x2="7" y2="7" />
+            <line x1="2" y1="17" x2="7" y2="17" />
+            <line x1="17" y1="17" x2="22" y2="17" />
+            <line x1="17" y1="7" x2="22" y2="7" />
+        </svg>
+        }
+        @case ('tv') {
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
+            <polyline points="17 2 12 7 7 2" />
+        </svg>
+        }
+        @case ('music') {
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+        </svg>
+        }
+        @case ('games') {
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <line x1="6" y1="12" x2="10" y2="12" />
+            <line x1="8" y1="10" x2="8" y2="14" />
+            <line x1="15" y1="13" x2="15.01" y2="13" />
+            <line x1="18" y1="11" x2="18.01" y2="11" />
+            <rect x="2" y="6" width="20" height="12" rx="2" />
+        </svg>
+        }
+        @case ('podcasts') {
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" y1="19" x2="12" y2="23" />
+            <line x1="8" y1="23" x2="16" y2="23" />
+        </svg>
+        }
+        @case ('books') {
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+        </svg>
+        }
+        }
+    </div>
+
+    @if (category.isNew) {
+    <span class="mcc__new-badge">New</span>
+    }
+
+    <!-- Content -->
+    <div class="mcc__content">
+        <p class="mcc__count">{{ category.itemCount.toLocaleString() }} titles</p>
+        <h3 class="mcc__title">{{ category.title }}</h3>
+        <p class="mcc__desc">{{ category.description }}</p>
+    </div>
+
+</article>

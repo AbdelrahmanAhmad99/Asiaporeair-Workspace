@@ -1,0 +1,43 @@
+<!-- booking-inventory-list.component.html -->
+<div class="inventory-list" role="list" aria-label="Currently included services">
+    <div *ngFor="let item of ancillaries; trackBy: trackBySale" class="inventory-row"
+        [class.inventory-row--staged]="isStagedForRemoval(item.saleId)" role="listitem"
+        [attr.aria-label]="item.productName + (isStagedForRemoval(item.saleId) ? ', staged for removal' : ', included')">
+
+        <!-- Status dot -->
+        <div class="inv-status-dot" [class.dot--remove]="isStagedForRemoval(item.saleId)" aria-hidden="true"></div>
+
+        <div class="inv-info">
+            <span class="inv-name">{{ item.productName }}</span>
+            <span *ngIf="item.quantity > 1" class="inv-qty">×{{ item.quantity }}</span>
+            <span *ngIf="isStagedForRemoval(item.saleId)" class="removal-label" aria-hidden="true">Staged for
+                removal</span>
+        </div>
+
+        <span class="inv-price">SGD {{ formatPrice(item.pricePaid * item.quantity) }}</span>
+
+        <button *ngIf="item.isRemovable && !isStagedForRemoval(item.saleId)" class="btn-remove"
+            (click)="stageRemoval.emit(item)" [attr.aria-label]="'Remove ' + item.productName">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                <path d="M10 11v6M14 11v6" />
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+            </svg>
+        </button>
+
+        <button *ngIf="isStagedForRemoval(item.saleId)" class="btn-undo" (click)="unstageRemoval.emit(item.saleId)"
+            [attr.aria-label]="'Undo removal of ' + item.productName">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <polyline points="1 4 1 10 7 10" />
+                <path d="M3.51 15a9 9 0 1 0 .49-4.98" />
+            </svg>
+            Undo
+        </button>
+
+        <span *ngIf="!item.isRemovable" class="non-removable-label">Non-removable</span>
+
+    </div>
+</div>

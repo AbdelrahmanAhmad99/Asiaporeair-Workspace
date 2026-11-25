@@ -1,0 +1,1023 @@
+// ============================================================================
+// passenger-details.component.scss
+// Asiaporeair | "Traveller Profiles" — Passenger Details Smart Page
+// ============================================================================
+
+@use "sass:color";
+
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --ivory: #F8F9FA;
+    --charcoal: #101056;
+    --text-primary: #101056;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --border-subtle: rgba(182, 143, 36, 0.15);
+    --glass-bg: rgba(5, 25, 55, 0.04);
+    --glass-border: rgba(182, 143, 36, 0.12);
+    --shadow-soft: 0 10px 30px rgba(5, 25, 55, 0.08);
+    --shadow-card: 0 4px 20px rgba(5, 25, 55, 0.06);
+    --radius-card: 12px;
+    --radius-btn: 4px;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --transition: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+
+    display: block;
+    font-family: var(--font);
+    background: var(--ivory);
+    min-height: 100vh;
+    letter-spacing: -0.01em;
+}
+
+// ── Mixins ────────────────────────────────────────────────────────────────────
+@mixin glass-panel {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-soft);
+}
+
+@mixin gold-focus {
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+}
+
+// ── Shell ─────────────────────────────────────────────────────────────────────
+.details-shell {
+    position: relative;
+}
+
+// ── Context Bar ───────────────────────────────────────────────────────────────
+.context-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--midnight);
+    box-shadow: 0 2px 20px rgba(5, 25, 55, 0.35);
+}
+
+.context-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.context-journey {
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+}
+
+.context-label {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(226, 199, 128, 0.65);
+}
+
+.context-route {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
+
+// Progress Stepper
+.progress-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    justify-content: center;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.4;
+    transition: opacity var(--transition);
+
+    &--active {
+        opacity: 1;
+
+        .step-num {
+            background: var(--royal-gold);
+            color: var(--midnight);
+            border-color: var(--royal-gold);
+            font-weight: 700;
+        }
+
+        .step-name {
+            color: #fff;
+            font-weight: 600;
+        }
+    }
+
+    &--done {
+        opacity: 0.8;
+
+        .step-num {
+            background: rgba(182, 143, 36, 0.2);
+            border-color: var(--royal-gold);
+            color: var(--champagne);
+        }
+
+        .step-name {
+            color: rgba(255, 255, 255, 0.7);
+        }
+    }
+}
+
+.step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all var(--transition);
+    flex-shrink: 0;
+}
+
+.step-name {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.step-line {
+    width: 28px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid rgba(182, 143, 36, 0.35);
+    border-radius: var(--radius-btn);
+    background: transparent;
+    color: var(--champagne);
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+
+    &:hover {
+        background: rgba(182, 143, 36, 0.1);
+        border-color: var(--royal-gold);
+    }
+
+    @include gold-focus;
+}
+
+// ── Journey Band ──────────────────────────────────────────────────────────────
+.journey-band {
+    background: rgba(5, 25, 55, 0.96);
+    border-bottom: 1px solid rgba(182, 143, 36, 0.15);
+}
+
+.journey-band-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.journey-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.journey-route-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--champagne);
+    letter-spacing: -0.01em;
+}
+
+.journey-dot {
+    color: rgba(226, 199, 128, 0.3);
+    font-size: 0.7rem;
+}
+
+.journey-airline,
+.journey-cabin,
+.journey-fare {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 500;
+}
+
+.journey-passenger-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+}
+
+// ── Content Grid ──────────────────────────────────────────────────────────────
+.content-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+    align-items: start;
+
+    @media (max-width: 1100px) {
+        grid-template-columns: 1fr;
+
+        .summary-sidebar {
+            display: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+}
+
+// ── Forms Column ──────────────────────────────────────────────────────────────
+.forms-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+// ── Page Header ───────────────────────────────────────────────────────────────
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.page-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.04em;
+    margin: 0;
+}
+
+.completion-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 100px;
+    background: rgba(5, 25, 55, 0.06);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: all var(--transition);
+    white-space: nowrap;
+
+    &.badge--complete {
+        background: rgba(16, 185, 129, 0.08);
+        border-color: rgba(16, 185, 129, 0.25);
+        color: #065f46;
+    }
+}
+
+.page-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 640px;
+}
+
+.page-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+// ── Loyalty Banner ────────────────────────────────────────────────────────────
+.loyalty-banner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(182, 143, 36, 0.25);
+    border-left: 3px solid var(--royal-gold);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.loyalty-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(182, 143, 36, 0.08);
+    border: 1px solid rgba(182, 143, 36, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.loyalty-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.loyalty-heading {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    letter-spacing: -0.01em;
+}
+
+.loyalty-desc {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.loyalty-cta {
+    padding: 7px 16px;
+    border: 1px solid var(--royal-gold);
+    border-radius: var(--radius-btn);
+    background: transparent;
+    font-family: var(--font);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--royal-gold);
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+
+    &:hover {
+        background: var(--royal-gold);
+        color: var(--midnight);
+    }
+
+    @include gold-focus;
+}
+
+// ── Form Progress ─────────────────────────────────────────────────────────────
+.form-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-progress-track {
+    height: 3px;
+    background: rgba(5, 25, 55, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.form-progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--royal-gold), var(--champagne));
+    border-radius: 2px;
+    transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-progress-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+// ── Passenger Forms List ──────────────────────────────────────────────────────
+.passenger-forms {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+// ── Passenger Slot ────────────────────────────────────────────────────────────
+.passenger-slot {
+    background: #fff;
+    border: 1px solid rgba(5, 25, 55, 0.08);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: border-color var(--transition), box-shadow var(--transition);
+
+    &.slot--active {
+        border-color: rgba(182, 143, 36, 0.4);
+        box-shadow: 0 8px 32px rgba(182, 143, 36, 0.1);
+    }
+
+    &.slot--complete {
+        border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    &.slot--invalid {
+        border-color: rgba(239, 68, 68, 0.35);
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.06);
+    }
+}
+
+// Slot Header Button
+.slot-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font);
+    gap: 1rem;
+    transition: background var(--transition);
+
+    &:hover {
+        background: rgba(5, 25, 55, 0.015);
+    }
+
+    @include gold-focus;
+}
+
+.slot-identity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.slot-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(5, 25, 55, 0.05);
+    border: 1.5px solid rgba(182, 143, 36, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: all var(--transition);
+
+    &.avatar--complete {
+        background: rgba(16, 185, 129, 0.08);
+        border-color: rgba(16, 185, 129, 0.3);
+        color: #065f46;
+    }
+}
+
+.slot-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-align: left;
+}
+
+.slot-type-badge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    border-radius: 100px;
+    display: inline-block;
+    align-self: flex-start;
+
+    &--adult {
+        background: rgba(5, 25, 55, 0.07);
+        color: var(--charcoal);
+    }
+
+    &--child {
+        background: rgba(59, 130, 246, 0.08);
+        color: #1e40af;
+    }
+
+    &--infant {
+        background: rgba(168, 85, 247, 0.08);
+        color: #6b21a8;
+    }
+}
+
+.slot-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    letter-spacing: -0.01em;
+}
+
+.slot-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slot-complete-tag {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #065f46;
+    background: rgba(16, 185, 129, 0.08);
+    padding: 3px 8px;
+    border-radius: 100px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.slot-error-tag {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #991b1b;
+    background: rgba(239, 68, 68, 0.07);
+    padding: 3px 8px;
+    border-radius: 100px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.slot-chevron {
+    color: var(--text-muted);
+    transition: transform var(--transition);
+    flex-shrink: 0;
+
+    &.chevron--open {
+        transform: rotate(180deg);
+        color: var(--royal-gold);
+    }
+}
+
+// Slot form body
+.slot-form-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 380ms cubic-bezier(0.16, 1, 0.3, 1);
+    border-top: 1px solid transparent;
+
+    &.is-open {
+        max-height: 1200px; // generous max for form content
+        border-top-color: var(--border-subtle);
+    }
+}
+
+// ── Bottom CTA Row ────────────────────────────────────────────────────────────
+.bottom-cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.5rem;
+
+    @media (max-width: 520px) {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+}
+
+.back-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    font-family: var(--font);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0;
+    transition: color var(--transition);
+
+    &:hover {
+        color: var(--charcoal);
+    }
+
+    @include gold-focus;
+}
+
+.continue-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 28px;
+    background: var(--midnight);
+    color: var(--champagne);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition);
+
+    &:hover {
+        background: var(--royal-gold);
+        color: var(--midnight);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(182, 143, 36, 0.25);
+    }
+
+    &.btn--disabled {
+        background: rgba(5, 25, 55, 0.4);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    @include gold-focus;
+}
+
+// ── Validation Error Banner ───────────────────────────────────────────────────
+.validation-error-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #991b1b;
+}
+
+// ── Summary Sidebar ───────────────────────────────────────────────────────────
+.summary-sidebar {
+    position: sticky;
+    top: 80px;
+}
+
+.summary-glass {
+    @include glass-panel;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.summary-section-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 8px;
+}
+
+// Flight Card
+.summary-flight-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+// .summary-flight-header {
+//     // just spacing
+// }
+
+.summary-flight-route {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.summary-route-iata {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.03em;
+}
+
+.summary-flight-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.summary-meta-item {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.summary-meta-dot {
+    color: var(--border-subtle);
+}
+
+.summary-fare-badge {
+    display: inline-flex;
+    padding: 3px 10px;
+    background: rgba(182, 143, 36, 0.1);
+    border: 1px solid rgba(182, 143, 36, 0.2);
+    border-radius: 100px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #92670d;
+    align-self: flex-start;
+}
+
+.summary-divider {
+    height: 1px;
+    background: var(--border-subtle);
+
+    &--light {
+        background: rgba(5, 25, 55, 0.05);
+    }
+}
+
+// Passenger List
+.summary-pax-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-pax-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.summary-pax-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.65rem;
+    padding: 4px 0;
+
+    &.pax--complete {
+        .pax-slot-label {
+            color: var(--text-secondary);
+        }
+    }
+}
+
+.pax-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(5, 25, 55, 0.12);
+    border: 1.5px solid transparent;
+    flex-shrink: 0;
+    transition: all var(--transition);
+
+    &.dot--complete {
+        background: rgba(16, 185, 129, 0.2);
+        border-color: rgba(16, 185, 129, 0.4);
+    }
+}
+
+.pax-slot-label {
+    font-weight: 600;
+    color: var(--text-muted);
+    flex: 1;
+}
+
+.pax-name {
+    font-size: 0.6rem;
+    color: var(--charcoal);
+    font-weight: 600;
+}
+
+.pax-pending {
+    font-size: 0.6rem;
+    color: rgba(5, 25, 55, 0.3);
+    font-style: italic;
+}
+
+// Price Section
+.summary-price-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.summary-price-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.summary-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.summary-price-label {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+}
+
+.summary-price-value {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--charcoal);
+}
+
+// Total
+.summary-total {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+    background: rgba(5, 25, 55, 0.025);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+}
+
+.summary-total-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+.summary-total-amount {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.summary-total-currency {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.summary-total-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.summary-tax-note {
+    font-size: 0.55rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+// Summary Continue CTA
+.summary-continue-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: var(--midnight);
+    color: var(--champagne);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition);
+
+    &:hover:not(:disabled) {
+        background: var(--royal-gold);
+        color: var(--midnight);
+    }
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+
+    @include gold-focus;
+}
+
+.summary-guarantee {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 900px) {
+    .progress-stepper {
+        gap: 0;
+    }
+
+    .step-name {
+        display: none;
+    }
+
+    .page-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .progress-stepper {
+        display: none;
+    }
+
+    .context-inner {
+        padding: 0 1rem;
+    }
+
+    .journey-band-inner {
+        padding: 8px 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
+// ── Utility ───────────────────────────────────────────────────────────────────
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

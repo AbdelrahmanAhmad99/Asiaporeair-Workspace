@@ -1,0 +1,79 @@
+<section class="aic-hero" aria-label="Airport identity overview">
+
+  <!-- Ghost watermark: huge IATA code as a depth layer -->
+  <span class="aic-watermark" aria-hidden="true">{{ airport().iataCode }}</span>
+
+  <!-- ══ Hero Content ═══════════════════════════════════════════ -->
+  <div class="aic-content">
+
+    <!-- Top row: status tag + country tag -->
+    <div class="aic-tag-row">
+      <span class="aic-tag aic-tag--active">
+        <span class="aic-tag__dot" aria-hidden="true"></span>
+        Operational
+      </span>
+      <span class="aic-tag aic-tag--country">
+        <svg class="aic-tag__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3" />
+        </svg>
+        {{ airport().countryIsoCode }}
+      </span>
+    </div>
+
+    <!-- Primary: IATA code — giant Royal Gold -->
+    <div class="aic-iata-wrap" aria-label="IATA code: {{ airport().iataCode }}">
+      <h2 class="aic-iata">{{ airport().iataCode }}</h2>
+      <span class="aic-iata-label">IATA</span>
+    </div>
+
+    <!-- Airport full name -->
+    <h3 class="aic-name">{{ airport().name }}</h3>
+
+    <!-- Location line -->
+    <p class="aic-location">
+      <svg class="aic-location__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z" />
+      </svg>
+      {{ locationLabel() }}
+    </p>
+
+    <!-- Divider -->
+    <div class="aic-divider" aria-hidden="true"></div>
+
+    <!-- Technical identifiers grid -->
+    <dl class="aic-tech-grid">
+
+      <!-- ICAO -->
+      <div class="aic-tech-item">
+        <dt class="aic-tech-item__label">ICAO</dt>
+        <dd class="aic-tech-item__value aic-tech-item__value--icao">{{ airport().icaoCode }}</dd>
+      </div>
+
+      <!-- Latitude -->
+      <div class="aic-tech-item">
+        <dt class="aic-tech-item__label">Latitude</dt>
+        <dd class="aic-tech-item__value aic-tech-item__value--coord">{{ latDisplay() }}</dd>
+      </div>
+
+      <!-- Longitude -->
+      <div class="aic-tech-item">
+        <dt class="aic-tech-item__label">Longitude</dt>
+        <dd class="aic-tech-item__value aic-tech-item__value--coord">{{ lonDisplay() }}</dd>
+      </div>
+
+      <!-- Altitude -->
+      <div class="aic-tech-item">
+        <dt class="aic-tech-item__label">Elevation</dt>
+        <dd class="aic-tech-item__value">{{ altDisplay() }}</dd>
+      </div>
+
+    </dl>
+
+  </div>
+
+</section>

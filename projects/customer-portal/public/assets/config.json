@@ -1,0 +1,14 @@
+{
+  "apiUrl": " ",
+  "stripePublicKey": " ",
+  "featureFlags": {
+    "loyaltyEnabled": true,
+    "seatMapV2": false
+  },
+  "supportedLocales": [
+    "en",
+    "ar",
+    "zh"
+  ],
+  "defaultLocale": "en"
+}

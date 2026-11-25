@@ -1,0 +1,162 @@
+<div class="adg-card">
+    <div class="adg-scroll">
+        <table class="adg-table" role="grid" aria-label="Partner fleet management registry">
+
+            <!-- ── Sticky Sapphire Header ──────────────────────────── -->
+            <thead class="adg-head">
+                <tr>
+                    @for (col of columns; track col.key) {
+                    <th class="adg-th" [class.adg-col--md-hidden]="col.hideOnMd"
+                        [class.adg-col--lg-hidden]="col.hideOnLg" scope="col">
+                        {{ col.label }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+
+            <!-- ── Loading Shimmer ─────────────────────────────────── -->
+            @if (loading()) {
+            <tbody aria-busy="true" aria-label="Loading partner records">
+                @for (row of shimmerRows; track $index) {
+                <tr class="adg-tr adg-tr--even">
+                    @for (col of columns; track col.key) {
+                    <td class="adg-td" [class.adg-col--md-hidden]="col.hideOnMd"
+                        [class.adg-col--lg-hidden]="col.hideOnLg">
+                        @if (col.key === 'logo') {
+                        <div class="adg-shimmer adg-shimmer--circle"></div>
+                        } @else {
+                        <div class="adg-shimmer" [style.width]="col.shimmerWidth"></div>
+                        }
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- ── Data Rows ────────────────────────────────────────── -->
+            @if (!loading()) {
+            <tbody [@gridAnim]="airlines().length">
+
+                @for (airline of airlines(); track airline.iataCode; let even = $even) {
+                <tr class="adg-tr" [class.adg-tr--even]="even" [class.adg-tr--odd]="!even"
+                    [attr.aria-label]="airline.name">
+
+                    <!-- Logo Circle -->
+                    <td class="adg-td adg-td--logo">
+                        <div class="adg-logo" [attr.aria-label]="airline.name + ' logo'">
+                            {{ logoInitials(airline.name) }}
+                        </div>
+                    </td>
+
+                    <!-- IATA Code — Bold Royal Gold badge -->
+                    <td class="adg-td">
+                        <span class="adg-iata">{{ airline.iataCode }}</span>
+                    </td>
+
+                    <!-- Airline Name -->
+                    <td class="adg-td">
+                        <span class="adg-name">{{ airline.name }}</span>
+                    </td>
+
+                    <!-- Callsign -->
+                    <td class="adg-td adg-col--md-hidden">
+                        <span class="adg-callsign">{{ airline.callsign }}</span>
+                    </td>
+
+                    <!-- Base Airport Hub -->
+                    <td class="adg-td">
+                        <span class="adg-hub">
+                            {{ airline.baseAirportIataCode }}
+                            <span class="adg-hub__name">{{ airline.baseAirportName }}</span>
+                        </span>
+                    </td>
+
+                    <!-- Operating Region -->
+                    <td class="adg-td adg-col--lg-hidden">
+                        <span class="adg-region-pill"
+                            [class]="'adg-region-pill ' + regionClass(airline.operatingRegion)">
+                            {{ airline.operatingRegion }}
+                        </span>
+                    </td>
+
+                    <!-- Actions: View / Edit / Deactivate -->
+                    <td class="adg-td">
+                        <div class="adg-actions">
+
+                            <!-- View Details — Sapphire style -->
+                            <button class="adg-action-btn adg-action-btn--view" type="button"
+                                (click)="viewDetail.emit(airline.iataCode)"
+                                [attr.aria-label]="'View details for ' + airline.name" title="View Partner Profile">
+                                <svg class="adg-action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5
+                               12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639
+                               C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z
+                               M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                </svg>
+                            </button>
+
+                            <!-- Edit — Champagne style -->
+                            <button class="adg-action-btn adg-action-btn--edit" type="button"
+                                (click)="editAirline.emit(airline.iataCode)" [attr.aria-label]="'Edit ' + airline.name"
+                                title="Edit Configuration">
+                                <svg class="adg-action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652
+                               L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5
+                               4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                                </svg>
+                            </button>
+
+                            <!-- Deactivate — Luxury Ruby style -->
+                            <button class="adg-action-btn adg-action-btn--deactivate" type="button"
+                                (click)="deactivate.emit(airline.iataCode)"
+                                [attr.aria-label]="'Deactivate partnership with ' + airline.name"
+                                title="Terminate Partnership">
+                                <svg class="adg-action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0
+                               0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                                </svg>
+                            </button>
+
+                        </div>
+                    </td>
+
+                </tr>
+                }
+
+                <!-- ── Empty State ───────────────────────────────────── -->
+                @if (airlines().length === 0) {
+                <tr>
+                    <td [attr.colspan]="columns.length" class="adg-empty">
+                        <div class="adg-empty__inner">
+                            <div class="adg-empty__icon-wrap" aria-hidden="true">
+                                <svg class="adg-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                </svg>
+                            </div>
+                            <p class="adg-empty__title">No partner airlines found.</p>
+                            <p class="adg-empty__sub">Adjust your search or region filter, or onboard a new partner.</p>
+                        </div>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+            }
+
+        </table>
+    </div>
+
+    <!-- ── Table Footer ───────────────────────────────────────────── -->
+    @if (!loading() && airlines().length > 0) {
+    <div class="adg-footer">
+        <span class="adg-footer__label">{{ recordLabel() }}</span>
+    </div>
+    }
+
+</div>

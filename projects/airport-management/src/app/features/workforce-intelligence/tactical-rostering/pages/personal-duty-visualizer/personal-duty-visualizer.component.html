@@ -1,0 +1,217 @@
+<!-- personal-duty-visualizer.component.html -->
+
+<div class="pdv-page">
+
+    <!-- ══ Event Detail Drawer ══════════════════════════════════ -->
+    @if (selectedEvent()) {
+    <div class="pdv-drawer-bd" (click)="closeEventDetail()" aria-hidden="true"></div>
+    <aside class="pdv-drawer" role="complementary" aria-label="Duty event detail">
+        <div class="pdv-drawer__rule" aria-hidden="true"></div>
+
+        <div class="pdv-drawer__header">
+            <div class="pdv-drawer__header__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="pdv-drawer__header__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+            </div>
+            <div>
+                <p class="pdv-drawer__header__label">Operational Duty Window</p>
+                <p class="pdv-drawer__header__title">{{ selectedEvent()!.raw.title }}</p>
+            </div>
+            <button class="pdv-drawer__close" type="button" (click)="closeEventDetail()" aria-label="Close detail">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="pdv-drawer__body">
+            @if (selectedEvent()!.raw.flightNo) {
+            <div class="pdv-drawer__row">
+                <span class="pdv-drawer__row__key">Flight Number</span>
+                <span class="pdv-drawer__row__val pdv-drawer__row__val--flight">{{ selectedEvent()!.raw.flightNo
+                    }}</span>
+            </div>
+            }
+            @if (selectedEvent()!.raw.originIata && selectedEvent()!.raw.destinationIata) {
+            <div class="pdv-drawer__row">
+                <span class="pdv-drawer__row__key">Route</span>
+                <span class="pdv-drawer__row__val pdv-drawer__row__val--route">
+                    {{ selectedEvent()!.raw.originIata }} → {{ selectedEvent()!.raw.destinationIata }}
+                </span>
+            </div>
+            }
+            <div class="pdv-drawer__row">
+                <span class="pdv-drawer__row__key">Departure</span>
+                <span class="pdv-drawer__row__val">{{ selectedEvent()!.startDate | date:'MMM d, y HH:mm' }}</span>
+            </div>
+            <div class="pdv-drawer__row">
+                <span class="pdv-drawer__row__key">Arrival</span>
+                <span class="pdv-drawer__row__val">{{ selectedEvent()!.endDate | date:'MMM d, y HH:mm' }}</span>
+            </div>
+            @if (selectedEvent()!.raw.aircraftTailNo) {
+            <div class="pdv-drawer__row">
+                <span class="pdv-drawer__row__key">Aircraft</span>
+                <span class="pdv-drawer__row__val pdv-drawer__row__val--mono">{{ selectedEvent()!.raw.aircraftTailNo
+                    }}</span>
+            </div>
+            }
+            <div class="pdv-drawer__row">
+                <span class="pdv-drawer__row__key">Status</span>
+                <span class="pdv-drawer__row__val"
+                    [class.pdv-drawer__row__val--ok]="selectedEvent()!.raw.status === 'Completed'"
+                    [class.pdv-drawer__row__val--warn]="selectedEvent()!.raw.status === 'Standby'"
+                    [class.pdv-drawer__row__val--err]="selectedEvent()!.raw.status === 'Cancelled'">
+                    {{ selectedEvent()!.raw.status }}
+                </span>
+            </div>
+            @if (selectedEvent()!.raw.notes) {
+            <div class="pdv-drawer__notes">{{ selectedEvent()!.raw.notes }}</div>
+            }
+        </div>
+
+        <!-- Full event strip preview -->
+        <div class="pdv-drawer__strip-preview">
+            <aoms-duty-event-strip [event]="selectedEvent()!" [compact]="false" [showTooltip]="false" />
+        </div>
+    </aside>
+    }
+
+    <!-- ══ Header ════════════════════════════════════════════════ -->
+    <header class="pdv-header">
+        <div class="pdv-header__left">
+            <nav class="pdv-crumb" aria-label="Breadcrumb">
+                <button class="pdv-crumb__link" type="button" (click)="goToRosterPlanner()">
+                    Roster Planner
+                </button>
+                <span class="pdv-crumb__sep" aria-hidden="true">·</span>
+                <button class="pdv-crumb__link" type="button" (click)="goToAvailabilityExplorer()">
+                    Availability Explorer
+                </button>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="pdv-crumb__arrow"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="pdv-crumb__current">Schedule Cockpit</span>
+            </nav>
+
+            <h1 class="pdv-title">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="pdv-title__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+                Personal Duty Cockpit
+            </h1>
+        </div>
+
+        <div class="pdv-header__controls">
+            <button class="pdv-icon-btn pdv-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Light mode' : 'Dark mode'">
+                @if (isDarkMode()) {
+                <svg class="pdv-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="pdv-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+        </div>
+    </header>
+
+    <!-- ══ Body ══════════════════════════════════════════════════ -->
+    <main class="pdv-body">
+
+        <!-- KPI Strip -->
+        @if (!store.scheduleLoading() && store.activeSchedule().length > 0) {
+        <div class="pdv-kpis">
+            <div class="pdv-kpi">
+                <p class="pdv-kpi__label">Flight Duties</p>
+                <p class="pdv-kpi__val">{{ kpiFlights() }}</p>
+            </div>
+            <div class="pdv-kpi">
+                <p class="pdv-kpi__label">Total Events</p>
+                <p class="pdv-kpi__val">{{ kpiEvents() }}</p>
+            </div>
+            <div class="pdv-kpi">
+                <p class="pdv-kpi__label">Duty Hours</p>
+                <p class="pdv-kpi__val">{{ kpiDutyHrs() }}<span class="pdv-kpi__unit">h</span></p>
+            </div>
+            <div class="pdv-kpi pdv-kpi--period">
+                <p class="pdv-kpi__label">Operational Window</p>
+                <p class="pdv-kpi__val pdv-kpi__val--period">{{ periodLabel() }}</p>
+            </div>
+        </div>
+        }
+
+        <!-- ── Error Panel ────────────────────────────────────────── -->
+        @if (store.scheduleError()) {
+        <div class="pdv-error-panel" role="alert">
+            <div class="pdv-error-panel__glass" aria-hidden="true"></div>
+            <div class="pdv-error-panel__left">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="pdv-error-panel__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+                <div>
+                    <p class="pdv-error-panel__title">Schedule Data Unavailable</p>
+                    <p class="pdv-error-panel__msg">{{ store.scheduleError() }}</p>
+                </div>
+            </div>
+            <button class="pdv-error-panel__retry" type="button" (click)="onRetrySync()">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="pdv-error-panel__retry__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Re-Sync Schedule
+            </button>
+        </div>
+        }
+
+        <!-- ── Calendar Controls ──────────────────────────────────── -->
+        <div class="pdv-controls">
+
+            <!-- Navigation -->
+            <div class="pdv-controls__nav">
+                <button class="pdv-nav-btn" type="button" (click)="onPrevPeriod()" aria-label="Previous period">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+                <button class="pdv-today-btn" type="button" (click)="onToday()">Today</button>
+                <button class="pdv-nav-btn" type="button" (click)="onNextPeriod()" aria-label="Next period">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+                <span class="pdv-period-label" aria-live="polite">{{ periodLabel() }}</span>
+            </div>
+
+            <!-- View switcher -->
+            <div class="pdv-view-switcher" role="group" aria-label="Calendar view">
+                <button class="pdv-view-btn" [class.pdv-view-btn--active]="store.calendarView() === 'monthly'"
+                    type="button" (click)="onViewChange('monthly')">Monthly</button>
+                <button class="pdv-view-btn" [class.pdv-view-btn--active]="store.calendarView() === 'weekly'"
+                    type="button" (click)="onViewChange('weekly')">Weekly</button>
+            </div>
+
+        </div>
+
+        <!-- ── Calendar ──────────────────────────────────────────── -->
+        <aoms-schedule-calendar-renderer [view]="store.calendarView()" [rangeStart]="store.scheduleDateRange().start"
+            [rangeEnd]="store.scheduleDateRange().end" [eventsByDate]="store.scheduleByDate()"
+            [loading]="store.scheduleLoading()" (eventClicked)="onEventClicked($event)" />
+
+    </main>
+
+</div>

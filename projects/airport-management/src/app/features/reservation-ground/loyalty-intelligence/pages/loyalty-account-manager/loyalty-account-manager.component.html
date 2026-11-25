@@ -1,0 +1,450 @@
+<div class="lam-page">
+
+    <!-- ══ Tier Upgrade Modal ════════════════════════════════════════ -->
+    @if (showTierModal() && store.selectedAccount()) {
+    <div class="lam-modal-bd" (click)="onTierCancelled()" aria-hidden="true"></div>
+    <div class="lam-modal" role="dialog" aria-modal="true" aria-labelledby="lam-tier-title">
+        <div class="lam-modal__accent"></div>
+        <div class="lam-modal__icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5z" />
+            </svg>
+        </div>
+        <div class="lam-modal__body">
+            <h2 class="lam-modal__title" id="lam-tier-title">Update Member Tier</h2>
+            <p class="lam-modal__sub">{{ store.selectedAccount()!.linkedUserName }} · {{
+                store.selectedAccount()!.cardNumber }}</p>
+
+            <div class="lam-tier-selector">
+                @for (tier of tierOptions; track tier) {
+                <button class="lam-tier-option" [class.lam-tier-option--active]="pendingTier() === tier"
+                    [class.lam-tier-option--current]="store.selectedAccount()!.level === tier" type="button"
+                    (click)="onPendingTierChange(tier)">
+                    <span class="lam-tier-option__name">{{ tier }}</span>
+                    @if (store.selectedAccount()!.level === tier) {
+                    <span class="lam-tier-option__current-label">Current</span>
+                    }
+                </button>
+                }
+            </div>
+        </div>
+        <div class="lam-modal__actions">
+            <button class="lam-modal__btn lam-modal__btn--cancel" type="button"
+                (click)="onTierCancelled()">Cancel</button>
+            <button class="lam-modal__btn lam-modal__btn--confirm" type="button"
+                [disabled]="pendingTier() === store.selectedAccount()!.level || store.actionLoading()"
+                (click)="onTierConfirmed()">
+                @if (store.actionLoading()) { Updating… } @else { Confirm Upgrade }
+            </button>
+        </div>
+    </div>
+    }
+
+    <!-- ══ Points Adjustment Modal ═══════════════════════════════════ -->
+    @if (showPointsModal() && store.selectedAccount()) {
+    <div class="lam-modal-bd" (click)="onPointsCancelled()" aria-hidden="true"></div>
+    <div class="lam-modal" role="dialog" aria-modal="true" aria-labelledby="lam-pts-title">
+        <div class="lam-modal__accent"></div>
+        <div class="lam-modal__icon-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33" />
+            </svg>
+        </div>
+        <div class="lam-modal__body">
+            <h2 class="lam-modal__title" id="lam-pts-title">Manual Points Adjustment</h2>
+            <p class="lam-modal__sub">
+                Current balance: <strong>{{ store.selectedPointsFormatted() }} pts</strong>
+            </p>
+            <div class="lam-pts-form">
+                <div class="lam-field">
+                    <label class="lam-field__label" for="lam-delta">Points Delta</label>
+                    <input id="lam-delta" class="lam-field__input" type="number" placeholder="e.g. 500 or -200"
+                        [value]="pointsDraft().delta" (input)="onPointsDeltaChange($any($event.target).value)" />
+                    <p class="lam-field__hint">Positive = add · Negative = deduct</p>
+                </div>
+                <div class="lam-field">
+                    <label class="lam-field__label" for="lam-reason">Reason <span class="lam-required">*</span></label>
+                    <textarea id="lam-reason" class="lam-field__textarea" rows="3"
+                        placeholder="e.g. Goodwill gesture — flight disruption compensation"
+                        [value]="pointsDraft().reason" (input)="onPointsReasonChange($any($event.target).value)">
+          </textarea>
+                </div>
+            </div>
+            @if (store.actionError()) {
+            <div class="lam-modal__error">{{ store.actionError() }}</div>
+            }
+        </div>
+        <div class="lam-modal__actions">
+            <button class="lam-modal__btn lam-modal__btn--cancel" type="button"
+                (click)="onPointsCancelled()">Cancel</button>
+            <button class="lam-modal__btn lam-modal__btn--confirm" type="button"
+                [disabled]="!pointsDraft().delta || !pointsDraft().reason.trim() || store.actionLoading()"
+                (click)="onPointsConfirmed()">
+                @if (store.actionLoading()) { Adjusting… } @else { Apply Adjustment }
+            </button>
+        </div>
+    </div>
+    }
+
+    <!-- ══ Delete Confirmation Modal ════════════════════════════════ -->
+    @if (showDeleteModal() && store.selectedAccount()) {
+    <aoms-delete-account-modal [accountName]="store.selectedAccount()!.linkedUserName"
+        [cardNumber]="store.selectedAccount()!.cardNumber" [isProcessing]="store.actionLoading()"
+        [error]="store.actionError()" (confirmed)="onDeleteConfirmed()" (cancelled)="onDeleteCancelled()" />
+    }
+
+    <!-- ══ Sticky Header ══════════════════════════════════════════════ -->
+    <header class="lam-header">
+        <div class="lam-header__left">
+            <nav class="lam-breadcrumb" aria-label="Breadcrumb">
+                <span class="lam-breadcrumb__section">Loyalty Intelligence</span>
+                <svg class="lam-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="lam-breadcrumb__current">Account Manager</span>
+            </nav>
+            <div class="lam-title-row">
+                <h1 class="lam-title">
+                    <svg class="lam-title__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5z" />
+                    </svg>
+                    Loyalty Account Manager
+                </h1>
+                @if (store.pagination().total > 0) {
+                <span class="lam-count-badge">{{ store.pagination().total.toLocaleString() }} members</span>
+                }
+            </div>
+        </div>
+
+        <div class="lam-header__controls">
+            <!-- Action success toast -->
+            @if (store.actionSuccess()) {
+            <div class="lam-toast lam-toast--success" role="status" aria-live="polite">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="lam-toast__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                <span>{{ store.actionSuccess() }}</span>
+                <button class="lam-toast__dismiss" type="button" (click)="onDismissSuccess()" aria-label="Dismiss">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            }
+
+            <!-- Points Desk link -->
+            <button class="lam-nav-btn" type="button" (click)="goToPointsDesk()">
+                <svg class="lam-nav-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33" />
+                </svg>
+                Points Desk
+            </button>
+
+            <!-- Refresh -->
+            <button class="lam-icon-btn" type="button" [disabled]="store.isLoading()" (click)="onRetry()"
+                aria-label="Refresh">
+                <svg class="lam-icon-btn__icon" [class.lam-icon-btn__icon--spin]="store.isLoading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Dark mode -->
+            <button class="lam-icon-btn lam-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Light mode' : 'Dark mode'">
+                @if (isDarkMode()) {
+                <svg class="lam-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="lam-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+        </div>
+    </header>
+
+    <!-- ══ Page Body ══════════════════════════════════════════════════ -->
+    <div class="lam-body">
+
+        <!-- Error banner -->
+        @if (store.error() && !store.isLoading()) {
+        <div class="lam-error-banner" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="lam-error-banner__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <span>{{ store.error() }}</span>
+            <button class="lam-error-banner__dismiss" type="button" (click)="onDismissError()" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- Action error (not in modal context) -->
+        @if (store.actionError() && !showTierModal() && !showPointsModal() && !showDeleteModal()) {
+        <div class="lam-error-banner lam-error-banner--action" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="lam-error-banner__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            <span>{{ store.actionError() }}</span>
+            <button class="lam-error-banner__dismiss" type="button" (click)="onDismissError()" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- ── Main Layout ─────────────────────────────────────────────── -->
+        <div class="lam-workspace">
+
+            <!-- Left: Search + Grid -->
+            <div class="lam-workspace__left">
+
+                <!-- Search bar -->
+                <div class="lam-search-bar">
+                    <div class="lam-search-bar__field lam-search-bar__field--main">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="lam-search-bar__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                        </svg>
+                        <input class="lam-search-bar__input" type="text" placeholder="Search by card number…"
+                            autocomplete="off" spellcheck="false" [value]="store.searchFilter().cardNumberContains"
+                            (input)="onCardNumberInput($any($event.target).value)" [disabled]="store.isLoading()"
+                            aria-label="Search by card number" />
+                    </div>
+
+                    <!-- Tier filter -->
+                    <div class="lam-select-wrap">
+                        <select class="lam-select" [value]="store.searchFilter().level"
+                            (change)="onLevelFilterChange($any($event.target).value)" [disabled]="store.isLoading()"
+                            aria-label="Filter by tier">
+                            <option value="">All Tiers</option>
+                            @for (tier of tierOptions; track tier) {
+                            <option [value]="tier">{{ tier }}</option>
+                            }
+                        </select>
+                        <svg class="lam-select-wrap__caret" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </div>
+
+                    <!-- Include deleted toggle -->
+                    <div class="lam-toggle-wrap">
+                        <button class="lam-toggle" type="button" role="switch"
+                            [attr.aria-checked]="store.searchFilter().includeDeleted"
+                            [class.lam-toggle--on]="store.searchFilter().includeDeleted"
+                            (click)="onIncludeDeletedToggle()" [disabled]="store.isLoading()">
+                            <span class="lam-toggle__thumb"></span>
+                        </button>
+                        <span class="lam-toggle-label">Incl. Inactive</span>
+                    </div>
+
+                    <!-- Search button -->
+                    <button class="lam-search-btn" type="button" [disabled]="store.isLoading()"
+                        (click)="onSearchSubmit()">
+                        @if (store.isLoading()) {
+                        <svg class="lam-spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        } @else {
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                        </svg>
+                        }
+                    </button>
+
+                    @if (store.hasActiveFilter()) {
+                    <button class="lam-clear-btn" type="button" (click)="onClearSearch()" aria-label="Clear filters">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    }
+                </div>
+
+                <!-- Member list -->
+                <div class="lam-member-list">
+                    @if (store.isLoading() && store.accounts().length === 0) {
+                    <div class="lam-shimmer-list" aria-busy="true">
+                        @for (i of [1,2,3,4,5,6]; track i) { <div class="lam-shimmer-row"></div> }
+                    </div>
+                    }
+
+                    @if (store.resultsEmpty()) {
+                    <div class="lam-empty" role="status">
+                        <p class="lam-empty__label">No Members Found</p>
+                        <p class="lam-empty__hint">Adjust your search filters and try again.</p>
+                    </div>
+                    }
+
+                    @for (account of store.accounts(); track trackByFlyerId($index, account)) {
+                    <button class="lam-member-row"
+                        [class.lam-member-row--selected]="store.selectedAccount()?.flyerId === account.flyerId"
+                        [class.lam-member-row--inactive]="!account.isActive" type="button"
+                        (click)="onAccountSelected(account)"
+                        [attr.aria-pressed]="store.selectedAccount()?.flyerId === account.flyerId"
+                        [attr.aria-label]="account.linkedUserName + ', ' + account.level + ' member'">
+
+                        <aoms-krisflyer-tier-badge [tier]="account.level" [compact]="true" />
+
+                        <div class="lam-member-row__info">
+                            <span class="lam-member-row__name">{{ account.linkedUserName }}</span>
+                            <span class="lam-member-row__card">{{ account.cardNumber }}</span>
+                        </div>
+
+                        <div class="lam-member-row__right">
+                            <span class="lam-member-row__points">{{ account.awardPoints.toLocaleString() }}</span>
+                            <aoms-account-status-indicator [isActive]="account.isActive" [compact]="true" />
+                        </div>
+                    </button>
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (store.pagination().totalPages > 1 && !store.isLoading()) {
+                <nav class="lam-pagination" aria-label="Member search pages">
+                    <button class="lam-pagination__btn" type="button" [disabled]="store.pagination().page <= 1"
+                        (click)="onPrevPage()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+                    <span class="lam-pagination__info">
+                        <strong>{{ store.pagination().page }}</strong> / {{ store.pagination().totalPages }}
+                    </span>
+                    <button class="lam-pagination__btn" type="button"
+                        [disabled]="store.pagination().page >= store.pagination().totalPages" (click)="onNextPage()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                </nav>
+                }
+
+            </div>
+
+            <!-- Right: Member Profile -->
+            <aside class="lam-workspace__profile">
+
+                @if (!store.selectedAccount() && !store.detailLoading()) {
+                <div class="lam-no-selection">
+                    <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 64 64"
+                        class="lam-no-selection__icon" aria-hidden="true">
+                        <path d="M32 14a10 10 0 1 1 0 20 10 10 0 0 1 0-20z" stroke-opacity="0.35" stroke-width="1.5" />
+                        <path d="M12 50c0-11 9-20 20-20s20 9 20 20" stroke-opacity="0.25" stroke-width="1.5"
+                            stroke-linecap="round" />
+                        <path d="M40 20h8M44 16v8" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.45" />
+                    </svg>
+                    <p class="lam-no-selection__label">Select a Member</p>
+                    <p class="lam-no-selection__hint">Click any row to view and manage the member's loyalty profile.</p>
+                </div>
+                }
+
+                @if (store.detailLoading()) {
+                <div class="lam-detail-shimmer" aria-busy="true">
+                    <div class="lam-shimmer lam-shimmer--badge"></div>
+                    <div class="lam-shimmer lam-shimmer--title"></div>
+                    <div class="lam-shimmer lam-shimmer--card"></div>
+                    <div class="lam-shimmer lam-shimmer--row"></div>
+                    <div class="lam-shimmer lam-shimmer--row"></div>
+                </div>
+                }
+
+                @if (store.selectedAccount() && !store.detailLoading()) {
+                @let acct = store.selectedAccount()!;
+                <div class="lam-profile">
+
+                    <!-- Profile header -->
+                    <div class="lam-profile__header">
+                        <aoms-krisflyer-tier-badge [tier]="acct.level" [compact]="false" />
+                        <button class="lam-profile__close" type="button" (click)="onAccountDeselected()"
+                            aria-label="Close profile">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Name and status -->
+                    <div class="lam-profile__identity">
+                        <div>
+                            <p class="lam-profile__name">{{ acct.linkedUserName }}</p>
+                            <p class="lam-profile__card">{{ acct.cardNumber }}</p>
+                        </div>
+                        <aoms-account-status-indicator [isActive]="acct.isActive" [compact]="false" />
+                    </div>
+
+                    <!-- Summary card -->
+                    <aoms-loyalty-summary-card [points]="acct.awardPoints" [tier]="acct.level"
+                        [cardNumber]="acct.cardNumber" />
+
+                    <!-- Admin actions -->
+                    <div class="lam-profile__actions">
+                        <button class="lam-action-btn lam-action-btn--tier" type="button"
+                            [disabled]="store.actionLoading()" (click)="onOpenTierModal()">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5z" />
+                            </svg>
+                            Change Tier
+                        </button>
+
+                        <button class="lam-action-btn lam-action-btn--points" type="button"
+                            [disabled]="store.actionLoading()" (click)="onOpenPointsModal()">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33" />
+                            </svg>
+                            Adjust Points
+                        </button>
+
+                        <button class="lam-action-btn lam-action-btn--delete" type="button"
+                            [disabled]="store.actionLoading()" (click)="onOpenDeleteModal()">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            </svg>
+                            Remove Account
+                        </button>
+                    </div>
+
+                </div>
+                }
+            </aside>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,224 @@
+// ============================================================================
+// profile-avatar-uploader.component.scss
+// Asiaporeair | Avatar Uploader — Premium Circular Design
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+  display: block;
+}
+
+@keyframes shimmer-gold {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.avatar-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+
+  &__file-input {
+    display: none;
+  }
+
+  // ── Main Circle ─────────────────────────────────────────────────────────
+  &__circle {
+    position: relative;
+    width: 116px;
+    height: 116px;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    flex-shrink: 0;
+
+    // Gold ring border
+    box-shadow:
+      0 0 0 3px rgba($royal-gold, 0.35),
+      0 8px 28px rgba($midnight, 0.18);
+
+    transition: box-shadow $t, transform $t;
+
+    &:hover,
+    &:focus-visible {
+      box-shadow:
+        0 0 0 3px $royal-gold,
+        0 12px 36px rgba($midnight, 0.25);
+      transform: scale(1.03);
+
+      .avatar-uploader__overlay {
+        opacity: 1;
+      }
+    }
+
+    &.is-drag-over {
+      box-shadow: 0 0 0 3px $champagne, 0 12px 36px rgba($royal-gold, 0.3);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $royal-gold;
+      outline-offset: 4px;
+    }
+  }
+
+  // ── Skeleton ─────────────────────────────────────────────────────────────
+  &__skeleton {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(90deg,
+        rgba($royal-gold, 0.08) 0%,
+        rgba($royal-gold, 0.2) 50%,
+        rgba($royal-gold, 0.08) 100%);
+    background-size: 200% 100%;
+    animation: shimmer-gold 1.8s ease infinite;
+  }
+
+  // ── Photo ─────────────────────────────────────────────────────────────────
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  // ── Initials Fallback ─────────────────────────────────────────────────────
+  &__initials {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, darken($midnight, 2%), lighten($midnight, 8%));
+    font-family: $font;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: $champagne;
+  }
+
+  // ── Hover Overlay ────────────────────────────────────────────────────────
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba($midnight, 0.72);
+    backdrop-filter: blur(4px);
+    color: $champagne;
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity $t;
+  }
+
+  // ── Tier Badge ────────────────────────────────────────────────────────────
+  &__tier-badge {
+    position: absolute;
+    bottom: 42px; // above the "Change Photo" button
+    left: 50%;
+    transform: translateX(-50%) translateY(50%);
+
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px 3px 8px;
+    border-radius: 20px;
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    background: $midnight;
+    border: 1px solid rgba($royal-gold, 0.4);
+    color: $royal-gold;
+
+    // Tier-specific overrides
+    &[data-tier="gold"] {
+      background: linear-gradient(135deg, #B8860B, #D4AF37);
+      color: $midnight;
+      border-color: transparent;
+    }
+
+    &[data-tier="platinum"] {
+      background: linear-gradient(135deg, #9E9E9E, #C0C0C0);
+      color: $midnight;
+      border-color: transparent;
+    }
+
+    &[data-tier="diamond"] {
+      background: linear-gradient(135deg, $midnight, #1a3a6e);
+      color: $champagne;
+      border-color: rgba($champagne, 0.5);
+    }
+  }
+
+  // ── Change Button ─────────────────────────────────────────────────────────
+  &__change-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: $font;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba($midnight, 0.45);
+    padding: 4px 0;
+    transition: color $t;
+
+    &:hover {
+      color: $royal-gold;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $royal-gold;
+      border-radius: 3px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-uploader {
+    &__skeleton {
+      animation: none;
+    }
+
+    &__circle {
+      transition: none;
+    }
+
+    &__overlay {
+      transition: none;
+    }
+  }
+}

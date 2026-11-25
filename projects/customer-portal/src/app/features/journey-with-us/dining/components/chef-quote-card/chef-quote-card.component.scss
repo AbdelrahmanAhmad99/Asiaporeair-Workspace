@@ -1,0 +1,171 @@
+    :host {
+        display: block;
+    }
+
+    .cqc {
+        background: #FFFFFF;
+        border-radius: 12px;
+        border: 1px solid rgba(226, 199, 128, .22);
+        padding: 32px 32px 28px;
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        grid-template-rows: auto auto;
+        gap: 0 24px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(5, 25, 55, .07);
+        transition: box-shadow 320ms ease, transform 320ms ease;
+
+        &:hover {
+            box-shadow: 0 12px 40px rgba(5, 25, 55, .12);
+            transform: translateY(-3px);
+        }
+
+        &--compact {
+            grid-template-columns: 64px 1fr;
+            padding: 22px 24px;
+        }
+
+        // Top-right gold accent bar
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #B68F24 0%, #E2C780 50%, transparent 100%);
+        }
+    }
+
+    .cqc__quote-mark {
+        position: absolute;
+        top: 16px;
+        right: 24px;
+        font-size: 72px;
+        line-height: 1;
+        color: rgba(182, 143, 36, .12);
+        font-family: Georgia, serif;
+        font-weight: 700;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .cqc__portrait-wrap {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid rgba(182, 143, 36, .4);
+        flex-shrink: 0;
+        align-self: start;
+
+        .cqc--compact & {
+            width: 64px;
+            height: 64px;
+        }
+    }
+
+    .cqc__portrait {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .cqc__blockquote {
+        grid-column: 2;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .cqc__quote {
+        font-family: 'Montserrat', 'Inter', sans-serif;
+        font-size: 0.9rem;
+        font-style: italic;
+        font-weight: 400;
+        color: #101056;
+        line-height: 1.72;
+        margin: 0;
+    }
+
+    .cqc__footer {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cqc__signature {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .cqc__name {
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: -.01em;
+        color: #101056;
+    }
+
+    .cqc__title {
+        font-size: 0.68rem;
+        font-weight: 400;
+        color: #718096;
+        line-height: 1.4;
+    }
+
+    .cqc__divider {
+        height: 1px;
+        background: linear-gradient(90deg, rgba(182, 143, 36, .3), transparent);
+    }
+
+    .cqc__awards {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .cqc__award {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: #B68F24;
+        padding: 2px 9px 2px 6px;
+        border-radius: 20px;
+        background: rgba(182, 143, 36, .08);
+        border: 1px solid rgba(182, 143, 36, .22);
+    }
+
+    .cqc__signature-dish {
+        font-size: 0.7rem;
+        color: #718096;
+        font-style: italic;
+        line-height: 1.5;
+    }
+
+    .cqc__sig-label {
+        font-weight: 700;
+        font-style: normal;
+        color: #101056;
+        font-size: 0.65rem;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .cqc {
+            transition: none;
+        }
+    }

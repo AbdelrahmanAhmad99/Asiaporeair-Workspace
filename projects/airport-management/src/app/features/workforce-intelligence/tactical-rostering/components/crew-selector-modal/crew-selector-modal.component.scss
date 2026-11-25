@@ -1,0 +1,497 @@
+// ============================================================================
+// crew-selector-modal.component.scss
+// AOMS — Tactical Rostering: Crew Assignment Modal
+// ============================================================================
+
+$gold: #B68F24;
+$champagne: #E2C780;
+$midnight: #051937;
+$emerald: #064E3B;
+$t: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+
+$cols: 2.25rem 1fr 120px 70px 2.25rem;
+
+.csm-bd {
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    background: rgba(5, 25, 55, 0.75);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    animation: csm-fade 200ms ease forwards;
+}
+
+.csm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    width: min(620px, calc(100vw - 2rem));
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    background: $midnight;
+    border: 1px solid rgba(226, 199, 128, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(182, 143, 36, 0.06) inset;
+    overflow: hidden;
+    animation: csm-enter 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    max-height: 85vh;
+
+    &__rule {
+        height: 2px;
+        flex-shrink: 0;
+        background: linear-gradient(to right, transparent, $gold, transparent);
+    }
+}
+
+.csm__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.125rem 1.375rem;
+    border-bottom: 1px solid rgba(226, 199, 128, 0.12);
+    flex-shrink: 0;
+
+    &__icon-wrap {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 8px;
+        flex-shrink: 0;
+        background: rgba(182, 143, 36, 0.12);
+        border: 1px solid rgba(226, 199, 128, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__icon {
+        width: 1.125rem;
+        height: 1.125rem;
+        color: $champagne;
+    }
+
+    &__title {
+        font-size: 1.125rem;
+        font-family: var(--aoms-font-heading);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: rgba(255, 255, 255, 0.92);
+    }
+
+    &__sub {
+        font-size: 0.8125rem;
+        font-family: var(--aoms-font-body);
+        color: rgba(226, 199, 128, 0.45);
+    }
+}
+
+.csm__close {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 4px;
+    border: 1px solid rgba(226, 199, 128, 0.18);
+    background: transparent;
+    color: rgba(226, 199, 128, 0.5);
+    cursor: pointer;
+    outline: none;
+    transition: all $t;
+
+    svg {
+        width: 0.875rem;
+        height: 0.875rem;
+    }
+
+    &:hover {
+        color: $champagne;
+        border-color: rgba(226, 199, 128, 0.38);
+    }
+}
+
+.csm__selection-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.375rem;
+    background: rgba(182, 143, 36, 0.08);
+    border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+    font-size: 0.8125rem;
+    font-family: var(--aoms-font-body);
+    font-weight: 500;
+    color: $champagne;
+    flex-shrink: 0;
+
+    &__icon {
+        width: 0.9375rem;
+        height: 0.9375rem;
+        flex-shrink: 0;
+        color: $gold;
+    }
+}
+
+.csm-hdr {
+    display: grid;
+    grid-template-columns: $cols;
+    padding: 0 1.375rem;
+    background: rgba(5, 25, 55, 0.5);
+    border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+    flex-shrink: 0;
+
+    >span {
+        padding: 0.5625rem 0.5rem;
+        font-size: 10px;
+        font-family: var(--aoms-font-body);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: rgba(226, 199, 128, 0.4);
+    }
+}
+
+.csm__body {
+    overflow-y: auto;
+    flex: 1;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(182, 143, 36, 0.2);
+        border-radius: 2px;
+    }
+}
+
+.csm__row {
+    display: grid;
+    grid-template-columns: $cols;
+    align-items: center;
+    width: 100%;
+    padding: 0.625rem 1.375rem;
+    border: none;
+    text-align: left;
+    background: transparent;
+    border-bottom: 1px solid rgba(226, 199, 128, 0.07);
+    cursor: pointer;
+    outline: none;
+    transition: background $t;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: rgba(226, 199, 128, 0.04);
+    }
+
+    &--selected {
+        background: rgba(182, 143, 36, 0.07) !important;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $champagne;
+        outline-offset: -2px;
+    }
+}
+
+.csm__avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    font-family: var(--aoms-font-heading);
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(226, 199, 128, 0.1);
+    border: 1px solid rgba(226, 199, 128, 0.15);
+    transition: all $t;
+
+    &--selected {
+        color: $midnight;
+        background: linear-gradient(135deg, $gold, #c8a030);
+        border-color: transparent;
+    }
+}
+
+.csm__name-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+    padding: 0 0.5rem;
+    overflow: hidden;
+}
+
+.csm__name {
+    font-size: 0.875rem;
+    font-family: var(--aoms-font-body);
+    font-weight: 600;
+    color: rgba(248, 249, 250, 0.85);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color $t;
+
+    .csm__row--selected & {
+        color: $champagne;
+    }
+}
+
+.csm__email {
+    font-size: 11px;
+    font-family: var(--aoms-font-body);
+    color: rgba(226, 199, 128, 0.35);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.csm__pos {
+    font-size: 10px;
+    font-family: var(--aoms-font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: rgba(226, 199, 128, 0.4);
+    padding: 0 0.5rem;
+    white-space: nowrap;
+}
+
+.csm__base {
+    font-size: 0.8125rem;
+    font-family: var(--aoms-font-heading);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: rgba(182, 143, 36, 0.5);
+
+    .csm__row--selected & {
+        color: $gold;
+    }
+}
+
+.csm__check {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 4px;
+    border: 1.5px solid rgba(226, 199, 128, 0.2);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all $t;
+
+    &--on {
+        background: linear-gradient(135deg, $gold, #c8a030);
+        border-color: transparent;
+    }
+
+    &__icon {
+        width: 0.875rem;
+        height: 0.875rem;
+        color: #fff;
+    }
+}
+
+.csm__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    font-size: 0.9375rem;
+    font-family: var(--aoms-font-body);
+    color: rgba(226, 199, 128, 0.3);
+    font-style: italic;
+}
+
+// Shimmer
+.csm__shimmer-row {
+    display: grid;
+    grid-template-columns: $cols;
+    align-items: center;
+    padding: 0.625rem 1.375rem;
+    border-bottom: 1px solid rgba(226, 199, 128, 0.07);
+}
+
+.csm-sh {
+    border-radius: 4px;
+    background: rgba(182, 143, 36, 0.08);
+    animation: csm-sh 1.5s ease-in-out infinite;
+
+    &--avatar {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+    }
+
+    &--name {
+        height: 0.875rem;
+        width: 75%;
+        animation-delay: 0.05s;
+    }
+
+    &--pos {
+        height: 0.75rem;
+        width: 60%;
+        animation-delay: 0.1s;
+    }
+
+    &--base {
+        height: 0.75rem;
+        width: 40px;
+        animation-delay: 0.15s;
+    }
+
+    &--chk {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 4px;
+        animation-delay: 0.2s;
+    }
+}
+
+.csm__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    padding: 0.875rem 1.375rem;
+    border-top: 1px solid rgba(226, 199, 128, 0.12);
+    flex-shrink: 0;
+    background: rgba(5, 25, 55, 0.3);
+}
+
+.csm__cancel {
+    padding: 0.5625rem 1rem;
+    font-size: 0.875rem;
+    font-family: var(--aoms-font-body);
+    font-weight: 400;
+    color: rgba(226, 199, 128, 0.5);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: color $t;
+
+    &:hover {
+        color: $champagne;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+.csm__confirm {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+    padding: 0.5625rem 1.5rem;
+    font-size: 0.9375rem;
+    font-family: var(--aoms-font-body);
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 14px rgba(182, 143, 36, 0.4);
+    transition: all $t;
+
+    &:hover:not(:disabled) {
+        background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+        box-shadow: 0 6px 20px rgba(182, 143, 36, 0.55);
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        opacity: 0.42;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $champagne;
+        outline-offset: 2px;
+    }
+
+    &--pulsing {
+        animation: csm-pulse 1s ease-in-out infinite;
+    }
+
+    &__icon {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+
+        &--spin {
+            animation: csm-spin 1s linear infinite;
+        }
+    }
+}
+
+@keyframes csm-fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes csm-enter {
+    from {
+        opacity: 0;
+        transform: translate(-50%, calc(-50% + 16px)) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes csm-sh {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes csm-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes csm-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 14px rgba(182, 143, 36, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 4px 24px rgba(182, 143, 36, 0.7);
+        transform: translateY(-1px);
+    }
+}

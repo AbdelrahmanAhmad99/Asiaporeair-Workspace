@@ -1,0 +1,185 @@
+// ============================================================================
+// fare-rules-accordion.component.scss
+// Asiaporeair | Fare Rules Accordion
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$warn : #c2410c;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 240ms $ease;
+
+:host {
+    display: block;
+}
+
+.fra-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+// ── Accordion item shell ──────────────────────────────────────────────────────
+.fra-item {
+    border: 1px solid rgba($charcoal, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color $t, box-shadow $t;
+
+    &--open {
+        border-color: rgba($royal-gold, 0.35);
+        box-shadow: 0 2px 12px rgba($midnight, 0.06), 0 0 0 1px rgba($royal-gold, 0.1);
+    }
+
+    &--warning:not(.fra-item--open) {
+        border-color: rgba($warn, 0.18);
+    }
+
+    &--warning.fra-item--open {
+        border-color: rgba($warn, 0.3);
+        box-shadow: 0 2px 12px rgba($warn, 0.06);
+    }
+}
+
+// ── Trigger button ────────────────────────────────────────────────────────────
+.fra-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: $white;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background $t;
+
+    &:hover {
+        background: rgba($royal-gold, 0.03);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: -2px;
+    }
+
+    .fra-item--open & {
+        background: rgba($royal-gold, 0.04);
+    }
+
+    &__left {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+// ── Icon bubble ───────────────────────────────────────────────────────────────
+.fra-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba($royal-gold, 0.07);
+    border: 1px solid rgba($royal-gold, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: rgba($royal-gold, 0.8);
+    transition: background $t, border-color $t, color $t;
+
+    .fra-item--open & {
+        background: rgba($royal-gold, 0.14);
+        border-color: $royal-gold;
+        color: $royal-gold;
+    }
+
+    .fra-item--warning & {
+        background: rgba($warn, 0.07);
+        border-color: rgba($warn, 0.2);
+        color: $warn;
+    }
+}
+
+// ── Heading ───────────────────────────────────────────────────────────────────
+.fra-heading {
+    font-family: $font;
+    font-size: 0.77rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: $charcoal;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color $t;
+
+    .fra-item--open & {
+        color: darken($royal-gold, 8%);
+    }
+}
+
+// ── Warning chip ──────────────────────────────────────────────────────────────
+.fra-warning-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: rgba($warn, 0.08);
+    border: 1px solid rgba($warn, 0.2);
+    font-family: $font;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $warn;
+    flex-shrink: 0;
+}
+
+// ── Chevron ───────────────────────────────────────────────────────────────────
+.fra-chevron {
+    flex-shrink: 0;
+    color: rgba($charcoal, 0.3);
+    transition: transform $t, color $t;
+
+    &--open {
+        transform: rotate(180deg);
+        color: $royal-gold;
+    }
+}
+
+// ── Panel content ─────────────────────────────────────────────────────────────
+.fra-panel {
+    padding: 0 1rem 1rem 3.5rem; // offset matches trigger left padding + icon
+    border-top: 1px solid rgba($royal-gold, 0.1);
+}
+
+.fra-content {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: $muted;
+    line-height: 1.7;
+    margin: 0.75rem 0 0;
+    letter-spacing: 0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fra-item {
+        transition: none !important;
+    }
+
+    .fra-chevron {
+        transition: none !important;
+    }
+}

@@ -1,0 +1,220 @@
+<!-- availability-explorer-hub.component.html -->
+
+<div class="aeh-page" [@pageIn]>
+
+    <!-- ══ Header ════════════════════════════════════════════════ -->
+    <header class="aeh-header">
+        <div class="aeh-header__left">
+            <nav class="aeh-crumb" aria-label="Breadcrumb">
+                <button class="aeh-crumb__back" type="button" (click)="goToRosterPlanner()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="aeh-crumb__back__arrow" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    Roster Planner
+                </button>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="aeh-crumb__sep"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="aeh-crumb__current">Availability Explorer</span>
+            </nav>
+
+            <div class="aeh-title-row">
+                <h1 class="aeh-title">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="aeh-title__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                    </svg>
+                    Tactical Nerve Center
+                </h1>
+                @if (store.hasAehResults()) {
+                <span class="aeh-result-count" aria-live="polite">
+                    {{ store.availableCrew().length }} crew found
+                </span>
+                }
+            </div>
+        </div>
+
+        <div class="aeh-header__controls">
+            <button class="aeh-icon-btn aeh-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Light mode' : 'Dark mode'">
+                @if (isDarkMode()) {
+                <svg class="aeh-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="aeh-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+        </div>
+    </header>
+
+    <!-- ══ Body ══════════════════════════════════════════════════ -->
+    <main class="aeh-body">
+
+        <!-- ── Two-column layout: Filters (left) + Results (right) ── -->
+        <div class="aeh-layout">
+
+            <!-- ── LEFT: Filter Panel ──────────────────────────────── -->
+            <aside class="aeh-sidebar">
+
+                <!-- Expiring Certifications Alert -->
+                @if (!store.isLoadingExpiring() && store.expiringCertCrew().length > 0) {
+                <div class="aeh-cert-alert" role="status">
+                    <div class="aeh-cert-alert__header">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="aeh-cert-alert__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                        <span class="aeh-cert-alert__title">
+                            {{ store.expiringCertCrew().length }} crew with expiring certifications
+                        </span>
+                    </div>
+                    <p class="aeh-cert-alert__sub">
+                        Within next {{ store.certExpiryDays() }} days — verify compliance before rostering.
+                    </p>
+                </div>
+                }
+
+                <aoms-availability-search-filters [isLoading]="store.isLoadingAeh()"
+                    (searchSubmitted)="onSearchSubmitted($event)" (resetTriggered)="onReset()" />
+
+            </aside>
+
+            <!-- ── RIGHT: Results ──────────────────────────────────── -->
+            <section class="aeh-results" aria-live="polite" aria-label="Search results">
+
+                <!-- Selection Toolbar -->
+                @if (store.selectedForRosterCount() > 0) {
+                <div class="aeh-sel-toolbar" role="status">
+                    <div class="aeh-sel-toolbar__left">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="aeh-sel-toolbar__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                        </svg>
+                        <strong>{{ store.selectedForRosterCount() }}</strong> crew member{{
+                        store.selectedForRosterCount() !== 1 ? 's' : '' }} selected
+                    </div>
+                    <div class="aeh-sel-toolbar__actions">
+                        <button class="aeh-sel-toolbar__clear" type="button" (click)="onClearSelections()">Clear
+                            selection</button>
+                        <button class="aeh-sel-toolbar__proceed" type="button" (click)="onProceedToRoster()">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                class="aeh-sel-toolbar__proceed__icon" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                            </svg>
+                            Proceed to Roster Planner
+                        </button>
+                    </div>
+                </div>
+                }
+
+                <!-- IDLE State -->
+                @if (loadState() === 'idle') {
+                <div class="aeh-idle">
+                    <div class="aeh-idle__icon-wrap" aria-hidden="true">
+                        <svg fill="none" stroke="currentColor" stroke-width="0.75" viewBox="0 0 24 24"
+                            class="aeh-idle__icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0z" />
+                        </svg>
+                    </div>
+                    <h2 class="aeh-idle__title">Availability Matrix Ready</h2>
+                    <p class="aeh-idle__sub">
+                        Configure search criteria in the tactical panel to query the crew availability matrix.
+                        Results will be displayed here with real-time compliance indicators.
+                    </p>
+                </div>
+                }
+
+                <!-- LOADING shimmer -->
+                @if (loadState() === 'loading') {
+                <div class="aeh-grid" aria-busy="true">
+                    @for (c of shimmerCards; track $index) {
+                    <div class="aeh-card-shimmer">
+                        <div class="aeh-sh aeh-sh--avatar"></div>
+                        <div class="aeh-sh aeh-sh--name"></div>
+                        <div class="aeh-sh aeh-sh--pos"></div>
+                        <div class="aeh-sh aeh-sh--bar"></div>
+                        <div class="aeh-sh aeh-sh--btn"></div>
+                    </div>
+                    }
+                </div>
+                }
+
+                <!-- ERROR State — Glassmorphism panel -->
+                @if (loadState() === 'error' && store.operationalError()) {
+                <div class="aeh-error-panel" role="alert">
+                    <div class="aeh-error-panel__glass" aria-hidden="true"></div>
+
+                    <div class="aeh-error-panel__left">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="aeh-error-panel__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+
+                        <div>
+                            <p class="aeh-error-panel__title">Operational Search Failure</p>
+                            <p class="aeh-error-panel__msg">{{ store.operationalError() }}</p>
+                        </div>
+                    </div>
+
+                    <button class="aeh-error-panel__retry" type="button" (click)="onRetry()">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="aeh-error-panel__retry__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Retry Search
+                    </button>
+                </div>
+                }
+
+                <!-- LOADED: Card grid -->
+                @if (loadState() === 'loaded') {
+
+                @if (store.availableCrew().length === 0) {
+                <div class="aeh-no-results">
+                    <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"
+                        class="aeh-no-results__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                    </svg>
+                    <h2 class="aeh-no-results__title">No Crew Available</h2>
+                    <p class="aeh-no-results__sub">
+                        No crew members matched the specified criteria. Try adjusting the rank filter or
+                        expanding the search base airport.
+                    </p>
+                </div>
+                }
+
+                <div class="aeh-grid" [@cardsIn]="loadState()">
+                    @for (member of store.availableCrew(); track member.employeeId) {
+                    <div class="aeh-card-slot">
+                        <aoms-available-crew-card [crew]="member" [isSelected]="isCardSelected(member.employeeId)"
+                            (cardClicked)="onCardClicked($event)" (selectClicked)="onSelectClicked($event)" />
+                    </div>
+                    }
+                </div>
+
+                }
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>

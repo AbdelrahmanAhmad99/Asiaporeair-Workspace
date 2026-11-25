@@ -1,0 +1,267 @@
+@use '../command-bar-tokens' as t;
+
+:host {
+    @include t.cb-tokens;
+    display: block;
+    font-family: var(--cb-font);
+}
+
+.search {
+    position: relative;
+}
+
+// Visually hidden but available to assistive tech (label + described-by text).
+.search__label {
+    @include t.cb-visually-hidden;
+}
+
+// ── Field (glassmorphic) ─────────────────────────────────────────────────────
+.field {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    height: 2.5rem;
+    padding-inline: 0.75rem;
+    color: var(--cb-ivory);
+    background: var(--cb-glass);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--cb-champagne-hairline);
+    border-radius: var(--cb-radius-card);
+    transition:
+        border-color 160ms ease-in-out,
+        box-shadow 160ms ease-in-out;
+
+    &:hover {
+        border-color: var(--cb-champagne);
+    }
+
+    // Gold focus ring (Royal Gold on Midnight Sapphire is 5.8:1, above the 3:1 non-text minimum).
+    &:focus-within {
+        border-color: var(--cb-gold);
+        box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.45);
+    }
+}
+
+.icon {
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25; // ultra-thin line art, ~1px at rendered size
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.field__icon {
+    color: var(--cb-champagne);
+}
+
+.field__input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    // The focus indicator is the ring on .field (:focus-within), so the native outline is redundant here.
+    outline: none;
+    font: inherit;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+
+    &::placeholder {
+        color: var(--cb-ivory-muted);
+        opacity: 1;
+    }
+}
+
+.field__shortcut {
+    flex: none;
+    padding: 0.125rem 0.4375rem;
+    font: inherit;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--cb-ivory-muted);
+    border: 1px solid var(--cb-champagne-hairline);
+    border-radius: var(--cb-radius-button);
+}
+
+.field__clear {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--cb-ivory-muted);
+    background: transparent;
+    border: 0;
+    border-radius: var(--cb-radius-button);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--cb-ivory);
+        background: var(--cb-champagne-wash);
+    }
+
+    &:focus-visible {
+        @include t.cb-focus-ring;
+    }
+}
+
+// ── Dropdown ─────────────────────────────────────────────────────────────────
+.panel {
+    @include t.cb-glass-surface;
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(100% + 0.5rem);
+    z-index: 40;
+    min-width: 26rem;
+    max-height: 26rem;
+    padding: 0.375rem;
+    overflow-y: auto;
+    color: var(--cb-ivory);
+}
+
+.options,
+.hints__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.option {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0.75rem;
+    padding: 0.5rem 0.625rem;
+    border-inline-start: 2px solid transparent;
+    border-radius: var(--cb-radius-button);
+    cursor: pointer;
+
+    // Active state: thin Royal Gold edge, per the sidebar/navigation spec.
+    &.is-active {
+        background: var(--cb-champagne-wash);
+        border-inline-start-color: var(--cb-gold);
+    }
+}
+
+.option__icon {
+    color: var(--cb-champagne);
+}
+
+.option__text {
+    display: grid;
+    row-gap: 0.125rem;
+    min-width: 0;
+}
+
+.option__title {
+    overflow: hidden;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.option__destination {
+    font-size: 0.75rem;
+    color: var(--cb-ivory-muted);
+}
+
+.option__live {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-items: end;
+    column-gap: 0.375rem;
+    row-gap: 0.125rem;
+    font-size: 0.75rem;
+}
+
+.option__live-dot {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    background: var(--cb-emerald-signal);
+    border-radius: 50%;
+    justify-self: end;
+}
+
+.option__live-text {
+    font-weight: 600;
+    color: var(--cb-emerald-signal);
+}
+
+.option__detail {
+    grid-column: 1 / -1;
+    font-variant-numeric: tabular-nums;
+    color: var(--cb-ivory-muted);
+}
+
+// ── Format hints ─────────────────────────────────────────────────────────────
+.hints {
+    padding: 0.5rem 0.625rem 0.375rem;
+}
+
+.hints__title {
+    margin: 0 0 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--cb-champagne);
+}
+
+.hints__item {
+    display: grid;
+    grid-template-columns: 7rem 6rem minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: 0.75rem;
+    padding: 0.3125rem 0;
+    font-size: 0.8125rem;
+    border-top: 1px solid var(--cb-champagne-hairline);
+
+    &:first-child {
+        border-top: 0;
+    }
+}
+
+.hints__entity {
+    font-weight: 500;
+}
+
+.hints__example {
+    font-variant-numeric: tabular-nums;
+    color: var(--cb-champagne);
+}
+
+.hints__destination {
+    overflow: hidden;
+    color: var(--cb-ivory-muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@container command-bar (max-width: 1100px) {
+    .field__shortcut {
+        display: none;
+    }
+
+    .panel {
+        min-width: 0;
+    }
+
+    .hints__item {
+        grid-template-columns: 6rem minmax(0, 1fr);
+    }
+
+    .hints__destination {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .field {
+        transition: none;
+    }
+}

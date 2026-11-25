@@ -1,0 +1,430 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $amber: #B45309;
+ $node-size: 14px;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Container card (squircle 12px)
+ // ============================================================================
+ .ltv-container {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($gold, 0.18);
+     box-shadow:
+         0 4px 24px rgba($midnight, 0.35),
+         0 1px 0 rgba($champagne, 0.08) inset;
+     padding: 1.5rem 1.25rem 1rem;
+     min-height: 9rem;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     overflow: hidden;
+     animation: ltv-enter 350ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. Timeline wrapper
+ // ============================================================================
+ .ltv-timeline {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+ }
+
+ // Conflict banner
+ .ltv-conflict-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.5rem 0.875rem;
+     border-radius: 6px;
+     background: rgba($amber, 0.12);
+     border: 1px solid rgba($amber, 0.3);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     color: $amber;
+     animation: ltv-slide-down 220ms $luxury both;
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+         color: $amber;
+     }
+ }
+
+ // ============================================================================
+ // 3. Track — horizontal flex row containing nodes and segments
+ // ============================================================================
+ .ltv-track {
+     display: flex;
+     align-items: center;
+     min-height: 5rem;
+     padding: 1rem 0;
+     overflow-x: auto;
+
+     &::-webkit-scrollbar {
+         height: 3px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.2);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 4. Airport node — vertical stack: IATA ↕ dot ↕ time
+ // ============================================================================
+ .ltv-node {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.35rem;
+     flex-shrink: 0;
+     cursor: default;
+
+     // &--origin {}
+
+     // &--dest {}
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 900;
+         letter-spacing: 0.12em;
+         text-transform: uppercase;
+         line-height: 1;
+         white-space: nowrap;
+
+         &--gold {
+             color: $gold;
+             text-shadow: 0 0 12px rgba($gold, 0.3);
+         }
+
+         &--champagne {
+             color: $champagne;
+         }
+     }
+
+     &__dot {
+         width: $node-size;
+         height: $node-size;
+         border-radius: 50%;
+         border: 2px solid transparent;
+         flex-shrink: 0;
+
+         &--gold {
+             background: $gold;
+             border-color: rgba($gold, 0.5);
+             box-shadow: 0 0 10px rgba($gold, 0.45), 0 0 0 4px rgba($gold, 0.1);
+         }
+
+         &--champagne {
+             background: transparent;
+             border-color: $champagne;
+             box-shadow: 0 0 6px rgba($champagne, 0.25);
+         }
+     }
+
+     &__time {
+         font-family: 'Courier New', monospace;
+         font-size: 10px;
+         font-weight: 700;
+         color: rgba($champagne, 0.5);
+         letter-spacing: 0.04em;
+         white-space: nowrap;
+         display: flex;
+         align-items: center;
+         gap: 0.2rem;
+     }
+
+     &__offset {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 8px;
+         font-weight: 700;
+         color: $gold;
+         background: rgba($gold, 0.12);
+         border-radius: 3px;
+         padding: 0.1rem 0.25rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Flight segment — Royal Gold lines + plane icon
+ // ============================================================================
+ .ltv-segment {
+     position: relative;
+     display: flex;
+     align-items: center;
+     min-width: 5rem;
+     cursor: pointer;
+     transition: opacity 150ms $ease;
+
+     // Flex proportional to block time — set via [style.flex] in template
+     flex: 1;
+
+     &:hover {
+         opacity: 0.85;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+         border-radius: 3px;
+     }
+
+     // Conflict leg — amber flash background
+     &--conflict {
+         animation: ltv-conflict-flash 1.4s ease-in-out infinite;
+     }
+
+     // ── The gold flight path line ─────────────────────────────────────────
+     &__line {
+         position: absolute;
+         left: 0;
+         right: 0;
+         top: 50%;
+         transform: translateY(-50%);
+         height: 2px;
+         background: linear-gradient(90deg, $gold 0%, $champagne 50%, $gold 100%);
+         border-radius: 1px;
+     }
+
+     // Glow effect under the gold line
+     &__glow {
+         position: absolute;
+         inset: -2px 0;
+         background: inherit;
+         filter: blur(4px);
+         opacity: 0.4;
+     }
+
+     // Plane icon centred on the line
+     &__plane {
+         position: absolute;
+         left: 50%;
+         top: 50%;
+         transform: translate(-50%, -50%);
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         background: $midnight; // knockout behind the icon keeps the line clean
+         border-radius: 50%;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         padding: 2px;
+
+         svg {
+             width: 100%;
+             height: 100%;
+         }
+     }
+
+     // Duration / leg label above the line
+     &__label {
+         position: absolute;
+         left: 50%;
+         transform: translateX(-50%);
+         bottom: calc(50% + 14px); // above the node dot
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 0.1rem;
+         white-space: nowrap;
+     }
+
+     &__duration {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 700;
+         letter-spacing: 0.06em;
+         color: $champagne;
+     }
+
+     &__leg-no {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 8px;
+         font-weight: 700;
+         letter-spacing: 0.12em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.4);
+     }
+ }
+
+ // ============================================================================
+ // 6. Day reference scale
+ // ============================================================================
+ .ltv-day-scale {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding-top: 0.5rem;
+     border-top: 1px solid rgba($champagne, 0.08);
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.3);
+
+         // &--right {}
+     }
+ }
+
+ // ============================================================================
+ // 7. Empty state
+ // ============================================================================
+ .ltv-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 1.5rem 1rem;
+
+     &__dashes {
+         display: flex;
+         align-items: center;
+         width: 100%;
+         max-width: 24rem;
+         gap: 0;
+     }
+
+     &__node {
+         width: 10px;
+         height: 10px;
+         border-radius: 50%;
+         flex-shrink: 0;
+
+         &--origin {
+             background: rgba($gold, 0.4);
+         }
+
+         &--dest {
+             background: rgba($champagne, 0.3);
+         }
+     }
+
+     &__line {
+         flex: 1;
+         height: 1px;
+         background: repeating-linear-gradient(90deg,
+                 rgba($champagne, 0.25) 0,
+                 rgba($champagne, 0.25) 8px,
+                 transparent 8px,
+                 transparent 16px);
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 600;
+         color: rgba($champagne, 0.55);
+         margin: 0;
+     }
+
+     &__sub {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: rgba($champagne, 0.3);
+         margin: 0;
+         max-width: 28ch;
+         text-align: center;
+         line-height: 1.6;
+     }
+ }
+
+ // ============================================================================
+ // 8. Shimmer skeleton
+ // ============================================================================
+ .ltv-skeleton {
+     padding: 1rem 0;
+
+     &__track {
+         display: flex;
+         align-items: center;
+         gap: 0;
+         height: 2.5rem;
+     }
+
+     &__seg {
+         height: 4px;
+         border-radius: 2px;
+         background: rgba($champagne, 0.07);
+         flex: 2;
+         animation: ltv-pulse 1.5s ease-in-out infinite;
+
+         &:nth-child(odd) {
+             animation-delay: 0.15s;
+         }
+     }
+
+     &__node {
+         width: 12px;
+         height: 12px;
+         border-radius: 50%;
+         background: rgba($champagne, 0.1);
+         flex-shrink: 0;
+         animation: ltv-pulse 1.5s ease-in-out infinite;
+     }
+ }
+
+ // ============================================================================
+ // 9. Keyframes
+ // ============================================================================
+ @keyframes ltv-enter {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes ltv-slide-down {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes ltv-conflict-flash {
+
+     0%,
+     100% {
+         background: transparent;
+     }
+
+     50% {
+         background: rgba($amber, 0.07);
+     }
+ }
+
+ @keyframes ltv-pulse {
+
+     0%,
+     100% {
+         opacity: 0.4;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }

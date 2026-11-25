@@ -1,0 +1,102 @@
+    :host {
+        display: inline-block;
+    }
+
+    @keyframes ringPulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 0.6;
+        }
+
+        50% {
+            transform: scale(1.18);
+            opacity: 0;
+        }
+    }
+
+    .vtb {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 28px;
+        border-radius: 4px;
+        background: #051937;
+        border: 1px solid rgba(182, 143, 36, 0.5);
+        cursor: pointer;
+        font-family: 'Montserrat', 'Inter', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #E2C780;
+        transition: background 280ms ease, border-color 280ms ease, transform 200ms ease, box-shadow 280ms ease;
+        overflow: visible;
+
+        &:hover {
+            background: #B68F24;
+            border-color: #B68F24;
+            color: #051937;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(182, 143, 36, 0.35);
+
+            .vtb__ring {
+                animation: none;
+                opacity: 0;
+            }
+
+            .vtb__arrow {
+                transform: translateX(5px);
+            }
+
+            .vtb__icon-wrap {
+                color: #051937;
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid #B68F24;
+            outline-offset: 3px;
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    .vtb__ring {
+        position: absolute;
+        inset: -8px;
+        border-radius: 8px;
+        border: 1.5px solid rgba(182, 143, 36, 0.4);
+        animation: ringPulse 2.2s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .vtb__icon-wrap {
+        color: #B68F24;
+        display: flex;
+        align-items: center;
+        transition: color 280ms ease;
+    }
+
+    .vtb__label {
+        line-height: 1;
+    }
+
+    .vtb__arrow {
+        transition: transform 260ms ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .vtb__ring {
+            animation: none;
+        }
+
+        .vtb,
+        .vtb__arrow {
+            transition: none;
+        }
+    }

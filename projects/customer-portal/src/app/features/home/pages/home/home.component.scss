@@ -1,0 +1,183 @@
+ $midnight : #051937;
+ $royal-gold : #B68F24;
+ $champagne : #E2C780;
+ $ivory : #F8F9FA;
+ $white : #FFFFFF;
+ $charcoal : #101056;
+ $muted : #718096;
+ $font : 'Montserrat',
+ 'Inter',
+ -apple-system,
+ sans-serif;
+ $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+ @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+ :host {
+   display: block;
+ }
+
+ // ── Page shell ─────────────────────────────────────────────────────────────────
+ .home {
+   background: $ivory;
+   font-family: $font;
+ }
+
+ // ── Container ──────────────────────────────────────────────────────────────────
+ .home__container {
+   max-width: 1240px;
+   margin: 0 auto;
+   padding: 0 40px;
+
+   @media (max-width: 768px) {
+     padding: 0 20px;
+   }
+ }
+
+ // ── Generic section wrapper ────────────────────────────────────────────────────
+ .home__section {
+   padding: 80px 0;
+
+   &--ivory {
+     background: $ivory;
+   }
+
+   &--white {
+     background: $white;
+   }
+
+   &--tight {
+     padding: 0;
+   }
+
+   &--no-pad {
+     padding: 0;
+   }
+
+   @media (max-width: 768px) {
+     padding: 56px 0;
+   }
+ }
+
+ // ── Section header (News + others) ────────────────────────────────────────────
+ .home__section-header {
+   text-align: center;
+   // margin-bottom: 44px;
+ }
+
+ .home__section-eyebrow {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 12px;
+   font-size: 10px;
+   font-weight: 700;
+   letter-spacing: 0.2em;
+   text-transform: uppercase;
+   color: rgba($royal-gold, 0.7);
+   margin-bottom: 10px;
+ }
+
+ .home__section-eyebrow-line {
+   flex: 0 0 32px;
+   height: 1px;
+   background: rgba($royal-gold, 0.3);
+ }
+
+ .home__section-title {
+   font-family: $font;
+   font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+   font-weight: 300;
+   letter-spacing: -0.03em;
+   color: $charcoal;
+   margin: 0;
+   line-height: 1.2;
+
+   strong {
+     font-weight: 800;
+     color: $midnight;
+   }
+ }
+
+ // ── Hero section ───────────────────────────────────────────────────────────────
+ .home__hero {
+   position: relative;
+   min-height: 100dvh;
+   display: flex;
+   align-items: center;
+   overflow: visible;
+   z-index: 10; // ADDED to stay above subsequent sections
+ }
+
+ .home__hero-content {
+   position: relative;
+   z-index: 5;
+   width: 100%;
+   max-width: 1240px;
+   margin: 0 auto;
+   padding: 0 40px 60px;
+   display: flex;
+   flex-direction: column;
+   gap: 28px;
+   align-items: flex-start;
+   // padding-top: 96px; // clear the navbar
+
+   @media (max-width: 768px) {
+     padding: 80px 20px 40px;
+     gap: 32px;
+   }
+ }
+
+ // ── Hero headline ──────────────────────────────────────────────────────────────
+ .home__hero-headline {
+   pointer-events: none;
+   height: 50%;
+ }
+
+ .home__hero-eyebrow {
+   font-size: 11px;
+   font-weight: 700;
+   letter-spacing: 0.22em;
+   text-transform: uppercase;
+   color: $champagne;
+   margin: 0 0 10px;
+   opacity: 0.75;
+ }
+
+ .home__hero-title {
+   font-family: $font;
+   font-size: clamp(2.5rem, 7vw, 5.5rem);
+   font-weight: 800;
+   letter-spacing: -0.04em;
+   line-height: 1.0;
+   color: $white;
+   margin: 0;
+
+   span {
+     background: linear-gradient(135deg, $royal-gold 0%, $champagne 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     background-clip: text;
+   }
+ }
+
+ // ── Booking hub (tabs + widget) ────────────────────────────────────────────────
+ .home__booking-hub {
+   width: 100%;
+   max-width: 900px;
+ }
+
+ // ── News grid ──────────────────────────────────────────────────────────────────
+ .home__news-grid {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 24px;
+
+   @media (max-width: 900px) {
+     grid-template-columns: 1fr 1fr;
+   }
+
+   @media (max-width: 560px) {
+     grid-template-columns: 1fr;
+   }
+ }

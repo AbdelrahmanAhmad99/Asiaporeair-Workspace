@@ -1,0 +1,388 @@
+ // ── Design tokens ──────────────────────────────────────────────────────────────
+ $midnight : #051937;
+ $royal-gold : #B68F24;
+ $champagne : #E2C780;
+ $ivory : #F8F9FA;
+ $white : #FFFFFF;
+ $charcoal : #101056;
+ $muted : #718096;
+ $font : 'Montserrat',
+ 'Inter',
+ -apple-system,
+ sans-serif;
+ $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+ @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+ // ── Host reset ─────────────────────────────────────────────────────────────────
+ :host {
+     display: block;
+ }
+
+ // ── Shell ──────────────────────────────────────────────────────────────────────
+ .signup-shell {
+     position: relative;
+     min-height: 100dvh;
+     display: flex;
+     flex-direction: column;
+     font-family: $font;
+     overflow-x: hidden;
+ }
+
+ // ── Background ─────────────────────────────────────────────────────────────────
+ .signup-shell__bg {
+     position: fixed;
+     inset: 0;
+     z-index: 0;
+ }
+
+ .signup-shell__bg-image {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     object-position: center 30%;
+ }
+
+ .signup-shell__bg-overlay {
+     position: absolute;
+     inset: 0;
+     //    background:
+     //     linear-gradient(135deg,
+     //         rgba($midnight, 0.92) 0%,
+     //         rgba($midnight, 0.75) 45%,
+     //         rgba($midnight, 0.5) 100%);
+     background:
+         linear-gradient(135deg,
+             rgba($midnight, 0.52) 40%,
+             rgba($midnight, 0.45) 45%,
+             rgba($midnight, 0.40) 50%);
+ }
+
+ // ── Navigation ─────────────────────────────────────────────────────────────────
+ .signup-nav {
+     position: relative;
+     z-index: 10;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 18px 40px;
+     background: rgba($midnight, 0.6);
+     backdrop-filter: blur(12px);
+     border-bottom: 1px solid rgba($champagne, 0.12);
+
+     @media (max-width: 640px) {
+         padding: 14px 20px;
+     }
+
+     &__logo {
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         gap: 16px;
+     }
+
+     &__hint {
+         font-size: 13px;
+         color: rgba($white, 0.55);
+         font-weight: 400;
+
+         @media (max-width: 480px) {
+             display: none;
+         }
+     }
+
+     &__login-btn {
+         padding: 8px 20px;
+         border-radius: 4px;
+         border: 1px solid rgba($royal-gold, 0.6);
+         background: transparent;
+         font-family: $font;
+         font-size: 12px;
+         font-weight: 700;
+         letter-spacing: 0.06em;
+         text-transform: uppercase;
+         color: $champagne;
+         cursor: pointer;
+         transition: background 260ms $ease, border-color 260ms $ease, color 260ms $ease;
+
+         &:hover {
+             background: $royal-gold;
+             border-color: $royal-gold;
+             color: $midnight;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $royal-gold;
+             outline-offset: 3px;
+         }
+     }
+ }
+
+ // ── Main content ───────────────────────────────────────────────────────────────
+ .signup-main {
+     position: relative;
+     z-index: 5;
+     flex: 1;
+     display: grid;
+     grid-template-columns: 1fr 520px;
+     gap: 0;
+     max-width: 1280px;
+     margin: 0 auto;
+     width: 100%;
+     padding: 48px 40px;
+     align-items: start;
+
+     @media (max-width: 1100px) {
+         grid-template-columns: 1fr;
+         padding: 32px 20px;
+     }
+ }
+
+ // ── Brand panel (left) ─────────────────────────────────────────────────────────
+ .signup-brand {
+     padding: 24px 48px 24px 0;
+     display: flex;
+     align-items: center;
+
+     @media (max-width: 1100px) {
+         display: none;
+     }
+
+     &__content {
+         max-width: 440px;
+     }
+
+     &__pre-line {
+         width: 44px;
+         height: 2px;
+         background: $royal-gold;
+         margin-bottom: 14px;
+     }
+
+     &__eyebrow {
+         font-size: 11px;
+         font-weight: 700;
+         letter-spacing: 0.2em;
+         text-transform: uppercase;
+         color: $royal-gold;
+         margin: 0 0 10px;
+     }
+
+     &__headline {
+         font-size: clamp(2rem, 4vw, 3rem);
+         font-weight: 800;
+         letter-spacing: -0.04em;
+         color: $white;
+         line-height: 1.08;
+         margin: 0 0 18px;
+     }
+
+     &__sub {
+         font-size: 14px;
+         color: rgba($white, 0.58);
+         line-height: 1.75;
+         margin: 0 0 32px;
+     }
+
+     &__perks {
+         list-style: none;
+         margin: 0;
+         padding: 0;
+         display: flex;
+         flex-direction: column;
+         gap: 12px;
+     }
+
+     &__perk {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         font-size: 13px;
+         color: rgba($white, 0.7);
+         font-weight: 500;
+     }
+
+     &__perk-icon {
+         color: $royal-gold;
+         font-size: 10px;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Form card (right) ──────────────────────────────────────────────────────────
+ .signup-panel {
+     &__card {
+         background: rgba($white, 0.97);
+         border-radius: 16px;
+         border: 1px solid rgba($champagne, 0.2);
+         box-shadow: 0 24px 64px rgba($midnight, 0.25);
+         padding: 36px 36px 32px;
+
+         @media (max-width: 480px) {
+             padding: 24px 20px;
+             border-radius: 12px;
+         }
+     }
+
+     &__header {
+         margin-bottom: 22px;
+     }
+
+     &__title {
+         font-size: 22px;
+         font-weight: 800;
+         letter-spacing: -0.03em;
+         color: $charcoal;
+         margin: 0 0 6px;
+     }
+
+     &__subtitle {
+         font-size: 13px;
+         color: $muted;
+         margin: 0;
+         line-height: 1.55;
+     }
+
+     &__terms {
+         font-size: 11px;
+         color: rgba($muted, 0.8);
+         text-align: center;
+         line-height: 1.6;
+         margin: 16px 0 0;
+
+         a {
+             color: $royal-gold;
+             text-decoration: none;
+
+             &:hover {
+                 text-decoration: underline;
+             }
+         }
+     }
+ }
+
+ // ── Divider ────────────────────────────────────────────────────────────────────
+ .signup-divider {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+     margin: 18px 0;
+
+     &__line {
+         flex: 1;
+         height: 1px;
+         background: rgba($champagne, 0.35);
+     }
+
+     &__text {
+         font-size: 11px;
+         font-weight: 500;
+         color: rgba($muted, 0.7);
+         white-space: nowrap;
+         letter-spacing: 0.04em;
+     }
+ }
+
+ // ── Error alert ────────────────────────────────────────────────────────────────
+ .signup-error-alert {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+     padding: 12px 14px;
+     border-radius: 8px;
+     background: rgba(#B91C1C, 0.07);
+     border: 1px solid rgba(#B91C1C, 0.25);
+     font-size: 13px;
+     font-weight: 500;
+     color: #991B1B;
+     margin-bottom: 16px;
+     line-height: 1.45;
+
+     svg {
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Success state ──────────────────────────────────────────────────────────────
+ .signup-success {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     padding: 16px 0;
+     gap: 12px;
+
+     &__icon {
+         width: 72px;
+         height: 72px;
+         border-radius: 50%;
+         background: rgba($royal-gold, 0.1);
+         border: 2px solid rgba($royal-gold, 0.3);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         color: $royal-gold;
+         margin-bottom: 6px;
+     }
+
+     &__title {
+         font-size: 20px;
+         font-weight: 800;
+         letter-spacing: -0.025em;
+         color: $charcoal;
+         margin: 0;
+     }
+
+     &__message {
+         font-size: 14px;
+         color: $charcoal;
+         font-weight: 500;
+         margin: 0;
+     }
+
+     &__sub {
+         font-size: 13px;
+         color: $muted;
+         margin: 0;
+         line-height: 1.6;
+         max-width: 340px;
+     }
+ }
+
+ // ── Shared primary button ──────────────────────────────────────────────────────
+ .btn-primary {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 100%;
+     padding: 14px 24px;
+     border-radius: 4px;
+     background: $midnight;
+     border: 1px solid rgba($royal-gold, 0.4);
+     font-family: $font;
+     font-size: 13px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: $champagne;
+     cursor: pointer;
+     transition: background 260ms $ease, box-shadow 260ms $ease;
+     margin-top: 8px;
+
+     &:hover {
+         background: $royal-gold;
+         border-color: $royal-gold;
+         color: $midnight;
+         box-shadow: 0 6px 20px rgba($royal-gold, 0.3);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $royal-gold;
+         outline-offset: 3px;
+     }
+ }

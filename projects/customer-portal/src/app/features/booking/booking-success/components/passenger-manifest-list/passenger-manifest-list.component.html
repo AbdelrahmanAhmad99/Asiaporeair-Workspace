@@ -1,0 +1,114 @@
+<!-- passenger-manifest-list.component.html -->
+
+<div class="manifest-card" aria-label="Passenger details and add-ons">
+
+    <div class="card-header">
+        <div class="header-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+        </div>
+        <div>
+            <h4 class="card-title">Traveller Details &amp; Enhancements</h4>
+            <span class="card-sub">{{ passengers().length }} Passenger(s)</span>
+        </div>
+    </div>
+
+    <!-- Passenger Rows -->
+    <div class="manifest-body">
+        <div *ngFor="let pax of passengers(); let last = last; trackBy: trackByPax" class="pax-block"
+            [class.pax-block--last]="last">
+
+            <!-- Passenger Name Row -->
+            <div class="pax-name-row">
+                <div class="pax-avatar" aria-hidden="true">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </div>
+                <div class="pax-name">
+                    {{ pax.firstName }} {{ pax.lastName }}
+                </div>
+                <span class="card-sub" *ngIf="pax.dateOfBirth">DOB: {{ pax.dateOfBirth | date:'mediumDate' }}</span>
+                <span class="card-sub" *ngIf="pax.passportNumber">&bull; Passport: {{ pax.passportNumber }}</span>
+            </div>
+
+            <!-- Seat Assignment & Ancillary -->
+            <div class="ancillary-list">
+
+                <!-- Seat Assignment -->
+                <ng-container *ngIf="(pax.assignedSeatNumber || getSeatForPassenger(pax.passengerId)) as seat">
+                    <div>
+                        <div class="seat-chip" *ngIf="seat !== 'Not assigned'">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1">
+                                <path d="M6 3v11M18 3v11" />
+                                <path d="M6 14a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4" />
+                                <line x1="6" y1="21" x2="6" y2="18" />
+                                <line x1="18" y1="21" x2="18" y2="18" />
+                            </svg>
+                            Assigned Seat {{ seat }}
+                            <span *ngIf="pax.cabinClassName" class="cabin-tag">{{ pax.cabinClassName }}</span>
+                        </div>
+                        <div class="no-seat-chip" *ngIf="seat === 'Not assigned'">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            Seat Not Assigned
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Ancillary Sales (shown only on first passenger for simplicity) -->
+                <ng-container *ngIf="passengers().indexOf(pax) === 0">
+                    <div *ngFor="let sale of ancillarySales(); trackBy: trackBySale" class="ancillary-row">
+                        <div class="ancillary-icon" aria-hidden="true">
+                            <!-- Baggage -->
+                            <svg *ngIf="getCategoryIconKey(sale.productName) === 'baggage'" width="11" height="11"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <rect x="6" y="8" width="12" height="13" rx="2" />
+                                <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+                            </svg>
+                            <!-- Meal -->
+                            <svg *ngIf="getCategoryIconKey(sale.productName) === 'meal'" width="11" height="11"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                                <line x1="6" y1="1" x2="6" y2="4" />
+                                <line x1="10" y1="1" x2="10" y2="4" />
+                                <line x1="14" y1="1" x2="14" y2="4" />
+                            </svg>
+                            <!-- Oxygen / Medical -->
+                            <svg *ngIf="getCategoryIconKey(sale.productName) === 'oxygen'" width="11" height="11"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                            <!-- Default / other -->
+                            <svg *ngIf="!['baggage','meal','oxygen'].includes(getCategoryIconKey(sale.productName))"
+                                width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                        </div>
+                        <div class="ancillary-info">
+                            <span class="ancillary-name">{{ sale.productName }}</span>
+                            <span class="ancillary-qty">Qty: {{ sale.quantity }}</span>
+                        </div>
+                        <div class="ancillary-price">
+                            {{ currency() }} {{ formatPrice(sale.pricePaid * sale.quantity) }}
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+        </div>
+        <!-- /pax blocks -->
+    </div>
+</div>

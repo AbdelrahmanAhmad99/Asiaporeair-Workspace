@@ -1,0 +1,153 @@
+<!-- flight-crew-roster-list.component.html -->
+
+<div class="rcl">
+
+    <!-- ══ Left: Flight Deck ══════════════════════════════════════ -->
+    <div class="rcl__panel">
+
+        <div class="rcl__panel__header">
+            <div class="rcl__panel__header__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="rcl__panel__header__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+            </div>
+            <div>
+                <p class="rcl__panel__header__title">Flight Deck</p>
+                <p class="rcl__panel__header__sub">{{ pilots().length }} pilot{{ pilots().length !== 1 ? 's' : '' }}
+                    assigned</p>
+            </div>
+            <span class="rcl__count-badge rcl__count-badge--pilot">{{ pilots().length }}</span>
+        </div>
+
+        <!-- Column labels -->
+        <div class="rcl__col-hdr" aria-hidden="true">
+            <span>Name</span><span>Position</span><span>Base</span><span></span>
+        </div>
+
+        @if (loading()) {
+        <div class="rcl__shimmer-list" aria-busy="true">
+            @for (r of shimmerRows; track $index) {
+            <div class="rcl__shimmer-row">
+                <div class="rcl-sh rcl-sh--avatar"></div>
+                <div class="rcl-sh rcl-sh--name"></div>
+                <div class="rcl-sh rcl-sh--pos"></div>
+                <div class="rcl-sh rcl-sh--base"></div>
+            </div>
+            }
+        </div>
+        } @else {
+        <div class="rcl__list" [@rosterIn]="pilots().length" role="list">
+            @for (pilot of pilots(); track pilot.employeeId) {
+            <div class="rcl__entry" role="listitem"
+                [class.rcl__entry--processing]="processingId() === pilot.employeeId">
+
+                <div class="rcl__avatar rcl__avatar--pilot" aria-hidden="true">{{ initials(pilot) }}</div>
+
+                <div class="rcl__entry__name-col">
+                    <span class="rcl__name">{{ pilot.fullName }}</span>
+                    <span class="rcl__email">{{ pilot.email }}</span>
+                </div>
+
+                <span class="rcl__position">{{ pilot.position || 'Pilot' }}</span>
+
+                <span class="rcl__base">{{ pilot.baseAirport }}</span>
+
+                <button class="rcl__remove-btn" type="button" [disabled]="processingId() === pilot.employeeId"
+                    (click)="removeMember.emit(pilot.employeeId)"
+                    [attr.aria-label]="'Remove ' + pilot.fullName + ' from roster'">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="rcl__remove-btn__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                </button>
+
+            </div>
+            }
+
+            @if (pilots().length === 0) {
+            <div class="rcl__empty">
+                <p>No pilots assigned</p>
+            </div>
+            }
+        </div>
+        }
+
+    </div>
+
+    <!-- ══ Right: Cabin Crew ══════════════════════════════════════ -->
+    <div class="rcl__panel">
+
+        <div class="rcl__panel__header">
+            <div class="rcl__panel__header__icon-wrap rcl__panel__header__icon-wrap--crew" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="rcl__panel__header__icon rcl__panel__header__icon--crew">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+            </div>
+            <div>
+                <p class="rcl__panel__header__title">Cabin Crew</p>
+                <p class="rcl__panel__header__sub">{{ attendants().length }} attendant{{ attendants().length !== 1 ? 's'
+                    : '' }} assigned</p>
+            </div>
+            <span class="rcl__count-badge rcl__count-badge--crew">{{ attendants().length }}</span>
+        </div>
+
+        <div class="rcl__col-hdr" aria-hidden="true">
+            <span>Name</span><span>Position</span><span>Base</span><span></span>
+        </div>
+
+        @if (loading()) {
+        <div class="rcl__shimmer-list" aria-busy="true">
+            @for (r of shimmerRows; track $index) {
+            <div class="rcl__shimmer-row">
+                <div class="rcl-sh rcl-sh--avatar"></div>
+                <div class="rcl-sh rcl-sh--name"></div>
+                <div class="rcl-sh rcl-sh--pos"></div>
+                <div class="rcl-sh rcl-sh--base"></div>
+            </div>
+            }
+        </div>
+        } @else {
+        <div class="rcl__list" [@rosterIn]="attendants().length" role="list">
+            @for (att of attendants(); track att.employeeId) {
+            <div class="rcl__entry" role="listitem" [class.rcl__entry--processing]="processingId() === att.employeeId">
+
+                <div class="rcl__avatar rcl__avatar--crew" aria-hidden="true">{{ initials(att) }}</div>
+
+                <div class="rcl__entry__name-col">
+                    <span class="rcl__name">{{ att.fullName }}</span>
+                    <span class="rcl__email">{{ att.email }}</span>
+                </div>
+
+                <span class="rcl__position">{{ att.position || 'Attendant' }}</span>
+
+                <span class="rcl__base">{{ att.baseAirport }}</span>
+
+                <button class="rcl__remove-btn" type="button" [disabled]="processingId() === att.employeeId"
+                    (click)="removeMember.emit(att.employeeId)"
+                    [attr.aria-label]="'Remove ' + att.fullName + ' from roster'">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="rcl__remove-btn__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                </button>
+
+            </div>
+            }
+
+            @if (attendants().length === 0) {
+            <div class="rcl__empty">
+                <p>No cabin crew assigned</p>
+            </div>
+            }
+        </div>
+        }
+
+    </div>
+
+</div>

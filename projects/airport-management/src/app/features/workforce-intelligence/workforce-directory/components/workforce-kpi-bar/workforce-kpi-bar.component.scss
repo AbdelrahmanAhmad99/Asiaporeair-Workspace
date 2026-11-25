@@ -1,0 +1,249 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $violet: #5B21B6;
+ $cobalt: #1E3A5F;
+ $t: 160ms ease;
+
+ .wkb-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+     gap: 1rem;
+ }
+
+ .wkb-card {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+     padding: 1.25rem 1.25rem 1.125rem 1.5rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba(226, 199, 128, 0.14);
+     overflow: hidden;
+     box-shadow: 0 6px 24px rgba(5, 25, 55, 0.25), 0 0 0 1px rgba(226, 199, 128, 0.04) inset;
+     transition: transform $t, box-shadow $t;
+
+     &:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 10px 32px rgba(5, 25, 55, 0.35), 0 0 0 1px rgba(226, 199, 128, 0.18) inset;
+     }
+
+     // Ambient glow
+     &::after {
+         content: '';
+         position: absolute;
+         bottom: -1.5rem;
+         right: -1.5rem;
+         width: 6rem;
+         height: 6rem;
+         border-radius: 50%;
+         pointer-events: none;
+     }
+
+     &[data-variant="total"] ::after {
+         background: radial-gradient(circle, rgba(182, 143, 36, 0.12) 0%, transparent 70%);
+     }
+
+     &[data-variant="pilots"] ::after {
+         background: radial-gradient(circle, rgba(30, 58, 95, 0.18) 0%, transparent 70%);
+     }
+
+     &[data-variant="crew"] ::after {
+         background: radial-gradient(circle, rgba(6, 78, 59, 0.12) 0%, transparent 70%);
+     }
+
+     &[data-variant="admins"] ::after {
+         background: radial-gradient(circle, rgba(91, 33, 182, 0.1) 0%, transparent 70%);
+     }
+ }
+
+ // Vertical accent stripe
+ .wkb-card__stripe {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 3px;
+     height: 100%;
+     border-radius: 12px 0 0 12px;
+
+     .wkb-card[data-variant="total"] & {
+         background: linear-gradient(to bottom, $gold, $champagne, transparent);
+     }
+
+     .wkb-card[data-variant="pilots"] & {
+         background: linear-gradient(to bottom, #3B82F6, transparent);
+     }
+
+     .wkb-card[data-variant="crew"] & {
+         background: linear-gradient(to bottom, lighten($emerald, 30%), transparent);
+     }
+
+     .wkb-card[data-variant="admins"] & {
+         background: linear-gradient(to bottom, lighten($violet, 30%), transparent);
+     }
+ }
+
+ .wkb-card__top {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 0.5rem;
+     margin-bottom: 0.25rem;
+ }
+
+ .wkb-card__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     border-radius: 8px;
+     border: 1px solid rgba(226, 199, 128, 0.14);
+     flex-shrink: 0;
+
+     .wkb-card[data-variant="total"] & {
+         background: rgba(182, 143, 36, 0.12);
+     }
+
+     .wkb-card[data-variant="pilots"] & {
+         background: rgba(59, 130, 246, 0.12);
+     }
+
+     .wkb-card[data-variant="crew"] & {
+         background: rgba(6, 78, 59, 0.14);
+     }
+
+     .wkb-card[data-variant="admins"] & {
+         background: rgba(91, 33, 182, 0.12);
+     }
+ }
+
+ .wkb-card__icon {
+     width: 1rem;
+     height: 1rem;
+
+     .wkb-card[data-variant="total"] & {
+         color: $champagne;
+     }
+
+     .wkb-card[data-variant="pilots"] & {
+         color: #93C5FD;
+     }
+
+     .wkb-card[data-variant="crew"] & {
+         color: lighten($emerald, 40%);
+     }
+
+     .wkb-card[data-variant="admins"] & {
+         color: #C4B5FD;
+     }
+ }
+
+ .wkb-card__badge {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     padding: 0.125rem 0.4375rem;
+     border-radius: 100px;
+     color: rgba(226, 199, 128, 0.65);
+     background: rgba(226, 199, 128, 0.08);
+     border: 1px solid rgba(226, 199, 128, 0.14);
+     white-space: nowrap;
+ }
+
+ .wkb-card__label {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: rgba(226, 199, 128, 0.42);
+ }
+
+ .wkb-card__value {
+     font-size: 2.125rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.03em;
+     line-height: 1;
+     font-variant-numeric: tabular-nums;
+     color: $champagne;
+
+     .wkb-card[data-variant="pilots"] & {
+         color: #93C5FD;
+     }
+
+     .wkb-card[data-variant="crew"] & {
+         color: lighten($emerald, 42%);
+     }
+
+     .wkb-card[data-variant="admins"] & {
+         color: #C4B5FD;
+     }
+ }
+
+ .wkb-card__sub {
+     font-size: 0.6875rem;
+     font-family: var(--aoms-font-body);
+     color: rgba(226, 199, 128, 0.32);
+     line-height: 1.3;
+ }
+
+ // Shimmer skeleton
+ .wkb-card--shimmer {
+     pointer-events: none;
+ }
+
+ .wkb-sh {
+     border-radius: 4px;
+     background: rgba(226, 199, 128, 0.06);
+     animation: wkb-pulse 1.5s ease-in-out infinite;
+
+     &--icon {
+         width: 2rem;
+         height: 2rem;
+         border-radius: 8px;
+         animation-delay: 0s;
+     }
+
+     &--label {
+         height: 0.5rem;
+         width: 60%;
+         margin-top: 0.375rem;
+         animation-delay: 0.1s;
+     }
+
+     &--value {
+         height: 2rem;
+         width: 50%;
+         animation-delay: 0.2s;
+     }
+
+     &--sub {
+         height: 0.5rem;
+         width: 75%;
+         animation-delay: 0.3s;
+     }
+ }
+
+ @keyframes wkb-pulse {
+
+     0%,
+     100% {
+         opacity: 0.4;
+     }
+
+     50% {
+         opacity: 0.85;
+     }
+ }
+
+ :host-context(.aoms-dark) {
+     .wkb-card {
+         box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+     }
+ }

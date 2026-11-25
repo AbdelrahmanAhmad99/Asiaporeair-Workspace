@@ -1,0 +1,404 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ivory: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Page Shell ─────────────────────────────────────────────────────────
+ .gst-page {
+   min-height: 100%;
+   display: flex;
+   flex-direction: column;
+   background-color: var(--aoms-bg-primary, $ivory);
+   transition: background-color $t-base;
+   position: relative;
+ }
+
+ // ── 2. Sticky Header ──────────────────────────────────────────────────────
+ .gst-header {
+   position: sticky;
+   top: 0;
+   z-index: 20;
+   display: flex;
+   align-items: flex-start;
+   justify-content: space-between;
+   gap: 1rem;
+   padding: 0.875rem 1.75rem;
+   background: var(--aoms-bg-card, #fff);
+   border-bottom: 1px solid rgba($champagne, 0.15);
+   box-shadow: 0 2px 12px rgba($midnight, 0.06);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+   flex-shrink: 0;
+   transition: background-color $t-base;
+
+   &__left {
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+     flex: 1;
+     min-width: 0;
+   }
+
+   &__controls {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+     margin-top: 0.25rem;
+   }
+ }
+
+ .gst-breadcrumb {
+   display: flex;
+   align-items: center;
+   gap: 0.375rem;
+
+   &__section {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: var(--aoms-text-muted);
+   }
+
+   &__sep {
+     width: 0.75rem;
+     height: 0.75rem;
+     color: var(--aoms-text-muted);
+     opacity: 0.5;
+   }
+
+   &__current {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: $gold;
+   }
+ }
+
+ .gst-title-row {
+   display: flex;
+   align-items: center;
+   gap: 0.625rem;
+   flex-wrap: wrap;
+ }
+
+ .gst-title {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   font-size: 1.25rem;
+   font-family: var(--aoms-font-heading);
+   font-weight: 700;
+   letter-spacing: -0.02em;
+   line-height: 1;
+   color: var(--aoms-text-primary, $charcoal);
+   transition: color $t-fast;
+
+   &__icon {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: $gold;
+     flex-shrink: 0;
+   }
+ }
+
+ .gst-flight-badge {
+   font-size: 11px;
+   font-family: 'Courier New', monospace;
+   font-weight: 700;
+   letter-spacing: 0.05em;
+   color: $gold;
+   padding: 0.125rem 0.5rem;
+   border-radius: 100px;
+   background: rgba($gold, 0.08);
+   border: 1px solid rgba($gold, 0.2);
+ }
+
+ .gst-complete-badge {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.3rem;
+   font-size: 11px;
+   font-family: var(--aoms-font-body);
+   font-weight: 700;
+   text-transform: uppercase;
+   letter-spacing: 0.06em;
+   color: lighten($emerald, 40%);
+   padding: 0.125rem 0.5rem;
+   border-radius: 100px;
+   background: rgba($emerald, 0.1);
+   border: 1px solid rgba($emerald, 0.25);
+
+   svg {
+     width: 0.75rem;
+     height: 0.75rem;
+   }
+ }
+
+ // Nav buttons
+ .gst-nav-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.35rem;
+   padding: 0 0.75rem;
+   height: 2.125rem;
+   border-radius: 4px;
+   border: 1px solid rgba($champagne, 0.2);
+   background: transparent;
+   color: var(--aoms-text-secondary);
+   font-family: var(--aoms-font-body);
+   font-size: 12px;
+   font-weight: 600;
+   cursor: pointer;
+   white-space: nowrap;
+   transition: all $t-fast;
+
+   &:hover {
+     border-color: $champagne;
+     color: $gold;
+     background: rgba($champagne, 0.06);
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &__icon {
+     width: 0.875rem;
+     height: 0.875rem;
+     flex-shrink: 0;
+   }
+
+   &--manifest {
+     border-color: rgba($emerald, 0.3);
+     color: lighten($emerald, 20%);
+
+     &:hover {
+       border-color: lighten($emerald, 15%);
+       color: lighten($emerald, 35%);
+       background: rgba($emerald, 0.06);
+     }
+   }
+ }
+
+ .gst-icon-btn {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 2.125rem;
+   height: 2.125rem;
+   border-radius: 4px;
+   border: 1px solid rgba($champagne, 0.22);
+   background: transparent;
+   color: var(--aoms-text-secondary);
+   cursor: pointer;
+   transition: all $t-fast;
+
+   &:hover:not(:disabled) {
+     border-color: $champagne;
+     background: rgba($champagne, 0.07);
+   }
+
+   &:disabled {
+     opacity: 0.38;
+     cursor: not-allowed;
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &--gold {
+     color: $gold;
+   }
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+
+     &--spin {
+       animation: gst-spin 1s linear infinite;
+     }
+   }
+ }
+
+ // ── 3. Body ───────────────────────────────────────────────────────────────
+ .gst-body {
+   flex: 1;
+   padding: 1.25rem 1.75rem;
+   display: flex;
+   flex-direction: column;
+   gap: 1.25rem;
+   overflow-y: auto;
+   position: relative;
+ }
+
+ // ── 4. Loading State ──────────────────────────────────────────────────────
+ .gst-loading {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   flex: 1;
+   gap: 1rem;
+   min-height: 300px;
+   animation: gst-fadein 200ms ease forwards;
+
+   &__ring {
+     width: 52px;
+     height: 52px;
+     border-radius: 50%;
+     border: 2px solid rgba($gold, 0.15);
+     border-top-color: $gold;
+     animation: gst-spin 1s linear infinite;
+     box-shadow: 0 0 16px rgba($gold, 0.2);
+   }
+
+   &__label {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.03em;
+   }
+ }
+
+ // ── 5. Error Overlay ──────────────────────────────────────────────────────
+ .gst-error-overlay {
+   display: flex;
+   align-items: flex-start;
+   gap: 1rem;
+   padding: 1.25rem 1.5rem;
+   border-radius: 12px;
+   background: rgba($ruby, 0.06);
+   border: 1px solid rgba($ruby, 0.2);
+   animation: gst-fadein 200ms ease forwards;
+
+   &__icon {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: lighten($ruby, 25%);
+     flex-shrink: 0;
+     margin-top: 0.125rem;
+   }
+
+   &__title {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     color: lighten($ruby, 18%);
+     margin-bottom: 0.25rem;
+   }
+
+   &__msg {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 28%);
+     line-height: 1.5;
+     flex: 1;
+   }
+
+   &__retry {
+     display: inline-flex;
+     align-items: center;
+     padding: 0 1rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid $gold;
+     background: transparent;
+     color: $champagne;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     cursor: pointer;
+     white-space: nowrap;
+     flex-shrink: 0;
+     box-shadow: 0 0 10px rgba($gold, 0.2);
+     transition: all $t-fast;
+
+     &:hover {
+       background: rgba($gold, 0.1);
+       box-shadow: 0 0 16px rgba($gold, 0.35);
+     }
+
+     &:focus-visible {
+       outline: 2px solid $champagne;
+       outline-offset: 2px;
+     }
+   }
+ }
+
+ // ── 6. Workspace: Grid + Feedback ─────────────────────────────────────────
+ .gst-workspace {
+   display: grid;
+   grid-template-columns: 1fr 400px;
+   gap: 1.25rem;
+   align-items: start;
+   flex: 1;
+
+   @media (max-width: 1100px) {
+     grid-template-columns: 1fr;
+   }
+
+   &__grid {
+     min-width: 0;
+     display: flex;
+     flex-direction: column;
+   }
+
+   &__feedback {
+     position: sticky;
+     top: calc(var(--aoms-topbar-height, 64px) + 1.25rem);
+
+     @media (max-width: 1100px) {
+       position: static;
+       order: -1; // Feedback panel comes first on mobile — it's most important
+     }
+   }
+ }
+
+ // ── 7. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes gst-fadein {
+   from {
+     opacity: 0;
+     transform: translateY(6px);
+   }
+
+   to {
+     opacity: 1;
+     transform: translateY(0);
+   }
+ }
+
+ @keyframes gst-spin {
+   from {
+     transform: rotate(0deg);
+   }
+
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ // ── 8. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+   .gst-header {
+     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+   }
+
+   .gst-icon-btn:hover:not(:disabled) {
+     color: $champagne;
+   }
+ }

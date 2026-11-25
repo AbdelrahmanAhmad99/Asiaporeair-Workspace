@@ -1,0 +1,78 @@
+<!-- refund-policy-panel.component.html -->
+
+<div class="policy-panel" role="region" aria-label="Refund policy details">
+
+    <!-- Panel header -->
+    <div class="panel-header">
+        <div class="panel-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+        </div>
+        <div>
+            <h2 class="panel-title">Refund Policy</h2>
+            <p class="panel-sub">Review the applicable refund tiers before proceeding</p>
+        </div>
+        <div *ngIf="applicableTier as tier" class="applicable-chip"
+            [class]="'chip--' + getTierCls(tier.refundRate).replace('tier--', '')"
+            aria-label="Your applicable tier: {{ tier.label }}">
+            <span class="chip-dot" aria-hidden="true"></span>
+            {{ tier.label }} Applies
+        </div>
+    </div>
+
+    <div class="gold-rule" aria-hidden="true"></div>
+
+    <!-- Accordion Tiers -->
+    <div class="tiers-list" role="list">
+        <div *ngFor="let tier of tiers; let i = index" class="tier-item" [class]="getTierCls(tier.refundRate)"
+            role="listitem">
+
+            <button class="tier-header" [attr.aria-expanded]="isOpen(i)" [attr.aria-controls]="'tier-body-' + i"
+                (click)="toggle(i)">
+                <div class="tier-rate-badge" [class]="'rate--' + tier.refundRate" aria-hidden="true">
+                    {{ tier.refundRate }}%
+                </div>
+                <div class="tier-label-group">
+                    <span class="tier-label">{{ tier.label }}</span>
+                    <span class="tier-timeframe">{{ tier.timeframe }}</span>
+                </div>
+                <div class="tier-amount-col" *ngIf="totalPrice > 0"
+                    aria-label="Refund amount: {{ currency }} {{ getRefundAmount(tier.refundRate) }}">
+                    <span class="tier-amount-curr">{{ currency }}</span>
+                    <span class="tier-amount-val">{{ getRefundAmount(tier.refundRate) }}</span>
+                </div>
+                <svg class="tier-chevron" [class.tier-chevron--open]="isOpen(i)" width="13" height="13"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+            </button>
+
+            <div *ngIf="isOpen(i)" [@expand] [id]="'tier-body-' + i" class="tier-body">
+                <p class="tier-description">{{ tier.description }}</p>
+                <p *ngIf="tier === applicableTier" class="tier-applicable-note">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    This tier currently applies to your booking.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footnote -->
+    <div class="policy-footnote" role="note">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        Refunds are credited to the original payment method within 5–10 business days. Booking service fees are
+        non-refundable.
+    </div>
+
+</div>

@@ -1,0 +1,152 @@
+<!-- stripe-card-element.component.html -->
+
+<div class="stripe-wrapper" [formGroup]="form()" aria-label="Card payment details">
+
+    <!-- Total to Pay Banner -->
+    <div class="total-banner" aria-label="Total amount to be charged">
+        <span class="total-banner-label">Total to be paid now</span>
+        <span class="total-banner-amount">{{ currency() }} {{ formatAmount(amount()) }}</span>
+    </div>
+
+    <!-- Security Note -->
+    <div class="security-note">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1"
+            aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        <span>In some instances, credit/debit card verification may be required. Please complete all fields marked with
+            *</span>
+    </div>
+
+    <!-- Card Number -->
+    <div class="field-group" [class.field-group--error]="!!getFieldError()('cardNumber')">
+        <label class="field-label" for="cardNumber">Card Number *</label>
+        <div class="field-input-wrap">
+            <input class="field-input" id="cardNumber" type="text" inputmode="numeric" autocomplete="cc-number"
+                placeholder="•••• •••• •••• ••••" formControlName="cardNumber" maxlength="16"
+                (input)="onCardInput($event)" (focus)="onFocus('cardNumber')" (blur)="onBlur()"
+                [attr.aria-describedby]="getFieldError()('cardNumber') ? 'err-cardNumber' : null"
+                [attr.aria-invalid]="!!getFieldError()('cardNumber')">
+            <!-- Card brand icons -->
+            <div class="card-brand-icons" aria-hidden="true">
+                <svg viewBox="0 0 38 24" fill="none" class="brand-icon">
+                    <rect width="38" height="24" rx="3" fill="#1A1F71" /><text x="4" y="17" font-family="Arial"
+                        font-size="10" font-weight="bold" fill="white">VISA</text>
+                </svg>
+                <svg viewBox="0 0 38 24" fill="none" class="brand-icon">
+                    <rect width="38" height="24" rx="3" fill="#252525" />
+                    <circle cx="14" cy="12" r="7" fill="#EB001B" opacity="0.85" />
+                    <circle cx="24" cy="12" r="7" fill="#F79E1B" opacity="0.85" />
+                </svg>
+            </div>
+        </div>
+        <span *ngIf="getFieldError()('cardNumber')" class="field-error" id="err-cardNumber" role="alert">{{
+            getFieldError()('cardNumber') }}</span>
+    </div>
+
+    <!-- Expiry + CVV Row -->
+    <div class="field-row">
+        <!-- Expiry -->
+        <div class="field-group" [class.field-group--error]="!!getFieldError()('expiry')">
+            <label class="field-label" for="expiry">Expiry Date (MM/YY) *</label>
+            <input class="field-input" id="expiry" type="text" inputmode="numeric" autocomplete="cc-exp"
+                placeholder="MM/YY" formControlName="expiry" maxlength="5" (input)="onExpiryInput($event)"
+                (focus)="onFocus('expiry')" (blur)="onBlur()" [attr.aria-invalid]="!!getFieldError()('expiry')">
+            <span *ngIf="getFieldError()('expiry')" class="field-error" role="alert">{{ getFieldError()('expiry')
+                }}</span>
+        </div>
+
+        <!-- CVV -->
+        <div class="field-group" [class.field-group--error]="!!getFieldError()('cvv')">
+            <label class="field-label" for="cvv">
+                CVV *
+                <button class="cvv-info-btn" type="button" aria-label="What is CVV?"
+                    title="3 or 4 digit security code on your card">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                </button>
+            </label>
+            <div class="field-input-wrap">
+                <input class="field-input" id="cvv" type="password" inputmode="numeric" autocomplete="cc-csc"
+                    placeholder="•••" formControlName="cvv" maxlength="4" (focus)="onFocus('cvv')" (blur)="onBlur()"
+                    [attr.aria-invalid]="!!getFieldError()('cvv')">
+                <!-- Security logos -->
+                <div class="security-logos" aria-label="Security verified">
+                    <span class="security-tag">MasterCard SecureCode</span>
+                    <span class="security-tag">Verified by Visa</span>
+                    <span class="security-tag">SafeKey</span>
+                </div>
+            </div>
+            <span *ngIf="getFieldError()('cvv')" class="field-error" role="alert">{{ getFieldError()('cvv') }}</span>
+        </div>
+    </div>
+
+    <!-- Name on Card -->
+    <div class="field-group" [class.field-group--error]="!!getFieldError()('nameOnCard')">
+        <label class="field-label" for="nameOnCard">Name on Credit / Debit Card *</label>
+        <input class="field-input" id="nameOnCard" type="text" autocomplete="cc-name"
+            placeholder="As it appears on your card" formControlName="nameOnCard" (focus)="onFocus('nameOnCard')"
+            (blur)="onBlur()" [attr.aria-invalid]="!!getFieldError()('nameOnCard')">
+        <span *ngIf="getFieldError()('nameOnCard')" class="field-error" role="alert">{{ getFieldError()('nameOnCard')
+            }}</span>
+    </div>
+
+    <!-- Billing Address Section -->
+    <div class="billing-section">
+        <h3 class="billing-title">Billing Address</h3>
+
+        <!-- Address Line -->
+        <div class="field-group" [class.field-group--error]="!!getFieldError()('addressLine')">
+            <label class="field-label" for="addressLine">Address line 1 *</label>
+            <input class="field-input" id="addressLine" type="text" autocomplete="billing address-line1"
+                placeholder="Street address" formControlName="addressLine" (focus)="onFocus('addressLine')"
+                (blur)="onBlur()">
+        </div>
+
+        <!-- Country + City Row -->
+        <div class="field-row">
+            <div class="field-group" [class.field-group--error]="!!getFieldError()('country')">
+                <label class="field-label" for="country">Country / Region *</label>
+                <select class="field-input field-select" id="country" formControlName="country"
+                    autocomplete="billing country">
+                    <option value="">Select country</option>
+                    <option value="SG">Singapore</option>
+                    <option value="US">United States</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                    <option value="MY">Malaysia</option>
+                    <option value="JP">Japan</option>
+                    <option value="CN">China</option>
+                    <option value="IN">India</option>
+                    <option value="AE">United Arab Emirates</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label class="field-label" for="city">City / Town *</label>
+                <input class="field-input" id="city" type="text" autocomplete="billing address-level2"
+                    placeholder="City" formControlName="city">
+            </div>
+        </div>
+
+        <!-- State + Postal Row -->
+        <div class="field-row">
+            <div class="field-group">
+                <label class="field-label" for="state">State / Province (Optional)</label>
+                <input class="field-input" id="state" type="text" autocomplete="billing address-level1"
+                    placeholder="State" formControlName="postalCode">
+            </div>
+            <div class="field-group">
+                <label class="field-label" for="postal">Postal Code (Optional)</label>
+                <input class="field-input" id="postal" type="text" autocomplete="billing postal-code"
+                    placeholder="Postal code" formControlName="postalCode">
+            </div>
+        </div>
+    </div>
+
+</div>

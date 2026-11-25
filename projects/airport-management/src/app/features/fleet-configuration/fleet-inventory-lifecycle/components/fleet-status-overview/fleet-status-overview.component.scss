@@ -1,0 +1,299 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ============================================================================
+ // 1. Grid Layout
+ // ============================================================================
+ .kpi-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+     gap: 1rem;
+ }
+
+ // ============================================================================
+ // 2. KPI Card Base
+ // ============================================================================
+ .kpi-card {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 0.3125rem;
+     padding: 1.25rem 1.25rem 1.125rem 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     overflow: hidden;
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07);
+     transition:
+         transform $t-fast,
+         box-shadow $t-fast,
+         border-color $t-fast,
+         background-color $t-base;
+
+     // Glassmorphism overlay (subtle)
+     backdrop-filter: blur(4px);
+     -webkit-backdrop-filter: blur(4px);
+
+     &:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 8px 24px rgba(5, 25, 55, 0.1), 0 0 0 1px rgba(226, 199, 128, 0.3);
+     }
+
+     // Ambient radial behind value
+     &::after {
+         content: '';
+         position: absolute;
+         bottom: -2rem;
+         right: -2rem;
+         width: 6rem;
+         height: 6rem;
+         border-radius: 50%;
+         pointer-events: none;
+         opacity: 0.5;
+     }
+
+     // ── Variant color overrides ───────────────────────────────────────────
+     &[data-variant="active"]::after {
+         background: radial-gradient(circle, rgba(6, 78, 59, 0.08) 0%, transparent 70%);
+     }
+
+     &[data-variant="maintenance"]::after {
+         background: radial-gradient(circle, rgba(180, 83, 9, 0.07) 0%, transparent 70%);
+     }
+
+     &[data-variant="grounded"]::after {
+         background: radial-gradient(circle, rgba(113, 13, 6, 0.08) 0%, transparent 70%);
+     }
+
+     &[data-variant="total"]::after {
+         background: radial-gradient(circle, rgba(182, 143, 36, 0.07) 0%, transparent 70%);
+     }
+ }
+
+ // ============================================================================
+ // 3. Left Accent Stripe — variant-coloured
+ // ============================================================================
+ .kpi-card__accent {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 3px;
+     height: 100%;
+     border-radius: 12px 0 0 12px;
+
+     .kpi-card[data-variant="total"] & {
+         background: linear-gradient(to bottom, $gold, $champagne, transparent);
+     }
+
+     .kpi-card[data-variant="active"] & {
+         background: linear-gradient(to bottom, $emerald, lighten($emerald, 20%), transparent);
+     }
+
+     .kpi-card[data-variant="maintenance"] & {
+         background: linear-gradient(to bottom, $amber, lighten($amber, 15%), transparent);
+     }
+
+     .kpi-card[data-variant="grounded"] & {
+         background: linear-gradient(to bottom, $ruby, lighten($ruby, 20%), transparent);
+     }
+ }
+
+ // ============================================================================
+ // 4. Top Row: Icon + Trend
+ // ============================================================================
+ .kpi-card__top {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 0.5rem;
+     margin-bottom: 0.375rem;
+ }
+
+ .kpi-card__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     border-radius: 8px;
+     border: 1px solid;
+     transition: background $t-fast;
+
+     .kpi-card[data-variant="total"] & {
+         background: rgba(182, 143, 36, 0.1);
+         border-color: rgba(182, 143, 36, 0.2);
+     }
+
+     .kpi-card[data-variant="active"] & {
+         background: rgba(6, 78, 59, 0.08);
+         border-color: rgba(6, 78, 59, 0.18);
+     }
+
+     .kpi-card[data-variant="maintenance"] & {
+         background: rgba(180, 83, 9, 0.08);
+         border-color: rgba(180, 83, 9, 0.18);
+     }
+
+     .kpi-card[data-variant="grounded"] & {
+         background: rgba(113, 13, 6, 0.08);
+         border-color: rgba(113, 13, 6, 0.18);
+     }
+ }
+
+ .kpi-card__icon {
+     width: 1rem;
+     height: 1rem;
+
+     .kpi-card[data-variant="total"] & {
+         color: $gold;
+     }
+
+     .kpi-card[data-variant="active"] & {
+         color: $emerald;
+     }
+
+     .kpi-card[data-variant="maintenance"] & {
+         color: $amber;
+     }
+
+     .kpi-card[data-variant="grounded"] & {
+         color: $ruby;
+     }
+ }
+
+ .kpi-card__trend {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+     text-align: right;
+     line-height: 1.3;
+     transition: color $t-fast;
+ }
+
+ // ============================================================================
+ // 5. Text Content
+ // ============================================================================
+ .kpi-card__label {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-muted);
+     transition: color $t-fast;
+ }
+
+ .kpi-card__value {
+     font-size: 2.125rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.035em;
+     line-height: 1;
+     font-variant-numeric: tabular-nums;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+
+     .kpi-card[data-variant="active"] & {
+         color: darken($emerald, 5%);
+     }
+
+     .kpi-card[data-variant="maintenance"] & {
+         color: $amber;
+     }
+
+     .kpi-card[data-variant="grounded"] & {
+         color: $ruby;
+     }
+ }
+
+ .kpi-card__sub {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     transition: color $t-fast;
+ }
+
+ // ============================================================================
+ // 6. Shimmer Skeleton
+ // ============================================================================
+ .kpi-card--shimmer {
+     pointer-events: none;
+
+     .kpi-card__shimmer-icon {
+         width: 2rem;
+         height: 2rem;
+         border-radius: 8px;
+         background: rgba(182, 143, 36, 0.08);
+         animation: kpi-pulse 1.5s ease-in-out infinite;
+         margin-bottom: 0.375rem;
+     }
+
+     .kpi-card__shimmer-label {
+         height: 0.6rem;
+         width: 65%;
+         background: rgba(182, 143, 36, 0.07);
+         border-radius: 4px;
+         animation: kpi-pulse 1.5s ease-in-out 0.1s infinite;
+     }
+
+     .kpi-card__shimmer-value {
+         height: 2rem;
+         width: 50%;
+         background: rgba(182, 143, 36, 0.09);
+         border-radius: 4px;
+         animation: kpi-pulse 1.5s ease-in-out 0.2s infinite;
+     }
+
+     .kpi-card__shimmer-trend {
+         height: 0.6rem;
+         width: 55%;
+         background: rgba(182, 143, 36, 0.06);
+         border-radius: 4px;
+         animation: kpi-pulse 1.5s ease-in-out 0.3s infinite;
+     }
+ }
+
+ // ============================================================================
+ // 7. Keyframes
+ // ============================================================================
+ @keyframes kpi-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 8. Dark Mode (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .kpi-card {
+         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+
+         &:hover {
+             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(226, 199, 128, 0.22);
+         }
+     }
+
+     .kpi-card__value {
+         &.kpi-card[data-variant="active"] {
+             color: #34d399;
+         }
+
+         &.kpi-card[data-variant="grounded"] {
+             color: #fca5a5;
+         }
+     }
+ }

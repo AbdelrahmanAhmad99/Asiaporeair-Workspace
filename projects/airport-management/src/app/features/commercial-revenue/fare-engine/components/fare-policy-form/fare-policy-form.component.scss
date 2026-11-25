@@ -1,0 +1,532 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $off-white: #F9F9F9;
+ $t: 180ms ease;
+ $t-slide: 280ms cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ── Card Wrapper ──────────────────────────────────────────────────────────
+ .fpf-card {
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba($champagne, 0.14);
+     border-radius: 12px;
+     box-shadow: 0 4px 20px rgba($midnight, 0.06);
+     overflow: hidden;
+     transition: background-color $t, box-shadow $t;
+ }
+
+ // ── Stepper Nav ───────────────────────────────────────────────────────────
+ .fpf-stepper {
+     display: flex;
+     align-items: center;
+     padding: 0.875rem 1.5rem;
+     background: var(--aoms-bg-primary);
+     border-bottom: 1px solid rgba($champagne, 0.12);
+     gap: 0;
+
+     &__step {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         padding: 0.5rem 0.75rem;
+         border-radius: 6px;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         transition: all $t;
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         &--active {
+             .fpf-stepper__num {
+                 background: $midnight;
+                 color: $champagne;
+                 border-color: $midnight;
+             }
+
+             .fpf-stepper__label {
+                 color: var(--aoms-text-primary);
+                 font-weight: 700;
+             }
+         }
+
+         &:not(.fpf-stepper__step--active):hover {
+             background: rgba($champagne, 0.05);
+
+             .fpf-stepper__label {
+                 color: var(--aoms-text-secondary);
+             }
+         }
+     }
+
+     &__num {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.625rem;
+         height: 1.625rem;
+         border-radius: 50%;
+         border: 1.5px solid rgba($champagne, 0.35);
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 800;
+         letter-spacing: 0.04em;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+         transition: all $t;
+     }
+
+     &__label {
+         font-size: 12px;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-muted);
+         transition: all $t;
+         white-space: nowrap;
+     }
+
+     &__connector {
+         flex: 1;
+         height: 1px;
+         background: rgba($champagne, 0.2);
+         margin: 0 0.25rem;
+     }
+ }
+
+ // ── Form Sections (Slide Transition) ──────────────────────────────────────
+ .fpf-section {
+     display: none;
+     flex-direction: column;
+     gap: 1.25rem;
+     padding: 1.5rem;
+     animation: fpf-slide-in $t-slide forwards;
+
+     &--visible {
+         display: flex;
+     }
+
+     &__footer {
+         display: flex;
+         justify-content: flex-end;
+         padding-top: 0.75rem;
+         border-top: 1px solid rgba($champagne, 0.1);
+
+         &--actions {
+             gap: 0.5rem;
+         }
+     }
+ }
+
+ // ── Fields ────────────────────────────────────────────────────────────────
+ .fpf-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+ }
+
+ // ── Label ─────────────────────────────────────────────────────────────────
+ .fpf-label {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     flex-wrap: wrap;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-secondary);
+     cursor: default;
+     user-select: none;
+
+     &__required {
+         color: lighten($ruby, 25%);
+         font-size: 13px;
+         line-height: 1;
+     }
+
+     &__locked {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.25rem;
+         font-size: 10px;
+         font-weight: 500;
+         color: $champagne;
+         background: rgba($champagne, 0.08);
+         border: 1px solid rgba($champagne, 0.2);
+         padding: 0.125rem 0.5rem;
+         border-radius: 100px;
+         letter-spacing: 0.03em;
+         text-transform: none;
+
+         svg {
+             width: 0.625rem;
+             height: 0.625rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ // ── Input Wrap ────────────────────────────────────────────────────────────
+ .fpf-input-wrap {
+     position: relative;
+
+     &__lock-icon {
+         position: absolute;
+         right: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $champagne;
+         opacity: 0.6;
+         pointer-events: none;
+     }
+ }
+
+ // ── Text Input ────────────────────────────────────────────────────────────
+ .fpf-input {
+     width: 100%;
+     height: 2.75rem;
+     padding: 0 0.875rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: $off-white;
+     color: $charcoal;
+     font-family: var(--aoms-font-body);
+     font-size: 0.9rem;
+     font-weight: 500;
+     outline: none;
+     transition: all $t;
+
+     &::placeholder {
+         color: rgba($charcoal, 0.35);
+         font-weight: 400;
+     }
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.14);
+         background: #fff;
+     }
+
+     &--error {
+         border-color: lighten($ruby, 20%);
+         background: rgba($ruby, 0.03);
+
+         &:focus {
+             border-color: lighten($ruby, 15%);
+             box-shadow: 0 0 0 3px rgba($ruby, 0.1);
+         }
+     }
+
+     &--locked {
+         padding-right: 2.25rem;
+         background: rgba($midnight, 0.04);
+         color: rgba($charcoal, 0.6);
+         cursor: not-allowed;
+         border-color: rgba($champagne, 0.15);
+
+         &:focus {
+             border-color: rgba($champagne, 0.15);
+             box-shadow: none;
+         }
+     }
+ }
+
+ // ── Textarea ──────────────────────────────────────────────────────────────
+ .fpf-textarea {
+     width: 100%;
+     padding: 0.75rem 0.875rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: $off-white;
+     color: $charcoal;
+     font-family: var(--aoms-font-body);
+     font-size: 0.875rem;
+     font-weight: 400;
+     line-height: 1.6;
+     outline: none;
+     resize: vertical;
+     min-height: 180px;
+     transition: all $t;
+
+     &::placeholder {
+         color: rgba($charcoal, 0.3);
+     }
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.12);
+         background: #fff;
+     }
+
+     &--error {
+         border-color: lighten($ruby, 20%);
+         background: rgba($ruby, 0.02);
+
+         &:focus {
+             border-color: lighten($ruby, 15%);
+             box-shadow: 0 0 0 3px rgba($ruby, 0.08);
+         }
+     }
+ }
+
+ // ── Validation Error ──────────────────────────────────────────────────────
+ .fpf-error {
+     display: flex;
+     align-items: center;
+     gap: 0.25rem;
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: lighten($ruby, 22%);
+     margin: 0;
+     animation: fpf-shake 280ms ease forwards;
+ }
+
+ // ── Hint ──────────────────────────────────────────────────────────────────
+ .fpf-hint {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     margin: 0;
+     line-height: 1.4;
+ }
+
+ // ── Buttons ───────────────────────────────────────────────────────────────
+ .fpf-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0 1.125rem;
+     height: 2.375rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     border-radius: 4px;
+     cursor: pointer;
+     transition: all 160ms ease;
+     white-space: nowrap;
+
+     svg {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+     // Ghost — text only, left arrow
+     &--ghost {
+         color: var(--aoms-text-muted);
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.15);
+
+         &:hover:not(:disabled) {
+             color: var(--aoms-text-secondary);
+             background: rgba($champagne, 0.05);
+         }
+     }
+
+     // Outline — cancel
+     &--outline {
+         color: var(--aoms-text-secondary);
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.22);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: var(--aoms-text-primary);
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // Next section
+     &--next {
+         margin-left: auto;
+         color: $midnight;
+         background: $champagne;
+         border: none;
+         box-shadow: 0 3px 10px rgba($champagne, 0.3);
+
+         &:hover:not(:disabled) {
+             background: lighten($champagne, 5%);
+             box-shadow: 0 5px 16px rgba($champagne, 0.42);
+             transform: translateY(-1px);
+         }
+     }
+
+     // Save (Royal Gold CTA)
+     &--save {
+         color: $midnight;
+         background: $gold;
+         border: none;
+         box-shadow: 0 4px 14px rgba($gold, 0.38);
+
+         &:hover:not(:disabled) {
+             background: lighten($gold, 6%);
+             box-shadow: 0 6px 20px rgba($gold, 0.55);
+             transform: translateY(-1px);
+         }
+
+         &:active:not(:disabled) {
+             transform: translateY(0);
+         }
+     }
+
+     // Champagne spinner while saving
+     &__spinner {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+         color: $midnight;
+         animation: fpf-spin 1s linear infinite;
+     }
+ }
+
+ // ── Skeleton Loading ──────────────────────────────────────────────────────
+ .fpf-skeleton-wrap {
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     padding: 1.5rem;
+ }
+
+ .fpf-skeleton-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+ }
+
+ .fpf-skeleton {
+     display: block;
+     border-radius: 6px;
+     background: linear-gradient(90deg,
+             rgba($midnight, 0.06) 0%,
+             rgba($champagne, 0.12) 50%,
+             rgba($midnight, 0.06) 100%);
+     background-size: 200% 100%;
+     animation: fpf-shimmer 1.5s ease-in-out infinite;
+
+     &--label {
+         width: 120px;
+         height: 12px;
+         border-radius: 4px;
+     }
+
+     &--input {
+         width: 100%;
+         height: 2.75rem;
+         border-radius: 12px;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes fpf-slide-in {
+     from {
+         opacity: 0;
+         transform: translateX(12px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes fpf-shake {
+     0% {
+         transform: translateX(0);
+     }
+
+     20% {
+         transform: translateX(-4px);
+     }
+
+     40% {
+         transform: translateX(4px);
+     }
+
+     60% {
+         transform: translateX(-2px);
+     }
+
+     80% {
+         transform: translateX(2px);
+     }
+
+     100% {
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes fpf-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes fpf-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+
+     .fpf-input,
+     .fpf-textarea {
+         background: rgba(255, 255, 255, 0.04);
+         color: rgba(255, 255, 255, 0.88);
+         border-color: rgba($champagne, 0.18);
+
+         &::placeholder {
+             color: rgba(255, 255, 255, 0.25);
+         }
+
+         &:focus {
+             background: rgba(255, 255, 255, 0.07);
+         }
+
+         &--locked {
+             background: rgba(255, 255, 255, 0.02);
+             color: rgba(255, 255, 255, 0.35);
+         }
+     }
+
+     .fpf-stepper {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .fpf-skeleton {
+         background: linear-gradient(90deg,
+                 rgba(255, 255, 255, 0.04) 0%,
+                 rgba($champagne, 0.09) 50%,
+                 rgba(255, 255, 255, 0.04) 100%);
+         background-size: 200% 100%;
+     }
+ }

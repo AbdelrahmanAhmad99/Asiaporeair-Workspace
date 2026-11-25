@@ -1,0 +1,441 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ============================================================================
+ // 1. Wrapper Card (squircle 12px)
+ // ============================================================================
+ .amt-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background-color: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 4px 22px rgba($midnight, 0.07);
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease),
+         box-shadow var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Horizontal scroll container
+ // ============================================================================
+ .amt-scroll {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+
+     &::-webkit-scrollbar {
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.3);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 3. Table base
+ // ============================================================================
+ .amt-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 0.8125rem; // 13px — tight for data density
+ }
+
+ // ============================================================================
+ // 4. Sticky header — Midnight Sapphire with Gold text
+ // ============================================================================
+ .amt-head {
+     background-color: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 2;
+ }
+
+ .amt-th {
+     padding: 0.8125rem 1rem;
+     text-align: left;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Body rows — alternating tints
+ // ============================================================================
+ .amt-tr {
+     border-bottom: 1px solid rgba($champagne, 0.07);
+     transition: background-color 120ms ease;
+     cursor: default;
+
+     &--even {
+         background-color: var(--aoms-bg-card, #ffffff);
+     }
+
+     &--odd {
+         background-color: rgba($off-white, 0.55);
+     }
+
+     &:hover {
+         background-color: rgba($champagne, 0.055) !important;
+
+         .amt-td__airport-name {
+             color: $midnight;
+         }
+
+         .amt-actions {
+             opacity: 1;
+         }
+
+         .amt-badge--iata {
+             border-color: rgba($gold, 0.5);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Cells
+ // ============================================================================
+ .amt-td {
+     padding: 0.6875rem 1rem;
+     vertical-align: middle;
+
+     &:first-child {
+         padding-left: 1.25rem;
+     }
+
+     &:last-child {
+         padding-right: 1.25rem;
+     }
+
+     &--shimmer {
+         padding: 0.6875rem 1rem;
+     }
+ }
+
+ // ── IATA badge — bold Royal Gold ──────────────────────────────────────────
+ .amt-badge--iata {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.5rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-size: 12px;
+     font-weight: 800;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: $gold;
+     background: rgba($gold, 0.08);
+     border: 1px solid rgba($gold, 0.22);
+     white-space: nowrap;
+     transition: border-color 120ms ease;
+ }
+
+ // ── ICAO badge — Champagne monospace ──────────────────────────────────────
+ .amt-badge--icao {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.5rem;
+     border-radius: 4px;
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: $champagne;
+     background: rgba($champagne, 0.07);
+     border: 1px solid rgba($champagne, 0.18);
+     white-space: nowrap;
+ }
+
+ // ── Country ISO badge ─────────────────────────────────────────────────────
+ .amt-badge--iso {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.15rem 0.4rem;
+     border-radius: 3px;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: var(--aoms-text-secondary, $charcoal);
+     background: rgba($charcoal, 0.05);
+     border: 1px solid rgba($charcoal, 0.1);
+ }
+
+ // ── Airport name ──────────────────────────────────────────────────────────
+ .amt-td__airport-name {
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 13px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color 120ms ease;
+     max-width: 22rem;
+     display: block;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+ }
+
+ // ── City / Country text ───────────────────────────────────────────────────
+ .amt-td__city,
+ .amt-td__country {
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 12px;
+     color: var(--aoms-text-secondary, rgba($charcoal, 0.7));
+     white-space: nowrap;
+ }
+
+ // ── Coordinate / Altitude ─────────────────────────────────────────────────
+ .amt-td__coord,
+ .amt-td__alt {
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.03em;
+ }
+
+ // ============================================================================
+ // 7. Responsive column hiding
+ // ============================================================================
+ .amt-col--md-hidden {
+     @media (max-width: 767px) {
+         display: none;
+     }
+ }
+
+ .amt-col--lg-hidden {
+     @media (max-width: 1023px) {
+         display: none;
+     }
+ }
+
+ .amt-col--xl-hidden {
+     @media (max-width: 1279px) {
+         display: none;
+     }
+ }
+
+ // ============================================================================
+ // 8. Action buttons
+ // ============================================================================
+ .amt-actions {
+     display: flex;
+     align-items: center;
+     gap: 0.2rem;
+     opacity: 0.45;
+     transition: opacity 120ms ease;
+ }
+
+ .amt-action-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.875rem;
+     height: 1.875rem;
+     border-radius: 4px;
+     border: 1px solid transparent;
+     background: transparent;
+     color: var(--aoms-text-secondary, rgba($charcoal, 0.6));
+     cursor: pointer;
+     transition: all var(--aoms-transition-fast, 150ms ease);
+
+     &:hover {
+         color: $midnight;
+         border-color: rgba($champagne, 0.35);
+         background: rgba($champagne, 0.1);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // Danger (deactivate)
+     &--danger {
+         &:hover {
+             color: #9f1239;
+             border-color: rgba(159, 18, 57, 0.3);
+             background: rgba(159, 18, 57, 0.07);
+         }
+     }
+
+     &__icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+     }
+ }
+
+ // ============================================================================
+ // 9. Shimmer skeleton
+ // ============================================================================
+ .amt-shimmer {
+     height: 0.875rem;
+     border-radius: 4px;
+     background: rgba($champagne, 0.08);
+     animation: amt-pulse 1.5s ease-in-out infinite;
+ }
+
+ // ============================================================================
+ // 10. Empty state
+ // ============================================================================
+ .amt-empty {
+     padding: 4rem 1.5rem;
+     text-align: center;
+ }
+
+ .amt-empty__inner {
+     display: inline-flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+ }
+
+ .amt-empty__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3.25rem;
+     height: 3.25rem;
+     border-radius: 12px;
+     background: rgba($gold, 0.07);
+     border: 1px solid rgba($gold, 0.15);
+ }
+
+ .amt-empty__icon {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: var(--aoms-text-muted);
+ }
+
+ .amt-empty__title {
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-size: 0.875rem;
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     margin: 0;
+ }
+
+ .amt-empty__sub {
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     max-width: 30ch;
+     margin: 0;
+     line-height: 1.6;
+ }
+
+ // ============================================================================
+ // 11. Table Footer
+ // ============================================================================
+ .amt-footer {
+     display: flex;
+     align-items: center;
+     padding: 0.75rem 1.25rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     background: rgba($off-white, 0.5);
+ }
+
+ .amt-footer__label {
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.02em;
+ }
+
+ // ============================================================================
+ // 12. Keyframes
+ // ============================================================================
+ @keyframes amt-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 13. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .amt-card {
+         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+     }
+
+     .amt-tr--odd {
+         background-color: rgba(255, 255, 255, 0.025);
+     }
+
+     .amt-tr:hover {
+         background-color: rgba($champagne, 0.05) !important;
+
+         .amt-td__airport-name {
+             color: $champagne;
+         }
+     }
+
+     .amt-badge--iata {
+         color: $champagne;
+         background: rgba($champagne, 0.1);
+         border-color: rgba($champagne, 0.25);
+     }
+
+     .amt-badge--iso {
+         color: rgba(255, 255, 255, 0.6);
+         background: rgba(255, 255, 255, 0.06);
+         border-color: rgba(255, 255, 255, 0.1);
+     }
+
+     .amt-td__airport-name {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .amt-td__city,
+     .amt-td__country {
+         color: rgba(255, 255, 255, 0.45);
+     }
+
+     .amt-td__coord,
+     .amt-td__alt {
+         color: rgba(255, 255, 255, 0.3);
+     }
+
+     .amt-action-btn {
+         color: rgba(255, 255, 255, 0.4);
+
+         &:hover {
+             color: $champagne;
+         }
+     }
+
+     .amt-footer {
+         background: rgba(255, 255, 255, 0.02);
+     }
+ }

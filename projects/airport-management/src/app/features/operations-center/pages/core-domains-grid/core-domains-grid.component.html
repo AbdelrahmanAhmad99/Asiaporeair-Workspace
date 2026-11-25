@@ -1,0 +1,17 @@
+<section class="panel" aria-labelledby="aoms-core-modules-heading">
+    <header class="panel__head">
+        <h2 id="aoms-core-modules-heading" class="panel__title">Core modules</h2>
+        <p class="panel__meta">{{ accessibleCount() }} of {{ totalCount }} available to {{ roleLabel() }}</p>
+    </header>
+
+    <ul class="grid">
+        @for (gateway of cards(); track gateway.id) {
+        <li class="grid__item">
+            <aoms-gateway-card [gateway]="gateway" (navigated)="gatewayNavigated.emit($event)"
+                (accessRequested)="accessRequested.emit($event)" />
+        </li>
+        } @empty {
+        <li class="grid__empty">No modules are available for your role. Contact an administrator to request access.</li>
+        }
+    </ul>
+</section>

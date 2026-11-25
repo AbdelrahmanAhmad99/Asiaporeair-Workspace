@@ -1,0 +1,140 @@
+   :host {
+       display: block;
+   }
+
+   .act__table-wrap {
+       width: 100%;
+       overflow-x: auto;
+       border-radius: 12px;
+       border: 1px solid rgba(226, 199, 128, .25);
+       box-shadow: 0 4px 22px rgba(5, 25, 55, .07);
+       background: #FFFFFF;
+   }
+
+   .act__table {
+       width: 100%;
+       border-collapse: collapse;
+       font-family: 'Montserrat', 'Inter', sans-serif;
+   }
+
+   .act__thead {
+       background: #051937;
+   }
+
+   .act__th {
+       padding: 14px 20px;
+       text-align: left;
+       font-size: .64rem;
+       font-weight: 700;
+       letter-spacing: .14em;
+       text-transform: uppercase;
+       color: rgba(226, 199, 128, .75);
+       border-bottom: 1px solid rgba(182, 143, 36, .2);
+       white-space: nowrap;
+   }
+
+   .act__row {
+       border-bottom: 1px solid rgba(226, 199, 128, .12);
+       transition: background 200ms ease;
+
+       &:last-child {
+           border-bottom: none;
+       }
+
+       &:hover {
+           background: rgba(248, 249, 250, .8);
+       }
+
+       &--gold {
+           background: rgba(182, 143, 36, .04);
+       }
+
+       &--gold:hover {
+           background: rgba(182, 143, 36, .08);
+       }
+   }
+
+   .act__td {
+       padding: 16px 20px;
+       vertical-align: top;
+
+       &--name {
+           min-width: 180px;
+       }
+
+       &--lounge {
+           min-width: 200px;
+       }
+   }
+
+   .act__name-cell {
+       display: flex;
+       align-items: center;
+       gap: 8px;
+   }
+
+   .act__badge {
+       font-size: 12px;
+       flex-shrink: 0;
+
+       &--gold {
+           color: #B68F24;
+       }
+
+       &--silver {
+           color: #718096;
+       }
+   }
+
+   .act__cabin {
+       font-size: .82rem;
+       font-weight: 700;
+       color: #101056;
+       letter-spacing: -.01em;
+   }
+
+   .act__td--lounge {
+       font-size: .78rem;
+       font-weight: 600;
+       color: #101056;
+   }
+
+   .act__benefits-list {
+       list-style: none;
+       margin: 0;
+       padding: 0;
+       display: flex;
+       flex-direction: column;
+       gap: 5px;
+   }
+
+   .act__benefit {
+       display: flex;
+       align-items: flex-start;
+       gap: 7px;
+       font-size: .72rem;
+       color: #718096;
+       line-height: 1.4;
+
+       svg {
+           color: #B68F24;
+           flex-shrink: 0;
+           margin-top: 2px;
+       }
+   }
+
+   .act__note {
+       margin-top: 12px;
+       font-size: .68rem;
+       color: #718096;
+       line-height: 1.55;
+       padding-left: 4px;
+   }
+
+   @media (max-width: 600px) {
+
+       .act__th,
+       .act__td {
+           padding: 12px 14px;
+       }
+   }

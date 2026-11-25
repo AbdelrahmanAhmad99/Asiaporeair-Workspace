@@ -1,0 +1,96 @@
+ :host {
+     display: block;
+ }
+
+ $royal-gold : #B68F24;
+ $midnight : #051937;
+ $white : #FFFFFF;
+ $font : 'Montserrat',
+ 'Inter',
+ sans-serif;
+
+ .aab {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .aab__alert {
+     background: rgba($midnight, .95);
+     border-bottom: 1px solid rgba($royal-gold, .15);
+
+     &--warning {
+         background: rgba(146, 64, 14, .92);
+     }
+
+     &--critical {
+         background: rgba(127, 29, 29, .95);
+     }
+ }
+
+ .aab__inner {
+     max-width: 1240px;
+     margin: 0 auto;
+     padding: 10px 40px;
+     display: flex;
+     align-items: center;
+     gap: 12px;
+
+     @media(max-width:768px) {
+         padding: 10px 20px;
+         flex-wrap: wrap;
+     }
+ }
+
+ .aab__icon {
+     flex-shrink: 0;
+     stroke: rgba($royal-gold, .8);
+ }
+
+ .aab__message {
+     flex: 1;
+     font-family: $font;
+     font-size: 12px;
+     color: rgba($white, .8);
+     margin: 0;
+     line-height: 1.5;
+ }
+
+ .aab__actions {
+     display: flex;
+     align-items: center;
+     gap: 12px;
+     flex-shrink: 0;
+ }
+
+ .aab__link {
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: .06em;
+     text-transform: uppercase;
+     color: $royal-gold;
+     text-decoration: none;
+
+     &:hover {
+         text-decoration: underline;
+     }
+ }
+
+ .aab__dismiss {
+     background: none;
+     border: none;
+     cursor: pointer;
+     color: rgba($white, .4);
+     padding: 4px;
+     display: flex;
+     align-items: center;
+     transition: color 200ms ease;
+
+     &:hover {
+         color: $white;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $royal-gold;
+         border-radius: 2px;
+     }
+ }

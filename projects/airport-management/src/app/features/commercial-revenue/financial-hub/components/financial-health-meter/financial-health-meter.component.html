@@ -1,0 +1,70 @@
+<div class="fhm-card" role="figure" [attr.aria-label]="label() + ': ' + value().toFixed(1) + ' percent'">
+
+    <div class="fhm-header">
+        <h3 class="fhm-header__title">{{ label() }}</h3>
+        @if (!loading()) {
+        <span class="fhm-status" [class.fhm-status--on]="isOnTarget()" [class.fhm-status--off]="!isOnTarget()">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="statusIconPath()" />
+            </svg>
+            {{ statusLabel() }}
+        </span>
+        }
+    </div>
+
+    @if (loading()) {
+    <div class="fhm-skeleton" aria-hidden="true">
+        <div class="fhm-sk fhm-sk--gauge"></div>
+    </div>
+    } @else {
+
+    <div class="fhm-gauge-wrap">
+        <svg viewBox="0 0 260 180" class="fhm-svg" xmlns="http://www.w3.org/2000/svg">
+
+            <defs>
+                <!-- Metallic gold sweep — used when on/above target -->
+                <linearGradient id="fhmGaugeOnTarget" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#8a6a1a" />
+                    <stop offset="35%" stop-color="#B68F24" />
+                    <stop offset="55%" stop-color="#E2C780" />
+                    <stop offset="75%" stop-color="#B68F24" />
+                    <stop offset="100%" stop-color="#064E3B" />
+                </linearGradient>
+                <!-- Amber-to-Ruby sweep — used when below target -->
+                <linearGradient id="fhmGaugeBelowTarget" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#B45309" />
+                    <stop offset="55%" stop-color="#c96a1c" />
+                    <stop offset="100%" stop-color="#710D06" />
+                </linearGradient>
+            </defs>
+
+            <!-- Background track -->
+            <path [attr.d]="trackPath()" fill="none" stroke="rgba(226,199,128,0.12)" [attr.stroke-width]="strokeWidth"
+                stroke-linecap="round" />
+
+            <!-- Progress arc -->
+            <path [attr.d]="progressPath()" fill="none" [attr.stroke]="'url(#' + gaugeGradientId() + ')'"
+                [attr.stroke-width]="strokeWidth" stroke-linecap="round" class="fhm-progress-arc" />
+
+            <!-- Target tick mark -->
+            <line [attr.x1]="targetTick().x1" [attr.y1]="targetTick().y1" [attr.x2]="targetTick().x2"
+                [attr.y2]="targetTick().y2" stroke="#E2C780" stroke-width="2.5" stroke-linecap="round" />
+
+            <!-- Center readout -->
+            <text [attr.x]="cx" [attr.y]="cy - 6" class="fhm-readout-value">{{ value().toFixed(1) }}%</text>
+            <text [attr.x]="cx" [attr.y]="cy + 16" class="fhm-readout-caption">of gross revenue</text>
+
+        </svg>
+
+        <div class="fhm-target-caption">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            Target margin: <strong>{{ target() }}%</strong>
+        </div>
+    </div>
+
+    }
+
+</div>

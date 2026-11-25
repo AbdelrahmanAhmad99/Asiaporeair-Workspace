@@ -1,0 +1,690 @@
+ // ── CSS custom properties (per spec) ─────────────────────────────────────
+ :host {
+     --primary-midnight: #051937;
+     --royal-gold: #B68F24;
+ }
+
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .rc-page {
+     min-height: 100%;
+     background: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+     position: relative;
+ }
+
+ // ============================================================================
+ // 2. Sticky Command Header
+ // ============================================================================
+ .rc-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.9375rem 1.5rem;
+     background: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 14px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ .rc-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // Back arrow
+ .rc-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+         transform: translateX(-2px);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // Breadcrumb
+ .rc-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__link {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color 150ms $ease;
+
+         &:hover {
+             color: $gold;
+         }
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .rc-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     transition: color 150ms $ease;
+
+     // Amber unsaved-changes indicator dot
+     &__dirty-dot {
+         display: inline-block;
+         width: 7px;
+         height: 7px;
+         border-radius: 50%;
+         background: $amber;
+         box-shadow: 0 0 0 3px rgba($amber, 0.2);
+         flex-shrink: 0;
+         animation: rc-pulse-amber 2s ease-in-out infinite;
+     }
+ }
+
+ // ── Action Bar ────────────────────────────────────────────────────────────
+ .rc-action-bar {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+ }
+
+ .rc-sep {
+     width: 1px;
+     height: 1.5rem;
+     background: rgba($champagne, 0.2);
+     flex-shrink: 0;
+ }
+
+ .rc-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &__spin {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         animation: rc-spin 1s linear infinite;
+     }
+
+     // Champagne gold ghost (Analyze)
+     &--ghost {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.25);
+         color: $champagne;
+
+         &:hover {
+             background: rgba($champagne, 0.08);
+             border-color: $champagne;
+         }
+     }
+
+     // Sapphire outline (Explorer)
+     &--outline {
+         background: transparent;
+         border: 1px solid rgba($midnight, 0.22);
+         color: var(--aoms-text-secondary, $charcoal);
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.05);
+         }
+     }
+
+     // Exit — text-only
+     &--exit {
+         background: transparent;
+         border: 1px solid transparent;
+         color: var(--aoms-text-muted);
+
+         &:hover {
+             color: $ruby;
+         }
+     }
+
+     // Royal Gold solid (primary CTA)
+     &--primary {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+         font-weight: 700;
+
+         &:hover:not(:disabled) {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 14px rgba($gold, 0.38);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .rc-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     max-width: 860px;
+     margin: 0 auto;
+
+     @media (max-width: 920px) {
+         max-width: 100%;
+     }
+ }
+
+ // ============================================================================
+ // 4. Mode Strip
+ // ============================================================================
+ .rc-mode-strip {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     animation: rc-fade-in 280ms $luxury both;
+ }
+
+ .rc-mode-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.3rem 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &--create {
+         background: rgba($gold, 0.09);
+         border: 1px solid rgba($gold, 0.25);
+         color: $gold;
+     }
+
+     &--edit {
+         background: rgba($midnight, 0.06);
+         border: 1px solid rgba($midnight, 0.15);
+         color: $charcoal;
+     }
+ }
+
+ .rc-mode-id {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.375rem;
+     font-weight: 900;
+     letter-spacing: 0.15em;
+     color: transparent;
+     -webkit-text-stroke: 1px rgba($champagne, 0.35);
+     // text-stroke: 1px rgba($champagne, 0.35);
+     user-select: none;
+     pointer-events: none;
+ }
+
+ // ============================================================================
+ // 5. Loading Skeleton
+ // ============================================================================
+ .rc-skeleton {
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     animation: rc-pulse 1.6s ease-in-out infinite;
+ }
+
+ .rc-sk {
+     &__card {
+         border-radius: 12px;
+         background: var(--aoms-bg-card, #ffffff);
+         border: 1px solid rgba($champagne, 0.18);
+         padding: 1.5rem 1.75rem;
+         display: flex;
+         flex-direction: column;
+         gap: 1.375rem;
+     }
+
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+     }
+
+     &__icon {
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 8px;
+         background: rgba($champagne, 0.1);
+         flex-shrink: 0;
+     }
+
+     &__lines {
+         display: flex;
+         flex-direction: column;
+         gap: 0.5rem;
+         flex: 1;
+     }
+
+     &__line {
+         border-radius: 4px;
+         background: rgba($champagne, 0.08);
+
+         &--title {
+             width: 40%;
+             height: 0.875rem;
+         }
+
+         &--sub {
+             width: 65%;
+             height: 0.625rem;
+         }
+     }
+
+     &__fields {
+         display: grid;
+         grid-template-columns: 1fr auto 1fr;
+         gap: 0.875rem;
+         align-items: center;
+
+         &--two {
+             grid-template-columns: 1fr 1fr;
+         }
+     }
+
+     &__field {
+         border-radius: 8px;
+         background: rgba($champagne, 0.07);
+
+         &--hub {
+             height: 3rem;
+         }
+
+         &--metric {
+             height: 3.5rem;
+         }
+     }
+
+     &__arrow {
+         width: 1.25rem;
+         height: 1.25rem;
+         border-radius: 50%;
+         background: rgba($champagne, 0.07);
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 6. Unsaved Changes Modal (Amber)
+ // ============================================================================
+ .rc-modal-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 40;
+     background: rgba($midnight, 0.6);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     animation: rc-fade-in 200ms $ease both;
+ }
+
+ .rc-modal {
+     position: fixed;
+     z-index: 50;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: min(480px, calc(100vw - 2rem));
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($amber, 0.25);
+     box-shadow:
+         0 24px 64px rgba($midnight, 0.28),
+         0 0 0 1px rgba($amber, 0.08);
+     overflow: hidden;
+     animation: rc-modal-enter 280ms $luxury both;
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+
+     &__amber-bar {
+         position: absolute;
+         top: 0;
+         left: 0;
+         right: 0;
+         height: 3px;
+         background: linear-gradient(90deg, darken($amber, 15%) 0%, $amber 100%);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3rem;
+         height: 3rem;
+         border-radius: 10px;
+         background: rgba($amber, 0.09);
+         border: 1px solid rgba($amber, 0.22);
+         flex-shrink: 0;
+         margin-top: 0.75rem;
+
+         svg {
+             width: 1.25rem;
+             height: 1.25rem;
+             color: $amber;
+         }
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 16px;
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary, $charcoal);
+         margin: 0;
+     }
+
+     &__body {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         line-height: 1.65;
+         color: var(--aoms-text-secondary);
+         margin: 0;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding-top: 0.5rem;
+         border-top: 1px solid rgba($champagne, 0.12);
+     }
+ }
+
+ .rc-modal-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.25rem;
+     padding: 0 1rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // "Return to Composer" — subtle outline
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($charcoal, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // "Discard & Leave" — Amber solid
+     &--confirm {
+         background: $amber;
+         border: 1px solid $amber;
+         color: #ffffff;
+         font-weight: 700;
+
+         &:hover {
+             background: darken($amber, 8%);
+             box-shadow: 0 4px 12px rgba($amber, 0.4);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. Keyframes
+ // ============================================================================
+ @keyframes rc-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes rc-fade-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes rc-modal-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px));
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%);
+     }
+ }
+
+ @keyframes rc-pulse {
+
+     0%,
+     100% {
+         opacity: 0.65;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ @keyframes rc-pulse-amber {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba($amber, 0.45);
+     }
+
+     50% {
+         box-shadow: 0 0 0 4px rgba($amber, 0);
+     }
+ }
+
+ // ============================================================================
+ // 8. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .rc-header {
+         box-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+     }
+
+     .rc-back-btn:hover {
+         color: $champagne;
+     }
+
+     .rc-btn--outline {
+         border-color: rgba($champagne, 0.25);
+         color: $champagne;
+
+         &:hover {
+             border-color: $champagne;
+             background: rgba($champagne, 0.07);
+         }
+     }
+
+     .rc-btn--exit {
+         &:hover {
+             color: lighten($ruby, 10%);
+         }
+     }
+
+     .rc-mode-badge--edit {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.55);
+     }
+
+     .rc-sk__card {
+         background: rgba(255, 255, 255, 0.03);
+         border-color: rgba($champagne, 0.08);
+     }
+
+     .rc-sk__line,
+     .rc-sk__field,
+     .rc-sk__icon,
+     .rc-sk__arrow {
+         background: rgba($champagne, 0.05);
+     }
+
+     .rc-modal {
+         background: #0d1f35;
+         border-color: rgba($amber, 0.3);
+         box-shadow: 0 28px 72px rgba(0, 0, 0, 0.55);
+     }
+
+     .rc-modal__title {
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .rc-modal__body {
+         color: rgba(255, 255, 255, 0.6);
+     }
+
+     .rc-modal__actions {
+         border-top-color: rgba($champagne, 0.08);
+     }
+
+     .rc-modal-btn--cancel {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+ }

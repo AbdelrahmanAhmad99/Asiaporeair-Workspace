@@ -1,0 +1,331 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ============================================================================
+ // 1. Panel shell — Glassmorphism card
+ // ============================================================================
+ .asp-panel {
+     border-radius: 12px;
+     background: rgba($midnight, 0.06);
+     backdrop-filter: blur(14px);
+     -webkit-backdrop-filter: blur(14px);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 4px 24px rgba($midnight, 0.07);
+     padding: 1.25rem 1.5rem;
+     animation: asp-enter 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+ }
+
+ // ============================================================================
+ // 2. Form layout
+ // ============================================================================
+ .asp-form {
+     display: flex;
+     align-items: flex-end;
+     gap: 1rem;
+     flex-wrap: wrap;
+ }
+
+ .asp-fields {
+     display: flex;
+     align-items: flex-end;
+     gap: 0.875rem;
+     flex: 1;
+     flex-wrap: wrap;
+ }
+
+ // ============================================================================
+ // 3. Individual field (floating label pattern)
+ // ============================================================================
+ .asp-field {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     min-width: 7rem;
+
+     &--wide {
+         flex: 1;
+         min-width: 10rem;
+     }
+ }
+
+ // ============================================================================
+ // 4. Input
+ // ============================================================================
+ .asp-input {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+
+     width: 100%;
+     height: 3.25rem;
+     padding: 1.3rem 2.25rem 0.4rem 0.875rem; // top padding for float
+
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 14px;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-primary, $charcoal);
+
+     background: rgba(255, 255, 255, 0.88);
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+
+     transition:
+         border-color 180ms $ease,
+         background 180ms $ease,
+         box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow:
+             0 0 0 3px rgba($champagne, 0.18),
+             0 0 12px rgba($champagne, 0.08);
+     }
+ }
+
+ // ============================================================================
+ // 5. Floating label
+ // ============================================================================
+ .asp-label {
+     position: absolute;
+     top: 50%;
+     left: 0.875rem;
+     transform: translateY(-50%);
+     pointer-events: none;
+
+     display: flex;
+     align-items: center;
+     gap: 0.3rem;
+
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 13px;
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+
+     transition:
+         top 180ms $ease,
+         font-size 180ms $ease,
+         font-weight 180ms $ease,
+         color 180ms $ease,
+         transform 180ms $ease,
+         letter-spacing 180ms $ease;
+
+     // Float when input is focused OR has content
+     .asp-input:focus~&,
+     .asp-input:not(:placeholder-shown)~& {
+         top: 0.45rem;
+         transform: translateY(0);
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: $champagne;
+     }
+
+     &__icon {
+         width: 0.8rem;
+         height: 0.8rem;
+         flex-shrink: 0;
+         transition: color 180ms $ease;
+     }
+ }
+
+ // Focus: champagne label colour
+ .asp-input:focus~.asp-label {
+     color: $champagne !important;
+ }
+
+ // ============================================================================
+ // 6. Character-limit badge (top-right corner of field)
+ // ============================================================================
+ .asp-field__badge {
+     position: absolute;
+     top: 0.4rem;
+     right: 0.5rem;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.06em;
+     color: rgba($charcoal, 0.25);
+     pointer-events: none;
+     transition: color 180ms $ease;
+ }
+
+ // Highlight the badge when field is focused
+ .asp-field:focus-within .asp-field__badge {
+     color: rgba($champagne, 0.6);
+ }
+
+ // ============================================================================
+ // 7. Action buttons
+ // ============================================================================
+ .asp-actions {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+ }
+
+ .asp-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 3.25rem;
+     padding: 0 1.125rem;
+     border-radius: 4px;
+     border: none;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 13px;
+     font-weight: 600;
+     letter-spacing: 0.02em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 180ms $ease;
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: asp-spin 1s linear infinite;
+         }
+     }
+
+     // ── Search — Royal Gold ────────────────────────────────────────────────
+     &--search {
+         background: $gold;
+         color: $midnight;
+         border: 1px solid $gold;
+         min-width: 8rem;
+
+         &:hover:not(:disabled) {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 14px rgba($gold, 0.35);
+         }
+     }
+
+     // ── Clear — ghost ──────────────────────────────────────────────────────
+     &--clear {
+         background: transparent;
+         border: 1px solid rgba($charcoal, 0.18);
+         color: var(--aoms-text-muted);
+         width: 3.25rem;
+         padding: 0;
+         justify-content: center;
+
+         &:hover:not(:disabled) {
+             border-color: rgba(159, 18, 57, 0.35);
+             color: #9f1239;
+             background: rgba(159, 18, 57, 0.05);
+         }
+     }
+
+     // ── Add New — Sapphire outline ─────────────────────────────────────────
+     &--add {
+         background: transparent;
+         border: 1px solid rgba($midnight, 0.2);
+         color: var(--aoms-text-secondary, $charcoal);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.07);
+         }
+     }
+ }
+
+ // ── Vertical separator between Search and Add ──────────────────────────────
+ .asp-separator {
+     width: 1px;
+     height: 1.5rem;
+     background: rgba($champagne, 0.2);
+     flex-shrink: 0;
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes asp-enter {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes asp-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .asp-panel {
+         background: rgba($midnight, 0.55);
+         border-color: rgba($champagne, 0.1);
+         box-shadow: 0 4px 28px rgba(0, 0, 0, 0.3);
+     }
+
+     .asp-input {
+         background: rgba(255, 255, 255, 0.06);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.88);
+
+         &:focus {
+             background: rgba(255, 255, 255, 0.1);
+         }
+     }
+
+     .asp-btn--add {
+         border-color: rgba(255, 255, 255, 0.12);
+         color: rgba(255, 255, 255, 0.65);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+
+     .asp-btn--clear {
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.4);
+     }
+
+     .asp-separator {
+         background: rgba($champagne, 0.12);
+     }
+
+     .asp-field__badge {
+         color: rgba(255, 255, 255, 0.18);
+     }
+ }

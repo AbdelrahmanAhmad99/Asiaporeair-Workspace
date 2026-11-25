@@ -1,0 +1,20 @@
+<div class="agi" [class.agi--flipped]="imageLeft">
+
+    <!-- Image side (passes through a named image slot, or shows placeholder) -->
+    <div class="agi__image-side">
+        <ng-content select="[amenityImage]"></ng-content>
+    </div>
+
+    <!-- Text side -->
+    <div class="agi__text-side">
+        <div class="agi__text-inner">
+            @if (amenity.highlight) {
+            <span class="agi__highlight">{{ amenity.highlight }}</span>
+            }
+            <h3 class="agi__title">{{ amenity.title }}</h3>
+            <div class="agi__divider" aria-hidden="true"></div>
+            <p class="agi__body">{{ amenity.body }}</p>
+        </div>
+    </div>
+
+</div>

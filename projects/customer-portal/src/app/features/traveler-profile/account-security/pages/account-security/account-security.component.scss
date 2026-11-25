@@ -1,0 +1,491 @@
+// ============================================================================
+// account-security.component.scss
+// Asiaporeair | "Account Security Hub" — Page Styles
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$danger : #c53030;
+$success : #276749;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HERO HEADER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sec-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 90% -20%, rgba($royal-gold, 0.09) 0%, transparent 52%),
+            radial-gradient(ellipse at -5% 115%, rgba($royal-gold, 0.04) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    &__inner {
+        position: relative;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 44px 0;
+
+        @media (max-width: 768px) {
+            padding: 22px 20px 0;
+        }
+    }
+
+    &__content {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding-bottom: 24px;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    &__title {
+        font-size: clamp(1.3rem, 3vw, 1.8rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $white;
+        margin: 0 0 6px;
+        line-height: 1.15;
+    }
+
+    &__subtitle {
+        font-size: 0.78rem;
+        color: rgba($white, 0.5);
+        margin: 0;
+        max-width: 420px;
+        line-height: 1.6;
+    }
+
+    &__status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: rgba($muted, 0.15);
+        border: 1px solid rgba($muted, 0.2);
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: rgba($white, 0.6);
+        flex-shrink: 0;
+        transition: all $t;
+
+        &.is-secured {
+            background: rgba($royal-gold, 0.12);
+            border-color: rgba($royal-gold, 0.3);
+            color: $champagne;
+        }
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba($royal-gold, 0.3), transparent);
+    }
+}
+
+.sec-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 18px;
+
+    &__link {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba($white, 0.35);
+        text-decoration: none;
+        transition: color $t;
+
+        &:hover {
+            color: $champagne;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            border-radius: 2px;
+        }
+    }
+
+    &__sep {
+        font-size: 12px;
+        color: rgba($white, 0.18);
+    }
+
+    &__current {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba($champagne, 0.65);
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CONTENT LAYOUT
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sec-content {
+    padding: 0 44px 64px;
+
+    @media (max-width: 768px) {
+        padding: 0 16px 48px;
+    }
+
+    &__inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-top: 36px;
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 32px;
+        align-items: start;
+
+        @media (max-width: 960px) {
+            grid-template-columns: 1fr;
+            max-width: 640px;
+        }
+    }
+}
+
+.sec-col {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SECTION HEADER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sec-section-header {
+    &__title {
+        font-family: $font;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: $charcoal;
+        margin: 0 0 5px;
+    }
+
+    &__sub {
+        font-size: 0.75rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.6;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ERROR BANNER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sec-error-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 18px;
+    background: rgba($danger, 0.05);
+    border: 1px solid rgba($danger, 0.2);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    color: $danger;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ESCAPE HATCH BLOCK (Forgot / Reset Password)
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sec-escape-block {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($champagne, 0.25);
+    box-shadow: 0 4px 18px rgba($midnight, 0.06);
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__title {
+        font-family: $font;
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: $muted;
+        margin: 0 0 4px;
+    }
+}
+
+.sec-escape-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    transition: all $t;
+
+    &--primary {
+        background: rgba($midnight, 0.03);
+        border-color: rgba($midnight, 0.08);
+
+        &:hover {
+            border-color: rgba($royal-gold, 0.4);
+            background: rgba($royal-gold, 0.04);
+            box-shadow: 0 4px 14px rgba($midnight, 0.07);
+
+            .sec-escape-btn__icon {
+                background: rgba($royal-gold, 0.1);
+                border-color: rgba($royal-gold, 0.25);
+                color: $royal-gold;
+            }
+
+            .sec-escape-btn__chevron {
+                color: $royal-gold;
+                transform: translateX(3px);
+            }
+        }
+    }
+
+    &--secondary {
+        background: rgba($danger, 0.02);
+        border-color: rgba($danger, 0.1);
+
+        &:hover {
+            border-color: rgba($danger, 0.3);
+            background: rgba($danger, 0.04);
+            box-shadow: 0 4px 14px rgba($midnight, 0.06);
+
+            .sec-escape-btn__icon {
+                background: rgba($danger, 0.08);
+                border-color: rgba($danger, 0.2);
+                color: $danger;
+            }
+
+            .sec-escape-btn__chevron {
+                color: $danger;
+                transform: translateX(3px);
+            }
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba($midnight, 0.04);
+        border: 1px solid rgba($midnight, 0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: rgba($charcoal, 0.5);
+        transition: all $t;
+    }
+
+    &__body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__label {
+        display: block;
+        font-family: $font;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: $charcoal;
+        letter-spacing: -0.01em;
+        margin-bottom: 2px;
+    }
+
+    &__desc {
+        display: block;
+        font-size: 0.65rem;
+        color: $muted;
+    }
+
+    &__chevron {
+        color: rgba($charcoal, 0.22);
+        flex-shrink: 0;
+        transition: color $t, transform $t;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RIGHT NAV COLUMN
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sec-nav-header {
+    &__title {
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: $muted;
+        margin-bottom: 2px;
+    }
+
+    &__subtitle {
+        font-size: 0.66rem;
+        color: rgba($muted, 0.65);
+    }
+}
+
+.sec-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sec-nav-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 13px;
+    background: $white;
+    border: 1px solid rgba($champagne, 0.22);
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: border-color $t, box-shadow $t, transform $t;
+    box-shadow: 0 2px 8px rgba($midnight, 0.04);
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.45);
+        box-shadow: 0 5px 18px rgba($midnight, 0.08);
+        transform: translateY(-1px);
+
+        .sec-nav-card__icon {
+            background: rgba($royal-gold, 0.1);
+            border-color: rgba($royal-gold, 0.25);
+            color: $royal-gold;
+        }
+
+        .sec-nav-card__chevron {
+            color: $royal-gold;
+            transform: translateX(3px);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &__icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 7px;
+        background: rgba($midnight, 0.04);
+        border: 1px solid rgba($midnight, 0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: rgba($charcoal, 0.5);
+        transition: all $t;
+    }
+
+    &__label {
+        flex: 1;
+        font-family: $font;
+        font-size: 0.77rem;
+        font-weight: 700;
+        color: $charcoal;
+        letter-spacing: -0.01em;
+    }
+
+    &__chevron {
+        color: rgba($charcoal, 0.2);
+        flex-shrink: 0;
+        transition: color $t, transform $t;
+    }
+}
+
+// ── Security tip card ─────────────────────────────────────────────────────────
+.sec-tip-card {
+    display: flex;
+    gap: 12px;
+    padding: 16px 16px;
+    background: linear-gradient(145deg, rgba($midnight, 0.03), rgba($royal-gold, 0.03));
+    border: 1px solid rgba($royal-gold, 0.16);
+    border-radius: 12px;
+
+    &__icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: rgba($royal-gold, 0.1);
+        border: 1px solid rgba($royal-gold, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $royal-gold;
+        flex-shrink: 0;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: $charcoal;
+        margin: 0 0 4px;
+        letter-spacing: -0.01em;
+    }
+
+    &__text {
+        font-size: 0.67rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.65;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ACCESSIBILITY / REDUCED MOTION
+// ══════════════════════════════════════════════════════════════════════════════
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sec-nav-card,
+    .sec-escape-btn {
+        transition: none;
+    }
+}

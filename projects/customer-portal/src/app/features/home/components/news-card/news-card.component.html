@@ -1,0 +1,31 @@
+<article class="nc" [attr.aria-label]="article.headline">
+
+    <!-- Image -->
+    <a class="nc__img-wrap" [routerLink]="article.ctaRoute" tabindex="-1" aria-hidden="true">
+        <img class="nc__img" [src]="article.imageUrl" [alt]="article.headline" loading="lazy" />
+        <div class="nc__img-overlay" aria-hidden="true"></div>
+        <span class="nc__category">{{ article.category }}</span>
+    </a>
+
+    <!-- Body -->
+    <div class="nc__body">
+        <time class="nc__date" [attr.datetime]="article.publishedAt">
+            {{ article.publishedAt | date:'d MMM yyyy' }}
+        </time>
+        <h3 class="nc__headline">
+            <a [routerLink]="article.ctaRoute" class="nc__headline-link">
+                {{ article.headline }}
+            </a>
+        </h3>
+        <p class="nc__excerpt">{{ article.excerpt }}</p>
+        <a class="nc__cta" [routerLink]="article.ctaRoute" aria-label="Read more: {{ article.headline }}">
+            Read More
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+            </svg>
+        </a>
+    </div>
+
+</article>

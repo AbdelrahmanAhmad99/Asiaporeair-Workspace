@@ -1,0 +1,651 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ============================================================================
+ // 1. Matrix Container
+ // ============================================================================
+ .matrix {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     box-shadow: 0 4px 20px rgba(5, 25, 55, 0.07);
+     overflow: hidden;
+     transition:
+         background-color var(--aoms-transition-base),
+         border-color var(--aoms-transition-base),
+         box-shadow var(--aoms-transition-base);
+
+     // Collapse inner padding
+     padding: 0;
+ }
+
+ // ============================================================================
+ // 2. Matrix Header
+ // ============================================================================
+ .matrix__header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+     padding: 0.875rem 1.25rem;
+     background: rgba(5, 25, 55, 0.03);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.12);
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+     }
+
+     &__icon {
+         width: 1.0625rem;
+         height: 1.0625rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .matrix__title {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+ }
+
+ .matrix__summary {
+     display: flex;
+     align-items: baseline;
+     gap: 0.375rem;
+
+     &__count {
+         font-size: 1.125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: $gold;
+         letter-spacing: -0.02em;
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__of {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-muted);
+     }
+
+     &__label {
+         font-size: 12px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+     }
+ }
+
+ // ============================================================================
+ // 3. Column Headers
+ // ============================================================================
+ .matrix__col-heads {
+     display: grid;
+     grid-template-columns: 180px 1fr auto;
+     gap: 1rem;
+     padding: 0.5rem 1.25rem;
+     background: rgba(5, 25, 55, 0.02);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.08);
+
+     @media (max-width: 767px) {
+         display: none;
+     }
+ }
+
+ .matrix__col-head {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: var(--aoms-text-muted);
+
+     &--range {
+         text-align: left;
+     }
+
+     &--status {
+         text-align: right;
+     }
+ }
+
+ // ============================================================================
+ // 4. Section Labels
+ // ============================================================================
+ .matrix__section {
+     padding: 0 1.25rem 1.25rem;
+
+     &--incapable {
+         opacity: 0.65;
+     }
+
+     &__label {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.4375rem;
+         padding: 0.375rem 0;
+         margin-bottom: 0.625rem;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: $emerald;
+
+         &--muted {
+             color: var(--aoms-text-muted);
+         }
+
+         &__icon {
+             width: 0.875rem;
+             height: 0.875rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Results List
+ // ============================================================================
+ .matrix__list {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+ }
+
+ // ============================================================================
+ // 6. Individual Matrix Card
+ // ============================================================================
+ .matrix-card {
+     display: grid;
+     grid-template-columns: 180px 1fr auto;
+     align-items: center;
+     gap: 1rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.12);
+     transition:
+         border-color $t-fast,
+         box-shadow $t-fast,
+         background $t-fast;
+
+     @media (max-width: 767px) {
+         grid-template-columns: 1fr;
+         gap: 0.625rem;
+     }
+
+     &:hover {
+         border-color: rgba(226, 199, 128, 0.3);
+         background: rgba(226, 199, 128, 0.03);
+     }
+
+     // ── Optimal: Luxury Glow ──────────────────────────────────────
+     &--optimal {
+         border-color: rgba(182, 143, 36, 0.3);
+         background: rgba(182, 143, 36, 0.04);
+         box-shadow:
+             0 0 0 1px rgba(182, 143, 36, 0.15),
+             0 4px 16px rgba(182, 143, 36, 0.08),
+             inset 0 0 20px rgba(182, 143, 36, 0.03);
+
+         &:hover {
+             border-color: rgba(182, 143, 36, 0.5);
+             box-shadow:
+                 0 0 0 1px rgba(182, 143, 36, 0.25),
+                 0 6px 20px rgba(182, 143, 36, 0.12);
+         }
+     }
+
+     // ── Near Limit: amber glow ────────────────────────────────────
+     &--near-limit {
+         border-color: rgba(180, 83, 9, 0.25);
+     }
+
+     // ── Incapable: dimmed ─────────────────────────────────────────
+     &--incapable {
+         border-color: rgba(5, 25, 55, 0.06);
+         background: rgba(5, 25, 55, 0.01);
+     }
+ }
+
+ // 6a. Aircraft Identity column
+ .matrix-card__identity {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     min-width: 0;
+ }
+
+ .matrix-card__monogram {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.25rem;
+     height: 2.25rem;
+     border-radius: 8px;
+     flex-shrink: 0;
+     font-size: 11px;
+     font-family: var(--aoms-font-heading);
+     font-weight: 800;
+     letter-spacing: 0.04em;
+     color: $midnight;
+     background: linear-gradient(135deg, $gold 0%, $champagne 100%);
+     transition: opacity $t-fast;
+
+     &--muted {
+         background: rgba(5, 25, 55, 0.07);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ .matrix-card__names {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+     min-width: 0;
+ }
+
+ .matrix-card__model {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-primary);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     transition: color $t-fast;
+
+     &--muted {
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ .matrix-card__manufacturer {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+ }
+
+ // 6b. Capability Meter column
+ .matrix-card__meter {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3125rem;
+     min-width: 0;
+
+     &__track {
+         position: relative;
+         height: 6px;
+         background: rgba(5, 25, 55, 0.07);
+         border-radius: 100px;
+         overflow: hidden;
+     }
+
+     &__fill {
+         height: 100%;
+         border-radius: 100px;
+         transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
+
+         &--optimal {
+             background: linear-gradient(to right, $gold, $champagne, $gold);
+             box-shadow: 0 0 6px rgba(182, 143, 36, 0.4);
+         }
+
+         &--capable {
+             background: linear-gradient(to right, $gold, $champagne);
+         }
+
+         &--near-limit {
+             background: linear-gradient(to right, $amber, lighten($amber, 15%));
+         }
+
+         &--incapable {
+             background: rgba(5, 25, 55, 0.2);
+         }
+     }
+
+     &__target {
+         position: absolute;
+         top: -2px;
+         right: 0;
+         width: 2px;
+         height: calc(100% + 4px);
+         background: rgba(5, 25, 55, 0.3);
+         border-radius: 1px;
+     }
+
+     &__labels {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         gap: 0.5rem;
+     }
+
+     &__range {
+         font-size: 12px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-secondary);
+         font-variant-numeric: tabular-nums;
+         transition: color $t-fast;
+     }
+
+     &__margin {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-muted);
+         transition: color $t-fast;
+
+         &--positive {
+             color: $emerald;
+         }
+     }
+ }
+
+ // 6c. Right column: badge + action
+ .matrix-card__right {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+
+     @media (max-width: 767px) {
+         justify-content: space-between;
+     }
+ }
+
+ // View Specs button
+ .matrix-card__view-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     background: transparent;
+     color: var(--aoms-text-muted);
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.08);
+         color: $gold;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+ }
+
+ // ============================================================================
+ // 7. Efficiency Badges
+ // ============================================================================
+ .efficiency-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.25rem 0.625rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     white-space: nowrap;
+     border: 1px solid;
+     transition: all $t-fast;
+
+     &__icon {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+     }
+
+     // Optimal — emerald green
+     &.badge--optimal {
+         color: $emerald;
+         background: rgba(6, 78, 59, 0.08);
+         border-color: rgba(6, 78, 59, 0.25);
+     }
+
+     // Capable — gold
+     &.badge--capable {
+         color: #7c5c10;
+         background: rgba(182, 143, 36, 0.1);
+         border-color: rgba(182, 143, 36, 0.3);
+     }
+
+     // Near Limit — amber warning
+     &.badge--near-limit {
+         color: $amber;
+         background: rgba(180, 83, 9, 0.08);
+         border-color: rgba(180, 83, 9, 0.25);
+     }
+
+     // Inefficient — muted
+     &.badge--inefficient {
+         color: var(--aoms-text-muted);
+         background: rgba(5, 25, 55, 0.04);
+         border-color: rgba(5, 25, 55, 0.12);
+     }
+
+     // Incapable
+     &.badge--incapable {
+         color: var(--aoms-text-muted);
+         background: rgba(5, 25, 55, 0.04);
+         border-color: rgba(5, 25, 55, 0.1);
+     }
+ }
+
+ // ============================================================================
+ // 8. Shimmer Loading Skeleton
+ // ============================================================================
+ .matrix__shimmer-list {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+     padding: 1rem 1.25rem;
+ }
+
+ .matrix__shimmer-row {
+     display: grid;
+     grid-template-columns: 180px 1fr 80px;
+     align-items: center;
+     gap: 1rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     border: 1px solid rgba(226, 199, 128, 0.08);
+
+     @media (max-width: 767px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ .matrix__shimmer-identity {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+ }
+
+ .matrix__shimmer-bar-wrap {
+     flex: 1;
+ }
+
+ .matrix__shimmer-block {
+     border-radius: 4px;
+     background: rgba(182, 143, 36, 0.08);
+     animation: rl-pulse 1.5s ease-in-out infinite;
+
+     &--mono {
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 8px;
+         flex-shrink: 0;
+     }
+
+     &--model {
+         height: 0.875rem;
+         width: 100px;
+         margin-bottom: 0.25rem;
+     }
+
+     &--mfr {
+         height: 0.625rem;
+         width: 70px;
+         animation-delay: 0.1s;
+     }
+
+     &--bar {
+         height: 6px;
+         width: 100%;
+         border-radius: 100px;
+         animation-delay: 0.15s;
+     }
+
+     &--badge {
+         height: 1.5rem;
+         width: 80px;
+         border-radius: 100px;
+         animation-delay: 0.2s;
+     }
+ }
+
+ // ============================================================================
+ // 9. Empty State
+ // ============================================================================
+ .matrix__empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 3.5rem 1.25rem;
+     text-align: center;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3rem;
+         height: 3rem;
+         border-radius: 12px;
+         background: rgba(182, 143, 36, 0.08);
+         color: $gold;
+         margin-bottom: 0.25rem;
+     }
+
+     &__icon {
+         width: 1.5rem;
+         height: 1.5rem;
+     }
+
+     &__title {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-secondary);
+     }
+
+     &__sub {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ============================================================================
+ // 10. Keyframes
+ // ============================================================================
+ @keyframes rl-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 11. Dark Mode Overrides (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .matrix {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+     }
+
+     .matrix__header {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     .matrix-card {
+         &--optimal {
+             background: rgba(182, 143, 36, 0.07);
+         }
+     }
+
+     .matrix-card__meter__track {
+         background: rgba(255, 255, 255, 0.07);
+     }
+
+     .matrix-card__monogram--muted {
+         background: rgba(255, 255, 255, 0.06);
+     }
+
+     .efficiency-badge {
+         &.badge--optimal {
+             color: #34d399;
+             background: rgba(52, 211, 153, 0.08);
+             border-color: rgba(52, 211, 153, 0.2);
+         }
+
+         &.badge--capable {
+             color: $champagne;
+             background: rgba(226, 199, 128, 0.1);
+             border-color: rgba(226, 199, 128, 0.25);
+         }
+
+         &.badge--near-limit {
+             color: #fbbf24;
+             background: rgba(251, 191, 36, 0.08);
+             border-color: rgba(251, 191, 36, 0.2);
+         }
+     }
+
+     .matrix-card__meter__margin--positive {
+         color: #34d399;
+     }
+ }

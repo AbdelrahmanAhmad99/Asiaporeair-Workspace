@@ -1,0 +1,62 @@
+/* 1. Tailwind Directives (Must be first) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PrimeNG Theme */
+// @use "@primeng/themes/aura-light" as *;
+
+
+/* PrimeFlex utilities */
+// @import "primeflex/primeflex.css";
+
+// /* 2. PrimeNG Theme (Aura Light Blue) & Icons */
+// @import "primeng/resources/themes/aura-light-blue/theme.css";
+// @import "primeng/resources/primeng.css";
+// @import "primeicons/primeicons.css";
+
+// /* 3. Angular Material Prebuilt Theme */
+// @import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+// /* 4. AG Grid Styles */
+// @import "ag-grid-community/styles/ag-grid.css";
+// @import "ag-grid-community/styles/ag-theme-quartz.css";
+
+// /* 5. NGX-Toastr */
+// @import 'ngx-toastr/toastr';
+
+// /* 6. Leaflet Maps */
+// @import "leaflet/dist/leaflet.css";
+
+// /* 7. FontAwesome */
+// @import "@fortawesome/fontawesome-free/css/all.css";
+
+/* Global Body Reset */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8fafc;
+    /* Slate-50 */
+}
+
+.success-snackbar {
+    background-color: #4CAF50 !important; // Green
+    color: white;
+}
+
+.error-snackbar {
+    background-color: #F44336 !important; // Red
+    color: white;
+}
+
+.info-snackbar {
+    background-color: #2196F3 !important; // Blue
+    color: white;
+}
+
+.warning-snackbar {
+    background-color: #FF9800 !important; // Orange
+    color: white;
+}

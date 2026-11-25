@@ -1,0 +1,436 @@
+ // ── Design tokens ──────────────────────────────────────────────────────────
+ $midnight: #051937;
+ $midnight-card: #071f42;
+ $royal-gold: #B68F24;
+ $champagne-gold: #E2C780;
+ $charcoal-navy: #101056;
+ $off-white: #F8F9FA;
+ $emerald: #064E3B;
+
+ // ── Card Shell ────────────────────────────────────────────────────────────
+ .base-card {
+   background: $midnight;
+   border: 1px solid rgba(226, 199, 128, 0.2);
+   border-radius: 12px;
+   padding: 24px;
+   font-family: 'Inter', system-ui, sans-serif;
+   box-shadow:
+     0 4px 24px rgba(5, 25, 55, 0.25),
+     inset 0 1px 0 rgba(226, 199, 128, 0.08);
+   position: sticky;
+   top: 88px;
+
+   &__header {
+     display: flex;
+     align-items: center;
+     gap: 14px;
+     margin-bottom: 22px;
+   }
+
+   &__icon-wrap {
+     width: 40px;
+     height: 40px;
+     border-radius: 8px;
+     background: rgba(182, 143, 36, 0.15);
+     border: 1px solid rgba(182, 143, 36, 0.3);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+
+     svg {
+       width: 20px;
+       height: 20px;
+       color: $champagne-gold;
+     }
+   }
+
+   &__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 700;
+     color: #fff;
+     margin: 0 0 2px;
+   }
+
+   &__subtitle {
+     font-size: 11px;
+     color: rgba(226, 199, 128, 0.5);
+     letter-spacing: 0.06em;
+     margin: 0;
+     text-transform: uppercase;
+   }
+ }
+
+ // ── Current Base Highlight ────────────────────────────────────────────────
+ .current-base {
+   background: rgba(182, 143, 36, 0.06);
+   border: 1px solid rgba(182, 143, 36, 0.25);
+   border-radius: 8px;
+   padding: 14px 16px;
+   margin-bottom: 20px;
+   transition: border-color 400ms, background 400ms;
+
+   &--saved {
+     border-color: rgba(110, 231, 183, 0.5);
+     background: rgba(6, 78, 59, 0.12);
+   }
+
+   &__label {
+     display: block;
+     font-size: 9px;
+     letter-spacing: 0.12em;
+     color: rgba(226, 199, 128, 0.5);
+     text-transform: uppercase;
+     margin-bottom: 6px;
+   }
+
+   &__iata {
+     display: block;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 28px;
+     font-weight: 800;
+     color: $royal-gold;
+     letter-spacing: 0.04em;
+     line-height: 1;
+   }
+
+   &__confirm {
+     display: inline-block;
+     margin-top: 6px;
+     font-size: 11px;
+     color: #6ee7b7;
+     animation: fadeIn 300ms ease;
+   }
+ }
+
+ @keyframes fadeIn {
+   from {
+     opacity: 0;
+   }
+
+   to {
+     opacity: 1;
+   }
+ }
+
+ // ── Divider ───────────────────────────────────────────────────────────────
+ .base-divider {
+   height: 1px;
+   background: linear-gradient(90deg, transparent, rgba(226, 199, 128, 0.2), transparent);
+   margin-bottom: 20px;
+ }
+
+ // ── Field label ───────────────────────────────────────────────────────────
+ .field-label {
+   display: block;
+   font-size: 11px;
+   color: rgba(226, 199, 128, 0.7);
+   letter-spacing: 0.06em;
+   text-transform: uppercase;
+   margin-bottom: 8px;
+ }
+
+ // ── Dropdown Wrapper ──────────────────────────────────────────────────────
+ .dropdown-wrap {
+   position: relative;
+   margin-bottom: 16px;
+ }
+
+ // ── Dropdown Trigger ──────────────────────────────────────────────────────
+ .dropdown-trigger {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 8px;
+   background: rgba(7, 31, 66, 0.8);
+   border: 1px solid rgba(226, 199, 128, 0.25);
+   border-radius: 8px;
+   padding: 11px 14px;
+   color: rgba(255, 255, 255, 0.85);
+   font-size: 13px;
+   cursor: pointer;
+   text-align: left;
+   transition: border-color 200ms, box-shadow 200ms;
+
+   &:hover:not(:disabled) {
+     border-color: rgba(226, 199, 128, 0.55);
+     box-shadow: 0 0 0 3px rgba(226, 199, 128, 0.07);
+   }
+
+   &:focus-visible {
+     outline: none;
+     border-color: $champagne-gold;
+     box-shadow: 0 0 0 3px rgba(226, 199, 128, 0.15);
+   }
+
+   &:disabled {
+     opacity: 0.5;
+     cursor: not-allowed;
+   }
+
+   &__label {
+     flex: 1;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+   }
+
+   &__chevron {
+     width: 16px;
+     height: 16px;
+     color: $champagne-gold;
+     flex-shrink: 0;
+     transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+     &.rotate {
+       transform: rotate(180deg);
+     }
+   }
+ }
+
+ // ── Dropdown Panel ────────────────────────────────────────────────────────
+ .dropdown-panel {
+   position: absolute;
+   top: calc(100% + 6px);
+   left: 0;
+   right: 0;
+   z-index: 100;
+   background: $midnight-card;
+   border: 1px solid rgba(226, 199, 128, 0.25);
+   border-radius: 10px;
+   box-shadow: 0 12px 40px rgba(5, 25, 55, 0.55);
+   overflow: hidden;
+   animation: dropDown 180ms cubic-bezier(0.4, 0, 0.2, 1);
+ }
+
+ @keyframes dropDown {
+   from {
+     opacity: 0;
+     transform: translateY(-6px);
+   }
+
+   to {
+     opacity: 1;
+     transform: translateY(0);
+   }
+ }
+
+ // ── Dropdown Search ───────────────────────────────────────────────────────
+ .dropdown-search-wrap {
+   position: relative;
+   padding: 10px;
+   border-bottom: 1px solid rgba(226, 199, 128, 0.12);
+
+   .dropdown-search-icon {
+     position: absolute;
+     left: 18px;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 14px;
+     height: 14px;
+     color: rgba(226, 199, 128, 0.45);
+     pointer-events: none;
+   }
+ }
+
+ .dropdown-search {
+   width: 100%;
+   background: rgba(5, 25, 55, 0.6);
+   border: 1px solid rgba(226, 199, 128, 0.2);
+   border-radius: 6px;
+   padding: 8px 12px 8px 34px;
+   color: #fff;
+   font-size: 12px;
+   outline: none;
+   transition: border-color 200ms;
+   box-sizing: border-box;
+
+   &::placeholder {
+     color: rgba(255, 255, 255, 0.3);
+   }
+
+   &:focus {
+     border-color: rgba(226, 199, 128, 0.5);
+   }
+ }
+
+ // ── Dropdown List ─────────────────────────────────────────────────────────
+ .dropdown-list {
+   list-style: none;
+   margin: 0;
+   padding: 6px;
+   max-height: 220px;
+   overflow-y: auto;
+   scrollbar-width: thin;
+   scrollbar-color: rgba(182, 143, 36, 0.3) transparent;
+ }
+
+ .dropdown-option {
+   display: flex;
+   align-items: baseline;
+   gap: 8px;
+   padding: 10px 12px;
+   border-radius: 6px;
+   cursor: pointer;
+   transition: background 150ms;
+   position: relative;
+
+   &:hover {
+     background: rgba(226, 199, 128, 0.07);
+   }
+
+   &--selected {
+     background: rgba(182, 143, 36, 0.12);
+   }
+
+   &--current {
+     .option-iata {
+       color: $royal-gold;
+     }
+   }
+
+   .option-iata {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 700;
+     color: rgba(255, 255, 255, 0.9);
+     min-width: 36px;
+   }
+
+   .option-name {
+     font-size: 12px;
+     color: rgba(255, 255, 255, 0.65);
+     flex: 1;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+   }
+
+   .option-city {
+     font-size: 11px;
+     color: rgba(255, 255, 255, 0.35);
+     white-space: nowrap;
+   }
+
+   .option-current-badge {
+     font-size: 9px;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+     background: rgba(182, 143, 36, 0.2);
+     color: $champagne-gold;
+     padding: 1px 6px;
+     border-radius: 10px;
+     border: 1px solid rgba(182, 143, 36, 0.35);
+     white-space: nowrap;
+   }
+ }
+
+ .dropdown-empty {
+   padding: 16px 12px;
+   font-size: 12px;
+   color: rgba(255, 255, 255, 0.35);
+   text-align: center;
+ }
+
+ // ── Authorize Button ──────────────────────────────────────────────────────
+ .btn-authorize {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+   padding: 12px;
+   border-radius: 4px;
+   border: 1px solid rgba(226, 199, 128, 0.2);
+   background: rgba(226, 199, 128, 0.05);
+   color: rgba(255, 255, 255, 0.35);
+   font-size: 13px;
+   font-weight: 600;
+   cursor: not-allowed;
+   transition: all 300ms;
+
+   svg {
+     width: 16px;
+     height: 16px;
+   }
+
+   &--active:not(:disabled) {
+     background: linear-gradient(135deg, $royal-gold, $champagne-gold);
+     color: $midnight;
+     border-color: transparent;
+     cursor: pointer;
+     position: relative;
+     overflow: hidden;
+
+     // Center-out golden line effect
+     &::after {
+       content: '';
+       position: absolute;
+       bottom: 0;
+       left: 50%;
+       width: 0;
+       height: 2px;
+       background: rgba(5, 25, 55, 0.4);
+       transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+         left 300ms cubic-bezier(0.4, 0, 0.2, 1);
+     }
+
+     &:hover::after {
+       left: 0;
+       width: 100%;
+     }
+
+     &:hover {
+       box-shadow: 0 0 20px rgba(226, 199, 128, 0.45);
+     }
+   }
+ }
+
+ // ── Base note text ────────────────────────────────────────────────────────
+ .base-note {
+   font-size: 11px;
+   color: rgba(226, 199, 128, 0.4);
+   text-align: center;
+   margin: 10px 0 0;
+   line-height: 1.5;
+ }
+
+ // ── Shimmer inline skeleton ───────────────────────────────────────────────
+ .shimmer-inline {
+   display: inline-block;
+   width: 60px;
+   height: 28px;
+   border-radius: 4px;
+   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+   background-size: 200% 100%;
+   animation: shimmer 1.4s infinite;
+ }
+
+ @keyframes shimmer {
+   0% {
+     background-position: -200% 0;
+   }
+
+   100% {
+     background-position: 200% 0;
+   }
+ }
+
+ // ── Spinner ───────────────────────────────────────────────────────────────
+ .spinner {
+   display: inline-block;
+   width: 14px;
+   height: 14px;
+   border: 2px solid rgba(5, 25, 55, 0.3);
+   border-top-color: $midnight;
+   border-radius: 50%;
+   animation: spin 600ms linear infinite;
+ }
+
+ @keyframes spin {
+   to {
+     transform: rotate(360deg);
+   }
+ }

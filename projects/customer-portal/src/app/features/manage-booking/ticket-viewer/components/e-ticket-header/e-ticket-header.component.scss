@@ -1,0 +1,217 @@
+// e-ticket-header.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$success: #2E7D52;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.ticket-header {
+    display: flex;
+    flex-direction: column;
+}
+
+.gold-top-bar {
+    height: 4px;
+    background: linear-gradient(90deg, $royal-gold 0%, $champagne 40%, $royal-gold 70%, darken($royal-gold, 12%) 100%);
+}
+
+.header-body {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+// Brand
+.brand-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-name {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.brand-sub {
+    font-size: 0.58rem;
+    color: $text-muted;
+    letter-spacing: 0.04em;
+}
+
+// Ticket number
+.ticket-number-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-align: center;
+    padding: 0.5rem 1.25rem;
+    border-left: 1px solid rgba($charcoal, 0.08);
+    border-right: 1px solid rgba($charcoal, 0.08);
+}
+
+.tn-label {
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: $text-muted;
+}
+
+.tn-value {
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+}
+
+// Meta block
+.meta-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+
+    &.badge--valid {
+        background: rgba($success, 0.10);
+        border: 1px solid rgba($success, 0.25);
+        color: darken($success, 5%);
+
+        .status-dot {
+            background: darken($success, 5%);
+        }
+    }
+
+    &.badge--void {
+        background: rgba(#d95f5f, 0.10);
+        border: 1px solid rgba(#d95f5f, 0.25);
+        color: #d95f5f;
+
+        .status-dot {
+            background: #d95f5f;
+        }
+    }
+
+    &.badge--checkin {
+        background: rgba(#185FA5, 0.10);
+        border: 1px solid rgba(#185FA5, 0.25);
+        color: #185FA5;
+
+        .status-dot {
+            background: #185FA5;
+        }
+    }
+
+    &.badge--boarded {
+        background: rgba($royal-gold, 0.10);
+        border: 1px solid rgba($royal-gold, 0.3);
+        color: darken($royal-gold, 10%);
+
+        .status-dot {
+            background: $royal-gold;
+        }
+    }
+
+    &.badge--default {
+        background: rgba($charcoal, 0.06);
+        border: 1px solid rgba($charcoal, 0.15);
+        color: $text-muted;
+
+        .status-dot {
+            background: $text-muted;
+        }
+    }
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.meta-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: right;
+}
+
+.meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.meta-key {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $text-muted;
+}
+
+.meta-val {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: $charcoal;
+
+    &--accent {
+        color: $royal-gold;
+        letter-spacing: 0.06em;
+        font-family: 'Courier New', monospace;
+    }
+}
+
+@media print {
+    .ticket-header {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .status-badge {
+        border: 1px solid #ccc !important;
+        color: #333 !important;
+        background: none !important;
+    }
+}

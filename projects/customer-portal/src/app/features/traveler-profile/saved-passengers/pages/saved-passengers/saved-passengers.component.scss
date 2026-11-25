@@ -1,0 +1,577 @@
+// ============================================================================
+// saved-passengers.component.scss
+// Asiaporeair | "Travel Companions Hub" — Page Styles
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$error : #c53030;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+@keyframes shimmer-gold {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HERO HEADER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sp-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 85% -15%, rgba($royal-gold, 0.09) 0%, transparent 55%),
+            radial-gradient(ellipse at -5% 110%, rgba($royal-gold, 0.05) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    &__inner {
+        position: relative;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 44px 0;
+
+        @media (max-width: 768px) {
+            padding: 22px 20px 0;
+        }
+    }
+
+    &__content {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding-bottom: 24px;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    &__title {
+        font-size: clamp(1.3rem, 3vw, 1.8rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $white;
+        margin: 0 0 6px;
+        line-height: 1.15;
+    }
+
+    &__subtitle {
+        font-size: 0.78rem;
+        color: rgba($white, 0.5);
+        margin: 0;
+        max-width: 420px;
+        line-height: 1.6;
+    }
+
+    &__count-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: rgba($royal-gold, 0.12);
+        border: 1px solid rgba($royal-gold, 0.3);
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: $champagne;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba($royal-gold, 0.3), transparent);
+    }
+}
+
+.sp-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 18px;
+
+    &__link {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba($white, 0.35);
+        text-decoration: none;
+        transition: color $t;
+
+        &:hover {
+            color: $champagne;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            border-radius: 2px;
+        }
+    }
+
+    &__sep {
+        font-size: 12px;
+        color: rgba($white, 0.18);
+    }
+
+    &__current {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba($champagne, 0.65);
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CONTENT LAYOUT
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sp-content {
+    padding: 0 44px 64px;
+
+    @media (max-width: 768px) {
+        padding: 0 16px 48px;
+    }
+
+    &__inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-top: 36px;
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 32px;
+        align-items: start;
+
+        @media (max-width: 960px) {
+            grid-template-columns: 1fr;
+            max-width: 640px;
+        }
+    }
+}
+
+.sp-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    // &--list {}
+
+    // &--nav {}
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// TOOLBAR
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sp-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    &__left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: $charcoal;
+        margin: 0;
+    }
+
+    &__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.12);
+        border: 1px solid rgba($royal-gold, 0.3);
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: darken($royal-gold, 5%);
+    }
+}
+
+// ── Add button ────────────────────────────────────────────────────────────────
+.sp-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    border-radius: 4px;
+    background: $midnight;
+    border: 1px solid rgba($royal-gold, 0.35);
+    font-family: $font;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        background: $royal-gold;
+        border-color: $royal-gold;
+        color: $midnight;
+        box-shadow: 0 4px 16px rgba($royal-gold, 0.3);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SKELETON SHIMMER GRID
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sp-skeleton-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sp-skeleton-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    background: $white;
+    border: 1px solid rgba($champagne, 0.2);
+    border-radius: 12px;
+}
+
+.sp-skeleton {
+    &__avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: linear-gradient(90deg,
+                rgba($champagne, 0.08) 0%,
+                rgba($champagne, 0.22) 50%,
+                rgba($champagne, 0.08) 100%);
+        background-size: 200% 100%;
+        animation: shimmer-gold 1.8s ease infinite;
+    }
+
+    &__body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 4px;
+    }
+
+    &__line {
+        height: 12px;
+        border-radius: 4px;
+        background: linear-gradient(90deg,
+                rgba($champagne, 0.08) 0%,
+                rgba($champagne, 0.22) 50%,
+                rgba($champagne, 0.08) 100%);
+        background-size: 200% 100%;
+        animation: shimmer-gold 1.8s ease infinite;
+
+        &--name {
+            width: 55%;
+            animation-delay: 0s;
+        }
+
+        &--detail {
+            width: 70%;
+            animation-delay: 0.1s;
+        }
+
+        &--detail2 {
+            width: 40%;
+            animation-delay: 0.2s;
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CARD GRID
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sp-card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// EMPTY STATE
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sp-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 32px;
+    background: $white;
+    border: 1px dashed rgba($champagne, 0.4);
+    border-radius: 12px;
+    gap: 10px;
+
+    &__icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.06);
+        border: 1px solid rgba($royal-gold, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba($royal-gold, 0.5);
+        margin-bottom: 8px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: $charcoal;
+        margin: 0;
+    }
+
+    &__subtitle {
+        font-size: 0.76rem;
+        color: $muted;
+        margin: 0;
+        max-width: 320px;
+        line-height: 1.6;
+    }
+
+    &__cta {
+        margin-top: 8px;
+        padding: 10px 24px;
+        border-radius: 4px;
+        background: $midnight;
+        border: 1px solid rgba($royal-gold, 0.3);
+        font-family: $font;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: $champagne;
+        cursor: pointer;
+        transition: all $t;
+
+        &:hover {
+            background: $royal-gold;
+            border-color: $royal-gold;
+            color: $midnight;
+            box-shadow: 0 4px 14px rgba($royal-gold, 0.3);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 3px;
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ERROR BANNER
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sp-error-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 18px;
+    background: rgba($error, 0.05);
+    border: 1px solid rgba($error, 0.2);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    color: $error;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// RIGHT NAV COLUMN
+// ══════════════════════════════════════════════════════════════════════════════
+
+.sp-nav-header {
+    &__title {
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: $muted;
+        margin-bottom: 2px;
+    }
+
+    &__subtitle {
+        font-size: 0.66rem;
+        color: rgba($muted, 0.65);
+    }
+}
+
+.sp-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sp-nav-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: $white;
+    border: 1px solid rgba($champagne, 0.22);
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: border-color $t, box-shadow $t, transform $t;
+    box-shadow: 0 2px 8px rgba($midnight, 0.04);
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.45);
+        box-shadow: 0 5px 18px rgba($midnight, 0.08);
+        transform: translateY(-1px);
+
+        .sp-nav-card__icon {
+            background: rgba($royal-gold, 0.1);
+            border-color: rgba($royal-gold, 0.25);
+            color: $royal-gold;
+        }
+
+        .sp-nav-card__chevron {
+            color: $royal-gold;
+            transform: translateX(3px);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba($midnight, 0.04);
+        border: 1px solid rgba($midnight, 0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: rgba($charcoal, 0.55);
+        transition: all $t;
+    }
+
+    &__label {
+        flex: 1;
+        font-family: $font;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: $charcoal;
+        letter-spacing: -0.01em;
+    }
+
+    &__chevron {
+        color: rgba($charcoal, 0.22);
+        flex-shrink: 0;
+        transition: color $t, transform $t;
+    }
+}
+
+// ── Info card ─────────────────────────────────────────────────────────────────
+.sp-info-card {
+    display: flex;
+    gap: 12px;
+    padding: 16px 18px;
+    background: rgba($royal-gold, 0.04);
+    border: 1px solid rgba($royal-gold, 0.18);
+    border-radius: 12px;
+
+    &__icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: rgba($royal-gold, 0.1);
+        border: 1px solid rgba($royal-gold, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $royal-gold;
+        flex-shrink: 0;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: $charcoal;
+        margin: 0 0 4px;
+        letter-spacing: -0.01em;
+    }
+
+    &__text {
+        font-size: 0.68rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.6;
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ACCESSIBILITY & REDUCED MOTION
+// ══════════════════════════════════════════════════════════════════════════════
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sp-skeleton__avatar,
+    .sp-skeleton__line {
+        animation: none;
+    }
+
+    .sp-nav-card,
+    .sp-add-btn {
+        transition: none;
+    }
+}

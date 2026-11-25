@@ -1,0 +1,163 @@
+<!-- ============================================================
+     booking-search-filters.component.html
+     AOMS — Booking Search Terminal: Filter Bar (Dumb)
+     ============================================================ -->
+
+<div class="bsf-bar" [class.bsf-bar--loading]="isLoading()">
+
+    <!-- Glass accent strip -->
+    <div class="bsf-bar__accent-strip" aria-hidden="true"></div>
+
+    <!-- Filter Fields Row -->
+    <div class="bsf-fields" (keydown)="onKeydown($event)">
+
+        <!-- PNR Reference with Quick Search -->
+        <div class="bsf-field bsf-field--with-action">
+            <label class="bsf-field__label" for="bsf-pnr">PNR Reference</label>
+            <div class="bsf-field__wrap">
+                <svg class="bsf-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5-3.9 19.5m-2.1-19.5-3.9 19.5" />
+                </svg>
+                <input id="bsf-pnr" class="bsf-field__input" type="text" placeholder="e.g. ABC123" maxlength="10"
+                    autocomplete="off" spellcheck="false" [value]="form().bookingReference"
+                    (input)="onFieldChange('bookingReference', $any($event.target).value)" [disabled]="isLoading()"
+                    aria-label="PNR Reference" />
+                <button
+                    class="bsf-field__quick-search"
+                    type="button"
+                    (click)="onSearchByReference()"
+                    [disabled]="isLoading() || !form().bookingReference?.trim()"
+                    [attr.aria-label]="'Search by reference ' + form().bookingReference"
+                    title="Direct search by this PNR">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Flight Number -->
+        <div class="bsf-field">
+            <label class="bsf-field__label" for="bsf-flight">Flight Number</label>
+            <div class="bsf-field__wrap">
+                <svg class="bsf-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+                <input id="bsf-flight" class="bsf-field__input" type="text" placeholder="e.g. APA 721" maxlength="10"
+                    autocomplete="off" spellcheck="false" [value]="form().flightNumber"
+                    (input)="onFieldChange('flightNumber', $any($event.target).value)" [disabled]="isLoading()"
+                    aria-label="Flight Number" />
+            </div>
+        </div>
+
+        <!-- Passenger Name -->
+        <div class="bsf-field bsf-field--wide">
+            <label class="bsf-field__label" for="bsf-passenger">Passenger Name</label>
+            <div class="bsf-field__wrap">
+                <svg class="bsf-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                <input id="bsf-passenger" class="bsf-field__input" type="text" placeholder="Search by name…"
+                    autocomplete="off" [value]="form().passengerNameContains"
+                    (input)="onFieldChange('passengerNameContains', $any($event.target).value)" [disabled]="isLoading()"
+                    aria-label="Passenger name" />
+            </div>
+        </div>
+
+        <!-- Departure Date From -->
+        <div class="bsf-field">
+            <label class="bsf-field__label" for="bsf-date-from">Date From</label>
+            <div class="bsf-field__wrap">
+                <svg class="bsf-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+                <input id="bsf-date-from" class="bsf-field__input bsf-field__input--date" type="date"
+                    [value]="form().departureDateFrom"
+                    (input)="onFieldChange('departureDateFrom', $any($event.target).value)" [disabled]="isLoading()"
+                    aria-label="Departure date from" />
+            </div>
+        </div>
+
+        <!-- Departure Date To -->
+        <div class="bsf-field">
+            <label class="bsf-field__label" for="bsf-date-to">Date To</label>
+            <div class="bsf-field__wrap">
+                <svg class="bsf-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+                <input id="bsf-date-to" class="bsf-field__input bsf-field__input--date" type="date"
+                    [value]="form().departureDateTo"
+                    (input)="onFieldChange('departureDateTo', $any($event.target).value)" [disabled]="isLoading()"
+                    aria-label="Departure date to" />
+            </div>
+        </div>
+
+        <!-- Payment Status Dropdown -->
+        <div class="bsf-field">
+            <label class="bsf-field__label" for="bsf-status">Booking Status</label>
+            <div class="bsf-field__wrap">
+                <svg class="bsf-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+                <select id="bsf-status" class="bsf-field__select" [value]="form().paymentStatus"
+                    (change)="onFieldChange('paymentStatus', $any($event.target).value)" [disabled]="isLoading()"
+                    aria-label="Booking status filter">
+                    @for (opt of statusOptions; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                </select>
+                <svg class="bsf-field__select-caret" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Actions Row -->
+    <div class="bsf-actions">
+        <!-- Clear Button — visible only when filters are active -->
+        @if (hasActiveFilters() && !isLoading()) {
+        <button class="bsf-btn bsf-btn--clear" type="button" (click)="onReset()" aria-label="Clear all filters">
+            <svg class="bsf-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            Clear
+        </button>
+        }
+
+        <!-- Search Button -->
+        <button class="bsf-btn bsf-btn--search" type="button" (click)="onSubmit()" [disabled]="isLoading()">
+            @if (isLoading()) {
+            <svg class="bsf-btn__icon bsf-btn__icon--spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Searching…
+            } @else {
+            <svg class="bsf-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            Search Records
+            }
+        </button>
+    </div>
+
+</div>

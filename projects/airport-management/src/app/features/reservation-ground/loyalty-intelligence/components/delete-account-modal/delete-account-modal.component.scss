@@ -1,0 +1,373 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ruby: #710D06;
+
+ $t-fast: 150ms ease;
+
+ // ── 1. Backdrop ───────────────────────────────────────────────────────────
+ .dam-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 49;
+     background: rgba($midnight, 0.78);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     animation: dam-fade 200ms ease forwards;
+ }
+
+ // ── 2. Panel ──────────────────────────────────────────────────────────────
+ .dam-panel {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 50;
+     width: min(440px, calc(100vw - 2rem));
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 0 1.75rem 1.75rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($ruby, 0.35);
+     box-shadow:
+         0 0 0 1px rgba($gold, 0.08),
+         0 24px 60px rgba(0, 0, 0, 0.65),
+         0 0 40px rgba($ruby, 0.07) inset;
+     overflow: hidden;
+     text-align: center;
+     animation: dam-enter 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     &__accent {
+         width: calc(100% + 3.5rem);
+         height: 4px;
+         margin: 0 -1.75rem;
+         flex-shrink: 0;
+         background: linear-gradient(to right,
+                 rgba($ruby, 0.3),
+                 darken($ruby, 3%),
+                 lighten($ruby, 18%),
+                 darken($ruby, 3%),
+                 rgba($ruby, 0.3));
+     }
+ }
+
+ // ── 3. Warning Icon ───────────────────────────────────────────────────────
+ .dam-icon-wrap {
+     position: relative;
+     width: 72px;
+     height: 72px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     margin-top: 0.5rem;
+ }
+
+ .dam-ring {
+     position: absolute;
+     border-radius: 50%;
+
+     &--1 {
+         width: 52px;
+         height: 52px;
+         border: 1.5px solid rgba($ruby, 0.6);
+     }
+
+     &--2 {
+         width: 63px;
+         height: 63px;
+         border: 1.5px solid rgba($ruby, 0.3);
+         animation: dam-pulse 2s ease-out infinite;
+     }
+
+     &--3 {
+         width: 72px;
+         height: 72px;
+         border: 1.5px solid rgba($ruby, 0.15);
+         animation: dam-pulse 2s ease-out 0.4s infinite;
+     }
+ }
+
+ .dam-icon {
+     width: 1.75rem;
+     height: 1.75rem;
+     color: lighten($ruby, 28%);
+     position: relative;
+     z-index: 1;
+     filter: drop-shadow(0 0 6px rgba($ruby, 0.45));
+ }
+
+ // ── 4. Title ──────────────────────────────────────────────────────────────
+ .dam-title {
+     font-size: 1.1875rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     color: rgba(255, 255, 255, 0.9);
+     line-height: 1;
+ }
+
+ // ── 5. Member Context Card ────────────────────────────────────────────────
+ .dam-context {
+     width: 100%;
+     display: flex;
+     flex-direction: column;
+     gap: 0.4375rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.06);
+     border: 1px solid rgba($ruby, 0.18);
+     text-align: left;
+
+     &__row {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         gap: 0.75rem;
+     }
+
+     &__key {
+         font-size: 9.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: rgba($champagne, 0.35);
+         flex-shrink: 0;
+     }
+
+     &__val {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: rgba(255, 255, 255, 0.8);
+         text-align: right;
+
+         &--mono {
+             font-family: 'Courier New', monospace;
+             font-size: 0.8125rem;
+             letter-spacing: 0.05em;
+             color: $champagne;
+         }
+     }
+ }
+
+ // ── 6. Warning ────────────────────────────────────────────────────────────
+ .dam-warning {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.2);
+     text-align: left;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: lighten($ruby, 20%);
+         flex-shrink: 0;
+         margin-top: 0.0625rem;
+     }
+
+     p {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         line-height: 1.6;
+         color: rgba(255, 255, 255, 0.5);
+
+         strong {
+             color: lighten($ruby, 22%);
+             font-weight: 700;
+         }
+     }
+ }
+
+ // ── 7. API Error ──────────────────────────────────────────────────────────
+ .dam-error {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.5rem;
+     width: 100%;
+     padding: 0.625rem 0.875rem;
+     border-radius: 6px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.25);
+     text-align: left;
+     animation: dam-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: lighten($ruby, 22%);
+         flex-shrink: 0;
+         margin-top: 0.0625rem;
+     }
+
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 28%);
+     line-height: 1.5;
+ }
+
+ // ── 8. Actions ────────────────────────────────────────────────────────────
+ .dam-actions {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.75rem;
+     width: 100%;
+     padding-top: 0.5rem;
+     border-top: 1px solid rgba(255, 255, 255, 0.06);
+ }
+
+ .dam-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.625rem 1.125rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.875rem;
+     font-weight: 700;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--cancel {
+         color: rgba(255, 255, 255, 0.45);
+         background: transparent;
+         border: 1px solid rgba(255, 255, 255, 0.12);
+
+         &:hover:not(:disabled) {
+             color: rgba(255, 255, 255, 0.75);
+             border-color: rgba(255, 255, 255, 0.25);
+             background: rgba(255, 255, 255, 0.05);
+         }
+
+         &:disabled {
+             opacity: 0.3;
+             cursor: not-allowed;
+         }
+     }
+
+     &--confirm {
+         color: #fff;
+         background: $ruby;
+         border: 1px solid rgba($gold, 0.3); // Gold accent border per spec
+         box-shadow: 0 4px 16px rgba($ruby, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+         &:hover:not(:disabled) {
+             background: lighten($ruby, 8%);
+             border-color: rgba($gold, 0.5);
+             box-shadow: 0 6px 22px rgba($ruby, 0.65);
+             transform: translateY(-1px);
+         }
+
+         &:active:not(:disabled) {
+             transform: translateY(0);
+         }
+
+         &:disabled {
+             opacity: 0.45;
+             cursor: not-allowed;
+             transform: none;
+             box-shadow: none;
+         }
+     }
+ }
+
+ .dam-spin {
+     animation: dam-spin 1s linear infinite;
+ }
+
+ // ── 9. ESC Hint ───────────────────────────────────────────────────────────
+ .dam-esc-hint {
+     font-size: 10.5px;
+     font-family: var(--aoms-font-body);
+     color: rgba($champagne, 0.2);
+     margin-top: -0.25rem;
+
+     kbd {
+         font-family: 'Courier New', monospace;
+         font-size: 10px;
+         padding: 0.0625rem 0.3125rem;
+         border-radius: 3px;
+         background: rgba($champagne, 0.07);
+         border: 1px solid rgba($champagne, 0.12);
+         color: rgba($champagne, 0.3);
+     }
+ }
+
+ // ── 10. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes dam-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes dam-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(-3px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes dam-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px)) scale(0.93);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%) scale(1);
+     }
+ }
+
+ @keyframes dam-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes dam-pulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.6;
+     }
+
+     100% {
+         transform: scale(1.6);
+         opacity: 0;
+     }
+ }

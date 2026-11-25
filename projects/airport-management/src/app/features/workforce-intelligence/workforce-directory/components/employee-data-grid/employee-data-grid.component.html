@@ -1,0 +1,251 @@
+<!-- employee-data-grid.component.html -->
+
+<div class="edg-card">
+
+    <!-- ══ Shimmer ════════════════════════════════════════════════ -->
+    <div class="edg-body">
+
+        <div class="edg-header" role="row">
+            <div class="edg-header__cell edg-col--avatar" role="columnheader"><span class="sr-only">Photo</span></div>
+            <div class="edg-header__cell edg-col--name" role="columnheader">Name</div>
+            <div class="edg-header__cell edg-col--id" role="columnheader">Employee ID</div>
+            <div class="edg-header__cell edg-col--role" role="columnheader">Role</div>
+            <div class="edg-header__cell edg-col--dept" role="columnheader">Department</div>
+            <div class="edg-header__cell edg-col--salary" role="columnheader">Salary</div>
+            <div class="edg-header__cell edg-col--status" role="columnheader">Status</div>
+            <div class="edg-header__cell edg-col--actions" role="columnheader">Actions</div>
+        </div>
+
+        @if (loading()) {
+        <div aria-busy="true">
+            @for (r of shimmerRows; track $index) {
+            <div class="edg-row edg-row--shimmer" [class.edg-row--even]="$even">
+                <div class="edg-col--avatar">
+                    <div class="edg-sh edg-sh--avatar"></div>
+                </div>
+                <div class="edg-col--name">
+                    <div class="edg-sh"></div>
+                    <div class="edg-sh edg-sh--sub"></div>
+                </div>
+                <div class="edg-col--id">
+                    <div class="edg-sh edg-sh--narrow"></div>
+                </div>
+                <div class="edg-col--role">
+                    <div class="edg-sh edg-sh--pill"></div>
+                </div>
+                <div class="edg-col--dept">
+                    <div class="edg-sh"></div>
+                </div>
+                <div class="edg-col--salary">
+                    <div class="edg-sh edg-sh--narrow"></div>
+                </div>
+                <div class="edg-col--status">
+                    <div class="edg-sh edg-sh--pill"></div>
+                </div>
+                <div class="edg-col--actions">
+                    <div class="edg-sh edg-sh--btn"></div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+
+        <!-- ══ Data Rows ══════════════════════════════════════════════ -->
+        @if (!loading()) {
+        <div class="edg-body" role="rowgroup" [@gridRows]="employees().length">
+
+            @for (emp of employees(); track trackByEmployee($index, emp); let even = $even) {
+            <div class="edg-row" [class.edg-row--even]="even" [class.edg-row--odd]="!even"
+                [class.edg-row--processing]="processingId() === emp.employeeId" role="row">
+
+                <!-- Avatar -->
+                <div class="edg-col--avatar" role="gridcell">
+                    @if (emp.profilePictureUrl) {
+                    <img class="edg__avatar edg__avatar--photo" [src]="emp.profilePictureUrl" [alt]="emp.fullName"
+                        loading="lazy" />
+                    } @else {
+                    <div class="edg__avatar edg__avatar--initials"
+                        [class]="'edg__avatar--initials--' + emp.userType.toLowerCase()">
+                        {{ initials(emp) }}
+                    </div>
+                    }
+                </div>
+
+                <!-- Name + email -->
+                <div class="edg-col--name" role="gridcell">
+                    <span class="edg__name">{{ emp.fullName }}</span>
+                    <span class="edg__email">{{ emp.email }}</span>
+                </div>
+
+                <!-- Employee ID -->
+                <div class="edg-col--id" role="gridcell">
+                    <span class="edg__id">#{{ emp.employeeId }}</span>
+                    @if (emp.appUserId) {
+                    <span class="edg__meta edg__meta--mono" [title]="emp.appUserId">{{ compactAppUserId(emp.appUserId) }}</span>
+                    }
+                </div>
+
+                <!-- Role badge + icon -->
+                <div class="edg-col--role" role="gridcell">
+                    <span class="edg__role-badge" [ngClass]="roleConfig(emp.role).cssClass">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="edg__role-badge__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                [attr.d]="roleConfig(emp.role).iconPath" />
+                        </svg>
+                        {{ roleConfig(emp.role).label }}
+                    </span>
+                    @if (emp.position) {
+                    <span class="edg__meta" [title]="emp.position">{{ emp.position }}</span>
+                    }
+                </div>
+
+                <!-- Department -->
+                <div class="edg-col--dept" role="gridcell">
+                    <span class="edg__dept">{{ emp.department ?? (emp.crewBaseAirportIata ?? emp.crewBaseAirport ?? '—') }}</span>
+                </div>
+
+                <!-- Salary -->
+                <div class="edg-col--salary" role="gridcell">
+                    <span class="edg__salary">
+                        @if (emp.salary) {
+                        SGD {{ emp.salary | number:'1.0-0' }}
+                        } @else {
+                        <span class="edg__salary--na">—</span>
+                        }
+                    </span>
+                    @if (emp.dateOfHire) {
+                    <span class="edg__meta">{{ emp.dateOfHire | date:'dd MMM yyyy' }}</span>
+                    }
+                </div>
+
+                <!-- Status Badge -->
+                <div class="edg-col--status" role="gridcell">
+                    <span class="edg__status" [class.edg__status--active]="emp.status === 'Active'"
+                        [class.edg__status--inactive]="emp.status === 'Inactive'"
+                        [class.edg__status--leave]="emp.status === 'OnLeave'">
+                        @if (emp.status === 'Active') { <span class="edg__status__dot" aria-hidden="true"></span> Active
+                        }
+                        @if (emp.status === 'Inactive') { <span class="edg__status__dot edg__status__dot--pulse"
+                            aria-hidden="true"></span> Inactive }
+                        @if (emp.status === 'OnLeave') { <span class="edg__status__dot" aria-hidden="true"></span> On
+                        Leave
+                        }
+                    </span>
+                </div>
+
+                <!-- Actions -->
+                <div class="edg-col--actions" role="gridcell">
+                    <div class="edg__action-group">
+
+                        <!-- Manage (navigate to profile) -->
+                        <button class="edg__manage-btn" type="button" (click)="manageClicked.emit(emp.employeeId)"
+                            [attr.aria-label]="'Manage profile for ' + emp.fullName">
+                            Manage
+                        </button>
+
+                        <!-- Access Manager (manage system access & security) -->
+                        <button class="edg__access-btn" type="button" 
+                            (click)="accessManagerClicked.emit({ employeeId: emp.employeeId, appUserId: emp.appUserId, role: emp.role })"
+                            [attr.aria-label]="'Manage system access for ' + emp.fullName"
+                            title="Configure system access and security settings">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21h10.5a2.25 2.25 0 0 0 2.25-2.25V19.5a2.25 2.25 0 0 0-2.25-2.25h-10.5a2.25 2.25 0 0 0-2.25 2.25v1.25a2.25 2.25 0 0 0 2.25 2.25z" />
+                            </svg>
+                        </button>
+
+                        <!-- Deactivate / Reactivate -->
+                        @if (emp.status === 'Active' || emp.status === 'OnLeave') {
+                        <button class="edg__status-btn edg__status-btn--deactivate" type="button"
+                            [disabled]="processingId() === emp.employeeId"
+                            (click)="deactivateClicked.emit(emp.employeeId)"
+                            [attr.aria-label]="'Deactivate ' + emp.fullName">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                            </svg>
+                        </button>
+                        }
+
+                        @if (emp.status === 'Inactive') {
+                        <button class="edg__status-btn edg__status-btn--reactivate" type="button"
+                            [disabled]="processingId() === emp.employeeId"
+                            (click)="reactivateClicked.emit(emp.employeeId)"
+                            [attr.aria-label]="'Reactivate ' + emp.fullName">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                        </button>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+            }
+
+            <!-- Empty state -->
+            @if (employees().length === 0) {
+            <div class="edg-empty" role="status">
+                <div class="edg-empty__icon-wrap" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="edg-empty__icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0z" />
+                    </svg>
+                </div>
+                <p class="edg-empty__title">No Employees Found</p>
+                <p class="edg-empty__sub">Adjust the filters above to locate personnel records.</p>
+            </div>
+            }
+
+        </div>
+        }
+
+        <!-- ══ Pagination ═════════════════════════════════════════════ -->
+        @if (!loading() && pagination() && pagination()!.total > 0) {
+        <div class="edg-pagination">
+
+            <span class="edg-pagination__info">
+                Showing
+                <strong>{{ (pagination()!.page - 1) * pagination()!.size + 1 }}</strong>–<strong>{{ endIndex()
+                    }}</strong>
+                of <strong>{{ pagination()!.total }}</strong> employees
+            </span>
+
+            <div class="edg-pagination__controls">
+                <button class="edg-pagination__btn" type="button" [disabled]="!pagination()!.hasPrev"
+                    (click)="prevPage.emit()" aria-label="Previous page">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+
+                @for (pg of pageNumbers; track pg) {
+                @if (pg < 0) { <span class="edg-pagination__ellipsis" aria-hidden="true">…</span>
+                    } @else {
+                    <button class="edg-pagination__page" type="button"
+                        [class.edg-pagination__page--active]="pg === pagination()!.page"
+                        [attr.aria-current]="pg === pagination()!.page ? 'page' : null"
+                        (click)="pageChanged.emit(pg)">{{ pg
+                        }}</button>
+                    }
+                    }
+
+                    <button class="edg-pagination__btn" type="button" [disabled]="!pagination()!.hasNext"
+                        (click)="nextPage.emit()" aria-label="Next page">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+            </div>
+
+        </div>
+        }
+
+    </div>

@@ -1,0 +1,48 @@
+<nav class="stepper" aria-label="Check-in progress">
+    <ol class="stepper__track" role="list">
+        @for (step of steps; track step.stepNumber; let last = $last) {
+
+        <!-- Step node -->
+        <li class="stepper__step" [class.stepper__step--active]="activeStep === step.stepNumber"
+            [class.stepper__step--completed]="activeStep > step.stepNumber"
+            [attr.aria-current]="activeStep === step.stepNumber ? 'step' : null" role="listitem">
+
+            <!-- Icon / Number bubble -->
+            <div class="stepper__bubble" [attr.aria-hidden]="true">
+                @if (activeStep > step.stepNumber) {
+                <!-- Checkmark for completed -->
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                } @else if (activeStep === step.stepNumber) {
+                <!-- Active: boarding pass icon -->
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 12V22H4V12" />
+                    <path d="M22 7H2v5h20V7z" />
+                    <path d="M12 22V7" />
+                </svg>
+                } @else {
+                <span class="stepper__num">{{ step.stepNumber }}</span>
+                }
+            </div>
+
+            <!-- Labels -->
+            <div class="stepper__labels">
+                <span class="stepper__label">{{ step.label }}</span>
+                <span class="stepper__sublabel">{{ step.sublabel }}</span>
+            </div>
+
+        </li>
+
+        <!-- Connector line between steps -->
+        @if (!last) {
+        <li class="stepper__connector" aria-hidden="true"
+            [class.stepper__connector--filled]="activeStep > step.stepNumber">
+            <div class="stepper__line"></div>
+        </li>
+        }
+        }
+    </ol>
+</nav>

@@ -1,0 +1,112 @@
+<!-- pnr-lookup-form.component.html -->
+
+<div class="lookup-form-card" role="region" aria-label="Locate your booking">
+
+    <!-- Card Header -->
+    <div class="card-header">
+        <div class="header-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+            </svg>
+        </div>
+        <div>
+            <h2 class="card-title">Booking Lookup</h2>
+            <p class="card-sub">Enter your reference and last name to retrieve your itinerary</p>
+        </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="form-body"
+        aria-label="Booking reference lookup form">
+
+        <!-- ── Booking Reference ──────────────────────────────────────────────── -->
+        <div class="form-group" [@fieldSlide]>
+            <div class="floating-field" [class.floating-field--error]="hasError('bookingReference')"
+                [class.floating-field--filled]="isFilled('bookingReference')">
+                <div class="field-icon" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <line x1="2" y1="10" x2="22" y2="10" />
+                    </svg>
+                </div>
+                <input id="booking-ref" type="text" class="float-input float-input--mono"
+                    formControlName="bookingReference" autocomplete="off" spellcheck="false" maxlength="9"
+                    placeholder=" " (input)="onRefInput($event)"
+                    [class.float-input--error]="hasError('bookingReference')"
+                    [attr.aria-describedby]="hasError('bookingReference') ? 'err-ref' : 'hint-ref'"
+                    [attr.aria-invalid]="hasError('bookingReference')">
+                <label class="float-label" for="booking-ref">Booking Reference</label>
+                <span class="field-example" id="hint-ref" aria-hidden="true">e.g. ABCD12</span>
+            </div>
+            <span *ngIf="hasError('bookingReference')" id="err-ref" class="field-error" role="alert">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                </svg>
+                {{ getError('bookingReference') }}
+            </span>
+        </div>
+
+        <!-- ── Last Name ─────────────────────────────────────────────────────── -->
+        <div class="form-group" [@fieldSlide]>
+            <div class="floating-field" [class.floating-field--error]="hasError('lastName')"
+                [class.floating-field--filled]="isFilled('lastName')">
+                <div class="field-icon" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </div>
+                <input id="last-name" type="text" class="float-input" formControlName="lastName"
+                    autocomplete="family-name" spellcheck="false" placeholder=" " (input)="onLastNameInput($event)"
+                    [class.float-input--error]="hasError('lastName')"
+                    [attr.aria-describedby]="hasError('lastName') ? 'err-ln' : 'hint-ln'"
+                    [attr.aria-invalid]="hasError('lastName')">
+                <label class="float-label" for="last-name">Last Name</label>
+                <span class="field-example" id="hint-ln" aria-hidden="true">As in Passport</span>
+            </div>
+            <span *ngIf="hasError('lastName')" id="err-ln" class="field-error" role="alert">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                </svg>
+                {{ getError('lastName') }}
+            </span>
+        </div>
+
+        <!-- ── Submit Button ─────────────────────────────────────────────────── -->
+        <button type="submit" class="btn-locate" [disabled]="isLoading"
+            [attr.aria-label]="isLoading ? 'Searching for your booking…' : 'Locate my journey'">
+
+            <!-- Idle / ready state -->
+            <ng-container *ngIf="!isLoading">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                Locate My Journey
+            </ng-container>
+
+            <!-- Loading state -->
+            <ng-container *ngIf="isLoading">
+                <span class="btn-spinner" aria-hidden="true"></span>
+                Searching…
+            </ng-container>
+
+        </button>
+
+        <!-- Privacy note -->
+        <p class="privacy-note">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Your last name is verified locally and is not transmitted to our servers.
+        </p>
+
+    </form>
+
+</div>

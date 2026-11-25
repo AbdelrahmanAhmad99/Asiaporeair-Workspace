@@ -1,0 +1,288 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $ruby: #710D06;
+ $t: 160ms ease;
+
+ // ── Bar Container ─────────────────────────────────────────────────────────
+ .pfb-bar {
+     padding: 1.125rem;
+     border-radius: 12px;
+     background: rgba($charcoal, 0.05);
+     border: 1px solid rgba($champagne, 0.14);
+     box-shadow: 0 4px 16px rgba($midnight, 0.06);
+ }
+
+ // ── Form Layout ───────────────────────────────────────────────────────────
+ .pfb-form {
+     display: grid;
+     grid-template-columns: 0.8fr 1.4fr 1.4fr 1fr 1fr auto;
+     gap: 0.875rem;
+     align-items: end;
+
+     @media (max-width: 1200px) {
+         grid-template-columns: repeat(2, 1fr);
+     }
+
+     @media (max-width: 640px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ .pfb-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+     min-width: 0;
+
+     &--actions {
+         flex-direction: row;
+         align-items: stretch;
+         gap: 0.5rem;
+
+         @media (max-width: 1200px) {
+             grid-column: 1 / -1;
+         }
+     }
+ }
+
+ // ── Label ─────────────────────────────────────────────────────────────────
+ .pfb-label {
+     font-size: 10px;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 800;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-muted);
+     user-select: none;
+ }
+
+ // ── Range Group (amount / date) ───────────────────────────────────────────
+ .pfb-range {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+
+     &__sep {
+         flex-shrink: 0;
+         font-size: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+ }
+
+ // ── Text / Number / Date Input ────────────────────────────────────────────
+ .pfb-input {
+     width: 100%;
+     height: 2.625rem;
+     padding: 0 0.75rem;
+     border-radius: 12px; // Squircle
+     border: 1px solid rgba($champagne, 0.18);
+     background: rgba($charcoal, 0.045);
+     color: var(--aoms-text-primary);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 500;
+     outline: none;
+     transition: all $t;
+     min-width: 0;
+
+     &[type="number"] {
+         // -moz-appearance: textfield;
+
+         &::-webkit-inner-spin-button,
+         &::-webkit-outer-spin-button {
+             -webkit-appearance: none;
+         }
+     }
+
+     &[type="date"] {
+         color-scheme: light;
+         font-variant-numeric: tabular-nums;
+     }
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+         font-weight: 400;
+         opacity: 0.65;
+     }
+
+     &:focus {
+         border-color: $gold;
+         background: rgba($charcoal, 0.07);
+         box-shadow: 0 0 0 3px rgba($gold, 0.12);
+     }
+
+     &--prefixed {
+         padding-left: 2.625rem;
+     }
+ }
+
+ .pfb-input-prefix-wrap {
+     position: relative;
+     flex: 1;
+     min-width: 0;
+ }
+
+ .pfb-input-prefix {
+     position: absolute;
+     left: 0.75rem;
+     top: 50%;
+     transform: translateY(-50%);
+     font-size: 0.6875rem;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.04em;
+     color: rgba($gold, 0.7);
+     pointer-events: none;
+     z-index: 1;
+ }
+
+ // ── Select ────────────────────────────────────────────────────────────────
+ .pfb-select-wrap {
+     position: relative;
+
+     &__chevron {
+         position: absolute;
+         right: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $champagne;
+         pointer-events: none;
+     }
+ }
+
+ .pfb-select {
+     width: 100%;
+     height: 2.625rem;
+     padding: 0 2.25rem 0 0.75rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.18);
+     background: rgba($charcoal, 0.045);
+     color: var(--aoms-text-primary);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 600;
+     outline: none;
+     appearance: none;
+     cursor: pointer;
+     transition: all $t;
+
+     &:focus {
+         border-color: $gold;
+         background: rgba($charcoal, 0.07);
+         box-shadow: 0 0 0 3px rgba($gold, 0.12);
+     }
+
+     option {
+         background: var(--aoms-bg-card, #fff);
+         color: var(--aoms-text-primary, $charcoal);
+     }
+ }
+
+ // ── Action Buttons ────────────────────────────────────────────────────────
+ .pfb-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.375rem;
+     height: 2.625rem;
+     padding: 0 1.125rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     cursor: pointer;
+     transition: all $t;
+     white-space: nowrap;
+     flex: 1;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--search {
+         color: $midnight;
+         background: $gold;
+         border: none;
+         box-shadow: 0 4px 14px rgba($gold, 0.38);
+
+         &:hover:not(:disabled) {
+             background: lighten($gold, 6%);
+             box-shadow: 0 6px 20px rgba($gold, 0.55);
+         }
+     }
+
+     &--reset {
+         color: var(--aoms-text-secondary);
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.22);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     &__spinner {
+         animation: pfb-spin 1s linear infinite;
+     }
+ }
+
+ @keyframes pfb-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .pfb-bar {
+         background: rgba(255, 255, 255, 0.03);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .pfb-input,
+     .pfb-select {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.14);
+         color: rgba(255, 255, 255, 0.88);
+
+         &::placeholder {
+             color: rgba(255, 255, 255, 0.25);
+         }
+
+         &:focus {
+             background: rgba(255, 255, 255, 0.07);
+         }
+
+         option {
+             background: darken($midnight, 4%);
+             color: rgba(255, 255, 255, 0.88);
+         }
+     }
+
+     .pfb-input[type="date"] {
+         color-scheme: dark;
+     }
+ }

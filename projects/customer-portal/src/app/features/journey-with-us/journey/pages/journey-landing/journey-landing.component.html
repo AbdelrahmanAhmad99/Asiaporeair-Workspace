@@ -1,0 +1,65 @@
+<!-- ============================================================================
+     journey-landing.component.html
+     Asiaporeair | Journey With Us — Hub Landing Page
+     ============================================================================ -->
+
+<div class="jl-shell">
+
+    <!-- Hero Video Banner -->
+    <app-hero-video-banner [breadcrumbs]="breadcrumbs" headline="The Journey Is the Destination"
+        subheadline="Every flight is a curated experience of service, space, and refined luxury — from the moment you plan to the moment you land."></app-hero-video-banner>
+
+    <!-- Hub Sections Grid -->
+    <section class="jl-hub" aria-labelledby="jl-hub-title">
+        <div class="jl-hub__inner">
+
+            <header class="jl-hub__header">
+                <div class="jl-hub__header-line" aria-hidden="true"></div>
+                <div>
+                    <p class="jl-hub__header-eyebrow">Explore</p>
+                    <h2 class="jl-hub__header-title" id="jl-hub-title">Journey With Us</h2>
+                    <p class="jl-hub__header-subtitle">
+                        Discover every dimension of the Asiaporeair experience — from the cabin you choose
+                        to the stories we carry.
+                    </p>
+                </div>
+            </header>
+
+            <!-- 5-card grid: 3 top + 2 bottom -->
+            <div class="jl-hub__grid">
+
+                <!-- Top row: first 3 -->
+                <div class="jl-hub__row jl-hub__row--top">
+                    @for (section of sections().slice(0, 3); track trackById($index, section)) {
+                    <app-hub-navigation-card [section]="section" [index]="$index"></app-hub-navigation-card>
+                    }
+                </div>
+
+                <!-- Bottom row: last 2 (wider) -->
+                <div class="jl-hub__row jl-hub__row--bottom">
+                    @for (section of sections().slice(3); track trackById($index, section)) {
+                    <app-hub-navigation-card [section]="section" [index]="$index + 3"></app-hub-navigation-card>
+                    }
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Brand tagline strip -->
+    <div class="jl-tagline-strip" aria-hidden="true">
+        <div class="jl-tagline-strip__inner">
+            <span>Curated Excellence</span>
+            <span class="jl-tagline-strip__dot">◆</span>
+            <span>Award-Winning Service</span>
+            <span class="jl-tagline-strip__dot">◆</span>
+            <span>Your Journey, Elevated</span>
+            <span class="jl-tagline-strip__dot">◆</span>
+            <span>Curated Excellence</span>
+            <span class="jl-tagline-strip__dot">◆</span>
+            <span>Award-Winning Service</span>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,569 @@
+// ============================================================================
+// check-in-search.component.scss
+// Asiaporeair | "Boarding & Services" — Check-in Entry Page
+// Design System: "Luxury Midnight"
+// ============================================================================
+
+// ── §1 Design Tokens ──────────────────────────────────────────────────────────
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$success : #2E7D52;
+$error : #d95f5f;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+// ── §2 Google Fonts ───────────────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+// ── §3 Host / Shell ───────────────────────────────────────────────────────────
+:host {
+    display: block;
+    font-family: $font;
+    min-height: 100vh;
+    background: $ivory;
+}
+
+.ci-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+// ── §4 Hero Header ────────────────────────────────────────────────────────────
+.ci-hero {
+    background: $midnight;
+    padding: 0 0 0.5rem;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba($champagne, 0.1);
+
+    // Subtle noise texture overlay
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        opacity: 0.4;
+    }
+
+    // Bottom gradient fade
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(to right,
+                transparent,
+                rgba($royal-gold, 0.35),
+                $champagne,
+                rgba($royal-gold, 0.35),
+                transparent);
+    }
+
+    &__particles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    &__inner {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1.75rem 2rem 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(to right,
+                transparent,
+                rgba($royal-gold, 0.25) 15%,
+                $royal-gold,
+                $champagne,
+                $royal-gold,
+                rgba($royal-gold, 0.25) 85%,
+                transparent);
+        margin-bottom: 2rem;
+    }
+
+    &__title-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    &__icon-ring {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.08);
+        border: 1.5px solid rgba($champagne, 0.22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 28px rgba($royal-gold, 0.12);
+        animation: iconPulse 3.5s ease-in-out infinite;
+    }
+
+    &__title {
+        font-size: clamp(1.6rem, 4vw, 2.4rem);
+        font-weight: 300;
+        letter-spacing: -0.03em;
+        color: $white;
+        margin: 0;
+        line-height: 1.15;
+    }
+
+    &__title-accent {
+        font-weight: 600;
+        color: $champagne;
+    }
+
+    &__subtitle {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        color: rgba($white, 0.5);
+        max-width: 500px;
+        line-height: 1.65;
+        margin: 0;
+    }
+
+    &__back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        border-radius: 3px;
+        background: transparent;
+        border: 1px solid rgba($champagne, 0.18);
+        font-family: $font;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: rgba($white, 0.5);
+        cursor: pointer;
+        transition: all $t;
+
+        &:hover {
+            border-color: rgba($champagne, 0.4);
+            color: $champagne;
+            background: rgba($champagne, 0.05);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 2px;
+        }
+    }
+}
+
+// ── §5 Brand wordmark ─────────────────────────────────────────────────────────
+.ci-brand {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+// ── §6 Ambient particles ──────────────────────────────────────────────────────
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($champagne, 0.18);
+    animation: twinkle 3s ease-in-out infinite;
+
+    @for $i from 1 through 12 {
+        &:nth-child(#{$i}) {
+            width: #{2 + ($i % 3)}px;
+            height: #{2 + ($i % 3)}px;
+            // top: #{5 + ($i * 7) % 88}%;
+            // left: #{3 + ($i * 8) % 94}%;
+            animation-delay: #{$i * 0.25}s;
+            animation-duration: #{2 + $i * 0.2}s;
+        }
+    }
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.08;
+    }
+
+    50% {
+        opacity: 0.65;
+    }
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba($royal-gold, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 38px rgba($royal-gold, 0.28);
+    }
+}
+
+// ── §7 Main body ──────────────────────────────────────────────────────────────
+.ci-body {
+    flex: 1;
+    padding: 2.5rem 2rem 4rem;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ci-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+    align-items: start;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── §8 Form column ────────────────────────────────────────────────────────────
+.ci-form-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+// ── §9 Main search card ───────────────────────────────────────────────────────
+.ci-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.08);
+    box-shadow:
+        0 4px 6px rgba($midnight, 0.04),
+        0 10px 30px rgba($midnight, 0.08);
+    overflow: hidden;
+
+    &__gold-bar {
+        height: 3px;
+        background: linear-gradient(90deg, $royal-gold, $champagne, $royal-gold);
+        background-size: 200% 100%;
+        animation: goldShimmer 3s ease-in-out infinite;
+    }
+
+    &__header {
+        padding: 1.75rem 2rem 0;
+    }
+
+    &__title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: $charcoal;
+        margin: 0 0 0.35rem;
+    }
+
+    &__subtitle {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.78rem;
+        color: $muted;
+        margin: 0 0 1.5rem;
+        line-height: 1.55;
+    }
+
+    // Form content sits at its own padding
+    app-check-in-lookup-form {
+        display: block;
+        padding: 0 2rem 1.75rem;
+    }
+}
+
+@keyframes goldShimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── §10 Success card ──────────────────────────────────────────────────────────
+.ci-success-card {
+    background: rgba($success, 0.06);
+    border: 1px solid rgba($success, 0.22);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &__icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: rgba($success, 0.1);
+        border: 1px solid rgba($success, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: darken($success, 5%);
+        flex-shrink: 0;
+    }
+
+    &__text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    &__heading {
+        font-family: $font;
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: darken($success, 5%);
+    }
+
+    &__sub {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        color: rgba($success, 0.7);
+    }
+
+    &__spinner {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid rgba($success, 0.2);
+        border-top-color: darken($success, 5%);
+        animation: spin 0.8s linear infinite;
+        flex-shrink: 0;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ── §11 Sidebar ───────────────────────────────────────────────────────────────
+.ci-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 1.5rem;
+}
+
+// .sidebar-item {
+//     /* wrapper for animation targeting */
+// }
+
+// ── §12 Loyalty nudge card ────────────────────────────────────────────────────
+.ci-nudge {
+    background: $midnight;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border: 1px solid rgba($champagne, 0.12);
+    box-shadow: 0 4px 20px rgba($midnight, 0.15);
+
+    &__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.1);
+        border: 1px solid rgba($champagne, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    &__body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__heading {
+        font-family: $font;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: $champagne;
+    }
+
+    &__text {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.68rem;
+        color: rgba($white, 0.45);
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: none;
+        border: none;
+        font-family: $font;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: $royal-gold;
+        cursor: pointer;
+        padding: 0;
+        text-transform: uppercase;
+        transition: color $t;
+
+        &:hover {
+            color: $champagne;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            border-radius: 2px;
+        }
+    }
+}
+
+// ── §13 Quick-link button ─────────────────────────────────────────────────────
+.ci-quick-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.9rem 1.25rem;
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.1);
+    border-radius: 10px;
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: $charcoal;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color $t, background $t, box-shadow $t;
+
+    &__icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: rgba($midnight, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: rgba($midnight, 0.45);
+        transition: background $t, color $t;
+    }
+
+    &__chevron {
+        margin-left: auto;
+        color: rgba($charcoal, 0.25);
+        flex-shrink: 0;
+        transition: transform $t, color $t;
+    }
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.3);
+        background: rgba($royal-gold, 0.03);
+        box-shadow: 0 2px 12px rgba($midnight, 0.06);
+
+        .ci-quick-link__icon {
+            background: rgba($royal-gold, 0.08);
+            color: $royal-gold;
+        }
+
+        .ci-quick-link__chevron {
+            transform: translateX(3px);
+            color: $royal-gold;
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §14 Responsive ────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+    .ci-hero__inner {
+        padding: 1.25rem 1rem 0;
+    }
+
+    .ci-body {
+        padding: 1.5rem 1rem 3rem;
+    }
+
+    .ci-card__header {
+        padding: 1.25rem 1.25rem 0;
+    }
+
+    .ci-card app-check-in-lookup-form {
+        padding: 0 1.25rem 1.25rem;
+    }
+}
+
+// ── §15 Accessibility — Focus Styles ─────────────────────────────────────────
+:focus-visible {
+    outline: 2px solid $royal-gold;
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+// ── §16 Reduced Motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+
+    .particle,
+    .ci-hero__icon-ring,
+    .ci-success-card__spinner,
+    .ci-card__gold-bar {
+        animation: none !important;
+    }
+
+    .ci-hero__back-btn,
+    .ci-nudge__cta,
+    .ci-quick-link {
+        transition: none !important;
+    }
+}

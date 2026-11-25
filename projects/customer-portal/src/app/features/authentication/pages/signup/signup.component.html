@@ -1,0 +1,139 @@
+<div class="signup-shell">
+
+    <!-- ── Cinematic background ─────────────────────────────────────────── -->
+    <div class="signup-shell__bg" aria-hidden="true">
+        <img class="signup-shell__bg-image" src="assets/images/auth/background.png" alt="" loading="eager" />
+        <div class="signup-shell__bg-overlay"></div>
+    </div>
+
+    <!-- ── Top navigation bar ───────────────────────────────────────────── -->
+    <nav class="signup-nav" aria-label="Authentication navigation">
+        <a class="signup-nav__logo" (click)="onGoHome()" role="button" tabindex="0">
+            <img src="assets/images/application/logo.svg" alt="Asiaporeair" height="32" />
+        </a>
+        <div class="signup-nav__actions">
+            <span class="signup-nav__hint">Already a member?</span>
+            <button class="signup-nav__login-btn" type="button" (click)="onGoToLogin()">
+                Access Your Suite
+            </button>
+        </div>
+    </nav>
+
+    <!-- ── Main content ─────────────────────────────────────────────────── -->
+    <main class="signup-main" role="main">
+
+        <!-- Left — branding panel (hidden on mobile) -->
+        <aside class="signup-brand" aria-hidden="true">
+            <div class="signup-brand__content">
+                <div class="signup-brand__pre-line"></div>
+                <p class="signup-brand__eyebrow">Welcome to Asiaporeair</p>
+                <h1 class="signup-brand__headline">Begin Your<br />Journey Today</h1>
+                <p class="signup-brand__sub">
+                    Join a community of discerning travellers. Earn Voyager Miles,
+                    unlock exclusive lounges, and experience the sky differently.
+                </p>
+                <ul class="signup-brand__perks" aria-label="Member benefits">
+                    <li class="signup-brand__perk">
+                        <span class="signup-brand__perk-icon" aria-hidden="true">✦</span>
+                        Earn Voyager Miles on every flight
+                    </li>
+                    <li class="signup-brand__perk">
+                        <span class="signup-brand__perk-icon" aria-hidden="true">✦</span>
+                        Priority lounge access from Gold tier
+                    </li>
+                    <li class="signup-brand__perk">
+                        <span class="signup-brand__perk-icon" aria-hidden="true">✦</span>
+                        Exclusive upgrade offers and rewards
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Right — form panel -->
+        <section class="signup-panel" aria-label="Create your account">
+            <div class="signup-panel__card">
+
+                <!-- ── Success state ──────────────────────────────────────────── -->
+                @if (store.isSuccess()) {
+                <div class="signup-success" role="alert" aria-live="polite">
+                    <div class="signup-success__icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="9 12 11 14 15 10" />
+                        </svg>
+                    </div>
+                    <h2 class="signup-success__title">Account Created</h2>
+                    <p class="signup-success__message">{{ store.successMsg() }}</p>
+                    <p class="signup-success__sub">
+                        Please check your inbox to verify your email address before accessing your suite.
+                    </p>
+                    <button class="btn-primary" type="button" (click)="onGoToLogin()">
+                        Access Your Suite
+                    </button>
+                </div>
+                }
+
+                <!-- ── Form state ─────────────────────────────────────────────── -->
+                @if (!store.isSuccess()) {
+
+                <header class="signup-panel__header">
+                    <h2 class="signup-panel__title">Create Your Account</h2>
+                    <p class="signup-panel__subtitle">
+                        Your first step toward a world-class travel experience.
+                    </p>
+                </header>
+
+                <!-- Social login options -->
+                <app-social-login-buttons />
+
+                <!-- Divider -->
+                <div class="signup-divider" aria-hidden="true">
+                    <span class="signup-divider__line"></span>
+                    <span class="signup-divider__text">or register with email</span>
+                    <span class="signup-divider__line"></span>
+                </div>
+
+                <!-- Global error alert -->
+                @if (store.hasError()) {
+                <div class="signup-error-alert" role="alert" aria-live="assertive">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    {{ store.authError() }}
+                </div>
+                }
+
+                <!-- Profile picture uploader -->
+                <app-profile-picture-uploader (fileSelected)="onProfilePictureSelected($event)" />
+
+                <!-- Signup form -->
+                <app-signup-form [isLoading]="store.isLoading()" (formSubmit)="onSubmit($event)"
+                    (passwordChange)="onPasswordChange($event)">
+
+                    <!-- Password strength meter -->
+                    @if (livePassword().length > 0) {
+                    <app-password-strength-meter [password]="livePassword()" />
+                    }
+                </app-signup-form>
+
+                <!-- Footer links -->
+                <p class="signup-panel__terms">
+                    By creating an account you agree to our
+                    <a href="/legal/terms" target="_blank" rel="noopener">Terms of Service</a>
+                    and
+                    <a href="/legal/privacy" target="_blank" rel="noopener">Privacy Policy</a>.
+                </p>
+
+                }
+
+            </div>
+        </section>
+
+    </main>
+    <!-- ── Layout footer ─────────────────────────────────────────────────────── -->
+    <app-auth-layout-footer />
+</div>

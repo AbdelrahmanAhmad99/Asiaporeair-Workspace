@@ -1,0 +1,70 @@
+<!-- ============================================================================
+     profile-avatar-uploader.component.html
+     Asiaporeair | Avatar Uploader — Luxury Circle with Gold Overlay
+     ============================================================================ -->
+
+<div class="avatar-uploader">
+
+    <!-- Hidden file input -->
+    <input #fileInput type="file" accept="image/jpeg,image/png,image/webp" class="avatar-uploader__file-input"
+        aria-label="Upload profile photo" (change)="onFileInputChange($event)" />
+
+    <!-- Avatar Circle -->
+    <div class="avatar-uploader__circle" [class.is-drag-over]="isDragOver()" [class.is-loading]="isLoading"
+        (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)" role="button" tabindex="0"
+        aria-label="Change profile photo" (click)="triggerFileInput(fileInput)"
+        (keydown.enter)="triggerFileInput(fileInput)">
+
+        <!-- Skeleton shimmer -->
+        @if (isLoading) {
+        <div class="avatar-uploader__skeleton" aria-hidden="true"></div>
+        }
+
+        <!-- Image or Initials -->
+        @if (!isLoading) {
+        @if (resolvedAvatar) {
+        <img [src]="resolvedAvatar" [alt]="displayName + ' profile photo'" class="avatar-uploader__image" />
+        } @else {
+        <div class="avatar-uploader__initials" aria-hidden="true">
+            {{ initials }}
+        </div>
+        }
+
+        <!-- Hover Overlay -->
+        <div class="avatar-uploader__overlay" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+            </svg>
+            <span>Change Photo</span>
+        </div>
+        }
+
+    </div>
+
+    <!-- Loyalty Tier Badge -->
+    @if (!isLoading) {
+    <div class="avatar-uploader__tier-badge" [attr.data-tier]="loyaltyTier.toLowerCase()">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+            <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+        {{ loyaltyTier }}
+    </div>
+    }
+
+    <!-- Change photo text link (below circle) -->
+    @if (!isLoading) {
+    <button class="avatar-uploader__change-btn" type="button" (click)="triggerFileInput(fileInput)"
+        aria-label="Upload new profile photo">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+        </svg>
+        Change Photo
+    </button>
+    }
+
+</div>

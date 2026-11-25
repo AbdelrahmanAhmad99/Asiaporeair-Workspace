@@ -1,0 +1,41 @@
+<!-- workforce-kpi-bar.component.html -->
+
+<div class="wkb-grid">
+
+    @if (loading()) {
+    @for (c of shimmerCards; track $index) {
+    <div class="wkb-card wkb-card--shimmer" aria-hidden="true">
+        <div class="wkb-sh wkb-sh--icon"></div>
+        <div class="wkb-sh wkb-sh--label"></div>
+        <div class="wkb-sh wkb-sh--value"></div>
+        <div class="wkb-sh wkb-sh--sub"></div>
+    </div>
+    }
+    }
+
+    @if (!loading()) {
+    @for (card of cards(); track card.id) {
+    <div class="wkb-card" [attr.data-variant]="card.variant">
+
+        <div class="wkb-card__stripe" aria-hidden="true"></div>
+
+        <div class="wkb-card__top">
+            <div class="wkb-card__icon-wrap" aria-hidden="true">
+                <svg class="wkb-card__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="card.iconPath" />
+                </svg>
+            </div>
+            @if (card.badge) {
+            <span class="wkb-card__badge">{{ card.badge }}</span>
+            }
+        </div>
+
+        <p class="wkb-card__label">{{ card.label }}</p>
+        <p class="wkb-card__value">{{ card.value }}</p>
+        <p class="wkb-card__sub">{{ card.subLabel }}</p>
+
+    </div>
+    }
+    }
+
+</div>

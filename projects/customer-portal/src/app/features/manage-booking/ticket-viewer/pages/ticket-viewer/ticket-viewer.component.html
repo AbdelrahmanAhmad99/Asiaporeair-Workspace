@@ -1,0 +1,165 @@
+<!-- ============================================================================
+     ticket-viewer.component.html
+     Asiaporeair | "E-Ticket" — Digital Boarding Document
+     ============================================================================ -->
+
+<div class="ticket-shell" [class.print-mode]="isPrinting()">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         PAGE HEADER (screen only — hidden on print)
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="tv-header screen-only" role="banner">
+        <div class="tv-header-inner">
+            <button class="back-link" (click)="onBack()" [disabled]="isPrinting()"
+                aria-label="Return to booking details">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Booking Details
+            </button>
+
+            <div class="header-middle">
+                <span class="header-eyebrow" aria-hidden="true">ASIAPOREAIR · ELECTRONIC TICKET</span>
+                @if (ticket()) {
+                <span class="header-code" aria-label="Ticket code">{{ ticket()!.ticketCode }}</span>
+                }
+            </div>
+
+            <!-- Action buttons (screen only) -->
+            @if (!isLoading() && ticket()) {
+            <div class="header-actions" role="group" aria-label="Ticket actions">
+                <button class="btn-wallet" (click)="onAddToWallet()" aria-label="Add to Apple Wallet">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                        <line x1="1" y1="10" x2="23" y2="10" />
+                    </svg>
+                    Add to Wallet
+                </button>
+                <button class="btn-pdf" (click)="onDownloadPdf()" aria-label="Download PDF">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Download PDF
+                </button>
+                <button class="btn-print" (click)="onPrintTicket()" aria-label="Print this e-ticket">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <polyline points="6 9 6 2 18 2 18 9" />
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                        <rect x="6" y="14" width="12" height="8" />
+                    </svg>
+                    Print E-Ticket
+                </button>
+            </div>
+            }
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         LOADING — Gold Skeleton
+    ══════════════════════════════════════════════════════════════════════════ -->
+    @if (isLoading()) {
+    <div class="ticket-skeleton" aria-busy="true" aria-label="Loading your e-ticket">
+        <div class="skeleton-document">
+            <div class="skel-gold-bar" aria-hidden="true"></div>
+            <div class="skel-header">
+                <div class="skel skel--logo"></div>
+                <div class="skel skel--code"></div>
+            </div>
+            <div class="skel skel--divider"></div>
+            <div class="skel-route">
+                <div class="skel skel--iata"></div>
+                <div class="skel skel--track"></div>
+                <div class="skel skel--iata"></div>
+            </div>
+            <div class="skel skel--divider"></div>
+            @for (i of skeletonRows; track i) {
+            <div class="skel skel--row"></div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ERROR STATE
+    ══════════════════════════════════════════════════════════════════════════ -->
+    @if (ticketError() && !isLoading()) {
+    <div class="ticket-error" [@fadeIn] role="alert">
+        <div class="error-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d95f5f" stroke-width="1">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+        </div>
+        <p class="error-msg">{{ ticketError() }}</p>
+        <button class="btn-back-error" (click)="onBack()">Return to My Trips</button>
+    </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         TICKET DOCUMENT
+    ══════════════════════════════════════════════════════════════════════════ -->
+    @if (!isLoading() && ticket()) {
+    <div class="ticket-document" [@ticketUnfold] [@sectionsReveal] role="main"
+        aria-label="Electronic ticket for {{ paxName() }}">
+
+        <!-- PART 1: E-Ticket Header -->
+        <div class="ticket-section" [@goldGlow]>
+            <app-e-ticket-header [ticket]="ticket()!" [statusBadge]="statusBadge()" [issueDate]="issueDateDisplay()">
+            </app-e-ticket-header>
+        </div>
+
+        <!-- PART 2: Itinerary Row (full-width) -->
+        <div class="ticket-section ticket-section--flight">
+            <app-itinerary-summary-row [ticket]="ticket()!"></app-itinerary-summary-row>
+        </div>
+
+        <!-- PART 3: Passenger + QR Grid -->
+        <div class="ticket-section ticket-grid">
+            <div class="ticket-grid-main">
+                <app-passenger-ticket-card [ticket]="ticket()!"></app-passenger-ticket-card>
+            </div>
+            <div class="ticket-grid-qr">
+                <app-ticket-qr-code [ticketCode]="ticket()!.ticketCode" [passengerName]="paxName()"
+                    [isValid]="isValid()">
+                </app-ticket-qr-code>
+            </div>
+        </div>
+
+        <!-- PART 4: Security / Conditions -->
+        <div class="ticket-section">
+            <app-ticket-security-info [ticket]="ticket()!" [isExpanded]="isSecurityExpanded()"
+                (toggleExpand)="isSecurityExpanded.set(!isSecurityExpanded())">
+            </app-ticket-security-info>
+        </div>
+
+        <!-- Print watermark (print only) -->
+        <div class="print-watermark" aria-hidden="true">
+            <span>ASIAPOREAIR · ELECTRONIC TICKET · {{ ticket()!.ticketCode }}</span>
+        </div>
+
+    </div>
+    }
+
+    <!-- Screen-only footer nav -->
+    @if (!isLoading() && ticket()) {
+    <div class="tv-footer screen-only">
+        <button class="btn-view-booking" (click)="onViewBookingDetails()" aria-label="View full booking details">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+            </svg>
+            View Full Booking Details
+        </button>
+    </div>
+    }
+
+</div>

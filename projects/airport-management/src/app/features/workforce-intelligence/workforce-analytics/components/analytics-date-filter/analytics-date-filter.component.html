@@ -1,0 +1,74 @@
+<!-- analytics-date-filter.component.html -->
+
+<div class="adf">
+    <!-- Glass layer -->
+    <div class="adf__glass" aria-hidden="true"></div>
+
+    <!-- ── Header row ─────────────────────────────────────────── -->
+    <div class="adf__header">
+        <div class="adf__header__left">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="adf__header__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+            <span class="adf__header__title">Analysis Period</span>
+        </div>
+        @if (currentRange()) {
+        <span class="adf__range-label">{{ rangeLabel() }}</span>
+        }
+    </div>
+
+    <!-- ── Preset pills ───────────────────────────────────────── -->
+    <div class="adf__presets" role="group" aria-label="Date range presets">
+        @for (p of presets; track p.id) {
+        <button class="adf__preset" type="button" [class.adf__preset--active]="activePresetId() === p.id"
+            [disabled]="loading()" (click)="onPresetClick(p)" [attr.aria-pressed]="activePresetId() === p.id">
+            {{ p.label }}
+        </button>
+        }
+    </div>
+
+    <!-- ── Custom range pickers ──────────────────────────────── -->
+    @if (showCustom()) {
+    <div class="adf__custom" role="group" aria-label="Custom date range">
+        <div class="adf__date-pair">
+
+            <div class="adf__field">
+                <label class="adf__field__label" for="adf-start">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="adf__field__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                    From
+                </label>
+                <input class="adf__date-input" id="adf-start" type="date" [ngModel]="customStart()"
+                    (ngModelChange)="customStart.set($event)" aria-label="Start date" />
+            </div>
+
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="adf__arrow"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+
+            <div class="adf__field">
+                <label class="adf__field__label" for="adf-end">To</label>
+                <input class="adf__date-input" id="adf-end" type="date" [ngModel]="customEnd()"
+                    (ngModelChange)="customEnd.set($event)" aria-label="End date" />
+            </div>
+
+        </div>
+
+        <button class="adf__apply-btn" type="button" [disabled]="!customValid() || loading()" (click)="onApplyCustom()">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="adf__apply-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            Apply Range
+        </button>
+    </div>
+    }
+
+</div>

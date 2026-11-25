@@ -1,0 +1,214 @@
+// ============================================================================
+// hub-navigation-card.component.scss
+// Asiaporeair | Hub Navigation Card — Luxury Image Card with Gold Accents
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$white : #FFFFFF;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 360ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes cardReveal {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── Card shell ────────────────────────────────────────────────────────────────
+.hnc {
+    display: block;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+    aspect-ratio: 16 / 10;
+    background: $midnight;
+
+    // Staggered entry animation
+    animation: cardReveal 600ms $ease both;
+    animation-delay: var(--anim-delay, 0ms);
+
+    // Transition properties
+    transition: transform $t, box-shadow $t;
+
+    &:hover {
+        transform: translateY(-4px) scale(1.005);
+        box-shadow: 0 20px 50px rgba($midnight, 0.3);
+
+        .hnc__image {
+            transform: scale(1.06);
+        }
+
+        .hnc__image-overlay {
+            opacity: 1;
+        }
+
+        .hnc__cta {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .hnc__cta-arrow {
+            transform: translateX(5px);
+        }
+
+        .hnc__corner {
+            opacity: 1;
+        }
+
+        .hnc__desc {
+            opacity: 1;
+            max-height: 80px;
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+}
+
+// ── Image ─────────────────────────────────────────────────────────────────────
+.hnc__image-wrap {
+    position: absolute;
+    inset: 0;
+}
+
+.hnc__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform $t;
+}
+
+.hnc__image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+            rgba($midnight, 0.88) 0%,
+            rgba($midnight, 0.45) 50%,
+            rgba($midnight, 0.12) 100%);
+    opacity: 0.8;
+    transition: opacity $t;
+}
+
+// ── Body content ──────────────────────────────────────────────────────────────
+.hnc__body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 24px 20px;
+    z-index: 2;
+}
+
+.hnc__tagline {
+    display: block;
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: $royal-gold;
+    margin-bottom: 6px;
+}
+
+.hnc__title {
+    font-family: $font;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: $white;
+    margin: 0 0 8px;
+    line-height: 1.2;
+}
+
+.hnc__desc {
+    font-family: $font;
+    font-size: 0.76rem;
+    font-weight: 400;
+    color: rgba($white, 0.7);
+    line-height: 1.55;
+    margin: 0 0 12px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 300ms $ease, max-height 400ms $ease;
+}
+
+// ── CTA ───────────────────────────────────────────────────────────────────────
+.hnc__cta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.65;
+    transform: translateX(-6px);
+    transition: opacity $t, transform $t;
+}
+
+.hnc__cta-text {
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: $champagne;
+    text-transform: uppercase;
+}
+
+.hnc__cta-arrow {
+    color: $champagne;
+    transition: transform 280ms $ease;
+}
+
+// ── Gold corner accent ────────────────────────────────────────────────────────
+.hnc__corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 40px solid $royal-gold;
+    border-left: 40px solid transparent;
+    opacity: 0;
+    transition: opacity $t;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hnc {
+        animation: none;
+        transition: none;
+    }
+
+    .hnc__image {
+        transition: none;
+    }
+
+    .hnc__desc {
+        opacity: 1;
+        max-height: 80px;
+    }
+
+    .hnc__cta {
+        opacity: 1;
+        transform: none;
+    }
+}

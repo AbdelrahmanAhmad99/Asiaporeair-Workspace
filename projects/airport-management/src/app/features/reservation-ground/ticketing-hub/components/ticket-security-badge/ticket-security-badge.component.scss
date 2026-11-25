@@ -1,0 +1,154 @@
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+
+ $t: 150ms ease;
+
+ // ── Badge Base ────────────────────────────────────────────────────────────
+ .tsb-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.1875rem 0.5rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     white-space: nowrap;
+     transition: all $t;
+
+     // ── Status variants ──────────────────────────────────────────────────
+
+     // Issued — emerald (confirmed legal document)
+     &--issued {
+         color: lighten($emerald, 40%);
+         background: rgba($emerald, 0.12);
+         border: 1px solid rgba($emerald, 0.28);
+         box-shadow: 0 0 6px rgba($emerald, 0.15);
+     }
+
+     // Active — brighter emerald (currently in use)
+     &--active {
+         color: #6ee7b7;
+         background: rgba($emerald, 0.1);
+         border: 1px solid rgba($emerald, 0.22);
+         box-shadow: 0 0 8px rgba($emerald, 0.2);
+     }
+
+     // Used / Boarded — muted amber (consumed ticket)
+     &--used {
+         color: lighten($amber, 25%);
+         background: rgba($amber, 0.08);
+         border: 1px solid rgba($amber, 0.18);
+     }
+
+     // Voided — deep ruby (invalidated, must be visually distinct but elegant)
+     &--voided {
+         color: lighten($ruby, 25%);
+         background: rgba($ruby, 0.1);
+         border: 1px solid rgba($ruby, 0.25);
+         box-shadow: 0 0 6px rgba($ruby, 0.15);
+     }
+
+     // Suspended — warm amber/gold warning
+     &--suspended {
+         color: $champagne;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.28);
+         box-shadow: 0 0 6px rgba($gold, 0.18);
+     }
+
+     // Refunded — champagne neutral
+     &--refunded {
+         color: rgba($champagne, 0.7);
+         background: rgba($champagne, 0.06);
+         border: 1px solid rgba($champagne, 0.14);
+     }
+
+     // Expired — dim muted
+     &--expired {
+         color: rgba($champagne, 0.4);
+         background: rgba($midnight, 0.06);
+         border: 1px solid rgba($champagne, 0.1);
+     }
+
+     // Neutral / Unknown
+     &--neutral {
+         color: rgba($champagne, 0.35);
+         background: transparent;
+         border: 1px dashed rgba($champagne, 0.12);
+     }
+ }
+
+ // ── Status dot ────────────────────────────────────────────────────────────
+ .tsb-badge__dot {
+     width: 5px;
+     height: 5px;
+     border-radius: 50%;
+     flex-shrink: 0;
+     position: relative;
+
+     &--issued,
+     &--active {
+         background: lighten($emerald, 35%);
+
+         &::after {
+             content: '';
+             position: absolute;
+             inset: -2px;
+             border-radius: 50%;
+             background: rgba($emerald, 0.45);
+             animation: tsb-pulse 2s ease-out infinite;
+         }
+     }
+
+     &--used {
+         background: lighten($amber, 20%);
+     }
+
+     &--voided {
+         background: lighten($ruby, 20%);
+     }
+
+     &--suspended {
+         background: $champagne;
+
+         &::after {
+             content: '';
+             position: absolute;
+             inset: -2px;
+             border-radius: 50%;
+             background: rgba($gold, 0.4);
+             animation: tsb-pulse 2.5s ease-out infinite;
+         }
+     }
+
+     &--refunded {
+         background: rgba($champagne, 0.45);
+     }
+
+     &--expired {
+         background: rgba($champagne, 0.2);
+     }
+
+     &--neutral {
+         background: rgba($champagne, 0.15);
+     }
+ }
+
+ @keyframes tsb-pulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.7;
+     }
+
+     100% {
+         transform: scale(3);
+         opacity: 0;
+     }
+ }

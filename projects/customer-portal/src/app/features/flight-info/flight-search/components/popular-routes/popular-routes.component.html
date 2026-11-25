@@ -1,0 +1,109 @@
+<!-- ============================================================================
+     popular-routes.component.html
+     Asiaporeair | Premium Route Cards
+     ============================================================================ -->
+
+<section class="pr-section" aria-label="Popular routes">
+
+    <!-- Section header -->
+    <div class="pr-header">
+        <div class="pr-header__left">
+            <div class="pr-header__eyebrow" aria-hidden="true">
+                <div class="pr-header__eyebrow-line"></div>
+                <span>Curated Journeys</span>
+                <div class="pr-header__eyebrow-line"></div>
+            </div>
+            <h2 class="pr-header__title">
+                Popular <span class="pr-header__title-accent">Routes</span>
+            </h2>
+            <p class="pr-header__sub">
+                Handpicked destinations with our most sought-after fare combinations.
+            </p>
+        </div>
+    </div>
+
+    <!-- Loading skeleton grid -->
+    @if (isLoading) {
+    <div class="pr-grid pr-grid--loading" aria-busy="true" aria-label="Loading routes">
+        @for (s of [1,2,3,4]; track s) {
+        <div class="pr-skeleton">
+            <div class="pr-skel pr-skel--img"></div>
+            <div class="pr-skel-body">
+                <div class="pr-skel pr-skel--iata"></div>
+                <div class="pr-skel pr-skel--title"></div>
+                <div class="pr-skel pr-skel--price"></div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Route cards -->
+    @if (!isLoading) {
+    <div class="pr-grid">
+        @for (route of routes; track route.id; let i = $index) {
+        <article class="pr-card" [style.--card-gradient]="route.imageGradient" [style.animation-delay]="(i * 80) + 'ms'"
+            [attr.aria-label]="route.origin + ' to ' + route.destinationCity">
+
+            <!-- Background image layer -->
+            <div class="pr-card__bg" aria-hidden="true"
+                [style.background-image]="route.imageUrl ? 'url(' + route.imageUrl + ')' : 'none'">
+            </div>
+
+            <!-- Dark overlay gradient -->
+            <div class="pr-card__overlay" aria-hidden="true"></div>
+
+            <!-- Gold top accent stripe -->
+            <div class="pr-card__stripe" aria-hidden="true"></div>
+
+            <!-- Card body -->
+            <div class="pr-card__body">
+
+                <!-- Route IATA display -->
+                <div class="pr-card__route" aria-label="Route: {{ route.origin }} to {{ route.destination }}">
+                    <span class="pr-card__iata">{{ route.origin }}</span>
+                    <div class="pr-card__arc" aria-hidden="true">
+                        <div class="pr-card__arc-line"></div>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1">
+                            <path
+                                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                        </svg>
+                        <div class="pr-card__arc-line"></div>
+                    </div>
+                    <span class="pr-card__iata">{{ route.destination }}</span>
+                </div>
+
+                <!-- Destination name -->
+                <div class="pr-card__destination">
+                    <h3 class="pr-card__city">{{ route.destinationCity }}</h3>
+                    <p class="pr-card__country">{{ route.destinationCountry }}</p>
+                </div>
+
+                <!-- Price + CTA row -->
+                <div class="pr-card__footer">
+                    <div class="pr-card__price-block">
+                        <span class="pr-card__price-label">from</span>
+                        <span class="pr-card__price">
+                            {{ route.currency }} {{ route.fromPrice | number:'1.0-0' }}
+                        </span>
+                        <span class="pr-card__cabin">{{ route.cabinClass }}</span>
+                    </div>
+
+                    <button class="pr-card__cta" type="button" (click)="routeSelected.emit(route)"
+                        [attr.aria-label]="'Explore fares from ' + route.origin + ' to ' + route.destinationCity">
+                        Explore Fares
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </article>
+        }
+    </div>
+    }
+
+</section>

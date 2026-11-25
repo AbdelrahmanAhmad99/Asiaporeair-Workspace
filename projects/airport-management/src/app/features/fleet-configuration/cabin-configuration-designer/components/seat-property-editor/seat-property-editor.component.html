@@ -1,0 +1,174 @@
+<aside class="spe" [class.spe--active]="!!seat()" role="complementary" aria-label="Seat property editor">
+
+    @if (!seat()) {
+    <!-- Idle State -->
+    <div class="spe__idle">
+        <div class="spe__idle__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" class="spe__idle__icon">
+                <rect x="3" y="3" width="18" height="18" rx="3" />
+                <path d="M9 12h6m-3-3v6" stroke-width="1.5" />
+            </svg>
+        </div>
+        <p class="spe__idle__title">No Seat Selected</p>
+        <p class="spe__idle__sub">Click any seat on the canvas to inspect and modify its specifications.</p>
+    </div>
+    }
+
+    @if (seat()) {
+    <!-- Active Editor -->
+    <div class="spe__editor">
+
+        <!-- Header -->
+        <div class="spe__header">
+            <div class="spe__header__left">
+                <p class="spe__header__sub">Seat Inspector</p>
+                <h3 class="spe__header__seat-num">{{ seat()!.seatNumber }}</h3>
+            </div>
+            <button class="spe__close-btn" type="button" (click)="panelClosed.emit()" aria-label="Close seat inspector">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="spe__close-btn__icon" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Seat ID chip -->
+        <div class="spe__id-strip">
+            <span class="spe__id-label">Seat ID</span>
+            <span class="spe__id-value">{{ seat()!.seatId }}</span>
+        </div>
+
+        <!-- Save Status -->
+        @if (saveSuccess()) {
+        <div class="spe__toast spe__toast--success" role="status">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="spe__toast__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            {{ saveSuccess() }}
+        </div>
+        }
+
+        @if (saveError()) {
+        <div class="spe__toast spe__toast--error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="spe__toast__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            {{ saveError() }}
+        </div>
+        }
+
+        <!-- Toggles Section -->
+        <div class="spe__section">
+            <p class="spe__section__label">Position Attributes</p>
+
+            <!-- Window toggle -->
+            <div class="spe__toggle-row">
+                <div class="spe__toggle-row__info">
+                    <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"
+                        class="spe__toggle-row__icon" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="3" />
+                        <circle cx="12" cy="12" r="4" />
+                    </svg>
+                    <div>
+                        <span class="spe__toggle-row__name">Window Seat</span>
+                        <span class="spe__toggle-row__sub">Displays gold indicator dot</span>
+                    </div>
+                </div>
+                <button class="spe__toggle" type="button" role="switch" [attr.aria-checked]="isWindow()"
+                    [class.spe__toggle--on]="isWindow()" [disabled]="isProcessing()"
+                    (click)="onToggle('isWindow', !isWindow())">
+                    <span class="spe__toggle__thumb"></span>
+                </button>
+            </div>
+
+            <!-- Aisle toggle -->
+            <div class="spe__toggle-row">
+                <div class="spe__toggle-row__info">
+                    <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"
+                        class="spe__toggle-row__icon" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                    <div>
+                        <span class="spe__toggle-row__name">Aisle Seat</span>
+                        <span class="spe__toggle-row__sub">Blue edge stripe on canvas</span>
+                    </div>
+                </div>
+                <button class="spe__toggle" type="button" role="switch" [attr.aria-checked]="isAisle()"
+                    [class.spe__toggle--on]="isAisle()" [disabled]="isProcessing()"
+                    (click)="onToggle('isAisle', !isAisle())">
+                    <span class="spe__toggle__thumb"></span>
+                </button>
+            </div>
+
+            <!-- Exit Row toggle -->
+            <div class="spe__toggle-row">
+                <div class="spe__toggle-row__info">
+                    <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"
+                        class="spe__toggle-row__icon spe__toggle-row__icon--exit" aria-hidden="true">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    <div>
+                        <span class="spe__toggle-row__name">Exit Row</span>
+                        <span class="spe__toggle-row__sub">Emergency exit row marker</span>
+                    </div>
+                </div>
+                <button class="spe__toggle" type="button" role="switch" [attr.aria-checked]="isExitRow()"
+                    [class.spe__toggle--on]="isExitRow()" [disabled]="isProcessing()"
+                    (click)="onToggle('isExitRow', !isExitRow())">
+                    <span class="spe__toggle__thumb"></span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Apply Specs Button -->
+        <button class="spe__apply-btn" type="button" [disabled]="isProcessing() || !isDirty()" (click)="emitUpdate()">
+            @if (!isProcessing()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="spe__apply-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+            Apply Specifications
+            }
+            @if (isProcessing()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="spe__apply-btn__icon spe__apply-btn__icon--spin" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                     3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                     13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Saving…
+            }
+        </button>
+
+        <!-- Divider -->
+        <div class="spe__divider" aria-hidden="true"></div>
+
+        <!-- Danger Zone: Remove Seat -->
+        <div class="spe__danger">
+            <p class="spe__danger__label">Danger Zone</p>
+            <button class="spe__delete-btn" type="button" [disabled]="isProcessing()" (click)="onDeleteClicked()">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="spe__delete-btn__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166
+                     m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25
+                     0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397
+                     m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397
+                     m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32
+                     0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+                Remove Seat from Layout
+            </button>
+        </div>
+
+    </div>
+    }
+
+</aside>

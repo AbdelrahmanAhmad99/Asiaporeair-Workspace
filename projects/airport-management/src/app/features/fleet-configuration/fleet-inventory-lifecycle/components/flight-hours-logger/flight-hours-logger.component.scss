@@ -1,0 +1,311 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+
+ .fhl-card {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07);
+     transition: background-color var(--aoms-transition-base), border-color var(--aoms-transition-base);
+ }
+
+ // ── Header ──────────────────────────────────────────────────────────────
+ .fhl-card__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 7px;
+         background: rgba(182, 143, 36, 0.1);
+         border: 1px solid rgba(182, 143, 36, 0.2);
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+     }
+ }
+
+ .fhl-card__title {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+ }
+
+ .fhl-card__sub {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     margin-top: 0.125rem;
+     transition: color $t-fast;
+ }
+
+ .fhl-card__current-total {
+     color: var(--aoms-text-secondary);
+
+     strong {
+         font-weight: 600;
+         color: var(--aoms-gold);
+     }
+ }
+
+ // ── Body ────────────────────────────────────────────────────────────────
+ .fhl-card__body {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+ }
+
+ // ── Step Buttons ─────────────────────────────────────────────────────────
+ .fhl-steps {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     flex-wrap: wrap;
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+         margin-right: 0.25rem;
+         white-space: nowrap;
+     }
+ }
+
+ .fhl-step-btn {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.25rem 0.625rem;
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     background: transparent;
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         color: $midnight;
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.08);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── Input + Submit Row ───────────────────────────────────────────────────
+ .fhl-input-row {
+     display: flex;
+     align-items: stretch;
+     gap: 0.625rem;
+ }
+
+ .fhl-input-wrap {
+     position: relative;
+     flex: 1;
+     display: flex;
+     align-items: center;
+
+     &--valid .fhl-input {
+         border-color: rgba($emerald, 0.5);
+     }
+
+     &--invalid .fhl-input {
+         border-color: rgba($ruby, 0.5);
+     }
+ }
+
+ .fhl-input {
+     width: 100%;
+     padding: 0.6875rem 3.5rem 0.6875rem 1rem;
+     font-size: 1.0625rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary);
+     background: var(--aoms-bg-card);
+     border: 1.5px solid rgba(226, 199, 128, 0.25);
+     border-radius: 8px;
+     outline: none;
+     appearance: none;
+     -moz-appearance: textfield;
+     font-variant-numeric: tabular-nums;
+     text-align: right;
+     transition: border-color $t-fast, box-shadow $t-fast, background $t-fast;
+
+     &::-webkit-outer-spin-button,
+     &::-webkit-inner-spin-button {
+         -webkit-appearance: none;
+     }
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+ }
+
+ .fhl-input__unit {
+     position: absolute;
+     right: 2.25rem;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     color: var(--aoms-text-muted);
+     pointer-events: none;
+ }
+
+ .fhl-input__state-icon {
+     position: absolute;
+     right: 0.75rem;
+     width: 1rem;
+     height: 1rem;
+     pointer-events: none;
+
+     &--valid {
+         color: $emerald;
+     }
+ }
+
+ // Submit button
+ .fhl-submit-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.6875rem 1.25rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: #ffffff;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     box-shadow: 0 4px 12px rgba(182, 143, 36, 0.35);
+     flex-shrink: 0;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+         box-shadow: 0 6px 16px rgba(182, 143, 36, 0.45);
+         transform: translateY(-1px);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: fhl-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── Validation error ──────────────────────────────────────────────────────
+ .fhl-error {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: #710d06;
+     animation: fhl-fadein 150ms ease forwards;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes fhl-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes fhl-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(-3px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .fhl-input {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.18);
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .fhl-error {
+         color: #fca5a5;
+     }
+
+     .fhl-submit-btn {
+         box-shadow: 0 4px 12px rgba(182, 143, 36, 0.22);
+     }
+ }

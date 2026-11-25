@@ -1,0 +1,75 @@
+<div class="bw">
+
+    <!-- Glassmorphism shell -->
+    <div class="bw__shell" role="region" aria-label="Flight search">
+
+        <!-- The existing flight search engine — receives a patch via ViewChild -->
+        @if (activeTab === 'book') {
+        <app-flight-search-engine />
+        }
+
+        <!-- Non-book tab placeholders -->
+        @if (activeTab === 'manage') {
+        <div class="bw__placeholder">
+            <div class="bw__placeholder-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path
+                        d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
+                </svg>
+            </div>
+            <h3 class="bw__placeholder-title">Manage Your Booking</h3>
+            <p class="bw__placeholder-sub">Enter your booking reference and last name to view, change, or cancel your
+                reservation.</p>
+            <a class="bw__placeholder-cta" routerLink="/manage-booking/retrieve-booking">Go to Manage Booking</a>
+        </div>
+        }
+
+        @if (activeTab === 'checkin') {
+        <div class="bw__placeholder">
+            <div class="bw__placeholder-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </svg>
+            </div>
+            <h3 class="bw__placeholder-title">Boarding & Services</h3>
+            <p class="bw__placeholder-sub">Online check-in opens 48 hours before departure. Select your seat, add bags,
+                and receive your boarding pass.</p>
+            <a class="bw__placeholder-cta" routerLink="/check-in/search">Begin Check-In</a>
+        </div>
+        }
+
+        @if (activeTab === 'status') {
+        <div class="bw__placeholder">
+            <div class="bw__placeholder-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+            </div>
+            <h3 class="bw__placeholder-title">Real-Time Flight Status</h3>
+            <p class="bw__placeholder-sub">Track any Asiaporeair flight with live departure, arrival, and gate
+                information.</p>
+            <a class="bw__placeholder-cta" routerLink="/flight-info/status">Check Flight Status</a>
+        </div>
+        }
+
+        @if (activeTab === 'ticket') {
+        <div class="bw__placeholder">
+            <div class="bw__placeholder-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+            </div>
+            <h3 class="bw__placeholder-title">Retrieve Ticket</h3>
+            <p class="bw__placeholder-sub">Retrieve your ticket with your booking reference and last name.</p>
+            <a class="bw__placeholder-cta" routerLink="/manage-booking/retrieve-ticket">Retrieve Ticket</a>
+        </div>
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,614 @@
+ // ── Design tokens ─────────────────────────────────────────────────────────
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+
+ // Validation colours — "Rose-Amber" luxury error palette
+ $error-rose: #9f1239; // text / border
+ $error-rose-bg: rgba(159, 18, 57, 0.05);
+ $error-rose-border: rgba(159, 18, 57, 0.25);
+
+ // Spacing
+ $gap-section: 1.75rem;
+ $gap-fields: 1.25rem;
+
+ // ── Easing ────────────────────────────────────────────────────────────────
+ $ease-luxury: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ============================================================================
+ // 1. Form shell
+ // ============================================================================
+ .cfu-form {
+     width: 100%;
+     animation: cfu-enter 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+ }
+
+ // ============================================================================
+ // 2. Card container (squircle, 12px radius per spec)
+ // ============================================================================
+ .cfu-card {
+     border-radius: 12px;
+     background-color: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.2);
+     box-shadow: 0 4px 24px rgba($midnight, 0.07);
+     overflow: hidden;
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease),
+         box-shadow var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 3. Section layout
+ // ============================================================================
+ .cfu-section {
+     padding: 1.75rem 2rem;
+ }
+
+ .cfu-section__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     margin-bottom: $gap-section;
+ }
+
+ .cfu-section__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.5rem;
+     height: 2.5rem;
+     border-radius: 8px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.18);
+ }
+
+ .cfu-section__icon {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: $champagne;
+ }
+
+ .cfu-section__title {
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-size: 15px;
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.2rem;
+     transition: color var(--aoms-transition-fast, 150ms ease);
+ }
+
+ .cfu-section__subtitle {
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 12px;
+     color: var(--aoms-text-muted);
+     margin: 0;
+     transition: color var(--aoms-transition-fast, 150ms ease);
+ }
+
+ // ============================================================================
+ // 4. Field grid
+ // ============================================================================
+ .cfu-fields {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: $gap-fields;
+
+     @media (max-width: 640px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ // ============================================================================
+ // 5. Individual field wrapper — the container that holds input + floating label
+ // ============================================================================
+ .cfu-field {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+
+     // Wide field: spans both columns
+     &--wide {
+         grid-column: 1 / -1;
+     }
+
+     // ── Error state — applied via [class.cfu-field--error] ──────────────────
+     &--error {
+
+         .cfu-input,
+         .cfu-select {
+             border-color: $error-rose !important;
+             background-color: $error-rose-bg;
+
+             &:focus {
+                 box-shadow:
+                     0 0 0 3px rgba($error-rose, 0.12),
+                     0 0 12px rgba($error-rose, 0.06);
+             }
+         }
+
+         .cfu-label {
+             color: $error-rose;
+         }
+     }
+
+     // ── Locked field (ISO code in Edit mode) ──────────────────────────────
+     &--locked {
+         .cfu-input {
+             cursor: not-allowed;
+             opacity: 0.65;
+             background: rgba($midnight, 0.04);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Input — the core text field with floating label behaviour
+ // ============================================================================
+ .cfu-input {
+     // Reset
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     border: none;
+     background: none;
+
+     width: 100%;
+     padding: 1.5rem 1rem 0.5rem;
+     height: 3.5rem;
+
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 14px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+
+     background-color: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+
+     transition:
+         border-color 200ms $ease-luxury,
+         background 200ms $ease-luxury,
+         box-shadow 200ms $ease-luxury;
+
+     &:focus {
+         border-color: $champagne;
+         background-color: #ffffff;
+         box-shadow:
+             0 0 0 3px rgba($champagne, 0.15),
+             0 0 16px rgba($champagne, 0.08);
+     }
+
+     // Prefixed variant (phone code)
+     &--prefixed {
+         padding-left: 2.25rem;
+         border-radius: 0 8px 8px 0;
+         border-left: none;
+     }
+
+     &:disabled {
+         cursor: not-allowed;
+     }
+ }
+
+ // ============================================================================
+ // 7. Floating label
+ // ============================================================================
+ .cfu-label {
+     position: absolute;
+     top: 50%;
+     left: 1rem;
+     transform: translateY(-50%);
+     pointer-events: none;
+
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 14px;
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+
+     transition:
+         top 200ms $ease-luxury,
+         font-size 200ms $ease-luxury,
+         font-weight 200ms $ease-luxury,
+         color 200ms $ease-luxury,
+         letter-spacing 200ms $ease-luxury,
+         transform 200ms $ease-luxury;
+
+     // ── Float trigger: when input is focused OR has a value (placeholder=" ") ──
+     // (placeholder=" " trick: :not(:placeholder-shown) means value exists)
+     .cfu-input:focus~&,
+     .cfu-input:not(:placeholder-shown)~& {
+         top: 0.5rem;
+         transform: translateY(0);
+         font-size: 10px;
+         font-weight: 600;
+         letter-spacing: 0.07em;
+         text-transform: uppercase;
+         color: $champagne;
+     }
+
+     // Label for select (always floated since select has a value)
+     &--select {
+         top: 0.5rem;
+         transform: translateY(0);
+         font-size: 10px;
+         font-weight: 600;
+         letter-spacing: 0.07em;
+         text-transform: uppercase;
+         color: var(--aoms-text-muted);
+     }
+
+     // Label for prefixed input
+     &--prefixed {
+         left: 2.25rem;
+
+         .cfu-input:focus~&,
+         .cfu-input:not(:placeholder-shown)~& {
+             top: 0.5rem;
+             left: 2.25rem;
+         }
+     }
+
+     &__required {
+         color: $error-rose;
+         margin-left: 0.2rem;
+     }
+ }
+
+ // Focus: make the floated label gold
+ .cfu-input:focus~.cfu-label,
+ .cfu-select:focus~.cfu-label--select {
+     color: $champagne !important;
+ }
+
+ // ============================================================================
+ // 8. Select dropdown (custom styled)
+ // ============================================================================
+ .cfu-select {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+
+     width: 100%;
+     padding: 1.5rem 2.5rem 0.5rem 1rem; // right padding for chevron
+     height: 3.5rem;
+     cursor: pointer;
+
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 14px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+
+     background-color: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+
+     transition:
+         border-color 200ms $ease-luxury,
+         background 200ms $ease-luxury,
+         box-shadow 200ms $ease-luxury;
+
+     &:focus {
+         border-color: $champagne;
+         background-color: #ffffff;
+         box-shadow:
+             0 0 0 3px rgba($champagne, 0.15),
+             0 0 16px rgba($champagne, 0.08);
+     }
+
+     // Hide the default empty option visually
+     option:first-child {
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ .cfu-select__chevron {
+     position: absolute;
+     right: 1rem;
+     top: 50%;
+     transform: translateY(-50%);
+     pointer-events: none;
+     width: 1rem;
+     height: 1rem;
+     color: var(--aoms-text-muted);
+     transition: color 200ms $ease-luxury;
+
+     svg {
+         width: 100%;
+         height: 100%;
+     }
+ }
+
+ .cfu-select:focus~.cfu-select__chevron {
+     color: $champagne;
+ }
+
+ // ============================================================================
+ // 9. Prefix wrapper (phone code "+")
+ // ============================================================================
+ .cfu-input-prefix-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+ }
+
+ .cfu-input-prefix {
+     position: absolute;
+     left: 0;
+     top: 0;
+     bottom: 0;
+     width: 2.25rem;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 14px;
+     font-weight: 600;
+     color: var(--aoms-text-muted);
+     background-color: rgba($midnight, 0.04);
+     border: 1px solid rgba($charcoal, 0.15);
+     border-right: none;
+     border-radius: 8px 0 0 8px;
+     pointer-events: none;
+     z-index: 1;
+     transition: color 200ms $ease-luxury, border-color 200ms $ease-luxury;
+ }
+
+ // When the actual input inside the wrapper is focused, highlight the prefix
+ .cfu-input-prefix-wrap:focus-within .cfu-input-prefix {
+     color: $champagne;
+     border-color: $champagne;
+ }
+
+ // ============================================================================
+ // 10. Field lock icon (Edit mode: ISO Code)
+ // ============================================================================
+ .cfu-field__lock-icon {
+     position: absolute;
+     right: 0.75rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 1rem;
+     height: 1rem;
+     color: var(--aoms-text-muted);
+     pointer-events: none;
+
+     svg {
+         width: 100%;
+         height: 100%;
+     }
+ }
+
+ // ============================================================================
+ // 11. Validation error message — Rose-Amber luxury tone
+ // ============================================================================
+ .cfu-error {
+     display: block;
+     margin-top: 0.35rem;
+     padding: 0.3rem 0.625rem;
+     border-radius: 4px;
+     background: $error-rose-bg;
+     border-left: 2px solid $error-rose;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 11px;
+     font-weight: 500;
+     letter-spacing: 0.01em;
+     color: $error-rose;
+     animation: cfu-error-in 180ms $ease-luxury both;
+ }
+
+ // ============================================================================
+ // 12. Field hint text
+ // ============================================================================
+ .cfu-hint {
+     display: block;
+     margin-top: 0.3rem;
+     padding-left: 0.125rem;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.01em;
+     opacity: 0.75;
+ }
+
+ // ============================================================================
+ // 13. Divider between sections
+ // ============================================================================
+ .cfu-divider {
+     height: 1px;
+     background: linear-gradient(90deg,
+             transparent 0%,
+             rgba($champagne, 0.18) 20%,
+             rgba($champagne, 0.18) 80%,
+             transparent 100%);
+     margin: 0 2rem;
+ }
+
+ // ============================================================================
+ // 14. Form action buttons
+ // ============================================================================
+ .cfu-actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.75rem;
+     padding: 1.5rem 2rem;
+     background: rgba($off-white, 0.6);
+     border-top: 1px solid rgba($champagne, 0.12);
+ }
+
+ .cfu-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4rem;
+     padding: 0 1.25rem;
+     height: 2.5rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 13px;
+     font-weight: 600;
+     letter-spacing: 0.02em;
+     cursor: pointer;
+     transition: all 200ms $ease-luxury;
+     white-space: nowrap;
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &__icon,
+     &__spinner {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+
+     &__spinner {
+         animation: cfu-spin 1s linear infinite;
+     }
+
+     // ── Cancel — transparent with sapphire border ──────────────────────────
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($midnight, 0.25);
+         color: var(--aoms-text-secondary, $charcoal);
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     // ── Save — Royal Gold fill, luxury hover shadow ───────────────────────
+     &--save {
+         background-color: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+
+         &:hover:not(:disabled) {
+             background-color: $champagne;
+             border-color: $champagne;
+             box-shadow:
+                 0 4px 16px rgba($gold, 0.35),
+                 0 1px 4px rgba($midnight, 0.15);
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 15. Keyframes
+ // ============================================================================
+ @keyframes cfu-enter {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes cfu-error-in {
+     from {
+         opacity: 0;
+         transform: translateX(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes cfu-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================================
+ // 16. Dark Mode Overrides  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .cfu-card {
+         background-color: rgba(255, 255, 255, 0.03);
+         border-color: rgba($champagne, 0.1);
+         box-shadow: 0 4px 28px rgba(0, 0, 0, 0.3);
+     }
+
+     .cfu-section__title {
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .cfu-input,
+     .cfu-select {
+         background-color: rgba($midnight, 0.55);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.88);
+
+         &:focus {
+             background-color: rgba($midnight, 0.8);
+         }
+     }
+
+     .cfu-input-prefix {
+         background-color: rgba($midnight, 0.8);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.45);
+     }
+
+     .cfu-select option {
+         background-color: #0d2745;
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .cfu-field--locked .cfu-input {
+         background: rgba($midnight, 0.35);
+     }
+
+     .cfu-error {
+         background: rgba(159, 18, 57, 0.12);
+         border-left-color: #f43f5e;
+         color: #f43f5e;
+     }
+
+     .cfu-actions {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+
+     .cfu-btn--cancel {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+             background: rgba($champagne, 0.08);
+         }
+     }
+ }

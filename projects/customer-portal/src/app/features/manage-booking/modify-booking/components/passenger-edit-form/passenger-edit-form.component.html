@@ -1,0 +1,150 @@
+<!-- passenger-edit-form.component.html -->
+
+<div class="edit-form-card" [@slideIn] [class.edit-form-card--saving]="draft.isSaving">
+
+    <!-- Card Header -->
+    <div class="card-header">
+        <button class="header-toggle" (click)="toggleExpanded()" [attr.aria-expanded]="isExpanded"
+            [attr.aria-controls]="'form-body-' + draft.passengerId">
+            <div class="pax-avatar" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+            </div>
+            <div class="pax-meta">
+                <span class="pax-label">Passenger {{ passengerIndex }}</span>
+                <span class="pax-name">{{ draft.firstName }} {{ draft.lastName }}</span>
+            </div>
+            <div class="header-badges">
+                <span *ngIf="draft.isDirty && !draft.savedAt" class="dirty-badge" aria-label="Unsaved changes">
+                    <span aria-hidden="true">●</span> Unsaved
+                </span>
+                <span *ngIf="draft.savedAt" class="saved-badge" aria-label="Changes saved">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Saved
+                </span>
+            </div>
+            <svg class="chevron-icon" [class.chevron-icon--open]="isExpanded" width="14" height="14" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Saving overlay -->
+    <div *ngIf="draft.isSaving" class="saving-overlay" aria-label="Saving changes" aria-busy="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            class="spin-icon" aria-hidden="true">
+            <path
+                d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+        </svg>
+        Saving changes…
+    </div>
+
+    <!-- Form Body -->
+    <div *ngIf="isExpanded && !draft.isSaving" [id]="'form-body-' + draft.passengerId" class="form-body">
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- ── Section: Identity ─────────────────────────────── -->
+            <div class="form-section">
+                <div class="section-label">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    Identity
+                </div>
+                <div class="field-row">
+                    <div class="floating-field" [class.floating-field--error]="hasError('firstName')"
+                        [class.floating-field--filled]="form.get('firstName')?.value">
+                        <input type="text" id="firstName-{{draft.passengerId}}" class="float-input"
+                            formControlName="firstName" autocomplete="given-name" placeholder=" "
+                            [attr.aria-describedby]="hasError('firstName') ? 'err-fn-' + draft.passengerId : null">
+                        <label class="float-label" [for]="'firstName-' + draft.passengerId">First Name *</label>
+                        <span *ngIf="hasError('firstName')" [id]="'err-fn-' + draft.passengerId" class="field-error"
+                            role="alert">
+                            {{ getError('firstName') }}
+                        </span>
+                    </div>
+                    <div class="floating-field" [class.floating-field--error]="hasError('lastName')"
+                        [class.floating-field--filled]="form.get('lastName')?.value">
+                        <input type="text" [id]="'lastName-' + draft.passengerId" class="float-input"
+                            formControlName="lastName" autocomplete="family-name" placeholder=" "
+                            [attr.aria-describedby]="hasError('lastName') ? 'err-ln-' + draft.passengerId : null">
+                        <label class="float-label" [for]="'lastName-' + draft.passengerId">Last Name *</label>
+                        <span *ngIf="hasError('lastName')" [id]="'err-ln-' + draft.passengerId" class="field-error"
+                            role="alert">
+                            {{ getError('lastName') }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Section: Travel Documents ─────────────────────── -->
+            <div class="form-section">
+                <div class="section-label">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <line x1="2" y1="10" x2="22" y2="10" />
+                    </svg>
+                    Travel Documents
+                </div>
+                <div class="field-row">
+                    <div class="floating-field" [class.floating-field--error]="hasError('passportNumber')"
+                        [class.floating-field--filled]="form.get('passportNumber')?.value">
+                        <input type="text" [id]="'passport-' + draft.passengerId" class="float-input float-input--mono"
+                            formControlName="passportNumber" autocomplete="off" placeholder=" " maxlength="9"
+                            (input)="$any($event.target).value = $any($event.target).value.toUpperCase()"
+                            [attr.aria-describedby]="hasError('passportNumber') ? 'err-pp-' + draft.passengerId : 'hint-pp-' + draft.passengerId">
+                        <label class="float-label" [for]="'passport-' + draft.passengerId">Passport Number</label>
+                        <span [id]="'hint-pp-' + draft.passengerId" class="field-hint">6–9 uppercase alphanumeric</span>
+                        <span *ngIf="hasError('passportNumber')" [id]="'err-pp-' + draft.passengerId"
+                            class="field-error" role="alert">
+                            {{ getError('passportNumber') }}
+                        </span>
+                    </div>
+                    <div class="floating-field" [class.floating-field--error]="hasError('dateOfBirth')"
+                        [class.floating-field--filled]="form.get('dateOfBirth')?.value">
+                        <input type="date" [id]="'dob-' + draft.passengerId" class="float-input"
+                            formControlName="dateOfBirth" [max]="maxDob" [min]="minDob"
+                            [attr.aria-describedby]="hasError('dateOfBirth') ? 'err-dob-' + draft.passengerId : null">
+                        <label class="float-label float-label--date" [for]="'dob-' + draft.passengerId">Date of
+                            Birth</label>
+                        <span *ngIf="hasError('dateOfBirth')" [id]="'err-dob-' + draft.passengerId" class="field-error"
+                            role="alert">
+                            {{ getError('dateOfBirth') }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Form Actions ───────────────────────────────────── -->
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" (click)="onCancel()"
+                    aria-label="Cancel changes for this passenger">
+                    Cancel Changes
+                </button>
+                <button type="submit" class="btn-save" [disabled]="form.invalid || (!form.dirty && !draft.isDirty)"
+                    [attr.aria-label]="'Save changes for ' + draft.firstName + ' ' + draft.lastName">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                        <polyline points="17 21 17 13 7 13 7 21" />
+                        <polyline points="7 3 7 8 15 8" />
+                    </svg>
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

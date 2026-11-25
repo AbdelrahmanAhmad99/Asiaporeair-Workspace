@@ -1,0 +1,261 @@
+@use '../command-bar-tokens' as t;
+
+:host {
+    @include t.cb-tokens;
+    display: block;
+    font-family: var(--cb-font);
+}
+
+.visually-hidden {
+    @include t.cb-visually-hidden;
+}
+
+.health {
+    position: relative;
+    // Per-tone variables drive the pill, the signal dot and the pulse.
+    --tone-fill: var(--cb-emerald);
+    --tone-signal: var(--cb-emerald-signal);
+
+    &[data-tone='DEGRADED'] {
+        --tone-fill: var(--cb-amber);
+        --tone-signal: var(--cb-amber-signal);
+    }
+
+    &[data-tone='CRITICAL'] {
+        --tone-fill: var(--cb-ruby);
+        --tone-signal: var(--cb-ruby-signal);
+    }
+}
+
+// ── Pill ─────────────────────────────────────────────────────────────────────
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.25rem;
+    padding: 0.25rem 0.625rem 0.25rem 0.75rem;
+    color: var(--cb-ivory); // ivory on emerald 9.2:1, amber 4.7:1, ruby 13:1
+    background: var(--tone-fill);
+    border: 1px solid color-mix(in srgb, var(--tone-signal) 45%, transparent);
+    border-radius: var(--cb-radius-card);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+
+    &:focus-visible {
+        @include t.cb-focus-ring;
+    }
+}
+
+.pill__latency {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    padding-inline-start: 0.5rem;
+    border-inline-start: 1px solid rgba(248, 249, 250, 0.35);
+}
+
+.pill__chevron {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 160ms ease-in-out;
+}
+
+.pill[aria-expanded='true'] .pill__chevron {
+    transform: rotate(180deg);
+}
+
+// ── Signal dot + pulse ───────────────────────────────────────────────────────
+.pill__signal,
+.row__signal {
+    position: relative;
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--tone-signal);
+    border-radius: 50%;
+}
+
+.pill__signal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--tone-signal);
+    animation: signal-pulse 2.4s ease-out infinite;
+}
+
+// Distinct cadence per state so the status is legible without colour.
+.health[data-tone='DEGRADED'] .pill__signal::after {
+    animation-duration: 1.2s;
+}
+
+.health[data-tone='CRITICAL'] .pill__signal::after {
+    animation: none;
+    inset: -3px;
+    opacity: 0.9;
+}
+
+@keyframes signal-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+// ── Diagnostics panel ────────────────────────────────────────────────────────
+.panel {
+    @include t.cb-glass-surface;
+    position: absolute;
+    inset-block-start: calc(100% + 0.5rem);
+    inset-inline-end: 0;
+    z-index: 30;
+    width: 22rem;
+    max-width: calc(100vw - 2rem);
+    padding: 0.75rem;
+    color: var(--cb-ivory);
+}
+
+.panel__notice {
+    margin-bottom: 0.625rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--cb-champagne-wash);
+    border-inline-start: 2px solid var(--cb-gold);
+    border-radius: var(--cb-radius-button);
+}
+
+.panel__notice-title {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--cb-champagne);
+}
+
+.panel__notice-detail {
+    margin: 0.125rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--cb-ivory-muted);
+}
+
+.panel__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.row {
+    --tone-signal: var(--cb-emerald-signal);
+    display: grid;
+    grid-template-columns: 0.5rem 1fr auto auto;
+    align-items: center;
+    column-gap: 0.625rem;
+    padding: 0.4375rem 0.25rem;
+    font-size: 0.8125rem;
+    border-bottom: 1px solid var(--cb-champagne-hairline);
+
+    &[data-status='DEGRADED'] {
+        --tone-signal: var(--cb-amber-signal);
+    }
+
+    &[data-status='DOWN'] {
+        --tone-signal: var(--cb-ruby-signal);
+    }
+}
+
+.row__label {
+    font-weight: 500;
+}
+
+.row__reading {
+    font-variant-numeric: tabular-nums;
+    color: var(--cb-ivory-muted);
+}
+
+.row__status {
+    min-width: 4.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: end;
+    color: var(--tone-signal);
+}
+
+.panel__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.panel__synced {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--cb-ivory-muted);
+}
+
+.panel__refresh {
+    padding: 0.375rem 0.75rem;
+    color: var(--cb-sapphire); // on Royal Gold 5.8:1
+    background: var(--cb-gold);
+    border: 1px solid var(--cb-gold);
+    border-radius: var(--cb-radius-button);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    &:hover:not(:disabled) {
+        background: var(--cb-champagne);
+        border-color: var(--cb-champagne);
+    }
+
+    &:focus-visible {
+        @include t.cb-focus-ring;
+    }
+
+    &:disabled {
+        cursor: progress;
+        opacity: 0.7;
+    }
+}
+
+@container command-bar (max-width: 1280px) {
+    .pill__latency {
+        display: none;
+    }
+}
+
+@container command-bar (max-width: 900px) {
+
+    // Keep the signal + chevron; the live region still announces the full label.
+    .pill__label {
+        @include t.cb-visually-hidden;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pill__signal::after {
+        animation: none;
+        opacity: 0;
+    }
+
+    .health[data-tone='CRITICAL'] .pill__signal::after {
+        opacity: 0.9;
+    }
+
+    .pill__chevron {
+        transition: none;
+    }
+}

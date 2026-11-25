@@ -1,0 +1,59 @@
+<div class="lkb-grid">
+
+    <!-- ── Shimmer state ─────────────────────────────────────────── -->
+    @if (loading()) {
+    @for (c of shimmerCards; track $index) {
+    <div class="lkb-card lkb-card--shimmer" aria-hidden="true">
+        <div class="lkb-card__sh-icon"></div>
+        <div class="lkb-card__sh-label"></div>
+        <div class="lkb-card__sh-value"></div>
+        <div class="lkb-card__sh-sub"></div>
+    </div>
+    }
+    }
+
+    <!-- ── Live cards ────────────────────────────────────────────── -->
+    @if (!loading()) {
+    @for (card of cards(); track card.id) {
+    <div class="lkb-card" [attr.data-variant]="card.variant">
+
+        <!-- Vertical accent stripe -->
+        <div class="lkb-card__stripe" aria-hidden="true"></div>
+
+        <!-- Top row: icon + badge -->
+        <div class="lkb-card__top">
+            <div class="lkb-card__icon-wrap" aria-hidden="true">
+                <svg class="lkb-card__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="card.iconPath" />
+                </svg>
+            </div>
+            @if (card.badge) {
+            <span class="lkb-card__badge"
+                [class.lkb-card__badge--warn]="card.variant === 'pending' && stats().maintenancePending > 0"
+                [class.lkb-card__badge--success]="card.variant === 'readiness' && stats().networkReadinessPct === 100">
+                {{ card.badge }}
+            </span>
+            }
+        </div>
+
+        <!-- Metric label -->
+        <p class="lkb-card__label">{{ card.label }}</p>
+
+        <!-- Metric value -->
+        <p class="lkb-card__value">{{ card.value }}</p>
+
+        <!-- Sub-label -->
+        <p class="lkb-card__sub">{{ card.subLabel }}</p>
+
+        <!-- Readiness micro progress bar -->
+        @if (card.variant === 'readiness') {
+        <div class="lkb-card__progress" aria-hidden="true">
+            <div class="lkb-card__progress__fill" [style.width.%]="stats().networkReadinessPct"></div>
+        </div>
+        }
+
+    </div>
+    }
+    }
+
+</div>

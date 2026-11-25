@@ -1,0 +1,354 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ .wizard-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ── Header ─────────────────────────────────────────────────────────────
+ .wizard-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.15);
+     box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     transition: background-color $t-base, box-shadow $t-base;
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+     }
+ }
+
+ .wizard-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.25rem;
+     flex-wrap: wrap;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         transition: color $t-fast;
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+         transition: color $t-fast;
+     }
+ }
+
+ .wizard-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+
+     &__icon {
+         width: 1.1875rem;
+         height: 1.1875rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .wizard-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.22);
+     background: transparent;
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &--gold {
+         color: $gold;
+     }
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.07);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // ── Page Body ──────────────────────────────────────────────────────────
+ .wizard-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ // ── Error Banner ───────────────────────────────────────────────────────
+ .wizard-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 1rem 1.125rem;
+     border-radius: 10px;
+     animation: wz-fadein 200ms ease forwards;
+
+     background: rgba(113, 13, 6, 0.07);
+     border: 1px solid rgba(113, 13, 6, 0.22);
+
+     &--constraint {
+         background: rgba(180, 83, 9, 0.07);
+         border-color: rgba(180, 83, 9, 0.22);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 50%;
+         background: rgba(113, 13, 6, 0.1);
+         flex-shrink: 0;
+
+         .wizard-error-banner--constraint & {
+             background: rgba(180, 83, 9, 0.1);
+         }
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $ruby;
+
+         .wizard-error-banner--constraint & {
+             color: $amber;
+         }
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.1875rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__title {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: $ruby;
+
+         .wizard-error-banner--constraint & {
+             color: $amber;
+         }
+     }
+
+     &__message {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-secondary);
+         line-height: 1.4;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         border: none;
+         background: none;
+         cursor: pointer;
+         outline: none;
+         flex-shrink: 0;
+         margin-top: 0.125rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.7;
+         transition: opacity $t-fast;
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+         }
+
+         &:hover {
+             opacity: 1;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+             border-radius: 3px;
+         }
+     }
+ }
+
+ // ── Form Card ──────────────────────────────────────────────────────────
+ .wizard-form-card {
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     box-shadow: 0 4px 20px rgba(5, 25, 55, 0.07);
+     overflow: hidden;
+     transition: background-color $t-base, border-color $t-base, box-shadow $t-base;
+ }
+
+ // ── Skeleton ────────────────────────────────────────────────────────────
+ .wizard-skeleton {
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     overflow: hidden;
+
+     &__tabs {
+         display: flex;
+         border-bottom: 1px solid rgba(226, 199, 128, 0.12);
+         padding: 0;
+     }
+
+     &__tab {
+         flex: 1;
+         height: 3rem;
+         background: rgba(182, 143, 36, 0.05);
+         animation: wz-pulse 1.5s ease-in-out infinite;
+
+         &+& {
+             border-left: 1px solid rgba(226, 199, 128, 0.1);
+             animation-delay: 0.1s;
+         }
+     }
+
+     &__body {
+         padding: 1.75rem;
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         gap: 1.5rem;
+     }
+
+     &__field {
+         height: 3.5rem;
+         border-radius: 8px;
+         background: rgba(182, 143, 36, 0.07);
+         animation: wz-pulse 1.5s ease-in-out infinite;
+
+         &+& {
+             animation-delay: 0.1s;
+         }
+
+         &--full {
+             grid-column: span 2;
+         }
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────
+ @keyframes wz-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes wz-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .wizard-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .wizard-form-card {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+     }
+
+     .wizard-error-banner {
+         background: rgba(113, 13, 6, 0.14);
+         border-color: rgba(113, 13, 6, 0.35);
+
+         &__title {
+             color: #fca5a5;
+         }
+
+         &--constraint {
+             background: rgba(180, 83, 9, 0.12);
+             border-color: rgba(180, 83, 9, 0.3);
+
+             .wizard-error-banner__title {
+                 color: #fbbf24;
+             }
+         }
+     }
+ }

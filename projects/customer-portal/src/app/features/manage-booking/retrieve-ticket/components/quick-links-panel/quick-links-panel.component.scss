@@ -1,0 +1,122 @@
+// ============================================================================
+// quick-links-panel.component.scss
+// Asiaporeair | Quick Links Panel — Sophisticated Action Cards
+// ============================================================================
+
+$midnight-sapphire : #051937;
+$royal-gold        : #B68F24;
+$champagne-gold    : #E2C780;
+$deep-navy         : #101056;
+
+// ── Panel Shell ───────────────────────────────────────────────────────────────
+.qlp-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// ── Panel Title ───────────────────────────────────────────────────────────────
+.qlp-panel__title {
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba($deep-navy, 0.4);
+  margin: 0 0 4px;
+}
+
+// ── Link Card ─────────────────────────────────────────────────────────────────
+.qlp-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid rgba($midnight-sapphire, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+
+  &:hover {
+    border-color: rgba($champagne-gold, 0.6);
+    box-shadow: 0 6px 20px rgba($midnight-sapphire, 0.08),
+                0 0 0 2px rgba($champagne-gold, 0.2);
+    transform: translateY(-1px);
+
+    .qlp-card__arrow { transform: translateX(3px); }
+    .qlp-card__icon-wrap { background: rgba($champagne-gold, 0.15); }
+  }
+  &:active { transform: translateY(0); }
+
+  // Gold variant: "Access Your Suite" button
+  &--suite {
+    background: linear-gradient(135deg,
+      rgba($royal-gold, 0.04) 0%,
+      rgba($champagne-gold, 0.08) 100%
+    );
+    border-color: rgba($royal-gold, 0.22);
+
+    &:hover {
+      border-color: rgba($royal-gold, 0.5);
+      box-shadow: 0 6px 20px rgba($royal-gold, 0.14),
+                  0 0 0 2px rgba($royal-gold, 0.12);
+    }
+    .qlp-card__label { color: $royal-gold; }
+  }
+}
+
+// ── Icon Wrap ─────────────────────────────────────────────────────────────────
+.qlp-card__icon-wrap {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  background: rgba($midnight-sapphire, 0.04);
+  border: 1px solid rgba($midnight-sapphire, 0.08);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $midnight-sapphire;
+  transition: background 0.2s ease;
+
+  &--gold {
+    background: rgba($royal-gold, 0.08);
+    border-color: rgba($royal-gold, 0.2);
+    color: $royal-gold;
+  }
+}
+
+// ── Text Content ──────────────────────────────────────────────────────────────
+.qlp-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.qlp-card__label {
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: $midnight-sapphire;
+}
+
+.qlp-card__desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  color: rgba($deep-navy, 0.5);
+  line-height: 1.5;
+}
+
+// ── Arrow ─────────────────────────────────────────────────────────────────────
+.qlp-card__arrow {
+  flex-shrink: 0;
+  color: rgba($deep-navy, 0.25);
+  transition: transform 0.2s ease, color 0.2s ease;
+
+  .qlp-card:hover & { color: $royal-gold; }
+}

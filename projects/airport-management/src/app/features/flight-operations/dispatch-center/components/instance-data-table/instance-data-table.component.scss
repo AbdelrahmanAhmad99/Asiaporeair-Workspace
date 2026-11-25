@@ -1,0 +1,681 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Squircle 12px card container per spec
+ // ============================================================================
+ .idt-card {
+   border-radius: 12px;
+   overflow: hidden;
+   background: var(--aoms-bg-card, #ffffff);
+   border: 1px solid rgba($champagne, 0.18);
+   box-shadow: 0 4px 22px rgba($midnight, 0.07);
+   animation: idt-enter 340ms $luxury both;
+   transition:
+     background-color var(--aoms-transition-base, 250ms ease),
+     border-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Scroll
+ // ============================================================================
+ .idt-scroll {
+   overflow-x: auto;
+   -webkit-overflow-scrolling: touch;
+
+   &::-webkit-scrollbar {
+     height: 4px;
+   }
+
+   &::-webkit-scrollbar-track {
+     background: transparent;
+   }
+
+   &::-webkit-scrollbar-thumb {
+     background: rgba($champagne, 0.28);
+     border-radius: 2px;
+   }
+ }
+
+ // ============================================================================
+ // 3. Table
+ // ============================================================================
+ .idt-table {
+   width: 100%;
+   border-collapse: collapse;
+   font-size: 13px;
+ }
+
+ // ============================================================================
+ // 4. Sticky Midnight Sapphire header — Champagne text
+ // ============================================================================
+ .idt-head {
+   background: $midnight;
+   position: sticky;
+   top: 0;
+   z-index: 2;
+ }
+
+ .idt-th {
+   padding: 0.875rem 0.875rem;
+   text-align: left;
+   font-family: 'Montserrat', sans-serif;
+   font-size: 9.5px;
+   font-weight: 700;
+   letter-spacing: 0.1em;
+   text-transform: uppercase;
+   color: $champagne;
+   white-space: nowrap;
+   border-bottom: 1px solid rgba($champagne, 0.1);
+
+   &:first-child {
+     padding-left: 1.25rem;
+   }
+
+   &:last-child {
+     padding-right: 1.25rem;
+     text-align: right;
+   }
+ }
+
+ // ============================================================================
+ // 5. Data rows — Deep Charcoal text on Ivory workspace (per spec)
+ // ============================================================================
+ .idt-tr {
+   border-bottom: 1px solid rgba($champagne, 0.07);
+   transition: background-color 120ms $ease;
+
+   // Even: pure white (per spec — "High-contrast Ivory/White")
+   &--even {
+     background: var(--aoms-bg-card, #ffffff);
+   }
+
+   // Odd: very light gray (per spec — "Alternate rows between pure white and very light gray")
+   &--odd {
+     background: rgba(0, 0, 0, 0.018);
+   }
+
+   &:hover {
+     background: rgba($champagne, 0.055) !important;
+
+     .idt-actions {
+       opacity: 1;
+     }
+   }
+
+   // Cancelled — ghost opacity
+   &--cancelled {
+     opacity: 0.55;
+   }
+
+   // Being cancelled — dim + lock
+   &--cancelling {
+     opacity: 0.3;
+     pointer-events: none;
+   }
+ }
+
+ // ============================================================================
+ // 6. Cells
+ // ============================================================================
+ .idt-td {
+   padding: 0.8rem 0.875rem;
+   vertical-align: middle;
+   color: $charcoal; // Deep Charcoal Navy per spec
+
+   &:first-child {
+     padding-left: 1.25rem;
+   }
+
+   &:last-child {
+     padding-right: 1.25rem;
+   }
+
+   &--actions {
+     text-align: right;
+   }
+ }
+
+ // ============================================================================
+ // 7. Info Groups (Multi-line layout)
+ // ============================================================================
+ .idt-info-group {
+   display: flex;
+   flex-direction: column;
+   gap: 0.125rem;
+ }
+
+ .idt-main-val {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 13.5px;
+   font-weight: 800;
+   letter-spacing: 0.04em;
+   color: $gold;
+   text-transform: uppercase;
+ }
+
+ .idt-sub-val {
+   font-size: 10px;
+   font-weight: 500;
+   color: var(--aoms-text-muted);
+   letter-spacing: 0.02em;
+ }
+
+ .idt-id {
+   font-family: 'Courier New', monospace;
+   font-size: 10.5px;
+   font-weight: 700;
+   color: rgba($midnight, 0.6);
+   letter-spacing: 0.02em;
+ }
+
+ .idt-pair {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+ }
+
+ .idt-pill--model {
+   background: rgba($midnight, 0.05);
+   padding: 0.125rem 0.375rem;
+   border-radius: 3px;
+   font-family: 'Courier New', monospace;
+   font-weight: 700;
+   font-size: 9.5px;
+   color: $midnight;
+ }
+
+ // ============================================================================
+ // 8. Route Details
+ // ============================================================================
+ .idt-iata {
+   font-family: 'Montserrat', sans-serif;
+   font-weight: 900;
+   font-size: 14px;
+   color: $midnight;
+   letter-spacing: 0.05em;
+ }
+
+ .idt-city {
+   font-family: 'Montserrat', sans-serif;
+   font-weight: 600;
+   font-size: 11px;
+   color: $gold;
+ }
+
+ .idt-airport-name {
+   font-size: 10px;
+   color: var(--aoms-text-muted);
+   max-width: 18ch;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+ }
+
+ // ============================================================================
+ // 9. Times Grid
+ // ============================================================================
+ .idt-times-grid {
+   display: flex;
+   flex-direction: column;
+   gap: 0.25rem;
+ }
+
+ .idt-time-row {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   opacity: 0.6;
+
+   &--actual {
+     opacity: 1;
+
+     .idt-time-label {
+       color: $emerald;
+     }
+
+     .idt-time-val {
+       font-weight: 800;
+       color: $emerald;
+     }
+   }
+ }
+
+ .idt-time-label {
+   font-family: 'Montserrat', sans-serif;
+   font-weight: 700;
+   font-size: 8px;
+   letter-spacing: 0.08em;
+   width: 40px;
+   flex-shrink: 0;
+ }
+
+ .idt-time-val {
+   font-family: 'Courier New', monospace;
+   font-size: 12px;
+   font-weight: 600;
+   letter-spacing: 0.02em;
+
+   &--pending {
+     font-style: italic;
+     font-weight: 400;
+     font-size: 10px;
+     color: var(--aoms-text-muted);
+   }
+ }
+
+ // ============================================================================
+ // 12. Status Pill with Pulsing Dot
+ // ============================================================================
+ .idt-status-pill {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.4rem;
+   padding: 0.25rem 0.6rem 0.25rem 0.45rem;
+   border-radius: 4px;
+   font-family: 'Montserrat', sans-serif;
+   font-size: 10px;
+   font-weight: 700;
+   letter-spacing: 0.06em;
+   text-transform: uppercase;
+   white-space: nowrap;
+   border: 1px solid transparent;
+
+   &--scheduled {
+     background: rgba($amber, 0.1);
+     border-color: rgba($amber, 0.25);
+     color: darken($amber, 10%);
+   }
+
+   &--delayed {
+     background: rgba($ruby, 0.1);
+     border-color: rgba($ruby, 0.28);
+     color: lighten($ruby, 8%);
+   }
+
+   &--boarding {
+     background: rgba(59, 130, 246, .1);
+     border-color: rgba(59, 130, 246, .28);
+     color: #3b82f6;
+   }
+
+   &--inflight {
+     background: rgba($emerald, 0.1);
+     border-color: rgba($emerald, 0.28);
+     color: #059669;
+   }
+
+   &--arrived {
+     background: rgba(108, 117, 125, .1);
+     border-color: rgba(108, 117, 125, .22);
+     color: #6C757D;
+   }
+
+   &--cancelled {
+     background: rgba($ruby, 0.08);
+     border-color: rgba($ruby, 0.2);
+     color: rgba($ruby, 0.7);
+   }
+
+   &--diverted {
+     background: rgba($amber, 0.12);
+     border-color: rgba($amber, 0.3);
+     color: $amber;
+   }
+
+   &--unknown {
+     background: rgba(108, 117, 125, .1);
+     border-color: transparent;
+     color: #6C757D;
+   }
+ }
+
+ // Status dot — shared base
+ .idt-status-dot {
+   display: inline-block;
+   width: 6px;
+   height: 6px;
+   border-radius: 50%;
+   flex-shrink: 0;
+
+   // Colour inherits from parent pill via currentColor-aware sibling trick
+   .idt-status-pill--scheduled & {
+     background: $amber;
+   }
+
+   .idt-status-pill--delayed & {
+     background: $ruby;
+   }
+
+   .idt-status-pill--boarding & {
+     background: #3b82f6;
+   }
+
+   .idt-status-pill--inflight & {
+     background: #059669;
+   }
+
+   .idt-status-pill--arrived & {
+     background: #6C757D;
+   }
+
+   .idt-status-pill--cancelled & {
+     background: rgba($ruby, 0.45);
+   }
+
+   .idt-status-pill--diverted & {
+     background: $amber;
+   }
+
+   // ── Pulsing animation for "live" statuses per spec ─────────────────────
+   &--pulse {
+     animation: idt-pulse-ring 1.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+     position: relative;
+
+     &::after {
+       content: '';
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       width: 100%;
+       height: 100%;
+       border-radius: 50%;
+       animation: idt-pulse-ring 1.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+     }
+
+     .idt-status-pill--delayed &,
+     .idt-status-pill--delayed &::after {
+       background: rgba($ruby, 0.35);
+     }
+
+     .idt-status-pill--boarding &,
+     .idt-status-pill--boarding &::after {
+       background: rgba(59, 130, 246, .35);
+     }
+
+     .idt-status-pill--inflight &,
+     .idt-status-pill--inflight &::after {
+       background: rgba(5, 150, 105, .3);
+     }
+
+     .idt-status-pill--diverted &,
+     .idt-status-pill--diverted &::after {
+       background: rgba($amber, 0.35);
+     }
+   }
+ }
+
+ // ============================================================================
+ // 13. Action buttons
+ // ============================================================================
+ .idt-actions {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.2rem;
+   justify-content: flex-end;
+   opacity: 0.5;
+   transition: opacity 120ms $ease;
+ }
+
+ .idt-action-btn {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 2rem;
+   height: 2rem;
+   border-radius: 4px;
+   border: 1px solid transparent;
+   background: transparent;
+   cursor: pointer;
+   transition: all 150ms $ease;
+
+   svg {
+     width: 0.9375rem;
+     height: 0.9375rem;
+   }
+
+   &:disabled {
+     opacity: 0.3;
+     cursor: not-allowed;
+     pointer-events: none;
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &--analyse {
+     color: rgba($champagne, 0.6);
+
+     &:hover:not(:disabled) {
+       color: $champagne;
+       border-color: rgba($champagne, 0.28);
+       background: rgba($champagne, 0.08);
+     }
+   }
+
+   &--cancel {
+     color: rgba($ruby, 0.55);
+
+     &:hover:not(:disabled) {
+       color: $ruby;
+       border-color: rgba($ruby, 0.3);
+       background: rgba($ruby, 0.08);
+     }
+   }
+ }
+
+ .idt-spinner {
+   display: inline-flex;
+   align-items: center;
+   justify-content: flex-end;
+   width: 100%;
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+     color: rgba($champagne, 0.5);
+     animation: idt-spin 0.85s linear infinite;
+   }
+ }
+
+ // ============================================================================
+ // 14. Responsive
+ // ============================================================================
+ .idt-col--md-hidden {
+   @media (max-width: 767px) {
+     display: none;
+   }
+ }
+
+ .idt-col--lg-hidden {
+   @media (max-width: 1023px) {
+     display: none;
+   }
+ }
+
+ // ============================================================================
+ // 15. Shimmer
+ // ============================================================================
+ .idt-shimmer {
+   height: 0.75rem;
+   border-radius: 3px;
+   background: rgba($champagne, 0.09);
+   animation: idt-pulse-shimmer 1.5s ease-in-out infinite;
+ }
+
+ .idt-od-shimmer {
+   display: flex;
+   align-items: center;
+   gap: 0.3rem;
+ }
+
+ // ============================================================================
+ // 16. Empty state
+ // ============================================================================
+ .idt-empty {
+   padding: 4.5rem 1.5rem;
+   text-align: center;
+ }
+
+ .idt-empty__inner {
+   display: inline-flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.75rem;
+ }
+
+ .idt-empty__icon-wrap {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 3.25rem;
+   height: 3.25rem;
+   border-radius: 12px;
+   background: rgba($gold, 0.07);
+   border: 1px solid rgba($gold, 0.15);
+ }
+
+ .idt-empty__icon {
+   width: 1.5rem;
+   height: 1.5rem;
+   color: var(--aoms-text-muted);
+ }
+
+ .idt-empty__title {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 14px;
+   font-weight: 600;
+   color: var(--aoms-text-secondary);
+   margin: 0;
+ }
+
+ .idt-empty__sub {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   color: var(--aoms-text-muted);
+   max-width: 30ch;
+   margin: 0;
+   line-height: 1.6;
+ }
+
+ // ============================================================================
+ // 17. Footer
+ // ============================================================================
+ .idt-footer {
+   display: flex;
+   align-items: center;
+   padding: 0.75rem 1.25rem;
+   border-top: 1px solid rgba($champagne, 0.1);
+   background: rgba($off-white, 0.5);
+ }
+
+ .idt-footer__label {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 11px;
+   color: var(--aoms-text-muted);
+ }
+
+ // ============================================================================
+ // 18. Keyframes
+ // ============================================================================
+ @keyframes idt-enter {
+   from {
+     opacity: 0;
+     transform: translateY(8px);
+   }
+
+   to {
+     opacity: 1;
+     transform: translateY(0);
+   }
+ }
+
+ @keyframes idt-spin {
+   from {
+     transform: rotate(0deg);
+   }
+
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ @keyframes idt-pulse-shimmer {
+
+   0%,
+   100% {
+     opacity: 0.5;
+   }
+
+   50% {
+     opacity: 1;
+   }
+ }
+
+ // Pulsing glow ring for live status dots
+ @keyframes idt-pulse-ring {
+   0% {
+     box-shadow: 0 0 0 0 currentColor;
+     opacity: 1;
+   }
+
+   70% {
+     box-shadow: 0 0 0 6px transparent;
+     opacity: 0;
+   }
+
+   100% {
+     box-shadow: 0 0 0 0 transparent;
+     opacity: 0;
+   }
+ }
+
+ // ============================================================================
+ // 19. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+   .idt-card {
+     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+   }
+
+   .idt-tr--even {
+     background: rgba(255, 255, 255, 0.025);
+   }
+
+   .idt-tr--odd {
+     background: rgba($midnight, 0.3);
+   }
+
+   .idt-tr:hover {
+     background: rgba($champagne, 0.04) !important;
+   }
+
+   .idt-td {
+     color: rgba(255, 255, 255, 0.85);
+   }
+
+   .idt-time {
+     color: rgba(255, 255, 255, 0.78);
+   }
+
+   .idt-date {
+     color: rgba(255, 255, 255, 0.4);
+   }
+
+   .idt-footer {
+     background: rgba(255, 255, 255, 0.02);
+     border-top-color: rgba($champagne, 0.08);
+   }
+ }

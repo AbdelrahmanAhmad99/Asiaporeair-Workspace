@@ -1,0 +1,45 @@
+<div class="igs" aria-label="Image gallery" role="region">
+
+    <!-- Main display -->
+    <div class="igs__main">
+        <img class="igs__active-image" [src]="images[activeIndex()]"
+            [alt]="'Gallery image ' + (activeIndex() + 1) + ' of ' + images.length" loading="lazy" />
+
+        <!-- Prev / Next controls -->
+        @if (images.length > 1) {
+        <button class="igs__ctrl igs__ctrl--prev" type="button" (click)="prev()" [disabled]="activeIndex() === 0"
+            aria-label="Previous image">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <polyline points="15 18 9 12 15 6" />
+            </svg>
+        </button>
+        <button class="igs__ctrl igs__ctrl--next" type="button" (click)="next()"
+            [disabled]="activeIndex() === images.length - 1" aria-label="Next image">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <polyline points="9 18 15 12 9 6" />
+            </svg>
+        </button>
+
+        <!-- Counter -->
+        <div class="igs__counter" aria-live="polite">
+            {{ activeIndex() + 1 }} / {{ images.length }}
+        </div>
+        }
+    </div>
+
+    <!-- Thumbnails -->
+    @if (images.length > 1) {
+    <div class="igs__thumbs" role="list" aria-label="Gallery thumbnails">
+        @for (img of images; track img; let i = $index) {
+        <button class="igs__thumb" [class.igs__thumb--active]="i === activeIndex()" type="button" role="listitem"
+            (click)="setActive(i)" [attr.aria-label]="'View image ' + (i + 1)"
+            [attr.aria-current]="i === activeIndex() ? 'true' : null">
+            <img [src]="img" [alt]="'Thumbnail ' + (i + 1)" loading="lazy" />
+        </button>
+        }
+    </div>
+    }
+
+</div>

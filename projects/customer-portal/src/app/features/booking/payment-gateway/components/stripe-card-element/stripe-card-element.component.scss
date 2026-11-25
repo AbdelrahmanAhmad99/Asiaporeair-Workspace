@@ -1,0 +1,234 @@
+// stripe-card-element.component.scss
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --success: #10b981;
+    --danger: #ef4444;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --trans: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
+    padding: 0 1.5rem 1.5rem;
+}
+
+// ── Total Banner ──────────────────────────────────────────────────────────────
+.total-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    margin-bottom: 1rem;
+    background: rgba(5, 25, 55, 0.03);
+    border: 1px solid rgba(5, 25, 55, 0.08);
+    border-radius: 8px;
+    font-family: var(--font);
+}
+
+.total-banner-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-sec);
+}
+
+.total-banner-amount {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.03em;
+}
+
+// ── Security Note ─────────────────────────────────────────────────────────────
+.security-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    font-family: var(--font);
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+}
+
+// ── Field Groups ──────────────────────────────────────────────────────────────
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 12px;
+    font-family: var(--font);
+
+    &--error {
+        .field-input {
+            border-bottom-color: var(--danger) !important;
+        }
+
+        .field-label {
+            color: var(--danger);
+        }
+    }
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.field-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-sec);
+}
+
+.field-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.field-input {
+    width: 100%;
+    padding: 10px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(5, 25, 55, 0.2);
+    border-radius: 0;
+    outline: none;
+    font-family: var(--font);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    transition: border-color var(--trans);
+    letter-spacing: 0.02em;
+
+    &::placeholder {
+        color: rgba(16, 16, 86, 0.25);
+        font-weight: 400;
+    }
+
+    &:focus {
+        border-bottom-color: var(--royal-gold);
+    }
+
+    &[type="password"] {
+        letter-spacing: 0.2em;
+    }
+}
+
+.field-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23718096' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+    padding-right: 20px;
+}
+
+.field-error {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--danger);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+// ── Card Brand Icons ──────────────────────────────────────────────────────────
+.card-brand-icons {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+}
+
+.brand-icon {
+    height: 18px;
+    width: auto;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+// ── Security Logos ────────────────────────────────────────────────────────────
+.security-logos {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+}
+
+.security-tag {
+    font-size: 0.48rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+    background: rgba(5, 25, 55, 0.04);
+    border: 1px solid rgba(5, 25, 55, 0.1);
+    border-radius: 3px;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
+
+.cvv-info-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    transition: color var(--trans);
+
+    &:hover {
+        color: var(--royal-gold);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        border-radius: 2px;
+    }
+}
+
+// ── Billing Section ───────────────────────────────────────────────────────────
+.billing-section {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(5, 25, 55, 0.08);
+}
+
+.billing-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.02em;
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    font-family: var(--font);
+    letter-spacing: 0.06em;
+}

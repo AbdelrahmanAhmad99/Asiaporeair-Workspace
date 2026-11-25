@@ -1,0 +1,38 @@
+<!-- seat-item.component.html -->
+
+<div class="seat" [class]="'seat--' + state()" [class.seat--window]="seat().isWindow"
+    [class.seat--exit]="seat().isExitRow" [class.seat--hovered]="isHovered()"
+    [attr.role]="isInteractable() ? 'button' : 'img'" [attr.tabindex]="isInteractable() ? 0 : -1"
+    [attr.aria-label]="ariaLabel()"
+    [attr.aria-pressed]="state() === 'selected-active' ? 'true' : (state() === 'selected-other' ? 'mixed' : null)"
+    [attr.aria-disabled]="state() === 'occupied' ? 'true' : null" (click)="isInteractable() && seatClick.emit()"
+    (keydown)="onKeydown($event)" (mouseenter)="seatHover.emit(true)" (mouseleave)="seatHover.emit(false)">
+
+    <!-- Occupied X mark -->
+    <svg *ngIf="state() === 'occupied'" class="seat-icon seat-icon--x" width="12" height="12" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+
+    <!-- Selected: checkmark for active passenger, passenger number for others -->
+    <ng-container *ngIf="state() === 'selected-active'">
+        <svg class="seat-icon seat-icon--check" width="11" height="11" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+        </svg>
+    </ng-container>
+
+    <ng-container *ngIf="state() === 'selected-other' && passengerIndex() !== null">
+        <span class="seat-pax-num" aria-hidden="true">{{ (passengerIndex()! + 1) }}</span>
+    </ng-container>
+
+    <!-- Available: seat number label (tiny) -->
+    <span *ngIf="state() === 'available'" class="seat-label" aria-hidden="true">
+        {{ seat().seatNumber }}
+    </span>
+
+    <!-- Window indicator dot -->
+    <span *ngIf="seat().isWindow && state() === 'available'" class="window-dot" aria-hidden="true"></span>
+
+</div>

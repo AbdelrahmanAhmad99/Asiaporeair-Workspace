@@ -1,0 +1,96 @@
+<div class="ad-page">
+
+    <!-- ══ Sticky Page Header ════════════════════════════════════════ -->
+    <header class="ad-header">
+
+        <!-- Left: Breadcrumb + Title -->
+        <div class="ad-header-left">
+            <nav class="ad-breadcrumb" aria-label="Breadcrumb">
+                <span class="ad-breadcrumb__section">Network &amp; Infrastructure</span>
+                <svg class="ad-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="ad-breadcrumb__current">Airport Hub</span>
+            </nav>
+            <h1 class="ad-title">Global Node Hub</h1>
+        </div>
+
+        <!-- Right: Controls -->
+        <div class="ad-header-controls">
+
+            <!-- Archive Link -->
+            <button class="ad-header-btn" (click)="navigateToArchive()" title="View deactivated airports"
+                aria-label="Airport archive">
+                <svg class="ad-header-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                </svg>
+                Archive
+            </button>
+
+            <!-- Refresh -->
+            <button class="ad-icon-btn" (click)="refresh()" [disabled]="loading()" aria-label="Refresh data"
+                title="Refresh">
+                <svg class="ad-icon-btn__icon" [class.ad-icon-btn__icon--spin]="loading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Dark / Light Toggle -->
+            <button class="ad-icon-btn ad-icon-btn--gold" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+                [attr.title]="isDarkMode() ? 'Light Mode' : 'Dark Mode'">
+
+                @if (isDarkMode()) {
+                <!-- Sun icon -->
+                <svg class="ad-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <!-- Moon icon -->
+                <svg class="ad-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ═════════════════════════════════════════════════ -->
+    <main class="ad-body">
+
+        <!-- ── Error Banner ──────────────────────────────────────────── -->
+        @if (error()) {
+        <div class="ad-error-banner" role="alert">
+            <svg class="ad-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            {{ error() }}
+        </div>
+        }
+
+        <!-- ── Executive Metrics Bar ──────────────────────────────────── -->
+        <aoms-airport-metrics-bar [metrics]="metrics()" [loading]="loading()" />
+
+        <!-- ── Search Panel ───────────────────────────────────────────── -->
+        <aoms-airport-search-panel [initialCriteria]="searchCriteria()" [loading]="loading()"
+            (onSearch)="onSearch($event)" (onClear)="onClear()" (onAddNew)="navigateToCreate()" />
+
+        <!-- ── Master Table ───────────────────────────────────────────── -->
+        <aoms-airport-master-table [airports]="displayedAirports()" [loading]="loading()"
+            [recordLabel]="recordCountLabel()" [hasActiveSearch]="hasActiveSearch()"
+            (actionTriggered)="onTableAction($event)" />
+
+    </main>
+</div>

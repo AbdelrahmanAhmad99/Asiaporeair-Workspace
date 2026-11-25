@@ -1,0 +1,161 @@
+<section class="profile-page" aria-label="Crew Technical Profile">
+
+  <!-- ── Page Header ──────────────────────────────────────────────────── -->
+  <header class="page-header">
+    <button class="btn-back" (click)="onBack()" aria-label="Return to Directory">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+      Operational Directory
+    </button>
+
+    <div class="header-title-block">
+      <span class="header-eyebrow">TECHNICAL PROFILE / COMMAND CENTER</span>
+      <h1 class="header-name">
+        @if (isLoading()) {
+        <span class="shimmer-line shimmer-line--lg"></span>
+        } @else {
+        {{ fullName() }}
+        }
+      </h1>
+      @if (member()) {
+      <div class="header-meta">
+        <span class="meta-badge" [class.meta-badge--active]="member()!.isActive">
+          {{ member()!.isActive ? 'On Active Duty' : 'Inactive' }}
+        </span>
+        <span class="meta-iata">Base: {{ member()!.baseAirportIata }}</span>
+      </div>
+      }
+    </div>
+
+    <button class="btn-primary" id="add-certification-btn" (click)="onOpenAddForm()" [disabled]="isProcessing()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Log New Credential
+    </button>
+  </header>
+
+  <!-- ── Operational Error Banner (Ruby Red) ───────────────────────────── -->
+  @if (operationalError()) {
+  <div class="banner banner--error" role="alert" @bannerAnim>
+    <svg class="banner__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+    </svg>
+    <span class="banner__text">{{ operationalError() }}</span>
+    <button class="banner__close" (click)="dismissError()" aria-label="Dismiss error">✕</button>
+  </div>
+  }
+
+  <!-- ── Feedback Toast (Success / Error) ──────────────────────────────── -->
+  @if (feedback()) {
+  <div class="banner" [class.banner--success]="feedback()!.type === 'success'"
+    [class.banner--error]="feedback()!.type === 'error'" role="status" @bannerAnim>
+    <svg class="banner__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      @if (feedback()!.type === 'success') {
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      } @else {
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+      }
+    </svg>
+    <span class="banner__text">{{ feedback()!.text }}</span>
+    <button class="banner__close" (click)="dismissFeedback()" aria-label="Dismiss">✕</button>
+  </div>
+  }
+
+  <!-- ── Main Content Grid ──────────────────────────────────────────────── -->
+  <div class="content-grid">
+
+    <!-- LEFT COLUMN: Base Manager -->
+    <aside class="sidebar-col">
+      <aoms-crew-base-manager [currentBase]="member()?.baseAirportIata ?? ''" [airports]="airports()"
+        [isProcessing]="isProcessing()" [isLoading]="isLoading()" (baseUpdated)="onBaseUpdated($event)" />
+    </aside>
+
+    <!-- RIGHT COLUMN: Certifications -->
+    <main class="certs-col">
+      <div class="certs-header">
+        <h2 class="certs-title">
+          Credential Ledger
+          @if (!isLoading()) {
+          <span class="cert-count-badge">{{ certCount() }}</span>
+          }
+        </h2>
+        <span class="certs-subtitle">Licensed Authorizations &amp; Medical Records</span>
+      </div>
+
+      <!-- Loading Skeletons -->
+      @if (isLoading()) {
+      <div class="cert-cards-grid">
+        @for (s of [1,2,3,4]; track s) {
+        <div class="cert-skeleton">
+          <div class="shimmer-line shimmer-line--sm"></div>
+          <div class="shimmer-line shimmer-line--md"></div>
+          <div class="shimmer-line shimmer-line--xs"></div>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Certification Cards -->
+      @if (!isLoading()) {
+      @if (certifications().length === 0) {
+      <div class="empty-state">
+        <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+        </svg>
+        <p class="empty-state__title">No Credentials on Record</p>
+        <p class="empty-state__subtitle">Initialize the credential ledger by logging the first credential.</p>
+        <button class="btn-primary btn-primary--sm" (click)="onOpenAddForm()">Log First Credential</button>
+      </div>
+      } @else {
+      <div class="cert-cards-grid" [@cardStagger]="certifications().length">
+        @for (cert of certifications(); track cert.certId) {
+        <aoms-certification-record-card [cert]="cert" [isProcessing]="isProcessing()"
+          (editRequested)="onOpenEditForm($event)" (deleteRequested)="onDeleteRequested($event)" />
+        }
+      </div>
+      }
+      }
+    </main>
+  </div>
+
+</section>
+
+<!-- ── Certification Form Dialog (Glassmorphism Overlay) ─────────────────── -->
+@if (isCertFormOpen()) {
+<aoms-certification-form-ui [editingCertId]="editingCertId()" [initialData]="editingCertData()"
+  [isProcessing]="isProcessing()" (formSubmitted)="onFormSubmitted($event)" (formCancelled)="onFormCancelled()" />
+}
+
+<!-- ── Delete Confirmation Dialog (Luxury Brand-Consistent) ──────────────── -->
+@if (deleteConfirm()) {
+<div class="dialog-backdrop" role="dialog" aria-modal="true" aria-labelledby="delete-dialog-title">
+  <div class="delete-dialog">
+    <div class="delete-dialog__icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+      </svg>
+    </div>
+    <h3 id="delete-dialog-title" class="delete-dialog__title">Revoke Credential Authorization</h3>
+    <p class="delete-dialog__body">
+      You are about to permanently remove
+      <strong class="delete-dialog__cert-name">{{ deleteConfirm()!.certName }}</strong>
+      from the credential ledger. This action cannot be undone and will affect pilot eligibility assessments.
+    </p>
+    <div class="delete-dialog__actions">
+      <button class="btn-secondary" (click)="onDeleteCancelled()" id="delete-cancel-btn">
+        Retain Authorization
+      </button>
+      <button class="btn-danger" (click)="onDeleteConfirmed()" [disabled]="isProcessing()" id="delete-confirm-btn">
+        Revoke Permanently
+      </button>
+    </div>
+  </div>
+</div>
+}

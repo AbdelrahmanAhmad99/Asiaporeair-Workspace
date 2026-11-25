@@ -1,0 +1,159 @@
+<!-- ancillary-payment-modal.component.html -->
+
+<div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+
+    <!-- ── Header ──────────────────────────────────────────────────────────── -->
+    <div class="modal-header">
+        <div class="modal-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+        </div>
+        <div class="modal-title-block">
+            <h2 class="modal-title" id="modal-title">Secure Payment</h2>
+            <p class="modal-subtitle">Confirm your additional services</p>
+        </div>
+        <button class="modal-close" (click)="cancel.emit()" [disabled]="processingState() === 'processing'"
+            aria-label="Close payment modal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="modal-body">
+
+        <!-- ── Order Summary ─────────────────────────────────────────────── -->
+        <div class="order-summary" aria-label="Order summary">
+            <div class="summary-title">Order Summary</div>
+
+            <div *ngFor="let item of additions" class="summary-row">
+                <span class="summary-name">{{ item.name }}
+                    <span *ngIf="item.quantity > 1" class="summary-qty">×{{ item.quantity }}</span>
+                </span>
+                <span class="summary-price">{{ currency }} {{ formatPrice(item.baseCost * item.quantity) }}</span>
+            </div>
+
+            <div *ngFor="let item of removals" class="summary-row summary-row--removal">
+                <span class="summary-name">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    {{ item.name }}
+                </span>
+                <span class="summary-price summary-price--credit">— {{ currency }} {{ formatPrice(item.baseCost *
+                    item.quantity) }}</span>
+            </div>
+
+            <div class="summary-divider" aria-hidden="true"></div>
+
+            <div class="summary-total" aria-label="Total due: {{ currency }} {{ formatPrice(deltaAmount) }}">
+                <span class="total-label">Total Due</span>
+                <div class="total-amount-group">
+                    <span class="total-curr">{{ currency }}</span>
+                    <span class="total-val">{{ formatPrice(deltaAmount) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Success State ─────────────────────────────────────────────── -->
+        <div *ngIf="processingState() === 'done'" class="success-state" aria-live="polite">
+            <div class="success-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1.5">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            </div>
+            <span class="success-text">Payment confirmed!</span>
+        </div>
+
+        <!-- ── Card Form ─────────────────────────────────────────────────── -->
+        <form *ngIf="processingState() !== 'done'" [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="card-form"
+            aria-label="Payment card details" novalidate>
+
+            <div class="form-field">
+                <label class="field-label" for="nameOnCard">Name on Card</label>
+                <input id="nameOnCard" type="text" class="field-input" formControlName="nameOnCard"
+                    placeholder="As printed on card" autocomplete="cc-name"
+                    [class.field-input--error]="!!getFieldError('nameOnCard')"
+                    [attr.aria-describedby]="getFieldError('nameOnCard') ? 'err-name' : null">
+                <span *ngIf="getFieldError('nameOnCard')" id="err-name" class="field-error" role="alert">
+                    {{ getFieldError('nameOnCard') }}
+                </span>
+            </div>
+
+            <div class="form-field">
+                <label class="field-label" for="cardNumber">Card Number</label>
+                <div class="input-icon-wrap">
+                    <input id="cardNumber" type="text" class="field-input" formControlName="cardNumber"
+                        placeholder="0000 0000 0000 0000" maxlength="16" autocomplete="cc-number" inputmode="numeric"
+                        (input)="formatCardNumber($event)" [class.field-input--error]="!!getFieldError('cardNumber')"
+                        [attr.aria-describedby]="getFieldError('cardNumber') ? 'err-card' : null">
+                    <div class="card-logos" aria-hidden="true">
+                        <span class="card-logo">VISA</span>
+                        <span class="card-logo">MC</span>
+                    </div>
+                </div>
+                <span *ngIf="getFieldError('cardNumber')" id="err-card" class="field-error" role="alert">
+                    {{ getFieldError('cardNumber') }}
+                </span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-field">
+                    <label class="field-label" for="expiry">Expiry</label>
+                    <input id="expiry" type="text" class="field-input" formControlName="expiry" placeholder="MM/YY"
+                        maxlength="5" autocomplete="cc-exp" (input)="formatExpiry($event)"
+                        [class.field-input--error]="!!getFieldError('expiry')"
+                        [attr.aria-describedby]="getFieldError('expiry') ? 'err-exp' : null">
+                    <span *ngIf="getFieldError('expiry')" id="err-exp" class="field-error" role="alert">
+                        {{ getFieldError('expiry') }}
+                    </span>
+                </div>
+                <div class="form-field">
+                    <label class="field-label" for="cvv">CVV</label>
+                    <input id="cvv" type="password" class="field-input" formControlName="cvv" placeholder="•••"
+                        maxlength="4" autocomplete="cc-csc" inputmode="numeric"
+                        [class.field-input--error]="!!getFieldError('cvv')"
+                        [attr.aria-describedby]="getFieldError('cvv') ? 'err-cvv' : null">
+                    <span *ngIf="getFieldError('cvv')" id="err-cvv" class="field-error" role="alert">
+                        {{ getFieldError('cvv') }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Security note -->
+            <div class="security-note">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                256-bit SSL encrypted · Your card details are never stored
+            </div>
+
+            <!-- Processing indicator -->
+            <div *ngIf="processingState() === 'processing'" class="processing-bar" aria-label="Processing payment">
+                <div class="processing-track">
+                    <div class="processing-fill"></div>
+                </div>
+                <span class="processing-label">Securing your payment…</span>
+            </div>
+
+            <!-- Submit -->
+            <button *ngIf="processingState() === 'idle'" type="submit" class="btn-pay"
+                [disabled]="processingState() !== 'idle'"
+                aria-label="Confirm and pay {{ currency }} {{ formatPrice(deltaAmount) }}">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                Pay {{ currency }} {{ formatPrice(deltaAmount) }}
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

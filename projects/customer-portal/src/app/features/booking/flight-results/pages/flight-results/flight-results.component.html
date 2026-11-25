@@ -1,0 +1,647 @@
+<!-- ============================================================================
+     flight-results.component.html
+     Asiaporeair | "Select Your Suite" — Premium Flight Results
+     ============================================================================ -->
+
+<div class="results-shell" [class.is-loading]="isLoading()">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       TOP CONTEXT BAR — Sticky journey summary
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="context-bar" role="banner" aria-label="Journey summary">
+        <div class="context-inner">
+
+            <!-- Journey label -->
+            <div class="context-journey">
+                <span class="context-label">Your Journey</span>
+                <span class="context-route" aria-label="Search: {{ searchLabel() }}">{{ searchLabel() }}</span>
+            </div>
+
+            <!-- Progress stepper -->
+            <nav class="progress-stepper" aria-label="Booking progress">
+                <div class="step active" aria-current="step">
+                    <span class="step-num">1</span>
+                    <span class="step-name">Flights</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">2</span>
+                    <span class="step-name">Passengers</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">3</span>
+                    <span class="step-name">Add-Ons</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-name">Seats</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-name">Payment</span>
+                </div>
+            </nav>
+
+            <!-- Edit Search -->
+            <button class="edit-search-btn" (click)="onEditSearch()" aria-label="Edit your search criteria">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                Refine Search
+            </button>
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       LOADING SKELETON
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="isLoading()" class="skeleton-wrapper" aria-label="Loading flight options" aria-busy="true">
+        <div class="skeleton-card" *ngFor="let i of [1,2,3]">
+            <div class="skeleton-row">
+                <div class="skeleton-block sk-wide"></div>
+                <div class="skeleton-block sk-mid"></div>
+                <div class="skeleton-block sk-narrow"></div>
+            </div>
+            <div class="skeleton-row sk-row-sm">
+                <div class="skeleton-block sk-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT GRID
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="content-grid" *ngIf="!isLoading()">
+
+        <!-- ── LEFT: Filter Sidebar ─────────────────────────────────────────── -->
+        <aside class="filter-sidebar" aria-label="Filter flight options">
+
+            <div class="filter-glass-panel">
+                <div class="filter-header">
+                    <h2 class="filter-title">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                            aria-hidden="true">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                        </svg>
+                        Refine Options
+                    </h2>
+                    <button *ngIf="isFilterActive()" class="filter-reset-btn" (click)="resetFilters()"
+                        aria-label="Reset all filters">
+                        Reset
+                    </button>
+                </div>
+
+                <!-- Filter: Stops -->
+                <div class="filter-group">
+                    <h3 class="filter-group-label">Number of Stops</h3>
+                    <div class="filter-pills">
+                        <button class="filter-pill" [class.active]="filters().stops.includes('nonstop')"
+                            (click)="toggleStopFilter('nonstop')"
+                            aria-pressed="{{ filters().stops.includes('nonstop') }}">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1" aria-hidden="true">
+                                <path d="M5 12h14" />
+                            </svg>
+                            Nonstop
+                        </button>
+                        <button class="filter-pill" [class.active]="filters().stops.includes('1stop')"
+                            (click)="toggleStopFilter('1stop')" aria-pressed="{{ filters().stops.includes('1stop') }}">
+                            1 Stop
+                        </button>
+                        <button class="filter-pill" [class.active]="filters().stops.includes('2stop')"
+                            (click)="toggleStopFilter('2stop')" aria-pressed="{{ filters().stops.includes('2stop') }}">
+                            2+ Stops
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter: Departure Time -->
+                <div class="filter-group">
+                    <h3 class="filter-group-label">Departure Window</h3>
+                    <div class="filter-time-grid">
+                        <button class="filter-time-btn" [class.active]="filters().departureSlots.includes('morning')"
+                            (click)="toggleDepartureSlot('morning')"
+                            aria-pressed="{{ filters().departureSlots.includes('morning') }}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1" aria-hidden="true">
+                                <circle cx="12" cy="12" r="4" />
+                                <path
+                                    d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                            </svg>
+                            <span>Morning</span>
+                            <span class="time-hint">06:00–12:00</span>
+                        </button>
+                        <button class="filter-time-btn" [class.active]="filters().departureSlots.includes('afternoon')"
+                            (click)="toggleDepartureSlot('afternoon')"
+                            aria-pressed="{{ filters().departureSlots.includes('afternoon') }}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1" aria-hidden="true">
+                                <circle cx="12" cy="12" r="5" />
+                                <path
+                                    d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                            </svg>
+                            <span>Afternoon</span>
+                            <span class="time-hint">12:00–18:00</span>
+                        </button>
+                        <button class="filter-time-btn" [class.active]="filters().departureSlots.includes('evening')"
+                            (click)="toggleDepartureSlot('evening')"
+                            aria-pressed="{{ filters().departureSlots.includes('evening') }}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1" aria-hidden="true">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                            </svg>
+                            <span>Evening</span>
+                            <span class="time-hint">18:00–22:00</span>
+                        </button>
+                        <button class="filter-time-btn" [class.active]="filters().departureSlots.includes('night')"
+                            (click)="toggleDepartureSlot('night')"
+                            aria-pressed="{{ filters().departureSlots.includes('night') }}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1" aria-hidden="true">
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
+                                <path d="M19 3v4M21 5h-4" />
+                            </svg>
+                            <span>Night</span>
+                            <span class="time-hint">22:00–06:00</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter: Price Range -->
+                <div class="filter-group" *ngIf="priceStats().max > priceStats().min">
+                    <h3 class="filter-group-label">Maximum Fare
+                        <span class="filter-price-value">{{ currency() }} {{ filters().maxPrice | number:'1.0-0'
+                            }}</span>
+                    </h3>
+                    <div class="filter-slider-wrap">
+                        <input type="range" class="filter-slider" [min]="priceStats().min" [max]="priceStats().max"
+                            [value]="filters().maxPrice ?? priceStats().max" (input)="onPriceSliderChange($event)"
+                            aria-label="Maximum price filter" />
+                        <div class="slider-track-labels">
+                            <span>{{ currency() }} {{ priceStats().min | number:'1.0-0' }}</span>
+                            <span>{{ currency() }} {{ priceStats().max | number:'1.0-0' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter: Cabin Class -->
+                <div class="filter-group" *ngIf="availableCabins().length > 1">
+                    <h3 class="filter-group-label">Cabin Preference</h3>
+                    <div class="filter-cabin-list">
+                        <button class="filter-cabin-btn" [class.active]="filters().cabinClass === null"
+                            (click)="setCabinFilter(null)" aria-pressed="{{ filters().cabinClass === null }}">
+                            All Classes
+                        </button>
+                        <button *ngFor="let cabin of availableCabins()" class="filter-cabin-btn"
+                            [class.active]="filters().cabinClass === cabin" (click)="setCabinFilter(cabin)"
+                            aria-pressed="{{ filters().cabinClass === cabin }}">
+                            {{ cabin }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ── CENTER: Flight Results ────────────────────────────────────────── -->
+        <main class="results-main" role="main" aria-label="Available flights">
+
+            <!-- Sort Bar -->
+            <div class="sort-bar" role="toolbar" aria-label="Sort options">
+                <span class="sort-label">
+                    <strong>{{ processedItineraries().length }}</strong>
+                    {{ processedItineraries().length === 1 ? 'option' : 'options' }} found
+                </span>
+                <div class="sort-options">
+                    <span class="sort-by-label">Sort by:</span>
+                    <button class="sort-btn" [class.active]="activeSort() === 'duration'" (click)="setSort('duration')"
+                        aria-pressed="{{ activeSort() === 'duration' }}">
+                        Travel Duration
+                    </button>
+                    <button class="sort-btn" [class.active]="activeSort() === 'price'" (click)="setSort('price')"
+                        aria-pressed="{{ activeSort() === 'price' }}">
+                        Price
+                    </button>
+                    <button class="sort-btn" [class.active]="activeSort() === 'departure'"
+                        (click)="setSort('departure')" aria-pressed="{{ activeSort() === 'departure' }}">
+                        Departure
+                    </button>
+                    <button class="sort-btn" [class.active]="activeSort() === 'arrival'" (click)="setSort('arrival')"
+                        aria-pressed="{{ activeSort() === 'arrival' }}">
+                        Arrival
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="processedItineraries().length === 0" class="empty-state" role="status">
+                <div class="empty-icon" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="0.8">
+                        <path
+                            d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                </div>
+                <h3 class="empty-title">No Journeys Match Your Criteria</h3>
+                <p class="empty-desc">Adjust your filters to discover more travel options.</p>
+                <button class="empty-reset-btn" (click)="resetFilters()">Clear All Filters</button>
+            </div>
+
+            <!-- ── ITINERARY CARDS LIST ────────────────────────────────────────── -->
+            <div class="itinerary-list" [@listStagger]="processedItineraries().length" role="list">
+
+                <article *ngFor="let it of processedItineraries(); trackBy: trackByItinerary" class="itinerary-card"
+                    [class.card--selected]="selectedFares().has(it.itineraryId)" role="listitem"
+                    [attr.aria-label]="'Flight itinerary: ' + getStopLabel(it.numberOfStops)">
+
+                    <!-- ── Card Top: Main Flight Row ─────────────────────────────── -->
+                    <div class="card-main">
+
+                        <!-- Segment Timeline -->
+                        <div class="segment-timeline" aria-label="Outbound flight details">
+                            <ng-container *ngFor="let seg of it.outboundSegments; let last = last; let i = index">
+
+                                <!-- Flight Segment -->
+                                <div class="seg-block">
+                                    <!-- Departure -->
+                                    <div class="seg-point">
+                                        <span class="seg-iata" aria-label="From {{ seg.originCity }}">{{
+                                            seg.originAirportIata }}</span>
+                                        <span class="seg-time">{{ formatTime(seg.departureTime) }}</span>
+                                        <span class="seg-date-city">{{ seg.originCity }}</span>
+                                        <span class="seg-date">{{ formatDate(seg.departureTime) }}</span>
+                                    </div>
+
+                                    <!-- Flight Arc -->
+                                    <div class="seg-arc"
+                                        [attr.aria-label]="'Flight duration: ' + formatDuration(seg.durationMinutes)">
+                                        <div class="seg-arc-meta">
+                                            <span class="seg-duration">{{ formatDuration(seg.durationMinutes) }}</span>
+                                            <span class="seg-airline">{{ seg.airlineName }} · {{ seg.flightNumber
+                                                }}</span>
+                                        </div>
+                                        <div class="seg-arc-line" aria-hidden="true">
+                                            <div class="arc-dot arc-dot--start"></div>
+                                            <div class="arc-track">
+                                                <!-- plane icon -->
+                                                <svg class="arc-plane" width="14" height="14" viewBox="0 0 24 24"
+                                                    fill="#B68F24" aria-hidden="true">
+                                                    <path
+                                                        d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                                                </svg>
+                                            </div>
+                                            <div class="arc-dot arc-dot--end"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Arrival -->
+                                    <div class="seg-point seg-point--right">
+                                        <span class="seg-iata" aria-label="To {{ seg.destinationCity }}">{{
+                                            seg.destinationAirportIata }}</span>
+                                        <span class="seg-time">{{ formatTime(seg.arrivalTime) }}</span>
+                                        <span class="seg-date-city">{{ seg.destinationCity }}</span>
+                                        <span class="seg-date">{{ formatDate(seg.arrivalTime) }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Layover Badge (between segments) -->
+                                <div *ngIf="!last" class="layover-badge"
+                                    [attr.aria-label]="'Layover at ' + seg.destinationAirportIata">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E2C780"
+                                        stroke-width="1" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                    Layover · {{ seg.destinationAirportIata }}
+                                </div>
+
+                            </ng-container>
+                        </div>
+
+                        <!-- Card Meta Column -->
+                        <div class="card-meta">
+                            <!-- Stop badge -->
+                            <span class="stop-badge" [class]="getStopClass(it.numberOfStops)"
+                                [attr.aria-label]="getStopLabel(it.numberOfStops) + ' flight'">
+                                {{ getStopLabel(it.numberOfStops) }}
+                                <ng-container *ngIf="it.numberOfStops > 0">
+                                    · {{ getLayoverAirports(it.outboundSegments).join(', ') }}
+                                </ng-container>
+                            </span>
+
+                            <!-- Total Duration -->
+                            <div class="total-duration"
+                                [attr.aria-label]="'Total journey time: ' + formatDuration(it.totalDurationMinutes)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2C780"
+                                    stroke-width="1" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                {{ formatDuration(it.totalDurationMinutes) }} total
+                            </div>
+
+                            <!-- Lowest Price Teaser -->
+                            <div class="price-teaser">
+                                <span class="price-teaser-from">from</span>
+                                <span class="price-teaser-amount">{{ currency() }} {{ getLowestPrice(it) |
+                                    number:'1.2-2' }}</span>
+                                <span class="price-teaser-pax">per adult</span>
+                            </div>
+
+                            <!-- "Select Your Suite" CTA -->
+                            <button class="fare-expand-btn"
+                                [class.btn--active]="expandedFareItineraryId() === it.itineraryId"
+                                (click)="toggleFareExpand(it.itineraryId)"
+                                [attr.aria-expanded]="expandedFareItineraryId() === it.itineraryId"
+                                [attr.aria-controls]="'fare-panel-' + it.itineraryId">
+                                <span>{{ expandedFareItineraryId() === it.itineraryId ? 'Collapse Options' : 'Select
+                                    Your Suite' }}</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" [class.rotated]="expandedFareItineraryId() === it.itineraryId"
+                                    aria-hidden="true">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </button>
+
+                            <!-- "Details" toggle -->
+                            <button class="details-toggle-btn" (click)="toggleItineraryExpand(it.itineraryId)"
+                                [attr.aria-expanded]="expandedItineraryId() === it.itineraryId"
+                                [attr.aria-controls]="'details-panel-' + it.itineraryId">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="8" x2="12" y2="16" />
+                                    <line x1="8" y1="12" x2="16" y2="12" />
+                                </svg>
+                                {{ expandedItineraryId() === it.itineraryId ? 'Hide Details' : 'More Details' }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ── Fare Details Panel (expandable) ──────────────────────── -->
+                    <div [id]="'details-panel-' + it.itineraryId" [@detailsSlide]
+                        *ngIf="expandedItineraryId() === it.itineraryId" class="details-panel" role="region"
+                        [attr.aria-label]="'Flight details'">
+
+                        <div class="details-inner">
+                            <!-- Per-segment details -->
+                            <div *ngFor="let seg of it.outboundSegments; let i = index" class="detail-seg">
+                                <div class="detail-seg-header">
+                                    <span class="detail-seg-num">Leg {{ i + 1 }}</span>
+                                    <span class="detail-aircraft">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                            stroke-width="1" aria-hidden="true">
+                                            <rect x="2" y="7" width="20" height="14" rx="2" />
+                                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                                        </svg>
+                                        {{ seg.aircraftModel }}
+                                    </span>
+                                </div>
+                                <div class="detail-seg-route">
+                                    <div class="detail-point">
+                                        <span class="detail-iata">{{ seg.originAirportIata }}</span>
+                                        <span class="detail-airport">{{ seg.originAirportName }}</span>
+                                        <span class="detail-time">{{ formatTime(seg.departureTime) }}</span>
+                                    </div>
+                                    <div class="detail-divider" aria-hidden="true">
+                                        <div class="detail-line"></div>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#B68F24"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                                        </svg>
+                                        <div class="detail-line"></div>
+                                        <span class="detail-dur">{{ formatDuration(seg.durationMinutes) }}</span>
+                                    </div>
+                                    <div class="detail-point detail-point--right">
+                                        <span class="detail-iata">{{ seg.destinationAirportIata }}</span>
+                                        <span class="detail-airport">{{ seg.destinationAirportName }}</span>
+                                        <span class="detail-time">{{ formatTime(seg.arrivalTime) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Fare Selection Matrix (expandable) ────────────────────── -->
+                    <div [id]="'fare-panel-' + it.itineraryId"
+                        [@fareExpand]="expandedFareItineraryId() === it.itineraryId ? 'expanded' : 'collapsed'"
+                        class="fare-panel" role="region" [attr.aria-label]="'Fare options for this flight'">
+
+                        <div class="fare-panel-inner">
+
+                            <!-- Cabin tabs -->
+                            <div class="cabin-tabs" role="tablist" [attr.aria-label]="'Cabin class options'">
+                                <ng-container *ngFor="let cabin of getCabinTiers(it)">
+                                    <div class="cabin-tab-group">
+
+                                        <div class="cabin-tab-label" role="presentation">{{ cabin }}</div>
+
+                                        <!-- Fare Cards within cabin -->
+                                        <div class="fare-cards-row">
+                                            <div *ngFor="let fare of getFaresByClass(it, cabin); trackBy: trackByFare"
+                                                class="fare-card"
+                                                [class.fare-card--selected]="isFareSelected(it.itineraryId, fare.fareBasisCode)"
+                                                [class.fare-card--low-stock]="fare.availableSeats <= 5" role="article"
+                                                [attr.aria-label]="fare.fareName + ' fare: ' + currency() + ' ' + (fare.pricePerAdult | number:'1.2-2')">
+
+                                                <!-- Fare name -->
+                                                <div class="fare-card-name">{{ fare.fareName }}</div>
+
+                                                <!-- Price -->
+                                                <div class="fare-card-price" aria-label="Price per adult">
+                                                    <span class="fare-currency">{{ currency() }}</span>
+                                                    <span class="fare-amount">{{ fare.pricePerAdult | number:'1.2-2'
+                                                        }}</span>
+                                                    <span class="fare-per">/ adult</span>
+                                                </div>
+
+                                                <!-- Fare Perks -->
+                                                <ul class="fare-perks" aria-label="Fare inclusions">
+                                                    <li class="fare-perk">
+                                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                                            stroke="#B68F24" stroke-width="1" aria-hidden="true">
+                                                            <path
+                                                                d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                                            <line x1="7" y1="7" x2="7.01" y2="7" />
+                                                        </svg>
+                                                        {{ fare.baggageAllowance }}
+                                                    </li>
+                                                    <li class="fare-perk" [class.perk--available]="fare.isChangeable"
+                                                        [class.perk--unavailable]="!fare.isChangeable">
+                                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                                            [attr.stroke]="fare.isChangeable ? '#B68F24' : '#6b7280'"
+                                                            stroke-width="1" aria-hidden="true">
+                                                            <polyline *ngIf="fare.isChangeable"
+                                                                points="20 6 9 17 4 12" />
+                                                            <line *ngIf="!fare.isChangeable" x1="18" y1="6" x2="6"
+                                                                y2="18" />
+                                                            <line *ngIf="!fare.isChangeable" x1="6" y1="6" x2="18"
+                                                                y2="18" />
+                                                        </svg>
+                                                        {{ fare.isChangeable ? 'Changeable' : 'Non-Changeable' }}
+                                                    </li>
+                                                    <li class="fare-perk" [class.perk--available]="fare.isRefundable"
+                                                        [class.perk--unavailable]="!fare.isRefundable">
+                                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                                            [attr.stroke]="fare.isRefundable ? '#B68F24' : '#6b7280'"
+                                                            stroke-width="1" aria-hidden="true">
+                                                            <polyline *ngIf="fare.isRefundable"
+                                                                points="20 6 9 17 4 12" />
+                                                            <line *ngIf="!fare.isRefundable" x1="18" y1="6" x2="6"
+                                                                y2="18" />
+                                                            <line *ngIf="!fare.isRefundable" x1="6" y1="6" x2="18"
+                                                                y2="18" />
+                                                        </svg>
+                                                        {{ fare.isRefundable ? 'Refundable' : 'Non-Refundable' }}
+                                                    </li>
+                                                </ul>
+
+                                                <!-- Low stock warning -->
+                                                <div *ngIf="fare.availableSeats <= 5" class="fare-urgency" role="alert"
+                                                    aria-live="polite">
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                                                        stroke="#E2C780" stroke-width="1.5" aria-hidden="true">
+                                                        <circle cx="12" cy="12" r="10" />
+                                                        <line x1="12" y1="8" x2="12" y2="12" />
+                                                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                                                    </svg>
+                                                    Only {{ fare.availableSeats }} seats left
+                                                </div>
+
+                                                <!-- Select CTA -->
+                                                <button class="fare-select-btn"
+                                                    [class.fare-select-btn--selected]="isFareSelected(it.itineraryId, fare.fareBasisCode)"
+                                                    (click)="selectFare(it.itineraryId, fare)"
+                                                    [attr.aria-pressed]="isFareSelected(it.itineraryId, fare.fareBasisCode)"
+                                                    [attr.aria-label]="'Select ' + fare.fareName + ' fare for ' + currency() + ' ' + (fare.pricePerAdult | number:'1.2-2')">
+                                                    <ng-container
+                                                        *ngIf="!isFareSelected(it.itineraryId, fare.fareBasisCode)">
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                                        </svg>
+                                                        Select Suite
+                                                    </ng-container>
+                                                    <ng-container
+                                                        *ngIf="isFareSelected(it.itineraryId, fare.fareBasisCode)">
+                                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                                            <polyline points="20 6 9 17 4 12" />
+                                                        </svg>
+                                                        Suite Selected
+                                                    </ng-container>
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Selected Indicator Strip -->
+                    <div *ngIf="selectedFares().has(it.itineraryId)" class="selected-strip" aria-live="polite">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#051937" stroke-width="2"
+                            aria-hidden="true">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        {{ selectedFares().get(it.itineraryId)?.fareOption?.fareName }} selected ·
+                        {{ currency() }} {{ selectedFares().get(it.itineraryId)?.fareOption?.pricePerAdult |
+                        number:'1.2-2' }} / adult
+                    </div>
+
+                </article>
+                <!-- / itinerary-card -->
+
+            </div>
+            <!-- /itinerary-list -->
+
+        </main>
+
+        <!-- ── RIGHT: Price Summary Sidebar ─────────────────────────────────── -->
+        <aside class="summary-sidebar" aria-label="Booking summary" aria-live="polite">
+            <div class="summary-glass" [@summaryPulse]="summaryVersion()">
+
+                <!-- Empty state -->
+                <div *ngIf="!priceSummary()" class="summary-empty">
+                    <div class="summary-empty-icon" aria-hidden="true">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="0.8">
+                            <rect x="2" y="7" width="20" height="14" rx="2" />
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                        </svg>
+                    </div>
+                    <p class="summary-empty-text">Select your preferred fare to see the total investment.</p>
+                </div>
+
+                <!-- Summary with fare selected -->
+                <div *ngIf="priceSummary()" class="summary-content" [@fadeSlideIn]>
+                    <h3 class="summary-title">Your Suite Summary</h3>
+
+                    <div class="summary-divider" aria-hidden="true"></div>
+
+                    <ul class="summary-breakdown" aria-label="Fare breakdown">
+                        <li *ngFor="let item of priceSummary()!.breakdowns" class="summary-line">
+                            <span class="summary-line-label">{{ item.label }}</span>
+                            <span class="summary-line-price">{{ currency() }} {{ item.price | number:'1.2-2' }}</span>
+                        </li>
+                    </ul>
+
+                    <div class="summary-divider" aria-hidden="true"></div>
+
+                    <!-- Passengers note -->
+                    <p class="summary-pax-note">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                            aria-hidden="true">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                        {{ totalPassengers() }} {{ totalPassengers() === 1 ? 'passenger' : 'passengers' }}
+                    </p>
+
+                    <!-- Total -->
+                    <div class="summary-total" aria-label="Total fare">
+                        <span class="summary-total-label">Total Fare</span>
+                        <div class="summary-total-amount">
+                            <span class="summary-total-currency">{{ currency() }}</span>
+                            <span class="summary-total-num">{{ priceSummary()!.total | number:'1.2-2' }}</span>
+                        </div>
+                        <p class="summary-tax-note">Total includes taxes &amp; surcharges</p>
+                    </div>
+
+                    <!-- Proceed CTA -->
+                    <button class="summary-proceed-btn" (click)="onProceed()" [disabled]="!priceSummary()?.canProceed"
+                        aria-label="Proceed to passenger details">
+                        <span>Proceed to Passengers</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    <!-- Guarantee note -->
+                    <p class="summary-guarantee">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1"
+                            aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        Fare not guaranteed until payment is complete
+                    </p>
+                </div>
+
+            </div>
+        </aside>
+
+    </div>
+    <!-- /content-grid -->
+
+</div>
+<!-- /results-shell -->

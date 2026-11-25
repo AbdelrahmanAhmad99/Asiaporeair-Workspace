@@ -1,0 +1,397 @@
+// ============================================================================
+// destination-explorer.component.scss
+// Asiaporeair | Destination Discovery Grid
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+}
+
+// ── §1 Section header ─────────────────────────────────────────────────────────
+.de-section {
+    padding: 0;
+}
+
+.de-header {
+    text-align: center;
+    margin-bottom: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    &__eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: $font;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba($royal-gold, 0.7);
+    }
+
+    &__eyebrow-line {
+        flex: 0 0 32px;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($royal-gold, 0.4));
+
+        &:last-child {
+            background: linear-gradient(to left, transparent, rgba($royal-gold, 0.4));
+        }
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 300;
+        letter-spacing: -0.03em;
+        color: $charcoal;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    &__title-accent {
+        font-weight: 700;
+        color: $midnight;
+    }
+
+    &__sub {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.6;
+        max-width: 500px;
+    }
+}
+
+// ── §2 Grid ───────────────────────────────────────────────────────────────────
+.de-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+
+    @media (max-width: 960px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── §3 Destination card ───────────────────────────────────────────────────────
+.de-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 1px solid rgba($royal-gold, 0.1);
+    box-shadow: 0 4px 16px rgba($midnight, 0.1);
+    transition: transform $t, box-shadow $t, border-color $t;
+    animation: cardUp 450ms $ease both;
+
+    &:hover {
+        transform: translateY(-6px);
+        box-shadow:
+            0 20px 48px rgba($midnight, 0.2),
+            0 0 0 1px rgba($royal-gold, 0.28);
+        border-color: rgba($royal-gold, 0.28);
+
+        .de-card__bg {
+            transform: scale(1.15);
+        }
+
+        .de-card__iata {
+            opacity: 1;
+            letter-spacing: 0.25em;
+        }
+
+        .de-card__cta {
+            background: $royal-gold;
+            color: $midnight;
+            border-color: $royal-gold;
+        }
+    }
+
+    &:focus-within {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+@keyframes cardUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── §4 Card layers ────────────────────────────────────────────────────────────
+.de-card__bg {
+    position: absolute;
+    inset: 0;
+    background-color: $midnight;
+    background-image: var(--card-gradient, linear-gradient(150deg, #051937, #0a3060));
+    background-size: cover;
+    background-position: center;
+    transition: transform 1.2s $ease;
+}
+
+.de-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+            rgba($midnight, 0.95) 0%,
+            rgba($midnight, 0.5) 45%,
+            transparent 100%);
+    pointer-events: none;
+}
+
+// ── §5 Offer tag ──────────────────────────────────────────────────────────────
+.de-card__tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba($royal-gold, 0.18);
+    border: 1px solid rgba($champagne, 0.35);
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $champagne;
+    z-index: 2;
+    backdrop-filter: blur(8px);
+}
+
+// ── §6 Large background IATA watermark ────────────────────────────────────────
+.de-card__iata {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: $font;
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: rgba($white, 0.06);
+    pointer-events: none;
+    user-select: none;
+    transition: opacity $t, letter-spacing $t;
+    z-index: 1;
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+// ── §7 Body ───────────────────────────────────────────────────────────────────
+.de-card__body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.25rem;
+    flex: 1;
+    gap: 0.75rem;
+}
+
+.de-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.de-card__city {
+    font-family: $font;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: $white;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.de-card__country {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    color: rgba($champagne, 0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.de-card__tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.73rem;
+    color: rgba($white, 0.5);
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+}
+
+// ── §8 Footer row ─────────────────────────────────────────────────────────────
+.de-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.625rem;
+    border-top: 1px solid rgba($royal-gold, 0.15);
+    flex-wrap: wrap;
+}
+
+.de-card__price-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.de-card__from {
+    font-family: $font;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba($champagne, 0.45);
+}
+
+.de-card__price {
+    font-family: $font;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $champagne;
+    letter-spacing: -0.01em;
+}
+
+// ── §9 CTA ────────────────────────────────────────────────────────────────────
+.de-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.3);
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: background $t, color $t, border-color $t;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §10 Skeleton ──────────────────────────────────────────────────────────────
+@keyframes shimmer {
+    0% {
+        background-position: -300% center;
+    }
+
+    100% {
+        background-position: 300% center;
+    }
+}
+
+%shimmer {
+    background: linear-gradient(90deg,
+            rgba($royal-gold, 0.05) 0%,
+            rgba($champagne, 0.12) 50%,
+            rgba($royal-gold, 0.05) 100%);
+    background-size: 300% 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.de-skeleton {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba($charcoal, 0.08);
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+}
+
+.de-skel {
+    @extend %shimmer;
+
+    &--bg {
+        flex: 1;
+        border-radius: 0;
+    }
+
+    &--tag {
+        height: 18px;
+        width: 80px;
+        margin: 1rem 1.25rem 0;
+    }
+
+    &--city {
+        height: 20px;
+        width: 65%;
+        margin: 0.5rem 1.25rem 0;
+    }
+
+    &--desc {
+        height: 12px;
+        width: 88%;
+        margin: 0.375rem 1.25rem;
+    }
+
+    &--price {
+        height: 14px;
+        width: 50%;
+        margin: 0 1.25rem 1.25rem;
+    }
+}
+
+.de-skel-body {
+    background: rgba($charcoal, 0.04);
+    display: flex;
+    flex-direction: column;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .de-card {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .de-skel {
+        animation: none !important;
+    }
+}

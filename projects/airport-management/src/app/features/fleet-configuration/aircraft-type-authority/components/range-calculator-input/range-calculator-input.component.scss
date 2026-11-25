@@ -1,0 +1,494 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $ivory: #F8F9FA;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ============================================================================
+ // 1. Panel Container — Midnight Sapphire dark card
+ // ============================================================================
+ .ctrl-panel {
+     display: flex;
+     flex-direction: column;
+     gap: 1.375rem;
+     padding: 1.5rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow:
+         0 8px 32px rgba(5, 25, 55, 0.3),
+         0 0 0 1px rgba(226, 199, 128, 0.06) inset;
+     position: relative;
+     overflow: hidden;
+
+     // Ambient radial glow in top-right
+     &::after {
+         content: '';
+         position: absolute;
+         top: -4rem;
+         right: -4rem;
+         width: 14rem;
+         height: 14rem;
+         background: radial-gradient(circle, rgba(182, 143, 36, 0.1) 0%, transparent 70%);
+         pointer-events: none;
+     }
+ }
+
+ // ============================================================================
+ // 2. Panel Header
+ // ============================================================================
+ .ctrl-panel__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 8px;
+         background: rgba(182, 143, 36, 0.12);
+         border: 1px solid rgba(182, 143, 36, 0.25);
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 1.0625rem;
+         height: 1.0625rem;
+         color: $gold;
+     }
+ }
+
+ .ctrl-panel__title {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.015em;
+     color: #ffffff;
+     line-height: 1.2;
+     margin-bottom: 0.125rem;
+ }
+
+ .ctrl-panel__sub {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: rgba(226, 199, 128, 0.6);
+     line-height: 1.4;
+ }
+
+ // ============================================================================
+ // 3. Route Map SVG Preview
+ // ============================================================================
+ .ctrl-panel__map {
+     position: relative;
+     background: rgba(5, 25, 55, 0.5);
+     border: 1px solid rgba(226, 199, 128, 0.1);
+     border-radius: 8px;
+     overflow: hidden;
+ }
+
+ .ctrl-panel__map__svg {
+     width: 100%;
+     height: 80px;
+     display: block;
+ }
+
+ .ctrl-panel__map__arc {
+     transition: d 400ms cubic-bezier(0.4, 0, 0.2, 1);
+ }
+
+ .ctrl-panel__map__distance-label {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     display: flex;
+     align-items: baseline;
+     gap: 0.25rem;
+     pointer-events: none;
+
+     &__value {
+         font-size: 1.25rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: rgba(255, 255, 255, 0.9);
+         text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__unit {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: $champagne;
+         padding-bottom: 2px;
+         text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+     }
+ }
+
+ // ============================================================================
+ // 4. Slider + Numeric Input
+ // ============================================================================
+ .ctrl-panel__slider-wrap {
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+ }
+
+ // 4a. Numeric input row
+ .ctrl-panel__numeric {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+
+     &__input {
+         width: 110px;
+         padding: 0.5rem 0.75rem;
+         font-size: 1.0625rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: #ffffff;
+         background: rgba(255, 255, 255, 0.07);
+         border: 1.5px solid rgba(226, 199, 128, 0.3);
+         border-radius: 6px;
+         outline: none;
+         text-align: right;
+         font-variant-numeric: tabular-nums;
+         appearance: none;
+         -moz-appearance: textfield;
+         transition:
+             border-color $t-fast,
+             box-shadow $t-fast;
+
+         &::-webkit-outer-spin-button,
+         &::-webkit-inner-spin-button {
+             -webkit-appearance: none;
+         }
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.18);
+         }
+     }
+
+     &__unit {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $champagne;
+     }
+ }
+
+ // Unit toggle button
+ .ctrl-panel__unit-toggle {
+     display: flex;
+     align-items: center;
+     gap: 0.25rem;
+     margin-left: auto;
+     padding: 0.3125rem 0.75rem;
+     background: rgba(255, 255, 255, 0.05);
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     border-radius: 100px;
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:hover {
+         border-color: rgba(226, 199, 128, 0.45);
+         background: rgba(226, 199, 128, 0.07);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__option {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: rgba(226, 199, 128, 0.45);
+         transition: color $t-fast;
+
+         &--active {
+             color: $champagne;
+         }
+     }
+
+     &__sep {
+         font-size: 11px;
+         color: rgba(226, 199, 128, 0.3);
+     }
+ }
+
+ // 4b. Slider track
+ .ctrl-panel__slider-track-wrap {
+     position: relative;
+     height: 20px;
+     display: flex;
+     align-items: center;
+ }
+
+ .ctrl-panel__slider-track {
+     position: absolute;
+     left: 0;
+     right: 0;
+     height: 4px;
+     background: rgba(255, 255, 255, 0.08);
+     border-radius: 100px;
+     overflow: hidden;
+     pointer-events: none;
+
+     &__fill {
+         height: 100%;
+         background: linear-gradient(to right, $gold, $champagne);
+         border-radius: 100px;
+         transition: width 80ms linear;
+     }
+ }
+
+ // The actual <input type="range"> — custom styled
+ .ctrl-panel__slider {
+     position: relative;
+     z-index: 2;
+     width: 100%;
+     height: 20px;
+     appearance: none;
+     background: transparent;
+     cursor: pointer;
+     outline: none;
+
+     // ── Webkit thumb ──────────────────────────────────────────────
+     &::-webkit-slider-thumb {
+         appearance: none;
+         width: 20px;
+         height: 20px;
+         border-radius: 50%;
+         background: linear-gradient(135deg, $gold 0%, $champagne 100%);
+         border: 2px solid $midnight;
+         box-shadow:
+             0 2px 8px rgba(182, 143, 36, 0.5),
+             0 0 0 3px rgba(182, 143, 36, 0.2);
+         transition: box-shadow $t-fast, transform $t-fast;
+
+         &:hover {
+             box-shadow:
+                 0 4px 12px rgba(182, 143, 36, 0.6),
+                 0 0 0 4px rgba(182, 143, 36, 0.3);
+             transform: scale(1.1);
+         }
+     }
+
+     // ── Firefox thumb ─────────────────────────────────────────────
+     &::-moz-range-thumb {
+         width: 20px;
+         height: 20px;
+         border-radius: 50%;
+         background: linear-gradient(135deg, $gold 0%, $champagne 100%);
+         border: 2px solid $midnight;
+         box-shadow: 0 2px 8px rgba(182, 143, 36, 0.5);
+         cursor: pointer;
+     }
+
+     &:focus-visible::-webkit-slider-thumb {
+         box-shadow:
+             0 0 0 3px $midnight,
+             0 0 0 5px $champagne;
+     }
+ }
+
+ // Range legend
+ .ctrl-panel__range-legend {
+     display: flex;
+     justify-content: space-between;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: rgba(226, 199, 128, 0.4);
+     letter-spacing: 0.04em;
+     margin-top: -0.25rem;
+ }
+
+ // ============================================================================
+ // 5. Route Presets
+ // ============================================================================
+ .ctrl-panel__presets {
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: rgba(226, 199, 128, 0.45);
+     }
+
+     &__grid {
+         display: grid;
+         grid-template-columns: repeat(2, 1fr);
+         gap: 0.5rem;
+
+         @media (min-width: 480px) {
+             grid-template-columns: repeat(4, 1fr);
+         }
+     }
+ }
+
+ .ctrl-panel__preset-btn {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.125rem;
+     padding: 0.5rem 0.5rem;
+     border-radius: 8px;
+     background: rgba(255, 255, 255, 0.04);
+     border: 1px solid rgba(226, 199, 128, 0.15);
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:hover {
+         background: rgba(226, 199, 128, 0.08);
+         border-color: rgba(226, 199, 128, 0.35);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--active {
+         background: rgba(182, 143, 36, 0.14);
+         border-color: $gold;
+         box-shadow: 0 0 0 1px rgba(182, 143, 36, 0.2);
+     }
+
+     &__archetype {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: rgba(226, 199, 128, 0.55);
+
+         .ctrl-panel__preset-btn--active & {
+             color: $champagne;
+         }
+     }
+
+     &__distance {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: rgba(255, 255, 255, 0.75);
+         letter-spacing: -0.01em;
+
+         .ctrl-panel__preset-btn--active & {
+             color: #ffffff;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. ETOPS Toggle Row
+ // ============================================================================
+ .ctrl-panel__etops {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba(255, 255, 255, 0.04);
+     border: 1px solid rgba(226, 199, 128, 0.12);
+
+     &__info {
+         display: flex;
+         flex-direction: column;
+         gap: 0.125rem;
+         min-width: 0;
+     }
+
+     &__title {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     &__desc {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: rgba(226, 199, 128, 0.5);
+         line-height: 1.4;
+     }
+
+     // Toggle Switch
+     &__toggle {
+         position: relative;
+         flex-shrink: 0;
+         width: 2.75rem;
+         height: 1.5rem;
+         border-radius: 100px;
+         background: rgba(255, 255, 255, 0.1);
+         border: 1px solid rgba(226, 199, 128, 0.2);
+         cursor: pointer;
+         outline: none;
+         transition: background $t-fast, border-color $t-fast;
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         &--on {
+             background: linear-gradient(to right, $gold, $champagne);
+             border-color: $gold;
+
+             .ctrl-panel__etops__toggle__thumb {
+                 transform: translateX(1.25rem);
+                 background: $midnight;
+             }
+         }
+
+         &__thumb {
+             position: absolute;
+             top: 2px;
+             left: 2px;
+             width: 1.125rem;
+             height: 1.125rem;
+             border-radius: 50%;
+             background: rgba(255, 255, 255, 0.6);
+             transition: transform $t-base, background $t-base;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. Dark Mode — panel is already Midnight Sapphire, minor tweaks only
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .ctrl-panel {
+         box-shadow:
+             0 8px 32px rgba(0, 0, 0, 0.5),
+             0 0 0 1px rgba(226, 199, 128, 0.04) inset;
+     }
+
+     .ctrl-panel__numeric__input {
+         background: rgba(255, 255, 255, 0.05);
+     }
+ }

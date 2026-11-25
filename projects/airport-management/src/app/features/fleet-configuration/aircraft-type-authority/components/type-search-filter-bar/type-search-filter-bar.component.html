@@ -1,0 +1,84 @@
+<div class="ctrl-bar">
+
+    <!-- ── Row 1: Search + Manufacturer + Reset + CTA ──────────── -->
+    <div class="ctrl-bar__main-row">
+
+        <!-- Model Search Input -->
+        <div class="ctrl-bar__search">
+            <svg class="ctrl-bar__search__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            <input class="ctrl-bar__search__input" type="text" placeholder="Search model or manufacturer…"
+                aria-label="Search aircraft types" [(ngModel)]="searchValue" (ngModelChange)="onSearchChange($event)" />
+        </div>
+
+        <!-- Manufacturer Dropdown -->
+        <div class="ctrl-bar__manufacturer">
+            <svg class="ctrl-bar__manufacturer__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21" />
+            </svg>
+            <select class="ctrl-bar__manufacturer__select" aria-label="Filter by manufacturer"
+                [(ngModel)]="manufacturerValue" (ngModelChange)="onManufacturerChange($event)">
+                <option value="">All Manufacturers</option>
+                @for (mfr of manufacturers(); track mfr) {
+                <option [value]="mfr">{{ mfr }}</option>
+                }
+            </select>
+            <svg class="ctrl-bar__manufacturer__chevron" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+            </svg>
+        </div>
+
+        <!-- Vertical Divider -->
+        <div class="ctrl-bar__divider" aria-hidden="true"></div>
+
+        <!-- Reset Filters -->
+        @if (hasActiveFilters()) {
+        <button class="ctrl-bar__reset-btn" (click)="onReset()" aria-label="Clear all filters">
+            <svg class="ctrl-bar__reset-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            Clear
+        </button>
+        }
+
+        <!-- Add Aircraft Type CTA -->
+        <button class="ctrl-bar__add-btn" (click)="addType.emit()" aria-label="Add new aircraft type">
+            <svg class="ctrl-bar__add-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add Aircraft Type
+        </button>
+
+    </div>
+
+    <!-- ── Row 2: Range Suitability Toggles ──────────────────────── -->
+    <div class="ctrl-bar__range-row" role="group" aria-label="Filter by range suitability">
+        <span class="ctrl-bar__range-label">
+            <svg class="ctrl-bar__range-label__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+            </svg>
+            Range Suitability
+        </span>
+
+        <div class="ctrl-bar__range-toggles">
+            @for (preset of rangePresets; track preset.label; let i = $index) {
+            <button class="ctrl-bar__range-pill" [class.ctrl-bar__range-pill--active]="activeRangePreset() === i"
+                (click)="onRangePresetChange(i)" [attr.aria-pressed]="activeRangePreset() === i"
+                [attr.aria-label]="'Filter by ' + preset.label">
+                {{ preset.label }}
+            </button>
+            }
+        </div>
+    </div>
+
+</div>

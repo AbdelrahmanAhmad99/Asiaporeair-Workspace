@@ -1,0 +1,77 @@
+<div class="ae-shell">
+
+    <!-- Hero -->
+    <header class="ae-hero">
+        <div class="ae-hero__inner">
+            <nav class="ae-bc" aria-label="Breadcrumb">
+                <a href="/" class="ae-bc__link">Home</a><span class="ae-bc__sep">›</span>
+                <a href="/journey-with-us/before-the-flight" class="ae-bc__link">Before the Flight</a>
+                <span class="ae-bc__sep">›</span>
+                <span class="ae-bc__cur">Airport Experience</span>
+            </nav>
+            <div class="ae-hero__pre-block">
+                <div class="ae-hero__pre-line"></div>
+                <span class="ae-hero__eyebrow">The Terminal, Reimagined</span>
+            </div>
+            <h1 class="ae-hero__title">Asiaporeair Airport Experience</h1>
+            <p class="ae-hero__sub">
+                Dedicated ground teams, priority lanes, and attentive concierge service transform
+                even the most bustling terminals into a seamless extension of your Asiaporeair journey.
+            </p>
+        </div>
+        <div class="ae-hero__image-band" aria-hidden="true">
+            <img src="assets/images/journey-with-us/airport-hero.png" alt="" class="ae-hero__bg-img" loading="eager" />
+            <div class="ae-hero__overlay"></div>
+        </div>
+    </header>
+
+    <!-- Feature blocks — alternating layout (mirrors Singapore Airlines' style) -->
+    <section class="ae-features" aria-labelledby="ae-features-title">
+        <h2 id="ae-features-title" style="display:none;">Airport Features</h2>
+
+        @for (feature of features(); track feature.id; let i = $index) {
+        <div class="ae-feature" [class.ae-feature--flipped]="i % 2 !== 0">
+
+            <!-- Image side -->
+            <div class="ae-feature__img-side">
+                <img [src]="feature.imagePath" [alt]="feature.title" class="ae-feature__img" loading="lazy" />
+            </div>
+
+            <!-- Text side -->
+            <div class="ae-feature__text-side">
+                <div class="ae-feature__icon-circle" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path [attr.d]="feature.icon" />
+                    </svg>
+                </div>
+                <h3 class="ae-feature__title">{{ feature.title }}</h3>
+                <div class="ae-feature__divider" aria-hidden="true"></div>
+                <p class="ae-feature__desc">{{ feature.description }}</p>
+            </div>
+
+        </div>
+        }
+    </section>
+
+    <!-- Quick check-in CTA -->
+    <div class="ae-cta-strip">
+        <div class="ae-cta-strip__inner">
+            <div class="ae-cta-strip__text">
+                <h3 class="ae-cta-strip__title">Ready to Begin Your Journey?</h3>
+                <p class="ae-cta-strip__desc">
+                    Complete online check-in up to 48 hours before your flight and proceed
+                    directly to your dedicated bag drop or lounge.
+                </p>
+            </div>
+            <a class="ae-cta-strip__btn" routerLink="/manage-booking">
+                Proceed to Check-In
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
+</div>

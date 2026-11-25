@@ -1,0 +1,498 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ivory: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Page Shell ─────────────────────────────────────────────────────────
+ .mrc-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary, $ivory);
+     transition: background-color $t-base;
+ }
+
+ // ── 2. Sticky Header ──────────────────────────────────────────────────────
+ .mrc-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card, #fff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+         min-width: 0;
+     }
+ }
+
+ .mrc-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .mrc-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ // Back to Dashboard — gold-outlined squircle per spec
+ .mrc-back-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0 1rem;
+     height: 2.375rem;
+     border-radius: 12px; // Squircle
+     border: 1.5px solid rgba($gold, 0.45);
+     background: transparent;
+     color: $gold;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     cursor: pointer;
+     white-space: nowrap;
+     flex-shrink: 0;
+     transition: all $t-fast;
+
+     &__icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+     }
+
+     &:hover {
+         background: rgba($gold, 0.08);
+         border-color: $gold;
+         box-shadow: 0 0 12px rgba($gold, 0.2);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .mrc-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.375rem;
+     height: 2.375rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: $gold;
+     cursor: pointer;
+     flex-shrink: 0;
+     transition: all $t-fast;
+
+     svg {
+         width: 1rem;
+         height: 1rem;
+     }
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── 3. Centralized Error Toast — Ruby Red Glassmorphism ───────────────────
+ .mrc-error-toast {
+     position: relative;
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     margin: 1rem 1.75rem 0;
+     padding: 1rem 1.125rem;
+     border-radius: 12px;
+     overflow: hidden;
+
+     background: linear-gradient(135deg, rgba($ruby, 0.1) 0%, rgba($midnight, 0.04) 100%);
+     border: 1px solid rgba($ruby, 0.3);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     box-shadow: 0 8px 24px rgba($ruby, 0.1);
+     animation: mrc-toast-in 260ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     &__accent {
+         position: absolute;
+         top: 0;
+         left: 0;
+         right: 0;
+         height: 3px;
+         background: linear-gradient(to right, rgba($ruby, 0.3), lighten($ruby, 18%), rgba($ruby, 0.3));
+     }
+
+     &__icon {
+         width: 1.25rem;
+         height: 1.25rem;
+         color: lighten($ruby, 22%);
+         flex-shrink: 0;
+         margin-top: 0.0625rem;
+     }
+
+     &__content {
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: lighten($ruby, 18%);
+         margin-bottom: 0.1875rem;
+     }
+
+     &__msg {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-secondary);
+         line-height: 1.5;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         border: none;
+         background: transparent;
+         color: var(--aoms-text-muted);
+         cursor: pointer;
+         border-radius: 4px;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             color: lighten($ruby, 20%);
+             background: rgba($ruby, 0.08);
+         }
+
+         &:focus-visible {
+             outline: 2px solid lighten($ruby, 30%);
+             outline-offset: 1px;
+         }
+     }
+ }
+
+ // ── 4. Body ───────────────────────────────────────────────────────────────
+ .mrc-body {
+     flex: 1;
+     display: flex;
+     align-items: flex-start;
+     justify-content: center;
+     padding: 2.5rem 1.75rem;
+     overflow-y: auto;
+ }
+
+ // ── 5. Form Stage ─────────────────────────────────────────────────────────
+ .mrc-form-stage {
+     width: 100%;
+     max-width: 560px;
+     animation: mrc-fadein 300ms ease forwards;
+ }
+
+ // ── 6. Success Stage ──────────────────────────────────────────────────────
+ .mrc-success-stage {
+     width: 100%;
+     max-width: 480px;
+     display: flex;
+     justify-content: center;
+     animation: mrc-fadein 300ms ease forwards;
+ }
+
+ .mrc-success-card {
+     position: relative;
+     width: 100%;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($emerald, 0.3);
+     box-shadow: 0 12px 40px rgba($midnight, 0.35), 0 0 40px rgba($emerald, 0.08);
+     overflow: hidden;
+     padding: 0 2rem 2rem;
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.875rem;
+     animation: mrc-success-card-in 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     &__accent {
+         width: calc(100% + 4rem);
+         margin: 0 -2rem 1.5rem;
+         height: 3px;
+         background: linear-gradient(to right, transparent, rgba($emerald, 0.4), lighten($emerald, 30%), rgba($emerald, 0.4), transparent);
+     }
+
+     &__icon-wrap {
+         position: relative;
+         width: 80px;
+         height: 80px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         margin-bottom: 0.5rem;
+     }
+
+     &__title {
+         font-size: 1.375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: $champagne;
+     }
+
+     &__sub {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: rgba($champagne, 0.55);
+         line-height: 1.5;
+     }
+
+     &__details {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 0.625rem;
+         padding: 1.25rem;
+         border-radius: 8px;
+         background: rgba($champagne, 0.04);
+         border: 1px solid rgba($champagne, 0.08);
+         width: 100%;
+         margin-top: 0.5rem;
+     }
+
+     &__card-number {
+         font-family: 'Courier New', monospace;
+         font-size: 1rem;
+         font-weight: 700;
+         letter-spacing: 0.12em;
+         color: $champagne;
+     }
+
+     &__welcome-pts {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: lighten($emerald, 35%);
+     }
+
+     &__actions {
+         display: flex;
+         flex-direction: column;
+         gap: 0.625rem;
+         width: 100%;
+         margin-top: 0.75rem;
+     }
+ }
+
+ .mrc-success-ring {
+     position: absolute;
+     border-radius: 50%;
+
+     &--1 {
+         width: 56px;
+         height: 56px;
+         border: 1.5px solid rgba($emerald, 0.5);
+     }
+
+     &--2 {
+         width: 68px;
+         height: 68px;
+         border: 1.5px solid rgba($emerald, 0.28);
+         animation: mrc-ring-pulse 2s ease-out infinite;
+     }
+
+     &--3 {
+         width: 80px;
+         height: 80px;
+         border: 1.5px solid rgba($emerald, 0.14);
+         animation: mrc-ring-pulse 2s ease-out 0.4s infinite;
+     }
+ }
+
+ .mrc-success-icon {
+     width: 1.75rem;
+     height: 1.75rem;
+     color: lighten($emerald, 35%);
+     position: relative;
+     z-index: 1;
+     filter: drop-shadow(0 0 8px rgba($emerald, 0.5));
+ }
+
+ .mrc-success-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.4375rem;
+     padding: 0.75rem 1.25rem;
+     border-radius: 12px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.875rem;
+     font-weight: 700;
+     cursor: pointer;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--secondary {
+         border: 1px solid rgba($champagne, 0.25);
+         background: transparent;
+         color: rgba($champagne, 0.7);
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     &--primary {
+         border: none;
+         background: linear-gradient(135deg, lighten($gold, 8%) 0%, $gold 50%, darken($gold, 6%) 100%);
+         color: $midnight;
+         box-shadow: 0 4px 16px rgba($gold, 0.4);
+
+         &:hover {
+             box-shadow: 0 6px 22px rgba($gold, 0.55);
+             transform: translateY(-1px);
+         }
+     }
+ }
+
+ // ── 7. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes mrc-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes mrc-toast-in {
+     from {
+         opacity: 0;
+         transform: translateY(-8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes mrc-success-card-in {
+     from {
+         opacity: 0;
+         transform: scale(0.94) translateY(12px);
+     }
+
+     to {
+         opacity: 1;
+         transform: scale(1) translateY(0);
+     }
+ }
+
+ @keyframes mrc-ring-pulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.6;
+     }
+
+     100% {
+         transform: scale(1.5);
+         opacity: 0;
+     }
+ }
+
+ // ── 8. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .mrc-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+ }

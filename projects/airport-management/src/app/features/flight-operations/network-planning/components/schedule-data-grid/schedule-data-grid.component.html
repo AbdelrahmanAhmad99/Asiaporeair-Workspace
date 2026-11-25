@@ -1,0 +1,191 @@
+<div class="sdg-card">
+    <div class="sdg-scroll">
+        <table class="sdg-table" role="grid" aria-label="Master flight schedule inventory">
+
+            <!-- ── Sticky Midnight Sapphire Header ─────────────────────── -->
+            <thead class="sdg-head">
+                <tr>
+                    @for (col of columns; track col.key) {
+                    <th class="sdg-th" [class.sdg-col--md-hidden]="col.hideMd" [class.sdg-col--lg-hidden]="col.hideLg"
+                        scope="col">
+                        {{ col.label }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+
+            <!-- ── Loading Shimmer ─────────────────────────────────────── -->
+            @if (loading()) {
+            <tbody aria-busy="true" aria-label="Loading schedules">
+                @for (row of shimmerRows; track $index) {
+                <tr class="sdg-tr sdg-tr--even">
+                    @for (col of columns; track col.key) {
+                    <td class="sdg-td" [class.sdg-col--md-hidden]="col.hideMd" [class.sdg-col--lg-hidden]="col.hideLg">
+                        @if (col.key !== 'actions') {
+                        <div class="sdg-shimmer" [style.width]="col.shimmerWidth"></div>
+                        }
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- ── Data Rows ─────────────────────────────────────────────── -->
+            @if (!loading()) {
+            <tbody [@schedGrid]="schedules().length">
+
+                @for (sched of schedules(); track sched.scheduleId; let even = $even) {
+
+                <tr class="sdg-tr" [class.sdg-tr--even]="even" [class.sdg-tr--odd]="!even"
+                    [class.sdg-tr--inactive]="!sched.isActive" [class.sdg-tr--deleting]="isDeleting(sched.scheduleId)"
+                    [attr.aria-label]="'Schedule ' + sched.flightNo + ', route ' + sched.routeId">
+
+                    <!-- Schedule ID — Royal Gold accent per spec -->
+                    <td class="sdg-td sdg-col--lg-hidden">
+                        <span class="sdg-id">
+                            <span class="sdg-id__hash" aria-hidden="true">#</span>{{ sched.scheduleId }}
+                        </span>
+                    </td>
+
+                    <!-- Flight Number -->
+                    <td class="sdg-td">
+                        <span class="sdg-flight-no">{{ sched.flightNo }}</span>
+                    </td>
+
+                    <!-- Route ID -->
+                    <td class="sdg-td sdg-col--md-hidden">
+                        <span class="sdg-route-id">{{ sched.routeName }}</span>
+                    </td>
+
+                    <!-- Airline -->
+                    <td class="sdg-td sdg-col--md-hidden">
+                        <span class="sdg-airline-id">{{ sched.airlineIataCode }}</span>
+                    </td>
+
+                    <!-- Aircraft -->
+                    <td class="sdg-td sdg-col--md-hidden">
+                        <span class="sdg-aircraft-id">{{ sched.aircraftTypeModel }}</span>
+                    </td>
+
+                    <!-- Days of Week -->
+                    <td class="sdg-td">
+                        <span class="sdg-days">{{ formatDays(sched.daysOfWeek) }}</span>
+                    </td>
+
+                    <!-- Departure time -->
+                    <td class="sdg-td">
+                        <span class="sdg-time">{{ sched.departureTimeScheduled }}</span>
+                    </td>
+
+                    <!-- Arrival time -->
+                    <td class="sdg-td">
+                        <span class="sdg-time">{{ sched.arrivalTimeScheduled }}</span>
+                    </td>
+
+                    <!-- Effective dates -->
+                    <td class="sdg-td sdg-col--md-hidden">
+                        <div class="sdg-dates">
+                            <span class="sdg-dates__start">{{ formatDate(sched.effectiveStartDate) }}</span>
+                            @if (sched.effectiveEndDate) {
+                            <span class="sdg-dates__sep" aria-hidden="true">–</span>
+                            <span class="sdg-dates__end">{{ formatDate(sched.effectiveEndDate) }}</span>
+                            } @else {
+                            <span class="sdg-dates__ongoing">Ongoing</span>
+                            }
+                        </div>
+                    </td>
+
+                    <!-- Status pill -->
+                    <td class="sdg-td">
+                        @if (sched.isActive) {
+                        <span class="sdg-status-pill sdg-status-pill--active">Active</span>
+                        } @else {
+                        <span class="sdg-status-pill sdg-status-pill--inactive">Inactive</span>
+                        }
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="sdg-td">
+                        @if (isDeleting(sched.scheduleId)) {
+                        <div class="sdg-spinner" aria-label="Removing…" aria-live="polite">
+                            <svg class="sdg-spinner__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992
+                               m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031
+                               9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                        </div>
+                        } @else {
+                        <div class="sdg-actions">
+
+                            <!-- Analyze / Edit -->
+                            <button class="sdg-action-btn sdg-action-btn--edit" type="button"
+                                [disabled]="isProcessing()" (click)="onEdit.emit(sched.scheduleId)"
+                                [attr.aria-label]="'Edit schedule ' + sched.flightNo" title="Analyze / Edit">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652
+                                 L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5
+                                 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                                </svg>
+                            </button>
+
+                            <!-- Deactivate / Delete (trash icon per spec) -->
+                            <button class="sdg-action-btn sdg-action-btn--delete" type="button"
+                                [disabled]="isProcessing()" (click)="onDelete.emit(sched.scheduleId)"
+                                [attr.aria-label]="'Remove schedule ' + sched.flightNo" title="Deactivate / Remove">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107
+                                 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077
+                                 H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108
+                                 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165
+                                 m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164
+                                 -2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022
+                                 -2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </button>
+
+                        </div>
+                        }
+                    </td>
+
+                </tr>
+                }
+
+                <!-- Empty state -->
+                @if (schedules().length === 0) {
+                <tr>
+                    <td [attr.colspan]="columns.length" class="sdg-empty">
+                        <div class="sdg-empty__inner">
+                            <div class="sdg-empty__icon-wrap" aria-hidden="true">
+                                <svg class="sdg-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1
+                               2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25
+                               2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0
+                               v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21
+                               11.25v7.5" />
+                                </svg>
+                            </div>
+                            <p class="sdg-empty__title">No schedules match the current filters.</p>
+                            <p class="sdg-empty__sub">Adjust the filter criteria or construct a new schedule.</p>
+                        </div>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+            }
+        </table>
+    </div>
+
+    <!-- Footer -->
+    @if (!loading() && schedules().length > 0) {
+    <div class="sdg-footer">
+        <span class="sdg-footer__label">{{ recordLabel() }}</span>
+    </div>
+    }
+
+</div>

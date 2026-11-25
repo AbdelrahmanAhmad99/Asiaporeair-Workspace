@@ -1,0 +1,815 @@
+ $primary-midnight: #051937;
+ $royal-gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $error: #9f1239;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Glassmorphism backdrop
+ // ============================================================================
+ .ocm-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 40;
+     background: rgba($primary-midnight, 0.65);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     animation: ocm-fade-in 200ms $ease both;
+ }
+
+ // ============================================================================
+ // 2. Modal panel — 12px squircle, frosted glass
+ // ============================================================================
+ .ocm-panel {
+     position: fixed;
+     z-index: 50;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: min(540px, calc(100vw - 2rem));
+     max-height: calc(100vh - 4rem);
+     overflow-y: auto;
+
+     border-radius: 12px;
+     background: rgba(255, 255, 255, 0.97);
+     border: 1px solid rgba($champagne, 0.25);
+     box-shadow:
+         0 24px 72px rgba($primary-midnight, 0.3),
+         0 0 0 1px rgba($champagne, 0.1);
+     overflow: hidden; // keeps gold-bar at very top
+
+     animation: ocm-enter 280ms $luxury both;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.3);
+         border-radius: 2px;
+     }
+
+     // Royal Gold accent bar at very top
+     &__gold-bar {
+         height: 3px;
+         background: linear-gradient(90deg, $primary-midnight 0%, $royal-gold 50%, $champagne 100%);
+     }
+
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 1rem;
+         padding: 1.375rem 1.5rem 0.875rem;
+         border-bottom: 1px solid rgba($champagne, 0.15);
+         background: linear-gradient(135deg, rgba($champagne, 0.05) 0%, transparent 70%);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 8px;
+         background: $primary-midnight;
+         border: 1px solid rgba($champagne, 0.18);
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $champagne;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 15px;
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: $charcoal;
+         margin: 0 0 0.25rem;
+         line-height: 1.2;
+     }
+
+     &__subtitle {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+         line-height: 1.5;
+     }
+
+     &__close {
+         margin-left: auto;
+         flex-shrink: 0;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.875rem;
+         height: 1.875rem;
+         border: 1px solid rgba($champagne, 0.2);
+         border-radius: 4px;
+         background: transparent;
+         cursor: pointer;
+         color: var(--aoms-text-muted);
+         transition: all 150ms $ease;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             border-color: $champagne;
+             color: $royal-gold;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     &__footer {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding: 1rem 1.5rem 1.375rem;
+         border-top: 1px solid rgba($champagne, 0.12);
+         background: rgba($off-white, 0.5);
+     }
+ }
+
+ // ============================================================================
+ // 3. Form error banner
+ // ============================================================================
+ .ocm-form-error {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     margin: 0.875rem 1.5rem 0;
+     padding: 0.75rem 1rem;
+     border-radius: 6px;
+     border-left: 3px solid $error;
+     background: rgba($error, 0.06);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: $error;
+     animation: ocm-error-in 180ms $luxury both;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 4. Form layout
+ // ============================================================================
+ .ocm-form {
+     padding: 0 0 0.5rem;
+ }
+
+ .ocm-section {
+     padding: 1.25rem 1.5rem;
+
+     &+& {
+         border-top: 1px solid rgba($champagne, 0.1);
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: var(--aoms-text-muted);
+         margin: 0 0 0.875rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Field wrapper
+ // ============================================================================
+ .ocm-field {
+     position: relative;
+
+     &--error .ocm-airline-selector-trigger {
+         border-color: $error !important;
+         box-shadow: 0 0 0 3px rgba($error, 0.1) !important;
+     }
+
+     &__error {
+         display: block;
+         margin-top: 0.375rem;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 500;
+         color: $error;
+         padding: 0.25rem 0.625rem;
+         border-radius: 4px;
+         background: rgba($error, 0.05);
+         border-left: 2px solid $error;
+         animation: ocm-error-in 180ms $luxury both;
+     }
+ }
+
+ // ============================================================================
+ // 6. Airline Non-Editable Dropdown Trigger
+ // ============================================================================
+ .ocm-airline-selector-trigger {
+     position: relative;
+     display: flex;
+     align-items: center;
+     height: 3.5rem;
+     padding: 0 1rem;
+     border: 1px solid rgba($charcoal, 0.14);
+     border-radius: 8px;
+     background: $off-white;
+     cursor: pointer;
+     transition: all 180ms $ease;
+     user-select: none;
+
+     &:hover {
+         border-color: rgba($champagne, 0.4);
+         background: #ffffff;
+     }
+
+     &:focus {
+         outline: none;
+         border-color: $champagne;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.15);
+     }
+
+     &--active {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.15);
+     }
+
+     &--selected {
+         background: rgba($champagne, 0.03);
+     }
+
+     &__icon {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         margin-right: 0.875rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+
+         svg {
+             width: 1.125rem;
+             height: 1.125rem;
+         }
+     }
+
+     &__content {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         min-width: 0;
+     }
+
+     &__placeholder {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         color: var(--aoms-text-muted);
+     }
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 800;
+         letter-spacing: 0.12em;
+         text-transform: uppercase;
+         color: $royal-gold;
+         margin-bottom: 2px;
+     }
+
+     &__name {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 600;
+         color: $charcoal;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+     }
+
+     &__chevron {
+         margin-left: 0.75rem;
+         color: var(--aoms-text-muted);
+         transition: transform 250ms $luxury;
+         flex-shrink: 0;
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+         }
+
+         &--open {
+             transform: rotate(180deg);
+             color: $royal-gold;
+         }
+     }
+ }
+
+ // ── Dropdown panel ─────────────────────────────────────────────────────────
+ .ocm-airline-panel {
+     position: absolute;
+     top: calc(100% + 4px);
+     left: 0;
+     right: 0;
+     z-index: 60;
+     list-style: none;
+     margin: 0;
+     padding: 0.375rem 0;
+     background: #ffffff;
+     border: 1px solid rgba($champagne, 0.25);
+     border-radius: 10px;
+     box-shadow: 0 12px 36px rgba($primary-midnight, 0.14);
+     max-height: 15rem;
+     overflow-y: auto;
+     animation: ocm-panel-drop 180ms $luxury both;
+
+     &::-webkit-scrollbar {
+         width: 3px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.3);
+         border-radius: 2px;
+     }
+
+     &__empty,
+     &__loading {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 0.75rem;
+         padding: 1.25rem 1rem;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-style: italic;
+         color: var(--aoms-text-muted);
+         text-align: center;
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+             color: $champagne;
+         }
+     }
+ }
+
+ .ocm-airline-option {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.625rem 1rem;
+     cursor: pointer;
+     transition: background 120ms $ease;
+
+     &:hover {
+         background: rgba($champagne, 0.07);
+     }
+
+     &--selected {
+         background: rgba($royal-gold, 0.05);
+     }
+
+     &__logo {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 50%;
+         background: $primary-midnight;
+         border: 1px solid rgba($champagne, 0.18);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 800;
+         color: $champagne;
+         letter-spacing: 0.06em;
+     }
+
+     &__details {
+         display: flex;
+         flex-direction: column;
+         gap: 0.1rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 800;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: $royal-gold;
+     }
+
+     &__name {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 500;
+         color: $charcoal;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+     }
+
+     &__region {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: var(--aoms-text-muted);
+     }
+
+     &__check {
+         flex-shrink: 0;
+         width: 1rem;
+         height: 1rem;
+         color: #059669;
+     }
+ }
+
+ // ============================================================================
+ // 7. Locked airline row (Edit mode)
+ // ============================================================================
+ .ocm-locked-airline {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($primary-midnight, 0.04);
+     border: 1px solid rgba($champagne, 0.15);
+
+     &__logo {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 50%;
+         background: $primary-midnight;
+         border: 1px solid rgba($champagne, 0.18);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 800;
+         color: $champagne;
+         flex-shrink: 0;
+     }
+
+     &__iata {
+         display: block;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 1.25rem;
+         font-weight: 800;
+         letter-spacing: 0.1em;
+         color: $royal-gold;
+     }
+
+     &__note {
+         display: block;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: var(--aoms-text-muted);
+         font-style: italic;
+         margin-top: 0.15rem;
+     }
+
+     &__lock {
+         margin-left: auto;
+         width: 1rem;
+         height: 1rem;
+         color: rgba($champagne, 0.35);
+         flex-shrink: 0;
+
+         svg {
+             width: 100%;
+             height: 100%;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 8. Operation Type radio cards
+ // ============================================================================
+ .ocm-type-toggle {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 0.75rem;
+
+     @media (max-width: 480px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ .ocm-type-option {
+     position: relative;
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 1rem;
+     border-radius: 10px;
+     border: 1px solid rgba($charcoal, 0.12);
+     background: rgba($off-white, 0.6);
+     cursor: pointer;
+     transition:
+         border-color 180ms $ease,
+         background 180ms $ease,
+         box-shadow 180ms $ease;
+
+     &:hover {
+         border-color: rgba($champagne, 0.35);
+         background: rgba($champagne, 0.04);
+     }
+
+     &--active {
+         border-color: $royal-gold;
+         background: rgba($royal-gold, 0.05);
+         box-shadow: 0 0 0 3px rgba($royal-gold, 0.08);
+     }
+
+     &__input {
+         position: absolute;
+         opacity: 0;
+         pointer-events: none;
+         width: 0;
+         height: 0;
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.125rem;
+         height: 2.125rem;
+         border-radius: 7px;
+         background: $primary-midnight;
+         border: 1px solid rgba($champagne, 0.18);
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+             color: $champagne;
+         }
+     }
+
+     &--active &__icon-wrap {
+         background: rgba($royal-gold, 0.12);
+         border-color: rgba($royal-gold, 0.3);
+
+         svg {
+             color: $royal-gold;
+         }
+     }
+
+     &__label {
+         display: block;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 700;
+         color: $charcoal;
+         margin-bottom: 0.2rem;
+         transition: color 150ms $ease;
+     }
+
+     &--active &__label {
+         color: $royal-gold;
+     }
+
+     &__desc {
+         display: block;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: var(--aoms-text-muted);
+         line-height: 1.5;
+     }
+ }
+
+ // ============================================================================
+ // 9. Action buttons
+ // ============================================================================
+ .ocm-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.375rem;
+     padding: 0 1.125rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon,
+     &__spin {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+     }
+
+     &__spin {
+         animation: ocm-spin 1s linear infinite;
+     }
+
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($charcoal, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $royal-gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     &--confirm {
+         background: $royal-gold;
+         border: 1px solid $royal-gold;
+         color: $primary-midnight;
+         font-weight: 700;
+
+         &:hover:not(:disabled) {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 16px rgba($royal-gold, 0.38);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 10. Keyframes
+ // ============================================================================
+ @keyframes ocm-fade-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes ocm-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px));
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%);
+     }
+ }
+
+ @keyframes ocm-panel-drop {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes ocm-error-in {
+     from {
+         opacity: 0;
+         transform: translateX(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes ocm-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================================
+ // 11. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .ocm-panel {
+         background: #0d1f35;
+         border-color: rgba($champagne, 0.15);
+         box-shadow: 0 28px 72px rgba(0, 0, 0, 0.55);
+     }
+
+     .ocm-panel__title {
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .ocm-panel__subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .ocm-airline-selector-trigger {
+         background: rgba($primary-midnight, 0.6);
+         border-color: rgba(255, 255, 255, 0.1);
+
+         &:hover {
+             background: rgba($primary-midnight, 0.8);
+         }
+
+         &--active,
+         &:focus {
+             background: rgba($primary-midnight, 0.85);
+         }
+
+         &__name {
+             color: rgba(255, 255, 255, 0.85);
+         }
+     }
+
+     .ocm-airline-panel {
+         background: #0d1f35;
+         border-color: rgba($champagne, 0.15);
+     }
+
+     .ocm-airline-option__name {
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .ocm-locked-airline {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .ocm-type-option {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(255, 255, 255, 0.1);
+
+         &__label {
+             color: rgba(255, 255, 255, 0.85);
+         }
+
+         &--active {
+             background: rgba($royal-gold, 0.08);
+             border-color: rgba($royal-gold, 0.3);
+         }
+
+         &--active &__label {
+             color: $champagne;
+         }
+     }
+
+     .ocm-panel__footer {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+
+     .ocm-btn--cancel {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+ }

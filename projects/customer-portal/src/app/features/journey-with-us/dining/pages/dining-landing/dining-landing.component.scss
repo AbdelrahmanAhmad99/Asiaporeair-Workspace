@@ -1,0 +1,357 @@
+// ============================================================================
+// dining-landing.component.scss
+// Asiaporeair | Dining Landing Hub — Page Styles
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 320ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $white;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ── Section header shared mixin ────────────────────────────────────────────────
+%section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 40px;
+}
+
+%header-line {
+    width: 3px;
+    min-height: 70px;
+    background: linear-gradient($royal-gold, $champagne);
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+%eyebrow {
+    font-family: $font;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: $royal-gold;
+    margin: 0 0 6px;
+}
+
+// ── Hub section ───────────────────────────────────────────────────────────────
+.dl-hub {
+    background: $ivory;
+    padding: 60px 0 68px;
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+
+        @media (max-width: 768px) {
+            padding: 0 20px;
+        }
+    }
+
+    &__header {
+        @extend %section-header;
+    }
+
+    &__header-line {
+        @extend %header-line;
+    }
+
+    &__eyebrow {
+        @extend %eyebrow;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $charcoal;
+        margin: 0 0 8px;
+        line-height: 1.15;
+    }
+
+    &__subtitle {
+        font-family: $font;
+        font-size: 0.83rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.65;
+        max-width: 520px;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 580px) {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+// ── Menu class previews ───────────────────────────────────────────────────────
+.dl-menus {
+    background: $white;
+    padding: 64px 0 72px;
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+
+        @media (max-width: 768px) {
+            padding: 0 20px;
+        }
+    }
+
+    &__header {
+        @extend %section-header;
+    }
+
+    &__header-line {
+        @extend %header-line;
+    }
+
+    &__eyebrow {
+        @extend %eyebrow;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.3rem, 2.8vw, 1.85rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $charcoal;
+        margin: 0;
+        line-height: 1.15;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+    }
+}
+
+.dl-menu-card {
+    display: block;
+    text-decoration: none;
+    border-radius: 12px;
+    overflow: hidden;
+    background: $white;
+    border: 1px solid rgba($champagne, 0.25);
+    box-shadow: 0 3px 18px rgba($midnight, 0.07);
+    transition: transform $t, box-shadow $t;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 44px rgba($midnight, 0.13);
+
+        .dl-menu-card__img {
+            transform: scale(1.05);
+        }
+
+        .dl-menu-card__cta svg {
+            transform: translateX(5px);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+
+    &__img-wrap {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background: $midnight;
+    }
+
+    &__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 380ms $ease;
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba($midnight, 0.5) 0%, transparent 60%);
+    }
+
+    &__body {
+        padding: 20px 22px 22px;
+    }
+
+    &__cabin {
+        display: inline-block;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin-bottom: 5px;
+    }
+
+    &__label {
+        font-family: $font;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: $charcoal;
+        margin: 0 0 8px;
+        line-height: 1.2;
+    }
+
+    &__desc {
+        font-size: 0.78rem;
+        color: $muted;
+        line-height: 1.6;
+        margin: 0 0 14px;
+    }
+
+    &__cta {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: $charcoal;
+
+        svg {
+            color: $royal-gold;
+            transition: transform 260ms $ease;
+        }
+    }
+}
+
+// ── Special meals strip ───────────────────────────────────────────────────────
+.dl-special-strip {
+    background: $midnight;
+    border-top: 1px solid rgba($royal-gold, 0.15);
+    border-bottom: 1px solid rgba($royal-gold, 0.15);
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 44px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+        flex-wrap: wrap;
+
+        @media (max-width: 768px) {
+            padding: 36px 20px;
+            flex-direction: column;
+        }
+    }
+
+    &__eyebrow {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin: 0 0 6px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        color: $white;
+        margin: 0 0 8px;
+    }
+
+    &__desc {
+        font-size: 0.8rem;
+        color: rgba($white, 0.55);
+        line-height: 1.65;
+        margin: 0;
+        max-width: 520px;
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 12px 24px;
+        border-radius: 4px;
+        background: transparent;
+        border: 1px solid rgba($royal-gold, 0.55);
+        text-decoration: none;
+        font-family: $font;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: $champagne;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: background $t, border-color $t, color $t;
+
+        &:hover {
+            background: $royal-gold;
+            border-color: $royal-gold;
+            color: $midnight;
+
+            svg {
+                color: $midnight;
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 3px;
+        }
+
+        svg {
+            color: $champagne;
+            transition: color $t;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dl-menu-card,
+    .dl-menu-card__img {
+        transition: none;
+    }
+}

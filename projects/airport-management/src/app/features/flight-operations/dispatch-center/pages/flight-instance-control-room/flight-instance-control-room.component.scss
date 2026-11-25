@@ -1,0 +1,683 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .ficr-page {
+   min-height: 100%;
+   background: var(--aoms-bg-primary, $off-white);
+   transition: background-color var(--aoms-transition-base, 250ms ease);
+   display: flex;
+   flex-direction: column;
+   position: relative;
+ }
+
+ // ============================================================================
+ // 2. Sticky Command Header
+ // ============================================================================
+ .ficr-header {
+   position: sticky;
+   top: 0;
+   z-index: 30;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 1rem;
+   padding: 0.9375rem 1.5rem;
+   background: var(--aoms-bg-card, #ffffff);
+   border-bottom: 1px solid rgba($champagne, 0.15);
+   box-shadow: 0 2px 14px rgba($midnight, 0.06);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+ }
+
+ .ficr-header-left {
+   display: flex;
+   flex-direction: column;
+   gap: 0.2rem;
+   min-width: 0;
+ }
+
+ .ficr-breadcrumb {
+   display: flex;
+   align-items: center;
+   gap: 0.375rem;
+
+   &__section {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: var(--aoms-text-muted);
+   }
+
+   &__sep {
+     width: 0.75rem;
+     height: 0.75rem;
+     color: var(--aoms-text-muted);
+     flex-shrink: 0;
+   }
+
+   &__current {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: $gold;
+   }
+ }
+
+ .ficr-title-row {
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+ }
+
+ .ficr-title {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 20px;
+   font-weight: 700;
+   letter-spacing: -0.02em;
+   line-height: 1;
+   color: var(--aoms-text-primary, $charcoal);
+   transition: color 150ms $ease;
+ }
+
+ // Live indicator badge
+ .ficr-live-badge {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.375rem;
+   padding: 0.2rem 0.55rem;
+   border-radius: 4px;
+   background: rgba($emerald, 0.1);
+   border: 1px solid rgba($emerald, 0.28);
+   font-family: 'Montserrat', sans-serif;
+   font-size: 10px;
+   font-weight: 700;
+   letter-spacing: 0.06em;
+   text-transform: uppercase;
+   color: #059669;
+
+   &__dot {
+     width: 6px;
+     height: 6px;
+     border-radius: 50%;
+     background: #059669;
+     flex-shrink: 0;
+     animation: ficr-pulse 1.8s ease-in-out infinite;
+   }
+ }
+
+ // ── Command bar ────────────────────────────────────────────────────────────
+ .ficr-command-bar {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+   flex-shrink: 0;
+ }
+
+ .ficr-sep {
+   width: 1px;
+   height: 1.5rem;
+   background: rgba($champagne, 0.2);
+   flex-shrink: 0;
+ }
+
+ .ficr-icon-btn {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 2.125rem;
+   height: 2.125rem;
+   border-radius: 4px;
+   border: 1px solid rgba($champagne, 0.2);
+   background: transparent;
+   color: var(--aoms-text-secondary);
+   cursor: pointer;
+   transition: all 150ms $ease;
+
+   &:hover:not(:disabled) {
+     border-color: $champagne;
+     background: rgba($champagne, 0.08);
+   }
+
+   &:disabled {
+     opacity: 0.4;
+     cursor: not-allowed;
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+
+     &--spin {
+       animation: ficr-spin 1s linear infinite;
+     }
+   }
+ }
+
+ .ficr-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.375rem;
+   height: 2.125rem;
+   padding: 0 0.875rem;
+   border-radius: 4px;
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   font-weight: 600;
+   letter-spacing: 0.01em;
+   cursor: pointer;
+   white-space: nowrap;
+   transition: all 150ms $ease;
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+
+   &__icon {
+     width: 0.875rem;
+     height: 0.875rem;
+     flex-shrink: 0;
+   }
+
+   // Sapphire outline (Fleet Assignment)
+   &--outline {
+     background: transparent;
+     border: 1px solid rgba($midnight, 0.22);
+     color: var(--aoms-text-secondary, $charcoal);
+
+     &:hover {
+       border-color: $champagne;
+       color: $gold;
+       background: rgba($champagne, 0.05);
+     }
+   }
+
+   // Champagne Gold ghost (Bulk Generate)
+   &--ghost {
+     background: transparent;
+     border: 1px solid rgba($champagne, 0.25);
+     color: $champagne;
+
+     &:hover {
+       background: rgba($champagne, 0.08);
+       border-color: $champagne;
+     }
+   }
+
+   // Royal Gold solid (Create Ad-Hoc)
+   &--primary {
+     background: $gold;
+     border: 1px solid $gold;
+     color: $midnight;
+     font-weight: 700;
+
+     &:hover {
+       background: $champagne;
+       border-color: $champagne;
+       box-shadow: 0 4px 14px rgba($gold, 0.38);
+     }
+   }
+ }
+
+ // ============================================================================
+ // 3. Status Badge Strip
+ // ============================================================================
+ .ficr-status-strip {
+   display: flex;
+   align-items: center;
+   gap: 0;
+   padding: 0.625rem 1.5rem;
+   background: rgba($midnight, 0.03);
+   border-bottom: 1px solid rgba($champagne, 0.1);
+   overflow-x: auto;
+   animation: ficr-fade-in 300ms $luxury both;
+   flex-wrap: wrap;
+
+   &::-webkit-scrollbar {
+     height: 0;
+   }
+ }
+
+ .ficr-badge {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.1rem;
+   padding: 0.375rem 1rem;
+   border-right: 1px solid rgba($champagne, 0.1);
+   flex-shrink: 0;
+
+   &__count {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 1.25rem;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     transition: color 150ms $ease;
+   }
+
+   &__label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     color: var(--aoms-text-muted);
+   }
+
+   &--scheduled .ficr-badge__count {
+     color: $amber;
+   }
+
+   &--delayed .ficr-badge__count {
+     color: $ruby;
+   }
+
+   &--boarding .ficr-badge__count {
+     color: #3b82f6;
+   }
+
+   &--inflight .ficr-badge__count {
+     color: #059669;
+   }
+
+   &--arrived .ficr-badge__count {
+     color: #6C757D;
+   }
+
+   &--cancelled .ficr-badge__count {
+     color: rgba($ruby, 0.6);
+   }
+
+   &--total .ficr-badge__count {
+     color: $gold;
+   }
+ }
+
+ .ficr-badge-sep--right {
+   border-right: 2px solid rgba($champagne, 0.2);
+   height: 2rem;
+   margin: 0 0.25rem;
+ }
+
+ // ============================================================================
+ // 4. Page Body
+ // ============================================================================
+ .ficr-body {
+   padding: 1.5rem;
+   display: flex;
+   flex-direction: column;
+   gap: 1.25rem;
+   flex: 1;
+ }
+
+ // ============================================================================
+ // 5. Error Banner — Ruby with Champagne text
+ // ============================================================================
+ .ficr-error-banner {
+   display: flex;
+   align-items: flex-start;
+   gap: 0.875rem;
+   padding: 0.875rem 1.125rem;
+   border-radius: 8px;
+   background: rgba($ruby, 0.07);
+   border: 1px solid rgba($ruby, 0.22);
+   border-left: 4px solid $ruby;
+   animation: ficr-fade-in 200ms $ease both;
+   flex-wrap: wrap;
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+     flex-shrink: 0;
+     color: $ruby;
+     margin-top: 0.1rem;
+   }
+
+   &__body {
+     display: flex;
+     flex-direction: column;
+     gap: 0.2rem;
+     flex: 1;
+   }
+
+   &__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 700;
+     color: $ruby;
+   }
+
+   &__msg {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: $champagne;
+     line-height: 1.5;
+   }
+
+   &__dismiss {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.25rem;
+     height: 1.25rem;
+     border: none;
+     background: transparent;
+     cursor: pointer;
+     color: rgba($ruby, 0.45);
+     border-radius: 3px;
+     flex-shrink: 0;
+     transition: color 150ms $ease;
+
+     svg {
+       width: 0.7rem;
+       height: 0.7rem;
+     }
+
+     &:hover {
+       color: $ruby;
+     }
+   }
+ }
+
+ // ============================================================================
+ // 6. Pagination
+ // ============================================================================
+ .ficr-pagination {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 1rem;
+ }
+
+ .ficr-page-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.35rem;
+   height: 2.125rem;
+   padding: 0 0.875rem;
+   border-radius: 4px;
+   border: 1px solid rgba($champagne, 0.2);
+   background: transparent;
+   color: var(--aoms-text-secondary);
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 150ms $ease;
+
+   svg {
+     width: 0.875rem;
+     height: 0.875rem;
+   }
+
+   &:hover:not(:disabled) {
+     border-color: $champagne;
+     color: $gold;
+     background: rgba($champagne, 0.06);
+   }
+
+   &:disabled {
+     opacity: 0.35;
+     cursor: not-allowed;
+   }
+
+   &:focus-visible {
+     outline: 2px solid $champagne;
+     outline-offset: 2px;
+   }
+ }
+
+ .ficr-page-info {
+   font-family: 'Montserrat', sans-serif;
+   font-size: 12px;
+   color: var(--aoms-text-muted);
+
+   strong {
+     font-weight: 700;
+     color: var(--aoms-text-secondary);
+   }
+ }
+
+ // ============================================================================
+ // 7. Toast Stack — "Luxury Toast" per spec
+ // ============================================================================
+ .ficr-toast-stack {
+   position: fixed;
+   bottom: 1.5rem;
+   right: 1.5rem;
+   z-index: 100;
+   display: flex;
+   flex-direction: column;
+   gap: 0.625rem;
+   pointer-events: none;
+   width: min(380px, calc(100vw - 3rem));
+ }
+
+ .ficr-toast {
+   pointer-events: auto;
+   display: flex;
+   align-items: flex-start;
+   gap: 0.75rem;
+   padding: 0.875rem 1rem;
+   border-radius: 10px;
+   box-shadow: 0 8px 32px rgba($midnight, 0.18);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+   animation: ficr-toast-in 260ms $luxury both;
+
+   &__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 1.875rem;
+     height: 1.875rem;
+     border-radius: 6px;
+
+     svg {
+       width: 1.125rem;
+       height: 1.125rem;
+     }
+   }
+
+   &__msg {
+     flex: 1;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12.5px;
+     font-weight: 500;
+     line-height: 1.5;
+     margin: 0;
+   }
+
+   &__dismiss {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.25rem;
+     height: 1.25rem;
+     border: none;
+     background: transparent;
+     cursor: pointer;
+     border-radius: 3px;
+     opacity: 0.4;
+     flex-shrink: 0;
+     transition: opacity 150ms $ease;
+
+     svg {
+       width: 0.7rem;
+       height: 0.7rem;
+     }
+
+     &:hover {
+       opacity: 1;
+     }
+   }
+
+   &--success {
+     background: rgba(236, 253, 245, 0.97);
+     border: 1px solid rgba($emerald, 0.3);
+
+     .ficr-toast__icon-wrap {
+       background: rgba($emerald, 0.12);
+       border: 1px solid rgba($emerald, 0.25);
+     }
+
+     .ficr-toast__icon-wrap svg {
+       color: #059669;
+     }
+
+     .ficr-toast__msg,
+     .ficr-toast__dismiss {
+       color: #065F46;
+     }
+   }
+
+   &--error {
+     background: rgba(255, 241, 242, 0.97);
+     border: 1px solid rgba($ruby, 0.3);
+
+     .ficr-toast__icon-wrap {
+       background: rgba($ruby, 0.1);
+       border: 1px solid rgba($ruby, 0.22);
+     }
+
+     .ficr-toast__icon-wrap svg {
+       color: $ruby;
+     }
+
+     .ficr-toast__msg,
+     .ficr-toast__dismiss {
+       color: $ruby-deep;
+     }
+   }
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes ficr-spin {
+   from {
+     transform: rotate(0deg);
+   }
+
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ @keyframes ficr-fade-in {
+   from {
+     opacity: 0;
+   }
+
+   to {
+     opacity: 1;
+   }
+ }
+
+ @keyframes ficr-toast-in {
+   from {
+     opacity: 0;
+     transform: translateX(18px) scale(0.97);
+   }
+
+   to {
+     opacity: 1;
+     transform: translateX(0) scale(1);
+   }
+ }
+
+ @keyframes ficr-pulse {
+
+   0%,
+   100% {
+     box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.45);
+   }
+
+   50% {
+     box-shadow: 0 0 0 4px transparent;
+   }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+   .ficr-header {
+     box-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+   }
+
+   .ficr-btn--outline {
+     border-color: rgba($champagne, 0.25);
+     color: $champagne;
+
+     &:hover {
+       border-color: $champagne;
+       background: rgba($champagne, 0.07);
+     }
+   }
+
+   .ficr-btn--ghost {
+     &:hover {
+       background: rgba($champagne, 0.07);
+     }
+   }
+
+   .ficr-status-strip {
+     background: rgba($midnight, 0.5);
+     border-bottom-color: rgba($champagne, 0.08);
+   }
+
+   .ficr-error-banner {
+     background: rgba($ruby, 0.12);
+     border-color: rgba($ruby, 0.35);
+
+     &__title {
+       color: #f43f5e;
+     }
+
+     &__msg {
+       color: rgba(244, 63, 94, 0.75);
+     }
+   }
+
+   .ficr-toast--success {
+     background: rgba(6, 78, 59, 0.92);
+
+     .ficr-toast__msg,
+     .ficr-toast__dismiss {
+       color: #6ee7b7;
+     }
+   }
+
+   .ficr-toast--error {
+     background: rgba(127, 29, 29, 0.9);
+
+     .ficr-toast__msg,
+     .ficr-toast__dismiss {
+       color: #fca5a5;
+     }
+   }
+ }

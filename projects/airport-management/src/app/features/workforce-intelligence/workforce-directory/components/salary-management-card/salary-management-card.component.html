@@ -1,0 +1,126 @@
+<!-- salary-management-card.component.html -->
+
+<div class="smc" [class.smc--editing]="isEditing()">
+
+    <!-- ── Card Header ─────────────────────────────────────────── -->
+    <div class="smc__header">
+        <div class="smc__header__left">
+            <div class="smc__header__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="smc__header__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+            </div>
+            <div>
+                <p class="smc__header__label">Base Compensation</p>
+                <p class="smc__header__sub">Annual base salary</p>
+            </div>
+        </div>
+
+        @if (!isEditing() && !isProcessing()) {
+        <button class="smc__edit-btn" type="button" (click)="onEditOpen()" aria-label="Edit salary">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="smc__edit-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+            </svg>
+            Adjust
+        </button>
+        }
+    </div>
+
+    <!-- ── Display Mode ────────────────────────────────────────── -->
+    @if (!isEditing()) {
+    <div class="smc__display" [class.smc__display--loading]="isProcessing()">
+        <span class="smc__currency">{{ currency() }}</span>
+        <span class="smc__amount">{{ currentSalary() | number:'1.2-2' }}</span>
+        <span class="smc__period">/ year</span>
+    </div>
+
+    @if (isProcessing()) {
+    <div class="smc__saving-indicator" aria-live="polite">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            class="smc__saving-indicator__spinner" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        Applying compensation update…
+    </div>
+    }
+    }
+
+    <!-- ── Edit Mode ───────────────────────────────────────────── -->
+    @if (isEditing()) {
+    <div class="smc__edit-form" role="group" aria-label="Salary adjustment form">
+
+        <!-- New salary input -->
+        <div class="smc__field">
+            <label class="smc__field__label" for="smc-salary">
+                New Annual Salary ({{ currency() }})
+                <span class="smc__field__req" aria-hidden="true">*</span>
+            </label>
+            <div class="smc__input-wrap">
+                <span class="smc__input-wrap__prefix" aria-hidden="true">{{ currency() }}</span>
+                <input class="smc__input" id="smc-salary" type="number" min="1" step="100" placeholder="0.00"
+                    [ngModel]="newSalary()" (ngModelChange)="newSalary.set($event)" aria-required="true"
+                    [attr.aria-invalid]="!!validationMsg()" />
+            </div>
+            @if (validationMsg()) {
+            <span class="smc__field__error" role="alert">{{ validationMsg() }}</span>
+            }
+        </div>
+
+        <!-- Reason field -->
+        <div class="smc__field">
+            <label class="smc__field__label" for="smc-reason">Adjustment Reason</label>
+            <input class="smc__input" id="smc-reason" type="text" placeholder="e.g. Annual review, promotion…"
+                [ngModel]="reason()" (ngModelChange)="reason.set($event)" maxlength="200" />
+        </div>
+
+        <!-- Current vs proposed comparison -->
+        @if (parsedSalary() && parsedSalary() !== currentSalary()) {
+        <div class="smc__comparison">
+            <span class="smc__comparison__from">{{ currency() }} {{ currentSalary() | number:'1.2-2' }}</span>
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="smc__comparison__arrow"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+            <span class="smc__comparison__to" [class.smc__comparison__to--up]="parsedSalary()! > currentSalary()"
+                [class.smc__comparison__to--down]="parsedSalary()! < currentSalary()">
+                {{ currency() }} {{ parsedSalary() | number:'1.2-2' }}
+            </span>
+            <span class="smc__comparison__delta" [class.smc__comparison__delta--up]="parsedSalary()! > currentSalary()"
+                [class.smc__comparison__delta--down]="parsedSalary()! < currentSalary()">
+                @if (parsedSalary()! > currentSalary()) { ↑ }
+                @if (parsedSalary()! < currentSalary()) { ↓ } {{ (((parsedSalary()! - currentSalary()) /
+                    currentSalary()) * 100) | number:'1.1-1' }}% </span>
+        </div>
+        }
+
+        <!-- Action buttons -->
+        <div class="smc__edit-actions">
+            <button class="smc__cancel-btn" type="button" (click)="onCancel()">Cancel</button>
+            <button class="smc__save-btn" type="button" [disabled]="!isValid() || isProcessing()"
+                [class.smc__save-btn--pulsing]="isProcessing()" (click)="onSave()">
+                @if (!isProcessing()) {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="smc__save-btn__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                Apply Compensation
+                }
+                @if (isProcessing()) {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="smc__save-btn__icon smc__save-btn__icon--spin" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Applying…
+                }
+            </button>
+        </div>
+
+    </div>
+    }
+
+</div>

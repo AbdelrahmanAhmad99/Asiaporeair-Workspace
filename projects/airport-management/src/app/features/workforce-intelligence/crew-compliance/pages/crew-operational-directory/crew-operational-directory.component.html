@@ -1,0 +1,190 @@
+<div class="cod-page" @pageAnim>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       PAGE HEADER
+       ════════════════════════════════════════════════════════════════════ -->
+  <header class="cod-header">
+
+    <div class="cod-header__identity">
+      <!-- Icon -->
+      <div class="cod-header__icon-wrap" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0z" />
+        </svg>
+      </div>
+
+      <!-- Title block -->
+      <div class="cod-header__title-block">
+        <h1 class="cod-header__title">Crew Operational Directory</h1>
+        <p class="cod-header__subtitle">
+          <span class="cod-subtitle__module">Workforce Intelligence</span>
+          <span class="cod-subtitle__sep">·</span>
+          <span class="cod-subtitle__radar">Technical Radar</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Right side: timestamp + action buttons -->
+    <div class="cod-header__actions">
+
+      <!-- Live timestamp -->
+      <div class="cod-timestamp" aria-label="Current system time">
+        <svg class="cod-timestamp__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+          aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5z"
+            clip-rule="evenodd" />
+        </svg>
+        <span>{{ currentTimestamp }}</span>
+      </div>
+
+      <!-- Compliance Watchdog Center -->
+      <button id="btn-watchdog-center" class="cod-btn cod-btn--ghost" type="button"
+        title="Navigate to Compliance Watchdog Center" (click)="onNavigateToWatchdog()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1zm3 8V5.5a3 3 0 1 0-6 0V9h6z"
+            clip-rule="evenodd" />
+        </svg>
+        Watchdog Center
+      </button>
+
+      <!-- Refresh -->
+      <button id="btn-refresh-crew" class="cod-btn cod-btn--icon" type="button" title="Reload crew data"
+        [disabled]="isLoading()" (click)="store.loadCrewMembers()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
+          [class.cod-icon--spinning]="isLoading()">
+          <path fill-rule="evenodd"
+            d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39zm1.26-3.853a.75.75 0 0 0-1.5 0v2.43l-.31-.31a7 7 0 0 0-11.712 3.138.75.75 0 0 0 1.449.39A5.5 5.5 0 0 1 13.89 6.044l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .75-.75V3.57z"
+            clip-rule="evenodd" />
+        </svg>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       STATS STRIP
+       ════════════════════════════════════════════════════════════════════ -->
+  <div class="cod-stats-strip" aria-label="Directory statistics">
+
+    <div class="cod-stat">
+      <svg class="cod-stat__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+        aria-hidden="true">
+        <path
+          d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 17a9.953 9.953 0 0 1-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16z" />
+      </svg>
+      <div class="cod-stat__body">
+        <span class="cod-stat__value">{{ pagination().total }}</span>
+        <span class="cod-stat__label">Total Records</span>
+      </div>
+    </div>
+
+    <div class="cod-stat-divider"></div>
+
+    <div class="cod-stat">
+      <svg class="cod-stat__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+        aria-hidden="true">
+        <path fill-rule="evenodd"
+          d="M.99 5.24A2.25 2.25 0 0 1 3.25 3h13.5A2.25 2.25 0 0 1 19 5.25l.01 9.5A2.25 2.25 0 0 1 16.76 17H3.26A2.25 2.25 0 0 1 1 14.74l-.01-9.5zm8.26 9.52.04-8.76-.93.361a10.62 10.62 0 0 1-3.32.826V11a10.62 10.62 0 0 0 3.32.826l.89.934zm1.5 0 .89-.933A10.62 10.62 0 0 0 15 13v-4.75a10.62 10.62 0 0 1-3.32-.825l-.93-.36-.04 8.755z"
+          clip-rule="evenodd" />
+      </svg>
+      <div class="cod-stat__body">
+        <span class="cod-stat__value">{{ pagination().page }} / {{ pagination().totalPages || 1 }}</span>
+        <span class="cod-stat__label">Current Page</span>
+      </div>
+    </div>
+
+    <div class="cod-stat-divider"></div>
+
+    <div class="cod-stat">
+      <svg class="cod-stat__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+        aria-hidden="true">
+        <path fill-rule="evenodd"
+          d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9z"
+          clip-rule="evenodd" />
+      </svg>
+      <div class="cod-stat__body">
+        <span class="cod-stat__value cod-stat__value--sm">
+          @if (hasActiveFilters()) { Filtered } @else { All Records }
+        </span>
+        <span class="cod-stat__label">Search Mode</span>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+    <div class="cod-stat-loading">
+      <div class="cod-spinner"></div>
+      <span>Fetching tactical data…</span>
+    </div>
+    }
+
+  </div><!-- /cod-stats-strip -->
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       RUBY RED GLASSMORPHISM ERROR BANNER
+       ════════════════════════════════════════════════════════════════════ -->
+  @if (operationalError()) {
+  <div class="cod-error-banner" @bannerAnim role="alert" aria-live="assertive">
+
+    <!-- Warning icon -->
+    <div class="cod-error-banner__icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path fill-rule="evenodd"
+          d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5z"
+          clip-rule="evenodd" />
+      </svg>
+    </div>
+
+    <!-- Message -->
+    <div class="cod-error-banner__content">
+      <strong class="cod-error-banner__title">Operational Alert</strong>
+      <p class="cod-error-banner__message">{{ operationalError() }}</p>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="cod-error-banner__actions">
+      <button class="cod-error-banner__retry" type="button" (click)="store.loadCrewMembers()" title="Retry data load">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39zm1.26-3.853a.75.75 0 0 0-1.5 0v2.43l-.31-.31a7 7 0 0 0-11.712 3.138.75.75 0 0 0 1.449.39A5.5 5.5 0 0 1 13.89 6.044l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .75-.75V3.57z"
+            clip-rule="evenodd" />
+        </svg>
+        Retry
+      </button>
+
+      <button class="cod-error-banner__dismiss" type="button" title="Dismiss alert" aria-label="Dismiss error banner"
+        (click)="dismissError()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path
+            d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22z" />
+        </svg>
+      </button>
+    </div>
+
+  </div><!-- /cod-error-banner -->
+  }
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       CONTENT AREA
+       ════════════════════════════════════════════════════════════════════ -->
+  <main class="cod-content" id="crew-compliance-main">
+
+    <!-- ── Strategic Filter Panel ─────────────────────────────────────── -->
+    <section class="cod-section" aria-label="Crew Filter Panel">
+      <aoms-compliance-filter-panel [filters]="activeFilters()" [loading]="isLoading()"
+        (filtersChanged)="onFiltersChanged($event)" (filtersReset)="onFiltersReset()" />
+    </section>
+
+    <!-- ── Technical Radar Grid ───────────────────────────────────────── -->
+    <section class="cod-section" aria-label="Crew Technical Compliance Grid">
+      <aoms-crew-technical-grid [crewMembers]="crewMembers()" [pagination]="pagination()" [pageNumbers]="pageNumbers()"
+        [loading]="isLoading()" (viewProfileClicked)="onViewProfile($event)" (nextPage)="onNextPage()"
+        (prevPage)="onPrevPage()" (pageChanged)="onPageChanged($event)" />
+    </section>
+
+  </main>
+
+</div><!-- /cod-page -->

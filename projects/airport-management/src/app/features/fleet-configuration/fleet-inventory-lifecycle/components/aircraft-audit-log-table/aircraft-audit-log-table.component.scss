@@ -1,0 +1,400 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── Grid column layout ────────────────────────────────────────────────────
+ $col-tail: 130px;
+ $col-model: 1fr;
+ $col-date: 130px;
+ $col-hours: 110px;
+ $col-reason: 1fr;
+ $col-actions: 110px;
+ $grid: $col-tail $col-model $col-date $col-hours $col-reason $col-actions;
+
+ // ============================================================================
+ // 1. Card Wrapper
+ // ============================================================================
+ .alt-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 4px 20px rgba(5, 25, 55, 0.07);
+     transition: background-color $t-base, border-color $t-base, box-shadow $t-base;
+ }
+
+ // ============================================================================
+ // 2. Column Header — Midnight Sapphire + Champagne text
+ // ============================================================================
+ .alt-header {
+     display: grid;
+     grid-template-columns: $grid;
+     background: $midnight;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+     min-width: 800px;
+
+     &__cell {
+         padding: 0.875rem 1rem;
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: $champagne;
+         white-space: nowrap;
+         user-select: none;
+     }
+ }
+
+ // ============================================================================
+ // 3. Body — Scrollable
+ // ============================================================================
+ .alt-body {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+
+     &::-webkit-scrollbar {
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba(182, 143, 36, 0.2);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 4. Data Rows — desaturated archived aesthetic
+ // ============================================================================
+ .alt-row {
+     display: grid;
+     grid-template-columns: $grid;
+     align-items: center;
+     min-width: 800px;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.06);
+     transition: background $t-fast, opacity $t-fast;
+
+     // Desaturated midnight tint for archived rows — 40% opacity feel
+     &--even {
+         background: rgba(5, 25, 55, 0.03);
+     }
+
+     &--odd {
+         background: rgba(5, 25, 55, 0.06);
+     }
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     &:hover:not(.alt-row--shimmer) {
+         background: rgba(226, 199, 128, 0.05) !important;
+     }
+
+     // Restoring — champagne tint + lower pointer events
+     &--restoring {
+         background: rgba(226, 199, 128, 0.04) !important;
+         pointer-events: none;
+         opacity: 0.7;
+     }
+
+     // Just restored — brief emerald success glow
+     &--restored {
+         background: rgba(6, 78, 59, 0.06) !important;
+         animation: alt-restored-flash 600ms ease forwards;
+     }
+
+     // Cells
+     >div {
+         padding: 0.875rem 1rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Cell Content Styles
+ // ============================================================================
+
+ // Tail number + IATA stack
+ .alt-col--tail {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+ }
+
+ .alt__tail {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     // Desaturated vs active fleet — subtle muted tone
+     color: var(--aoms-text-secondary);
+     transition: color $t-fast;
+ }
+
+ .alt__iata {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: rgba(226, 199, 128, 0.4);
+ }
+
+ // Model + airline stack
+ .alt-col--model {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+ }
+
+ .alt__model {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-secondary);
+     transition: color $t-fast;
+ }
+
+ .alt__airline {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     transition: color $t-fast;
+ }
+
+ // Date + user stack
+ .alt-col--date {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+ }
+
+ .alt__date {
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     font-variant-numeric: tabular-nums;
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+ }
+
+ .alt__by {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     opacity: 0.65;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+ }
+
+ // Hours
+ .alt__hours {
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     font-variant-numeric: tabular-nums;
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+ }
+
+ // Reason
+ .alt__reason {
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     font-style: italic;
+     color: var(--aoms-text-muted);
+     transition: color $t-fast;
+
+     &--empty {
+         opacity: 0.5;
+         font-style: italic;
+     }
+ }
+
+ // Actions — right-aligned
+ .alt-col--actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+ }
+
+ // ============================================================================
+ // 6. Shimmer Skeleton
+ // ============================================================================
+ .alt-row--shimmer {
+     pointer-events: none;
+ }
+
+ .alt-shimmer {
+     height: 0.875rem;
+     border-radius: 4px;
+     background: rgba(5, 25, 55, 0.07);
+     animation: alt-pulse 1.5s ease-in-out infinite;
+     width: 75%;
+
+     &--narrow {
+         width: 80px;
+     }
+
+     &--sub {
+         height: 0.625rem;
+         width: 55%;
+         margin-top: 0.25rem;
+         animation-delay: 0.1s;
+     }
+
+     &--btn {
+         height: 1.75rem;
+         width: 72px;
+         border-radius: 4px;
+         animation-delay: 0.15s;
+     }
+ }
+
+ // ============================================================================
+ // 7. Empty State
+ // ============================================================================
+ .alt-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 3.5rem 1.5rem;
+     text-align: center;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3.25rem;
+         height: 3.25rem;
+         border-radius: 12px;
+         background: rgba(6, 78, 59, 0.07);
+         color: $emerald;
+         margin-bottom: 0.25rem;
+     }
+
+     &__icon {
+         width: 1.625rem;
+         height: 1.625rem;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-secondary);
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         max-width: 340px;
+         line-height: 1.5;
+     }
+ }
+
+ // ============================================================================
+ // 8. Footer
+ // ============================================================================
+ .alt-footer {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 0.6875rem 1.25rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.1);
+     background: rgba(5, 25, 55, 0.02);
+     transition: background $t-base;
+
+     &__count {
+         font-size: 12px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+
+         strong {
+             font-weight: 600;
+             color: var(--aoms-text-secondary);
+         }
+     }
+
+     &__badge {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.3125rem;
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+         opacity: 0.55;
+
+         &__icon {
+             width: 0.75rem;
+             height: 0.75rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 9. Keyframes
+ // ============================================================================
+ @keyframes alt-pulse {
+
+     0%,
+     100% {
+         opacity: 0.4;
+     }
+
+     50% {
+         opacity: 0.8;
+     }
+ }
+
+ @keyframes alt-restored-flash {
+     0% {
+         background: rgba(6, 78, 59, 0.15);
+     }
+
+     100% {
+         background: rgba(6, 78, 59, 0.04);
+     }
+ }
+
+ // ============================================================================
+ // 10. Dark Mode (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .alt-card {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+     }
+
+     .alt-row--even {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .alt-row--odd {
+         background: rgba(255, 255, 255, 0.01);
+     }
+
+     .alt-row:hover:not(.alt-row--shimmer) {
+         background: rgba(226, 199, 128, 0.04) !important;
+     }
+
+     .alt-shimmer {
+         background: rgba(255, 255, 255, 0.04);
+     }
+
+     .alt-footer {
+         background: rgba(255, 255, 255, 0.01);
+     }
+ }

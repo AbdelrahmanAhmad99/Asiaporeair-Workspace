@@ -1,0 +1,235 @@
+// action-confirmation-modal.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$t: 260ms $ease;
+
+:host {
+    display: block;
+    width: 100%;
+    max-width: 460px;
+}
+
+.modal-card {
+    background: $midnight;
+    border: 1px solid rgba($champagne, 0.18);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba($midnight, 0.55);
+    font-family: $font;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($champagne, 0.4), transparent);
+    }
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 1.75rem 1.5rem 1rem;
+    text-align: center;
+}
+
+.modal-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba($royal-gold, 0.10);
+    border: 1px solid rgba($champagne, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-heading {
+    font-size: 1rem;
+    font-weight: 800;
+    color: $white;
+    letter-spacing: -0.03em;
+    margin: 0;
+}
+
+.modal-subheading {
+    font-size: 0.72rem;
+    color: rgba($white, 0.50);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 320px;
+}
+
+.pax-identity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.875rem 1.5rem;
+    background: rgba($white, 0.04);
+    border-top: 1px solid rgba($champagne, 0.1);
+    border-bottom: 1px solid rgba($champagne, 0.1);
+}
+
+.pax-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: rgba($royal-gold, 0.10);
+    border: 1px solid rgba($royal-gold, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $champagne;
+}
+
+.pax-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $white;
+    letter-spacing: -0.01em;
+}
+
+.change-summary {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.summary-title {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba($champagne, 0.5);
+    margin-bottom: 4px;
+}
+
+.change-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: rgba($white, 0.04);
+    border: 1px solid rgba($white, 0.06);
+}
+
+.change-field {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba($white, 0.40);
+    min-width: 80px;
+}
+
+.change-old {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.7rem;
+    color: rgba($white, 0.40);
+    text-decoration: line-through;
+    font-style: italic;
+
+    svg {
+        color: rgba($champagne, 0.4);
+        flex-shrink: 0;
+    }
+}
+
+.change-new {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $champagne;
+    letter-spacing: 0.02em;
+}
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba($champagne, 0.1);
+}
+
+.btn-cancel {
+    padding: 0.625rem 1.25rem;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.2);
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba($white, 0.60);
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($champagne, 0.4);
+        color: $champagne;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.btn-confirm {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.625rem 1.5rem;
+    border-radius: 4px;
+    background: linear-gradient(135deg, $royal-gold 0%, darken($royal-gold, 10%) 100%);
+    border: none;
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: $midnight;
+    cursor: pointer;
+    transition: all $t;
+    box-shadow: 0 3px 12px rgba($royal-gold, 0.30);
+
+    &:hover {
+        background: linear-gradient(135deg, $champagne 0%, $royal-gold 100%);
+        box-shadow: 0 6px 20px rgba($royal-gold, 0.45);
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $champagne;
+        outline-offset: 2px;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-confirm {
+        transition: none !important;
+
+        &:hover {
+            transform: none;
+        }
+    }
+}

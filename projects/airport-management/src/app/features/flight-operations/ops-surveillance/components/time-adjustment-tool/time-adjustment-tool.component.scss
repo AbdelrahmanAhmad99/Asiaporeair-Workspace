@@ -1,0 +1,471 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Backdrop
+ // ============================================================================
+ .tat-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 40;
+     background: rgba($midnight, 0.65);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     animation: tat-fade 200ms $ease both;
+ }
+
+ // ============================================================================
+ // 2. Panel — Midnight Sapphire Instrument Cluster
+ // ============================================================================
+ .tat-panel {
+     position: fixed;
+     z-index: 50;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: min(480px, calc(100vw - 2rem));
+
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.2);
+     box-shadow:
+         0 24px 64px rgba($midnight, 0.6),
+         0 0 0 1px rgba($champagne, 0.06),
+         0 0 40px rgba($gold, 0.08) inset;
+     overflow: hidden;
+     animation: tat-enter 280ms $luxury both;
+
+     &__gold-bar {
+         height: 3px;
+         background: linear-gradient(90deg, darken($gold, 10%), $gold, $champagne);
+     }
+
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+         padding: 1.25rem 1.5rem 0.875rem;
+         border-bottom: 1px solid rgba($champagne, 0.08);
+         background: rgba(255, 255, 255, 0.025);
+     }
+
+     &__clock-icon {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 8px;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.22);
+
+         svg {
+             width: 1.125rem;
+             height: 1.125rem;
+             color: $gold;
+         }
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 700;
+         color: $champagne;
+         margin: 0 0 0.3rem;
+     }
+
+     &__subtitle {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+     }
+
+     &__close {
+         margin-left: auto;
+         flex-shrink: 0;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.875rem;
+         height: 1.875rem;
+         border: 1px solid rgba($champagne, 0.16);
+         border-radius: 4px;
+         background: transparent;
+         cursor: pointer;
+         color: rgba($champagne, 0.4);
+         transition: all 150ms $ease;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+         }
+
+         &:disabled {
+             opacity: 0.3;
+             cursor: not-allowed;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ .tat-flight-no {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 900;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: $gold;
+ }
+
+ .tat-corridor {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.06em;
+     color: rgba($champagne, 0.5);
+ }
+
+ // ============================================================================
+ // 3. Terminal & Error notices
+ // ============================================================================
+ .tat-terminal-notice {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.625rem 1.5rem;
+     background: rgba($amber, 0.08);
+     border-bottom: 1px solid rgba($amber, 0.15);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: $amber;
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .tat-error {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.5rem;
+     margin: 0.75rem 1.5rem 0;
+     padding: 0.625rem 0.875rem;
+     border-radius: 6px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.28);
+     border-left: 3px solid $ruby;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11.5px;
+     color: lighten($ruby, 10%);
+     animation: tat-slide 180ms $luxury both;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         margin-top: 0.1rem;
+     }
+ }
+
+ // ============================================================================
+ // 4. Form
+ // ============================================================================
+ .tat-form {
+     padding: 1.125rem 1.5rem 0;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+ }
+
+ // Scheduled times reference strip
+ .tat-scheduled-strip {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.75rem 1rem;
+     border-radius: 8px;
+     background: rgba(255, 255, 255, 0.04);
+     border: 1px solid rgba($champagne, 0.1);
+
+     &__item {
+         display: flex;
+         flex-direction: column;
+         gap: 0.1rem;
+         flex: 1;
+
+         &--dest {
+             align-items: flex-end;
+         }
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 8.5px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.35);
+     }
+
+     &__time {
+         font-family: 'Courier New', monospace;
+         font-size: 13px;
+         font-weight: 700;
+         letter-spacing: 0.06em;
+         color: rgba($champagne, 0.7);
+     }
+
+     &__arrow {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+         color: rgba($champagne, 0.25);
+     }
+ }
+
+ // Delay / ahead warning
+ .tat-delay-warning {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.4rem 0.75rem;
+     border-radius: 5px;
+     background: rgba($amber, 0.08);
+     border: 1px solid rgba($amber, 0.2);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: $amber;
+     animation: tat-fade 200ms $ease both;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 5. Field
+ // ============================================================================
+ .tat-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.4rem;
+ }
+
+ .tat-label {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     color: rgba($champagne, 0.5);
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+             color: $gold;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Time input — "Glowing text" Instrument Cluster style
+ // ============================================================================
+ .tat-input {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     width: 100%;
+     height: 3.25rem;
+     padding: 0 1rem;
+
+     font-family: 'Courier New', monospace;
+     font-size: 1.25rem;
+     font-weight: 700;
+     letter-spacing: 0.06em;
+     color: $champagne;
+     text-align: center;
+
+     background: rgba(255, 255, 255, 0.04);
+     border: 1px solid rgba($champagne, 0.18);
+     border-radius: 8px;
+     cursor: pointer;
+     transition:
+         border-color 180ms $ease,
+         background 180ms $ease,
+         box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $gold;
+         background: rgba(255, 255, 255, 0.07);
+         // "Glowing text" instrument cluster effect per spec
+         box-shadow:
+             0 0 0 3px rgba($gold, 0.14),
+             0 0 18px rgba($gold, 0.12),
+             inset 0 0 12px rgba($gold, 0.06);
+         color: $gold;
+         text-shadow: 0 0 10px rgba($gold, 0.4);
+     }
+
+     &:disabled {
+         opacity: 0.3;
+         cursor: not-allowed;
+     }
+
+     &::-webkit-calendar-picker-indicator {
+         opacity: 0.45;
+         cursor: pointer;
+         filter: invert(0.8);
+     }
+ }
+
+ // ============================================================================
+ // 7. Actions
+ // ============================================================================
+ .tat-actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding: 1rem 0 1.375rem;
+     border-top: 1px solid rgba($champagne, 0.08);
+ }
+
+ .tat-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.375rem;
+     padding: 0 1rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.35;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon,
+     &__spin {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+
+     &__spin {
+         animation: tat-spin 0.9s linear infinite;
+     }
+
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.18);
+         color: rgba($champagne, 0.5);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+
+     &--save {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+         font-weight: 700;
+
+         &:hover:not(:disabled) {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 14px rgba($gold, 0.4);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes tat-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes tat-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 14px));
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%);
+     }
+ }
+
+ @keyframes tat-slide {
+     from {
+         opacity: 0;
+         transform: translateX(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes tat-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }

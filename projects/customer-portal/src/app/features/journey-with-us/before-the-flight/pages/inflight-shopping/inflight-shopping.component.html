@@ -1,0 +1,120 @@
+<div class="is-shell">
+
+    <!-- Hero -->
+    <header class="is-hero">
+        <div class="is-hero__inner">
+            <nav class="is-bc" aria-label="Breadcrumb">
+                <a href="/" class="is-bc__link">Home</a><span class="is-bc__sep">›</span>
+                <a href="/journey-with-us/before-the-flight" class="is-bc__link">Before the Flight</a>
+                <span class="is-bc__sep">›</span>
+                <span class="is-bc__cur">Inflight Shopping</span>
+            </nav>
+            <div class="is-hero__pre-block">
+                <div class="is-hero__pre-line"></div>
+                <span class="is-hero__eyebrow">Retail at Altitude</span>
+            </div>
+            <h1 class="is-hero__title">Inflight Shopping</h1>
+            <p class="is-hero__sub">
+                A curated boutique of the world's finest brands — available exclusively aboard
+                Asiaporeair flights. Discover luxury fragrances, rare spirits, premium skincare,
+                and exclusive collector's editions you won't find anywhere else.
+            </p>
+        </div>
+    </header>
+
+    <!-- Category filters -->
+    <div class="is-filters">
+        <div class="is-filters__inner">
+            @for (cat of categories; track cat.value) {
+            <button class="is-filter-pill" [class.is-filter-pill--active]="activeCategory() === cat.value" type="button"
+                (click)="setCategory(cat.value)">
+                {{ cat.label }}
+            </button>
+            }
+        </div>
+    </div>
+
+    <!-- Product grid -->
+    <section class="is-products" aria-labelledby="is-products-title">
+        <div class="is-products__inner">
+            <h2 id="is-products-title" style="display:none;">Products</h2>
+
+            @if (filteredItems().length === 0) {
+            <p class="is-empty">No products found in this category.</p>
+            } @else {
+            <div class="is-products__grid">
+                @for (item of filteredItems(); track item.id; let i = $index) {
+                <article class="is-product-card" [style.--delay]="(i * 60) + 'ms'">
+
+                    <div class="is-product-card__img-wrap">
+                        <img [src]="item.imagePath" [alt]="item.name + ' by ' + item.brand" class="is-product-card__img"
+                            loading="lazy" />
+                        @if (item.exclusive) {
+                        <span class="is-product-card__excl-badge">
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" stroke="none"
+                                aria-hidden="true">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                            Exclusive
+                        </span>
+                        }
+                    </div>
+
+                    <div class="is-product-card__body">
+                        <span class="is-product-card__brand">{{ item.brand }}</span>
+                        <h3 class="is-product-card__name">{{ item.name }}</h3>
+                        <p class="is-product-card__tagline">{{ item.tagline }}</p>
+                        <div class="is-product-card__category-tag">{{ categoryLabel(item.category) }}</div>
+                    </div>
+
+                </article>
+                }
+            </div>
+            }
+        </div>
+    </section>
+
+    <!-- Ordering info strip -->
+    <div class="is-info-strip">
+        <div class="is-info-strip__inner">
+            <div class="is-info-strip__item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <div>
+                    <strong>Pre-order before departure</strong>
+                    <p>Browse and reserve items up to 72 hours before your flight via Manage Booking.</p>
+                </div>
+            </div>
+            <div class="is-info-strip__item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M20 12V22H4V12" />
+                    <path d="M22 7H2v5h20V7z" />
+                    <path d="M12 22V7" />
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                </svg>
+                <div>
+                    <strong>Duty-free savings</strong>
+                    <p>All products are available duty-free, offering competitive pricing versus airport retail.</p>
+                </div>
+            </div>
+            <div class="is-info-strip__item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                </svg>
+                <div>
+                    <strong>Secure delivery to your seat</strong>
+                    <p>Pre-ordered items are packaged and ready at your seat — no additional handling required.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

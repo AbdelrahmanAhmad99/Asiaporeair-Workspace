@@ -1,0 +1,332 @@
+<!-- user-registration-dynamic.component.html -->
+
+<div class="urd">
+
+    <!-- ── Form Header ─────────────────────────────────────────── -->
+    <div class="urd__header">
+        <button class="urd__back-btn" type="button" (click)="backClicked.emit()">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__back-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Change Role
+        </button>
+        <div class="urd__role-pill">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__role-pill__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            Registering: <strong>{{ role() }}</strong>
+        </div>
+    </div>
+
+    <!-- ── Core Credentials ────────────────────────────────────── -->
+    <section class="urd__section">
+        <h3 class="urd__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            </svg>
+            Personal Identity
+        </h3>
+        <div class="urd__grid urd__grid--2">
+            <!-- First Name -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-fn" type="text" placeholder=" " autocomplete="given-name"
+                    [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" />
+                <label class="urd__fl-label" for="urd-fn">First Name <span class="urd__req"
+                        aria-hidden="true">*</span></label>
+            </div>
+            <!-- Last Name -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-ln" type="text" placeholder=" " autocomplete="family-name"
+                    [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" />
+                <label class="urd__fl-label" for="urd-ln">Last Name <span class="urd__req"
+                        aria-hidden="true">*</span></label>
+            </div>
+            <!-- Email -->
+            <div class="urd__fl-field" [class.urd__fl-field--error]="!!emailError()">
+                <input class="urd__fl-input" id="urd-em" type="email" placeholder=" " autocomplete="email"
+                    [ngModel]="email()" (ngModelChange)="email.set($event)" />
+                <label class="urd__fl-label" for="urd-em">Email Address <span class="urd__req"
+                        aria-hidden="true">*</span></label>
+                @if (emailError()) { <span class="urd__field-error" role="alert">{{ emailError() }}</span> }
+            </div>
+            <!-- Phone -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-ph" type="tel" placeholder=" " autocomplete="tel"
+                    [ngModel]="phoneNumber()" (ngModelChange)="phoneNumber.set($event)" />
+                <label class="urd__fl-label" for="urd-ph">Phone Number <span class="urd__req"
+                        aria-hidden="true">*</span></label>
+            </div>
+            <!-- DOB -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-dob" type="date" placeholder=" " [ngModel]="dateOfBirth()"
+                    (ngModelChange)="onDateOfBirthChange($event)" />
+                <label class="urd__fl-label urd__fl-label--date" for="urd-dob">Date of Birth</label>
+            </div>
+            <!-- Address -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-addr" type="text" placeholder=" " autocomplete="street-address"
+                    [ngModel]="address()" (ngModelChange)="address.set($event)" />
+                <label class="urd__fl-label" for="urd-addr">Address</label>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Employment Details ───────────────────────────────────── -->
+    <section class="urd__section">
+        <h3 class="urd__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006-3.75 4.5M4.5 11.131a48.114 48.114 0 0 0-3.413-.387C.04 10.706-.001 10.36-.001 10.003V6.489c0-1.081.769-2.014 1.837-2.174A48.09 48.09 0 0 1 12 4.5c2.291 0 4.545.16 6.797.459" />
+            </svg>
+            Employment Record
+        </h3>
+        <div class="urd__grid urd__grid--2">
+            <!-- Hire Date -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-hd" type="date" placeholder=" " [ngModel]="dateOfHire()"
+                    (ngModelChange)="onDateOfHireChange($event)" />
+                <label class="urd__fl-label urd__fl-label--date" for="urd-hd">Date of Hire</label>
+            </div>
+            <!-- Salary -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input urd__fl-input--currency" id="urd-sal" type="number" min="0" placeholder=" "
+                    [ngModel]="salary()" (ngModelChange)="salary.set($event)" />
+                <label class="urd__fl-label" for="urd-sal">Annual Salary (SGD)</label>
+            </div>
+            <!-- Admin: Department -->
+            @if (isAdmin()) {
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-dept" type="text" placeholder=" " [ngModel]="department()"
+                    (ngModelChange)="department.set($event)" />
+                <label class="urd__fl-label" for="urd-dept">Department</label>
+            </div>
+            }
+        </div>
+    </section>
+
+    <!-- ── Crew Base Airport (Pilot + Attendant) ───────────────── -->
+    @if (needsAirport()) {
+    <section class="urd__section" [class.urd__section--active]="showAirportDropdown()">
+        <h3 class="urd__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+            Crew Operations
+        </h3>
+        <div class="urd__grid urd__grid--1">
+            <!-- Crew Base Airport — searchable dropdown -->
+            <div class="urd__fl-field urd__fl-field--dropdown" [class.urd__fl-field--error]="!!crewBaseError()">
+                <div class="urd__airport-search">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="urd__airport-search__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                    </svg>
+                    <input class="urd__airport-search__input" id="urd-base" type="text"
+                        [placeholder]="isLoadingSupport() ? 'Loading airports…' : 'Search by IATA, name or city…'"
+                        [disabled]="isLoadingSupport()" [ngModel]="airportSearch()"
+                        (ngModelChange)="airportSearch.set($event)" (focus)="onAirportInputFocus()"
+                        (blur)="onAirportInputBlur()" autocomplete="off" aria-label="Search crew base airport"
+                        [attr.aria-expanded]="showAirportDropdown()" />
+                    @if (crewBaseAirport()) {
+                    <span class="urd__airport-search__selected">{{ crewBaseAirport() }}</span>
+                    }
+                </div>
+                @if (showAirportDropdown()) {
+                <div class="urd__airport-dropdown" role="listbox" aria-label="Airport options">
+                    @for (ap of filteredAirports(); track ap.iataCode) {
+                    <button class="urd__airport-option" type="button" role="option"
+                        (click)="onSelectAirport(ap.iataCode)">
+                        <span class="urd__airport-option__iata">{{ ap.iataCode }}</span>
+                        <span class="urd__airport-option__name">{{ ap.name }}</span>
+                        <span class="urd__airport-option__city">{{ ap.city }}, {{ ap.countryIsoCode }}</span>
+                    </button>
+                    }
+                    @if (filteredAirports().length === 0) {
+                    <p class="urd__airport-dropdown__empty">No airports match "{{ airportSearch() }}"</p>
+                    }
+                </div>
+                }
+                @if (crewBaseError()) { <span class="urd__field-error" role="alert">{{ crewBaseError() }}</span> }
+            </div>
+        </div>
+    </section>
+    }
+
+    <!-- ── Pilot Certifications ────────────────────────────────── -->
+    @if (isPilot()) {
+    <section class="urd__section">
+        <h3 class="urd__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            Pilot Certifications
+        </h3>
+        <div class="urd__grid urd__grid--2">
+            <!-- License Number -->
+            <div class="urd__fl-field" [class.urd__fl-field--error]="!!pilotErrors()">
+                <input class="urd__fl-input" id="urd-lic" type="text" placeholder=" " [ngModel]="licenseNumber()"
+                    (ngModelChange)="licenseNumber.set($event)" />
+                <label class="urd__fl-label" for="urd-lic">License Number <span class="urd__req"
+                        aria-hidden="true">*</span></label>
+                @if (pilotErrors() && !licenseNumber()) { <span class="urd__field-error" role="alert">{{ pilotErrors()
+                    }}</span> }
+            </div>
+            <!-- Total Flight Hours -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-hrs" type="number" min="0" placeholder=" "
+                    [ngModel]="totalFlightHours()" (ngModelChange)="totalFlightHours.set($event)" />
+                <label class="urd__fl-label" for="urd-hrs">Total Flight Hours</label>
+            </div>
+            <!-- Aircraft Type (select) -->
+            <div class="urd__fl-field" [class.urd__fl-field--error]="!!pilotErrors() && !aircraftTypeId()">
+                <div class="urd__select-wrap">
+                    <select class="urd__select" id="urd-actype" [ngModel]="aircraftTypeId()"
+                        (ngModelChange)="aircraftTypeId.set($event)" [disabled]="isLoadingSupport()">
+                        <option value="">{{ isLoadingSupport() ? 'Loading aircraft types…' : 'Select aircraft type
+                            certification…' }}</option>
+                        @for (ac of aircraftTypes(); track ac.typeId) {
+                        <option [value]="ac.typeId">{{ ac.manufacturer }} {{ ac.model }}</option>
+                        }
+                    </select>
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                        class="urd__select-wrap__chev" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                    </svg>
+                </div>
+                <span class="urd__field-sublabel">Aircraft type for which the pilot holds certification</span>
+                @if (pilotErrors() && !aircraftTypeId()) { <span class="urd__field-error" role="alert">{{ pilotErrors()
+                    }}</span> }
+            </div>
+            <!-- Last Sim Check -->
+            <div class="urd__fl-field">
+                <input class="urd__fl-input" id="urd-sim" type="date" placeholder=" " [ngModel]="lastSimCheckDate()"
+                    (ngModelChange)="onLastSimCheckDateChange($event)" />
+                <label class="urd__fl-label urd__fl-label--date" for="urd-sim">Last Sim Check Date</label>
+            </div>
+        </div>
+    </section>
+    }
+
+    <!-- ── SuperAdmin: Password ─────────────────────────────────── -->
+    @if (isSuperAdmin()) {
+    <section class="urd__section">
+        <h3 class="urd__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+            </svg>
+            Security Credentials
+        </h3>
+        <div class="urd__grid urd__grid--2">
+            <!-- Password -->
+            <div class="urd__fl-field urd__fl-field--password" [class.urd__fl-field--error]="!!passwordError()">
+                <input class="urd__fl-input" id="urd-pw" [type]="showPassword() ? 'text' : 'password'" placeholder=" "
+                    autocomplete="new-password" [ngModel]="password()" (ngModelChange)="password.set($event)" />
+                <label class="urd__fl-label" for="urd-pw">Password <span class="urd__req"
+                        aria-hidden="true">*</span></label>
+                <button class="urd__pw-toggle" type="button" (click)="showPassword.set(!showPassword())"
+                    [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="urd__pw-toggle__icon" aria-hidden="true">
+                        @if (!showPassword()) {
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        } @else {
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        }
+                    </svg>
+                </button>
+                <!-- Strength meter -->
+                @if (password()) {
+                <div class="urd__pw-strength">
+                    <div class="urd__pw-strength__bar">
+                        <div class="urd__pw-strength__fill"
+                            [class]="'urd__pw-strength__fill--' + passwordStrength().score"
+                            [style.width.%]="passwordStrength().pct"></div>
+                    </div>
+                    <span class="urd__pw-strength__label"
+                        [class]="'urd__pw-strength__label--' + passwordStrength().score">
+                        {{ passwordStrength().label }}
+                    </span>
+                </div>
+                }
+            </div>
+            <!-- Confirm Password -->
+            <div class="urd__fl-field"
+                [class.urd__fl-field--error]="!!passwordError() && password() !== confirmPassword()">
+                <input class="urd__fl-input" id="urd-cpw" [type]="showPassword() ? 'text' : 'password'" placeholder=" "
+                    autocomplete="new-password" [ngModel]="confirmPassword()"
+                    (ngModelChange)="confirmPassword.set($event)" />
+                <label class="urd__fl-label" for="urd-cpw">Confirm Password <span class="urd__req"
+                        aria-hidden="true">*</span></label>
+                @if (passwordError()) { <span class="urd__field-error" role="alert">{{ passwordError() }}</span> }
+            </div>
+        </div>
+    </section>
+    }
+
+    <!-- ── Profile Picture ─────────────────────────────────────── -->
+    <section class="urd__section">
+        <h3 class="urd__section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0z" />
+            </svg>
+            Profile Picture
+            <span class="urd__section__opt">(optional)</span>
+        </h3>
+        <label class="urd__file-picker" [class.urd__file-picker--has-file]="!!profilePicture()">
+            <input type="file" accept="image/*" class="urd__file-picker__input" (change)="onFileChange($event)"
+                aria-label="Upload profile picture" />
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__file-picker__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+            </svg>
+            @if (profilePicture()) {
+            <span class="urd__file-picker__label">{{ profilePicture()!.name }}</span>
+            } @else {
+            <span class="urd__file-picker__label">Click to upload or drag and drop — PNG, JPG, WEBP</span>
+            }
+        </label>
+    </section>
+
+    <!-- ── Form Actions ─────────────────────────────────────────── -->
+    <div class="urd__actions">
+        <button class="urd__cancel-btn" type="button" (click)="backClicked.emit()">Cancel</button>
+        <button class="urd__submit-btn" type="button" [disabled]="(!isFormValid() && touched()) || isSubmitting()"
+            [class.urd__submit-btn--pulsing]="isSubmitting()" (click)="onSubmit()">
+            @if (!isSubmitting()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="urd__submit-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            Provision Account
+            }
+            @if (isSubmitting()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="urd__submit-btn__icon urd__submit-btn__icon--spin" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Provisioning…
+            }
+        </button>
+    </div>
+
+</div>

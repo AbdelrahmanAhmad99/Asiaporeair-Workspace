@@ -1,0 +1,125 @@
+<!-- pax-manifest-table.component.html -->
+
+<div class="pmt-container">
+
+    <!-- Loading shimmer rows -->
+    @if (loading() && passengers().length === 0) {
+    <div class="pmt-shimmer-list" aria-busy="true" aria-label="Loading passengers">
+        @for (i of [1,2,3,4,5,6,7]; track i) {
+        <div class="pmt-shimmer-row">
+            <div class="pmt-shimmer pmt-shimmer--avatar"></div>
+            <div class="pmt-shimmer-group">
+                <div class="pmt-shimmer pmt-shimmer--name"></div>
+                <div class="pmt-shimmer pmt-shimmer--sub"></div>
+            </div>
+            <div class="pmt-shimmer pmt-shimmer--passport"></div>
+            <div class="pmt-shimmer pmt-shimmer--pill"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Pre-search idle state -->
+    @if (!hasSearched() && !loading()) {
+    <div class="pmt-idle" role="status">
+        <div class="pmt-idle__pulse" aria-hidden="true"></div>
+        <p class="pmt-idle__label">Registry Standby</p>
+        <p class="pmt-idle__hint">Enter search criteria above to retrieve passenger records.</p>
+    </div>
+    }
+
+    <!-- Empty search result -->
+    @if (isEmpty()) {
+    <div class="pmt-empty" role="status">
+        <svg class="pmt-empty__icon" viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="1.2"
+            aria-hidden="true">
+            <circle cx="40" cy="22" r="10" stroke-opacity="0.45" />
+            <path d="M18 52c0-12.15 9.85-22 22-22s22 9.85 22 22" stroke-opacity="0.3" stroke-dasharray="4 3" />
+            <line x1="58" y1="5" x2="72" y2="19" stroke-opacity="0.4" stroke-width="2" stroke-linecap="round" />
+            <line x1="72" y1="5" x2="58" y2="19" stroke-opacity="0.4" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <p class="pmt-empty__title">No Passenger Records Located</p>
+        <p class="pmt-empty__sub">Refine your search criteria to find the correct record.</p>
+    </div>
+    }
+
+    <!-- Data table -->
+    @if (passengers().length > 0) {
+    <div class="pmt-table-wrap">
+        <table class="pmt-table" aria-label="Passenger master registry">
+            <thead>
+                <tr class="pmt-thead">
+                    <th class="pmt-th pmt-th--avatar" scope="col" aria-label="Avatar"></th>
+                    <th class="pmt-th" scope="col">Passenger Name</th>
+                    <th class="pmt-th pmt-th--passport" scope="col">Passport / Doc ID</th>
+                    <th class="pmt-th pmt-th--dob" scope="col">Date of Birth</th>
+                    <th class="pmt-th pmt-th--actions" scope="col" aria-label="Actions"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (pax of enriched(); track pax.passengerId) {
+                <tr class="pmt-row" [class.pmt-row--active]="pax.passengerId" (click)="viewPassenger.emit(pax)"
+                    (keydown.enter)="viewPassenger.emit(pax)" (keydown.space)="viewPassenger.emit(pax)" tabindex="0"
+                    role="button" [attr.aria-pressed]="pax.passengerId"
+                    [attr.aria-label]="'Select passenger ' + pax.fullName">
+
+                    <!-- Avatar -->
+                    <td class="pmt-cell pmt-cell--avatar" aria-hidden="true">
+                        <div class="pmt-avatar" [class.pmt-avatar--active]="pax.passengerId">
+                            {{ pax.initials }}
+                        </div>
+                    </td>
+
+                    <!-- Name + User ID -->
+                    <td class="pmt-cell">
+                        <div class="pmt-name-block">
+                            <span class="pmt-name">{{ pax.fullName }}</span>
+                            <span class="pmt-user-id">UID · {{ pax.passengerId }}</span>
+                        </div>
+                    </td>
+
+                    <!-- Passport -->
+                    <td class="pmt-cell pmt-cell--passport">
+                        @if (pax.passportNumber) {
+                        <span class="pmt-passport">{{ pax.passportNumber }}</span>
+                        } @else {
+                        <span class="pmt-missing">—</span>
+                        }
+                    </td>
+
+                    <!-- Date of Birth -->
+                    <td class="pmt-cell pmt-cell--dob">{{ pax.dobDisplay }}</td>
+
+                    <!-- Actions -->
+                    <td class="pmt-cell pmt-cell--actions" (click)="$event.stopPropagation()">
+                        <!-- View / Edit -->
+                        <button class="pmt-action-btn pmt-action-btn--view" type="button"
+                            (click)="viewPassenger.emit(pax)" title="View & Edit"
+                            [attr.aria-label]="'Edit ' + pax.fullName">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                            </svg>
+                        </button>
+
+                        <!-- Delete -->
+                        <button class="pmt-action-btn pmt-action-btn--delete" type="button"
+                            (click)="deletePassenger.emit(pax)" title="Delete Record"
+                            [attr.aria-label]="'Delete ' + pax.fullName">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            </svg>
+                        </button>
+                    </td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+</div>

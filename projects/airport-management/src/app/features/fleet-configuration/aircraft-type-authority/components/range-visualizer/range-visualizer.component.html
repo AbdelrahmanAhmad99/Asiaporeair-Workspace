@@ -1,0 +1,101 @@
+<div class="range-card" [attr.data-category]="rangeCategory()">
+
+    <!-- ── Card Header ──────────────────────────────────────────── -->
+    <div class="range-card__header">
+        <div class="range-card__header__icon-wrap" aria-hidden="true">
+            <svg class="range-card__header__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82
+                 c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252
+                 a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836
+                 .88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317
+                 .158.69.158 1.006 0z" />
+            </svg>
+        </div>
+        <h4 class="range-card__title">Range Capability</h4>
+    </div>
+
+    <!-- ── Arc Gauge ────────────────────────────────────────────── -->
+    <div class="range-card__gauge-wrap">
+
+        @if (loading()) {
+        <!-- Shimmer arc -->
+        <div class="range-card__shimmer-arc" aria-hidden="true"></div>
+        }
+
+        @if (!loading()) {
+        <svg class="range-card__svg" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" role="img"
+            [attr.aria-label]="'Range gauge: ' + percentage() + '% of maximum capability'">
+
+            <defs>
+                <!-- Royal Gold gradient for the arc fill -->
+                <linearGradient id="range-arc-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#B68F24" />
+                    <stop offset="60%" stop-color="#E2C780" />
+                    <stop offset="100%" stop-color="#B68F24" />
+                </linearGradient>
+
+                <!-- Glow filter -->
+                <filter id="range-arc-glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- Background track arc -->
+            <path class="range-arc__track" [attr.d]="bgArcPath()" fill="none" stroke="rgba(182,143,36,0.1)"
+                stroke-width="10" stroke-linecap="round" />
+
+            <!-- Filled range arc (Royal Gold gradient) -->
+            @if (percentage() > 0) {
+            <path class="range-arc__fill" [attr.d]="arcPath()" fill="none" stroke="url(#range-arc-grad)"
+                stroke-width="10" stroke-linecap="round" filter="url(#range-arc-glow)" />
+            }
+
+            <!-- Centre: percentage number -->
+            <text [attr.x]="svgCx" [attr.y]="svgCy - 10" class="range-arc__pct-value" text-anchor="middle"
+                dominant-baseline="middle">
+                {{ percentage() }}%
+            </text>
+
+            <!-- Centre: "of max" sub-label -->
+            <text [attr.x]="svgCx" [attr.y]="svgCy + 14" class="range-arc__pct-label" text-anchor="middle"
+                dominant-baseline="middle">
+                of max range
+            </text>
+
+        </svg>
+
+        <!-- ── Range Stats Row ────────────────────────────── -->
+        <div class="range-card__stats">
+
+            <div class="range-stat">
+                <span class="range-stat__label">Kilometres</span>
+                <span class="range-stat__value">{{ rangeKmFormatted() }}</span>
+                <span class="range-stat__unit">km</span>
+            </div>
+
+            <div class="range-stat__divider" aria-hidden="true"></div>
+
+            <div class="range-stat">
+                <span class="range-stat__label">Statute Miles</span>
+                <span class="range-stat__value">{{ milesFormatted() }}</span>
+                <span class="range-stat__unit">mi</span>
+            </div>
+
+        </div>
+
+        <!-- ── Category Tag ────────────────────────────────── -->
+        <div class="range-card__category" [attr.data-category]="rangeCategory()" role="status"
+            [attr.aria-label]="'Classified as: ' + categoryLabel()">
+            {{ categoryLabel() }}
+        </div>
+
+        }
+
+    </div>
+
+</div>

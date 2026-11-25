@@ -1,0 +1,96 @@
+<section class="ag-section" aria-label="Airport operations hub">
+
+    <!-- ══ Section Header ════════════════════════════════════════════ -->
+    <div class="ag-header">
+        <div class="ag-header-left">
+            <div class="ag-header-icon-wrap" aria-hidden="true">
+                <svg class="ag-header-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0
+                   1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="ag-section-title">Operations Hub</h3>
+                <p class="ag-section-subtitle">
+                    Airports registered to {{ countryName() || 'this country' }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Status Summary Chips -->
+        <div class="ag-status-summary" aria-label="Status summary">
+            <span class="ag-status-chip ag-status-chip--active">
+                <span class="ag-status-dot ag-status-dot--active" aria-hidden="true"></span>
+                {{ activeCount() }} Active
+            </span>
+            @if (maintenanceCount() > 0) {
+            <span class="ag-status-chip ag-status-chip--maintenance">
+                <span class="ag-status-dot ag-status-dot--maintenance" aria-hidden="true"></span>
+                {{ maintenanceCount() }} Maintenance
+            </span>
+            }
+        </div>
+    </div>
+
+    <!-- ══ Airport Cards Grid ════════════════════════════════════════ -->
+    @if (airportCards().length > 0) {
+    <div class="ag-grid" [@gridAnimation]="airportCards().length" role="list">
+
+        @for (airport of airportCards(); track airport.iataCode) {
+        <article class="ag-card" role="listitem" [class.ag-card--maintenance]="airport.status === 'maintenance'"
+            [attr.aria-label]="airport.name + ' — ' + airport.status">
+
+            <!-- Card Top: IATA + Status Indicator -->
+            <div class="ag-card__top">
+                <span class="ag-card__iata">{{ airport.iataCode }}</span>
+                <span class="ag-card__status-indicator"
+                    [class.ag-card__status-indicator--active]="airport.status === 'active'"
+                    [class.ag-card__status-indicator--maintenance]="airport.status === 'maintenance'"
+                    [attr.aria-label]="airport.status === 'active' ? 'Operational' : 'Under maintenance'">
+                    <span class="ag-card__status-dot" [class.ag-card__status-dot--active]="airport.status === 'active'"
+                        [class.ag-card__status-dot--maintenance]="airport.status === 'maintenance'" aria-hidden="true">
+                    </span>
+                    {{ airport.status === 'active' ? 'Operational' : 'Maintenance' }}
+                </span>
+            </div>
+
+            <!-- Card Body: Airport Name -->
+            <div class="ag-card__body">
+                <p class="ag-card__name">{{ airport.name }}</p>
+            </div>
+
+            <!-- Card Footer: Decorative bottom accent line -->
+            <div class="ag-card__footer" aria-hidden="true">
+                <svg class="ag-card__footer-icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5
+                       10.5a7.5 7.5 0 1 1 15 0z" />
+                </svg>
+                <span class="ag-card__footer-label">View Terminal</span>
+            </div>
+
+        </article>
+        }
+
+    </div>
+    }
+
+    <!-- ══ Empty State ════════════════════════════════════════════════ -->
+    @if (airportCards().length === 0) {
+    <div class="ag-empty" role="status">
+        <div class="ag-empty__icon-wrap" aria-hidden="true">
+            <svg class="ag-empty__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0
+                   1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+        </div>
+        <p class="ag-empty__title">No airports registered</p>
+        <p class="ag-empty__subtitle">
+            No airports have been linked to {{ countryName() || 'this country' }} yet.
+            Add airports via the Global Node Hub.
+        </p>
+    </div>
+    }
+
+</section>

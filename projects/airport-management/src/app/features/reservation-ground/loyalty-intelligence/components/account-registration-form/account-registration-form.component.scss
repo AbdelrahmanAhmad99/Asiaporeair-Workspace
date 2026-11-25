@@ -1,0 +1,548 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Card Shell ─────────────────────────────────────────────────────────
+ .arf-card {
+     position: relative;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 20px 60px rgba($midnight, 0.35), 0 4px 16px rgba($midnight, 0.2);
+     overflow: hidden;
+ }
+
+ // Subtle mesh gradient background layer per spec
+ .arf-card__mesh {
+     position: absolute;
+     inset: 0;
+     background:
+         radial-gradient(ellipse 600px 400px at 15% 0%, rgba($gold, 0.08) 0%, transparent 55%),
+         radial-gradient(ellipse 500px 350px at 90% 100%, rgba($champagne, 0.06) 0%, transparent 50%),
+         radial-gradient(ellipse 400px 300px at 50% 50%, rgba($emerald, 0.03) 0%, transparent 60%);
+     pointer-events: none;
+     z-index: 0;
+ }
+
+ .arf-card__accent {
+     position: relative;
+     z-index: 1;
+     height: 3px;
+     background: linear-gradient(to right, transparent, rgba($gold, 0.5), rgba($champagne, 0.85), rgba($gold, 0.5), transparent);
+ }
+
+ .arf-card__inner {
+     position: relative;
+     z-index: 1;
+     padding: 2rem 2rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.375rem;
+ }
+
+ // ── 2. Header ─────────────────────────────────────────────────────────────
+ .arf-header {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     gap: 0.5rem;
+     margin-bottom: 0.25rem;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3.5rem;
+         height: 3.5rem;
+         border-radius: 50%;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.25);
+         color: $champagne;
+         margin-bottom: 0.375rem;
+
+         svg {
+             width: 1.625rem;
+             height: 1.625rem;
+         }
+     }
+
+     &__title {
+         font-size: 1.25rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: $champagne;
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: rgba($champagne, 0.45);
+         line-height: 1.5;
+         max-width: 340px;
+     }
+ }
+
+ // ── 3. Field Layout ───────────────────────────────────────────────────────
+ .arf-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+ }
+
+ .arf-label {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: rgba($champagne, 0.5);
+
+     &__required {
+         color: lighten($ruby, 28%);
+         font-size: 11px;
+     }
+
+     &__optional {
+         color: rgba($champagne, 0.28);
+         font-weight: 400;
+         text-transform: none;
+         font-size: 9.5px;
+     }
+ }
+
+ // ── 4. Input Wrap (Squircle 12px, Gold focus ring) ────────────────────────
+ .arf-input-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+     border-radius: 12px; // Squircle per spec
+     border: 1.5px solid rgba($champagne, 0.16);
+     background: rgba(255, 255, 255, 0.03);
+     transition: border-color $t-fast, box-shadow $t-fast, background $t-fast;
+
+     &:focus-within {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.16);
+         background: rgba($gold, 0.03);
+     }
+
+     &--valid:not(:focus-within) {
+         border-color: rgba($emerald, 0.4);
+     }
+
+     &--error {
+         border-color: rgba($ruby, 0.5) !important;
+         box-shadow: 0 0 0 3px rgba($ruby, 0.1) !important;
+     }
+
+     &--card {
+         flex: 1;
+     }
+
+     &__icon {
+         position: absolute;
+         left: 0.875rem;
+         width: 1rem;
+         height: 1rem;
+         color: rgba($champagne, 0.35);
+         pointer-events: none;
+         flex-shrink: 0;
+     }
+
+     &__check {
+         position: absolute;
+         right: 0.875rem;
+         width: 1rem;
+         height: 1rem;
+         color: lighten($emerald, 30%);
+         flex-shrink: 0;
+         animation: arf-check-in 200ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+     }
+ }
+
+ .arf-input {
+     width: 100%;
+     height: 2.875rem;
+     padding: 0 2.5rem;
+     background: transparent;
+     border: none;
+     outline: none;
+     font-family: var(--aoms-font-body);
+     font-size: 0.9375rem;
+     font-weight: 500;
+     color: $champagne;
+
+     &::placeholder {
+         color: rgba($champagne, 0.25);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+     &--mono {
+         font-family: 'Courier New', monospace;
+         letter-spacing: 0.06em;
+     }
+
+     // Remove number spinners
+     &[type='number'] {
+         // -moz-appearance: textfield;
+
+         &::-webkit-inner-spin-button,
+         &::-webkit-outer-spin-button {
+             -webkit-appearance: none;
+         }
+     }
+ }
+
+ // ── 5. Field Feedback ─────────────────────────────────────────────────────
+ .arf-field-error {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 25%);
+     padding-left: 0.25rem;
+     animation: arf-fadein 150ms ease forwards;
+ }
+
+ .arf-field-hint {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     color: rgba($champagne, 0.3);
+     padding-left: 0.25rem;
+
+     &__mono {
+         font-family: 'Courier New', monospace;
+         color: $champagne;
+         letter-spacing: 0.05em;
+     }
+ }
+
+ // ── 6. Card Number Row ────────────────────────────────────────────────────
+ .arf-card-input-row {
+     display: flex;
+     align-items: stretch;
+     gap: 0.5rem;
+ }
+
+ .arf-card-prefix {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 0 1rem;
+     border-radius: 12px;
+     background: rgba($gold, 0.08);
+     border: 1.5px solid rgba($gold, 0.25);
+     font-family: 'Courier New', monospace;
+     font-size: 0.9375rem;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     color: $gold;
+     flex-shrink: 0;
+ }
+
+ .arf-generate-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.875rem;
+     height: 2.875rem;
+     border-radius: 12px;
+     border: 1.5px solid rgba($champagne, 0.16);
+     background: rgba(255, 255, 255, 0.03);
+     color: rgba($champagne, 0.5);
+     cursor: pointer;
+     flex-shrink: 0;
+     transition: all $t-fast;
+
+     svg {
+         width: 1rem;
+         height: 1rem;
+     }
+
+     &:hover:not(:disabled) {
+         border-color: $gold;
+         color: $gold;
+         background: rgba($gold, 0.06);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── 7. Tier Selection Grid ────────────────────────────────────────────────
+ .arf-tier-grid {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 0.5rem;
+ }
+
+ .arf-tier-option {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.875rem 0.5rem;
+     border-radius: 12px;
+     border: 1.5px solid rgba($champagne, 0.14);
+     background: rgba(255, 255, 255, 0.02);
+     cursor: pointer;
+     transition: all $t-fast;
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         font-size: 1.25rem;
+         line-height: 1;
+     }
+
+     &__name {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: rgba($champagne, 0.55);
+     }
+
+     // Classic — midnight blue glow
+     &--classic:hover:not(:disabled) {
+         border-color: rgba($champagne, 0.35);
+     }
+
+     &--classic.arf-tier-option--active {
+         border-color: rgba(96, 165, 250, 0.5);
+         background: rgba(96, 165, 250, 0.08);
+         box-shadow: 0 0 12px rgba(96, 165, 250, 0.15);
+
+         .arf-tier-option__icon,
+         .arf-tier-option__name {
+             color: #93c5fd;
+         }
+     }
+
+     // Silver — chrome metallic
+     &--silver:hover:not(:disabled) {
+         border-color: rgba(203, 213, 225, 0.4);
+     }
+
+     &--silver.arf-tier-option--active {
+         border-color: rgba(203, 213, 225, 0.6);
+         background: linear-gradient(135deg, rgba(226, 232, 240, 0.12), rgba(148, 163, 184, 0.08));
+         box-shadow: 0 0 12px rgba(203, 213, 225, 0.2);
+
+         .arf-tier-option__icon,
+         .arf-tier-option__name {
+             color: #e2e8f0;
+         }
+     }
+
+     // Gold — royal gold shine
+     &--gold:hover:not(:disabled) {
+         border-color: rgba($gold, 0.4);
+     }
+
+     &--gold.arf-tier-option--active {
+         border-color: $gold;
+         background: linear-gradient(135deg, rgba($gold, 0.18), rgba($champagne, 0.1));
+         box-shadow: 0 0 16px rgba($gold, 0.25);
+
+         .arf-tier-option__icon,
+         .arf-tier-option__name {
+             color: $champagne;
+         }
+     }
+ }
+
+ // ── 8. Checkbox Row ───────────────────────────────────────────────────────
+ .arf-checkbox-row {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.75rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.1);
+     background: rgba(255, 255, 255, 0.015);
+     cursor: pointer;
+     text-align: left;
+     transition: all $t-fast;
+
+     &:hover {
+         border-color: rgba($champagne, 0.25);
+         background: rgba($champagne, 0.03);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+ }
+
+ .arf-checkbox {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.25rem;
+     height: 1.25rem;
+     border-radius: 5px;
+     border: 1.5px solid rgba($champagne, 0.3);
+     background: transparent;
+     flex-shrink: 0;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: $midnight;
+     }
+
+     &--checked {
+         background: $gold;
+         border-color: $gold;
+     }
+ }
+
+ .arf-checkbox-label {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: rgba($champagne, 0.6);
+     line-height: 1.4;
+ }
+
+ // ── 9. Submit Button — Royal Gold gradient + glow ─────────────────────────
+ .arf-submit-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.5rem;
+     width: 100%;
+     height: 3.125rem;
+     border-radius: 12px;
+     border: none;
+     background: linear-gradient(135deg, lighten($gold, 8%) 0%, $gold 50%, darken($gold, 6%) 100%);
+     color: $midnight;
+     font-family: var(--aoms-font-heading);
+     font-size: 1rem;
+     font-weight: 700;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     position: relative;
+     overflow: hidden;
+     box-shadow: 0 6px 20px rgba($gold, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+     transition: all $t-base;
+     margin-top: 0.25rem;
+
+     svg {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+
+     &::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: -75%;
+         width: 50%;
+         height: 100%;
+         background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+         transform: skewX(-20deg);
+         transition: left 700ms ease;
+     }
+
+     &:hover:not(:disabled) {
+         box-shadow: 0 10px 30px rgba($gold, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+         transform: translateY(-2px);
+
+         &::before {
+             left: 125%;
+         }
+     }
+
+     &:active:not(:disabled) {
+         transform: translateY(0);
+     }
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         transform: none;
+         box-shadow: none;
+
+         &::before {
+             display: none;
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 3px;
+     }
+
+     &__spin {
+         animation: arf-spin 1s linear infinite;
+     }
+ }
+
+ // ── 10. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes arf-fadein {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes arf-check-in {
+     from {
+         opacity: 0;
+         transform: scale(0.5);
+     }
+
+     to {
+         opacity: 1;
+         transform: scale(1);
+     }
+ }
+
+ @keyframes arf-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }

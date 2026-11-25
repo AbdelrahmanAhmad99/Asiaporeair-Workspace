@@ -1,0 +1,122 @@
+<div class="ace-page">
+
+    <!-- ══ Delete Confirmation Modal ════════════════════════════ -->
+    <aoms-config-delete-modal [isVisible]="showDeleteModal()" [configName]="pendingDeleteName()"
+        [isProcessing]="store.isDeleting()" [errorMessage]="store.deleteError()" (confirmed)="onDeleteConfirmed()"
+        (cancelled)="onDeleteCancelled()" (errorDismissed)="onDeleteErrorDismissed()" />
+
+    <!-- ══ Management Control Bar ═══════════════════════════════ -->
+    <aoms-config-action-toolbar [tailNumber]="tailNumber" [configCount]="store.configurations().length"
+        [loading]="store.isLoadingConfigs()" (backTriggered)="navigateToExplorer()" (newConfig)="onNewConfig()"
+        (searchChanged)="onSearchChanged($event)" (refreshTriggered)="store.getConfigs(tailNumber)" />
+
+    <!-- ══ Page Body ══════════════════════════════════════════════ -->
+    <main class="ace-body">
+
+        <!-- Load error -->
+        @if (store.configLoadError()) {
+        <div class="ace-error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ace-error__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{ store.configLoadError() }}
+        </div>
+        }
+
+        <!-- ── New Config Inline Form ────────────────────────────── -->
+        @if (showNewForm()) {
+        <div class="ace-new-form" role="region" aria-label="New configuration form">
+            <h3 class="ace-new-form__title">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ace-new-form__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0
+                     0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1
+                     3m8.5-3 1 3" />
+                </svg>
+                New LOPA Configuration
+            </h3>
+
+            <div class="ace-new-form__fields">
+                <div class="ace-new-form__field ace-new-form__field--wide">
+                    <div class="ace-fl-wrap">
+                        <input class="ace-fl-wrap__input" id="ncf-name" type="text" placeholder=" "
+                            [(ngModel)]="newConfigName" autocomplete="off" aria-required="true" />
+                        <label class="ace-fl-wrap__label" for="ncf-name">
+                            Configuration Name <span class="ace-fl-wrap__req" aria-hidden="true">*</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="ace-new-form__field">
+                    <div class="ace-fl-wrap">
+                        <input class="ace-fl-wrap__input" id="ncf-seats" type="number" placeholder=" "
+                            [(ngModel)]="newConfigSeats" min="1" max="999" aria-required="true" />
+                        <label class="ace-fl-wrap__label" for="ncf-seats">
+                            Total Seat Count <span class="ace-fl-wrap__req" aria-hidden="true">*</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            @if (createError()) {
+            <p class="ace-new-form__error" role="alert">{{ createError() }}</p>
+            }
+
+            <div class="ace-new-form__actions">
+                <button class="ace-new-form__cancel" type="button" (click)="onCancelNewForm()">
+                    Cancel
+                </button>
+                <button class="ace-new-form__submit" type="button" [disabled]="isCreatingConfig()"
+                    (click)="onCreateConfig()">
+                    @if (!isCreatingConfig()) { Create Configuration }
+                    @if (isCreatingConfig()) { Creating… }
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- ── Loading Shimmer ───────────────────────────────────── -->
+        @if (store.isLoadingConfigs()) {
+        <div class="ace-grid" aria-busy="true">
+            @for (r of [1,2,3]; track r) {
+            <div class="ace-shimmer-card">
+                <div class="ace-shimmer-card__name"></div>
+                <div class="ace-shimmer-card__seats"></div>
+                <div class="ace-shimmer-card__bar"></div>
+                <div class="ace-shimmer-card__footer"></div>
+            </div>
+            }
+        </div>
+        }
+
+        <!-- ── Empty State ───────────────────────────────────────── -->
+        @if (!store.isLoadingConfigs() && store.configurations().length === 0) {
+        <aoms-config-empty-state [tailNumber]="tailNumber" (createTriggered)="onNewConfig()" />
+        }
+
+        <!-- ── Configuration Cards ───────────────────────────────── -->
+        @if (!store.isLoadingConfigs() && store.configurations().length > 0) {
+        <div class="ace-grid" [@cardGrid]="store.filteredConfigs().length">
+
+            @for (cfg of store.filteredConfigs(); track cfg.configId) {
+            <aoms-config-version-card [config]="cfg"
+                [isDeleting]="store.isDeleting() && cfg.configId === pendingDeleteId()"
+                (openWorkspace)="onOpenWorkspace($event)" (deleteClicked)="onDeleteClicked($event)"
+                (duplicateClicked)="onDuplicateClicked($event)" />
+            }
+
+            <!-- Filter empty state -->
+            @if (store.filteredConfigs().length === 0) {
+            <div class="ace-filter-empty" role="status">
+                <p class="ace-filter-empty__text">No configurations match the current filter.</p>
+            </div>
+            }
+
+        </div>
+        }
+
+    </main>
+
+</div>

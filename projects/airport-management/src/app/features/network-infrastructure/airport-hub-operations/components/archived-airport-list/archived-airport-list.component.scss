@@ -1,0 +1,483 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $slate: #6C757D;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ============================================================================
+ // 1. Wrapper Card (squircle 12px)
+ // ============================================================================
+ .aal-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 4px 22px rgba($midnight, 0.07);
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease),
+         box-shadow var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Horizontal scroll container
+ // ============================================================================
+ .aal-scroll {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+
+     &::-webkit-scrollbar {
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.28);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 3. Table base
+ // ============================================================================
+ .aal-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 12px; // compact — tighter than the standard 13px
+ }
+
+ // ============================================================================
+ // 4. Sticky Midnight Sapphire Header with Royal Gold labels
+ // ============================================================================
+ .aal-head {
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 2;
+ }
+
+ .aal-th {
+     padding: 0.625rem 0.875rem; // compact header
+     text-align: left;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &:first-child {
+         padding-left: 1rem;
+     }
+
+     &:last-child {
+         padding-right: 1rem;
+     }
+ }
+
+ // ============================================================================
+ // 5. Data Rows — compact mode
+ // ============================================================================
+ .aal-tr {
+     border-bottom: 1px solid rgba($champagne, 0.06);
+     transition: background-color 120ms $ease;
+
+     &--even {
+         background: var(--aoms-bg-card, #ffffff);
+     }
+
+     &--odd {
+         background: rgba($off-white, 0.5);
+     }
+
+     // ── Active row hover ──────────────────────────────────────────────────────
+     &--active:hover {
+         background: rgba($champagne, 0.05) !important;
+
+         .aal-name {
+             color: $midnight;
+         }
+     }
+
+     // ── Deleted row: dimmed, no hover glow ────────────────────────────────────
+     &--deleted {
+         opacity: 0.58;
+
+         &:hover {
+             opacity: 0.72; // slightly reveal on hover without full brightness
+             background: rgba($ruby, 0.03) !important;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Compact cells
+ // ============================================================================
+ .aal-td {
+     vertical-align: middle;
+
+     &:first-child {
+         padding-left: 1rem;
+     }
+
+     &:last-child {
+         padding-right: 1rem;
+     }
+
+     // Compact mode — tighter vertical padding
+     &--compact {
+         padding: 0.5rem 0.875rem;
+     }
+
+     // Status dot cell
+     &--status {
+         width: 2rem;
+         padding-left: 1rem;
+     }
+ }
+
+ // ============================================================================
+ // 7. Status dots
+ // ============================================================================
+ .aal-status-dot {
+     display: inline-block;
+     width: 7px;
+     height: 7px;
+     border-radius: 50%;
+     flex-shrink: 0;
+     vertical-align: middle;
+
+     // Emerald dot — operational
+     &--active {
+         background: #059669;
+         box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.18);
+         animation: aal-pulse-emerald 2.5s ease-in-out infinite;
+     }
+
+     // Ruby dot — deactivated
+     &--deleted {
+         background: $ruby;
+         box-shadow: 0 0 0 2px rgba(113, 13, 6, 0.18);
+     }
+ }
+
+ // ============================================================================
+ // 8. IATA badge — key visual differentiator per row status
+ // ============================================================================
+ .aal-badge-iata {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.175rem 0.5rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 800;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     // Active variant — Royal Gold badge
+     &--active {
+         color: $gold;
+         background: rgba($gold, 0.08);
+         border: 1px solid rgba($gold, 0.22);
+     }
+
+     // Deleted variant — slate/greyed out + CSS strikethrough
+     &--deleted {
+         color: $slate;
+         background: rgba($slate, 0.08);
+         border: 1px solid rgba($slate, 0.2);
+         text-decoration: line-through;
+         text-decoration-color: rgba($ruby, 0.55);
+         text-decoration-thickness: 1.5px;
+     }
+ }
+
+ // ============================================================================
+ // 9. Other cell text styles
+ // ============================================================================
+
+ // ICAO — champagne monospace
+ .aal-icao {
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: 0.07em;
+     color: $champagne;
+ }
+
+ // Airport name
+ .aal-name {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color 120ms $ease;
+     display: block;
+     max-width: 20rem;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+ }
+
+ // City / Country
+ .aal-meta {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-secondary, rgba($charcoal, 0.7));
+     white-space: nowrap;
+ }
+
+ // ISO badge
+ .aal-iso {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     color: var(--aoms-text-muted);
+     text-transform: uppercase;
+ }
+
+ // Coordinates
+ .aal-coord {
+     font-family: 'Courier New', monospace;
+     font-size: 10px;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.03em;
+ }
+
+ // "Live" badge for active rows
+ .aal-operational-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     padding: 0.175rem 0.5rem;
+     border-radius: 3px;
+     background: rgba($emerald, 0.1);
+     border: 1px solid rgba($emerald, 0.25);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: #059669;
+
+     &__icon {
+         width: 0.625rem;
+         height: 0.625rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 10. Responsive column hiding
+ // ============================================================================
+ .aal-col--md-hidden {
+     @media (max-width: 767px) {
+         display: none;
+     }
+ }
+
+ .aal-col--lg-hidden {
+     @media (max-width: 1023px) {
+         display: none;
+     }
+ }
+
+ .aal-col--xl-hidden {
+     @media (max-width: 1279px) {
+         display: none;
+     }
+ }
+
+ // ============================================================================
+ // 11. Shimmer loading skeleton (compact variant)
+ // ============================================================================
+ .aal-shimmer {
+     height: 0.75rem; // compact
+     border-radius: 3px;
+     background: rgba($champagne, 0.08);
+     animation: aal-pulse 1.5s ease-in-out infinite;
+
+     &--dot {
+         width: 7px;
+         height: 7px;
+         border-radius: 50%;
+     }
+ }
+
+ // ============================================================================
+ // 12. Empty state
+ // ============================================================================
+ .aal-empty {
+     padding: 3.5rem 1.5rem;
+     text-align: center;
+ }
+
+ .aal-empty__inner {
+     display: inline-flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.625rem;
+ }
+
+ .aal-empty__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3rem;
+     height: 3rem;
+     border-radius: 10px;
+     background: rgba($gold, 0.07);
+     border: 1px solid rgba($gold, 0.14);
+ }
+
+ .aal-empty__icon {
+     width: 1.375rem;
+     height: 1.375rem;
+     color: var(--aoms-text-muted);
+ }
+
+ .aal-empty__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     margin: 0;
+ }
+
+ .aal-empty__sub {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     max-width: 28ch;
+     margin: 0;
+     line-height: 1.65;
+ }
+
+ // ============================================================================
+ // 13. Footer
+ // ============================================================================
+ .aal-footer {
+     display: flex;
+     align-items: center;
+     padding: 0.5rem 1rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     background: rgba($off-white, 0.5);
+ }
+
+ .aal-footer__count {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.01em;
+
+     strong {
+         font-weight: 700;
+         color: var(--aoms-text-secondary);
+     }
+ }
+
+ // ============================================================================
+ // 14. Keyframes
+ // ============================================================================
+ @keyframes aal-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ @keyframes aal-pulse-emerald {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4);
+     }
+
+     50% {
+         box-shadow: 0 0 0 4px rgba(5, 150, 105, 0);
+     }
+ }
+
+ // ============================================================================
+ // 15. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .aal-card {
+         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+     }
+
+     .aal-tr--even {
+         background: rgba(255, 255, 255, 0.025);
+     }
+
+     .aal-tr--odd {
+         background: rgba(255, 255, 255, 0.01);
+     }
+
+     .aal-tr--active:hover {
+         background: rgba($champagne, 0.04) !important;
+
+         .aal-name {
+             color: $champagne;
+         }
+     }
+
+     .aal-tr--deleted:hover {
+         background: rgba($ruby, 0.06) !important;
+     }
+
+     .aal-badge-iata--active {
+         color: $champagne;
+         background: rgba($champagne, 0.1);
+         border-color: rgba($champagne, 0.25);
+     }
+
+     .aal-badge-iata--deleted {
+         color: rgba($slate, 0.6);
+         background: rgba($slate, 0.08);
+         border-color: rgba($slate, 0.15);
+     }
+
+     .aal-icao {
+         color: rgba($champagne, 0.7);
+     }
+
+     .aal-name {
+         color: rgba(255, 255, 255, 0.82);
+     }
+
+     .aal-meta {
+         color: rgba(255, 255, 255, 0.45);
+     }
+
+     .aal-iso {
+         color: rgba(255, 255, 255, 0.28);
+     }
+
+     .aal-coord {
+         color: rgba(255, 255, 255, 0.25);
+     }
+
+     .aal-footer {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+ }

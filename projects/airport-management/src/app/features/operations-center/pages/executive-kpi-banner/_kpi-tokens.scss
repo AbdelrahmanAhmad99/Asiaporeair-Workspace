@@ -1,0 +1,42 @@
+ @mixin kb-tokens {
+     --kb-sapphire: var(--aoms-color-primary, #051937);
+     --kb-gold: var(--aoms-color-secondary, #b68f24);
+     --kb-champagne: var(--aoms-color-accent, #e2c780);
+
+     --kb-card: var(--aoms-surface-card, #f8f9fa);
+     --kb-text: var(--aoms-color-text, #101056);
+     --kb-text-muted: color-mix(in srgb, var(--kb-text) 74%, var(--kb-card));
+
+     --kb-champagne-hairline: rgba(226, 199, 128, 0.55);
+     --kb-champagne-track: rgba(226, 199, 128, 0.38);
+
+     // Status colours (guideline values). They sit on Ivory, where they read at AA or better.
+     --kb-emerald: var(--aoms-color-success, #064e3b);
+     --kb-amber: var(--aoms-color-warning, #b45309);
+     --kb-ruby: var(--aoms-color-danger, #710d06);
+
+     --kb-radius-card: 12px;
+     --kb-radius-chip: 4px;
+     // Soft, blue-tinted shadows. Never black. The band is dark, so the lift is slightly stronger than on Ivory.
+     --kb-shadow-rest: 0 4px 14px rgba(5, 25, 55, 0.22);
+     --kb-shadow-hover: 0 12px 30px rgba(5, 25, 55, 0.38);
+
+     --kb-font: 'Inter', 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+ }
+
+ @mixin kb-focus-ring {
+     outline: 2px solid var(--kb-gold);
+     outline-offset: 3px;
+ }
+
+ @mixin kb-visually-hidden {
+     position: absolute;
+     width: 1px;
+     height: 1px;
+     margin: -1px;
+     padding: 0;
+     overflow: hidden;
+     clip-path: inset(50%);
+     white-space: nowrap;
+     border: 0;
+ }

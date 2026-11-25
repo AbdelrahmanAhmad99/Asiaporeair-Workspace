@@ -1,0 +1,110 @@
+<!-- ============================================================================
+     login-history-list.component.html
+     Asiaporeair | Login History — Device, Location, Date, Revoke CTA
+     ============================================================================ -->
+
+<div class="lhl-card">
+
+    <!-- Header -->
+    <div class="lhl-card__header">
+        <div class="lhl-card__title-block">
+            <div class="lhl-card__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="lhl-card__title">Recent Login Activity</h3>
+                <p class="lhl-card__subtitle">Devices that have recently accessed your suite</p>
+            </div>
+        </div>
+
+        @if (!isLoading) {
+        <span class="lhl-card__count">{{ records.length }}</span>
+        }
+    </div>
+
+    <div class="lhl-card__rule" aria-hidden="true"></div>
+
+    <!-- Skeleton shimmer rows -->
+    @if (isLoading) {
+    <div class="lhl-skeleton-list" aria-busy="true" aria-label="Loading login history">
+        @for (i of skeletonRows; track i) {
+        <div class="lhl-skeleton-row">
+            <div class="lhl-skeleton__icon"></div>
+            <div class="lhl-skeleton__body">
+                <div class="lhl-skeleton__line lhl-skeleton__line--name"></div>
+                <div class="lhl-skeleton__line lhl-skeleton__line--detail"></div>
+            </div>
+            <div class="lhl-skeleton__date"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Session rows -->
+    @if (!isLoading) {
+    @if (records.length === 0) {
+    <div class="lhl-empty">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"
+            aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        <p>No login activity found</p>
+    </div>
+    } @else {
+    <ul class="lhl-list" role="list">
+        @for (record of records; track record.id) {
+        <li class="lhl-row" [class.lhl-row--current]="record.isCurrent">
+
+            <!-- Device icon -->
+            <div class="lhl-row__icon" [innerHTML]="deviceIcon(record.deviceType)" aria-hidden="true"></div>
+
+            <!-- Main info -->
+            <div class="lhl-row__body">
+                <div class="lhl-row__device-row">
+                    <span class="lhl-row__device">{{ record.deviceName }}</span>
+                    @if (record.isCurrent) {
+                    <span class="lhl-current-badge" role="status">This device</span>
+                    }
+                </div>
+                <div class="lhl-row__meta">
+                    <span class="lhl-row__location">
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        {{ record.location }}
+                    </span>
+                    @if (record.ipAddress) {
+                    <span class="lhl-row__ip">{{ record.ipAddress }}</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Date + time -->
+            <div class="lhl-row__datetime">
+                <span class="lhl-row__date">{{ formatDate(record.loginAt) }}</span>
+                <span class="lhl-row__time">{{ formatTime(record.loginAt) }}</span>
+            </div>
+
+            <!-- Revoke button (not shown for current session) -->
+            @if (!record.isCurrent) {
+            <button class="lhl-revoke-btn" type="button" (click)="onRevoke(record.id)"
+                [attr.aria-label]="'Revoke session from ' + record.deviceName">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+            }
+
+        </li>
+        }
+    </ul>
+    }
+    }
+
+</div>

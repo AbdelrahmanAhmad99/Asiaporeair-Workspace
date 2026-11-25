@@ -1,0 +1,181 @@
+<!-- ============================================================================
+     flight-search.component.html
+     Asiaporeair | "Explore Global Suites" — Flight Discovery Landing Page
+     Stack: Hero → SearchEngine → PopularRoutes → DestinationExplorer → Promos
+     ============================================================================ -->
+
+<div class="fs-page">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HERO HEADER — Midnight Sapphire
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="fs-hero" [@heroReveal] role="banner">
+
+        <!-- Ambient particles -->
+        <div class="fs-hero__particles" aria-hidden="true">
+            @for (p of [1,2,3,4,5,6,7,8,9,10,11,12]; track p) {
+            <span class="fs-particle"></span>
+            }
+        </div>
+
+        <!-- Diagonal geometric accent line -->
+        <div class="fs-hero__geo" aria-hidden="true"></div>
+
+        <div class="fs-hero__inner">
+
+            <!-- Top nav row -->
+            <div class="fs-hero__nav-row">
+                <div class="fs-hero__brand">
+                    <span class="fs-brand-text" aria-label="Asiaporeair">ASIAPOREAIR</span>
+                    <span class="fs-brand-divider" aria-hidden="true">|</span>
+                    <span class="fs-brand-tagline">Global Aviation Excellence</span>
+                </div>
+                <nav class="fs-hero__quick-nav" aria-label="Quick navigation">
+                    <a class="fs-quick-link" href="/flight-info/status">Flight Status</a>
+                    <a class="fs-quick-link" href="/flight-info/fares">Fare Directory</a>
+                    <a class="fs-quick-link fs-quick-link--highlight" href="/check-in/search">
+                        Boarding & Services
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Gold rule -->
+            <div class="fs-hero__rule" aria-hidden="true"></div>
+
+            <!-- Title block -->
+            <div class="fs-hero__title-block">
+                <div class="fs-hero__eyebrow" aria-hidden="true">
+                    <div class="fs-eyebrow-line"></div>
+                    <span>Premium Journeys Await</span>
+                    <div class="fs-eyebrow-line"></div>
+                </div>
+
+                <h1 class="fs-hero__title">
+                    Explore <span class="fs-hero__title-accent">Global Suites</span>
+                </h1>
+
+                <p class="fs-hero__subtitle">
+                    First-class experiences on over 60 routes. Exceptional service, every mile of the journey.
+                </p>
+
+                <!-- Trust badges -->
+                <div class="fs-trust-row" aria-label="Trust indicators">
+                    <div class="fs-trust-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                            aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        Secure Booking
+                    </div>
+                    <div class="fs-trust-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                            aria-hidden="true">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        5-Star Loyalty
+                    </div>
+                    <div class="fs-trust-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                            aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        24/7 Concierge
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         SEARCH ENGINE — Elevated over the ivory body
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="fs-engine-wrapper" id="flight-search-engine-anchor">
+        <div class="fs-engine-inner">
+            <app-flight-search-engine></app-flight-search-engine>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN BODY — Ivory background
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="fs-body" role="main" [@sectionStagger]>
+
+        <!-- ── Patch toast notification ─────────────────────────────── -->
+        @if (showPatchToast()) {
+        <div class="fs-patch-toast" role="status" aria-live="polite" [@fadeSlideUp]>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="2"
+                aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Search form updated for
+            <strong>{{ lastPatchedDestination() }}</strong>
+            — review and search when ready.
+        </div>
+        }
+
+        <!-- ── Popular Routes ──────────────────────────────────────── -->
+        <section class="section-block" aria-label="Popular routes">
+            <div class="fs-container">
+                <app-popular-routes [routes]="popularRoutes()" [isLoading]="false"
+                    (routeSelected)="onRouteSelected($event)">
+                </app-popular-routes>
+            </div>
+        </section>
+
+        <!-- ── Section divider ─────────────────────────────────────── -->
+        <div class="fs-divider" aria-hidden="true">
+            <div class="fs-divider__line"></div>
+            <div class="fs-divider__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1">
+                    <path
+                        d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                </svg>
+            </div>
+            <div class="fs-divider__line"></div>
+        </div>
+
+        <!-- ── Destination Explorer ────────────────────────────────── -->
+        <section class="section-block" aria-label="Explore destinations">
+            <div class="fs-container">
+                <app-destination-explorer [destinations]="destinationCards()" [isLoading]="false"
+                    (destinationSelected)="onDestinationSelected($event)">
+                </app-destination-explorer>
+            </div>
+        </section>
+
+        <!-- ── Section divider ─────────────────────────────────────── -->
+        <div class="fs-divider" aria-hidden="true">
+            <div class="fs-divider__line"></div>
+            <div class="fs-divider__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1">
+                    <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+            </div>
+            <div class="fs-divider__line"></div>
+        </div>
+
+        <!-- ── Promotional Banners ─────────────────────────────────── -->
+        <section class="section-block" aria-label="Promotional offers">
+            <div class="fs-container">
+                <app-flight-promo-banners [banners]="promoBanners()" [autoPlayIntervalMs]="5500"
+                    (bannerCtaClicked)="onBannerCta($event)">
+                </app-flight-promo-banners>
+            </div>
+        </section>
+
+        <!-- ── Footer note ─────────────────────────────────────────── -->
+        <footer class="fs-footer" role="contentinfo">
+            <p class="fs-footer__note">
+                Fares are indicative and subject to availability. All prices displayed in SGD unless stated otherwise.
+                Asiaporeair Loyalty points apply to qualifying fares.
+            </p>
+        </footer>
+
+    </main>
+
+</div>

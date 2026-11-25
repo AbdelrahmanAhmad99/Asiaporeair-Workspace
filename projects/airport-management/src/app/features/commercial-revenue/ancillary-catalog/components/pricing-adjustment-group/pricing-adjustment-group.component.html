@@ -1,0 +1,151 @@
+<div class="pag-card">
+
+    <!-- ── Card Header ────────────────────────────────────────────── -->
+    <div class="pag-card-header">
+        <svg class="pag-card-header__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+        </svg>
+        <div>
+            <h3 class="pag-card-header__title">Pricing &amp; Financial Control</h3>
+            <p class="pag-card-header__sub">Base price, tax handling, and net price preview</p>
+        </div>
+    </div>
+
+    <!-- ── Skeleton Loading ──────────────────────────────────────── -->
+    @if (isLoading()) {
+    <div class="pag-skeleton-wrap" aria-hidden="true">
+        @for (i of skeletonFields; track i) {
+        <div class="pag-sk-field">
+            <div class="pag-sk pag-sk--label"></div>
+            <div class="pag-sk pag-sk--input"></div>
+        </div>
+        }
+        <div class="pag-sk pag-sk--net"></div>
+    </div>
+    }
+
+    <!-- ── Form Body ─────────────────────────────────────────────── -->
+    @if (!isLoading()) {
+    <form class="pag-form" [formGroup]="form" novalidate>
+
+        <!-- Base Price + Currency -->
+        <div class="pag-row">
+
+            <!-- Base Price -->
+            <div class="pag-field pag-field--grow">
+                <label class="pag-label" for="pag-base-cost">
+                    Base Price <span class="pag-label__req" aria-label="required">*</span>
+                </label>
+                <div class="pag-input-prefix-wrap">
+                    <span class="pag-input-prefix">{{ currencySymbol() }}</span>
+                    <input id="pag-base-cost" class="pag-input pag-input--prefixed"
+                        [class.pag-input--error]="isInvalid('baseCost')" type="number" formControlName="baseCost"
+                        placeholder="0.00" min="0" max="100000" step="0.01" aria-describedby="pag-base-cost-err" />
+                </div>
+                @if (isInvalid('baseCost')) {
+                <p class="pag-error" id="pag-base-cost-err" role="alert">{{ getError('baseCost') }}</p>
+                }
+            </div>
+
+            <!-- Currency -->
+            <div class="pag-field">
+                <label class="pag-label" for="pag-currency">Currency</label>
+                <div class="pag-select-wrap">
+                    <select id="pag-currency" class="pag-select" formControlName="currency" aria-label="Currency">
+                        @for (c of currencies; track c.value) {
+                        <option [value]="c.value">{{ c.value }}</option>
+                        }
+                    </select>
+                    <svg class="pag-select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                    </svg>
+                </div>
+                <p class="pag-hint pag-hint--small">Display only</p>
+            </div>
+
+        </div>
+
+        <!-- Unit of Measure -->
+        <div class="pag-field">
+            <label class="pag-label" for="pag-unit">
+                Unit of Measure <span class="pag-label__req" aria-label="required">*</span>
+            </label>
+            <div class="pag-select-wrap">
+                <select id="pag-unit" class="pag-select" [class.pag-select--error]="isInvalid('unitOfMeasure')"
+                    formControlName="unitOfMeasure" aria-describedby="pag-unit-err">
+                    @for (u of units; track u.value) {
+                    <option [value]="u.value">{{ u.label }}</option>
+                    }
+                </select>
+                <svg class="pag-select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+            </div>
+            @if (isInvalid('unitOfMeasure')) {
+            <p class="pag-error" id="pag-unit-err" role="alert">{{ getError('unitOfMeasure') }}</p>
+            }
+        </div>
+
+        <!-- Tax Percentage -->
+        <div class="pag-field">
+            <label class="pag-label" for="pag-tax">
+                Tax Rate
+                <span class="pag-label__hint" title="Used for the Net Price preview only">(preview only)</span>
+            </label>
+            <div class="pag-input-suffix-wrap">
+                <input id="pag-tax" class="pag-input pag-input--suffixed"
+                    [class.pag-input--error]="isInvalid('taxPercentage')" type="number" formControlName="taxPercentage"
+                    placeholder="0" min="0" max="100" step="0.5" aria-describedby="pag-tax-err" />
+                <span class="pag-input-suffix">%</span>
+            </div>
+            @if (isInvalid('taxPercentage')) {
+            <p class="pag-error" id="pag-tax-err" role="alert">{{ getError('taxPercentage') }}</p>
+            }
+
+            <!-- Tax presets -->
+            <div class="pag-presets" aria-label="Quick tax rate presets">
+                @for (preset of taxPresets; track preset) {
+                <button class="pag-preset-btn" type="button"
+                    [class.pag-preset-btn--active]="form.get('taxPercentage')?.value === preset"
+                    (click)="applyTaxPreset(preset)" [attr.aria-label]="'Set tax rate to ' + preset + ' percent'">
+                    {{ preset }}%
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- ── Net Price Calculator ───────────────────────────────────── -->
+        <div class="pag-net-price">
+            <div class="pag-net-price__row">
+                <span class="pag-net-price__label">Base Price</span>
+                <span class="pag-net-price__value">{{ currencySymbol() }}{{ (form.get('baseCost')?.value || 0) |
+                    number:'1.2-2' }}</span>
+            </div>
+            <div class="pag-net-price__row">
+                <span class="pag-net-price__label">
+                    + Tax ({{ form.get('taxPercentage')?.value || 0 }}%)
+                </span>
+                <span class="pag-net-price__value pag-net-price__value--muted">
+                    {{ currencySymbol() }}{{ taxAmount() | number:'1.2-2' }}
+                </span>
+            </div>
+            <div class="pag-net-price__divider" aria-hidden="true"></div>
+            <div class="pag-net-price__row pag-net-price__row--total">
+                <span class="pag-net-price__label pag-net-price__label--total">Net Price</span>
+                <span class="pag-net-price__value pag-net-price__value--total">
+                    {{ currencySymbol() }}{{ netPrice() | number:'1.2-2' }}
+                </span>
+            </div>
+            <p class="pag-net-price__caption">
+                Net Price = Base Price + (Base Price × Tax Rate). This preview updates live as you type.
+            </p>
+        </div>
+
+    </form>
+    }
+
+</div>

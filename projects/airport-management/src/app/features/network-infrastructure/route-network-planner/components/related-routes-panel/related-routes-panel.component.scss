@@ -1,0 +1,399 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #9f1239;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Panel wrapper — Midnight Sapphire card, two-column grid
+ // ============================================================================
+ .rrp-panel {
+     display: grid;
+     grid-template-columns: 1fr auto 1fr;
+     gap: 0;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($gold, 0.14);
+     box-shadow: 0 8px 32px rgba($midnight, 0.28);
+     overflow: hidden;
+     animation: rrp-enter 440ms $luxury 120ms both;
+
+     @media (max-width: 800px) {
+         grid-template-columns: 1fr;
+         grid-template-rows: auto auto auto;
+     }
+ }
+
+ // ============================================================================
+ // 2. Vertical divider between panes
+ // ============================================================================
+ .rrp-divider {
+     width: 1px;
+     background: rgba($champagne, 0.1);
+     margin: 1.25rem 0;
+
+     @media (max-width: 800px) {
+         width: auto;
+         height: 1px;
+         margin: 0 1.25rem;
+     }
+ }
+
+ // ============================================================================
+ // 3. Individual pane
+ // ============================================================================
+ .rrp-pane {
+     display: flex;
+     flex-direction: column;
+     min-width: 0;
+ }
+
+ // ── Pane header ───────────────────────────────────────────────────────────────
+ .rrp-pane__header {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 1.125rem 1.375rem 0.75rem;
+     border-bottom: 1px solid rgba($champagne, 0.08);
+     background: rgba(255, 255, 255, 0.025);
+ }
+
+ .rrp-pane__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 8px;
+
+     // Origin pane — Gold tinted
+     &--origin {
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.22);
+     }
+
+     // Destination pane — Champagne tinted
+     &--dest {
+         background: rgba($champagne, 0.08);
+         border: 1px solid rgba($champagne, 0.18);
+     }
+ }
+
+ .rrp-pane__icon {
+     width: 1rem;
+     height: 1rem;
+     color: $champagne;
+ }
+
+ .rrp-pane__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: rgba(255, 255, 255, 0.85);
+     margin: 0 0 0.15rem;
+ }
+
+ .rrp-pane__subtitle {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 400;
+     color: rgba($champagne, 0.45);
+     margin: 0;
+ }
+
+ .rrp-pane__subtitle-iata {
+     font-weight: 800;
+     letter-spacing: 0.08em;
+     color: $champagne;
+ }
+
+ // Count badge
+ .rrp-pane__count {
+     margin-left: auto;
+     flex-shrink: 0;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     min-width: 1.5rem;
+     height: 1.5rem;
+     padding: 0 0.375rem;
+     border-radius: 3px;
+     background: rgba($gold, 0.12);
+     border: 1px solid rgba($gold, 0.22);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 700;
+     color: $champagne;
+ }
+
+ // ============================================================================
+ // 4. Route list
+ // ============================================================================
+ .rrp-list {
+     list-style: none;
+     margin: 0;
+     padding: 0.375rem 0;
+     flex: 1;
+     overflow-y: auto;
+     max-height: 22rem;
+
+     &::-webkit-scrollbar {
+         width: 3px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.2);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 5. Individual route row — staggered fade-in
+ // ============================================================================
+ .rrp-row {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.5rem 1.375rem;
+     border-bottom: 1px solid rgba($champagne, 0.05);
+     transition: background-color 120ms $ease;
+     animation: rrp-row-enter 240ms $luxury both;
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.04);
+
+         .rrp-analyze-btn {
+             opacity: 1;
+         }
+     }
+
+     // Inactive rows — dimmed
+     &--inactive {
+         opacity: 0.55;
+
+         &:hover {
+             opacity: 0.75;
+         }
+     }
+
+     // Shimmer variant
+     &--shimmer {
+         animation: none;
+     }
+ }
+
+ // ============================================================================
+ // 6. IATA badges — Champagne Gold accents per spec
+ // ============================================================================
+ .rrp-iata {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 800;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.5rem;
+     border-radius: 4px;
+     flex-shrink: 0;
+
+     // Origin — Royal Gold
+     &--origin {
+         color: $gold;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.2);
+     }
+
+     // Destination — Champagne
+     &--dest {
+         color: $champagne;
+         background: rgba($champagne, 0.07);
+         border: 1px solid rgba($champagne, 0.16);
+     }
+ }
+
+ // Route arrow
+ .rrp-arrow {
+     width: 0.875rem;
+     height: 0.875rem;
+     color: rgba($champagne, 0.3);
+     flex-shrink: 0;
+ }
+
+ // ============================================================================
+ // 7. Other cell text
+ // ============================================================================
+ .rrp-dist {
+     font-family: 'Courier New', monospace;
+     font-size: 10px;
+     color: rgba($champagne, 0.38);
+     letter-spacing: 0.04em;
+     margin-left: auto;
+     white-space: nowrap;
+ }
+
+ // Status dot
+ .rrp-dot {
+     display: inline-block;
+     width: 6px;
+     height: 6px;
+     border-radius: 50%;
+     flex-shrink: 0;
+
+     &--active {
+         background: #059669;
+         box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.18);
+     }
+
+     &--inactive {
+         background: rgba($ruby, 0.7);
+         box-shadow: 0 0 0 2px rgba($ruby, 0.1);
+     }
+ }
+
+ // ============================================================================
+ // 8. Analyze quick-jump button
+ // ============================================================================
+ .rrp-analyze-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.625rem;
+     height: 1.625rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.18);
+     background: transparent;
+     color: rgba($champagne, 0.45);
+     cursor: pointer;
+     flex-shrink: 0;
+     opacity: 0.4;
+     transition: all 150ms $ease;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+
+     &:hover {
+         background: rgba($gold, 0.1);
+         border-color: rgba($gold, 0.35);
+         color: $gold;
+         opacity: 1;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 9. Empty state
+ // ============================================================================
+ .rrp-empty {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 2.5rem 1.375rem;
+ }
+
+ .rrp-empty__text {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-style: italic;
+     color: rgba($champagne, 0.3);
+     text-align: center;
+     line-height: 1.5;
+     margin: 0;
+ }
+
+ // ============================================================================
+ // 10. Shimmer skeleton
+ // ============================================================================
+ .rrp-shimmer {
+     border-radius: 3px;
+     background: rgba($champagne, 0.07);
+     animation: rrp-pulse 1.5s ease-in-out infinite;
+
+     &--iata {
+         width: 44px;
+         height: 0.875rem;
+         border-radius: 4px;
+     }
+
+     &--arrow {
+         width: 0.875rem;
+         height: 0.875rem;
+         border-radius: 2px;
+     }
+
+     &--dist {
+         width: 56px;
+         height: 0.75rem;
+         margin-left: auto;
+     }
+ }
+
+ // ============================================================================
+ // 11. Keyframes
+ // ============================================================================
+ @keyframes rrp-enter {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes rrp-row-enter {
+     from {
+         opacity: 0;
+         transform: translateX(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes rrp-pulse {
+
+     0%,
+     100% {
+         opacity: 0.45;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 12. Dark Mode — panel is already dark-first
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .rrp-panel {
+         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+     }
+ }

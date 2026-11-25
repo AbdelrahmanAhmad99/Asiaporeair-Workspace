@@ -1,0 +1,217 @@
+<form class="sfu-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off">
+
+    <!-- Backend / API error banner -->
+    @if (formError()) {
+    <div class="sfu-api-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        <span>{{ formError() }}</span>
+    </div>
+    }
+
+    <!-- ── Section 1: Identifiers ──────────────────────────────── -->
+    <div class="sfu-card">
+        <div class="sfu-card__header">
+            <div class="sfu-card__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                   0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="sfu-card__title">Schedule Identifiers</h3>
+                <p class="sfu-card__subtitle">Flight number, route assignment, and operational parameters</p>
+            </div>
+        </div>
+
+        <div class="sfu-fields sfu-fields--two">
+
+            <!-- Flight Number -->
+            <div class="sfu-field" [class.sfu-field--error]="isInvalid('flightNo')">
+                <input id="sfu-flightno" class="sfu-input" type="text" formControlName="flightNo" maxlength="8"
+                    placeholder=" " (input)="onFlightNoInput($any($event.target).value)"
+                    [attr.aria-invalid]="isInvalid('flightNo') ? 'true' : null">
+                <label class="sfu-label" for="sfu-flightno">
+                    Flight Number <span class="sfu-label__req">*</span>
+                </label>
+                @if (isInvalid('flightNo')) {
+                <span class="sfu-field__err" role="alert">
+                    @if (form.get('flightNo')?.hasError('required')) { Required. }
+                    @else { 2–8 alphanumeric characters (e.g. SQ321). }
+                </span>
+                }
+            </div>
+
+            <!-- Route ID -->
+            <div class="sfu-field" [class.sfu-field--error]="isInvalid('routeId')">
+                <input id="sfu-route" class="sfu-input" type="number" formControlName="routeId" min="1" step="1"
+                    placeholder=" " [attr.aria-invalid]="isInvalid('routeId') ? 'true' : null">
+                <label class="sfu-label" for="sfu-route">
+                    Route ID <span class="sfu-label__req">*</span>
+                </label>
+                @if (isInvalid('routeId')) {
+                <span class="sfu-field__err" role="alert">
+                    @if (form.get('routeId')?.hasError('required')) { Required. }
+                    @else { Must be a valid positive route ID. }
+                </span>
+                }
+            </div>
+        </div>
+
+        <div class="sfu-fields sfu-fields--two" style="margin-top: 1.5rem;">
+            <!-- Airline -->
+            <div class="sfu-field" [class.sfu-field--error]="isInvalid('airlineIataCode')">
+                <select id="sfu-airline" class="sfu-input" formControlName="airlineIataCode"
+                    [attr.aria-invalid]="isInvalid('airlineIataCode') ? 'true' : null">
+                    <option value="" disabled selected>Select Airline</option>
+                    @for (item of airlines(); track item.iataCode) {
+                    <option [value]="item.iataCode">{{ item.iataCode }} - {{ item.name }}</option>
+                    }
+                </select>
+                <label class="sfu-label" for="sfu-airline">
+                    Operating Airline <span class="sfu-label__req">*</span>
+                </label>
+                @if (isInvalid('airlineIataCode')) {
+                <span class="sfu-field__err" role="alert">Required.</span>
+                }
+            </div>
+
+            <!-- Aircraft Type -->
+            <div class="sfu-field" [class.sfu-field--error]="isInvalid('aircraftTypeId')">
+                <select id="sfu-aircraft" class="sfu-input" formControlName="aircraftTypeId"
+                    [attr.aria-invalid]="isInvalid('aircraftTypeId') ? 'true' : null">
+                    <option [value]="null" disabled selected>Select Aircraft Type</option>
+                    @for (item of aircraftTypes(); track item.typeId) {
+                    <option [value]="item.typeId">{{ item.model }} ({{ item.manufacturer }})</option>
+                    }
+                </select>
+                <label class="sfu-label" for="sfu-aircraft">
+                    Aircraft Type <span class="sfu-label__req">*</span>
+                </label>
+                @if (isInvalid('aircraftTypeId')) {
+                <span class="sfu-field__err" role="alert">Required.</span>
+                }
+            </div>
+        </div>
+    </div><!-- /sfu-card: Identifiers -->
+
+    <!-- ── Section 2: Times ────────────────────────────────────── -->
+    <div class="sfu-card">
+        <div class="sfu-card__header">
+            <div class="sfu-card__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="sfu-card__title">Scheduled Block Times</h3>
+                <p class="sfu-card__subtitle">Master departure and arrival times (local / UTC basis)</p>
+            </div>
+        </div>
+
+        <div class="sfu-fields sfu-fields--two">
+
+            <!-- Departure Time -->
+            <div class="sfu-field" [class.sfu-field--error]="isInvalid('departureTimeScheduled')">
+                <input id="sfu-dep" class="sfu-input sfu-input--time" type="time"
+                    formControlName="departureTimeScheduled" placeholder=" "
+                    [attr.aria-invalid]="isInvalid('departureTimeScheduled') ? 'true' : null">
+                <label class="sfu-label" for="sfu-dep">
+                    Departure Time <span class="sfu-label__req">*</span>
+                </label>
+                @if (isInvalid('departureTimeScheduled')) {
+                <span class="sfu-field__err" role="alert">Required. Format: HH:MM</span>
+                }
+            </div>
+
+            <!-- Arrival Time -->
+            <div class="sfu-field" [class.sfu-field--error]="isInvalid('arrivalTimeScheduled')">
+                <input id="sfu-arr" class="sfu-input sfu-input--time" type="time" formControlName="arrivalTimeScheduled"
+                    placeholder=" " [attr.aria-invalid]="isInvalid('arrivalTimeScheduled') ? 'true' : null">
+                <label class="sfu-label" for="sfu-arr">
+                    Arrival Time <span class="sfu-label__req">*</span>
+                </label>
+                @if (isInvalid('arrivalTimeScheduled')) {
+                <span class="sfu-field__err" role="alert">Required. Format: HH:MM</span>
+                }
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Section 3: Operating Days ──────────────────────────── -->
+    <div class="sfu-card">
+        <div class="sfu-card__header">
+            <div class="sfu-card__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25
+                   2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0
+                   21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="sfu-card__title">Operating Frequency</h3>
+                <p class="sfu-card__subtitle">Days of week this schedule operates</p>
+            </div>
+        </div>
+
+        <div class="sfu-days" role="group" aria-label="Days of week">
+            @for (day of days; track day.value) {
+            <button class="sfu-day-btn" type="button" [class.sfu-day-btn--active]="isDaySelected(day.value)"
+                (click)="toggleDay(day.value)" [attr.aria-pressed]="isDaySelected(day.value)"
+                [attr.aria-label]="day.label">
+                {{ day.short }}
+            </button>
+            }
+        </div>
+
+        @if (selectedDays().size === 0) {
+        <p class="sfu-days-error" role="alert">At least one operating day is required.</p>
+        }
+    </div>
+
+    <!-- ── Section 4: Validity Period ──────────────────────────── -->
+    <div class="sfu-card">
+        <div class="sfu-card__header">
+            <div class="sfu-card__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                   2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                   16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="sfu-card__title">Validity Period</h3>
+                <p class="sfu-card__subtitle">Date range during which this schedule is operational</p>
+            </div>
+        </div>
+
+        <div class="sfu-fields sfu-fields--two">
+
+            <!-- Start Date -->
+            <div class="sfu-field" [class.sfu-field--error]="isInvalid('effectiveStartDate')">
+                <input id="sfu-start" class="sfu-input sfu-input--date" type="date" formControlName="effectiveStartDate"
+                    placeholder=" " [attr.aria-invalid]="isInvalid('effectiveStartDate') ? 'true' : null">
+                <label class="sfu-label" for="sfu-start">
+                    Effective From <span class="sfu-label__req">*</span>
+                </label>
+                @if (isInvalid('effectiveStartDate')) {
+                <span class="sfu-field__err" role="alert">Start date is required.</span>
+                }
+            </div>
+
+            <!-- End Date (optional) -->
+            <div class="sfu-field">
+                <input id="sfu-end" class="sfu-input sfu-input--date" type="date" formControlName="effectiveEndDate"
+                    placeholder=" ">
+                <label class="sfu-label" for="sfu-end">Effective Until</label>
+                <span class="sfu-field__hint">Leave empty for open-ended schedules</span>
+            </div>
+
+        </div>
+    </div>
+
+</form>

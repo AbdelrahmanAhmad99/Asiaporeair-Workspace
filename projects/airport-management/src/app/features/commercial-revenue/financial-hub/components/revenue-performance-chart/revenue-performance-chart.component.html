@@ -1,0 +1,105 @@
+<div class="rpc-card" role="figure" aria-label="Revenue performance trend chart">
+
+    <!-- ── Header ─────────────────────────────────────────────────── -->
+    <div class="rpc-header">
+        <div>
+            <h3 class="rpc-header__title">Revenue Performance</h3>
+            <p class="rpc-header__sub">
+                Gross daily revenue
+                @if (rangeLabel()) { — {{ rangeLabel() }} }
+            </p>
+        </div>
+
+        @if (!loading() && data().length > 0) {
+        <div class="rpc-header__stats">
+            <div class="rpc-stat">
+                <span class="rpc-stat__label">Daily Avg</span>
+                <span class="rpc-stat__value">{{ currencySymbol() }}{{ fmtCurrency(averageDailyRevenue()) }}</span>
+            </div>
+            @if (peakDay()) {
+            <div class="rpc-stat">
+                <span class="rpc-stat__label">Peak Day</span>
+                <span class="rpc-stat__value rpc-stat__value--gold">{{ currencySymbol() }}{{
+                    fmtCurrency(peakDay()!.totalRevenue) }}</span>
+            </div>
+            }
+        </div>
+        }
+    </div>
+
+    <!-- ── Skeleton Loading ──────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="rpc-skeleton" aria-hidden="true">
+        <div class="rpc-sk rpc-sk--chart"></div>
+    </div>
+    }
+
+    <!-- ── Chart ─────────────────────────────────────────────────── -->
+    @if (!loading() && plottedPoints().length > 0) {
+    <div class="rpc-chart-wrap">
+        <svg class="rpc-svg" [attr.viewBox]="'0 0 ' + vbWidth + ' ' + vbHeight" preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg">
+
+            <defs>
+                <linearGradient id="rpcAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#051937" stop-opacity="0.55" />
+                    <stop offset="55%" stop-color="#B68F24" stop-opacity="0.18" />
+                    <stop offset="100%" stop-color="#051937" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="rpcLineGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#B68F24" />
+                    <stop offset="100%" stop-color="#E2C780" />
+                </linearGradient>
+            </defs>
+
+            <!-- Gridlines -->
+            @for (line of gridLines(); track line.value) {
+            <g class="rpc-gridline">
+                <line [attr.x1]="44" [attr.x2]="vbWidth - 20" [attr.y1]="line.y" [attr.y2]="line.y" />
+                <text [attr.x]="8" [attr.y]="line.y + 4">{{ currencySymbol() }}{{ fmtCurrency(line.value) }}</text>
+            </g>
+            }
+
+            <!-- Area fill -->
+            <path class="rpc-area" [attr.d]="areaPath()" fill="url(#rpcAreaGradient)" />
+
+            <!-- Revenue trend line — Champagne Gold stroke -->
+            <path class="rpc-line" [attr.d]="linePath()" fill="none" stroke="url(#rpcLineGradient)" />
+
+            <!-- Data points -->
+            @for (pt of plottedPoints(); track pt.date) {
+            <g class="rpc-point" [class.rpc-point--current]="pt.isLast">
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" class="rpc-point__halo" />
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" class="rpc-point__dot" />
+            </g>
+            }
+
+            <!-- X-axis labels (sparse) -->
+            @for (pt of visibleLabelPoints(); track pt.date) {
+            <text [attr.x]="pt.x" [attr.y]="vbHeight - 14" class="rpc-x-label">{{ pt.label }}</text>
+            }
+
+            <!-- Current-day callout -->
+            @if (plottedPoints().length > 0) {
+            <text [attr.x]="plottedPoints()[plottedPoints().length - 1].x"
+                [attr.y]="plottedPoints()[plottedPoints().length - 1].y - 14" class="rpc-callout">
+                {{ currencySymbol() }}{{ fmtCurrency(plottedPoints()[plottedPoints().length - 1].totalRevenue) }}
+            </text>
+            }
+
+        </svg>
+    </div>
+    }
+
+    <!-- ── Empty State ───────────────────────────────────────────── -->
+    @if (!loading() && plottedPoints().length === 0) {
+    <div class="rpc-empty">
+        <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+        </svg>
+        <p>No revenue data available for this period.</p>
+    </div>
+    }
+
+</div>

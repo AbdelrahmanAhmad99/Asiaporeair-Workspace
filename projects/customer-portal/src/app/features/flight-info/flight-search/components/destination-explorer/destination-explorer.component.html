@@ -1,0 +1,99 @@
+<!-- ============================================================================
+     destination-explorer.component.html
+     Asiaporeair | Destination Discovery Grid
+     ============================================================================ -->
+
+<section class="de-section" aria-label="Explore destinations">
+
+    <!-- Section header -->
+    <div class="de-header">
+        <div class="de-header__eyebrow" aria-hidden="true">
+            <div class="de-header__eyebrow-line"></div>
+            <span>Discover the World</span>
+            <div class="de-header__eyebrow-line"></div>
+        </div>
+        <h2 class="de-header__title">
+            Destination <span class="de-header__title-accent">Explorer</span>
+        </h2>
+        <p class="de-header__sub">
+            Value offers curated for the discerning traveller. Click any destination to pre-fill your search.
+        </p>
+    </div>
+
+    <!-- Loading skeletons -->
+    @if (isLoading) {
+    <div class="de-grid" aria-busy="true">
+        @for (s of [1,2,3,4,5,6]; track s) {
+        <div class="de-skeleton">
+            <div class="de-skel de-skel--bg"></div>
+            <div class="de-skel-body">
+                <div class="de-skel de-skel--tag"></div>
+                <div class="de-skel de-skel--city"></div>
+                <div class="de-skel de-skel--desc"></div>
+                <div class="de-skel de-skel--price"></div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Destination cards -->
+    @if (!isLoading) {
+    <div class="de-grid">
+        @for (dest of destinations; track dest.id; let i = $index) {
+        <article class="de-card" [style.--card-gradient]="dest.imageGradient" [style.animation-delay]="(i * 70) + 'ms'"
+            [attr.aria-label]="dest.city + ', ' + dest.country">
+
+            <!-- Background gradient -->
+            <div class="de-card__bg" aria-hidden="true"
+                [style.background-image]="dest.imageUrl ? 'url(' + dest.imageUrl + ')' : 'none'">
+            </div>
+
+            <!-- Overlay -->
+            <div class="de-card__overlay" aria-hidden="true"></div>
+
+            <!-- Offer tag -->
+            <div class="de-card__tag" aria-label="Offer: {{ dest.offerLabel }}">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                {{ dest.offerLabel }}
+            </div>
+
+            <!-- Card content -->
+            <div class="de-card__body">
+
+                <div class="de-card__iata" aria-hidden="true">{{ dest.iata }}</div>
+
+                <div class="de-card__info">
+                    <h3 class="de-card__city">{{ dest.city }}</h3>
+                    <p class="de-card__country">{{ dest.country }}</p>
+                    <p class="de-card__tagline">{{ dest.tagline }}</p>
+                </div>
+
+                <div class="de-card__footer">
+                    <div class="de-card__price-row">
+                        <span class="de-card__from">from</span>
+                        <span class="de-card__price">{{ dest.currency }} {{ dest.fromPrice | number:'1.0-0' }}</span>
+                    </div>
+
+                    <button class="de-card__cta" type="button" (click)="destinationSelected.emit(dest)"
+                        [attr.aria-label]="'Explore ' + dest.city + ' — pre-fill search form'">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        Explore
+                    </button>
+                </div>
+
+            </div>
+        </article>
+        }
+    </div>
+    }
+
+</section>

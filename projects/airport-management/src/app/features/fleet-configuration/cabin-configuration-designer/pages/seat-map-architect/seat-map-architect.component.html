@@ -1,0 +1,232 @@
+<div class="sma-page" [@pageEnter]>
+
+    <!-- ══ Seat Deletion Modal ══════════════════════════════════ -->
+    @if (showDeleteModal()) {
+    <div class="sma-modal-bd" (click)="onDeleteCancelled()" aria-hidden="true"></div>
+
+    <div class="sma-modal" role="alertdialog" aria-modal="true" aria-labelledby="sma-del-title">
+
+        <div class="sma-modal__rule" aria-hidden="true"></div>
+
+        @if (!store.isSavingSeat()) {
+
+        <!-- Confirm -->
+        <div class="sma-modal__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="sma-modal__icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                     2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                     0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+        </div>
+
+        <div class="sma-modal__body">
+            <h2 class="sma-modal__title" id="sma-del-title">Remove Seat from Layout?</h2>
+            <p class="sma-modal__seat-id">Seat {{ pendingSeatNumber() }}</p>
+            <p class="sma-modal__copy">
+                This will permanently remove the seat position from the cabin layout.
+                All seat attribute data will be erased.
+            </p>
+        </div>
+
+        @if (store.seatSaveError()) {
+        <div class="sma-modal__error-box" role="alert">{{ store.seatSaveError() }}</div>
+        }
+
+        <div class="sma-modal__actions">
+            <button class="sma-modal__btn sma-modal__btn--cancel" type="button"
+                (click)="onDeleteCancelled()">Cancel</button>
+            <button class="sma-modal__btn sma-modal__btn--confirm" type="button" (click)="onDeleteConfirmed()">Remove
+                Seat</button>
+        </div>
+
+        } @else {
+
+        <!-- Loading -->
+        <div class="sma-modal__loading" aria-live="polite" aria-busy="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="sma-modal__loading__spinner">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                     3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                     13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            <p>Removing seat from layout…</p>
+        </div>
+
+        }
+
+    </div>
+    }
+
+    <!-- ══ Sticky Header ══════════════════════════════════════════ -->
+    <header class="sma-header">
+        <div class="sma-header__left">
+
+            <!-- Breadcrumb -->
+            <nav class="sma-breadcrumb" aria-label="Breadcrumb">
+                <button class="sma-breadcrumb__back" type="button" (click)="goBack()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="sma-breadcrumb__back__arrow" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    Cabin Zones
+                </button>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="sma-breadcrumb__sep"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                @if (cabinName) {
+                <span class="sma-breadcrumb__cabin">{{ cabinName }}</span>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="sma-breadcrumb__sep"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                }
+                <span class="sma-breadcrumb__current">Seat Architect</span>
+            </nav>
+
+            <!-- Page title row -->
+            <div class="sma-title-row">
+                <h1 class="sma-title">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="sma-title__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501
+                     20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75
+                     c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                    Seat Map Architect
+                </h1>
+
+                <!-- Cabin type badge -->
+                @if (cabinName) {
+                <span class="sma-cabin-badge" [style.background]="cabinVisual().badgeColor + '22'"
+                    [style.borderColor]="cabinVisual().badgeColor + '44'" [style.color]="cabinVisual().badgeColor">
+                    {{ cabinVisual().label }}
+                </span>
+                }
+
+                <!-- Seat count -->
+                @if (store.seatCount() > 0) {
+                <span class="sma-seat-count" [attr.aria-label]="store.seatCount() + ' seats configured'">
+                    {{ store.seatCount() }} seats
+                </span>
+                }
+            </div>
+
+        </div>
+
+        <!-- Right controls -->
+        <div class="sma-header__controls">
+
+            <!-- Load error banner -->
+            @if (store.seatMapLoadError()) {
+            <div class="sma-header__error" role="alert">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="sma-header__error__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                {{ store.seatMapLoadError() }}
+            </div>
+            }
+
+            <!-- Refresh -->
+            <button class="sma-icon-btn" type="button" [disabled]="store.isLoadingSeatMap()"
+                (click)="store.fetchSeatMap(cabinId)" aria-label="Refresh seat map">
+                <svg class="sma-icon-btn__icon" [class.sma-icon-btn__icon--spin]="store.isLoadingSeatMap()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                   3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                   13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Dark Mode -->
+            <button class="sma-icon-btn sma-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Light mode' : 'Dark mode'">
+                @if (isDarkMode()) {
+                <svg class="sma-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591
+                     M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636
+                     5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="sma-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75
+                     0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21
+                     12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Canvas + Sidebar ══════════════════════════════════════ -->
+    <div class="sma-body">
+
+        <!-- ── Left: Seat Canvas Area ─────────────────────────── -->
+        <main class="sma-canvas-area">
+
+            <!-- Loading shimmer -->
+            @if (store.isLoadingSeatMap()) {
+            <div class="sma-canvas-loading" aria-busy="true" aria-label="Loading seat map">
+                <div class="sma-shimmer-grid">
+                    @for (r of [1,2,3,4,5,6,7,8]; track r) {
+                    <div class="sma-shimmer-row">
+                        <div class="sma-shimmer-num"></div>
+                        @for (c of [1,2,3,4,5,6]; track c) {
+                        <div class="sma-shimmer-seat" [style.animation-delay]="(r * 14 + c * 8) + 'ms'"></div>
+                        }
+                        <div class="sma-shimmer-num"></div>
+                    </div>
+                    }
+                </div>
+                <p class="sma-canvas-loading__text">Rendering cabin layout…</p>
+            </div>
+            }
+
+            <!-- Empty state -->
+            @if (!store.isLoadingSeatMap() && store.seatCount() === 0 && !store.seatMapLoadError()) {
+            <div class="sma-canvas-empty">
+                <div class="sma-canvas-empty__icon-wrap" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"
+                        class="sma-canvas-empty__icon">
+                        <rect x="3" y="3" width="18" height="18" rx="3" />
+                        <path d="M12 8v4m0 4h.01" stroke-width="1.5" />
+                    </svg>
+                </div>
+                <p class="sma-canvas-empty__title">Canvas is Empty</p>
+                <p class="sma-canvas-empty__sub">
+                    No seats have been defined for this cabin zone yet.
+                    Seats can be added once the cabin class is saved.
+                </p>
+            </div>
+            }
+
+            <!-- The Engineering Canvas -->
+            @if (!store.isLoadingSeatMap() && store.seatGridLayout()) {
+            <div class="sma-canvas-scroll">
+                <aoms-visual-seat-grid [layout]="store.seatGridLayout()!" [cabinType]="cabinType()"
+                    [selectedSeatId]="store.selectedSeat()?.seatId ?? null" [hoveredSeatId]="hoveredSeatId()"
+                    [cabinName]="cabinName" (seatSelected)="onSeatSelected($event)"
+                    (seatHovered)="onSeatHovered($event)" (emptyClicked)="onEmptyClicked($event)" />
+            </div>
+            }
+
+        </main>
+
+        <!-- ── Right: Tactical Property Sidebar ───────────────── -->
+        @if (store.selectedSeat()) {
+        <aside class="sma-sidebar" [@sidebarSlide]>
+            <aoms-seat-property-editor [seat]="store.selectedSeat()" [isProcessing]="store.isSavingSeat()"
+                [saveError]="store.seatSaveError()" [saveSuccess]="store.seatSaveSuccess()"
+                (specsApplied)="onSpecsApplied($event)" (deleteSeat)="onDeleteRequested($event)"
+                (panelClosed)="onPanelClosed()" />
+        </aside>
+        }
+
+    </div>
+
+</div>

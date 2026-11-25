@@ -1,0 +1,452 @@
+// ============================================================================
+// retrieve-booking.component.scss
+// Asiaporeair | "Locate Your Journey"
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold: #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$charcoal : #101056;
+$white : #FFFFFF;
+$error : #d95f5f;
+$success : #2E7D52;
+$text-sec : #4a5568;
+$text-muted: #718096;
+$font : 'Inter',
+'Montserrat',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    min-height: 100vh;
+    background: $ivory;
+}
+
+// ── Hero Header ───────────────────────────────────────────────────────────────
+.retrieve-hero {
+    background: $midnight;
+    padding: 0 0 3.5rem;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($royal-gold, 0.3), transparent);
+    }
+}
+
+// Starfield
+.hero-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($champagne, 0.22);
+    animation: twinkle 3s ease-in-out infinite;
+
+    @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+            width: #{1.5 + ($i % 3)}px;
+            height: #{1.5 + ($i % 3)}px;
+            // top: #{6 + ($i * 9) % 85}%;
+            // left: #{3 + ($i * 9) % 92}%;
+            animation-delay: #{$i * 0.28}s;
+            animation-duration: #{2.2 + $i * 0.18}s;
+        }
+    }
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.75rem 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+// Top nav row
+.hero-top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand-wordmark {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: rgba($champagne, 0.65);
+    text-transform: uppercase;
+}
+
+.btn-my-trips {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.2);
+    font-family: $font;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba($white, 0.55);
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($champagne, 0.4);
+        color: $champagne;
+        background: rgba($champagne, 0.06);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.gold-rule {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba($royal-gold, 0.25), $royal-gold, $champagne, $royal-gold, rgba($royal-gold, 0.25), transparent);
+}
+
+// Hero title
+.hero-title-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    text-align: center;
+}
+
+.hero-icon-ring {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba($royal-gold, 0.08);
+    border: 1.5px solid rgba($champagne, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 24px rgba($royal-gold, 0.15);
+    animation: soft-pulse 3s ease-in-out infinite;
+}
+
+@keyframes soft-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba($royal-gold, 0.12);
+    }
+
+    50% {
+        box-shadow: 0 0 36px rgba($royal-gold, 0.28);
+    }
+}
+
+.hero-title {
+    font-size: 2.2rem;
+    font-weight: 300;
+    letter-spacing: -0.05em;
+    color: $white;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 0.82rem;
+    color: rgba($white, 0.55);
+    margin: 0;
+    max-width: 400px;
+    line-height: 1.6;
+}
+
+// ── Main Body ─────────────────────────────────────────────────────────────────
+.retrieve-body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+}
+
+.content-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.75rem;
+    align-items: start;
+
+    @media (max-width: 860px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-col,
+.helper-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.helper-col {
+    position: sticky;
+    top: 1.5rem;
+}
+
+// ── Success Banner ────────────────────────────────────────────────────────────
+.success-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+    background: rgba($success, 0.07);
+    border: 1px solid rgba($success, 0.25);
+    border-radius: 12px;
+}
+
+.success-icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: rgba($success, 0.12);
+    border: 1px solid rgba($success, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: darken($success, 5%);
+}
+
+.success-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.success-heading {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: darken($success, 5%);
+}
+
+.success-sub {
+    font-size: 0.65rem;
+    color: rgba($success, 0.7);
+}
+
+.success-spinner {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba($success, 0.2);
+    border-top-color: darken($success, 5%);
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ── Inline Error ──────────────────────────────────────────────────────────────
+.inline-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 0.875rem 1rem;
+    background: rgba($error, 0.07);
+    border: 1px solid rgba($error, 0.25);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    color: lighten($error, 12%);
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+        stroke: $error;
+    }
+
+    span {
+        flex: 1;
+    }
+}
+
+.clear-error-btn {
+    background: none;
+    border: none;
+    font-family: $font;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: lighten($error, 15%);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    white-space: nowrap;
+
+    &:hover {
+        color: lighten($error, 25%);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $error;
+        border-radius: 2px;
+    }
+}
+
+// ── Account nudge ─────────────────────────────────────────────────────────────
+.account-nudge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.7rem;
+    color: $text-muted;
+    line-height: 1.4;
+
+    svg {
+        flex-shrink: 0;
+        color: $text-muted;
+    }
+}
+
+.nudge-link {
+    background: none;
+    border: none;
+    font-family: $font;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: $royal-gold;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+        color: darken($royal-gold, 10%);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        border-radius: 2px;
+    }
+}
+
+// ── Toast Notification ────────────────────────────────────────────────────────
+.toast-notification {
+    position: fixed;
+    bottom: 1.75rem;
+    right: 1.75rem;
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.875rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    max-width: 340px;
+    box-shadow: 0 8px 32px rgba($midnight, 0.3);
+    pointer-events: none;
+    font-family: $font;
+
+    &.toast--success {
+        background: $midnight;
+        border: 1px solid rgba($champagne, 0.3);
+        color: $champagne;
+
+        .toast-icon {
+            color: $royal-gold;
+        }
+    }
+
+    &.toast--error {
+        background: rgba($error, 0.12);
+        border: 1px solid rgba($error, 0.35);
+        color: lighten($error, 15%);
+        backdrop-filter: blur(12px);
+
+        .toast-icon {
+            color: $error;
+        }
+    }
+}
+
+.toast-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.toast-msg {
+    line-height: 1.4;
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+    .hero-inner {
+        padding: 1.25rem 1rem 0;
+    }
+
+    .hero-title {
+        font-size: 1.6rem;
+    }
+
+    .retrieve-body {
+        padding: 1.75rem 1rem 3rem;
+    }
+
+    .content-layout {
+        gap: 1.25rem;
+    }
+
+    .toast-notification {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .particle,
+    .hero-icon-ring,
+    .success-spinner {
+        animation: none !important;
+    }
+
+    .btn-my-trips {
+        transition: none !important;
+    }
+}

@@ -1,0 +1,669 @@
+// ============================================================================
+// status-search-form.component.scss
+// Asiaporeair | "Track Your Journey" — Premium Status Search Form
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$error : #C53030;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 240ms $ease;
+
+:host {
+    display: block;
+}
+
+// ── §1 Shell ──────────────────────────────────────────────────────────────────
+.ssf-shell {
+    position: relative;
+    min-height: 200px;
+}
+
+// ── §2 Gold shimmer skeleton ──────────────────────────────────────────────────
+@keyframes shimmer-gold {
+    0% {
+        background-position: -300% center;
+    }
+
+    100% {
+        background-position: 300% center;
+    }
+}
+
+%shimmer {
+    background: linear-gradient(90deg,
+            rgba($royal-gold, 0.06) 0%,
+            rgba($champagne, 0.2) 50%,
+            rgba($royal-gold, 0.06) 100%);
+    background-size: 300% 100%;
+    animation: shimmer-gold 1.8s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.ssf-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 0.5rem 0;
+}
+
+.ssf-skel-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.ssf-skel {
+    @extend %shimmer;
+
+    &--icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    &--title {
+        height: 18px;
+        width: 200px;
+    }
+
+    &--label {
+        height: 11px;
+        width: 120px;
+        margin-bottom: 0.4rem;
+    }
+
+    &--input {
+        height: 48px;
+    }
+
+    &--btn {
+        height: 48px;
+        border-radius: 4px;
+    }
+}
+
+.ssf-skel-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ssf-skel-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.ssf-tracking-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: $font;
+    font-size: 0.65rem;
+    color: rgba($royal-gold, 0.6);
+    letter-spacing: 0.04em;
+}
+
+.ssf-spin {
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ── §3 Form layout ────────────────────────────────────────────────────────────
+.ssf-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.ssf-form-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &__line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($royal-gold, 0.25));
+
+        &:last-child {
+            background: linear-gradient(to left, transparent, rgba($royal-gold, 0.25));
+        }
+    }
+
+    &__text {
+        font-family: $font;
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba($royal-gold, 0.65);
+        white-space: nowrap;
+    }
+}
+
+.ssf-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── §4 Individual field wrapper ───────────────────────────────────────────────
+.ssf-field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+// ── §5 Floating label ─────────────────────────────────────────────────────────
+.ssf-float-label {
+    position: absolute;
+    top: 50%;
+    left: 3rem; // offset for left icon
+    transform: translateY(-50%);
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: $muted;
+    pointer-events: none;
+    transition: top $t, font-size $t, color $t, letter-spacing $t, transform $t;
+    line-height: 1;
+}
+
+// Float up when field is filled or has focus
+.ssf-field--filled .ssf-float-label,
+.ssf-input-shell:focus-within+*+.ssf-float-label,
+.ssf-input-shell:focus-within~.ssf-float-label {
+    top: -0.55rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: $royal-gold;
+    transform: translateY(0);
+    left: 0.1rem;
+}
+
+// When filled but not focused
+.ssf-field--filled .ssf-float-label {
+    top: -0.55rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    color: rgba($royal-gold, 0.7);
+    transform: translateY(0);
+    left: 0.1rem;
+}
+
+// .ssf-field--date .ssf-float-label {
+//     // Date field: label floats based on --filled class only (button not :focus-within target)
+// }
+
+.ssf-field--date.ssf-field--filled .ssf-float-label {
+    top: -0.55rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba($royal-gold, 0.7);
+    transform: translateY(0);
+    left: 0.1rem;
+}
+
+// ── §6 Input shell ────────────────────────────────────────────────────────────
+.ssf-input-shell {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba($charcoal, 0.14);
+    border-radius: 4px;
+    background: $white;
+    transition: border-color $t, box-shadow $t;
+    // overflow: visible !important; // needed for calendar dropdown
+    position: relative;
+
+    &:focus-within {
+        border-color: $royal-gold;
+        box-shadow: 0 0 0 3px rgba($royal-gold, 0.1), 0 1px 8px rgba($midnight, 0.06);
+    }
+
+    .ssf-field--error & {
+        border-color: rgba($error, 0.5);
+
+        &:focus-within {
+            box-shadow: 0 0 0 3px rgba($error, 0.1);
+        }
+    }
+}
+
+.ssf-input-icon {
+    width: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: rgba($charcoal, 0.28);
+    transition: color $t;
+
+    .ssf-input-shell:focus-within & {
+        color: $royal-gold;
+    }
+}
+
+// ── §7 Text input ─────────────────────────────────────────────────────────────
+.ssf-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: $font;
+    font-size: 0.88rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: $charcoal;
+    padding: 0.875rem 0.75rem 0.875rem 0;
+
+    &::placeholder {
+        color: transparent;
+    }
+
+    &--code {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+}
+
+// ── §8 Date trigger button ────────────────────────────────────────────────────
+.ssf-date-trigger {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: $font;
+    font-size: 0.82rem;
+    cursor: pointer;
+    padding: 0.875rem 0.75rem 0.875rem 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-width: 0;
+    color: $charcoal;
+    transition: none;
+
+    &:focus-visible {
+        outline: none;
+    }
+
+    // shell handles focus ring
+}
+
+.ssf-date-display {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ssf-date-placeholder {
+    color: rgba($charcoal, 0.3);
+    font-weight: 400;
+    font-size: 0.82rem;
+}
+
+.ssf-date-chevron {
+    flex-shrink: 0;
+    color: rgba($charcoal, 0.28);
+    transition: transform $t, color $t;
+
+    &--open {
+        transform: rotate(180deg);
+        color: $royal-gold;
+    }
+
+    .ssf-input-shell:focus-within & {
+        color: $royal-gold;
+    }
+}
+
+// ── §9 Custom calendar ────────────────────────────────────────────────────────
+.ssf-calendar {
+    position: absolute;
+    top: calc(100% + 6px);
+    overflow: visible !important;
+    left: 0;
+    z-index: 200;
+    background: $white;
+    border: 1px solid rgba($royal-gold, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba($midnight, 0.16);
+    padding: 1rem;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    animation: calDrop 220ms $ease both;
+
+    @media (max-width: 480px) {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100vw - 2rem);
+        max-width: 320px;
+        animation: none;
+    }
+}
+
+@keyframes calDrop {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ssf-cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ssf-cal-nav {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba($royal-gold, 0.25);
+    background: transparent;
+    color: $royal-gold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        background: rgba($royal-gold, 0.1);
+        border-color: $royal-gold;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.ssf-cal-month-label {
+    font-family: $font;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: $charcoal;
+}
+
+.ssf-cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.ssf-cal-weekday {
+    text-align: center;
+    font-family: $font;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($royal-gold, 0.7);
+    padding: 0.375rem 0;
+}
+
+.ssf-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.ssf-cal-empty {
+    aspect-ratio: 1;
+}
+
+.ssf-cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: $charcoal;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 180ms;
+
+    &:hover:not(.ssf-cal-day--disabled) {
+        background: rgba($royal-gold, 0.1);
+        border-color: rgba($royal-gold, 0.25);
+        color: darken($royal-gold, 8%);
+    }
+
+    &--today:not(.ssf-cal-day--selected) {
+        border-color: rgba($royal-gold, 0.3);
+        color: $royal-gold;
+        font-weight: 600;
+    }
+
+    &--selected {
+        background: $royal-gold;
+        border-color: $royal-gold;
+        color: $midnight;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba($royal-gold, 0.35);
+    }
+
+    &--disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 1px;
+    }
+}
+
+.ssf-cal-hint {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    color: $muted;
+    margin: 0;
+    border-top: 1px solid rgba($charcoal, 0.07);
+    padding-top: 0.625rem;
+    line-height: 1.4;
+}
+
+// ── §10 Validation error ──────────────────────────────────────────────────────
+.ssf-field-error {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: $font;
+    font-size: 0.67rem;
+    color: $error;
+    margin: 0.2rem 0 0;
+    animation: errSlide 200ms $ease;
+}
+
+.ssf-field-hint {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.63rem;
+    color: $muted;
+    margin: 0.25rem 0 0 0.1rem;
+    line-height: 1.5;
+
+    .ssf-field--error & {
+        display: none;
+    }
+}
+
+@keyframes errSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── §11 Action row ────────────────────────────────────────────────────────────
+.ssf-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+}
+
+.ssf-submit-btn {
+    flex: 1;
+    min-width: 180px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 4px;
+    background: $midnight;
+    border: 1px solid rgba($champagne, 0.2);
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: background $t, box-shadow $t, transform $t, border-color $t;
+
+    &:hover:not(:disabled) {
+        background: lighten($midnight, 6%);
+        border-color: rgba($champagne, 0.4);
+        box-shadow: 0 6px 24px rgba($midnight, 0.25);
+        transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.ssf-clear-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.875rem 1rem;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($charcoal, 0.12);
+    font-family: $font;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba($charcoal, 0.5);
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($error, 0.3);
+        color: $error;
+        background: rgba($error, 0.03);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §12 Help note ─────────────────────────────────────────────────────────────
+.ssf-help-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    color: rgba($muted, 0.6);
+    margin: 0;
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
+// ── §13 Reduced motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+    .ssf-spin {
+        animation: none !important;
+    }
+
+    .ssf-skel {
+        animation: none !important;
+    }
+
+    .ssf-calendar {
+        animation: none !important;
+    }
+
+    .ssf-cal-day,
+    .ssf-submit-btn,
+    .ssf-clear-btn {
+        transition: none !important;
+    }
+}

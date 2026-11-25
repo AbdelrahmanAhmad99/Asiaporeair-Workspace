@@ -1,0 +1,128 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $t-fast: 160ms ease;
+
+ .ces {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 1.125rem;
+     padding: 3.5rem 1.5rem;
+     text-align: center;
+     animation: ces-fadein 350ms ease forwards;
+ }
+
+ .ces__illustration {
+     width: 220px;
+     opacity: 0.9;
+ }
+
+ .ces__svg {
+     width: 100%;
+     height: auto;
+     filter: drop-shadow(0 4px 12px rgba(182, 143, 36, 0.1));
+ }
+
+ .ces__plus-circle {
+     animation: ces-pulse 2.5s ease-in-out infinite;
+ }
+
+ @keyframes ces-pulse {
+
+     0%,
+     100% {
+         opacity: 0.85;
+         transform: scale(1);
+     }
+
+     50% {
+         opacity: 1;
+         transform: scale(1.05);
+     }
+ }
+
+ .ces__text {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+     max-width: 360px;
+ }
+
+ .ces__title {
+     font-size: 1.125rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.015em;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+ }
+
+ .ces__sub {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     line-height: 1.5;
+     color: var(--aoms-text-muted);
+     transition: color $t-fast;
+
+     strong {
+         font-weight: 700;
+         color: var(--aoms-text-secondary);
+     }
+ }
+
+ .ces__cta {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.6875rem 1.75rem;
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: #fff;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     box-shadow: 0 6px 20px rgba(182, 143, 36, 0.4);
+     transition: all $t-fast;
+
+     &:hover {
+         background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+         box-shadow: 0 8px 24px rgba(182, 143, 36, 0.55);
+         transform: translateY(-2px);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .ces__hint {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     opacity: 0.7;
+     max-width: 320px;
+     line-height: 1.5;
+ }
+
+ @keyframes ces-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }

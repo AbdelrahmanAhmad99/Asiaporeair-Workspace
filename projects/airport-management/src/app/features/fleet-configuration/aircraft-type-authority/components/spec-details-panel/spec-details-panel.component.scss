@@ -1,0 +1,327 @@
+ // ----------------------------------------------------------------------------
+ // 1. Panel Container
+ // ----------------------------------------------------------------------------
+ .spec-panel {
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Panel Heading Row
+ // ----------------------------------------------------------------------------
+ .spec-panel__heading {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: var(--aoms-gold);
+         flex-shrink: 0;
+     }
+
+     &__text {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary);
+         transition: color var(--aoms-transition-fast);
+     }
+ }
+
+ .spec-panel__revision {
+     margin-left: auto;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-muted);
+     padding: 0.1875rem 0.625rem;
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     border-radius: 100px;
+     transition: color var(--aoms-transition-fast);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Spec Groups Grid — responsive 3-column layout
+ // ----------------------------------------------------------------------------
+ .spec-panel__grid {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 1rem;
+
+     @media (min-width: 640px) {
+         grid-template-columns: repeat(2, 1fr);
+     }
+
+     @media (min-width: 1024px) {
+         grid-template-columns: repeat(3, 1fr);
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Individual Spec Group Card
+ // ----------------------------------------------------------------------------
+ .spec-group {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+     overflow: hidden;
+     transition:
+         background-color var(--aoms-transition-base),
+         border-color var(--aoms-transition-base),
+         box-shadow var(--aoms-transition-base),
+         transform var(--aoms-transition-fast);
+
+     &:hover {
+         box-shadow: 0 4px 20px rgba(5, 25, 55, 0.09);
+         transform: translateY(-1px);
+     }
+ }
+
+ // 4a. Group Header Bar
+ .spec-group__header {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 0.875rem 1.125rem;
+     background: rgba(5, 25, 55, 0.03);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+     transition: background var(--aoms-transition-base);
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.75rem;
+         height: 1.75rem;
+         border-radius: 6px;
+         background: rgba(182, 143, 36, 0.1);
+         border: 1px solid rgba(182, 143, 36, 0.18);
+         flex-shrink: 0;
+         transition: background var(--aoms-transition-fast);
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-gold);
+     }
+ }
+
+ .spec-group__title {
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: var(--aoms-text-secondary);
+     transition: color var(--aoms-transition-fast);
+ }
+
+ // 4b. Items Container
+ .spec-group__items {
+     display: flex;
+     flex-direction: column;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Individual Spec Item
+ // ----------------------------------------------------------------------------
+ .spec-item {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 0.875rem 1.125rem;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.07);
+     transition: background var(--aoms-transition-fast);
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     &:hover {
+         background: rgba(226, 199, 128, 0.04);
+     }
+
+     // Dim empty-value items
+     &--empty {
+         opacity: 0.5;
+     }
+ }
+
+ // 5a. Icon wrapper
+ .spec-item__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     border-radius: 8px;
+     background: rgba(5, 25, 55, 0.04);
+     border: 1px solid rgba(5, 25, 55, 0.06);
+     flex-shrink: 0;
+     transition: background var(--aoms-transition-fast);
+
+     .spec-item:hover & {
+         background: rgba(182, 143, 36, 0.08);
+         border-color: rgba(182, 143, 36, 0.15);
+     }
+ }
+
+ .spec-item__icon {
+     width: 1rem;
+     height: 1rem;
+     color: var(--aoms-text-muted);
+     transition: color var(--aoms-transition-fast);
+
+     .spec-item:hover & {
+         color: var(--aoms-gold);
+     }
+ }
+
+ // 5b. Label + Value block
+ .spec-item__data {
+     display: flex;
+     flex-direction: column;
+     gap: 0.1875rem;
+     min-width: 0;
+ }
+
+ .spec-item__label {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+     transition: color var(--aoms-transition-fast);
+ }
+
+ .spec-item__value-row {
+     display: flex;
+     align-items: baseline;
+     gap: 0.5rem;
+     flex-wrap: wrap;
+ }
+
+ .spec-item__value-primary {
+     font-size: 1rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 600;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary);
+     font-variant-numeric: tabular-nums;
+     transition: color var(--aoms-transition-fast);
+ }
+
+ .spec-item__value-secondary {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+     padding: 0.125rem 0.5rem;
+     background: rgba(182, 143, 36, 0.07);
+     border: 1px solid rgba(182, 143, 36, 0.15);
+     border-radius: 100px;
+     white-space: nowrap;
+     transition: background var(--aoms-transition-fast);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Shimmer Loading Skeletons
+ // ----------------------------------------------------------------------------
+ .spec-group--shimmer {
+     pointer-events: none;
+ }
+
+ .spec-group__shimmer-title {
+     height: 0.75rem;
+     width: 80px;
+     border-radius: 4px;
+     background: rgba(182, 143, 36, 0.09);
+     animation: sp-pulse 1.5s ease-in-out infinite;
+     margin: 0.875rem 1.125rem;
+ }
+
+ .spec-item--shimmer {
+     pointer-events: none;
+
+     .spec-item__shimmer-icon {
+         width: 2rem;
+         height: 2rem;
+         border-radius: 8px;
+         background: rgba(182, 143, 36, 0.08);
+         animation: sp-pulse 1.5s ease-in-out infinite;
+         flex-shrink: 0;
+     }
+
+     .spec-item__shimmer-body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.3125rem;
+         flex: 1;
+     }
+
+     .spec-item__shimmer-label {
+         height: 0.6rem;
+         width: 60%;
+         border-radius: 4px;
+         background: rgba(182, 143, 36, 0.07);
+         animation: sp-pulse 1.5s ease-in-out 0.1s infinite;
+     }
+
+     .spec-item__shimmer-value {
+         height: 1rem;
+         width: 80%;
+         border-radius: 4px;
+         background: rgba(182, 143, 36, 0.09);
+         animation: sp-pulse 1.5s ease-in-out 0.2s infinite;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 7. Keyframes
+ // ----------------------------------------------------------------------------
+ @keyframes sp-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 8. Dark Mode Overrides (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .spec-group {
+         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+
+         &:hover {
+             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+         }
+     }
+
+     .spec-group__header {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     .spec-item__icon-wrap {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(255, 255, 255, 0.06);
+     }
+ }

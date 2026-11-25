@@ -1,0 +1,137 @@
+<div class="alt-card">
+
+    <!-- ══ Column Header Row ══════════════════════════════════════ -->
+    <div class="alt-header" role="row" aria-label="Archived aircraft columns">
+        <div class="alt-header__cell alt-col--tail" role="columnheader">Tail Number</div>
+        <div class="alt-header__cell alt-col--model" role="columnheader">Model / Type</div>
+        <div class="alt-header__cell alt-col--date" role="columnheader">Decommissioned</div>
+        <div class="alt-header__cell alt-col--hours" role="columnheader">Last Hours</div>
+        <div class="alt-header__cell alt-col--reason" role="columnheader">Archive Reason</div>
+        <div class="alt-header__cell alt-col--actions" role="columnheader">
+            <span class="sr-only">Actions</span>
+        </div>
+    </div>
+
+    <!-- ══ Loading Shimmer ════════════════════════════════════════ -->
+    @if (loading()) {
+    <div class="alt-body" aria-busy="true" aria-label="Loading archived fleet records">
+        @for (r of shimmerRows; track $index) {
+        <div class="alt-row alt-row--shimmer" [class.alt-row--even]="$even">
+            <div class="alt-col--tail">
+                <div class="alt-shimmer alt-shimmer--narrow"></div>
+            </div>
+            <div class="alt-col--model">
+                <div class="alt-shimmer"></div>
+                <div class="alt-shimmer alt-shimmer--sub"></div>
+            </div>
+            <div class="alt-col--date">
+                <div class="alt-shimmer alt-shimmer--narrow"></div>
+            </div>
+            <div class="alt-col--hours">
+                <div class="alt-shimmer alt-shimmer--narrow"></div>
+            </div>
+            <div class="alt-col--reason">
+                <div class="alt-shimmer"></div>
+            </div>
+            <div class="alt-col--actions">
+                <div class="alt-shimmer alt-shimmer--btn"></div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ══ Data Rows ══════════════════════════════════════════════ -->
+    @if (!loading()) {
+    <div class="alt-body" role="rowgroup" [@archiveRows]="records().length">
+
+        @for (rec of records(); track rec.tailNumber; let even = $even) {
+        <div class="alt-row" [class.alt-row--even]="even" [class.alt-row--odd]="!even"
+            [class.alt-row--restoring]="isRowRestoring(rec.tailNumber)"
+            [class.alt-row--restored]="isRowRestored(rec.tailNumber)" role="row"
+            [attr.aria-label]="'Archived aircraft ' + rec.tailNumber">
+
+            <!-- Tail Number -->
+            <div class="alt-col--tail" role="gridcell">
+                <span class="alt__tail">{{ rec.tailNumber }}</span>
+                <span class="alt__iata">{{ rec.airlineIataCode }}</span>
+            </div>
+
+            <!-- Model / Type -->
+            <div class="alt-col--model" role="gridcell">
+                <span class="alt__model">{{ rec.aircraftTypeModel ?? '—' }}</span>
+                <span class="alt__airline">{{ rec.airlineName }}</span>
+            </div>
+
+            <!-- Decommissioned date -->
+            <div class="alt-col--date" role="gridcell">
+                <span class="alt__date">{{ formatDate(rec.decommissionedAt) }}</span>
+                @if (rec.decommissionedByUser) {
+                <span class="alt__by">by {{ rec.decommissionedByUser }}</span>
+                }
+            </div>
+
+            <!-- Last known flight hours -->
+            <div class="alt-col--hours" role="gridcell">
+                <span class="alt__hours">{{ formatHours(rec.totalFlightHours) }}</span>
+            </div>
+
+            <!-- Archive Reason -->
+            <div class="alt-col--reason" role="gridcell" [title]="rec.archiveReason ?? ''">
+                @if (rec.archiveReason) {
+                <span class="alt__reason">{{ truncateReason(rec.archiveReason) }}</span>
+                } @else {
+                <span class="alt__reason alt__reason--empty">No reason recorded</span>
+                }
+            </div>
+
+            <!-- Actions -->
+            <div class="alt-col--actions" role="gridcell">
+                <aoms-restore-operation-button [tailNumber]="rec.tailNumber"
+                    [isReactivating]="isRowRestoring(rec.tailNumber)" [justRestored]="isRowRestored(rec.tailNumber)"
+                    (restoreClicked)="restoreTriggered.emit($event)" />
+            </div>
+
+        </div>
+        }
+
+        <!-- ── Empty State ──────────────────────────────────────── -->
+        @if (records().length === 0) {
+        <div class="alt-empty" role="status">
+            <div class="alt-empty__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="alt-empty__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75m-10.5.75a8.25 8.25 0 1 1 16.5 0 8.25 8.25 0 0 1-16.5 0z" />
+                </svg>
+            </div>
+            <p class="alt-empty__title">Vault is Clear</p>
+            <p class="alt-empty__sub">
+                No decommissioned assets match the current search criteria.
+            </p>
+        </div>
+        }
+
+    </div>
+    }
+
+    <!-- ══ Table Footer ═══════════════════════════════════════════ -->
+    @if (!loading() && records().length > 0) {
+    <div class="alt-footer">
+        <span class="alt-footer__count">
+            <strong>{{ records().length }}</strong>
+            {{ records().length === 1 ? 'decommissioned asset' : 'decommissioned assets' }}
+        </span>
+        <span class="alt-footer__badge">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="alt-footer__badge__icon" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75m-10.5.75a8.25 8.25 0 1 1 16.5 0 8.25 8.25 0 0 1-16.5 0z" />
+            </svg>
+            Secured Archive Log
+        </span>
+    </div>
+    }
+
+</div>
+
+<!-- Import the restore button so it renders in rows -->

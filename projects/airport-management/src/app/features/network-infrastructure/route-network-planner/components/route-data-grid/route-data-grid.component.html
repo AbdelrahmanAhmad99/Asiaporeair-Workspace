@@ -1,0 +1,167 @@
+<div class="rdg-card">
+    <div class="rdg-scroll">
+        <table class="rdg-table" role="grid" aria-label="Air network route registry">
+
+            <!-- ── Sticky Midnight Sapphire Header ─────────────────────── -->
+            <thead class="rdg-head">
+                <tr>
+                    @for (col of columns; track col.key) {
+                    <th class="rdg-th" [class.rdg-col--md-hidden]="col.hideOnMd"
+                        [class.rdg-col--lg-hidden]="col.hideOnLg" scope="col">
+                        {{ col.label }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+
+            <!-- ── Loading Shimmer ─────────────────────────────────────── -->
+            @if (loading()) {
+            <tbody aria-busy="true" aria-label="Loading routes">
+                @for (row of shimmerRows; track $index) {
+                <tr class="rdg-tr rdg-tr--even">
+                    @for (col of columns; track col.key) {
+                    <td class="rdg-td" [class.rdg-col--md-hidden]="col.hideOnMd"
+                        [class.rdg-col--lg-hidden]="col.hideOnLg">
+                        @if (col.key !== 'arrow') {
+                        <div class="rdg-shimmer" [style.width]="col.shimmerWidth"></div>
+                        }
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- ── Data Rows ─────────────────────────────────────────────── -->
+            @if (!loading()) {
+            <tbody [@routeGridAnim]="routes().length">
+
+                @for (route of routes(); track route.routeId; let even = $even) {
+                <tr class="rdg-tr" [class.rdg-tr--even]="even" [class.rdg-tr--odd]="!even"
+                    [class.rdg-tr--inactive]="!route.isActive"
+                    [attr.aria-label]="route.originAirportIataCode + ' to ' + route.destinationAirportIataCode">
+
+                    <!-- Origin Hub — Bold Royal Gold IATA -->
+                    <td class="rdg-td">
+                        <span class="rdg-iata rdg-iata--origin" [class.rdg-iata--inactive]="!route.isActive">
+                            {{ route.originAirportIataCode }}
+                        </span>
+                    </td>
+
+                    <!-- Route arrow -->
+                    <td class="rdg-td rdg-td--arrow">
+                        <svg class="rdg-route-arrow" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                        </svg>
+                    </td>
+
+                    <!-- Destination Hub -->
+                    <td class="rdg-td">
+                        <span class="rdg-iata rdg-iata--destination" [class.rdg-iata--inactive]="!route.isActive">
+                            {{ route.destinationAirportIataCode }}
+                        </span>
+                    </td>
+
+                    <!-- Distance -->
+                    <td class="rdg-td rdg-col--md-hidden">
+                        <span class="rdg-distance">{{ formatDistance(route.distanceKm) }}</span>
+                    </td>
+
+                    <!-- Route ID -->
+                    <td class="rdg-td rdg-col--lg-hidden">
+                        <span class="rdg-id">#{{ route.routeId }}</span>
+                    </td>
+
+                    <!-- Status pill -->
+                    <td class="rdg-td">
+                        @if (route.isActive) {
+                        <span class="rdg-status-pill rdg-status-pill--active">Active</span>
+                        } @else {
+                        <span class="rdg-status-pill rdg-status-pill--inactive">Inactive</span>
+                        }
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="rdg-td">
+                        <div class="rdg-actions">
+
+                            <!-- Analyze (sapphire) -->
+                            <button class="rdg-action-btn rdg-action-btn--analyze" type="button"
+                                (click)="onAnalyze.emit(route.routeId)"
+                                [attr.aria-label]="'Analyze route ' + route.originAirportIataCode + ' to ' + route.destinationAirportIataCode"
+                                title="Analyze Route">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5
+                               12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639
+                               C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z
+                               M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                </svg>
+                            </button>
+
+                            <!-- Modify (champagne) -->
+                            <button class="rdg-action-btn rdg-action-btn--modify" type="button"
+                                (click)="onModify.emit(route.routeId)"
+                                [attr.aria-label]="'Modify route #' + route.routeId" title="Modify Route">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652
+                               L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5
+                               4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                                </svg>
+                            </button>
+
+                            <!-- Deactivate (ruby) — only for active routes -->
+                            @if (route.isActive) {
+                            <button class="rdg-action-btn rdg-action-btn--deactivate" type="button"
+                                (click)="onDeactivate.emit(route.routeId)"
+                                [attr.aria-label]="'Deactivate route #' + route.routeId" title="Deactivate Corridor">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                    aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0
+                                 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                                </svg>
+                            </button>
+                            }
+
+                        </div>
+                    </td>
+
+                </tr>
+                }
+
+                <!-- ── Empty State ──────────────────────────────────────── -->
+                @if (routes().length === 0) {
+                <tr>
+                    <td [attr.colspan]="columns.length" class="rdg-empty">
+                        <div class="rdg-empty__inner">
+                            <div class="rdg-empty__icon-wrap" aria-hidden="true">
+                                <svg class="rdg-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12
+                               59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                                </svg>
+                            </div>
+                            <p class="rdg-empty__title">No air corridors found.</p>
+                            <p class="rdg-empty__sub">Adjust your search criteria or compose a new route.</p>
+                        </div>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+            }
+
+        </table>
+    </div>
+
+    <!-- Footer -->
+    @if (!loading() && routes().length > 0) {
+    <div class="rdg-footer">
+        <span class="rdg-footer__label">{{ recordLabel() }}</span>
+    </div>
+    }
+
+</div>

@@ -1,0 +1,361 @@
+ // ----------------------------------------------------------------------------
+ // 1. Table Wrapper Card
+ // ----------------------------------------------------------------------------
+ .data-table-card {
+   border-radius: 12px;
+   overflow: hidden;
+   background-color: var(--aoms-bg-card);
+   border: 1px solid rgba(226, 199, 128, 0.2);
+   box-shadow: 0 4px 20px rgba(5, 25, 55, 0.08);
+   transition:
+     background-color var(--aoms-transition-base),
+     border-color var(--aoms-transition-base),
+     box-shadow var(--aoms-transition-base);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Scroll Container
+ // ----------------------------------------------------------------------------
+ .data-table-scroll {
+   overflow-x: auto;
+   -webkit-overflow-scrolling: touch;
+
+   // styled scrollbar (Webkit)
+   &::-webkit-scrollbar {
+     height: 4px;
+   }
+
+   &::-webkit-scrollbar-track {
+     background: transparent;
+   }
+
+   &::-webkit-scrollbar-thumb {
+     background: rgba(182, 143, 36, 0.25);
+     border-radius: 2px;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. <table> base
+ // ----------------------------------------------------------------------------
+ .data-table {
+   width: 100%;
+   border-collapse: collapse;
+   font-size: 0.875rem;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Table Head
+ // ----------------------------------------------------------------------------
+ .data-table__head {
+   background-color: var(--aoms-midnight);
+ }
+
+ .data-table__th {
+   padding: 0.875rem 1.25rem;
+   text-align: left;
+   font-size: 11px;
+   font-family: var(--aoms-font-body);
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   color: var(--aoms-champagne);
+   white-space: nowrap;
+   border-bottom: 1px solid rgba(226, 199, 128, 0.12);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Table Body — Data Rows
+ // ----------------------------------------------------------------------------
+ .data-table__tr {
+   border-bottom: 1px solid rgba(226, 199, 128, 0.08);
+   transition: background-color 150ms ease;
+   cursor: default;
+
+   // Alternating rows
+   &--even {
+     background-color: var(--aoms-bg-card);
+   }
+
+   &--odd {
+     background-color: rgba(248, 249, 250, 0.5);
+   }
+
+   &:hover {
+     background-color: rgba(226, 199, 128, 0.06) !important;
+   }
+
+   // When row is hovered, reveal actions and tint name
+   &:hover .data-table__td--name-text {
+     color: var(--aoms-midnight);
+   }
+
+   &:hover .data-table__actions {
+     opacity: 1;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Table Cells — <td>
+ // ----------------------------------------------------------------------------
+ .data-table__td {
+   padding: 0.875rem 1.25rem;
+   vertical-align: middle;
+ }
+
+ // ISO Code badge
+ .data-table__badge--iso {
+   display: inline-flex;
+   align-items: center;
+   padding: 0.25rem 0.625rem;
+   border-radius: 4px;
+   font-size: 11px;
+   font-family: var(--aoms-font-body);
+   font-weight: 700;
+   letter-spacing: 0.1em;
+   text-transform: uppercase;
+   background: rgba(5, 25, 55, 0.06);
+   color: var(--aoms-midnight);
+   border: 1px solid rgba(5, 25, 55, 0.1);
+   white-space: nowrap;
+   transition:
+     background var(--aoms-transition-fast),
+     color var(--aoms-transition-fast);
+ }
+
+ // Country name text
+ .data-table__td--name-text {
+   font-family: var(--aoms-font-body);
+   font-weight: 500;
+   color: var(--aoms-text-primary);
+   transition: color 150ms ease;
+ }
+
+ // Continent cell
+ .data-table__td--continent {
+   font-family: var(--aoms-font-body);
+   font-size: 13px;
+   color: var(--aoms-text-secondary);
+   white-space: nowrap;
+ }
+
+ // Currency & PhoneCode cells
+ .data-table__td--currency,
+ .data-table__td--phone {
+   font-family: var(--aoms-font-body);
+   font-size: 12px;
+   color: var(--aoms-text-muted);
+   letter-spacing: 0.04em;
+   white-space: nowrap;
+ }
+
+ // Responsive hide/show
+ .data-table__td--md-hidden {
+   @media (max-width: 767px) {
+     display: none;
+   }
+ }
+
+ .data-table__td--lg-hidden {
+   @media (max-width: 1023px) {
+     display: none;
+   }
+ }
+
+ // Matching <th> responsive
+ .data-table__th--md-hidden {
+   @media (max-width: 767px) {
+     display: none;
+   }
+ }
+
+ .data-table__th--lg-hidden {
+   @media (max-width: 1023px) {
+     display: none;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 7. Action Buttons Cell
+ // ----------------------------------------------------------------------------
+ .data-table__actions {
+   display: flex;
+   align-items: center;
+   gap: 0.25rem;
+   opacity: 0.55;
+   transition: opacity 150ms ease;
+ }
+
+ .action-btn {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 2rem;
+   height: 2rem;
+   border-radius: 4px;
+   border: 1px solid transparent;
+   background: transparent;
+   color: var(--aoms-text-secondary);
+   cursor: pointer;
+   transition: all var(--aoms-transition-fast);
+
+   &:hover {
+     color: var(--aoms-midnight);
+     border-color: rgba(226, 199, 128, 0.35);
+     background: rgba(226, 199, 128, 0.1);
+   }
+
+   &:focus-visible {
+     outline: 2px solid var(--aoms-champagne);
+     outline-offset: 2px;
+   }
+
+   // Danger variant (deactivate / delete)
+   &--danger {
+     &:hover {
+       color: #710d06;
+       border-color: rgba(113, 13, 6, 0.25);
+       background: rgba(113, 13, 6, 0.06);
+     }
+   }
+
+   &__icon {
+     width: 1rem;
+     height: 1rem;
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 8. Shimmer Loading Skeleton
+ // ----------------------------------------------------------------------------
+ .data-table__shimmer-cell {
+   padding: 0.875rem 1.25rem;
+ }
+
+ .data-table__shimmer-bar {
+   height: 1rem;
+   border-radius: 4px;
+   background: rgba(182, 143, 36, 0.08);
+   animation: dt-pulse 1.5s ease-in-out infinite;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 9. Empty State
+ // ----------------------------------------------------------------------------
+ .data-table__empty {
+   padding: 4rem 1.25rem;
+   text-align: center;
+ }
+
+ .data-table__empty-inner {
+   display: inline-flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.75rem;
+ }
+
+ .data-table__empty-icon-wrap {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 3rem;
+   height: 3rem;
+   border-radius: 12px;
+   background: rgba(182, 143, 36, 0.08);
+   color: var(--aoms-text-muted);
+ }
+
+ .data-table__empty-icon {
+   width: 1.5rem;
+   height: 1.5rem;
+ }
+
+ .data-table__empty-title {
+   font-size: 0.875rem;
+   font-family: var(--aoms-font-body);
+   font-weight: 500;
+   color: var(--aoms-text-secondary);
+ }
+
+ .data-table__empty-subtitle {
+   font-size: 0.75rem;
+   font-family: var(--aoms-font-body);
+   color: var(--aoms-text-muted);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 10. Table Footer
+ // ----------------------------------------------------------------------------
+ .data-table__footer {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 0.75rem 1.25rem;
+   border-top: 1px solid rgba(226, 199, 128, 0.12);
+   background: rgba(248, 249, 250, 0.5);
+ }
+
+ .data-table__footer-text {
+   font-size: 12px;
+   font-family: var(--aoms-font-body);
+   color: var(--aoms-text-muted);
+
+   strong {
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+   }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 11. Keyframes
+ // ----------------------------------------------------------------------------
+ @keyframes dt-pulse {
+
+   0%,
+   100% {
+     opacity: 0.6;
+   }
+
+   50% {
+     opacity: 1;
+   }
+ }
+
+ // ============================================================================
+ // 12. Dark Mode Overrides  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+   .data-table-card {
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+   }
+
+   .data-table__tr--odd {
+     background-color: rgba(255, 255, 255, 0.02);
+   }
+
+   .data-table__badge--iso {
+     background: rgba(226, 199, 128, 0.08);
+     color: var(--aoms-champagne);
+     border-color: rgba(226, 199, 128, 0.15);
+   }
+
+   .data-table__tr:hover .data-table__td--name-text {
+     color: var(--aoms-champagne);
+   }
+
+   .data-table__footer {
+     background: rgba(255, 255, 255, 0.02);
+   }
+
+   .action-btn {
+     color: var(--aoms-text-muted);
+
+     &:hover {
+       color: var(--aoms-champagne);
+     }
+   }
+
+   .data-table__shimmer-bar {
+     background: rgba(226, 199, 128, 0.06);
+   }
+ }

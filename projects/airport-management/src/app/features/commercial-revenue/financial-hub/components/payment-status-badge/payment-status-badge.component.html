@@ -1,0 +1,13 @@
+<span class="psb-badge" [ngClass]="[cssClass(), compact() ? 'psb-badge--compact' : '']"
+    [class.psb-badge--shimmer]="justTransitionedToRefunded()" [attr.aria-label]="'Status: ' + status()">
+    <svg class="psb-badge__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="iconPath()" />
+    </svg>
+    @if (!compact()) {
+    <span class="psb-badge__label">{{ status() }}</span>
+    }
+    @if (justTransitionedToRefunded()) {
+    <span class="psb-badge__shimmer-sweep" aria-hidden="true"></span>
+    }
+</span>

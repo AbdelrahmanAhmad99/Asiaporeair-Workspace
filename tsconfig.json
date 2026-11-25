@@ -11,6 +11,14 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "paths": {
+      "shared-core": [
+        "./projects/shared-core/src/public-api.ts"
+      ],
+      "@shared-core": [
+        "./projects/shared-core/src/public-api.ts"
+      ]
+    },
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve"
@@ -21,5 +29,25 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": []
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/customer-portal/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/customer-portal/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/airport-management/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/airport-management/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/shared-core/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/shared-core/tsconfig.spec.json"
+    }
+  ]
 }

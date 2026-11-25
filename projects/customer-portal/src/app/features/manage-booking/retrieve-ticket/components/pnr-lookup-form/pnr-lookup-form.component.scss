@@ -1,0 +1,262 @@
+// ============================================================================
+// pnr-lookup-form.component.scss
+// Asiaporeair | Floating-Label Ticket Form — Gold Border Premium Styling
+// ============================================================================
+
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+$midnight-sapphire : #051937;
+$royal-gold : #B68F24;
+$champagne-gold : #E2C780;
+$deep-navy : #101056;
+$error-red : #C0392B;
+$gold-focus-shadow : 0 0 0 3px rgba(182, 143, 36, 0.18);
+
+// ── Form Shell ────────────────────────────────────────────────────────────────
+.plf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.plf-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 4px;
+
+  &__icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: $royal-gold;
+  }
+
+  &__title {
+    font-family: 'Montserrat', 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: $midnight-sapphire;
+    margin: 0 0 4px;
+  }
+
+  &__sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    color: rgba($deep-navy, 0.5);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+}
+
+// ── Field Wrapper ─────────────────────────────────────────────────────────────
+.plf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &--error .plf-float-group {
+    border-color: rgba($error-red, 0.7);
+
+    &:focus-within {
+      box-shadow: 0 0 0 3px rgba($error-red, 0.14);
+    }
+  }
+
+  &--error .plf-label {
+    color: $error-red;
+  }
+}
+
+// ── Floating Label Group ──────────────────────────────────────────────────────
+.plf-float-group {
+  position: relative;
+  border: 1px solid rgba($midnight-sapphire, 0.2);
+  border-radius: 8px;
+  background: #fff;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+
+  &--focused {
+    border-color: $royal-gold;
+    box-shadow: $gold-focus-shadow;
+
+    .plf-label {
+      top: 6px;
+      font-size: 10px;
+      color: $royal-gold;
+      letter-spacing: 0.08em;
+    }
+
+    .plf-field__suffix {
+      color: $royal-gold;
+    }
+  }
+
+  &--filled .plf-label,
+  &--focused .plf-label {
+    top: 6px;
+    font-size: 10px;
+    color: rgba($deep-navy, 0.55);
+    letter-spacing: 0.06em;
+  }
+}
+
+// ── Label (floats up on focus/fill) ──────────────────────────────────────────
+.plf-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: rgba($deep-navy, 0.45);
+  pointer-events: none;
+  transition: top 0.18s ease, font-size 0.18s ease, color 0.18s ease, letter-spacing 0.18s ease;
+  transform-origin: left center;
+}
+
+// ── Input ─────────────────────────────────────────────────────────────────────
+.plf-input {
+  width: 100%;
+  padding: 26px 48px 10px 16px; // top padding leaves room for floated label
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: $midnight-sapphire;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  letter-spacing: 0.01em;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  // let floating label serve as placeholder
+}
+
+// ── Suffix Icon ───────────────────────────────────────────────────────────────
+.plf-field__suffix {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba($deep-navy, 0.3);
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+// ── Hint Text ─────────────────────────────────────────────────────────────────
+.plf-hint {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: rgba($deep-navy, 0.4);
+  margin: 0;
+  padding-left: 2px;
+  letter-spacing: 0.01em;
+}
+
+// ── Inline Error ──────────────────────────────────────────────────────────────
+.plf-error {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  color: $error-red;
+  margin: 0;
+  padding-left: 2px;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// ── Server / Backend Error Banner ─────────────────────────────────────────────
+.plf-server-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  background: rgba($error-red, 0.05);
+  border: 1px solid rgba($error-red, 0.22);
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: darken($error-red, 8%);
+  line-height: 1.6;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+}
+
+// ── Submit Button ─────────────────────────────────────────────────────────────
+.plf-btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 28px;
+  background: $midnight-sapphire;
+  color: $royal-gold;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px; // Squircle corners per guidelines
+  cursor: pointer;
+  transition: background 0.22s ease, box-shadow 0.22s ease, transform 0.16s ease;
+  position: relative;
+  overflow: hidden;
+  margin-top: 4px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  &:hover:not(:disabled) {
+    background: darken($royal-gold, 6%);
+    box-shadow: 0 6px 24px rgba(182, 143, 36, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled,
+  &--loading {
+    opacity: 0.72;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+// ── Button Spinner ────────────────────────────────────────────────────────────
+.plf-btn__spinner {
+  width: 18px;
+  height: 18px;
+  animation: spin 0.9s linear infinite;
+  stroke: rgba(255, 255, 255, 0.85);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

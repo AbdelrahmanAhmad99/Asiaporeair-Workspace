@@ -1,0 +1,77 @@
+<!-- itinerary-summary-card.component.html -->
+
+<div class="itinerary-card" aria-label="Flight itinerary">
+
+    <!-- Flight Header -->
+    <div class="flight-header">
+        <span class="flight-number">{{ bookingDetail().flightNumber }}</span>
+        <span class="flight-sep">·</span>
+        <span class="flight-aircraft">{{ bookingDetail().aircraftModel }}</span>
+        <span class="flight-sep">·</span>
+        <span class="flight-airline">{{ bookingDetail().airlineName }}</span>
+    </div>
+
+    <!-- Segment -->
+    <div class="segment" role="group" aria-label="Flight segment">
+
+        <!-- Origin -->
+        <div class="segment-endpoint">
+            <span class="endpoint-time">{{ departureTime() }}</span>
+            <span class="endpoint-iata">{{ bookingDetail().originAirportCode }}</span>
+            <span class="endpoint-city">{{ bookingDetail().originAirportName }}</span>
+            <span class="endpoint-date">{{ departureDate() }}</span>
+        </div>
+
+        <!-- Flight Path Visual -->
+        <div class="segment-path" aria-hidden="true">
+            <div class="path-line"></div>
+            <div class="path-plane-wrapper">
+                <svg class="path-plane" width="18" height="18" viewBox="0 0 24 24" fill="#B68F24">
+                    <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+                </svg>
+                <span class="path-duration">{{ flightDuration() }}</span>
+            </div>
+            <div class="path-line"></div>
+        </div>
+
+        <!-- Destination -->
+        <div class="segment-endpoint segment-endpoint--right">
+            <span class="endpoint-time">{{ arrivalTime() }}</span>
+            <span class="endpoint-iata">{{ bookingDetail().destinationAirportCode }}</span>
+            <span class="endpoint-city">{{ bookingDetail().destinationAirportName }}</span>
+            <span class="endpoint-date">{{ arrivalDate() }}</span>
+        </div>
+
+    </div>
+
+    <!-- Fare Info Row -->
+    <div class="fare-row">
+        <div class="fare-chip">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            {{ bookingDetail().fareDescription }}
+        </div>
+        <div class="fare-chip">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {{ bookingDetail().fareBasisCode }}
+        </div>
+        <div class="fare-chip">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="6" y="8" width="12" height="13" rx="2"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+            2 × 23kg checked baggage
+        </div>
+    </div>
+
+    <!-- Fare Cost Row -->
+    <div class="fare-cost-row" aria-label="Base fare cost">
+        <div class="fare-cost-block">
+            <span class="fare-cost-label">Flights</span>
+            <div class="fare-cost-detail">
+                <span class="fare-cost-line">Air Fare · {{ bookingDetail().userFullName }}</span>
+                <span class="fare-cost-line">Airport / Government Taxes</span>
+            </div>
+        </div>
+        <div class="fare-cost-amounts">
+            <span class="fare-amount">{{ currency() }} {{ formatPrice(bookingDetail().totalPrice) }}</span>
+        </div>
+    </div>
+
+</div>

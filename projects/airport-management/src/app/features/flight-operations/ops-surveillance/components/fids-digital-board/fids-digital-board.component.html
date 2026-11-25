@@ -1,0 +1,117 @@
+<div class="fdb-board" [attr.aria-label]="view() === 'DEPARTURES' ? 'Departures board' : 'Arrivals board'"
+    role="region">
+
+    <!-- ── Column headers — Midnight Sapphire + Champagne Gold ─── -->
+    <div class="fdb-header" role="row" aria-label="Flight board column headers">
+        <div class="fdb-hcol fdb-hcol--time" role="columnheader">{{ timeLabel() }}</div>
+        <div class="fdb-hcol fdb-hcol--flight" role="columnheader">FLIGHT</div>
+        <div class="fdb-hcol fdb-hcol--dest" role="columnheader">{{ originDestLabel() }}</div>
+        <div class="fdb-hcol fdb-hcol--airline" role="columnheader">AIRLINE</div>
+        <div class="fdb-hcol fdb-hcol--gate" role="columnheader">GATE</div>
+        <div class="fdb-hcol fdb-hcol--status" role="columnheader">STATUS</div>
+    </div>
+
+    <!-- ── Loading shimmer — LED fade placeholder ─────────────── -->
+    @if (loading()) {
+    <div class="fdb-shimmer-list" aria-busy="true" aria-label="Loading flight data">
+        @for (s of shimmerRows; track $index) {
+        <div class="fdb-shimmer-row">
+            <div class="fdb-sk fdb-sk--time"></div>
+            <div class="fdb-sk fdb-sk--flight"></div>
+            <div class="fdb-sk fdb-sk--dest"></div>
+            <div class="fdb-sk fdb-sk--airline"></div>
+            <div class="fdb-sk fdb-sk--gate"></div>
+            <div class="fdb-sk fdb-sk--status"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Empty state ─────────────────────────────────────────── -->
+    @if (!loading() && rows().length === 0) {
+    <div class="fdb-empty">
+        <div class="fdb-empty__dash-frame" aria-hidden="true">
+            <span>— — — — — — — NO FLIGHTS — — — — — — —</span>
+        </div>
+        <p class="fdb-empty__sub">No flights in this window. Adjust filters or check the airport code.</p>
+    </div>
+    }
+
+    <!-- ── Flight rows — LED / Split-flap per spec ───────────────── -->
+    @if (!loading() && rows().length > 0) {
+    <div class="fdb-rows" role="list">
+
+        @for (f of rows(); track trackByFlight($index, f); let even = $even) {
+
+        <div class="fdb-row" [class.fdb-row--even]="even"
+            [class.fdb-row--cancelled]="(f.status ?? 'SCHEDULED').toUpperCase() === 'CANCELLED'"
+            [class.fdb-row--boarding]="(f.status ?? 'SCHEDULED').toUpperCase() === 'BOARDING'" role="listitem"
+            [attr.aria-label]="f.flightNo + ' to ' + (view() === 'DEPARTURES' ? f.destinationCity : f.originCity) + ' · ' + statusMeta(f.status ?? 'SCHEDULED').label">
+
+            <!-- Split-flap separator line (top of each row) -->
+            <div class="fdb-row__separator" aria-hidden="true"></div>
+
+            <!-- Scheduled Time + delay badge -->
+            <div class="fdb-col fdb-col--time">
+                <span class="fdb-time">{{ f.scheduledTime | date:'HH:mm' }}</span>
+                @if (delayMinutes(f.scheduledTime, f.estimatedTime) > 0) {
+                <span class="fdb-delay-badge"
+                    [attr.aria-label]="delayMinutes(f.scheduledTime, f.estimatedTime) + ' minute delay'">
+                    +{{ delayMinutes(f.scheduledTime, f.estimatedTime) }}m
+                </span>
+                }
+                <!-- Estimated time if different -->
+                @if (f.estimatedTime && f.estimatedTime !== f.scheduledTime && delayMinutes(f.scheduledTime,
+                f.estimatedTime) !== 0) {
+                <span class="fdb-est-time">{{ f.estimatedTime | date:'HH:mm' }}</span>
+                }
+            </div>
+
+            <!-- Flight Number — monospaced per spec -->
+            <div class="fdb-col fdb-col--flight">
+                <span class="fdb-flight-no">{{ f.flightNo }}</span>
+            </div>
+
+            <!-- Origin / Destination -->
+            <div class="fdb-col fdb-col--dest">
+                <span class="fdb-dest">{{ view() === 'DEPARTURES' ? f.destinationCity : f.originCity }}</span>
+            </div>
+
+            <!-- Airline -->
+            <div class="fdb-col fdb-col--airline">
+                <span class="fdb-airline">{{ f.airlineName }}</span>
+            </div>
+
+            <!-- Gate -->
+            <div class="fdb-col fdb-col--gate">
+                @if (f.gate) {
+                <span class="fdb-gate">{{ f.gate }}</span>
+                } @else {
+                <span class="fdb-gate fdb-gate--tbd">TBD</span>
+                }
+            </div>
+
+            <!-- Status — with flashing animation for BOARDING -->
+            <div class="fdb-col fdb-col--status">
+                <span class="fdb-status" [ngClass]="'fdb-status--' + statusMeta(f.status ?? 'SCHEDULED').cls"
+                    [class.fdb-status--flashing]="statusMeta(f.status ?? 'SCHEDULED').flashing">
+                    {{ statusMeta(f.status ?? 'SCHEDULED').label }}
+                </span>
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+    }
+
+    <!-- Board footer — row count -->
+    @if (!loading() && rows().length > 0) {
+    <div class="fdb-footer" aria-live="polite">
+        <span class="fdb-footer__count">{{ rows().length }} flight{{ rows().length !== 1 ? 's' : '' }}</span>
+        <span class="fdb-footer__note">Sorted by scheduled time · UTC+8</span>
+    </div>
+    }
+
+</div>

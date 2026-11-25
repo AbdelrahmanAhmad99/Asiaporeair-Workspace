@@ -1,0 +1,167 @@
+<div class="amt-card">
+
+    <!-- ── Scroll wrapper ────────────────────────────────────────── -->
+    <div class="amt-scroll">
+        <table class="amt-table" role="grid" aria-label="Airport master registry">
+
+            <!-- ── Sticky Head ──────────────────────────────────────── -->
+            <thead class="amt-head">
+                <tr>
+                    @for (col of columns; track col.key) {
+                    <th class="amt-th" [class.amt-col--md-hidden]="col.hideOnMd"
+                        [class.amt-col--lg-hidden]="col.hideOnLg" [class.amt-col--xl-hidden]="col.hideOnXl" scope="col">
+                        {{ col.label }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+
+            <!-- ── Loading Shimmer ──────────────────────────────────── -->
+            @if (loading()) {
+            <tbody>
+                @for (row of shimmerRows; track $index) {
+                <tr class="amt-tr amt-tr--even">
+                    @for (col of columns; track col.key) {
+                    <td class="amt-td amt-td--shimmer" [class.amt-col--md-hidden]="col.hideOnMd"
+                        [class.amt-col--lg-hidden]="col.hideOnLg" [class.amt-col--xl-hidden]="col.hideOnXl">
+                        <div class="amt-shimmer" [style.width]="col.shimmerWidth">
+                        </div>
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- ── Data Rows ─────────────────────────────────────────── -->
+            @if (!loading()) {
+            <tbody [@tableAnim]="airports().length">
+
+                @for (airport of airports(); track airport.iataCode; let even = $even) {
+                <tr class="amt-tr" [class.amt-tr--even]="even" [class.amt-tr--odd]="!even">
+
+                    <!-- IATA Code — Bold Royal Gold badge -->
+                    <td class="amt-td">
+                        <span class="amt-badge amt-badge--iata">{{ airport.iataCode }}</span>
+                    </td>
+
+                    <!-- ICAO Code — Champagne monospace -->
+                    <td class="amt-td">
+                        <span class="amt-badge amt-badge--icao">{{ airport.icaoCode }}</span>
+                    </td>
+
+                    <!-- Airport Name -->
+                    <td class="amt-td">
+                        <span class="amt-td__airport-name">{{ airport.name }}</span>
+                    </td>
+
+                    <!-- City -->
+                    <td class="amt-td amt-col--md-hidden">
+                        <span class="amt-td__city">{{ airport.city }}</span>
+                    </td>
+
+                    <!-- Country Name -->
+                    <td class="amt-td amt-col--lg-hidden">
+                        <span class="amt-td__country">{{ airport.countryName }}</span>
+                    </td>
+
+                    <!-- Country ISO -->
+                    <td class="amt-td amt-col--md-hidden">
+                        <span class="amt-badge amt-badge--iso">{{ airport.countryIsoCode }}</span>
+                    </td>
+
+                    <!-- Latitude -->
+                    <td class="amt-td amt-col--xl-hidden">
+                        <span class="amt-td__coord">{{ formatCoord(airport.latitude) }}</span>
+                    </td>
+
+                    <!-- Longitude -->
+                    <td class="amt-td amt-col--xl-hidden">
+                        <span class="amt-td__coord">{{ formatCoord(airport.longitude) }}</span>
+                    </td>
+
+                    <!-- Altitude -->
+                    <td class="amt-td amt-col--lg-hidden">
+                        <span class="amt-td__alt">{{ formatAlt(airport.altitude) }}</span>
+                    </td>
+
+                    <!-- Action Suite -->
+                    <td class="amt-td">
+                        <div class="amt-actions">
+
+                            <!-- View -->
+                            <button class="amt-action-btn" (click)="onAction('view', airport.iataCode)"
+                                [attr.aria-label]="'View details for ' + airport.name" title="View Details">
+                                <svg class="amt-action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z
+                            M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                </svg>
+                            </button>
+
+                            <!-- Edit -->
+                            <button class="amt-action-btn" (click)="onAction('edit', airport.iataCode)"
+                                [attr.aria-label]="'Edit ' + airport.name" title="Edit">
+                                <svg class="amt-action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                                </svg>
+                            </button>
+
+                            <!-- Deactivate -->
+                            <button class="amt-action-btn amt-action-btn--danger"
+                                (click)="onAction('deactivate', airport.iataCode)"
+                                [attr.aria-label]="'Deactivate ' + airport.name" title="Deactivate">
+                                <svg class="amt-action-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </button>
+
+                        </div>
+                    </td>
+
+                </tr>
+                }
+
+                <!-- ── Empty State ───────────────────────────────────── -->
+                @if (airports().length === 0) {
+                <tr>
+                    <td [attr.colspan]="columns.length" class="amt-empty">
+                        <div class="amt-empty__inner">
+                            <div class="amt-empty__icon-wrap" aria-hidden="true">
+                                <svg class="amt-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                                </svg>
+                            </div>
+                            @if (hasActiveSearch()) {
+                            <p class="amt-empty__title">No airports match your search criteria.</p>
+                            <p class="amt-empty__sub">Adjust the filters above or clear the search to show all records.
+                            </p>
+                            } @else {
+                            <p class="amt-empty__title">No active airports in the network.</p>
+                            <p class="amt-empty__sub">Use "New Airport" to register the first global node.</p>
+                            }
+                        </div>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+            }
+
+        </table>
+    </div>
+
+    <!-- ── Table Footer ─────────────────────────────────────────── -->
+    @if (!loading() && airports().length > 0) {
+    <div class="amt-footer">
+        <span class="amt-footer__label">{{ recordLabel() }}</span>
+    </div>
+    }
+
+</div>

@@ -1,0 +1,273 @@
+<div class="bgf-card">
+
+    <!-- Champagne Gold accent top bar -->
+    <div class="bgf-card__accent-bar" aria-hidden="true"></div>
+
+    <!-- Card Header -->
+    <div class="bgf-card__header">
+        <div class="bgf-card__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42
+                 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653
+                 a2.548 2.548 0 1 1-3.586-3.586l5.654-4.654m5.879-4.252c.083-.09.173
+                 -.177.264-.264.641-.641 1.529-.979 2.43-.979a3.479 3.479 0 0 1
+                 3.478 3.479c0 .901-.338 1.789-.979 2.43l-.264.264" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="bgf-card__title">Generation Parameters</h3>
+            <p class="bgf-card__subtitle">Configure the airline, period, and generation policy</p>
+        </div>
+    </div>
+
+    <!-- Error banner from backend -->
+    @if (formError()) {
+    <div class="bgf-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636
+                 5.636m12.728 12.728L5.636 5.636" />
+        </svg>
+        <p class="bgf-error__msg">{{ formError() }}</p>
+    </div>
+    }
+
+    <form class="bgf-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off">
+
+        <!-- ── Airline Searchable Select ─────────────────────────── -->
+        <div class="bgf-section">
+            <div class="bgf-section__label">
+                <span class="bgf-section__num" aria-hidden="true">01</span>
+                Operating Airline
+                <span class="bgf-req" aria-hidden="true">*</span>
+            </div>
+
+            <div class="bgf-field"
+                [class.bgf-field--error]="form.get('airlineIataCode')?.invalid && form.get('airlineIataCode')?.touched">
+
+                <div class="bgf-combo" [class.bgf-combo--open]="airlineOpen()">
+
+                    <div class="bgf-combo__input-wrap">
+                        <div class="bgf-combo__icon" aria-hidden="true">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                            </svg>
+                        </div>
+                        <input class="bgf-combo__input" type="text" [value]="airlineSearch()"
+                            (input)="onAirlineInput($any($event.target).value)" (focus)="airlineOpen.set(true)"
+                            (click)="airlineOpen.set(true)" (blur)="onAirlineBlur()"
+                            placeholder="Search airline by IATA, name, or region…"
+                            [class.bgf-combo__input--confirmed]="!!confirmedAirline()"
+                            aria-label="Search and select airline" [attr.aria-expanded]="airlineOpen()"
+                            autocomplete="off">
+                        @if (confirmedAirline()) {
+                        <button class="bgf-combo__clear" type="button"
+                            (mousedown)="$event.preventDefault(); clearAirline()" aria-label="Clear selected airline">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        }
+                    </div>
+
+                    @if (airlineOpen()) {
+                    <ul class="bgf-combo__list" role="listbox" aria-label="Available airlines">
+                        @if (filteredAirlines().length === 0) {
+                        <li class="bgf-combo__empty">No airlines match your search.</li>
+                        }
+                        @for (a of filteredAirlines(); track a.iataCode) {
+                        <li class="bgf-combo__option"
+                            [class.bgf-combo__option--selected]="confirmedAirline()?.iataCode === a.iataCode"
+                            role="option" [attr.aria-selected]="confirmedAirline()?.iataCode === a.iataCode"
+                            (mousedown)="$event.preventDefault(); selectAirline(a)">
+                            <div class="bgf-airline-option">
+                                <div class="bgf-airline-option__badge">{{ a.iataCode }}</div>
+                                <div class="bgf-airline-option__info">
+                                    <span class="bgf-airline-option__name">{{ a.name }}</span>
+                                    <span class="bgf-airline-option__meta">
+                                        {{ a.callsign }} · {{ a.operatingRegion }}
+                                    </span>
+                                </div>
+                            </div>
+                            @if (confirmedAirline()?.iataCode === a.iataCode) {
+                            <svg class="bgf-combo__check" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                            </svg>
+                            }
+                        </li>
+                        }
+                    </ul>
+                    }
+                </div>
+
+                @if (form.get('airlineIataCode')?.invalid && form.get('airlineIataCode')?.touched &&
+                !confirmedAirline()) {
+                <span class="bgf-field__err" role="alert">Select an airline from the list to continue.</span>
+                }
+
+                <!-- Confirmed airline summary strip -->
+                @if (confirmedAirline()) {
+                <div class="bgf-airline-strip" role="status" aria-live="polite">
+                    <span class="bgf-airline-strip__iata">{{ confirmedAirline()!.iataCode }}</span>
+                    <span class="bgf-airline-strip__name">{{ confirmedAirline()!.name }}</span>
+                    <span class="bgf-airline-strip__region">{{ confirmedAirline()!.operatingRegion }}</span>
+                </div>
+                }
+
+            </div>
+        </div>
+
+        <!-- ── Date Range ─────────────────────────────────────────── -->
+        <div class="bgf-section">
+            <div class="bgf-section__label">
+                <span class="bgf-section__num" aria-hidden="true">02</span>
+                Generation Period
+                <span class="bgf-req" aria-hidden="true">*</span>
+            </div>
+
+            @if (validityWindow()) {
+            <div class="bgf-validity-hint" role="note">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0
+                     0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+                Active schedule window: <strong>{{ validityWindow()!.earliest }}</strong>
+                @if (validityWindow()!.latest) {
+                → <strong>{{ validityWindow()!.latest }}</strong>
+                } @else {
+                → <strong>Open-ended</strong>
+                }
+            </div>
+            }
+
+            <div class="bgf-date-row">
+
+                <div class="bgf-field bgf-field--date" [class.bgf-field--error]="isInvalid('startDate')">
+                    <label class="bgf-date-label" for="bgf-start">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25
+                       2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0
+                       21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        Start Date
+                    </label>
+                    <input id="bgf-start" class="bgf-date-input" type="date" formControlName="startDate"
+                        [min]="validityWindow()?.earliest ?? ''"
+                        [attr.aria-invalid]="isInvalid('startDate') ? 'true' : null">
+                    @if (isInvalid('startDate')) {
+                    <span class="bgf-field__err" role="alert">Start date is required.</span>
+                    }
+                </div>
+
+                <div class="bgf-date-arrow" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                    </svg>
+                </div>
+
+                <div class="bgf-field bgf-field--date" [class.bgf-field--error]="isInvalid('endDate')">
+                    <label class="bgf-date-label" for="bgf-end">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25
+                       2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0
+                       21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        End Date
+                    </label>
+                    <input id="bgf-end" class="bgf-date-input" type="date" formControlName="endDate"
+                        [min]="form.get('startDate')?.value || ''" [max]="validityWindow()?.latest ?? ''"
+                        [attr.aria-invalid]="isInvalid('endDate') ? 'true' : null">
+                    @if (isInvalid('endDate')) {
+                    <span class="bgf-field__err" role="alert">End date is required.</span>
+                    }
+                </div>
+
+            </div>
+
+            <!-- Estimated day count badge -->
+            @if (estimatedDays() > 0) {
+            <div class="bgf-day-estimate" aria-live="polite">
+                <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                <span>Generation window: <strong>{{ estimatedDays() }}</strong> calendar day{{ estimatedDays() !== 1 ?
+                    's' : '' }}</span>
+            </div>
+            }
+
+        </div>
+
+        <!-- ── Generation Policy ──────────────────────────────────── -->
+        <div class="bgf-section">
+            <div class="bgf-section__label">
+                <span class="bgf-section__num" aria-hidden="true">03</span>
+                Generation Policy
+            </div>
+
+            <label class="bgf-checkbox-label">
+                <input class="bgf-checkbox" type="checkbox" formControlName="overwrite">
+                <div class="bgf-checkbox__visual" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                </div>
+                <div class="bgf-checkbox__text">
+                    <span class="bgf-checkbox__title">Overwrite Existing Instances</span>
+                    <span class="bgf-checkbox__desc">
+                        When enabled, instances already created for this period will be replaced.
+                        Use with caution — this action cannot be undone.
+                    </span>
+                </div>
+            </label>
+        </div>
+
+        <!-- ── Warning notice ─────────────────────────────────────── -->
+        <div class="bgf-warning" role="note">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <p>
+                This operation generates <strong>flight instances across all active schedules</strong>
+                for the selected airline. Execution time scales with the date range.
+                Review the schedule registry on the right before proceeding.
+            </p>
+        </div>
+
+        <!-- ── Actions ────────────────────────────────────────────── -->
+        <div class="bgf-actions">
+            <button class="bgf-btn bgf-btn--cancel" type="button" (click)="onCancel.emit()" [disabled]="isGenerating()">
+                Cancel
+            </button>
+
+            <button class="bgf-btn bgf-btn--generate" type="submit" [disabled]="!isFormReady()">
+                @if (isGenerating()) {
+                <svg class="bgf-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                     0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                     0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Generating Instances…
+                } @else {
+                <svg class="bgf-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21
+                     18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Execute Bulk Generation
+                }
+            </button>
+        </div>
+
+    </form>
+
+</div>

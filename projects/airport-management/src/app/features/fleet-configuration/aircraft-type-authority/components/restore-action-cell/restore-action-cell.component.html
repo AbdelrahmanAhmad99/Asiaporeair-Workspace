@@ -1,0 +1,64 @@
+<div class="rac" [attr.data-deleted]="isDeleted()">
+
+    <!-- ── Loading state ───────────────────────────────────────── -->
+    @if (isRestoring()) {
+    <div class="rac__restoring" aria-live="polite" aria-busy="true">
+        <svg class="rac__restoring__spinner" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992
+                 m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7
+                 M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        Restoring…
+    </div>
+    }
+
+    <!-- ── Active (not deleted) ─────────────────────────────────── -->
+    @if (!isRestoring() && !isDeleted()) {
+    <div class="rac__active-chip" role="status" aria-label="Currently in active fleet">
+        <svg class="rac__active-chip__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+        </svg>
+        In Active Fleet
+    </div>
+    }
+
+    <!-- ── Deleted — awaiting trigger ──────────────────────────── -->
+    @if (!isRestoring() && isDeleted() && !pendingConfirm()) {
+    <button class="rac__restore-btn" type="button" (click)="onInitiateRestore()"
+        [attr.aria-label]="'Reactivate aircraft type ' + typeId() + ' for service'">
+        <svg class="rac__restore-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+        </svg>
+        Reactivate for Service
+    </button>
+    }
+
+    <!-- ── Micro-confirmation ───────────────────────────────────── -->
+    @if (!isRestoring() && isDeleted() && pendingConfirm()) {
+    <div class="rac__confirm" role="group" aria-label="Confirm aircraft type restoration">
+        <span class="rac__confirm__prompt">Confirm restoration?</span>
+        <div class="rac__confirm__actions">
+            <button class="rac__confirm__yes" type="button" (click)="onConfirmRestore()"
+                aria-label="Confirm — restore to active fleet">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="rac__confirm__btn-icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                Yes
+            </button>
+            <button class="rac__confirm__no" type="button" (click)="onCancelRestore()" aria-label="Cancel restoration">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="rac__confirm__btn-icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                No
+            </button>
+        </div>
+    </div>
+    }
+
+</div>

@@ -1,0 +1,16 @@
+<div class="sib" role="list" aria-label="In-flight services">
+    @for (icon of icons; track icon.id) {
+    <div class="sib__item" role="listitem">
+        <div class="sib__icon-circle" aria-hidden="true">
+            <svg class="sib__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1">
+                <path [attr.d]="icon.svgPath" />
+            </svg>
+        </div>
+        <h3 class="sib__label">{{ icon.label }}</h3>
+        @if (icon.sublabel) {
+        <p class="sib__sub">{{ icon.sublabel }}</p>
+        }
+    </div>
+    }
+</div>

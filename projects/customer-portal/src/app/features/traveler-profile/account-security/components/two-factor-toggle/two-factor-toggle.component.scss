@@ -1,0 +1,307 @@
+// ============================================================================
+// two-factor-toggle.component.scss
+// Asiaporeair | 2FA Toggle — Gold / Gray Custom Switch
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$muted-bg : #CBD5E0;
+$success : #276749;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── Card ─────────────────────────────────────────────────────────────────────
+.tft-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($champagne, 0.25);
+    box-shadow: 0 4px 22px rgba($midnight, 0.06);
+    overflow: hidden;
+
+    &__header {
+        padding: 22px 28px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    &__title-block {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba($royal-gold, 0.08);
+        border: 1px solid rgba($royal-gold, 0.2);
+        color: $royal-gold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: $charcoal;
+        margin: 0 0 3px;
+    }
+
+    &__subtitle {
+        font-family: $font;
+        font-size: 0.7rem;
+        color: $muted;
+        margin: 0;
+    }
+
+    &__rule {
+        height: 1px;
+        margin: 0 28px;
+        background: linear-gradient(90deg, transparent, rgba($champagne, 0.4), transparent);
+    }
+}
+
+// ── Custom Toggle Switch ──────────────────────────────────────────────────────
+.tft-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        border-radius: 30px;
+        outline-offset: 3px;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    &__track {
+        position: relative;
+        width: 52px;
+        height: 28px;
+        background: $muted-bg;
+        border-radius: 14px;
+        transition: background $t;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    &__thumb {
+        position: absolute;
+        left: 3px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: $white;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
+        transition: left $t, background $t;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $royal-gold;
+        z-index: 2;
+    }
+
+    &__label {
+        font-family: $font;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: $muted;
+        transition: color $t;
+        min-width: 22px;
+        user-select: none;
+    }
+
+    // ── ON state ─────────────────────────────────────────────────────────
+    &--on {
+        .tft-toggle__track {
+            background: linear-gradient(135deg, darken($royal-gold, 4%), $royal-gold);
+        }
+
+        .tft-toggle__thumb {
+            left: calc(100% - 25px);
+        }
+
+        .tft-toggle__label {
+            color: $royal-gold;
+        }
+    }
+
+    // ── Toggling state ────────────────────────────────────────────────────
+    &--toggling .tft-toggle__track {
+        opacity: 0.7;
+    }
+}
+
+// Spinner inside track during toggle
+.tft-toggle__spinner {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid rgba($white, 0.3);
+    border-top-color: $white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+.tft-skeleton {
+    height: 28px;
+    width: 52px;
+    border-radius: 14px;
+    background: linear-gradient(90deg,
+            rgba($champagne, 0.1) 0%,
+            rgba($champagne, 0.25) 50%,
+            rgba($champagne, 0.1) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s ease infinite;
+
+    &--badge {
+        height: 22px;
+        width: 140px;
+        border-radius: 20px;
+    }
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────
+.tft-body {
+    padding: 18px 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tft-status-row {
+    display: flex;
+    align-items: center;
+}
+
+// ── Status badges ─────────────────────────────────────────────────────────────
+.tft-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: $font;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    &--active {
+        background: rgba($royal-gold, 0.1);
+        border: 1px solid rgba($royal-gold, 0.3);
+        color: darken($royal-gold, 6%);
+    }
+
+    &--inactive {
+        background: rgba($muted, 0.08);
+        border: 1px solid rgba($muted, 0.2);
+        color: $muted;
+    }
+}
+
+// ── Description ───────────────────────────────────────────────────────────────
+.tft-description {
+    font-family: $font;
+    font-size: 0.74rem;
+    font-weight: 400;
+    color: rgba($charcoal, 0.65);
+    line-height: 1.7;
+    margin: 0;
+}
+
+// ── Feature bullets ───────────────────────────────────────────────────────────
+.tft-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+.tft-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba($charcoal, 0.7);
+    line-height: 1.5;
+
+    &__dot {
+        flex-shrink: 0;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: $royal-gold;
+        margin-top: 5px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .tft-toggle__spinner,
+    .tft-skeleton {
+        animation: none;
+    }
+
+    .tft-toggle__track,
+    .tft-toggle__thumb,
+    .tft-toggle__label {
+        transition: none;
+    }
+}

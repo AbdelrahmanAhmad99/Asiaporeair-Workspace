@@ -1,0 +1,319 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $t: 200ms ease;
+
+ :host {
+     display: block;
+ }
+
+ .hvg {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 6px 24px rgba(5, 25, 55, 0.25);
+ }
+
+ // Header
+ .hvg__header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     flex-wrap: wrap;
+ }
+
+ .hvg__header__left {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+ }
+
+ .hvg__header__icon-wrap {
+     width: 2.25rem;
+     height: 2.25rem;
+     border-radius: 8px;
+     flex-shrink: 0;
+     background: rgba(182, 143, 36, 0.12);
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .hvg__header__icon {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: $champagne;
+ }
+
+ .hvg__title {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     color: rgba(255, 255, 255, 0.9);
+     letter-spacing: -0.01em;
+ }
+
+ .hvg__subtitle {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     color: rgba(226, 199, 128, 0.4);
+ }
+
+ // KPI strip
+ .hvg__kpis {
+     display: flex;
+     gap: 1.25rem;
+     flex-wrap: wrap;
+ }
+
+ .hvg__kpi {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+     text-align: right;
+
+     &__val {
+         font-size: 1.375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 800;
+         letter-spacing: -0.03em;
+         color: $champagne;
+         font-variant-numeric: tabular-nums;
+         line-height: 1;
+     }
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba(226, 199, 128, 0.4);
+     }
+
+     &--peak .hvg__kpi__val {
+         color: lighten(#B68F24, 15%);
+     }
+ }
+
+ // Chart container
+ .hvg__chart-wrap {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+ }
+
+ // Y-axis
+ .hvg__y-axis {
+     position: absolute;
+     left: 0;
+     top: 0;
+     bottom: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     justify-content: flex-end;
+     width: 2rem;
+     pointer-events: none;
+     z-index: 2;
+ }
+
+ .hvg__y-label {
+     position: absolute;
+     right: 0;
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-variant-numeric: tabular-nums;
+     color: rgba(226, 199, 128, 0.3);
+     text-align: right;
+     transform: translateY(50%);
+ }
+
+ // SVG wrapper
+ .hvg__svg-wrap {
+     margin-left: 2.25rem;
+     flex: 1;
+     min-height: 200px;
+     position: relative;
+ }
+
+ .hvg__svg {
+     width: 100%;
+     height: 200px;
+     display: block;
+     overflow: visible;
+ }
+
+ // SVG elements
+ .hvg__area {
+     transition: d 300ms ease;
+ }
+
+ .hvg__line {
+     stroke-dasharray: 10000;
+     stroke-dashoffset: 10000;
+     animation: hvg-draw 1.2s ease-out forwards;
+     animation-delay: 100ms;
+     transition: d 300ms ease;
+ }
+
+ .hvg__hit-zone {
+     cursor: pointer;
+ }
+
+ .hvg__point-ring {
+     opacity: 0;
+     transition: opacity 160ms ease, r 160ms ease;
+ }
+
+ .hvg__point-core {
+     transition: r 160ms ease;
+ }
+
+ .hvg__point-group {
+     &--hovered {
+         .hvg__point-ring {
+             opacity: 1;
+         }
+
+         .hvg__point-core {
+             r: 1.4;
+         }
+     }
+ }
+
+ // Tooltip inside foreignObject
+ .hvg__tooltip-fo {
+     overflow: visible;
+ }
+
+ .hvg__tooltip {
+     background: rgba(5, 25, 55, 0.92);
+     border: 1px solid rgba(226, 199, 128, 0.3);
+     border-radius: 5px;
+     padding: 0.25rem 0.5rem;
+     backdrop-filter: blur(8px);
+     white-space: nowrap;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+     pointer-events: none;
+
+     &__month {
+         font-size: 7px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: rgba(226, 199, 128, 0.5);
+     }
+
+     &__count {
+         font-size: 9px;
+         font-family: var(--aoms-font-heading);
+         font-weight: 800;
+         color: #E2C780;
+         font-variant-numeric: tabular-nums;
+     }
+ }
+
+ // X-axis
+ .hvg__x-axis {
+     position: relative;
+     height: 1.5rem;
+     margin-left: 2.25rem;
+ }
+
+ .hvg__x-label {
+     position: absolute;
+     transform: translateX(-50%);
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     font-variant-numeric: tabular-nums;
+     color: rgba(226, 199, 128, 0.35);
+     white-space: nowrap;
+ }
+
+ // Empty + Shimmer states
+ .hvg__empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 4rem 1.5rem;
+     text-align: center;
+
+     &__icon {
+         width: 3rem;
+         height: 3rem;
+         color: rgba(182, 143, 36, 0.25);
+         margin-bottom: 0.25rem;
+     }
+
+     &__title {
+         font-size: 1rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: rgba(255, 255, 255, 0.5);
+     }
+
+     &__sub {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(226, 199, 128, 0.3);
+         max-width: 360px;
+         line-height: 1.5;
+     }
+ }
+
+ .hvg__shimmer {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+     padding: 0;
+ }
+
+ .hvg-sh {
+     border-radius: 8px;
+     background: rgba(226, 199, 128, 0.07);
+     animation: hvg-sh 1.5s ease-in-out infinite;
+
+     &--chart {
+         height: 200px;
+     }
+
+     &--axis {
+         height: 1.5rem;
+         width: 90%;
+         margin-left: 2.25rem;
+         border-radius: 4px;
+         animation-delay: 0.1s;
+     }
+ }
+
+ @keyframes hvg-draw {
+     from {
+         stroke-dashoffset: 10000;
+     }
+
+     to {
+         stroke-dashoffset: 0;
+     }
+ }
+
+ @keyframes hvg-sh {
+
+     0%,
+     100% {
+         opacity: 0.4;
+     }
+
+     50% {
+         opacity: 0.9;
+     }
+ }

@@ -1,0 +1,87 @@
+<section class="hero" aria-label="Country identity overview">
+
+    <!-- Decorative typographic backdrop watermark -->
+    <span class="hero__watermark" aria-hidden="true">
+        {{ decorativeInitials() }}
+    </span>
+
+    <!-- ══ Hero Content ═══════════════════════════════════════════════ -->
+    <div class="hero__content">
+
+        <!-- Top Row: Continent tag + Airport count chip -->
+        <div class="hero__top-row">
+            <span class="hero__continent-tag">
+                <svg class="hero__continent-icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0
+                   1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0
+                   18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1
+                   7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953
+                   11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959
+                   8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919
+                   0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0
+                   1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                </svg>
+                {{ country().continent }}
+            </span>
+
+            <span class="hero__airport-chip">
+                <svg class="hero__airport-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0
+                   1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+                {{ airportCount() }} Airport{{ airportCount() === 1 ? '' : 's' }}
+            </span>
+        </div>
+
+        <!-- Country Name (Primary heading) -->
+        <h2 class="hero__country-name">{{ country().name }}</h2>
+
+        <!-- ISO Code accent line -->
+        <div class="hero__iso-row">
+            <span class="hero__iso-badge">{{ country().isoCode }}</span>
+            <span class="hero__iso-label">ISO&nbsp;3166‑1 Alpha‑2</span>
+        </div>
+
+        <!-- Divider -->
+        <div class="hero__divider" role="separator" aria-hidden="true"></div>
+
+        <!-- Metadata Stat Grid -->
+        <dl class="hero__meta-grid">
+
+            <!-- Currency -->
+            <div class="hero__meta-item">
+                <dt class="hero__meta-label">Currency</dt>
+                <dd class="hero__meta-value">
+                    {{ country().currencyCode ?? '—' }}
+                </dd>
+            </div>
+
+            <!-- Phone Code -->
+            <div class="hero__meta-item">
+                <dt class="hero__meta-label">Dial Code</dt>
+                <dd class="hero__meta-value hero__meta-value--accent">
+                    {{ formattedPhoneCode() }}
+                </dd>
+            </div>
+
+            <!-- Continent (repeated for scannability) -->
+            <div class="hero__meta-item">
+                <dt class="hero__meta-label">Region</dt>
+                <dd class="hero__meta-value">{{ country().continent }}</dd>
+            </div>
+
+            <!-- Airport Count -->
+            <div class="hero__meta-item">
+                <dt class="hero__meta-label">Registered Airports</dt>
+                <dd class="hero__meta-value hero__meta-value--gold">
+                    {{ airportCount() }}
+                </dd>
+            </div>
+
+        </dl>
+
+    </div>
+
+</section>

@@ -1,0 +1,131 @@
+// payment-method-selector.component.scss
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --trans: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
+    padding: 1rem 1.5rem;
+}
+
+.method-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    font-family: var(--font);
+
+    @media (max-width: 700px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.method-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1.5px solid rgba(5, 25, 55, 0.12);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--trans);
+
+    &:hover {
+        border-color: rgba(182, 143, 36, 0.4);
+        box-shadow: 0 4px 14px rgba(5, 25, 55, 0.07);
+    }
+
+    &--selected {
+        border-color: var(--royal-gold);
+        background: rgba(182, 143, 36, 0.03);
+        box-shadow: 0 0 0 1px rgba(182, 143, 36, 0.2);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: 2px;
+    }
+}
+
+.radio-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    border: 1.5px solid rgba(5, 25, 55, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--trans);
+
+    .method-card--selected & {
+        border-color: var(--royal-gold);
+    }
+}
+
+.radio-inner {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: transparent;
+    transition: background var(--trans);
+
+    &--checked {
+        background: var(--royal-gold);
+    }
+}
+
+.method-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.method-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    letter-spacing: -0.01em;
+}
+
+.method-desc {
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.method-logos {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-top: 6px;
+    align-self: flex-end;
+}
+
+.card-logo {
+    height: 20px;
+    width: auto;
+    border-radius: 3px;
+    flex-shrink: 0;
+
+    &--sm {
+        height: 16px;
+    }
+
+    &--wide {
+        width: 52px;
+        height: 20px;
+    }
+}

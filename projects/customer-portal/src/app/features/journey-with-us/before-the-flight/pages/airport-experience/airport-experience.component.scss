@@ -1,0 +1,308 @@
+  :host {
+      display: block;
+      font-family: 'Montserrat', 'Inter', sans-serif;
+      background: #fff;
+  }
+
+  .ae-hero {
+      background: #051937;
+      position: relative;
+  }
+
+  .ae-hero__inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 40px 48px;
+  }
+
+  .ae-bc {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 22px;
+  }
+
+  .ae-bc__link {
+      font-size: 11px;
+      color: rgba(255, 255, 255, .4);
+      text-decoration: none;
+
+      &:hover {
+          color: #E2C780;
+      }
+  }
+
+  .ae-bc__sep {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .18);
+  }
+
+  .ae-bc__cur {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(226, 199, 128, .65);
+  }
+
+  .ae-hero__pre-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+  }
+
+  .ae-hero__pre-line {
+      width: 44px;
+      height: 1px;
+      background: #B68F24;
+  }
+
+  .ae-hero__eyebrow {
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #B68F24;
+  }
+
+  .ae-hero__title {
+      font-size: clamp(1.7rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -.04em;
+      color: #fff;
+      margin: 0 0 14px;
+      line-height: 1.08;
+  }
+
+  .ae-hero__sub {
+      font-size: .86rem;
+      color: rgba(255, 255, 255, .55);
+      line-height: 1.72;
+      margin: 0;
+      max-width: 520px;
+  }
+
+  .ae-hero__image-band {
+      height: 240px;
+      overflow: hidden;
+      position: relative;
+  }
+
+  .ae-hero__bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+  }
+
+  .ae-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(5, 25, 55, .35) 0%, transparent 50%, rgba(248, 249, 250, .6) 100%);
+  }
+
+  .ae-features {
+      background: #fff;
+  }
+
+  .ae-feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 340px;
+      border-bottom: 1px solid rgba(226, 199, 128, .15);
+
+      &--flipped .ae-feature__img-side {
+          order: 2;
+      }
+
+      &--flipped .ae-feature__text-side {
+          order: 1;
+      }
+
+      &:last-child {
+          border-bottom: none;
+      }
+
+      &:nth-child(even) {
+          background: #F8F9FA;
+      }
+  }
+
+  @media(max-width:768px) {
+      .ae-feature {
+          grid-template-columns: 1fr;
+      }
+
+      .ae-feature--flipped .ae-feature__img-side,
+      .ae-feature--flipped .ae-feature__text-side {
+          order: unset;
+      }
+  }
+
+  .ae-feature__img-side {
+      overflow: hidden;
+      min-height: 280px;
+  }
+
+  .ae-feature__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .45s ease;
+  }
+
+  .ae-feature__img-side:hover .ae-feature__img {
+      transform: scale(1.04);
+  }
+
+  .ae-feature__text-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 56px;
+  }
+
+  @media(max-width:1100px) {
+      .ae-feature__text-side {
+          padding: 36px 36px;
+      }
+  }
+
+  @media(max-width:768px) {
+      .ae-feature__text-side {
+          padding: 32px 24px;
+      }
+  }
+
+  .ae-feature__icon-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      background: rgba(182, 143, 36, .08);
+      border: 1px solid rgba(182, 143, 36, .22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(182, 143, 36, .7);
+      margin-bottom: 18px;
+  }
+
+  .ae-feature__title {
+      font-family: 'Montserrat', 'Inter', sans-serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.55rem);
+      font-weight: 800;
+      letter-spacing: -.025em;
+      color: #101056;
+      margin: 0 0 14px;
+      line-height: 1.2;
+  }
+
+  .ae-feature__divider {
+      height: 2px;
+      width: 40px;
+      background: linear-gradient(90deg, #B68F24, #E2C780);
+      border-radius: 1px;
+      margin-bottom: 14px;
+  }
+
+  .ae-feature__desc {
+      font-size: .84rem;
+      color: #718096;
+      line-height: 1.72;
+      margin: 0;
+      max-width: 420px;
+  }
+
+  .ae-cta-strip {
+      background: #051937;
+      border-top: 1px solid rgba(182, 143, 36, .15);
+  }
+
+  .ae-cta-strip__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 44px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+  }
+
+  @media(max-width:768px) {
+      .ae-cta-strip__inner {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 36px 20px;
+      }
+  }
+
+  .ae-cta-strip__title {
+      font-family: 'Montserrat', 'Inter', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: #fff;
+      margin: 0 0 6px;
+  }
+
+  .ae-cta-strip__desc {
+      font-size: .78rem;
+      color: rgba(255, 255, 255, .5);
+      line-height: 1.65;
+      margin: 0;
+      max-width: 480px;
+  }
+
+  .ae-cta-strip__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 26px;
+      border-radius: 4px;
+      background: transparent;
+      border: 1px solid rgba(182, 143, 36, .55);
+      text-decoration: none;
+      font-family: inherit;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #E2C780;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background .28s ease, border-color .28s ease, color .28s ease;
+
+      &:hover {
+          background: #B68F24;
+          border-color: #B68F24;
+          color: #051937;
+
+          svg {
+              color: #051937;
+          }
+      }
+
+      &:focus-visible {
+          outline: 2px solid #B68F24;
+          outline-offset: 3px;
+      }
+
+      svg {
+          color: #E2C780;
+          transition: color .28s ease;
+      }
+  }
+
+  @media(prefers-reduced-motion:reduce) {
+      .ae-feature__img {
+          transition: none;
+      }
+
+      .ae-cta-strip__btn {
+          transition: none;
+      }
+  }

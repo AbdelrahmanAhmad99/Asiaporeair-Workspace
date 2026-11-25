@@ -1,0 +1,14 @@
+<!-- account-status-indicator.component.html -->
+
+<div class="asi-wrap" [class.asi-wrap--compact]="compact()" [class]="'asi-wrap--' + theme()"
+    [attr.aria-label]="label() + ' account'" role="status">
+
+    <span class="asi-dot" [class]="'asi-dot--' + theme()" aria-hidden="true">
+        <span class="asi-dot__ring"></span>
+    </span>
+
+    @if (!compact()) {
+    <span class="asi-label">{{ label() }}</span>
+    }
+
+</div>

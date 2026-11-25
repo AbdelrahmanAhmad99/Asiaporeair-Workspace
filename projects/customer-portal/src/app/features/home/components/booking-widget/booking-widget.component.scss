@@ -1,0 +1,117 @@
+ $midnight : #051937;
+ $royal-gold : #B68F24;
+ $champagne : #E2C780;
+ $white : #FFFFFF;
+ $charcoal : #101056;
+ $muted : #718096;
+ $font : 'Montserrat',
+ 'Inter',
+ -apple-system,
+ sans-serif;
+ $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+ :host {
+     display: block;
+ }
+
+ // ── Outer shell ───────────────────────────────────────────────────────────────
+ .bw {
+     width: 100%;
+ }
+
+ .bw__shell {
+     background: rgba($white, 0.75);
+     backdrop-filter: blur(24px);
+     -webkit-backdrop-filter: blur(24px);
+     border: 1px solid rgba($royal-gold, 0.2);
+     border-radius: 0 12px 12px 12px;
+     // overflow: hidden; // REMOVED to allow search engine dropdowns to be visible
+     overflow: visible; // EXPLICITLY allow overflow
+     box-shadow:
+         0 32px 80px rgba($midnight, 0.28),
+         inset 0 1px 0 rgba($white, 0.4);
+ }
+
+ // ── Non-book tab placeholder ───────────────────────────────────────────────────
+ .bw__placeholder {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     text-align: center;
+     gap: 16px;
+     padding: 64px 40px;
+     animation: bwFadeIn 400ms $ease;
+ }
+
+ .bw__placeholder-icon {
+     width: 72px;
+     height: 72px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background: rgba($royal-gold, 0.08);
+     border: 1px solid rgba($royal-gold, 0.12);
+     border-radius: 50%;
+     color: $royal-gold;
+     margin-bottom: 8px;
+ }
+
+ @keyframes bwFadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ .bw__placeholder-title {
+     font-family: $font;
+     font-size: 1.35rem;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     color: $midnight;
+     margin: 0;
+ }
+
+ .bw__placeholder-sub {
+     font-size: 14px;
+     color: $muted;
+     line-height: 1.6;
+     margin: 0;
+     max-width: 420px;
+ }
+
+ .bw__placeholder-cta {
+     display: inline-flex;
+     align-items: center;
+     gap: 8px;
+     padding: 10px 24px;
+     border-radius: 4px;
+     background: $midnight;
+     border: 1px solid rgba($royal-gold, 0.5);
+     font-family: $font;
+     font-size: 12px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: $champagne;
+     text-decoration: none;
+     margin-top: 8px;
+     transition: background 240ms $ease, border-color 240ms $ease, color 240ms $ease;
+
+     &:hover {
+         background: $royal-gold;
+         border-color: $royal-gold;
+         color: $midnight;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $royal-gold;
+         outline-offset: 3px;
+     }
+ }

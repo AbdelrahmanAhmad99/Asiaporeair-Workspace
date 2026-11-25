@@ -1,0 +1,195 @@
+<div class="gpa-page">
+
+    <!-- ══ Transaction Detail Drawer ═════════════════════════════════════ -->
+    @if (store.isDrawerOpen() && store.selectedTransaction()) {
+    <aoms-transaction-detail-view [transaction]="store.selectedTransaction()!" (closed)="onDrawerClosed()" />
+    }
+
+    <!-- ══ Export format picker (click-away closes) ══════════════════════ -->
+    @if (showExportMenu()) {
+    <div class="gpa-export-bd" (click)="toggleExportMenu()" aria-hidden="true"></div>
+    <div class="gpa-export-menu" role="menu" aria-label="Export format">
+        <button class="gpa-export-menu__item" role="menuitem" type="button" (click)="onExport('CSV')">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+            </svg>
+            Export as CSV
+            <span class="gpa-export-menu__hint">Spreadsheet</span>
+        </button>
+        <button class="gpa-export-menu__item" role="menuitem" type="button" (click)="onExport('PDF')">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-4.5c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+            </svg>
+            Export as PDF
+            <span class="gpa-export-menu__hint">Print-ready</span>
+        </button>
+    </div>
+    }
+
+    <!-- ══ Sticky Page Header ════════════════════════════════════════════ -->
+    <header class="gpa-header">
+
+        <div class="gpa-header__left">
+            <nav class="gpa-breadcrumb" aria-label="Breadcrumb">
+                <span class="gpa-breadcrumb__section">Commercial</span>
+                <svg class="gpa-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="gpa-breadcrumb__current">Financial Audit Hub</span>
+            </nav>
+
+            <div class="gpa-title-row">
+                <h1 class="gpa-title">
+                    <svg class="gpa-title__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                    </svg>
+                    Global Payment Auditor
+                </h1>
+
+                <!-- Total amount computed signal -->
+                @if (store.hasResults()) {
+                <span class="gpa-total-badge">
+                    Total: <strong>{{ store.totalAmountFiltered() | currency:'SGD':'symbol':'1.2-2' }}</strong>
+                </span>
+                }
+            </div>
+        </div>
+
+        <!-- Header Controls -->
+        <div class="gpa-header__controls">
+
+            <!-- Export success / error -->
+            @if (store.exportSuccess()) {
+            <div class="gpa-export-toast" role="status">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                {{ store.exportSuccess() }}
+            </div>
+            }
+
+            <!-- Executive Dashboard link (Gold Shimmer) -->
+            <button class="gpa-shimmer-btn" type="button" (click)="onNavigateToExecutiveDashboard()"
+                aria-label="Open Executive Dashboard">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5" />
+                </svg>
+                Executive Dashboard
+                <span class="gpa-shimmer-btn__shimmer" aria-hidden="true"></span>
+            </button>
+
+            <!-- Refund Terminal -->
+            <button class="gpa-nav-btn" type="button" (click)="onNavigateToRefundTerminal()"
+                aria-label="Open Refund Terminal">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                Refund Terminal
+            </button>
+
+            <!-- Dark mode -->
+            <button class="gpa-icon-btn gpa-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+                @if (isDarkMode()) {
+                <svg class="gpa-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="gpa-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ═════════════════════════════════════════════════════ -->
+    <main class="gpa-body">
+
+        <!-- Error banner: Ruby Red Glassmorphism (gateway timeouts, auth errors) -->
+        @if (store.auditError()) {
+        <div class="gpa-error-banner" [attr.key]="store.auditError()" role="alert">
+            <svg class="gpa-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="gpa-error-banner__content">
+                <span class="gpa-error-banner__title">Audit Error</span>
+                <span class="gpa-error-banner__message">{{ store.auditError() }}</span>
+            </div>
+            <button class="gpa-error-banner__dismiss" type="button" (click)="onDismissError()" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- Export error -->
+        @if (store.exportError()) {
+        <div class="gpa-error-banner" role="alert">
+            <span>{{ store.exportError() }}</span>
+        </div>
+        }
+
+        <!-- Result summary row -->
+        @if (store.hasSearched() && !store.isAuditing()) {
+        <div class="gpa-result-row">
+            <span class="gpa-result-row__count">{{ store.resultCountLabel() }}</span>
+            @if (store.hasMore()) {
+            <span class="gpa-result-row__hint">Scroll to load more — or narrow your filters.</span>
+            }
+        </div>
+        }
+
+        <!-- Precision Search Filter Bar -->
+        <aoms-payment-filter-bar [filters]="store.searchFilters()" [loading]="store.isAuditing()"
+            (filtersChanged)="onFiltersChanged($event)" (searchTriggered)="onSearchTriggered()"
+            (resetTriggered)="onResetTriggered()" />
+
+        <!-- High-Density Audit Grid -->
+        <aoms-payment-data-grid [payments]="store.payments()" [loading]="store.isAuditing()"
+            [isLoadingMore]="store.isLoadingMore()" [hasMore]="store.hasMore()"
+            [hasActiveFilters]="store.hasActiveFilters()"
+            [selectedPaymentId]="store.selectedTransaction()?.paymentId ?? null" (rowClicked)="onRowClicked($event)"
+            (loadMoreTriggered)="onLoadMore()" (resetFiltersRequested)="onResetTriggered()" />
+
+    </main>
+
+    <!-- ══ Royal Gold Export FAB ══════════════════════════════════════════ -->
+    <div class="gpa-fab-wrap">
+        @if (store.hasResults()) {
+        <button class="gpa-fab" type="button" (click)="toggleExportMenu()" [disabled]="store.isExporting()"
+            [class.gpa-fab--loading]="store.isExporting()" aria-label="Export Audit Log"
+            [attr.aria-expanded]="showExportMenu()" aria-haspopup="true">
+            @if (store.isExporting()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            } @else {
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            }
+            <span>Export Audit Log</span>
+        </button>
+        }
+    </div>
+
+</div>

@@ -1,0 +1,275 @@
+<div class="cwc-page" @pageAnim>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+       PAGE HEADER
+       ════════════════════════════════════════════════════════════════════ -->
+    <header class="cwc-header">
+
+        <div class="cwc-header__identity">
+
+            <!-- Back navigation -->
+            <button class="cwc-back-btn" type="button" title="Return to Operational Directory"
+                (click)="onNavigateToDirectory()" aria-label="Back to Crew Operational Directory">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+
+            <!-- Icon block -->
+            <div class="cwc-header__icon-wrap" aria-hidden="true">
+                <!-- Shield / watchdog icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="M9 12l2 2 4-4" />
+                </svg>
+            </div>
+
+            <!-- Title block -->
+            <div class="cwc-header__title-block">
+                <h1 class="cwc-header__title">Compliance Watchdog Center</h1>
+                <p class="cwc-header__subtitle">
+                    <span class="cwc-subtitle__module">Workforce Intelligence</span>
+                    <span class="cwc-subtitle__sep">·</span>
+                    <span class="cwc-subtitle__radar">Proactive Safety Radar</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Right: timestamp + controls -->
+        <div class="cwc-header__actions">
+
+            <!-- Live timestamp -->
+            <div class="cwc-timestamp" aria-label="Current system time">
+                <svg class="cwc-timestamp__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5z"
+                        clip-rule="evenodd" />
+                </svg>
+                <span>{{ currentTimestamp }}</span>
+            </div>
+
+            <!-- Threshold selector -->
+            <div class="cwc-threshold-selector" role="group" aria-label="Expiry watchdog window">
+                <span class="cwc-threshold-selector__label">Radar Window:</span>
+                @for (t of thresholds; track t.value) {
+                <button type="button" class="cwc-threshold-btn"
+                    [class.cwc-threshold-btn--active]="watchdogThreshold() === t.value"
+                    [attr.aria-pressed]="watchdogThreshold() === t.value" (click)="onThresholdChanged(t.value)">{{
+                    t.label }}</button>
+                }
+            </div>
+
+            <!-- Refresh -->
+            <button class="cwc-btn cwc-btn--icon" type="button" title="Re-scan certifications"
+                [disabled]="watchdogLoading()" (click)="retryLoad()" aria-label="Refresh watchdog scan">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
+                    [class.cwc-icon--spinning]="watchdogLoading()">
+                    <path fill-rule="evenodd"
+                        d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39zm1.26-3.853a.75.75 0 0 0-1.5 0v2.43l-.31-.31a7 7 0 0 0-11.712 3.138.75.75 0 0 0 1.449.39A5.5 5.5 0 0 1 13.89 6.044l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .75-.75V3.57z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+       KPI STATS STRIP
+       ════════════════════════════════════════════════════════════════════ -->
+    <div class="cwc-stats-strip" aria-label="Watchdog intelligence summary">
+
+        <!-- Total flagged -->
+        <div class="cwc-stat">
+            <div class="cwc-stat__icon-wrap cwc-stat__icon-wrap--gold" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="cwc-stat__body">
+                <span class="cwc-stat__value">{{ watchdogSummary().total }}</span>
+                <span class="cwc-stat__label">Flagged Records</span>
+            </div>
+        </div>
+
+        <div class="cwc-stat-divider"></div>
+
+        <!-- Expired -->
+        <div class="cwc-stat">
+            <div class="cwc-stat__icon-wrap cwc-stat__icon-wrap--ruby" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="cwc-stat__body">
+                <span class="cwc-stat__value cwc-stat__value--ruby">{{ watchdogSummary().expired }}</span>
+                <span class="cwc-stat__label">Expired</span>
+            </div>
+        </div>
+
+        <div class="cwc-stat-divider"></div>
+
+        <!-- Critical < 10d -->
+        <div class="cwc-stat">
+            <div class="cwc-stat__icon-wrap cwc-stat__icon-wrap--gold" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1zm3 8V5.5a3 3 0 1 0-6 0V9h6z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="cwc-stat__body">
+                <span class="cwc-stat__value cwc-stat__value--gold">{{ watchdogSummary().critical }}</span>
+                <span class="cwc-stat__label">Critical (≤ 10d)</span>
+            </div>
+        </div>
+
+        <div class="cwc-stat-divider"></div>
+
+        <!-- Warning < 30d -->
+        <div class="cwc-stat">
+            <div class="cwc-stat__icon-wrap cwc-stat__icon-wrap--champ" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm.75-11.25a.75.75 0 0 0-1.5 0v4.59L7.3 9.24a.75.75 0 1 0-1.1 1.02l3.25 3.5a.75.75 0 0 0 1.1 0l3.25-3.5a.75.75 0 1 0-1.1-1.02l-1.95 2.1V6.75z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="cwc-stat__body">
+                <span class="cwc-stat__value cwc-stat__value--champ">{{ watchdogSummary().warning }}</span>
+                <span class="cwc-stat__label">Warning (≤ 30d)</span>
+            </div>
+        </div>
+
+        <div class="cwc-stat-divider"></div>
+
+        <!-- Active window -->
+        <div class="cwc-stat">
+            <div class="cwc-stat__icon-wrap" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="cwc-stat__body">
+                <span class="cwc-stat__value">{{ thresholdLabel }}</span>
+                <span class="cwc-stat__label">Radar Window</span>
+            </div>
+        </div>
+
+        @if (watchdogLoading()) {
+        <div class="cwc-stat-loading">
+            <div class="cwc-spinner"></div>
+            <span>Scanning certification registry…</span>
+        </div>
+        }
+
+    </div><!-- /cwc-stats-strip -->
+
+    <!-- ════════════════════════════════════════════════════════════════════
+       RUBY RED GLASSMORPHISM ERROR BANNER
+       ════════════════════════════════════════════════════════════════════ -->
+    @if (watchdogError()) {
+    <div class="cwc-error-banner" @bannerAnim role="alert" aria-live="assertive">
+
+        <div class="cwc-error-banner__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5z"
+                    clip-rule="evenodd" />
+            </svg>
+        </div>
+
+        <div class="cwc-error-banner__content">
+            <strong class="cwc-error-banner__title">Radar Synchronization Failure</strong>
+            <p class="cwc-error-banner__message">{{ watchdogError() }}</p>
+        </div>
+
+        <div class="cwc-error-banner__actions">
+            <button class="cwc-error-banner__retry" type="button" (click)="retryLoad()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39zm1.26-3.853a.75.75 0 0 0-1.5 0v2.43l-.31-.31a7 7 0 0 0-11.712 3.138.75.75 0 0 0 1.449.39A5.5 5.5 0 0 1 13.89 6.044l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .75-.75V3.57z"
+                        clip-rule="evenodd" />
+                </svg>
+                Attempt Re-sync
+            </button>
+            <button class="cwc-error-banner__dismiss" type="button" aria-label="Dismiss error" (click)="dismissError()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path
+                        d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+            </button>
+        </div>
+
+    </div>
+    }
+
+    <!-- ════════════════════════════════════════════════════════════════════
+       LUXURY FULL COMPLIANCE TOAST
+       ════════════════════════════════════════════════════════════════════ -->
+    @if (fullyCompliant()) {
+    <div class="cwc-compliance-toast" @toastAnim role="status" aria-live="polite">
+
+        <!-- Emerald icon -->
+        <div class="cwc-compliance-toast__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+        </div>
+
+        <div class="cwc-compliance-toast__content">
+            <strong class="cwc-compliance-toast__title">Full Operational Readiness Confirmed</strong>
+            <p class="cwc-compliance-toast__message">
+                All crew certifications are valid and current within the
+                <strong>{{ thresholdLabel }}</strong> watchdog window.
+                Asiaporeair is cleared for unrestricted operations.
+            </p>
+        </div>
+
+        <button class="cwc-compliance-toast__dismiss" type="button" aria-label="Dismiss compliance confirmation"
+            (click)="dismissComplianceToast()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path
+                    d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22z" />
+            </svg>
+        </button>
+
+    </div>
+    }
+
+    <!-- ════════════════════════════════════════════════════════════════════
+       MAIN CONTENT — Priority Grid
+       ════════════════════════════════════════════════════════════════════ -->
+    <main class="cwc-content" id="watchdog-main">
+
+        <div class="cwc-content__header">
+            <div class="cwc-content__header-text">
+                <h2 class="cwc-content__title">
+                    At-Risk Certification Manifest
+                </h2>
+                <p class="cwc-content__desc">
+                    Displaying crew members with certifications expiring within
+                    <span class="cwc-content__threshold-pill">{{ thresholdLabel }}</span>.
+                    Sorted by urgency — most critical entries appear first.
+                </p>
+            </div>
+        </div>
+
+        <section aria-label="At-Risk Certification Priority Grid">
+            <aoms-expiring-certs-list [records]="expiringCerts()" [loading]="watchdogLoading()"
+                (viewProfile)="onViewProfile($event)" />
+        </section>
+
+    </main>
+
+</div><!-- /cwc-page -->

@@ -1,0 +1,213 @@
+// cancellation-summary-card.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$white: #FFFFFF;
+$error: #d95f5f;
+$success: #2E7D52;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.summary-card {
+    background: $midnight;
+    border: 1px solid rgba($champagne, 0.18);
+    border-radius: 12px;
+    overflow: hidden;
+    color: $white;
+    box-shadow: 0 8px 30px rgba($midnight, 0.25);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($champagne, 0.4), transparent);
+    }
+
+    display: flex;
+    flex-direction: column;
+}
+
+.card-pnr {
+    padding: 1.125rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.pnr-label {
+    font-size: 0.57rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba($champagne, 0.45);
+}
+
+.pnr-value {
+    font-size: 1rem;
+    font-weight: 800;
+    color: $champagne;
+    letter-spacing: 0.1em;
+}
+
+.gold-rule {
+    height: 1px;
+    margin: 0 1.25rem;
+    background: linear-gradient(to right, transparent, rgba($royal-gold, 0.35), transparent);
+}
+
+.card-flight {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.flight-num {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba($white, 0.70);
+
+    svg {
+        color: $royal-gold;
+    }
+}
+
+.route-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rp {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    &--right {
+        text-align: right;
+        align-items: flex-end;
+    }
+}
+
+.iata {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: $white;
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.city {
+    font-size: 0.55rem;
+    color: rgba($white, 0.40);
+}
+
+.arrow {
+    flex: 1;
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba($champagne, 0.3);
+}
+
+.dep-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.65rem;
+    color: rgba($white, 0.55);
+}
+
+.dot {
+    opacity: 0.35;
+}
+
+.dep-time {
+    font-weight: 700;
+    color: $champagne;
+}
+
+.amount-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1.25rem;
+}
+
+.amount-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba($white, 0.50);
+}
+
+.amount-group {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.amount-curr {
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: rgba($champagne, 0.6);
+    align-self: flex-start;
+    margin-top: 2px;
+}
+
+.amount-val {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: $champagne;
+    letter-spacing: -0.04em;
+}
+
+.status-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    border-top: 1px solid rgba($white, 0.06);
+
+    &--pending {
+        color: $champagne;
+
+        .spin-icon {
+            animation: spin 0.9s linear infinite;
+        }
+    }
+
+    &--success {
+        color: lighten($success, 30%);
+
+        svg {
+            color: lighten($success, 30%);
+        }
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .spin-icon {
+        animation: none !important;
+    }
+}

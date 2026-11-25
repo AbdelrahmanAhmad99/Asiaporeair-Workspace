@@ -1,0 +1,186 @@
+   :host {
+       display: block;
+   }
+
+   $royal-gold : #B68F24;
+   $champagne : #E2C780;
+   $midnight : #051937;
+   $white : #FFFFFF;
+   $font : 'Montserrat',
+   'Inter',
+   sans-serif;
+   $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+   .ljb {
+       background: linear-gradient(135deg, $midnight 0%, #0a2547 60%, #051937 100%);
+       border-top: 1px solid rgba($royal-gold, .15);
+       border-bottom: 1px solid rgba($royal-gold, .15);
+       padding: 72px 0;
+   }
+
+   .ljb__inner {
+       max-width: 1240px;
+       margin: 0 auto;
+       padding: 0 40px;
+       display: grid;
+       grid-template-columns: 1fr auto;
+       gap: 48px;
+       align-items: center;
+
+       @media(max-width:860px) {
+           grid-template-columns: 1fr;
+           padding: 0 20px;
+       }
+   }
+
+   .ljb__content {
+       display: flex;
+       align-items: flex-start;
+       gap: 28px;
+
+       @media(max-width:640px) {
+           flex-direction: column;
+           gap: 16px;
+       }
+   }
+
+   .ljb__star {
+       color: $royal-gold;
+       flex-shrink: 0;
+       margin-top: 4px;
+   }
+
+   .ljb__eyebrow {
+       font-size: 10px;
+       font-weight: 700;
+       letter-spacing: .2em;
+       text-transform: uppercase;
+       color: $royal-gold;
+       margin: 0 0 8px;
+   }
+
+   .ljb__title {
+       font-family: $font;
+       font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+       font-weight: 800;
+       letter-spacing: -.035em;
+       color: $white;
+       margin: 0 0 12px;
+       line-height: 1.15;
+   }
+
+   .ljb__body {
+       font-size: 14px;
+       color: rgba($white, .58);
+       line-height: 1.72;
+       margin: 0 0 20px;
+       max-width: 520px;
+   }
+
+   .ljb__perks {
+       list-style: none;
+       margin: 0 0 28px;
+       padding: 0;
+       display: flex;
+       flex-direction: column;
+       gap: 8px;
+
+       li {
+           display: flex;
+           align-items: center;
+           gap: 9px;
+           font-size: 13px;
+           font-weight: 500;
+           color: rgba($white, .7);
+
+           svg {
+               stroke: $royal-gold;
+               flex-shrink: 0;
+           }
+       }
+   }
+
+   .ljb__actions {
+       display: flex;
+       align-items: center;
+       gap: 12px;
+       flex-wrap: wrap;
+   }
+
+   .ljb__cta {
+       display: inline-flex;
+       align-items: center;
+       justify-content: center;
+       padding: 12px 26px;
+       border-radius: 4px;
+       font-family: $font;
+       font-size: 13px;
+       font-weight: 700;
+       letter-spacing: .08em;
+       text-transform: uppercase;
+       text-decoration: none;
+       transition: all 240ms $ease;
+
+       &--primary {
+           background: $royal-gold;
+           border: 1px solid $royal-gold;
+           color: $midnight;
+
+           &:hover {
+               background: lighten($royal-gold, 6%);
+               box-shadow: 0 6px 20px rgba($royal-gold, .35);
+           }
+       }
+
+       &--secondary {
+           background: transparent;
+           border: 1px solid rgba($champagne, .35);
+           color: $champagne;
+
+           &:hover {
+               border-color: rgba($champagne, .7);
+               background: rgba($champagne, .08);
+           }
+       }
+
+       &:focus-visible {
+           outline: 2px solid $royal-gold;
+           outline-offset: 3px;
+       }
+   }
+
+   .ljb__tiers {
+       display: flex;
+       flex-direction: column;
+       gap: 10px;
+
+       @media(max-width:860px) {
+           flex-direction: row;
+           flex-wrap: wrap;
+       }
+   }
+
+   .ljb__tier {
+       padding: 10px 20px;
+       border-radius: 8px;
+       border: 1px solid rgba(255, 255, 255, .1);
+       background: rgba(255, 255, 255, .04);
+       display: flex;
+       flex-direction: column;
+       gap: 3px;
+       min-width: 130px;
+       border-left: 3px solid var(--tier-color, #B68F24);
+   }
+
+   .ljb__tier-name {
+       font-size: 11px;
+       font-weight: 700;
+       color: $white;
+       letter-spacing: .06em;
+       text-transform: uppercase;
+   }
+
+   .ljb__tier-miles {
+       font-size: 10px;
+       color: rgba($white, .42);
+   }

@@ -1,0 +1,589 @@
+// ============================================================================
+// booking-details.component.scss
+// Asiaporeair | "Your Journey Manifest" — Light Theme
+// ============================================================================
+
+// ── Design Tokens (ASIAPOREAIR_GUIDELINES) ───────────────────────────────────
+$midnight  : #051937;   // Primary — headers, hero, navbar
+$royal-gold: #B68F24;   // Secondary — buttons, active states, borders
+$champagne : #E2C780;   // Accent — hover, dividers, highlights
+$ivory     : #F8F9FA;   // Page background
+$charcoal  : #101056;   // High-contrast body text
+$white     : #FFFFFF;   // Card surfaces
+$error     : #C0392B;
+$success   : #1A6B3C;
+$font      : 'Inter', 'Montserrat', -apple-system, sans-serif;
+$ease      : cubic-bezier(0.4, 0, 0.2, 1);
+$t-smooth  : 300ms $ease;
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+// text on dark bg ($midnight) -> use white/champagne
+// text on light bg ($ivory / $white) -> use $charcoal / $midnight
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+    color: $charcoal;
+}
+
+// ── Hero (DARK — Midnight Sapphire banner) ────────────────────────────────────
+.details-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, lighten($midnight, 4%) 0%, $midnight 100%);
+    padding: 2rem 2rem 2.5rem;
+    border-bottom: 1px solid rgba($royal-gold, 0.20);
+}
+
+.hero-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($champagne, 0.25);
+    animation: twinkle 3s ease-in-out infinite;
+
+    @for $i from 1 through 8 {
+        &:nth-child(#{$i}) {
+            width: #{2 + ($i % 2)}px;
+            height: #{2 + ($i % 2)}px;
+            animation-delay: #{($i * 0.35)}s;
+        }
+    }
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.1; }
+    50%       { opacity: 0.7; }
+}
+
+.hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    background: none;
+    border: none;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba($white, 0.50);
+    cursor: pointer;
+    padding: 0;
+    transition: color $t-smooth;
+
+    &:hover { color: $champagne; }
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        border-radius: 2px;
+    }
+}
+
+.hero-status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+// Status badges — on dark hero bg
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    &.status--confirmed {
+        background: rgba($success, 0.15);
+        border: 1px solid rgba($success, 0.40);
+        color: #68D391;
+        box-shadow: 0 0 12px rgba($success, 0.15);
+    }
+    &.status--pending {
+        background: rgba(#B87333, 0.15);
+        border: 1px solid rgba(#B87333, 0.40);
+        color: lighten(#B87333, 22%);
+    }
+    &.status--cancelled {
+        background: rgba($error, 0.15);
+        border: 1px solid rgba($error, 0.40);
+        color: #FC8181;
+    }
+    &.status--default {
+        background: rgba($white, 0.10);
+        border: 1px solid rgba($white, 0.25);
+        color: rgba($white, 0.75);
+    }
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+.hero-divider {
+    color: rgba($champagne, 0.35);
+}
+
+.booked-on {
+    font-size: 0.7rem;
+    color: rgba($white, 0.45);
+    font-weight: 500;
+}
+
+.hero-title {
+    font-size: 1.85rem;
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    color: $white;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.hero-pnr-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0.875rem 1.25rem;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($royal-gold, 0.28);
+    border-radius: 10px;
+    width: fit-content;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba($champagne, 0.5), transparent);
+        border-radius: 10px 10px 0 0;
+    }
+}
+
+.pnr-label {
+    font-size: 0.57rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba($champagne, 0.65);
+}
+
+.pnr-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: $champagne;
+    letter-spacing: 0.1em;
+}
+
+// Hero route strip — on dark
+.hero-route-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+}
+
+.strip-airport {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.strip-airport--right {
+    text-align: right;
+    align-items: flex-end;
+}
+
+.strip-iata {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: $white;
+    line-height: 1;
+}
+
+.strip-city {
+    font-size: 0.65rem;
+    color: rgba($white, 0.50);
+    font-weight: 500;
+}
+
+.strip-time {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: $champagne;
+}
+
+.strip-path {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 100px;
+}
+
+.strip-line {
+    flex: 1;
+    height: 1px;
+    background: rgba($champagne, 0.28);
+}
+
+.strip-duration {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: $champagne;
+    white-space: nowrap;
+}
+
+// ── Quick Actions (inside dark hero) ──────────────────────────────────────────
+.quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+    padding-top: 0.25rem;
+}
+
+.qa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.625rem 1.125rem;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all $t-smooth;
+
+    &--primary {
+        background: $royal-gold;
+        color: $midnight;
+        border: 1px solid rgba($champagne, 0.35);
+
+        &:hover {
+            background: $champagne;
+            box-shadow: 0 4px 18px rgba($royal-gold, 0.4);
+            transform: translateY(-1px);
+        }
+    }
+
+    &--ghost {
+        background: rgba($white, 0.06);
+        color: rgba($white, 0.78);
+        border: 1px solid rgba($champagne, 0.28);
+
+        &:hover {
+            border-color: $royal-gold;
+            color: $champagne;
+            background: rgba($royal-gold, 0.10);
+        }
+    }
+
+    &--danger {
+        background: rgba($error, 0.12);
+        color: #FC8181;
+        border: 1px solid rgba($error, 0.35);
+
+        &:hover {
+            background: rgba($error, 0.20);
+            border-color: rgba($error, 0.55);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── Body (LIGHT background) ───────────────────────────────────────────────────
+.details-body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+}
+
+.alert-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.875rem 1rem;
+    background: rgba($error, 0.06);
+    border: 1px solid rgba($error, 0.25);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: $error;
+    margin-bottom: 1.5rem;
+
+    svg {
+        flex-shrink: 0;
+        stroke: $error;
+    }
+}
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+@keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+.body-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.skel-section {
+    background: $white;
+    border: 1px solid rgba($midnight, 0.07);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba($midnight, 0.05);
+}
+
+.skel {
+    border-radius: 4px;
+    background: linear-gradient(90deg,
+        rgba($midnight, 0)    0%,
+        rgba($midnight, 0.06) 50%,
+        rgba($midnight, 0)    100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s $ease infinite;
+
+    &--badge   { width: 90px;  height: 20px; border-radius: 20px; }
+    &--title   { width: 60%;   height: 28px; }
+    &--pnr     { width: 40%;   height: 48px; border-radius: 8px; }
+    &--section-title { width: 35%; height: 18px; }
+    &--section-body  { height: 80px; }
+}
+
+// ── Detail Sections (WHITE cards on ivory) ─────────────────────────────────────
+.sections-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.detail-section {
+    background: $white;
+    border: 1px solid rgba($midnight, 0.09);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+        0 2px 8px  rgba($midnight, 0.05),
+        0 1px 3px  rgba($midnight, 0.03);
+    transition: border-color $t-smooth, box-shadow $t-smooth;
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.35);
+        box-shadow:
+            0 6px 24px rgba($midnight, 0.08),
+            0 1px 4px  rgba($midnight, 0.04);
+    }
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.25rem;
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $midnight;
+    background: rgba($midnight, 0.02);
+    border-bottom: 1px solid rgba($midnight, 0.07);
+
+    svg {
+        color: $royal-gold;
+        flex-shrink: 0;
+    }
+}
+
+// Boarding passes grid
+.boarding-passes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+    padding: 1.25rem;
+}
+
+// ── Cancellation Modal ─────────────────────────────────────────────────────────
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba($midnight, 0.60);
+    backdrop-filter: blur(12px) saturate(160%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.modal-card {
+    background: $white;
+    border: 1px solid rgba($midnight, 0.10);
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 24px 60px rgba($midnight, 0.20);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    position: relative;
+
+    // Royal Gold top accent line
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, $royal-gold, transparent);
+        border-radius: 12px 12px 0 0;
+    }
+}
+
+.modal-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba($error, 0.08);
+    border: 1px solid rgba($error, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $charcoal;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.modal-body {
+    font-size: 0.78rem;
+    color: rgba($charcoal, 0.65);
+    line-height: 1.6;
+    margin: 0;
+
+    strong { color: $midnight; }
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.modal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.25rem;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $t-smooth;
+
+    &--ghost {
+        background: transparent;
+        border: 1px solid rgba($midnight, 0.20);
+        color: $charcoal;
+
+        &:hover { background: rgba($midnight, 0.04); }
+    }
+
+    &--danger {
+        background: rgba($error, 0.08);
+        border: 1px solid rgba($error, 0.28);
+        color: $error;
+
+        &:hover { background: rgba($error, 0.15); }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── Print ──────────────────────────────────────────────────────────────────────
+@media print {
+    .details-hero .quick-actions,
+    .back-link,
+    .hero-particles { display: none !important; }
+
+    :host { background: #fff !important; }
+    .details-hero { padding: 1rem; }
+
+    .detail-section {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+
+    .section-heading { color: $midnight !important; }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+    .details-body { padding: 1.25rem 0.875rem 3rem; }
+    .details-hero { padding: 1.5rem 1rem 2rem; }
+    .hero-title   { font-size: 1.4rem; }
+    .strip-iata   { font-size: 1.1rem; }
+
+    .quick-actions { gap: 0.5rem; }
+    .qa-btn {
+        font-size: 0.68rem;
+        padding: 0.5rem 0.875rem;
+    }
+    .boarding-passes-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .particle, .skel { animation: none !important; }
+    .qa-btn, .detail-section { transition: none !important; }
+}

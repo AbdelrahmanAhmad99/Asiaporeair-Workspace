@@ -1,0 +1,366 @@
+// ============================================================================
+// book-the-cook.component.scss
+// Asiaporeair | Book the Cook — Full Page Styles
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 300ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $white;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+.btc-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+
+    // Subtle warm gold radial in top-right
+    &::before {
+        content: '';
+        position: absolute;
+        top: -80px;
+        right: -60px;
+        width: 380px;
+        height: 380px;
+        background: radial-gradient(ellipse, rgba($royal-gold, 0.08) 0%, transparent 65%);
+        pointer-events: none;
+    }
+
+    &__inner {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 40px 48px;
+
+        @media (max-width: 768px) {
+            padding: 24px 20px 36px;
+        }
+    }
+
+    &__breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 28px;
+    }
+
+    &__bc-link {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba($white, 0.4);
+        text-decoration: none;
+        transition: color 200ms;
+
+        &:hover {
+            color: $champagne;
+        }
+    }
+
+    &__bc-sep {
+        font-size: 12px;
+        color: rgba($white, 0.18);
+    }
+
+    &__bc-cur {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba($champagne, 0.65);
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 48px;
+        align-items: start;
+
+        @media (max-width: 960px) {
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+    }
+
+    &__pre-line {
+        width: 44px;
+        height: 2px;
+        background: $royal-gold;
+        margin-bottom: 10px;
+    }
+
+    &__eyebrow {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin: 0 0 8px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: $white;
+        margin: 0 0 14px;
+        line-height: 1.1;
+    }
+
+    &__subtitle {
+        font-size: 0.88rem;
+        color: rgba($white, 0.58);
+        line-height: 1.7;
+        margin: 0;
+        max-width: 440px;
+    }
+
+    &__chef {
+        align-self: center;
+    }
+}
+
+// ── How it works ──────────────────────────────────────────────────────────────
+.btc-how {
+    background: $ivory;
+    padding: 52px 0 56px;
+    border-bottom: 1px solid rgba($champagne, 0.2);
+
+    &__inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 40px;
+
+        @media (max-width: 768px) {
+            padding: 0 20px;
+        }
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin: 0 0 28px;
+    }
+
+    &__steps {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+
+        @media (max-width: 660px) {
+            flex-direction: column;
+        }
+    }
+
+    &__step {
+        flex: 1;
+
+        &-num {
+            font-family: $font;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: rgba($royal-gold, 0.2);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        &-title {
+            font-family: $font;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: $charcoal;
+            margin: 0 0 8px;
+            letter-spacing: -0.01em;
+        }
+
+        &-desc {
+            font-size: 0.78rem;
+            color: $muted;
+            line-height: 1.65;
+            margin: 0;
+        }
+    }
+
+    &__step-sep {
+        flex-shrink: 0;
+        padding-top: 8px;
+        color: rgba($royal-gold, 0.4);
+
+        @media (max-width: 660px) {
+            transform: rotate(90deg);
+            padding: 0;
+        }
+    }
+}
+
+// ── Menu section ──────────────────────────────────────────────────────────────
+.btc-menu {
+    background: $white;
+    padding: 60px 0 72px;
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+
+        @media (max-width: 768px) {
+            padding: 0 20px;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    &__header-line {
+        width: 3px;
+        min-height: 60px;
+        background: linear-gradient($royal-gold, $champagne);
+        border-radius: 2px;
+        flex-shrink: 0;
+        margin-top: 4px;
+    }
+
+    &__eyebrow {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin: 0 0 5px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $charcoal;
+        margin: 0;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+        margin-top: 28px;
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 560px) {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+// ── Filter pills ──────────────────────────────────────────────────────────────
+.btc-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.btc-filter-pill {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba($charcoal, 0.15);
+    background: none;
+    cursor: pointer;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba($charcoal, 0.6);
+    transition: all $t;
+
+    &:hover {
+        border-color: $royal-gold;
+        color: $royal-gold;
+        background: rgba($royal-gold, 0.05);
+    }
+
+    &--active {
+        background: $midnight;
+        border-color: $midnight;
+        color: $champagne;
+
+        &:hover {
+            background: darken($midnight, 3%);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.btc-empty {
+    padding: 60px 0;
+    text-align: center;
+    font-size: 0.86rem;
+    color: $muted;
+}
+
+// ── Deadline notice ───────────────────────────────────────────────────────────
+.btc-deadline {
+    background: rgba($royal-gold, 0.06);
+    border-top: 1px solid rgba($royal-gold, 0.18);
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px 40px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+
+        @media (max-width: 768px) {
+            padding: 14px 20px;
+        }
+
+        svg {
+            flex-shrink: 0;
+            color: $royal-gold;
+            margin-top: 1px;
+        }
+
+        p {
+            font-size: 0.76rem;
+            color: $muted;
+            line-height: 1.6;
+            margin: 0;
+
+            strong {
+                color: $charcoal;
+                font-weight: 700;
+            }
+        }
+    }
+}

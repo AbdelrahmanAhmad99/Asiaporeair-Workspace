@@ -1,0 +1,484 @@
+ @use 'sass:math';
+
+ // ── Design Tokens ──────────────────────────────────────────────────────────
+ $midnight: #051937;
+ $midnight-alt: #071f42;
+ $royal-gold: #B68F24;
+ $champagne-gold: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal-navy: #101056;
+ $ruby-red: #710D06;
+ $ruby-light: #fef2f2;
+ $emerald: #064E3B;
+ $emerald-light: #ecfdf5;
+ $amber: #B45309;
+
+ // ── Page Shell ────────────────────────────────────────────────────────────
+ .profile-page {
+   min-height: 100vh;
+   background: $off-white;
+   padding: 0 0 64px;
+   font-family: 'Inter', system-ui, sans-serif;
+ }
+
+ // ── Page Header ───────────────────────────────────────────────────────────
+ .page-header {
+   background: $midnight;
+   padding: 24px 32px 28px;
+   display: flex;
+   align-items: center;
+   gap: 24px;
+   position: sticky;
+   top: 0;
+   z-index: 50;
+   box-shadow: 0 4px 24px rgba(5, 25, 55, 0.35);
+
+   .btn-back {
+     display: flex;
+     align-items: center;
+     gap: 6px;
+     background: transparent;
+     border: 1px solid rgba(226, 199, 128, 0.3);
+     color: $champagne-gold;
+     padding: 8px 14px;
+     border-radius: 4px;
+     font-size: 12px;
+     letter-spacing: 0.04em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: border-color 200ms, background 200ms;
+
+     svg {
+       width: 14px;
+       height: 14px;
+     }
+
+     &:hover {
+       border-color: $champagne-gold;
+       background: rgba(226, 199, 128, 0.06);
+     }
+   }
+
+   .header-title-block {
+     flex: 1;
+
+     .header-eyebrow {
+       display: block;
+       font-size: 10px;
+       letter-spacing: 0.12em;
+       color: rgba(226, 199, 128, 0.55);
+       text-transform: uppercase;
+       margin-bottom: 4px;
+     }
+
+     .header-name {
+       font-family: 'Montserrat', sans-serif;
+       font-size: 22px;
+       font-weight: 700;
+       color: #fff;
+       margin: 0 0 8px;
+       line-height: 1.2;
+     }
+
+     .header-meta {
+       display: flex;
+       align-items: center;
+       gap: 12px;
+
+       .meta-badge {
+         font-size: 11px;
+         padding: 2px 10px;
+         border-radius: 12px;
+         background: rgba(182, 143, 36, 0.18);
+         color: $champagne-gold;
+         border: 1px solid rgba(182, 143, 36, 0.35);
+
+         &--active {
+           background: rgba(6, 78, 59, 0.3);
+           color: #6ee7b7;
+           border-color: rgba(110, 231, 183, 0.3);
+         }
+       }
+
+       .meta-iata {
+         font-size: 12px;
+         color: rgba(255, 255, 255, 0.5);
+         letter-spacing: 0.06em;
+       }
+     }
+   }
+
+   .btn-primary {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     background: linear-gradient(135deg, $royal-gold, $champagne-gold);
+     color: $midnight;
+     border: none;
+     padding: 10px 20px;
+     border-radius: 4px;
+     font-size: 13px;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: opacity 200ms, box-shadow 200ms;
+     box-shadow: 0 0 0 0 rgba(226, 199, 128, 0);
+
+     svg {
+       width: 16px;
+       height: 16px;
+     }
+
+     &:hover:not(:disabled) {
+       box-shadow: 0 0 18px rgba(226, 199, 128, 0.5);
+       opacity: 0.92;
+     }
+
+     &:disabled {
+       opacity: 0.5;
+       cursor: not-allowed;
+     }
+   }
+ }
+
+ // ── Banners ───────────────────────────────────────────────────────────────
+ .banner {
+   display: flex;
+   align-items: flex-start;
+   gap: 12px;
+   padding: 14px 20px;
+   margin: 16px 32px 0;
+   border-radius: 8px;
+   overflow: hidden;
+
+   &--error {
+     background: $ruby-light;
+     border: 1px solid rgba(113, 13, 6, 0.25);
+     color: $ruby-red;
+   }
+
+   &--success {
+     background: $emerald-light;
+     border: 1px solid rgba(6, 78, 59, 0.3);
+     color: $emerald;
+   }
+
+   &__icon {
+     width: 18px;
+     height: 18px;
+     flex-shrink: 0;
+     margin-top: 1px;
+   }
+
+   &__text {
+     flex: 1;
+     font-size: 13px;
+     line-height: 1.5;
+   }
+
+   &__close {
+     background: none;
+     border: none;
+     cursor: pointer;
+     color: inherit;
+     font-size: 14px;
+     opacity: 0.6;
+     padding: 0 4px;
+     line-height: 1;
+
+     &:hover {
+       opacity: 1;
+     }
+   }
+ }
+
+ // ── Content Grid ──────────────────────────────────────────────────────────
+ .content-grid {
+   display: grid;
+   grid-template-columns: 340px 1fr;
+   gap: 24px;
+   padding: 28px 32px 0;
+   align-items: start;
+
+   @media (max-width: 960px) {
+     grid-template-columns: 1fr;
+   }
+ }
+
+ // ── Certification Column ──────────────────────────────────────────────────
+ .certs-col {
+   .certs-header {
+     margin-bottom: 20px;
+     padding-bottom: 16px;
+     border-bottom: 1px solid rgba(182, 143, 36, 0.2);
+   }
+
+   .certs-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 18px;
+     font-weight: 700;
+     color: $charcoal-navy;
+     margin: 0 0 4px;
+     display: flex;
+     align-items: center;
+     gap: 10px;
+   }
+
+   .cert-count-badge {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 24px;
+     height: 24px;
+     border-radius: 50%;
+     background: $royal-gold;
+     color: $midnight;
+     font-size: 11px;
+     font-weight: 700;
+   }
+
+   .certs-subtitle {
+     font-size: 12px;
+     color: rgba(16, 16, 86, 0.5);
+     letter-spacing: 0.04em;
+   }
+ }
+
+ .cert-cards-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+   gap: 16px;
+ }
+
+ // ── Skeletons ─────────────────────────────────────────────────────────────
+ .cert-skeleton {
+   background: #fff;
+   border: 1px solid rgba(226, 199, 128, 0.25);
+   border-radius: 12px;
+   padding: 20px;
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+ }
+
+ .shimmer-line {
+   border-radius: 4px;
+   background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%);
+   background-size: 200% 100%;
+   animation: shimmer 1.4s infinite;
+
+   &--xs {
+     height: 10px;
+     width: 60%;
+   }
+
+   &--sm {
+     height: 12px;
+     width: 80%;
+   }
+
+   &--md {
+     height: 16px;
+     width: 55%;
+   }
+
+   &--lg {
+     height: 26px;
+     width: 70%;
+     display: inline-block;
+   }
+ }
+
+ @keyframes shimmer {
+   0% {
+     background-position: -200% 0;
+   }
+
+   100% {
+     background-position: 200% 0;
+   }
+ }
+
+ // ── Empty State ────────────────────────────────────────────────────────────
+ .empty-state {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   padding: 60px 24px;
+   text-align: center;
+   background: #fff;
+   border: 1px dashed rgba(182, 143, 36, 0.3);
+   border-radius: 12px;
+   gap: 12px;
+
+   &__icon {
+     width: 56px;
+     height: 56px;
+     color: rgba(182, 143, 36, 0.4);
+   }
+
+   &__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 16px;
+     font-weight: 700;
+     color: $charcoal-navy;
+     margin: 0;
+   }
+
+   &__subtitle {
+     font-size: 13px;
+     color: rgba(16, 16, 86, 0.5);
+     margin: 0;
+   }
+
+   .btn-primary--sm {
+     margin-top: 8px;
+     padding: 8px 20px;
+     font-size: 12px;
+     background: linear-gradient(135deg, $royal-gold, $champagne-gold);
+     color: $midnight;
+     border: none;
+     border-radius: 4px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: box-shadow 200ms;
+
+     &:hover {
+       box-shadow: 0 0 14px rgba(226, 199, 128, 0.4);
+     }
+   }
+ }
+
+ // ── Dialog Backdrop ────────────────────────────────────────────────────────
+ .dialog-backdrop {
+   position: fixed;
+   inset: 0;
+   background: rgba(5, 25, 55, 0.72);
+   backdrop-filter: blur(8px);
+   z-index: 200;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 24px;
+   animation: fadeIn 220ms ease;
+ }
+
+ @keyframes fadeIn {
+   from {
+     opacity: 0;
+   }
+
+   to {
+     opacity: 1;
+   }
+ }
+
+ // ── Delete Confirmation Dialog ─────────────────────────────────────────────
+ .delete-dialog {
+   background: $midnight;
+   border: 1px solid rgba(182, 143, 36, 0.3);
+   border-radius: 12px;
+   padding: 36px 32px 28px;
+   max-width: 480px;
+   width: 100%;
+   box-shadow: 0 20px 60px rgba(5, 25, 55, 0.6);
+   animation: scaleIn 250ms cubic-bezier(0.4, 0, 0.2, 1);
+   text-align: center;
+
+   &__icon-wrap {
+     width: 52px;
+     height: 52px;
+     border-radius: 50%;
+     background: rgba(113, 13, 6, 0.2);
+     border: 1px solid rgba(113, 13, 6, 0.5);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin: 0 auto 20px;
+
+     svg {
+       width: 26px;
+       height: 26px;
+       color: #fca5a5;
+     }
+   }
+
+   &__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 17px;
+     font-weight: 700;
+     color: #fff;
+     margin: 0 0 12px;
+   }
+
+   &__body {
+     font-size: 13px;
+     color: rgba(255, 255, 255, 0.65);
+     line-height: 1.65;
+     margin: 0 0 28px;
+   }
+
+   &__cert-name {
+     color: $champagne-gold;
+     font-weight: 600;
+   }
+
+   &__actions {
+     display: flex;
+     gap: 12px;
+     justify-content: center;
+   }
+ }
+
+ @keyframes scaleIn {
+   from {
+     transform: scale(0.92);
+     opacity: 0;
+   }
+
+   to {
+     transform: scale(1);
+     opacity: 1;
+   }
+ }
+
+ // ── Action Buttons (shared) ────────────────────────────────────────────────
+ .btn-secondary {
+   background: transparent;
+   border: 1px solid rgba(226, 199, 128, 0.35);
+   color: $champagne-gold;
+   padding: 10px 20px;
+   border-radius: 4px;
+   font-size: 13px;
+   font-weight: 500;
+   cursor: pointer;
+   transition: border-color 200ms, background 200ms;
+
+   &:hover {
+     border-color: $champagne-gold;
+     background: rgba(226, 199, 128, 0.06);
+   }
+ }
+
+ .btn-danger {
+   background: linear-gradient(135deg, #710D06, #9b1c1c);
+   color: #fca5a5;
+   border: 1px solid rgba(113, 13, 6, 0.7);
+   padding: 10px 20px;
+   border-radius: 4px;
+   font-size: 13px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: box-shadow 200ms, opacity 200ms;
+
+   &:hover:not(:disabled) {
+     box-shadow: 0 0 18px rgba(113, 13, 6, 0.5);
+   }
+
+   &:disabled {
+     opacity: 0.5;
+     cursor: not-allowed;
+   }
+ }

@@ -1,0 +1,105 @@
+// ============================================================================
+// fare-benefits-list.component.scss
+// Asiaporeair | Fare Benefits Checklist
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$excluded : #9ca3af;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$t : 220ms ease;
+
+:host {
+    display: block;
+}
+
+.fbl-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+// ── Category group ────────────────────────────────────────────────────────────
+.fbl-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.fbl-group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 0.125rem;
+
+    &__line {
+        flex: 1;
+        height: 1px;
+        background: rgba($royal-gold, 0.18);
+    }
+
+    &__label {
+        font-family: $font;
+        font-size: 0.57rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba($royal-gold, 0.65);
+        white-space: nowrap;
+    }
+}
+
+// ── Individual benefit item ────────────────────────────────────────────────────
+.fbl-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+
+    &--excluded {
+        .fbl-item__icon {
+            color: $excluded;
+        }
+
+        .fbl-item__label {
+            color: $excluded;
+            text-decoration: line-through;
+            text-decoration-color: rgba($excluded, 0.5);
+        }
+    }
+
+    &__icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.08);
+        border: 1px solid rgba($royal-gold, 0.18);
+        color: $royal-gold;
+        transition: background $t, border-color $t;
+
+        .fbl-item--excluded & {
+            background: rgba($excluded, 0.07);
+            border-color: rgba($excluded, 0.18);
+        }
+    }
+
+    &__label {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.74rem;
+        color: $charcoal;
+        line-height: 1.5;
+        letter-spacing: 0.01em;
+        transition: color $t;
+    }
+}

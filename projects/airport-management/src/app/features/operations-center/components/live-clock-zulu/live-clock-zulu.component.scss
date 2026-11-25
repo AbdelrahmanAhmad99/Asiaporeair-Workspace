@@ -1,0 +1,106 @@
+@use '../command-bar-tokens' as t;
+
+:host {
+    @include t.cb-tokens;
+    display: block;
+    font-family: var(--cb-font);
+}
+
+.clock {
+    display: flex;
+    align-items: stretch;
+    gap: 1.25rem;
+    color: var(--cb-ivory);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+}
+
+.clock__zulu,
+.clock__local {
+    position: relative;
+    display: grid;
+    row-gap: 0.0625rem;
+    align-content: center;
+}
+
+.clock__caption {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--cb-ivory-muted);
+}
+
+.clock__date {
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    color: var(--cb-ivory-muted);
+}
+
+// The one memorable element: the Zulu readout.
+.clock__zulu-time {
+    font-size: 1.625rem;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--cb-ivory);
+}
+
+.clock__suffix {
+    margin-inline-start: 0.125rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--cb-champagne);
+}
+
+.clock__local-time {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--cb-ivory);
+}
+
+// Seconds hairline: position inside the current minute.
+.clock__progress {
+    display: block;
+    height: 1px;
+    margin-top: 0.25rem;
+    background: var(--cb-champagne-hairline);
+    overflow: hidden;
+}
+
+.clock__progress-bar {
+    display: block;
+    height: 100%;
+    background: var(--cb-gold);
+    transform-origin: left center;
+    transition: transform 1s linear;
+    will-change: transform;
+
+    &.is-reset {
+        transition: none;
+    }
+}
+
+@container command-bar (max-width: 1100px) {
+    .clock__local {
+        display: none;
+    }
+}
+
+@container command-bar (min-width: 2000px) {
+    .clock__zulu-time {
+        font-size: 2rem;
+    }
+
+    .clock__local-time {
+        font-size: 1.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .clock__progress-bar {
+        transition: none;
+    }
+}

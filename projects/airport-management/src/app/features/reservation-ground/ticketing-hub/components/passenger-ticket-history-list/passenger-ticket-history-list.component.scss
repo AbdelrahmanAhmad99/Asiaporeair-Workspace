@@ -1,0 +1,376 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ $t: 150ms ease;
+
+ // ── 1. Container ─────────────────────────────────────────────────────────
+ .pthl-container {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 10px rgba($midnight, 0.05);
+     overflow: hidden;
+ }
+
+ // ── 2. Section Header ─────────────────────────────────────────────────────
+ .pthl-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+     padding: 0.875rem 1.25rem;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+     flex-wrap: wrap;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0;
+     }
+
+     &__title {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__badges {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+     }
+ }
+
+ // ── 3. Count / Void Badges ────────────────────────────────────────────────
+ .pthl-badge {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+
+     &--total {
+         color: var(--aoms-text-muted);
+         background: rgba($midnight, 0.05);
+         border: 1px solid rgba($champagne, 0.12);
+     }
+
+     &--voided {
+         color: lighten($ruby, 22%);
+         background: rgba($ruby, 0.08);
+         border: 1px solid rgba($ruby, 0.2);
+     }
+ }
+
+ // ── 4. Audit Alert Banner ─────────────────────────────────────────────────
+ .pthl-audit-alert {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.75rem 1.25rem;
+     background: rgba($amber, 0.07);
+     border-bottom: 1px solid rgba($amber, 0.15);
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $amber;
+         flex-shrink: 0;
+         margin-top: 0.0625rem;
+     }
+
+     &__title {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: lighten($amber, 20%);
+         margin-bottom: 0.125rem;
+     }
+
+     &__sub {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: lighten($amber, 30%);
+         line-height: 1.4;
+     }
+ }
+
+ // ── 5. Empty State ────────────────────────────────────────────────────────
+ .pthl-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 2.5rem 1.5rem;
+     text-align: center;
+
+     &__icon {
+         width: 64px;
+         height: 48px;
+         color: var(--aoms-text-muted);
+         opacity: 0.35;
+     }
+
+     &__msg {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         font-style: italic;
+     }
+ }
+
+ // ── 6. Table Wrap ─────────────────────────────────────────────────────────
+ .pthl-table-wrap {
+     overflow-x: auto;
+     max-height: 480px;
+     overflow-y: auto;
+
+     scrollbar-width: thin;
+     scrollbar-color: rgba($gold, 0.2) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($gold, 0.18);
+         border-radius: 2px;
+     }
+ }
+
+ // ── 7. Table ──────────────────────────────────────────────────────────────
+ .pthl-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+ }
+
+ // Sticky header
+ .pthl-thead-row {
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 1;
+ }
+
+ .pthl-th {
+     padding: 0 1rem;
+     height: 36px;
+     text-align: left;
+     font-size: 10px;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 2px solid rgba($champagne, 0.1);
+
+     &--indicator {
+         width: 28px;
+         padding: 0 0.25rem 0 0.75rem;
+     }
+
+     &--code {
+         min-width: 160px;
+     }
+
+     &--status {
+         width: 120px;
+     }
+
+     &--date {
+         width: 130px;
+     }
+ }
+
+ // ── 8. Data Rows ──────────────────────────────────────────────────────────
+ .pthl-row {
+     height: 40px;
+     border-bottom: 1px solid rgba($champagne, 0.07);
+     transition: background $t;
+
+     &:nth-child(even) {
+         background: rgba($midnight, 0.018);
+     }
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.07);
+     }
+
+     // Current ticket — gold accent row
+     &--current {
+         background: rgba($gold, 0.06) !important;
+         border-left: 3px solid $gold;
+
+         &:hover {
+             background: rgba($gold, 0.09) !important;
+         }
+     }
+
+     // Voided — subtle ruby tint
+     &--voided {
+         opacity: 0.82;
+         background: rgba($ruby, 0.03) !important;
+
+         &:hover {
+             background: rgba($ruby, 0.06) !important;
+         }
+     }
+ }
+
+ // ── 9. Cells ──────────────────────────────────────────────────────────────
+ .pthl-cell {
+     padding: 0 1rem;
+     vertical-align: middle;
+     white-space: nowrap;
+
+     &--indicator {
+         padding: 0 0.25rem 0 0.75rem;
+     }
+
+     &--code {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         height: 40px; // explicit for flex alignment
+     }
+
+     // &--status {}
+
+     &--date {
+         color: var(--aoms-text-secondary);
+         font-size: 0.75rem;
+     }
+ }
+
+ // ── 10. Current Dot ───────────────────────────────────────────────────────
+ .pthl-current-dot {
+     position: relative;
+     width: 8px;
+     height: 8px;
+     flex-shrink: 0;
+
+     &__ring {
+         display: block;
+         width: 8px;
+         height: 8px;
+         border-radius: 50%;
+         background: $gold;
+         box-shadow: 0 0 6px rgba($gold, 0.6);
+
+         &::after {
+             content: '';
+             position: absolute;
+             inset: -2px;
+             border-radius: 50%;
+             background: rgba($gold, 0.35);
+             animation: pthl-pulse 2s ease-out infinite;
+         }
+     }
+ }
+
+ // ── 11. Code Cell ─────────────────────────────────────────────────────────
+ .pthl-code {
+     font-family: 'Courier New', monospace;
+     font-size: 0.875rem;
+     font-weight: 700;
+     letter-spacing: 0.05em;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color $t;
+
+     &--current {
+         color: $gold;
+     }
+
+     &--voided {
+         color: lighten($ruby, 18%);
+         text-decoration: line-through;
+         text-decoration-color: rgba($ruby, 0.45);
+         text-decoration-thickness: 1px;
+     }
+ }
+
+ .pthl-current-label {
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: $gold;
+     background: rgba($gold, 0.1);
+     border: 1px solid rgba($gold, 0.2);
+     padding: 0.0625rem 0.375rem;
+     border-radius: 100px;
+ }
+
+ // ── 12. Date Cell ─────────────────────────────────────────────────────────
+ .pthl-date {
+     &--voided {
+         color: rgba(lighten($ruby, 20%), 0.7);
+         text-decoration: line-through;
+         text-decoration-color: rgba($ruby, 0.35);
+     }
+ }
+
+ // ── 13. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes pthl-pulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.7;
+     }
+
+     100% {
+         transform: scale(3);
+         opacity: 0;
+     }
+ }
+
+ // ── 14. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .pthl-row:nth-child(even) {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .pthl-row:hover {
+         background: rgba($champagne, 0.06);
+     }
+
+     .pthl-row--current {
+         background: rgba($gold, 0.08) !important;
+     }
+
+     .pthl-row--voided {
+         background: rgba($ruby, 0.05) !important;
+     }
+ }

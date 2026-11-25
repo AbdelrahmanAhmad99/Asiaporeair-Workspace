@@ -1,0 +1,378 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Form shell
+ // ============================================================================
+ .sfu-form {
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     animation: sfu-enter 360ms $luxury both;
+ }
+
+ // ============================================================================
+ // 2. API Error banner
+ // ============================================================================
+ .sfu-api-error {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.625rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.22);
+     border-left: 4px solid $ruby;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     color: $ruby;
+     line-height: 1.5;
+     animation: sfu-slide-in 200ms $luxury both;
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+         margin-top: 0.1rem;
+     }
+ }
+
+ // ============================================================================
+ // 3. Section card (Glassmorphism / squircle 12px)
+ // ============================================================================
+ .sfu-card {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.2);
+     box-shadow:
+         0 4px 20px rgba($midnight, 0.07),
+         0 0 0 1px rgba($champagne, 0.06);
+     overflow: hidden;
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+         padding: 1.25rem 1.5rem;
+         border-bottom: 1px solid rgba($champagne, 0.1);
+         background: linear-gradient(135deg, rgba($champagne, 0.04) 0%, transparent 70%);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 7px;
+         background: $midnight;
+         border: 1px solid rgba($champagne, 0.18);
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+             color: $champagne;
+         }
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 700;
+         color: var(--aoms-text-primary, $charcoal);
+         margin: 0 0 0.2rem;
+     }
+
+     &__subtitle {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+ }
+
+ // ============================================================================
+ // 4. Field grid
+ // ============================================================================
+ .sfu-fields {
+     padding: 1.25rem 1.5rem 1.5rem;
+     gap: 1.125rem;
+     display: grid;
+
+     &--two {
+         grid-template-columns: 1fr 1fr;
+
+         @media (max-width: 600px) {
+             grid-template-columns: 1fr;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Individual field — floating label pattern
+ // ============================================================================
+ .sfu-field {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 0.35rem;
+
+     &--error {
+         .sfu-input {
+             border-color: $ruby !important;
+         }
+
+         .sfu-label {
+             color: $ruby !important;
+         }
+     }
+
+     &__err {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 500;
+         color: $ruby;
+         padding: 0.2rem 0.5rem;
+         border-radius: 3px;
+         background: rgba($ruby, 0.05);
+         border-left: 2px solid $ruby;
+         animation: sfu-slide-in 160ms $luxury both;
+     }
+
+     &__hint {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: var(--aoms-text-muted);
+         opacity: 0.65;
+     }
+ }
+
+ // ============================================================================
+ // 6. Text / date / time inputs — floating label
+ // ============================================================================
+ .sfu-input {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     width: 100%;
+     height: 3.5rem;
+     padding: 1.45rem 1rem 0.45rem;
+
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+
+     background: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+     transition:
+         border-color 180ms $ease,
+         background 180ms $ease,
+         box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.15), 0 0 12px rgba($champagne, 0.07);
+     }
+
+     &:focus~.sfu-label,
+     &:not(:placeholder-shown)~.sfu-label {
+         top: 0.45rem;
+         font-size: 9px;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: $champagne;
+     }
+
+     &--time,
+     &--date {
+         font-family: 'Courier New', monospace;
+         letter-spacing: 0.04em;
+
+         &::-webkit-calendar-picker-indicator {
+             opacity: 0.4;
+             cursor: pointer;
+         }
+
+         &::-webkit-inner-spin-button,
+         &::-webkit-outer-spin-button {
+             -webkit-appearance: none;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. Floating label
+ // ============================================================================
+ .sfu-label {
+     position: absolute;
+     top: 50%;
+     left: 1rem;
+     transform: translateY(-50%);
+     pointer-events: none;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     transition:
+         top 180ms $ease,
+         font-size 180ms $ease,
+         font-weight 180ms $ease,
+         color 180ms $ease,
+         letter-spacing 180ms $ease,
+         text-transform 180ms $ease;
+
+     &__req {
+         color: $ruby;
+         margin-left: 0.15rem;
+     }
+ }
+
+ // ============================================================================
+ // 8. Day-of-week toggles — Royal Gold active per spec
+ // ============================================================================
+ .sfu-days {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.5rem;
+     padding: 0.75rem 1.5rem 1.375rem;
+ }
+
+ .sfu-day-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.75rem;
+     height: 2.75rem;
+     border-radius: 6px;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     // Unselected — subtle outline
+     background: transparent;
+     border: 1px solid rgba($charcoal, 0.18);
+     color: var(--aoms-text-muted);
+
+     &:hover {
+         border-color: rgba($champagne, 0.35);
+         color: $champagne;
+         background: rgba($champagne, 0.05);
+     }
+
+     // Selected — Royal Gold solid per spec
+     &--active {
+         background: $gold;
+         border-color: $gold;
+         color: $midnight;
+         font-weight: 800;
+         box-shadow: 0 2px 10px rgba($gold, 0.3);
+
+         &:hover {
+             background: $champagne;
+             border-color: $champagne;
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .sfu-days-error {
+     margin: 0 1.5rem 1rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: $ruby;
+     padding: 0.3rem 0.625rem;
+     border-radius: 4px;
+     background: rgba($ruby, 0.05);
+     border-left: 2px solid $ruby;
+ }
+
+ // ============================================================================
+ // 9. Keyframes
+ // ============================================================================
+ @keyframes sfu-enter {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes sfu-slide-in {
+     from {
+         opacity: 0;
+         transform: translateX(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ // ============================================================================
+ // 10. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .sfu-card {
+         background: rgba(255, 255, 255, 0.03);
+         box-shadow: 0 4px 24px rgba(0, 0, 0, .3);
+     }
+
+     .sfu-card__icon-wrap {
+         background: rgba($midnight, 0.8);
+     }
+
+     .sfu-input {
+         background: rgba($midnight, 0.5);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.88);
+
+         &:focus {
+             background: rgba($midnight, 0.8);
+         }
+     }
+
+     .sfu-day-btn {
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.4);
+
+         &:hover {
+             border-color: rgba($champagne, 0.35);
+             color: $champagne;
+         }
+
+         &--active {
+             background: $gold;
+             border-color: $gold;
+             color: $midnight;
+         }
+     }
+ }

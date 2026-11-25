@@ -1,0 +1,26 @@
+<!-- Base Layout — AOMS Enterprise Shell Grid -->
+<div class="shell" [ngClass]="layoutStore.themeClass()">
+
+  <!-- ── Sidebar (Left Column, Full Height) ─────────────────────────────── -->
+  <app-sidebar class="shell__sidebar"></app-sidebar>
+
+  <!-- ── Main Container (Right Column) ──────────────────────────────────── -->
+  <div class="shell__main">
+
+    <!-- Topbar -->
+    <app-topbar class="shell__topbar"></app-topbar>
+
+    <!-- Content Area with Router Outlet -->
+    <main class="shell__content" role="main">
+      <div class="shell__content-inner">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <app-footer class="shell__footer"></app-footer>
+  </div>
+
+  <!-- ── Floating Widgets (Fixed Position) ──────────────────────────────── -->
+  <app-layout-widgets></app-layout-widgets>
+</div>

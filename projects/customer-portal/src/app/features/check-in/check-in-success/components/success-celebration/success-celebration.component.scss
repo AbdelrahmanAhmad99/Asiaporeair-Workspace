@@ -1,0 +1,109 @@
+:host {
+    display: flex;
+    justify-content: center;
+}
+
+.celebration {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: celebIn 300ms cubic-bezier(0.22, 1, 0.36, 1) both,
+        celebOut 400ms 1700ms ease-in forwards;
+}
+
+@keyframes celebIn {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes celebOut {
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+/* Pulsing rings */
+.celebration__ring {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(182, 143, 36, 0.4);
+    animation: ringExpand 1.8s ease-out infinite;
+
+    &--2 {
+        width: 96px;
+        height: 96px;
+        border-color: rgba(226, 199, 128, 0.2);
+        animation-delay: 0.4s;
+    }
+}
+
+@keyframes ringExpand {
+    0% {
+        transform: scale(0.7);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+/* Central checkmark icon */
+.celebration__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(182, 143, 36, 0.1);
+    border: 1.5px solid rgba(182, 143, 36, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    animation: iconPop 500ms 100ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes iconPop {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Gold fleck particles */
+.fleck {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #E2C780;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .celebration,
+    .celebration__ring,
+    .celebration__icon,
+    .fleck {
+        animation: none !important;
+    }
+}

@@ -1,0 +1,61 @@
+<div class="im-shell">
+
+    <header class="im-hero">
+        <div class="im-hero__inner">
+            <nav class="im-bc" aria-label="Breadcrumb">
+                <a href="/" class="im-bc__link">Home</a>
+                <span class="im-bc__sep">›</span>
+                <a href="/journey-with-us/dining" class="im-bc__link">Dining</a>
+                <span class="im-bc__sep">›</span>
+                <span class="im-bc__cur">Inflight Menus</span>
+            </nav>
+            <div class="im-hero__pre-line"></div>
+            <p class="im-hero__ey">Dining Across All Cabins</p>
+            <h1 class="im-hero__title">Inflight Menus</h1>
+            <p class="im-hero__sub">Preview what's on your plate before you even reach the gate. Our menus reflect our
+                global network — thoughtfully composed for every journey.</p>
+        </div>
+    </header>
+
+    <!-- Cabin menu cards -->
+    <section class="im-cabins">
+        <div class="im-cabins__inner">
+            <div class="im-cabins__grid">
+                @for (group of menuGroups(); track group.id) {
+                <div class="im-menu-card">
+                    <div class="im-menu-card__img-wrap">
+                        <img [src]="group.imagePath" [alt]="group.menuLabel + ' menu'" loading="lazy"
+                            class="im-menu-card__img" />
+                        <div class="im-menu-card__overlay"></div>
+                        <span class="im-menu-card__badge">{{ group.cabinClass }}</span>
+                    </div>
+                    <div class="im-menu-card__body">
+                        <h3 class="im-menu-card__title">{{ group.menuLabel }}</h3>
+                        <p class="im-menu-card__desc">{{ group.description }}</p>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Special meals -->
+    <section class="im-special">
+        <div class="im-special__inner">
+            <h2 class="im-special__title">Special Meal Options</h2>
+            <p class="im-special__sub">Request at booking or up to 24 hours before departure.</p>
+            <div class="im-special__grid">
+                @for (meal of specialMeals(); track meal.id) {
+                <div class="im-special__item">
+                    <span class="im-special__code">{{ meal.code }}</span>
+                    <div>
+                        <div class="im-special__name">{{ meal.name }}</div>
+                        <div class="im-special__desc">{{ meal.description }}</div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+</div>

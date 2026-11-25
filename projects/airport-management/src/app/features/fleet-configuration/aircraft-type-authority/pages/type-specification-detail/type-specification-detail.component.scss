@@ -1,0 +1,247 @@
+ // ----------------------------------------------------------------------------
+ // 1. Page Shell
+ // ----------------------------------------------------------------------------
+ .tsd-page {
+     min-height: 100%;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color var(--aoms-transition-base);
+     display: flex;
+     flex-direction: column;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Page Body
+ // ----------------------------------------------------------------------------
+ .tsd-body {
+     flex: 1;
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+     overflow-y: auto;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Error Banner
+ // ----------------------------------------------------------------------------
+ .tsd-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1.125rem;
+     border-radius: 8px;
+     background: rgba(113, 13, 6, 0.08);
+     border: 1px solid rgba(113, 13, 6, 0.2);
+     color: #710d06;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Two-column Layout
+ // ----------------------------------------------------------------------------
+ .tsd-layout {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 1.25rem;
+     align-items: start;
+
+     @media (min-width: 900px) {
+         grid-template-columns: 280px 1fr;
+         gap: 1.5rem;
+     }
+
+     @media (min-width: 1200px) {
+         grid-template-columns: 300px 1fr;
+         gap: 1.75rem;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Left Sidebar (Identity + Range + Quick Facts)
+ // ----------------------------------------------------------------------------
+ .tsd-sidebar {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+
+     // On small screens the sidebar renders above the main content
+     @media (max-width: 899px) {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         align-items: start;
+     }
+
+     @media (max-width: 599px) {
+         display: flex;
+         flex-direction: column;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Main Content (Spec Groups)
+ // ----------------------------------------------------------------------------
+ .tsd-main-content {
+     min-width: 0; // Prevent overflow in grid
+ }
+
+ // ----------------------------------------------------------------------------
+ // 7. Quick Facts Strip
+ // ----------------------------------------------------------------------------
+ .tsd-quick-facts {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+     overflow: hidden;
+     transition:
+         background-color var(--aoms-transition-base),
+         border-color var(--aoms-transition-base),
+         box-shadow var(--aoms-transition-base);
+ }
+
+ .tsd-quick-fact {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1.125rem;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.07);
+     transition: background var(--aoms-transition-fast);
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     &:hover {
+         background: rgba(226, 199, 128, 0.04);
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: var(--aoms-gold);
+         flex-shrink: 0;
+     }
+
+     &__label {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         flex: 1;
+         min-width: 0;
+         transition: color var(--aoms-transition-fast);
+     }
+
+     &__value {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 600;
+         color: var(--aoms-text-primary);
+         white-space: nowrap;
+         font-variant-numeric: tabular-nums;
+         transition: color var(--aoms-transition-fast);
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 8. Print Header (hidden in screen mode)
+ // ----------------------------------------------------------------------------
+ .tsd-print-header {
+     display: none; // shown only via @media print below
+ }
+
+ // ============================================================================
+ // 9. Dark Mode Overrides (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .tsd-error-banner {
+         background: rgba(113, 13, 6, 0.14);
+         border-color: rgba(113, 13, 6, 0.35);
+         color: #f87171;
+     }
+
+     .tsd-quick-facts {
+         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+     }
+ }
+
+ // ============================================================================
+ // 10. Print Styles (@media print / .aoms-print-mode)
+ // ============================================================================
+ @media print {
+
+     // Show the print-specific header
+     .tsd-print-header {
+         display: block;
+         margin-bottom: 2rem;
+     }
+
+     .tsd-print-header__brand {
+         font-size: 9pt;
+         font-family: 'Montserrat', sans-serif;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: #b68f24;
+         margin-bottom: 0.5rem;
+     }
+
+     .tsd-print-header__title {
+         font-size: 18pt;
+         font-family: 'Montserrat', sans-serif;
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: #051937;
+         margin-bottom: 0.25rem;
+     }
+
+     .tsd-print-header__meta {
+         font-size: 9pt;
+         font-family: 'Inter', sans-serif;
+         color: #6b7280;
+         margin-bottom: 1rem;
+     }
+
+     .tsd-print-header__rule {
+         height: 1pt;
+         background: #b68f24;
+         border: none;
+         margin-bottom: 1.5rem;
+     }
+
+     // Force single-column layout for print
+     .tsd-layout {
+         grid-template-columns: 1fr;
+     }
+
+     .tsd-sidebar {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         gap: 1rem;
+     }
+
+     // Remove interactive elements from print
+     :host aoms-navigation-header {
+         display: none;
+     }
+
+     // Ensure cards print without shadow clipping
+     .tsd-page {
+         background: #ffffff;
+     }
+
+     .tsd-body {
+         padding: 0;
+     }
+ }

@@ -1,0 +1,703 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+ $t: 160ms ease;
+ $t-base: 240ms ease;
+
+ .pdv-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ── Header ─────────────────────────────────────────────────────────────────
+ .pdv-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.15);
+     box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base, box-shadow $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.375rem;
+     }
+ }
+
+ // Breadcrumb — centre-out golden underline on hover
+ .pdv-crumb {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-wrap: wrap;
+
+     &__link {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-secondary);
+         background: none;
+         border: none;
+         cursor: pointer;
+         outline: none;
+         position: relative;
+         transition: color $t;
+         padding: 0;
+
+         &::after {
+             content: '';
+             position: absolute;
+             bottom: -1px;
+             left: 50%;
+             transform: translateX(-50%);
+             width: 0;
+             height: 1px;
+             background: linear-gradient(to right, transparent, $gold, transparent);
+             transition: width 220ms ease;
+         }
+
+         &:hover {
+             color: $gold;
+
+             &::after {
+                 width: 100%;
+             }
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 3px;
+             border-radius: 3px;
+         }
+     }
+
+     &__sep {
+         color: rgba(226, 199, 128, 0.25);
+         font-size: 0.875rem;
+     }
+
+     &__arrow {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .pdv-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary);
+     transition: color $t;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .pdv-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.07);
+         color: $midnight;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // ── Body ───────────────────────────────────────────────────────────────────
+ .pdv-body {
+     flex: 1;
+     padding: 1.25rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     overflow-y: auto;
+ }
+
+ // ── KPI Strip ─────────────────────────────────────────────────────────────
+ .pdv-kpis {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+     gap: 0.875rem;
+     animation: pdv-fadein 250ms ease forwards;
+ }
+
+ .pdv-kpi {
+     padding: 1rem 1.125rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba(226, 199, 128, 0.15);
+     box-shadow: 0 4px 14px rgba(5, 25, 55, 0.2);
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+     transition: transform $t, box-shadow $t;
+
+     &:hover {
+         transform: translateY(-1px);
+         box-shadow: 0 6px 20px rgba(5, 25, 55, 0.3);
+     }
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: rgba(226, 199, 128, 0.4);
+     }
+
+     &__val {
+         font-size: 1.625rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 800;
+         letter-spacing: -0.035em;
+         color: $champagne;
+         line-height: 1;
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__unit {
+         font-size: 0.875rem;
+         font-weight: 400;
+         color: rgba(226, 199, 128, 0.5);
+         margin-left: 2px;
+     }
+
+     &--period {
+         grid-column: span 2;
+
+         @media (max-width: 640px) {
+             grid-column: span 1;
+         }
+     }
+
+     &__val--period {
+         font-size: 1rem;
+         letter-spacing: -0.01em;
+         color: rgba(226, 199, 128, 0.8);
+     }
+ }
+
+ // ── Error Panel (Glassmorphism) ────────────────────────────────────────────
+ .pdv-error-panel {
+     position: relative;
+     overflow: hidden;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1.25rem;
+     padding: 1.25rem 1.375rem;
+     border-radius: 12px;
+     background: rgba(113, 13, 6, 0.1);
+     border: 1px solid rgba(113, 13, 6, 0.32);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     animation: pdv-fadein 200ms ease forwards;
+
+     &__glass {
+         position: absolute;
+         inset: 0;
+         pointer-events: none;
+         background: linear-gradient(135deg, rgba(113, 13, 6, 0.1) 0%, transparent 60%);
+     }
+
+     &__left {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+         flex: 1;
+         position: relative;
+     }
+
+     &__icon {
+         width: 1.5rem;
+         height: 1.5rem;
+         color: lighten($ruby, 18%);
+         flex-shrink: 0;
+         margin-top: 1px;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: lighten($ruby, 22%);
+         margin-bottom: 0.375rem;
+     }
+
+     &__msg {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         line-height: 1.5;
+         color: lighten($ruby, 32%);
+     }
+
+     &__retry {
+         position: relative;
+         display: inline-flex;
+         align-items: center;
+         gap: 0.4375rem;
+         flex-shrink: 0;
+         align-self: center;
+         padding: 0.5625rem 1.25rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: #fff;
+         background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+         border: none;
+         border-radius: 4px;
+         cursor: pointer;
+         outline: none;
+         box-shadow: 0 4px 14px rgba(182, 143, 36, 0.38);
+         transition: all $t;
+
+         &:hover {
+             background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+             box-shadow: 0 6px 20px rgba(182, 143, 36, 0.55);
+             transform: translateY(-1px);
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         &__icon {
+             width: 0.9375rem;
+             height: 0.9375rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ // ── Calendar Controls ──────────────────────────────────────────────────────
+ .pdv-controls {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     flex-wrap: wrap;
+ }
+
+ .pdv-controls__nav {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+ }
+
+ .pdv-nav-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2rem;
+     height: 2rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+     }
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.08);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .pdv-today-btn {
+     padding: 0.375rem 0.875rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: $gold;
+     background: transparent;
+     border: 1px solid rgba(182, 143, 36, 0.28);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:hover {
+         border-color: rgba(182, 143, 36, 0.5);
+         background: rgba(182, 143, 36, 0.08);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .pdv-period-label {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary);
+     margin-left: 0.5rem;
+     transition: color $t;
+ }
+
+ .pdv-view-switcher {
+     display: flex;
+     background: rgba(5, 25, 55, 0.2);
+     padding: 0.1875rem;
+     border-radius: 8px;
+     border: 1px solid rgba(226, 199, 128, 0.12);
+     gap: 0.125rem;
+ }
+
+ .pdv-view-btn {
+     padding: 0.3125rem 0.875rem;
+     border-radius: 6px;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-muted);
+     background: transparent;
+     border: none;
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:hover:not(&--active) {
+         color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 1px;
+     }
+
+     &--active {
+         color: $midnight;
+         background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+         box-shadow: 0 2px 6px rgba(182, 143, 36, 0.35);
+     }
+ }
+
+ // ── Event Detail Drawer ───────────────────────────────────────────────────
+ .pdv-drawer-bd {
+     position: fixed;
+     inset: 0;
+     z-index: 40;
+     background: rgba(5, 25, 55, 0.5);
+     backdrop-filter: blur(4px);
+     animation: pdv-fade 200ms ease forwards;
+ }
+
+ .pdv-drawer {
+     position: fixed;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     z-index: 50;
+     width: min(360px, 90vw);
+     display: flex;
+     flex-direction: column;
+     background: $midnight;
+     border-left: 1px solid rgba(226, 199, 128, 0.2);
+     box-shadow: -8px 0 32px rgba(0, 0, 0, 0.35);
+     animation: pdv-drawer-in 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+     &__rule {
+         height: 2px;
+         flex-shrink: 0;
+         background: linear-gradient(to right, transparent, $gold, transparent);
+     }
+
+     &__header {
+         display: flex;
+         align-items: center;
+         gap: 0.75rem;
+         padding: 1.125rem 1.375rem;
+         border-bottom: 1px solid rgba(226, 199, 128, 0.12);
+         flex-shrink: 0;
+
+         &__icon-wrap {
+             width: 2.25rem;
+             height: 2.25rem;
+             border-radius: 8px;
+             flex-shrink: 0;
+             background: rgba(182, 143, 36, 0.12);
+             border: 1px solid rgba(226, 199, 128, 0.2);
+             display: flex;
+             align-items: center;
+             justify-content: center;
+         }
+
+         &__icon {
+             width: 1.125rem;
+             height: 1.125rem;
+             color: $champagne;
+         }
+
+         &__label {
+             font-size: 10px;
+             font-family: var(--aoms-font-body);
+             font-weight: 700;
+             text-transform: uppercase;
+             letter-spacing: 0.08em;
+             color: rgba(226, 199, 128, 0.45);
+         }
+
+         &__title {
+             font-size: 1.0625rem;
+             font-family: var(--aoms-font-heading);
+             font-weight: 700;
+             color: rgba(255, 255, 255, 0.92);
+             letter-spacing: -0.01em;
+         }
+     }
+
+     &__close {
+         margin-left: auto;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.75rem;
+         height: 1.75rem;
+         border-radius: 4px;
+         border: 1px solid rgba(226, 199, 128, 0.18);
+         background: transparent;
+         color: rgba(226, 199, 128, 0.5);
+         cursor: pointer;
+         outline: none;
+         transition: all $t;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             color: $champagne;
+             border-color: rgba(226, 199, 128, 0.38);
+         }
+     }
+
+     &__body {
+         flex: 1;
+         padding: 1rem 1.375rem;
+         display: flex;
+         flex-direction: column;
+         gap: 0;
+         overflow-y: auto;
+     }
+
+     &__row {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         gap: 0.75rem;
+         padding: 0.5rem 0;
+         border-bottom: 1px solid rgba(226, 199, 128, 0.07);
+
+         &:last-child {
+             border-bottom: none;
+         }
+
+         &__key {
+             font-size: 0.8125rem;
+             font-family: var(--aoms-font-body);
+             font-weight: 500;
+             color: rgba(226, 199, 128, 0.45);
+             flex-shrink: 0;
+         }
+
+         &__val {
+             font-size: 0.875rem;
+             font-family: var(--aoms-font-body);
+             font-weight: 500;
+             color: rgba(248, 249, 250, 0.85);
+             text-align: right;
+
+             &--flight {
+                 font-family: var(--aoms-font-heading);
+                 font-size: 1.0625rem;
+                 font-weight: 800;
+                 color: $champagne;
+             }
+
+             &--route {
+                 font-family: var(--aoms-font-heading);
+                 font-weight: 700;
+                 color: $gold;
+             }
+
+             &--mono {
+                 font-family: 'Menlo', 'Monaco', monospace;
+                 font-size: 0.8125rem;
+                 color: rgba(226, 199, 128, 0.6);
+             }
+
+             &--ok {
+                 color: lighten($emerald, 38%);
+             }
+
+             &--warn {
+                 color: #FCD34D;
+             }
+
+             &--err {
+                 color: lighten($ruby, 28%);
+             }
+         }
+     }
+
+     &__notes {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         line-height: 1.5;
+         color: rgba(255, 255, 255, 0.4);
+         font-style: italic;
+         border-top: 1px solid rgba(226, 199, 128, 0.1);
+         padding-top: 0.625rem;
+         margin-top: 0.5rem;
+     }
+
+     &__strip-preview {
+         padding: 1rem 1.375rem;
+         border-top: 1px solid rgba(226, 199, 128, 0.1);
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes pdv-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes pdv-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes pdv-drawer-in {
+     from {
+         transform: translateX(100%);
+         opacity: 0;
+     }
+
+     to {
+         transform: translateX(0);
+         opacity: 1;
+     }
+ }
+
+ // ── Dark Mode ──────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .pdv-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .pdv-crumb__link:hover {
+         color: $champagne;
+     }
+
+     .pdv-icon-btn:hover {
+         color: $champagne;
+     }
+
+     .pdv-error-panel {
+         background: rgba(113, 13, 6, 0.15);
+         border-color: rgba(113, 13, 6, 0.4);
+     }
+ }

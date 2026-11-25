@@ -1,0 +1,118 @@
+<!-- ============================================================
+     pax-action-bar.component.html
+     AOMS — Passenger Master Index: Global Actions Bar (Dumb)
+     ============================================================ -->
+
+<div class="pab-bar" [class.pab-bar--loading]="loading()">
+
+    <!-- Gold accent strip -->
+    <div class="pab-bar__accent" aria-hidden="true"></div>
+
+    <!-- ── Search Filters Row ────────────────────────────────────── -->
+    <div class="pab-filters" (keydown)="onKeydown($event)">
+
+        <!-- Passenger Name -->
+        <div class="pab-field pab-field--wide">
+            <label class="pab-field__label" for="pab-name">Passenger Name</label>
+            <div class="pab-field__wrap">
+                <svg class="pab-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                <input id="pab-name" class="pab-field__input" type="text" placeholder="Search by full name…"
+                    autocomplete="off" [value]="draft().nameContains"
+                    (input)="onFieldChange('nameContains', $any($event.target).value)" [disabled]="loading()"
+                    aria-label="Filter by passenger name" />
+            </div>
+        </div>
+
+        <!-- Passport / Document Number -->
+        <div class="pab-field">
+            <label class="pab-field__label" for="pab-passport">Passport / Doc ID</label>
+            <div class="pab-field__wrap">
+                <svg class="pab-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253M3 12a8.96 8.96 0 0 0 .284 2.253" />
+                </svg>
+                <input id="pab-passport" class="pab-field__input pab-field__input--mono" type="text"
+                    placeholder="e.g. A12345678" autocomplete="off" spellcheck="false" [value]="draft().passportNumber"
+                    (input)="onFieldChange('passportNumber', $any($event.target).value)" [disabled]="loading()"
+                    aria-label="Filter by passport number" />
+            </div>
+        </div>
+
+        <!-- User ID -->
+        <div class="pab-field pab-field--narrow">
+            <label class="pab-field__label" for="pab-uid">User ID</label>
+            <div class="pab-field__wrap">
+                <svg class="pab-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                </svg>
+                <input id="pab-uid" class="pab-field__input pab-field__input--mono" type="number" placeholder="UID"
+                    min="1" [value]="draft().userId" (input)="onFieldChange('userId', $any($event.target).value)"
+                    [disabled]="loading()" aria-label="Filter by user ID" />
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Actions Row ───────────────────────────────────────────── -->
+    <div class="pab-actions">
+
+        <!-- Global action buttons (left side) -->
+        <div class="pab-actions__global">
+
+            <!-- Export -->
+            <button class="pab-global-btn" type="button" [disabled]="loading()" (click)="exportRequested.emit()"
+                title="Export passenger data" aria-label="Export passenger data">
+                <svg class="pab-global-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Export
+            </button>
+
+        </div>
+
+        <!-- Search control buttons (right side) -->
+        <div class="pab-actions__search">
+
+            <!-- Clear filters -->
+            @if (hasActiveFilters() && !loading()) {
+            <button class="pab-btn pab-btn--clear" type="button" (click)="onReset()" aria-label="Clear all filters">
+                <svg class="pab-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+                Clear
+            </button>
+            }
+
+            <!-- Search -->
+            <button class="pab-btn pab-btn--search" type="button" [disabled]="loading()" (click)="onSubmit()">
+                @if (loading()) {
+                <svg class="pab-btn__icon pab-btn__icon--spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Searching…
+                } @else {
+                <svg class="pab-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                </svg>
+                Search Registry
+                }
+            </button>
+
+        </div>
+    </div>
+
+</div>

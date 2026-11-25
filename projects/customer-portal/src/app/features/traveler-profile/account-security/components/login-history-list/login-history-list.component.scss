@@ -1,0 +1,391 @@
+// ============================================================================
+// login-history-list.component.scss
+// Asiaporeair | Login History — Device Session Cards
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$danger : #c53030;
+$success : #276749;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── Card ─────────────────────────────────────────────────────────────────────
+.lhl-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($champagne, 0.25);
+    box-shadow: 0 4px 22px rgba($midnight, 0.06);
+    overflow: hidden;
+
+    &__header {
+        padding: 22px 28px 18px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    &__title-block {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    &__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba($royal-gold, 0.08);
+        border: 1px solid rgba($royal-gold, 0.2);
+        color: $royal-gold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: $charcoal;
+        margin: 0 0 3px;
+    }
+
+    &__subtitle {
+        font-family: $font;
+        font-size: 0.7rem;
+        color: $muted;
+        margin: 0;
+    }
+
+    &__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 24px;
+        height: 24px;
+        padding: 0 6px;
+        border-radius: 12px;
+        background: rgba($royal-gold, 0.1);
+        border: 1px solid rgba($royal-gold, 0.25);
+        font-family: $font;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: darken($royal-gold, 6%);
+        flex-shrink: 0;
+    }
+
+    &__rule {
+        height: 1px;
+        margin: 0 28px;
+        background: linear-gradient(90deg, transparent, rgba($champagne, 0.4), transparent);
+    }
+}
+
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+.lhl-skeleton-list {
+    padding: 8px 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.lhl-skeleton-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba($champagne, 0.12);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.lhl-skeleton {
+    &__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        flex-shrink: 0;
+        background: linear-gradient(90deg,
+                rgba($champagne, 0.08) 0%,
+                rgba($champagne, 0.22) 50%,
+                rgba($champagne, 0.08) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.8s ease infinite;
+    }
+
+    &__body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    &__line {
+        height: 10px;
+        border-radius: 4px;
+        background: linear-gradient(90deg,
+                rgba($champagne, 0.08) 0%,
+                rgba($champagne, 0.22) 50%,
+                rgba($champagne, 0.08) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.8s ease infinite;
+
+        &--name {
+            width: 55%;
+            animation-delay: 0.05s;
+        }
+
+        &--detail {
+            width: 75%;
+            animation-delay: 0.12s;
+        }
+    }
+
+    &__date {
+        width: 70px;
+        height: 28px;
+        border-radius: 6px;
+        background: linear-gradient(90deg,
+                rgba($champagne, 0.08) 0%,
+                rgba($champagne, 0.22) 50%,
+                rgba($champagne, 0.08) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.8s ease infinite;
+        animation-delay: 0.18s;
+        flex-shrink: 0;
+    }
+}
+
+// ── Session list ──────────────────────────────────────────────────────────────
+.lhl-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 28px 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.lhl-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba($champagne, 0.12);
+    transition: background $t;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: rgba($ivory, 0.5);
+    }
+
+    // Current session gets a subtle left gold accent
+    &--current {
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: $royal-gold;
+            border-radius: 0 2px 2px 0;
+        }
+    }
+
+    &__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba($midnight, 0.04);
+        border: 1px solid rgba($midnight, 0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: rgba($charcoal, 0.55);
+        transition: background $t, color $t;
+    }
+
+    &--current &__icon {
+        background: rgba($royal-gold, 0.08);
+        border-color: rgba($royal-gold, 0.2);
+        color: $royal-gold;
+    }
+
+    &__body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__device-row {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex-wrap: wrap;
+    }
+
+    &__device {
+        font-family: $font;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: $charcoal;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    &__location {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.68rem;
+        font-weight: 400;
+        color: $muted;
+    }
+
+    &__ip {
+        font-size: 0.65rem;
+        font-family: 'Courier New', monospace;
+        color: rgba($muted, 0.65);
+        background: rgba($charcoal, 0.04);
+        padding: 1px 6px;
+        border-radius: 4px;
+    }
+
+    &__datetime {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 2px;
+        flex-shrink: 0;
+    }
+
+    &__date {
+        font-family: $font;
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: rgba($charcoal, 0.65);
+    }
+
+    &__time {
+        font-family: $font;
+        font-size: 0.62rem;
+        font-weight: 400;
+        color: $muted;
+    }
+}
+
+// ── Current device badge ──────────────────────────────────────────────────────
+.lhl-current-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 8px;
+    border-radius: 20px;
+    background: rgba($royal-gold, 0.1);
+    border: 1px solid rgba($royal-gold, 0.28);
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: darken($royal-gold, 6%);
+    white-space: nowrap;
+}
+
+// ── Revoke button ──────────────────────────────────────────────────────────────
+.lhl-revoke-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: none;
+    border: 1px solid rgba($danger, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba($danger, 0.4);
+    flex-shrink: 0;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($danger, 0.45);
+        background: rgba($danger, 0.04);
+        color: $danger;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $danger;
+        outline-offset: 2px;
+    }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.lhl-empty {
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: rgba($muted, 0.6);
+
+    p {
+        font-family: $font;
+        font-size: 0.78rem;
+        margin: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .lhl-skeleton__icon,
+    .lhl-skeleton__line,
+    .lhl-skeleton__date {
+        animation: none;
+    }
+}

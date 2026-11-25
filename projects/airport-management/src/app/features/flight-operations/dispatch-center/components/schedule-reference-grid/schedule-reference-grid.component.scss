@@ -1,0 +1,609 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ $row-height: 52px;
+
+ // Column widths — must match between srg-head and srg-row
+ $col-id: 60px;
+ $col-flightno: 76px;
+ $col-airline: 68px;
+ $col-corridor: 100px;
+ $col-block: 72px;
+ $col-days: 112px;
+ $col-date: 88px;
+ $col-status: 72px;
+
+ // Grid row template shared by both header and data rows
+ @mixin grid-cols {
+     display: grid;
+     grid-template-columns:
+         $col-id $col-flightno $col-airline $col-corridor $col-block $col-days $col-date $col-date $col-status;
+     align-items: center;
+ }
+
+ // ============================================================================
+ // 1. Card container — Squircle 12px per spec
+ // ============================================================================
+ .srg-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.2);
+     box-shadow:
+         0 4px 22px rgba($midnight, 0.07),
+         0 0 0 1px rgba($champagne, 0.06);
+     display: flex;
+     flex-direction: column;
+     animation: srg-enter 350ms $luxury both;
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Toolbar
+ // ============================================================================
+ .srg-toolbar {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.25rem;
+     background: rgba($midnight, 0.03);
+     border-bottom: 1px solid rgba($champagne, 0.1);
+     flex-wrap: wrap;
+     row-gap: 0.5rem;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0.75rem;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 700;
+         letter-spacing: 0.02em;
+         color: var(--aoms-text-primary, $charcoal);
+         margin: 0;
+     }
+
+     &__counts {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+     }
+
+     &__active {
+         color: #059669;
+         font-weight: 600;
+     }
+
+     &__total {
+         color: var(--aoms-text-muted);
+     }
+
+     &__filtered {
+         color: $gold;
+         font-weight: 600;
+     }
+
+     &__search {
+         flex: 1;
+         max-width: 22rem;
+     }
+ }
+
+ // Search box
+ .srg-search {
+     position: relative;
+     display: flex;
+     align-items: center;
+
+     &__icon {
+         position: absolute;
+         left: 0.75rem;
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+
+         svg {
+             width: 100%;
+             height: 100%;
+         }
+     }
+
+     &__input {
+         width: 100%;
+         height: 2.125rem;
+         padding: 0 2.125rem 0 2.25rem;
+         border-radius: 6px;
+         border: 1px solid rgba($charcoal, 0.14);
+         outline: none;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 400;
+         color: var(--aoms-text-primary, $charcoal);
+         background: $off-white;
+         transition: border-color 180ms $ease, box-shadow 180ms $ease, background 180ms $ease;
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+         }
+
+         &:focus {
+             border-color: $champagne;
+             background: #ffffff;
+             box-shadow: 0 0 0 3px rgba($champagne, 0.13);
+         }
+     }
+
+     &__clear {
+         position: absolute;
+         right: 0.625rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.125rem;
+         height: 1.125rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         color: rgba($charcoal, 0.35);
+         border-radius: 3px;
+         transition: color 150ms $ease;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             color: $ruby;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Column header — Midnight Sapphire + Champagne Gold per spec
+ // ============================================================================
+ .srg-head {
+     @include grid-cols;
+     background: $midnight;
+     padding: 0 1.25rem;
+     flex-shrink: 0;
+ }
+
+ .srg-th {
+     padding: 0.75rem 0.5rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9.5px;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: $champagne;
+     white-space: nowrap;
+     user-select: none;
+
+     &--corridor {
+         min-width: $col-corridor;
+     }
+
+     &--days {
+         min-width: $col-days;
+     }
+
+     &--status {
+         text-align: center;
+     }
+ }
+
+ // ============================================================================
+ // 4. CDK Virtual Scroll viewport — fixed height, overflow-y auto
+ // ============================================================================
+ .srg-viewport {
+     flex: 1;
+     height: 400px; // fixed viewport — CDK requires explicit height
+     overflow-y: auto;
+     overflow-x: hidden;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.25);
+         border-radius: 2px;
+     }
+ }
+
+ // ============================================================================
+ // 5. Data rows — Ivory workspace per spec
+ // ============================================================================
+ .srg-row {
+     @include grid-cols;
+     padding: 0 1.25rem;
+     min-height: $row-height;
+     border-bottom: 1px solid rgba($champagne, 0.06);
+     transition: background-color 120ms $ease;
+
+     &--even {
+         background: var(--aoms-bg-card, #ffffff);
+     }
+
+     &--odd {
+         background: rgba(0, 0, 0, 0.017);
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.055) !important;
+     }
+
+     &--inactive {
+         opacity: 0.45;
+     }
+ }
+
+ .srg-td {
+     padding: 0.5rem;
+     font-family: 'Inter', 'Montserrat', sans-serif;
+     font-size: 12.5px;
+     color: $charcoal; // Deep Charcoal Navy per spec
+
+     &--corridor {
+         min-width: $col-corridor;
+     }
+
+     &--days {
+         min-width: $col-days;
+     }
+
+     &--status {
+         text-align: center;
+     }
+ }
+
+ // ============================================================================
+ // 6. Cell content elements
+ // ============================================================================
+ .srg-id {
+     font-family: 'Courier New', monospace;
+     font-size: 11px;
+     color: rgba($gold, 0.6);
+     letter-spacing: 0.04em;
+ }
+
+ .srg-flight-no {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 800;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: $gold;
+ }
+
+ .srg-airline {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: $champagne;
+ }
+
+ // Corridor
+ .srg-corridor {
+     display: flex;
+     align-items: center;
+     gap: 0.3rem;
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 800;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+
+         &--gold {
+             color: $gold;
+         }
+
+         &--champagne {
+             color: darken($champagne, 10%);
+         }
+     }
+
+     &__arrow {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: rgba($champagne, 0.4);
+         flex-shrink: 0;
+     }
+ }
+
+ .srg-time {
+     font-family: 'Courier New', monospace;
+     font-size: 11.5px;
+     font-weight: 700;
+     letter-spacing: 0.05em;
+     color: var(--aoms-text-secondary, $charcoal);
+ }
+
+ .srg-date {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-secondary, $charcoal);
+     letter-spacing: 0.02em;
+
+     &--open {
+         color: $amber;
+         font-style: italic;
+     }
+ }
+
+ // Days of week badge strip
+ .srg-days {
+     display: flex;
+     gap: 2px;
+     flex-wrap: nowrap;
+ }
+
+ .srg-day {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.5rem;
+     height: 1.25rem;
+     border-radius: 3px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 8px;
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     text-transform: uppercase;
+
+     // Inactive day
+     background: rgba($charcoal, 0.06);
+     color: rgba($charcoal, 0.3);
+     border: 1px solid transparent;
+
+     // Active day
+     &--active {
+         background: rgba($gold, 0.12);
+         border-color: rgba($gold, 0.25);
+         color: $gold;
+     }
+ }
+
+ // Status pill
+ .srg-status-pill {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.2rem 0.55rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.07em;
+     text-transform: uppercase;
+
+     &--active {
+         background: rgba($emerald, 0.12);
+         border: 1px solid rgba($emerald, 0.28);
+         color: #059669;
+     }
+
+     &--inactive {
+         background: rgba($amber, 0.1);
+         border: 1px solid rgba($amber, 0.22);
+         color: $amber;
+     }
+ }
+
+ // ============================================================================
+ // 7. Grid Footer
+ // ============================================================================
+ .srg-footer {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 0.625rem 1.25rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     background: rgba($off-white, 0.4);
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+     }
+
+     &__note {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: rgba($champagne, 0.4);
+         letter-spacing: 0.04em;
+         font-style: italic;
+     }
+ }
+
+ // ============================================================================
+ // 8. Shimmer rows
+ // ============================================================================
+ .srg-shimmer-list {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .srg-shimmer-row {
+     @include grid-cols;
+     padding: 0.625rem 1.25rem;
+     border-bottom: 1px solid rgba($champagne, 0.06);
+
+     &--odd {
+         background: rgba(0, 0, 0, 0.017);
+     }
+ }
+
+ .srg-sk {
+     height: 0.75rem;
+     border-radius: 3px;
+     background: rgba($champagne, 0.09);
+     animation: srg-pulse 1.5s ease-in-out infinite;
+ }
+
+ // ============================================================================
+ // 9. Empty state
+ // ============================================================================
+ .srg-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 4rem 1.5rem;
+     text-align: center;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3.5rem;
+         height: 3.5rem;
+         border-radius: 12px;
+         background: rgba($gold, 0.07);
+         border: 1px solid rgba($gold, 0.16);
+
+         svg {
+             width: 1.5rem;
+             height: 1.5rem;
+             color: var(--aoms-text-muted);
+         }
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 600;
+         color: var(--aoms-text-secondary);
+         margin: 0;
+     }
+
+     &__sub {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+         max-width: 28ch;
+         line-height: 1.6;
+     }
+ }
+
+ // ============================================================================
+ // 10. Keyframes
+ // ============================================================================
+ @keyframes srg-enter {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes srg-pulse {
+
+     0%,
+     100% {
+         opacity: 0.4;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 11. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .srg-card {
+         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+     }
+
+     .srg-toolbar {
+         background: rgba($midnight, 0.45);
+     }
+
+     .srg-toolbar__title {
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .srg-search__input {
+         background: rgba($midnight, 0.55);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.88);
+
+         &:focus {
+             background: rgba($midnight, 0.8);
+         }
+
+         &::placeholder {
+             color: rgba(255, 255, 255, 0.28);
+         }
+     }
+
+     .srg-row--even {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .srg-row--odd {
+         background: rgba($midnight, 0.25);
+     }
+
+     .srg-row:hover {
+         background: rgba($champagne, 0.04) !important;
+     }
+
+     .srg-td {
+         color: rgba(255, 255, 255, 0.82);
+     }
+
+     .srg-time {
+         color: rgba(255, 255, 255, 0.72);
+     }
+
+     .srg-date {
+         color: rgba(255, 255, 255, 0.65);
+     }
+
+     .srg-day {
+         background: rgba(255, 255, 255, 0.06);
+         color: rgba(255, 255, 255, 0.25);
+
+         &--active {
+             background: rgba($gold, 0.14);
+             color: $gold;
+         }
+     }
+
+     .srg-footer {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+ }

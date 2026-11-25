@@ -1,0 +1,382 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+
+ $row-h: 40px;
+ $t-fast: 150ms ease;
+
+ // ── 1. Container ──────────────────────────────────────────────────────────
+ .bpdg-container {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 10px rgba($midnight, 0.05);
+     overflow: hidden;
+     flex: 1;
+ }
+
+ // ── 2. Loading Shimmer ────────────────────────────────────────────────────
+ .bpdg-shimmer-list {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .bpdg-shimmer-row {
+     display: grid;
+     grid-template-columns: 64px 1.5fr 70px 80px 70px 50px;
+     align-items: center;
+     gap: 0.75rem;
+     height: $row-h;
+     padding: 0 1rem;
+     border-bottom: 1px solid rgba($champagne, 0.06);
+ }
+
+ .bpdg-shimmer {
+     height: 11px;
+     border-radius: 3px;
+     background: linear-gradient(90deg, rgba($midnight, 0.05) 25%, rgba($midnight, 0.11) 50%, rgba($midnight, 0.05) 75%);
+     background-size: 200% 100%;
+     animation: bpdg-shimmer 1.4s infinite;
+
+     &--id {
+         width: 50%;
+     }
+
+     &--name {
+         width: 80%;
+     }
+
+     &--seat {
+         width: 55%;
+     }
+
+     &--flight {
+         width: 65%;
+     }
+
+     &--seq {
+         width: 50%;
+     }
+
+     &--status {
+         height: 18px;
+         width: 60px;
+         border-radius: 100px;
+     }
+ }
+
+ // ── 3. Idle / Empty States ────────────────────────────────────────────────
+ .bpdg-idle,
+ .bpdg-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     gap: 0.5rem;
+     padding: 3rem 1.5rem;
+
+     &__icon {
+         width: 64px;
+         height: 48px;
+         color: var(--aoms-text-muted);
+         opacity: 0.35;
+         margin-bottom: 0.25rem;
+     }
+
+     &__label {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__hint {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         max-width: 280px;
+         line-height: 1.5;
+     }
+ }
+
+ // ── 4. Table Wrap ─────────────────────────────────────────────────────────
+ .bpdg-table-wrap {
+     overflow-x: auto;
+     max-height: 560px;
+     overflow-y: auto;
+
+     scrollbar-width: thin;
+     scrollbar-color: rgba($gold, 0.2) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+         height: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($gold, 0.18);
+         border-radius: 2px;
+     }
+ }
+
+ // ── 5. Table ──────────────────────────────────────────────────────────────
+ .bpdg-table {
+     width: 100%;
+     border-collapse: collapse;
+ }
+
+ // Sticky header — Midnight Sapphire / Champagne Gold
+ .bpdg-thead-row {
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 2;
+ }
+
+ .bpdg-th {
+     padding: 0 1rem;
+     height: 36px;
+     text-align: left;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 2px solid rgba($champagne, 0.1);
+
+     &--id {
+         width: 72px;
+     }
+
+     &--name {
+         min-width: 160px;
+     }
+
+     &--seat {
+         width: 72px;
+     }
+
+     &--flight {
+         width: 90px;
+     }
+
+     &--board {
+         width: 72px;
+     }
+
+     &--seq {
+         width: 60px;
+     }
+
+     &--action {
+         width: 48px;
+         padding: 0 0.5rem;
+         text-align: center;
+     }
+ }
+
+ // ── 6. Data Rows ──────────────────────────────────────────────────────────
+ .bpdg-row {
+     height: $row-h;
+     border-bottom: 1px solid rgba($champagne, 0.06);
+     cursor: pointer;
+     transition: background $t-fast;
+
+     &:nth-child(even) {
+         background: rgba($midnight, 0.018);
+     }
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     // Royal Gold hover state per AOMS spec — 10% champagne overlay
+     &:hover {
+         background: rgba($champagne, 0.08);
+     }
+
+     // Selected — gold left border + subtle gold background
+     &--selected {
+         background: rgba($gold, 0.07) !important;
+         border-left: 3px solid $gold;
+
+         &:hover {
+             background: rgba($gold, 0.1) !important;
+         }
+     }
+
+     // Pre-check rows — faint emerald left accent
+     &--precheck:not(&--selected) {
+         border-left: 3px solid rgba($emerald, 0.25);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $gold;
+         outline-offset: -2px;
+     }
+ }
+
+ // ── 7. Cells ──────────────────────────────────────────────────────────────
+ .bpdg-cell {
+     padding: 0 1rem;
+     vertical-align: middle;
+     white-space: nowrap;
+
+     &--action {
+         padding: 0 0.5rem;
+         text-align: center;
+     }
+ }
+
+ // ── 8. Cell Content Atoms ─────────────────────────────────────────────────
+ .bpdg-pass-id {
+     font-family: 'Courier New', monospace;
+     font-size: 0.8125rem;
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-secondary);
+     transition: color $t-fast;
+
+     &--selected {
+         color: $gold;
+     }
+ }
+
+ .bpdg-name-wrap {
+     display: flex;
+     align-items: center;
+     gap: 0.4375rem;
+ }
+
+ .bpdg-name {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 180px;
+     transition: color $t-fast;
+
+     &--selected {
+         color: $gold;
+         font-weight: 600;
+     }
+ }
+
+ // Frequent flyer dot indicator
+ .bpdg-ff-dot {
+     width: 6px;
+     height: 6px;
+     border-radius: 50%;
+     background: $gold;
+     flex-shrink: 0;
+     box-shadow: 0 0 5px rgba($gold, 0.5);
+ }
+
+ .bpdg-seat {
+     font-family: var(--aoms-font-heading);
+     font-size: 0.875rem;
+     font-weight: 700;
+     color: var(--aoms-text-secondary);
+     transition: color $t-fast;
+
+     &--selected {
+         color: $gold;
+     }
+ }
+
+ .bpdg-flight {
+     font-family: 'Courier New', monospace;
+     font-size: 0.8125rem;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-secondary);
+ }
+
+ .bpdg-time {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     font-variant-numeric: tabular-nums;
+ }
+
+ .bpdg-seq {
+     font-size: 0.75rem;
+     font-family: 'Courier New', monospace;
+     color: var(--aoms-text-muted);
+ }
+
+ // ── 9. Void Action Button ─────────────────────────────────────────────────
+ .bpdg-void-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.875rem;
+     height: 1.875rem;
+     border-radius: 4px;
+     border: 1px solid transparent;
+     background: transparent;
+     color: rgba($ruby, 0.4);
+     cursor: pointer;
+     margin: 0 auto;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+
+     &:hover:not(:disabled) {
+         border-color: rgba($ruby, 0.5);
+         background: rgba($ruby, 0.08);
+         color: lighten($ruby, 22%);
+     }
+
+     &:disabled {
+         opacity: 0.3;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid rgba($ruby, 0.5);
+         outline-offset: 1px;
+     }
+ }
+
+ // ── 10. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes bpdg-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── 11. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .bpdg-row:nth-child(even) {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .bpdg-row:hover {
+         background: rgba($champagne, 0.06);
+     }
+
+     .bpdg-row--selected {
+         background: rgba($gold, 0.09) !important;
+     }
+
+     .bpdg-shimmer {
+         background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+         background-size: 200% 100%;
+     }
+ }

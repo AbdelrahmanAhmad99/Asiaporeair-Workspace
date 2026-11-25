@@ -1,0 +1,52 @@
+<div class="stats-grid">
+
+    <!-- ── Loading Shimmer ─────────────────────────────────────── -->
+    @if (loading()) {
+    @for (card of shimmerCards; track $index) {
+    <div class="stat-card stat-card--shimmer" aria-hidden="true">
+        <div class="stat-card__shimmer-icon"></div>
+        <div class="stat-card__shimmer-label"></div>
+        <div class="stat-card__shimmer-value"></div>
+        <div class="stat-card__shimmer-trend"></div>
+    </div>
+    }
+    }
+
+    <!-- ── Live Cards ──────────────────────────────────────────── -->
+    @if (!loading()) {
+    @for (card of cards(); track card.id) {
+    <div class="stat-card" [attr.data-card]="card.id">
+
+        <!-- Gold accent bar (top-left) -->
+        <div class="stat-card__accent" aria-hidden="true"></div>
+
+        <!-- Icon -->
+        <div class="stat-card__icon-wrap" aria-hidden="true">
+            <svg class="stat-card__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="card.iconPath" />
+            </svg>
+        </div>
+
+        <!-- Label -->
+        <p class="stat-card__label">{{ card.label }}</p>
+
+        <!-- Value + Unit -->
+        <div class="stat-card__value-row">
+            <span class="stat-card__value">{{ card.value }}</span>
+            <span class="stat-card__unit">{{ card.unit }}</span>
+        </div>
+
+        <!-- Trend / Tag -->
+        <div class="stat-card__trend" [class.stat-card__trend--positive]="card.trendPositive">
+            <svg class="stat-card__trend-dot" viewBox="0 0 6 6" aria-hidden="true">
+                <circle cx="3" cy="3" r="3" />
+            </svg>
+            {{ card.trend }}
+        </div>
+
+    </div>
+    }
+    }
+
+</div>

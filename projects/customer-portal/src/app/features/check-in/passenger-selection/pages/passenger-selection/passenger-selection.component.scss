@@ -1,0 +1,605 @@
+// ============================================================================
+// passenger-selection.component.scss
+// Asiaporeair | Step 2 — Passenger Manifest Page
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$success : #1E6E45;
+$error : #C53030;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+// ── §1 Font import ────────────────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+// ── §2 Shell ──────────────────────────────────────────────────────────────────
+:host {
+    display: block;
+    font-family: $font;
+    min-height: 100vh;
+    background: $ivory;
+}
+
+.ps-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+// ── §3 Hero ───────────────────────────────────────────────────────────────────
+.ps-hero {
+    background: $midnight;
+    padding: 0 0 0.5rem;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba($champagne, 0.1);
+
+    // Noise texture
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        opacity: 0.4;
+    }
+
+    // Bottom gold line
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(to right,
+                transparent, rgba($royal-gold, 0.35), $champagne,
+                rgba($royal-gold, 0.35), transparent);
+    }
+
+    &__particles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    &__inner {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1.75rem 2rem 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(to right,
+                transparent,
+                rgba($royal-gold, 0.25) 15%,
+                $royal-gold, $champagne, $royal-gold,
+                rgba($royal-gold, 0.25) 85%,
+                transparent);
+        margin-bottom: 2rem;
+    }
+
+    &__title-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.875rem;
+        text-align: center;
+        padding-bottom: 0.5rem;
+    }
+
+    &__icon-ring {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.08);
+        border: 1.5px solid rgba($champagne, 0.22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 28px rgba($royal-gold, 0.12);
+        animation: iconPulse 3.5s ease-in-out infinite;
+    }
+
+    &__title {
+        font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+        font-weight: 300;
+        letter-spacing: -0.03em;
+        color: $white;
+        margin: 0;
+    }
+
+    &__title-accent {
+        font-weight: 600;
+        color: $champagne;
+    }
+
+    &__subtitle {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: rgba($white, 0.45);
+        max-width: 480px;
+        line-height: 1.65;
+        margin: 0;
+    }
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba($royal-gold, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 38px rgba($royal-gold, 0.28);
+    }
+}
+
+// ── §4 Brand & back button ────────────────────────────────────────────────────
+.ps-brand {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ps-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 3px;
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.18);
+    font-family: $font;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: rgba($white, 0.5);
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($champagne, 0.4);
+        color: $champagne;
+        background: rgba($champagne, 0.05);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §5 Flight pill ────────────────────────────────────────────────────────────
+.ps-flight-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 1rem;
+    background: rgba($royal-gold, 0.08);
+    border: 1px solid rgba($champagne, 0.2);
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    color: rgba($white, 0.7);
+    letter-spacing: 0.02em;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    &__pnr {
+        font-family: $font;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: $champagne;
+    }
+
+    &__sep {
+        color: rgba($champagne, 0.35);
+    }
+
+    &__route {
+        font-weight: 600;
+        color: rgba($white, 0.85);
+    }
+
+    &__time {
+        font-size: 0.65rem;
+        color: rgba($white, 0.55);
+    }
+}
+
+// ── §6 Particles ──────────────────────────────────────────────────────────────
+.ps-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($champagne, 0.15);
+    animation: twinkle 3s ease-in-out infinite;
+
+    @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+            width: #{2 + ($i % 3)}px;
+            height: #{2 + ($i % 3)}px;
+            // top: #{5 + ($i * 9) % 88}%;
+            // left: #{3 + ($i * 11) % 94}%;
+            animation-delay: #{$i * 0.3}s;
+            animation-duration: #{2.5 + $i * 0.2}s;
+        }
+    }
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.06;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+// ── §7 Main body ──────────────────────────────────────────────────────────────
+.ps-body {
+    flex: 1;
+    padding: 2.5rem 2rem 4rem;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ps-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    align-items: start;
+
+    @media (max-width: 860px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── §8 Cards column ───────────────────────────────────────────────────────────
+.ps-cards-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ps-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+// ── §9 Guard / empty states ───────────────────────────────────────────────────
+.ps-guard,
+.ps-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 2rem;
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.08);
+    text-align: center;
+
+    p {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        color: $muted;
+        line-height: 1.6;
+        max-width: 360px;
+    }
+
+    button {
+        background: none;
+        border: none;
+        color: $royal-gold;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: inherit;
+        font-family: inherit;
+    }
+}
+
+// ── §10 Global error banner ────────────────────────────────────────────────────
+.ps-global-error {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    background: rgba($error, 0.06);
+    border: 1px solid rgba($error, 0.22);
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.77rem;
+    color: $error;
+    line-height: 1.5;
+    animation: slideDown 250ms $ease;
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── §11 Sidebar ───────────────────────────────────────────────────────────────
+.ps-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 1.5rem;
+}
+
+// ── §12 Progress summary card ─────────────────────────────────────────────────
+.ps-summary-card {
+    background: $midnight;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba($champagne, 0.12);
+    box-shadow: 0 8px 28px rgba($midnight, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__label {
+        font-family: $font;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba($white, 0.4);
+    }
+
+    &__count {
+        font-family: $font;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: $champagne;
+    }
+}
+
+// ── §13 Progress bar ──────────────────────────────────────────────────────────
+.ps-progress-track {
+    width: 100%;
+    height: 4px;
+    background: rgba($white, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.ps-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    border-radius: 2px;
+    transition: width 600ms $ease;
+    min-width: 4px;
+}
+
+// ── §14 Passenger summary pills ───────────────────────────────────────────────
+.ps-pax-summary-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ps-pax-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    background: rgba($white, 0.04);
+    border: 1px solid rgba($white, 0.06);
+    transition: background $t, border-color $t;
+
+    &--done {
+        background: rgba($success, 0.12);
+        border-color: rgba($success, 0.25);
+
+        .ps-pax-pill__name {
+            color: rgba($white, 0.7);
+        }
+
+        .ps-pax-pill__dot {
+            background: $success;
+        }
+    }
+
+    &--loading {
+        background: rgba($royal-gold, 0.06);
+        border-color: rgba($royal-gold, 0.15);
+
+        .ps-pax-pill__dot {
+            background: $royal-gold;
+            animation: dotPulse 1s ease-in-out infinite;
+        }
+    }
+
+    &__dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba($white, 0.2);
+        flex-shrink: 0;
+        transition: background $t;
+    }
+
+    &__name {
+        flex: 1;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.72rem;
+        color: rgba($white, 0.5);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: color $t;
+    }
+
+    &__check {
+        color: $success;
+        flex-shrink: 0;
+    }
+}
+
+@keyframes dotPulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+// ── §15 All-done celebration strip ───────────────────────────────────────────
+.ps-all-done {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: rgba($success, 0.1);
+    border: 1px solid rgba($success, 0.25);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    color: lighten($success, 25%);
+    line-height: 1.5;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+        color: $success;
+    }
+}
+
+// ── §16 Booking info card ─────────────────────────────────────────────────────
+.ps-info-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.09);
+    box-shadow: 0 2px 8px rgba($midnight, 0.05);
+    overflow: hidden;
+}
+
+.ps-info-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.7rem 1.25rem;
+    border-bottom: 1px solid rgba($charcoal, 0.06);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.ps-info-label {
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($charcoal, 0.38);
+    flex-shrink: 0;
+}
+
+.ps-info-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: $charcoal;
+    text-align: right;
+
+    &--pnr {
+        font-family: $font;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: $royal-gold;
+    }
+}
+
+// ── §17 Responsive ────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+    .ps-hero__inner {
+        padding: 1.25rem 1rem 0;
+    }
+
+    .ps-body {
+        padding: 1.5rem 1rem 3rem;
+    }
+}
+
+// ── §18 Accessibility ─────────────────────────────────────────────────────────
+:focus-visible {
+    outline: 2px solid $royal-gold;
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+// ── §19 Reduced motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+
+    .ps-hero__icon-ring,
+    .ps-particle,
+    .ps-progress-bar,
+    .ps-pax-pill__dot {
+        animation: none !important;
+        transition: none !important;
+    }
+}

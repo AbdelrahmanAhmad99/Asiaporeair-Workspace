@@ -1,0 +1,185 @@
+// ============================================================================
+// retrieve-ticket.component.scss
+// Asiaporeair | "Locate Your Electronic Ticket" — Luxury Page Styles
+// ============================================================================
+
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+$midnight-sapphire : #051937;
+$royal-gold : #B68F24;
+$champagne-gold : #E2C780;
+$off-white : #F8F9FA;
+$pure-white : #FFFFFF;
+$deep-navy : #101056;
+$gold-shadow : rgba(182, 143, 36, 0.18);
+$sapphire-shadow : rgba(5, 25, 55, 0.12);
+
+// ── Page Shell ────────────────────────────────────────────────────────────────
+.rt-page {
+  position: relative;
+  min-height: 100vh;
+  background: $off-white;
+  overflow: hidden;
+  padding: 80px 24px 120px;
+
+  @media (min-width: 1024px) {
+    padding: 96px 48px 140px;
+  }
+}
+
+// ── Ambient Orbs ──────────────────────────────────────────────────────────────
+.rt-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.35;
+
+  &--1 {
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(182, 143, 36, 0.18) 0%, transparent 70%);
+    top: -160px;
+    right: -80px;
+  }
+
+  &--2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(5, 25, 55, 0.08) 0%, transparent 70%);
+    bottom: -100px;
+    left: -60px;
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.rt-header {
+  max-width: 100%;
+  // margin: 0 auto 64px;
+  text-align: center;
+  background: $midnight-sapphire;
+  padding-bottom: 20px;
+
+  .accent {
+    // font-weight: 600;
+    color: $champagne-gold;
+  }
+
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Montserrat', 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $royal-gold;
+    margin-bottom: 18px;
+  }
+
+  &__icon {
+    color: $royal-gold;
+  }
+
+  &__title {
+    font-family: 'Montserrat', 'Inter', sans-serif;
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    // color: $midnight-sapphire;
+    color: $off-white ;
+    margin: 0 0 16px;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    // color: rgba($deep-navy, 0.65);
+    color: rgba($pure-white, 0.50);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+    margin-bottom: 18px;
+  }
+}
+
+// ── Content Grid ─────────────────────────────────────────────────────────────
+.rt-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  max-width: 1120px;
+  margin: 0 auto;
+  align-items: start;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1fr 380px;
+    gap: 40px;
+  }
+}
+
+.rt-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// ── Skeleton Loader ───────────────────────────────────────────────────────────
+.rt-skeleton-overlay {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 36px;
+  box-shadow: 0 8px 32px $gold-shadow;
+  border: 1px solid rgba($champagne-gold, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rt-skeleton {
+  border-radius: 8px;
+  animation: shimmer 1.6s ease-in-out infinite;
+  background: linear-gradient(90deg,
+      rgba($champagne-gold, 0.12) 25%,
+      rgba($champagne-gold, 0.28) 50%,
+      rgba($champagne-gold, 0.12) 75%);
+  background-size: 400% 100%;
+
+  &--tall {
+    height: 64px;
+  }
+
+  &--medium {
+    height: 48px;
+    width: 80%;
+  }
+
+  &--short {
+    height: 48px;
+    width: 55%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+// ── Form Wrapper ──────────────────────────────────────────────────────────────
+.rt-form-wrapper {
+  background: #fff;
+  border-radius: 16px;
+  padding: 44px 40px;
+  box-shadow: 0 8px 40px $sapphire-shadow;
+  border: 1px solid rgba($champagne-gold, 0.2);
+
+  @media (max-width: 600px) {
+    padding: 32px 24px;
+  }
+}

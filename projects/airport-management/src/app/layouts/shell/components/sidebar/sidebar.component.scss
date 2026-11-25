@@ -1,0 +1,345 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AOMS Sidebar — Luxury Midnight Styles
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: var(--aoms-sidebar-expanded);
+  height: 100vh;
+  background: var(--aoms-bg-sidebar);
+  color: var(--aoms-text-on-dark);
+  transition: width var(--aoms-transition-smooth);
+  overflow: hidden;
+  position: relative;
+  z-index: 40;
+
+  &--collapsed {
+    width: var(--aoms-sidebar-collapsed);
+  }
+
+  // ── Brand Header ──────────────────────────────────────────────────────────
+  &__brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 12px;
+    min-height: 64px;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+  }
+
+  &__logo-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+
+  &__brand-text {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+    animation: fadeSlideIn 300ms ease-out;
+  }
+
+  &__brand-name {
+    font-family: var(--aoms-font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: var(--aoms-letter-heading);
+    color: #FFFFFF;
+  }
+
+  &__brand-sub {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--aoms-champagne);
+  }
+
+  // ── Toggle Button ─────────────────────────────────────────────────────────
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--aoms-text-on-dark-muted);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--aoms-transition-fast);
+    flex-shrink: 0;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--aoms-champagne);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      transition: transform var(--aoms-transition-smooth);
+    }
+  }
+
+  &__toggle-icon--flipped {
+    transform: rotate(180deg);
+  }
+
+  // ── Divider ───────────────────────────────────────────────────────────────
+  &__divider {
+    height: 1px;
+    margin: 0 16px 8px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(var(--aoms-champagne-rgb), 0.2),
+      transparent
+    );
+  }
+
+  // ── Navigation ────────────────────────────────────────────────────────────
+  &__nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
+
+    // Custom scrollbar for sidebar
+    &::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(var(--aoms-champagne-rgb), 0.15);
+      border-radius: 2px;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    margin-bottom: 2px;
+  }
+
+  // ── Navigation Link ───────────────────────────────────────────────────────
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    color: var(--aoms-text-on-dark);
+    font-family: var(--aoms-font-body);
+    font-size: 13px;
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: var(--aoms-radius-squircle);
+    transition: all var(--aoms-transition-fast);
+    position: relative;
+    border-left: 3px solid transparent;
+    text-align: left;
+
+    &:hover {
+      background: rgba(var(--aoms-champagne-rgb), 0.08);
+      color: #FFFFFF;
+    }
+
+    &--active,
+    &--active:hover {
+      background: rgba(var(--aoms-gold-rgb), 0.1);
+      border-left-color: var(--aoms-gold);
+      color: var(--aoms-champagne);
+      font-weight: 500;
+    }
+  }
+
+  // ── Icon ──────────────────────────────────────────────────────────────────
+  &__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    opacity: 0.75;
+    transition: opacity var(--aoms-transition-fast);
+
+    .sidebar__link:hover &,
+    .sidebar__link--active & {
+      opacity: 1;
+    }
+
+    .sidebar__link--active & {
+      color: var(--aoms-champagne);
+    }
+  }
+
+  // ── Label ─────────────────────────────────────────────────────────────────
+  &__label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    animation: fadeSlideIn 200ms ease-out;
+  }
+
+  // ── Badge ─────────────────────────────────────────────────────────────────
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #FFFFFF;
+    background: var(--aoms-amber);
+    border-radius: 10px;
+    flex-shrink: 0;
+    animation: fadeSlideIn 200ms ease-out;
+  }
+
+  // ── Chevron ───────────────────────────────────────────────────────────────
+  &__chevron {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: transform var(--aoms-transition-smooth), opacity var(--aoms-transition-fast);
+
+    &--open {
+      transform: rotate(180deg);
+      opacity: 0.8;
+    }
+  }
+
+  // ── Children List ─────────────────────────────────────────────────────────
+  &__children {
+    list-style: none;
+    margin: 2px 0 4px 0;
+    padding: 0;
+    animation: slideDown 250ms ease-out;
+  }
+
+  &__child-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px 8px 38px;
+    color: var(--aoms-text-on-dark-muted);
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: var(--aoms-radius-squircle);
+    transition: all var(--aoms-transition-fast);
+
+    &:hover {
+      background: rgba(var(--aoms-champagne-rgb), 0.06);
+      color: var(--aoms-text-on-dark);
+    }
+
+    &--active,
+    &--active:hover {
+      color: var(--aoms-champagne);
+      background: rgba(var(--aoms-gold-rgb), 0.08);
+    }
+  }
+
+  &__child-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.4;
+    flex-shrink: 0;
+    transition: opacity var(--aoms-transition-fast);
+
+    .sidebar__child-link--active & {
+      opacity: 1;
+      background: var(--aoms-champagne);
+    }
+  }
+
+  &__child-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Footer (Role Badge) ──────────────────────────────────────────────────
+  &__footer {
+    padding: 12px;
+    border-top: 1px solid rgba(var(--aoms-champagne-rgb), 0.1);
+  }
+
+  &__role-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: rgba(var(--aoms-gold-rgb), 0.08);
+    border-radius: var(--aoms-radius-squircle);
+    border: 1px solid rgba(var(--aoms-gold-rgb), 0.15);
+
+    .sidebar__icon {
+      color: var(--aoms-champagne);
+      opacity: 1;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__role-text {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--aoms-champagne);
+    white-space: nowrap;
+    animation: fadeSlideIn 200ms ease-out;
+  }
+}
+
+// ── Animations ──────────────────────────────────────────────────────────────
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+}

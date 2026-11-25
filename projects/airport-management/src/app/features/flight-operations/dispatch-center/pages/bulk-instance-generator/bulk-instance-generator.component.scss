@@ -1,0 +1,687 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page shell
+ // ============================================================================
+ .big-page {
+     min-height: 100%;
+     background: var(--aoms-bg-primary, $off-white);
+     display: flex;
+     flex-direction: column;
+     position: relative;
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Sticky Luxury Header — Midnight Sapphire per palette spec
+ // ============================================================================
+ .big-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: center;
+     background: $midnight;
+     border-bottom: 1px solid rgba($champagne, 0.12);
+     box-shadow: 0 2px 18px rgba($midnight, 0.5);
+ }
+
+ .big-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 3.5rem;
+     min-height: 5rem;
+     height: 100%;
+     border: none;
+     border-right: 1px solid rgba($champagne, 0.1);
+     background: transparent;
+     color: rgba($champagne, 0.45);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover {
+         background: rgba($champagne, 0.06);
+         color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     &__icon {
+         width: 1.25rem;
+         height: 1.25rem;
+         transition: transform 150ms $ease;
+     }
+
+     &:hover &__icon {
+         transform: translateX(-3px);
+     }
+ }
+
+ .big-header__center {
+     flex: 1;
+     padding: 0.875rem 1.25rem;
+     min-width: 0;
+ }
+
+ .big-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.3rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba($champagne, 0.35);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: rgba($champagne, 0.25);
+         flex-shrink: 0;
+     }
+
+     &__link {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba($champagne, 0.35);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color 150ms $ease;
+
+         &:hover {
+             color: $champagne;
+         }
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: $gold;
+     }
+ }
+
+ .big-title-row {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     flex-wrap: wrap;
+ }
+
+ .big-title {
+     display: flex;
+     flex-direction: column;
+     gap: 0.1rem;
+     margin: 0;
+
+     &__main {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 21px;
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: $gold;
+         line-height: 1;
+         text-shadow: 0 0 18px rgba($gold, 0.18);
+     }
+
+     &__sub {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         letter-spacing: 0.06em;
+         color: rgba($champagne, 0.4);
+         text-transform: uppercase;
+     }
+ }
+
+ .big-loading-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4rem;
+     padding: 0.25rem 0.625rem;
+     border-radius: 4px;
+     background: rgba($champagne, 0.07);
+     border: 1px solid rgba($champagne, 0.16);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 600;
+     letter-spacing: 0.06em;
+     color: rgba($champagne, 0.6);
+
+     &__spin {
+         width: 0.875rem;
+         height: 0.875rem;
+         animation: big-spin 0.85s linear infinite;
+     }
+ }
+
+ .big-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 3.5rem;
+     min-height: 5rem;
+     height: 100%;
+     border: none;
+     border-left: 1px solid rgba($champagne, 0.1);
+     background: transparent;
+     color: rgba($champagne, 0.4);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         background: rgba($champagne, 0.06);
+         color: $champagne;
+     }
+
+     &:disabled {
+         opacity: 0.3;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+
+         &--spin {
+             animation: big-spin 0.85s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Indeterminate progress bar (generation in progress)
+ // ============================================================================
+ .big-progress-bar {
+     height: 3px;
+     background: rgba($gold, 0.15);
+     overflow: hidden;
+     flex-shrink: 0;
+
+     &__fill {
+         height: 100%;
+         background: linear-gradient(90deg, $gold 0%, $champagne 50%, $gold 100%);
+         background-size: 200% 100%;
+         animation: big-progress 1.6s ease-in-out infinite;
+     }
+ }
+
+ // ============================================================================
+ // 4. Two-column body layout
+ // ============================================================================
+ .big-body {
+     display: grid;
+     grid-template-columns: 22rem 1fr;
+     gap: 1.5rem;
+     padding: 1.5rem;
+     flex: 1;
+     align-items: flex-start;
+
+     @media (max-width: 1100px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ .big-form-col {
+     min-width: 0;
+ }
+
+ .big-grid-col {
+     min-width: 0;
+ }
+
+ // ============================================================================
+ // 5. Modal backdrop
+ // ============================================================================
+ .big-modal-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 40;
+     background: rgba($midnight, 0.65);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     animation: big-fade 200ms $ease both;
+ }
+
+ // ============================================================================
+ // 6. Modal panel — shared base
+ // ============================================================================
+ .big-modal {
+     position: fixed;
+     z-index: 50;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: min(560px, calc(100vw - 2rem));
+     max-height: calc(100vh - 4rem);
+     overflow-y: auto;
+     border-radius: 12px;
+     overflow: hidden;
+     animation: big-modal-enter 280ms $luxury both;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.2);
+         border-radius: 2px;
+     }
+
+     // Ruby accent (error)
+     &__ruby-bar {
+         height: 3px;
+         background: linear-gradient(90deg, $ruby-deep, $ruby, lighten($ruby, 8%));
+     }
+
+     // Gold accent (success)
+     &__gold-bar {
+         height: 3px;
+         background: linear-gradient(90deg, darken($gold, 10%), $gold, $champagne);
+     }
+
+     &--error {
+         background: var(--aoms-bg-card, #ffffff);
+         border: 1px solid rgba($ruby, 0.25);
+         box-shadow: 0 24px 64px rgba($midnight, 0.3), 0 0 0 1px rgba($ruby, 0.08);
+     }
+
+     &--success {
+         background: var(--aoms-bg-card, #ffffff);
+         border: 1px solid rgba($champagne, 0.22);
+         box-shadow: 0 24px 64px rgba($midnight, 0.28), 0 0 0 1px rgba($gold, 0.08);
+     }
+
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+         padding: 1.375rem 1.5rem 0.875rem;
+         border-bottom: 1px solid rgba($champagne, 0.1);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 3rem;
+         height: 3rem;
+         border-radius: 10px;
+
+         svg {
+             width: 1.375rem;
+             height: 1.375rem;
+         }
+
+         &--ruby {
+             background: rgba($ruby, 0.1);
+             border: 1px solid rgba($ruby, 0.25);
+
+             svg {
+                 color: $ruby;
+             }
+         }
+
+         &--gold {
+             background: rgba($gold, 0.1);
+             border: 1px solid rgba($gold, 0.25);
+
+             svg {
+                 color: $gold;
+             }
+         }
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 16px;
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         margin: 0 0 0.25rem;
+
+         &--ruby {
+             color: $ruby;
+         }
+
+         &--gold {
+             color: $gold;
+         }
+     }
+
+     &__subtitle {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+
+     &__body {
+         padding: 1.25rem 1.5rem 1.5rem;
+         display: flex;
+         flex-direction: column;
+         gap: 1.125rem;
+     }
+
+     &__error-msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         line-height: 1.65;
+         color: $ruby;
+         padding: 0.875rem 1rem;
+         border-radius: 8px;
+         background: rgba($ruby, 0.06);
+         border-left: 3px solid $ruby;
+         margin: 0;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding-top: 0.75rem;
+         border-top: 1px solid rgba($champagne, 0.1);
+     }
+ }
+
+ // ============================================================================
+ // 7. Report stats
+ // ============================================================================
+ .big-report {
+     display: flex;
+     gap: 1rem;
+
+     &__stat {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         padding: 1.25rem 1rem;
+         border-radius: 10px;
+
+         &--primary {
+             background: rgba($emerald, 0.08);
+             border: 1px solid rgba($emerald, 0.2);
+         }
+
+         &--warning {
+             background: rgba($amber, 0.08);
+             border: 1px solid rgba($amber, 0.2);
+         }
+
+         &--clean {
+             background: rgba($emerald, 0.05);
+             border: 1px solid rgba($emerald, 0.12);
+         }
+     }
+
+     &__count {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 2.5rem;
+         font-weight: 900;
+         letter-spacing: -0.04em;
+         line-height: 1;
+         margin-bottom: 0.4rem;
+
+         .big-report__stat--primary & {
+             color: #059669;
+         }
+
+         .big-report__stat--warning & {
+             color: $amber;
+         }
+
+         .big-report__stat--clean & {
+             color: #059669;
+         }
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ============================================================================
+ // 8. Report messages list
+ // ============================================================================
+ .big-report-messages {
+     border-radius: 8px;
+     background: rgba($champagne, 0.04);
+     border: 1px solid rgba($champagne, 0.15);
+     overflow: hidden;
+
+     &__header {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         padding: 0.625rem 1rem;
+         background: rgba($champagne, 0.06);
+         border-bottom: 1px solid rgba($champagne, 0.1);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 700;
+         letter-spacing: 0.08em;
+         text-transform: uppercase;
+         color: var(--aoms-text-muted);
+
+         svg {
+             width: 0.9375rem;
+             height: 0.9375rem;
+             flex-shrink: 0;
+             color: $gold;
+         }
+     }
+
+     &__list {
+         list-style: none;
+         margin: 0;
+         padding: 0;
+     }
+
+     &__item {
+         padding: 0.5rem 1rem;
+         font-family: 'Inter', 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: var(--aoms-text-secondary);
+         border-bottom: 1px solid rgba($champagne, 0.07);
+         line-height: 1.5;
+
+         &:last-child {
+             border-bottom: none;
+         }
+     }
+
+     &__more {
+         padding: 0.5rem 1rem;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+         font-style: italic;
+     }
+ }
+
+ // ============================================================================
+ // 9. Modal buttons
+ // ============================================================================
+ .big-modal-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.375rem;
+     padding: 0 1.125rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+     }
+
+     &--primary {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+         font-weight: 700;
+
+         &:hover {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 14px rgba($gold, 0.38);
+         }
+     }
+
+     &--secondary {
+         background: transparent;
+         border: 1px solid rgba($charcoal, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.05);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 10. Keyframes
+ // ============================================================================
+ @keyframes big-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes big-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes big-modal-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px)) scale(0.98);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%) scale(1);
+     }
+ }
+
+ @keyframes big-progress {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ============================================================================
+ // 11. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .big-page {
+         background: rgba($midnight, 0.12);
+     }
+
+     .big-modal--error {
+         background: #0d1f35;
+         border-color: rgba($ruby, 0.3);
+     }
+
+     .big-modal--success {
+         background: #0d1f35;
+         border-color: rgba($champagne, 0.15);
+     }
+
+     .big-modal__title--ruby {
+         color: #f43f5e;
+     }
+
+     .big-modal__error-msg {
+         background: rgba($ruby, 0.1);
+         color: #f87171;
+     }
+
+     .big-modal__subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .big-report__stat--primary {
+         background: rgba($emerald, 0.1);
+     }
+
+     .big-report__label {
+         color: rgba(255, 255, 255, 0.4);
+     }
+
+     .big-modal-btn--secondary {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+ }

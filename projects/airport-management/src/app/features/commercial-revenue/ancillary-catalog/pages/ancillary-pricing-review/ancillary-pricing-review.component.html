@@ -1,0 +1,169 @@
+<div class="apr-page">
+
+    <!-- ══ Sticky Page Header ════════════════════════════════════════════ -->
+    <header class="apr-header">
+
+        <div class="apr-header__left">
+            <!-- Breadcrumb -->
+            <nav class="apr-breadcrumb" aria-label="Breadcrumb">
+                <span class="apr-breadcrumb__section">Commercial</span>
+                <svg class="apr-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="apr-breadcrumb__section">Ancillary Catalog</span>
+                <svg class="apr-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="apr-breadcrumb__current">Pricing Intelligence</span>
+            </nav>
+
+            <!-- Title -->
+            <div class="apr-title-row">
+                <h1 class="apr-title">
+                    <svg class="apr-title__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                    </svg>
+                    Product Intelligence Hub
+                </h1>
+
+                @if (product()) {
+                <span class="apr-product-pill">
+                    <span class="apr-product-pill__id">#{{ product()!.productId }}</span>
+                    {{ product()!.name }}
+                </span>
+                }
+            </div>
+        </div>
+
+        <!-- Header Controls -->
+        <div class="apr-header__controls">
+
+            <!-- Edit Configuration -->
+            <button class="apr-cta-btn" type="button" (click)="onEditConfiguration()" [disabled]="!productId()"
+                aria-label="Edit product configuration">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                </svg>
+                Edit Configuration
+            </button>
+
+            <!-- Return to Catalog (Champagne Gold outline) -->
+            <button class="apr-nav-btn" type="button" (click)="onReturnToCatalog()"
+                aria-label="Return to ancillary catalog">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                Return to Catalog
+            </button>
+
+            <!-- Dark / Light Toggle -->
+            <button class="apr-icon-btn apr-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+                @if (isDarkMode()) {
+                <svg class="apr-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="apr-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ═════════════════════════════════════════════════════ -->
+    <main class="apr-body">
+
+        <!-- ── Product Not Found — Ruby Red Glassmorphism ──────────────── -->
+        @if (notFound()) {
+        <div class="apr-not-found">
+            <div class="apr-not-found__icon">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <h2 class="apr-not-found__title">Product Not Found</h2>
+            <p class="apr-not-found__message">{{ store.reviewError() }}</p>
+            <div class="apr-not-found__actions">
+                <button class="apr-btn apr-btn--ghost" type="button" (click)="onRetry()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Retry
+                </button>
+                <button class="apr-btn apr-btn--gold" type="button" (click)="onReturnToCatalog()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    Return to Catalog
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- ── Generic Error Banner (non-404, e.g. 401/403/500) ────────── -->
+        @if (store.reviewError() && !notFound() && !store.isReviewLoading()) {
+        <div class="apr-error-banner" role="alert">
+            <svg class="apr-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <span>{{ store.reviewError() }}</span>
+            <button class="apr-error-banner__dismiss" type="button" (click)="onDismissError()"
+                aria-label="Dismiss error">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- ── Financial Portfolio View ─────────────────────────────────── -->
+        @if (!notFound()) {
+
+        <!-- Contextual Engine — full-width status bar -->
+        <aoms-catalog-status-bar [marketData]="store.marketComparisonData()"
+            [healthStatus]="store.pricingHealthStatus()" [loading]="store.isReviewLoading()" />
+
+        <!-- Portfolio Row: Passenger View card + Pricing Timeline -->
+        <div class="apr-portfolio-row">
+
+            <!-- Passenger View — reused product-feature-card in read-only mode -->
+            <div class="apr-portfolio-row__card">
+                @if (store.isReviewLoading()) {
+                <div class="apr-pfc-skeleton" aria-hidden="true">
+                    <div class="apr-pfc-sk apr-pfc-sk--icon"></div>
+                    <div class="apr-pfc-sk apr-pfc-sk--title"></div>
+                    <div class="apr-pfc-sk apr-pfc-sk--badge"></div>
+                    <div class="apr-pfc-sk apr-pfc-sk--price"></div>
+                </div>
+                } @else if (product()) {
+                <aoms-product-feature-card [product]="product()!" [readOnly]="true" />
+                }
+            </div>
+
+            <!-- Pricing Timeline Chart -->
+            <div class="apr-portfolio-row__chart">
+                <aoms-pricing-timeline-chart [data]="store.pricingTimeline()" [loading]="store.isReviewLoading()" />
+            </div>
+
+        </div>
+
+        }
+
+    </main>
+</div>

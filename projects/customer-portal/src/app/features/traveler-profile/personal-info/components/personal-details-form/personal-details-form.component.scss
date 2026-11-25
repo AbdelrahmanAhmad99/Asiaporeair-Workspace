@@ -1,0 +1,373 @@
+// ============================================================================
+// personal-details-form.component.scss
+// Asiaporeair | Personal Details — Floating Label Gold Form
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$text-muted : #718096;
+$error : #c53030;
+$success : #276749;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes shimmer-gold {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── Card Shell ────────────────────────────────────────────────────────────────
+.pdf-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($champagne, 0.22);
+    padding: 28px 32px 32px;
+    box-shadow: 0 4px 24px rgba($midnight, 0.06);
+
+    @media (max-width: 600px) {
+        padding: 22px 18px 24px;
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 28px;
+        gap: 12px;
+    }
+
+    &__title-block {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    &__icon-wrap {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba($royal-gold, 0.08);
+        border: 1px solid rgba($royal-gold, 0.2);
+        color: $royal-gold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: $charcoal;
+        margin: 0 0 3px;
+    }
+
+    &__subtitle {
+        font-family: $font;
+        font-size: 0.72rem;
+        font-weight: 400;
+        color: $text-muted;
+        margin: 0;
+        letter-spacing: 0.01em;
+    }
+
+    &__edit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: none;
+        border: 1px solid rgba($charcoal, 0.15);
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: $font;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: rgba($charcoal, 0.6);
+        padding: 6px 14px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: all $t;
+
+        &:hover {
+            border-color: $royal-gold;
+            color: $royal-gold;
+        }
+
+        &.is-editing {
+            border-color: rgba($error, 0.3);
+            color: $error;
+
+            &:hover {
+                border-color: $error;
+                background: rgba($error, 0.04);
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 2px;
+        }
+    }
+}
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+.pdf-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    &__field {
+        height: 52px;
+        border-radius: 6px;
+        background: linear-gradient(90deg,
+                rgba($champagne, 0.1) 0%,
+                rgba($champagne, 0.25) 50%,
+                rgba($champagne, 0.1) 100%);
+        background-size: 200% 100%;
+        animation: shimmer-gold 1.8s ease infinite;
+
+        &:nth-child(1) {
+            width: 100%;
+        }
+
+        &:nth-child(2) {
+            width: 100%;
+        }
+
+        &:nth-child(3) {
+            width: 60%;
+        }
+
+        &:nth-child(4) {
+            width: 80%;
+        }
+    }
+}
+
+// ── Form Layout ───────────────────────────────────────────────────────────────
+.pdf-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &__row {
+        display: grid;
+        gap: 16px;
+
+        &--2col {
+            grid-template-columns: 1fr 1fr;
+
+            @media (max-width: 540px) {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 8px;
+        border-top: 1px solid rgba($champagne, 0.15);
+        margin-top: 4px;
+    }
+}
+
+// ── Floating Label Field ──────────────────────────────────────────────────────
+.pdf-field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    &__input {
+        width: 100%;
+        height: 52px;
+        padding: 20px 14px 8px;
+        border: 1px solid rgba($charcoal, 0.14);
+        border-radius: 6px;
+        background: $ivory;
+        font-family: $font;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: $charcoal;
+        outline: none;
+        transition: border-color $t, box-shadow $t, background $t;
+        box-sizing: border-box;
+
+        &::placeholder {
+            color: transparent;
+        }
+
+        // Disabled (view-only) state
+        &:disabled {
+            background: $white;
+            border-color: rgba($charcoal, 0.09);
+            color: rgba($charcoal, 0.75);
+            cursor: default;
+        }
+
+        // Focus
+        &:focus:not(:disabled) {
+            border-color: $royal-gold;
+            box-shadow: 0 0 0 3px rgba($royal-gold, 0.12);
+            background: $white;
+
+            ~.pdf-field__label {
+                top: 8px;
+                font-size: 0.6rem;
+                color: $royal-gold;
+                letter-spacing: 0.08em;
+            }
+
+            ~.pdf-field__border {
+                transform: scaleX(1);
+            }
+        }
+
+        &--mono {
+            font-family: 'Courier New', 'Courier', monospace;
+            letter-spacing: 0.08em;
+        }
+    }
+
+    // Floating label
+    &__label {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: $font;
+        font-size: 0.82rem;
+        font-weight: 400;
+        color: $text-muted;
+        pointer-events: none;
+        transition: top $t, font-size $t, color $t, letter-spacing $t;
+
+        // Floated when input has value or is focused
+        &--date,
+        .pdf-field.is-active & {
+            top: 8px;
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            transform: none;
+        }
+    }
+
+    // "has-value" — float the label when there's content
+    &.is-active .pdf-field__label {
+        top: 8px;
+        font-size: 0.6rem;
+        letter-spacing: 0.08em;
+        transform: none;
+    }
+
+    // Error state
+    &.has-error .pdf-field__input:not(:disabled) {
+        border-color: rgba($error, 0.5);
+    }
+
+    &__border {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, $royal-gold, $champagne);
+        border-radius: 0 0 6px 6px;
+        transform: scaleX(0);
+        transition: transform 260ms $ease;
+        pointer-events: none;
+    }
+
+    &__error {
+        font-family: $font;
+        font-size: 0.62rem;
+        color: $error;
+        margin-top: 4px;
+        padding-left: 2px;
+        letter-spacing: 0.02em;
+    }
+}
+
+// ── Save Button ───────────────────────────────────────────────────────────────
+.pdf-save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 24px;
+    border-radius: 4px;
+    background: $midnight;
+    border: 1px solid rgba($royal-gold, 0.3);
+    font-family: $font;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover:not(:disabled) {
+        background: $royal-gold;
+        border-color: $royal-gold;
+        color: $midnight;
+        box-shadow: 0 4px 16px rgba($royal-gold, 0.3);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &.is-saving {
+        pointer-events: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+
+    &__spinner {
+        width: 13px;
+        height: 13px;
+        border: 1.5px solid rgba($champagne, 0.3);
+        border-top-color: $champagne;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .pdf-skeleton__field,
+    .pdf-save-btn__spinner {
+        animation: none !important;
+    }
+}

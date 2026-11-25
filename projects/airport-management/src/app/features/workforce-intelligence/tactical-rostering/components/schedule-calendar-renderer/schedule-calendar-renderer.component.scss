@@ -1,0 +1,276 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $t: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+
+ :host {
+     display: block;
+ }
+
+ .scr {
+     background: $midnight;
+     border-radius: 12px;
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     overflow: hidden;
+     box-shadow: 0 6px 24px rgba(5, 25, 55, 0.25), 0 0 0 1px rgba(226, 199, 128, 0.05) inset;
+ }
+
+ // ── Day-of-Week header ─────────────────────────────────────────────────────
+ .scr__dow-row {
+     display: grid;
+     grid-template-columns: repeat(7, 1fr);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.12);
+     background: rgba(5, 25, 55, 0.5);
+ }
+
+ .scr__dow-cell {
+     padding: 0.625rem 0;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.1em;
+     text-align: center;
+     color: rgba(226, 199, 128, 0.45);
+ }
+
+ // ── Monthly grid ───────────────────────────────────────────────────────────
+ .scr__month-grid {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .scr__week-row {
+     display: grid;
+     grid-template-columns: repeat(7, 1fr);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.08);
+
+     &:last-child {
+         border-bottom: none;
+     }
+ }
+
+ .scr__day-cell {
+     min-height: 110px;
+     padding: 0.375rem;
+     position: relative;
+     border-right: 1px solid rgba(226, 199, 128, 0.08);
+     transition: background $t;
+     overflow: hidden;
+
+     &:last-child {
+         border-right: none;
+     }
+
+     &--other-month {
+         opacity: 0.35;
+     }
+
+     &--weekend {
+         background: rgba(5, 25, 55, 0.3);
+     }
+
+     &--today {
+         background: rgba(182, 143, 36, 0.08);
+         box-shadow: inset 0 0 0 1.5px rgba(182, 143, 36, 0.38);
+     }
+
+     &:hover:not(.scr__day-cell--other-month) {
+         background: rgba(226, 199, 128, 0.05);
+     }
+ }
+
+ // Day number
+ .scr__day-num {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: rgba(226, 199, 128, 0.4);
+     line-height: 1;
+     width: 1.5rem;
+     height: 1.5rem;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border-radius: 50%;
+     margin-bottom: 0.25rem;
+
+     &--today {
+         color: $midnight;
+         background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+         font-weight: 800;
+         box-shadow: 0 2px 8px rgba(182, 143, 36, 0.4);
+     }
+ }
+
+ // Events container
+ .scr__events {
+     display: flex;
+     flex-direction: column;
+     gap: 2px;
+ }
+
+ .scr__overflow-badge {
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: rgba(226, 199, 128, 0.45);
+     padding: 0.125rem 0.25rem;
+     cursor: pointer;
+     transition: color $t;
+
+     &:hover {
+         color: $champagne;
+     }
+ }
+
+ // ── Weekly grid ────────────────────────────────────────────────────────────
+ .scr__week-grid {
+     display: grid;
+     grid-template-columns: repeat(7, 1fr);
+     min-height: 480px;
+ }
+
+ .scr__week-col {
+     display: flex;
+     flex-direction: column;
+     border-right: 1px solid rgba(226, 199, 128, 0.08);
+     transition: background $t;
+
+     &:last-child {
+         border-right: none;
+     }
+
+     &--weekend {
+         background: rgba(5, 25, 55, 0.25);
+     }
+
+     &--today {
+         background: rgba(182, 143, 36, 0.06);
+         box-shadow: inset 0 0 0 1.5px rgba(182, 143, 36, 0.3);
+     }
+
+     &__header {
+         padding: 0.625rem 0.5rem;
+         border-bottom: 1px solid rgba(226, 199, 128, 0.08);
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 0.125rem;
+         flex-shrink: 0;
+     }
+
+     &__dow {
+         font-size: 9px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: rgba(226, 199, 128, 0.35);
+     }
+
+     &__num {
+         font-size: 1rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: rgba(226, 199, 128, 0.6);
+         line-height: 1;
+         width: 2rem;
+         height: 2rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         border-radius: 50%;
+
+         &--today {
+             color: $midnight;
+             background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+             font-weight: 800;
+             box-shadow: 0 2px 8px rgba(182, 143, 36, 0.4);
+         }
+     }
+
+     &__events {
+         flex: 1;
+         padding: 0.375rem;
+         display: flex;
+         flex-direction: column;
+         gap: 3px;
+         overflow-y: auto;
+
+         &::-webkit-scrollbar {
+             width: 3px;
+         }
+
+         &::-webkit-scrollbar-thumb {
+             background: rgba(182, 143, 36, 0.2);
+             border-radius: 2px;
+         }
+     }
+
+     &__empty {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex: 1;
+         font-size: 0.875rem;
+         color: rgba(226, 199, 128, 0.12);
+         user-select: none;
+     }
+ }
+
+ // ── Shimmer ─────────────────────────────────────────────────────────────────
+ .scr__shimmer-grid {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .scr__shimmer-row {
+     display: grid;
+     grid-template-columns: repeat(7, 1fr);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.06);
+ }
+
+ .scr__shimmer-cell {
+     min-height: 110px;
+     padding: 0.375rem;
+     border-right: 1px solid rgba(226, 199, 128, 0.06);
+     display: flex;
+     flex-direction: column;
+     gap: 4px;
+
+     &:last-child {
+         border-right: none;
+     }
+ }
+
+ .scr-sh {
+     border-radius: 3px;
+     background: rgba(226, 199, 128, 0.06);
+     animation: scr-sh 1.5s ease-in-out infinite;
+
+     &--num {
+         width: 1.5rem;
+         height: 1.5rem;
+         border-radius: 50%;
+         align-self: flex-start;
+     }
+
+     &--event {
+         height: 1.375rem;
+         width: 90%;
+         border-radius: 4px;
+     }
+ }
+
+ @keyframes scr-sh {
+
+     0%,
+     100% {
+         opacity: 0.4;
+     }
+
+     50% {
+         opacity: 0.85;
+     }
+ }

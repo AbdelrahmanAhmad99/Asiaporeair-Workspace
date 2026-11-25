@@ -1,0 +1,896 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $ruby-deep: #710D06;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .ald-page {
+     min-height: 100%;
+     background: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+     position: relative;
+ }
+
+ // ============================================================================
+ // 2. Sticky Command Header
+ // ============================================================================
+ .ald-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.9375rem 1.5rem;
+     background: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 14px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ .ald-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // Back arrow
+ .ald-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+         transform: translateX(-2px);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // Breadcrumb
+ .ald-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__link {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color 150ms $ease;
+
+         &:hover {
+             color: $gold;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .ald-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 34ch;
+     transition: color 150ms $ease;
+ }
+
+ // ============================================================================
+ // 3. Four-button Action Suite
+ // ============================================================================
+ .ald-action-suite {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+ }
+
+ .ald-sep {
+     width: 1px;
+     height: 1.5rem;
+     background: rgba($champagne, 0.2);
+     flex-shrink: 0;
+ }
+
+ // Icon-only refresh button
+ .ald-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: ald-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // Shared button base
+ .ald-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     // Audit History — neutral ghost
+     &--ghost {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // Deactivate — Luxury Ruby ghost (outline)
+     &--ruby {
+         background: transparent;
+         border: 1px solid rgba($ruby, 0.35);
+         color: $ruby;
+
+         &:hover:not(:disabled) {
+             background: rgba($ruby, 0.07);
+             border-color: $ruby;
+             box-shadow: 0 2px 10px rgba($ruby, 0.15);
+         }
+     }
+
+     // Modify Profile — Royal Gold solid (primary CTA)
+     &--primary {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+         font-weight: 700;
+
+         &:hover {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 14px rgba($gold, 0.38);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 4. Page Body
+ // ============================================================================
+ .ald-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+     overflow-y: auto;
+     max-height: calc(100vh - var(--aoms-topbar-height, 64px));
+ }
+
+ // ============================================================================
+ // 5. Error Banner
+ // ============================================================================
+ .ald-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 1rem 1.125rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.2);
+     flex-wrap: wrap;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+         color: $ruby;
+         margin-top: 0.1rem;
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.2rem;
+         flex: 1;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 700;
+         color: $ruby;
+     }
+
+     &__msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: rgba($ruby, 0.8);
+         line-height: 1.5;
+     }
+
+     &__action {
+         flex-shrink: 0;
+         background: none;
+         border: 1px solid rgba($ruby, 0.3);
+         border-radius: 4px;
+         color: $ruby;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 600;
+         padding: 0.35rem 0.75rem;
+         cursor: pointer;
+         transition: all 150ms $ease;
+         white-space: nowrap;
+
+         &:hover {
+             background: rgba($ruby, 0.08);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Loading Skeleton — matches actual layout proportions exactly
+ // ============================================================================
+ .ald-skeleton-layout {
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+ }
+
+ .ald-skeleton {
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.15);
+     overflow: hidden;
+     animation: ald-pulse 1.6s ease-in-out infinite;
+
+     &--hero {
+         background: $midnight;
+         padding: 2.25rem 2.5rem;
+         display: flex;
+         flex-direction: column;
+         gap: 1.25rem;
+     }
+
+     &--fleet {
+         background: var(--aoms-bg-card, #ffffff);
+         padding: 1rem 1.25rem;
+         display: flex;
+         flex-direction: column;
+         gap: 0.875rem;
+     }
+ }
+
+ // Hero skeleton parts
+ .ald-sk {
+     &__row {
+         display: flex;
+         align-items: flex-start;
+         gap: 1.375rem;
+     }
+
+     &__logo {
+         width: 4.5rem;
+         height: 4.5rem;
+         border-radius: 12px;
+         background: rgba($champagne, 0.1);
+         flex-shrink: 0;
+     }
+
+     &__name-block {
+         display: flex;
+         flex-direction: column;
+         gap: 0.75rem;
+         flex: 1;
+         padding-top: 0.5rem;
+     }
+
+     &__divider {
+         height: 1px;
+         background: rgba($champagne, 0.1);
+     }
+
+     &__meta-row {
+         display: grid;
+         grid-template-columns: repeat(4, 1fr);
+         gap: 1.5rem;
+
+         @media (max-width: 768px) {
+             grid-template-columns: repeat(2, 1fr);
+         }
+     }
+
+     &__meta-item {
+         display: flex;
+         flex-direction: column;
+         gap: 0.375rem;
+     }
+
+     &__line {
+         border-radius: 4px;
+         background: rgba($champagne, 0.1);
+
+         &--title {
+             width: 65%;
+             height: 2rem;
+         }
+
+         &--iata {
+             width: 35%;
+             height: 1.25rem;
+         }
+
+         &--label {
+             width: 50%;
+             height: 0.625rem;
+         }
+
+         &--value {
+             width: 40%;
+             height: 1.5rem;
+         }
+
+         &--fleet-title {
+             width: 55%;
+             height: 0.875rem;
+         }
+
+         &--fleet-sub {
+             width: 40%;
+             height: 0.625rem;
+         }
+
+         &--fl-reg {
+             width: 56px;
+             height: 0.75rem;
+         }
+
+         &--fl-type {
+             width: 55%;
+             height: 0.75rem;
+         }
+
+         &--fl-status {
+             width: 60px;
+             height: 0.75rem;
+         }
+     }
+
+     // Fleet skeleton
+     &__fleet-header {
+         display: flex;
+         align-items: center;
+         gap: 0.875rem;
+         margin-bottom: 0.25rem;
+     }
+
+     &__icon-wrap {
+         width: 2.5rem;
+         height: 2.5rem;
+         border-radius: 8px;
+         background: rgba($champagne, 0.1);
+         flex-shrink: 0;
+     }
+
+     &__fleet-row {
+         display: flex;
+         align-items: center;
+         gap: 1.5rem;
+         padding: 0.5rem 0;
+         border-bottom: 1px solid rgba($champagne, 0.06);
+     }
+ }
+
+ // ============================================================================
+ // 7. Main content layout — stacked (hero → fleet)
+ // ============================================================================
+ .ald-content-layout {
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+ }
+
+ // ============================================================================
+ // 8. Deactivation Guard — Glassmorphism backdrop + panel
+ // ============================================================================
+ .ald-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 40;
+     background: rgba($midnight, 0.62);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     animation: ald-fade-in 200ms $ease both;
+ }
+
+ .ald-guard {
+     position: fixed;
+     z-index: 50;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: min(500px, calc(100vw - 2rem));
+
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($ruby, 0.22);
+     box-shadow:
+         0 24px 64px rgba($midnight, 0.3),
+         0 0 0 1px rgba($ruby, 0.08);
+     overflow: hidden;
+     animation: ald-modal-enter 280ms $luxury both;
+
+     // Ruby accent bar
+     &__ruby-bar {
+         height: 3px;
+         background: linear-gradient(90deg, $ruby-deep 0%, $ruby 60%, transparent 100%);
+     }
+
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 1rem;
+         padding: 1.5rem 1.5rem 1rem;
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.75rem;
+         height: 2.75rem;
+         border-radius: 8px;
+         background: rgba($ruby, 0.09);
+         border: 1px solid rgba($ruby, 0.22);
+     }
+
+     &__icon {
+         width: 1.25rem;
+         height: 1.25rem;
+         color: $ruby;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 16px;
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary, $charcoal);
+         margin: 0 0 0.2rem;
+     }
+
+     &__subtitle {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+
+     &__target {
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+         margin: 0 1.5rem;
+         padding: 1rem;
+         border-radius: 8px;
+         background: rgba($midnight, 0.04);
+         border: 1px solid rgba($champagne, 0.15);
+     }
+
+     &__target-logo {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.75rem;
+         height: 2.75rem;
+         border-radius: 50%;
+         background: $midnight;
+         border: 1px solid rgba($gold, 0.3);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 800;
+         letter-spacing: 0.06em;
+         color: $champagne;
+     }
+
+     &__target-name {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 600;
+         color: var(--aoms-text-primary, $charcoal);
+         margin: 0 0 0.25rem;
+     }
+
+     &__target-meta {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+
+     &__warning {
+         margin: 1.25rem 1.5rem;
+         padding: 0.875rem 1rem;
+         border-radius: 6px;
+         background: rgba($ruby, 0.04);
+         border-left: 3px solid rgba($ruby, 0.35);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         line-height: 1.65;
+         color: var(--aoms-text-secondary);
+
+         strong {
+             font-weight: 700;
+             color: $ruby;
+         }
+     }
+
+     &__error {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         margin: 0 1.5rem;
+         padding: 0.625rem 0.875rem;
+         border-radius: 6px;
+         background: rgba($ruby, 0.07);
+         border: 1px solid rgba($ruby, 0.2);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: $ruby;
+         animation: ald-fade-in 180ms $ease both;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+             flex-shrink: 0;
+             color: $ruby;
+         }
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding: 1rem 1.5rem 1.375rem;
+         border-top: 1px solid rgba($champagne, 0.12);
+         background: rgba($off-white, 0.5);
+     }
+ }
+
+ // Guard buttons
+ .ald-guard-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.25rem;
+     padding: 0 1.125rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__spin {
+         width: 0.9rem;
+         height: 0.9rem;
+         animation: ald-spin 1s linear infinite;
+     }
+
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($charcoal, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     &--confirm {
+         background: $ruby;
+         border: 1px solid $ruby;
+         color: #ffffff;
+
+         &:hover:not(:disabled) {
+             background: $ruby-deep;
+             border-color: $ruby-deep;
+             box-shadow: 0 4px 14px rgba($ruby, 0.4);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 9. Keyframes
+ // ============================================================================
+ @keyframes ald-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes ald-fade-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes ald-modal-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px));
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%);
+     }
+ }
+
+ @keyframes ald-pulse {
+
+     0%,
+     100% {
+         opacity: 0.65;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 10. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .ald-header {
+         box-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+     }
+
+     .ald-back-btn:hover {
+         color: $champagne;
+     }
+
+     .ald-icon-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .ald-btn--ghost:hover {
+         color: $champagne;
+     }
+
+     .ald-btn--ruby {
+         border-color: rgba(248, 113, 113, 0.3);
+         color: #f87171;
+
+         &:hover:not(:disabled) {
+             background: rgba(248, 113, 113, 0.08);
+             border-color: #f87171;
+         }
+     }
+
+     .ald-error-banner {
+         background: rgba($ruby, 0.12);
+         border-color: rgba($ruby, 0.3);
+
+         &__title,
+         &__icon {
+             color: #f43f5e;
+         }
+
+         &__msg {
+             color: rgba(244, 63, 94, 0.8);
+         }
+
+         &__action {
+             color: #f43f5e;
+             border-color: rgba(244, 63, 94, 0.3);
+         }
+     }
+
+     .ald-skeleton--hero {
+         background: rgba($midnight, 0.7);
+     }
+
+     .ald-skeleton--fleet {
+         background: rgba(255, 255, 255, 0.03);
+         border-color: rgba($champagne, 0.08);
+     }
+
+     .ald-sk__line,
+     .ald-sk__logo,
+     .ald-sk__icon-wrap {
+         background: rgba($champagne, 0.06);
+     }
+
+     .ald-guard {
+         background: #0d1f35;
+         border-color: rgba($ruby, 0.3);
+         box-shadow: 0 28px 72px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba($ruby, 0.12);
+     }
+
+     .ald-guard__title {
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .ald-guard__subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .ald-guard__target {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .ald-guard__target-name {
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .ald-guard__target-meta {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .ald-guard__warning {
+         background: rgba($ruby, 0.1);
+         border-left-color: rgba($ruby, 0.5);
+         color: rgba(255, 255, 255, 0.65);
+     }
+
+     .ald-guard__actions {
+         background: rgba(255, 255, 255, 0.02);
+         border-top-color: rgba($champagne, 0.08);
+     }
+
+     .ald-guard-btn--cancel {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+ }

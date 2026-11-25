@@ -1,0 +1,87 @@
+<!-- ============================================================================
+     fare-rules-accordion.component.html
+     Asiaporeair | Fare Rules Accordion
+     ============================================================================ -->
+
+<div class="fra-wrap" role="list" aria-label="Fare conditions and rules">
+
+    @for (section of sections(); track section.id) {
+
+    <div class="fra-item" [class.fra-item--open]="isOpen(section.id)" [class.fra-item--warning]="section.isWarning"
+        role="listitem">
+
+        <!-- ── Accordion trigger ─────────────────────────────────────── -->
+        <button class="fra-trigger" type="button" [attr.aria-expanded]="isOpen(section.id)"
+            [attr.aria-controls]="'fra-panel-' + section.id" (click)="toggle(section.id)">
+
+            <div class="fra-trigger__left">
+
+                <!-- Section icon -->
+                <div class="fra-icon" aria-hidden="true">
+                    @if (section.icon === 'change') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg>
+                    }
+                    @if (section.icon === 'refund') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <line x1="12" y1="1" x2="12" y2="23" />
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                    }
+                    @if (section.icon === 'penalty') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                    }
+                    @if (section.icon === 'validity') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    }
+                    @if (section.icon === 'general') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    }
+                </div>
+
+                <span class="fra-heading">{{ section.heading }}</span>
+
+                @if (section.isWarning) {
+                <span class="fra-warning-chip" aria-label="Important condition">Important</span>
+                }
+
+            </div>
+
+            <!-- Chevron -->
+            <svg class="fra-chevron" [class.fra-chevron--open]="isOpen(section.id)" width="13" height="13"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+            </svg>
+
+        </button>
+
+        <!-- ── Accordion panel ───────────────────────────────────────── -->
+        <div [id]="'fra-panel-' + section.id" role="region" [attr.aria-labelledby]="'fra-trigger-' + section.id"
+            [@accordionPanel]="isOpen(section.id) ? 'expanded' : 'collapsed'">
+            <div class="fra-panel">
+                <p class="fra-content">{{ section.content }}</p>
+            </div>
+        </div>
+
+    </div>
+
+    }
+
+</div>

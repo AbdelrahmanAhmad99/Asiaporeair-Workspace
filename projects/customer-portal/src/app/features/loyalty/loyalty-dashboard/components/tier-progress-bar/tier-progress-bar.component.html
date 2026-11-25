@@ -1,0 +1,85 @@
+<section class="progress-bar-widget" aria-label="Tier Upgrade Progress">
+
+  <!-- ── Shimmer Skeleton ─────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="progress-bar-widget__skeleton">
+      <div class="skeleton-line skeleton-line--wide"></div>
+      <div class="skeleton-track"></div>
+      <div class="skeleton-row">
+        <div class="skeleton-line skeleton-line--narrow"></div>
+        <div class="skeleton-line skeleton-line--narrow"></div>
+      </div>
+    </div>
+  }
+
+  <!-- ── Content ──────────────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+
+    @if (isTopTier()) {
+      <!-- Apex state — user is at the highest tier -->
+      <div class="progress-bar-widget__apex">
+        <svg class="apex-icon" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5"
+             stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true" width="28" height="28">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <div class="apex-text">
+          <h3 class="apex-title">Platinum Achieved</h3>
+          <p class="apex-sub">You have reached the pinnacle of Asiaporeair's loyalty programme.</p>
+        </div>
+      </div>
+    } @else {
+      <!-- Progress toward next tier -->
+      <header class="progress-bar-widget__header">
+        <div class="progress-bar-widget__tiers">
+          <span class="tier-badge tier-badge--current">{{ currentTier() }}</span>
+          <svg class="tiers-arrow" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" width="18" height="18">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+          <span class="tier-badge tier-badge--next">{{ nextTier() }}</span>
+        </div>
+        <p class="progress-bar-widget__tagline">
+          Journey to <strong>{{ nextTier() }}</strong> status
+        </p>
+      </header>
+
+      <!-- Bar track -->
+      <div class="progress-bar-widget__track-wrap"
+           role="progressbar"
+           [attr.aria-valuenow]="safeProgressPct()"
+           aria-valuemin="0"
+           aria-valuemax="100"
+           [attr.aria-label]="'Tier progress: ' + safeProgressPct() + '%'">
+        <div class="progress-bar-widget__track">
+          <div class="progress-bar-widget__fill"
+               [style.width.%]="safeProgressPct()">
+            <span class="progress-bar-widget__pct-label">{{ safeProgressPct() }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Point labels -->
+      <div class="progress-bar-widget__labels">
+        <div class="point-label">
+          <span class="point-label__value">{{ formattedCurrent }}</span>
+          <span class="point-label__desc">Current miles</span>
+        </div>
+        <div class="point-label point-label--right">
+          <span class="point-label__value">{{ formattedTarget }}</span>
+          <span class="point-label__desc">Required for {{ nextTier() }}</span>
+        </div>
+      </div>
+
+      <!-- Remaining notice -->
+      <p class="progress-bar-widget__remaining">
+        <strong>{{ formattedRemaining }}</strong> more miles needed to unlock {{ nextTier() }} status.
+      </p>
+    }
+  }
+
+</section>

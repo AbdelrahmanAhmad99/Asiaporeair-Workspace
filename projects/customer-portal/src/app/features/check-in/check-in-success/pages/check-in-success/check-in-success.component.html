@@ -1,0 +1,218 @@
+<!-- ============================================================================
+     check-in-success.component.html
+     Asiaporeair | Step 3 — "Your Journey is Confirmed"
+     ============================================================================ -->
+
+<div class="success-shell">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HERO — Midnight Sapphire header
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="success-hero" [@heroFade] role="banner">
+
+        <!-- Ambient particle field -->
+        <div class="success-hero__particles" aria-hidden="true">
+            @for (p of particles; track p) { <span class="s-particle"></span> }
+        </div>
+
+        <div class="success-hero__inner">
+
+            <!-- Nav row -->
+            <div class="success-hero__nav-row">
+                <span class="success-brand" aria-hidden="true">ASIAPOREAIR</span>
+
+                <div class="success-hero__nav-actions">
+                    <button class="success-back-btn" type="button" (click)="onCheckInAnother()"
+                        aria-label="Check in another passenger">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
+                        Back to Passengers
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gold rule -->
+            <div class="success-hero__rule" aria-hidden="true"></div>
+
+            <!-- Title block -->
+            <div class="success-hero__title-block">
+
+                <!-- Gold shimmer celebration (2s) -->
+                <app-success-celebration></app-success-celebration>
+
+                <h1 class="success-hero__title">
+                    Your Journey is <span class="success-hero__title-accent">Confirmed</span>
+                </h1>
+
+                @if (displayedPass()) {
+                <p class="success-hero__greeting" [@fadeIn]>
+                    {{ welcomeGreeting() }} — we are ready for your arrival.
+                </p>
+                }
+
+                @if (currentBooking()) {
+                <div class="success-flight-pill" [@fadeIn]>
+                    <span class="success-flight-pill__pnr">
+                        {{ currentBooking()!.bookingReference }}
+                    </span>
+                    <span aria-hidden="true">·</span>
+                    <span>{{ currentBooking()!.originAirportCode }} → {{ currentBooking()!.destinationAirportCode
+                        }}</span>
+                    <span aria-hidden="true">·</span>
+                    <span class="success-flight-pill__flight">{{ currentBooking()!.flightNumber }}</span>
+                </div>
+                }
+
+            </div>
+
+            <!-- Stepper — Step 3 active, 1 & 2 completed -->
+            <app-check-in-stepper [activeStep]="checkInStep()"></app-check-in-stepper>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN BODY
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="success-body" role="main">
+
+        <!-- Guard: no pass in store (direct navigation) -->
+        @if (isMissingPass()) {
+        <div class="success-guard" [@fadeIn] role="alert">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <p>
+                No active boarding pass found.
+                <button type="button" (click)="onReturnHome()">
+                    Begin a new check-in
+                </button>
+                to continue.
+            </p>
+        </div>
+        }
+
+        <!-- Happy path -->
+        @if (!isMissingPass()) {
+        <div class="success-layout" [@contentReveal]>
+
+            <!-- ── LEFT: Boarding pass display ──────────────────────── -->
+            <section class="success-pass-col reveal-item" aria-label="Boarding pass">
+
+                <!-- Multi-pass selector tabs (if > 1 passenger) -->
+                @if (hasMultiplePasses()) {
+                <div class="pass-tabs" role="tablist" aria-label="Passenger boarding passes">
+                    @for (pass of allPasses(); track pass.passId; let i = $index) {
+                    <button class="pass-tab" role="tab" [class.pass-tab--active]="activePassIndex() === i"
+                        [attr.aria-selected]="activePassIndex() === i" [attr.aria-controls]="'pass-' + i" type="button"
+                        (click)="selectPass(i)">
+                        {{ pass.passengerName.split(' ')[0] }}
+                        <span class="pass-tab__seat">· {{ pass.seatNumber }}</span>
+                    </button>
+                    }
+                </div>
+                }
+
+                <!-- The premium boarding pass card -->
+                @if (displayedPass(); as pass) {
+                <div [attr.id]="'pass-' + activePassIndex()" role="tabpanel"
+                    [attr.aria-label]="pass.passengerName + ' boarding pass'">
+                    <app-boarding-pass-preview [passengerName]="pass.passengerName" [flightNumber]="pass.flightNumber"
+                        [origin]="pass.originAirportCode" [destination]="pass.destinationAirportCode"
+                        [departureTime]="pass.departureTime" [arrivalTime]="pass.arrivalTime"
+                        [boardingTime]="pass.boardingTime" [seatNumber]="pass.seatNumber" [cabinClass]="pass.cabinClass"
+                        [bookingReference]="pass.bookingReference" [ticketCode]="pass.ticketCode"
+                        [sequenceNumber]="pass.sequenceNumber" [frequentFlyerNumber]="pass.frequentFlyerNumber ?? null"
+                        [precheckStatus]="pass.precheckStatus ?? null" [qrReady]="true">
+                    </app-boarding-pass-preview>
+                </div>
+                }
+
+            </section>
+
+            <!-- ── RIGHT: Sidebar ───────────────────────────────────── -->
+            <aside class="success-sidebar" aria-label="Actions and journey details">
+
+                <!-- Actions -->
+                <div class="reveal-item">
+                    <app-action-buttons-group [isDownloading]="isDownloading()" [isSendingEmail]="isSendingEmail()"
+                        [passengerName]="displayedPass()?.passengerName ?? ''" (downloadPdf)="onDownloadPdf()"
+                        (sendEmail)="onSendEmail($event)" (checkInAnother)="onCheckInAnother()"
+                        (returnToHome)="onReturnHome()">
+                    </app-action-buttons-group>
+                </div>
+
+                <!-- Journey secured info card -->
+                <div class="success-info-card reveal-item">
+
+                    <div class="success-info-card__header">
+                        <div class="success-info-card__icon" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E2C780"
+                                stroke-width="1" stroke-linecap="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <span class="success-info-card__title">Journey Secured</span>
+                    </div>
+
+                    <ul class="success-tips" aria-label="Journey tips">
+                        <li class="success-tip">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                stroke-width="2" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Arrive at the airport at least <strong>2 hours</strong> before departure.
+                        </li>
+                        <li class="success-tip">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                stroke-width="2" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Present this boarding pass — digital or printed — at the gate.
+                        </li>
+                        <li class="success-tip">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                stroke-width="2" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Boarding closes <strong>20 minutes</strong> before departure.
+                        </li>
+                        <li class="success-tip">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                stroke-width="2" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Carry a valid passport or government-issued photo ID.
+                        </li>
+                    </ul>
+
+                </div>
+
+                <!-- Contact strip -->
+                <div class="success-contact reveal-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                        aria-hidden="true">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17z" />
+                    </svg>
+                    <span>Need assistance? Our concierge team is available 24/7 at</span>
+                    <a class="success-contact__link" href="tel:+6561234567"
+                        aria-label="Call Asiaporeair concierge at plus 65 6123 4567">
+                        +65 6123 4567
+                    </a>
+                </div>
+
+            </aside>
+
+        </div>
+        }
+
+    </main>
+
+</div>

@@ -1,0 +1,252 @@
+// src/app/features/authentication/components/login-form/login-form.component.scss
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$charcoal : #101056;
+$muted : #718096;
+$error : #B91C1C;
+$error-bg : rgba(#B91C1C, 0.05);
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+    display: block;
+}
+
+.lf {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    // ── Floating-label field ──────────────────────────────────────────────────
+    &__field {
+        position: relative;
+
+        &--error {
+            .lf__input {
+                border-color: rgba($error, 0.45);
+                background: $error-bg;
+            }
+
+            .lf__label {
+                color: $error;
+            }
+
+            .lf__bar {
+                background: $error;
+                transform: scaleX(1);
+            }
+        }
+    }
+
+    // ── Input ──────────────────────────────────────────────────────────────────
+    &__input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 19px 44px 9px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba($muted, 0.2);
+        background: rgba(#F1F5F9, 0.55);
+        font-family: $font;
+        font-size: 14px;
+        color: $charcoal;
+        outline: none;
+        transition: border-color 220ms $ease, background 220ms $ease;
+        appearance: none;
+
+        &:focus {
+            border-color: rgba($royal-gold, 0.5);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba($royal-gold, 0.08);
+        }
+
+        // Float the label
+        &:not(:placeholder-shown)~.lf__label,
+        &:focus~.lf__label {
+            top: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.09em;
+            color: $royal-gold;
+        }
+
+        &:focus~.lf__bar {
+            transform: scaleX(1);
+        }
+    }
+
+    // ── Floating label ──────────────────────────────────────────────────────────
+    &__label {
+        position: absolute;
+        top: 15px;
+        left: 14px;
+        font-family: $font;
+        font-size: 13px;
+        font-weight: 500;
+        color: $muted;
+        pointer-events: none;
+        transition: top 180ms $ease, font-size 180ms $ease, color 180ms $ease, letter-spacing 180ms $ease;
+    }
+
+    // ── Gold underline bar ──────────────────────────────────────────────────────
+    &__bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        border-radius: 0 0 10px 10px;
+        background: $royal-gold;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 240ms $ease;
+    }
+
+    // ── Eye toggle ─────────────────────────────────────────────────────────────
+    &__eye {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: $muted;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        transition: color 180ms $ease;
+
+        &:hover {
+            color: $royal-gold;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            border-radius: 4px;
+            outline-offset: 2px;
+        }
+    }
+
+    // ── Error ─────────────────────────────────────────────────────────────────
+    &__error {
+        display: block;
+        margin-top: 5px;
+        font-size: 11px;
+        font-weight: 500;
+        color: $error;
+        padding-left: 2px;
+        animation: errorIn 180ms $ease;
+    }
+
+    // ── Forgot row ──────────────────────────────────────────────────────────────
+    &__forgot-row {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -8px;
+    }
+
+    &__forgot-link {
+        font-size: 12px;
+        font-weight: 600;
+        color: $royal-gold;
+        text-decoration: none;
+        transition: color 200ms $ease;
+
+        &:hover {
+            color: darken($royal-gold, 8%);
+            text-decoration: underline;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            border-radius: 2px;
+        }
+    }
+
+    // ── Submit ──────────────────────────────────────────────────────────────────
+    &__submit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 15px 24px;
+        border-radius: 4px;
+        background: $midnight;
+        border: 1px solid rgba($royal-gold, 0.35);
+        font-family: $font;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: $champagne;
+        cursor: pointer;
+        transition: background 260ms $ease, border-color 260ms $ease, color 260ms $ease, box-shadow 260ms $ease;
+
+        &:hover:not(:disabled) {
+            background: $royal-gold;
+            border-color: $royal-gold;
+            color: $midnight;
+            box-shadow: 0 6px 22px rgba($royal-gold, 0.32);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 3px;
+        }
+
+        &--loading {
+            pointer-events: none;
+        }
+    }
+
+    // ── Spinner ────────────────────────────────────────────────────────────────
+    &__spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba($champagne, 0.3);
+        border-top-color: $champagne;
+        border-radius: 50%;
+        animation: spin 650ms linear infinite;
+        flex-shrink: 0;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes errorIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lf__spinner {
+        animation: none;
+    }
+
+    .lf__label,
+    .lf__bar {
+        transition: none;
+    }
+}

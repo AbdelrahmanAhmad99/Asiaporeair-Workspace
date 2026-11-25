@@ -1,0 +1,121 @@
+<article class="gw" [attr.data-gateway]="gateway().id" [attr.data-access]="gateway().access"
+    [attr.aria-labelledby]="titleId()">
+    <header class="gw__head">
+        <span class="gw__icon" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24" width="22" height="22" focusable="false">
+                @switch (gateway().id) {
+                @case ('flight-operations-gateway-card') {
+                <path
+                    d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                }
+                @case ('fleet-assets-gateway-card') {
+                <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                }
+                @case ('crew-intelligence-gateway-card') {
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                }
+                @case ('network-infra-gateway-card') {
+                <circle cx="12" cy="12" r="10" />
+                <path d="M2 12h20" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                }
+                @case ('commercial-revenue-gateway-card') {
+                <path d="m22 7-8.5 8.5-5-5L2 17" />
+                <path d="M16 7h6v6" />
+                }
+                @case ('reservation-ground-gateway-card') {
+                <path
+                    d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                <path d="M13 5v2M13 17v2M13 11v2" />
+                }
+                }
+            </svg>
+        </span>
+
+        <div class="gw__heading">
+            <h3 class="gw__title" [id]="titleId()">{{ gateway().title }}</h3>
+            <p class="gw__description">{{ gateway().description }}</p>
+        </div>
+
+        @if (gateway().restriction; as restriction) {
+        <span class="gw__badge">
+            <svg class="icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            {{ restriction.badgeLabel }}
+        </span>
+        }
+    </header>
+
+    @if (gateway().telemetry; as telemetry) {
+    <div class="telemetry" role="group" [attr.aria-label]="gateway().title + ' live telemetry'"
+        [attr.data-tone]="telemetry.tone">
+        <div class="telemetry__status">
+            <span class="telemetry__dot" aria-hidden="true"></span>
+            <span class="telemetry__status-label">{{ telemetry.statusLabel }}</span>
+        </div>
+        <dl class="telemetry__metrics">
+            @for (metric of telemetry.metrics; track metric.label) {
+            <div class="metric" [attr.data-tone]="metric.tone">
+                <dt class="metric__label">{{ metric.label }}</dt>
+                <dd class="metric__value">{{ metric.value }}</dd>
+            </div>
+            }
+        </dl>
+    </div>
+    }
+
+    @if (gateway().restriction; as restriction) {
+    <div class="restriction">
+        <p class="restriction__note">{{ restriction.note }}</p>
+        <p class="restriction__clearance">{{ restriction.clearanceLabel }}</p>
+    </div>
+    }
+
+    @if (gateway().subLinks.length > 0) {
+    <nav class="links" [attr.aria-label]="gateway().title + ' modules'">
+        <ul class="links__list">
+            @for (link of gateway().subLinks; track link.id) {
+            <li class="links__item">
+                @if (link.isLocked) {
+                <span class="link link--locked">
+                    <span class="link__label">{{ link.label }}</span>
+                    <svg class="icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    <span class="visually-hidden">Restricted. {{ link.lockHint }}.</span>
+                </span>
+                } @else {
+                <a class="link" [routerLink]="link.route" (click)="onSubLinkNavigated(link)">
+                    <span class="link__label">{{ link.label }}</span>
+                    <svg class="icon link__arrow" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"
+                        focusable="false">
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                </a>
+                }
+            </li>
+            }
+        </ul>
+    </nav>
+    }
+
+    <footer class="gw__foot">
+        @if (gateway().access === 'GRANTED') {
+        <a class="cta" [routerLink]="gateway().primaryRoute" (click)="onPrimaryNavigated()">
+            <span>{{ gateway().primaryActionLabel }}</span>
+            <svg class="icon cta__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"
+                focusable="false">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+        </a>
+        } @else {
+        <button type="button" class="request" (click)="onRequestAccess()">Request access</button>
+        }
+    </footer>
+</article>

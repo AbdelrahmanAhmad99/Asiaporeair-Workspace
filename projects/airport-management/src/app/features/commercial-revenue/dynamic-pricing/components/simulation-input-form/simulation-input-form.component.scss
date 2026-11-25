@@ -1,0 +1,354 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $ruby: #710D06;
+ $t: 160ms ease;
+
+ // ── Card ──────────────────────────────────────────────────────────────────
+ .sif-card {
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.16);
+     border-radius: 12px;
+     box-shadow: 0 8px 32px rgba($midnight, 0.4);
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+ }
+
+ // ── Card Header ───────────────────────────────────────────────────────────
+ .sif-card-header {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 1rem 1.25rem;
+     border-bottom: 1px solid rgba($champagne, 0.12);
+     background: rgba(255, 255, 255, 0.03);
+
+     &__icon {
+         width: 1.375rem;
+         height: 1.375rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__title {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 700;
+         color: $champagne;
+         margin: 0;
+         letter-spacing: -0.01em;
+     }
+
+     &__sub {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.35);
+         margin: 0;
+         letter-spacing: 0.03em;
+     }
+ }
+
+ // ── Form ──────────────────────────────────────────────────────────────────
+ .sif-form {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+     flex: 1;
+ }
+
+ // ── Sections ──────────────────────────────────────────────────────────────
+ .sif-section {
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+     padding: 0.875rem 1.25rem;
+     border-bottom: 1px solid rgba($champagne, 0.07);
+
+     &:last-of-type {
+         border-bottom: none;
+     }
+
+     &__label {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: rgba($champagne, 0.6);
+         margin: 0;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ .sif-row {
+     display: flex;
+     gap: 0.625rem;
+
+     &--2col {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         gap: 0.625rem;
+     }
+ }
+
+ // ── Field ─────────────────────────────────────────────────────────────────
+ .sif-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+ }
+
+ // ── Label ─────────────────────────────────────────────────────────────────
+ .sif-label {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: rgba(255, 255, 255, 0.45);
+     user-select: none;
+     cursor: default;
+ }
+
+ // ── Text / Number Input ───────────────────────────────────────────────────
+ .sif-input {
+     width: 100%;
+     height: 2.375rem;
+     padding: 0 0.75rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.18);
+     background: rgba(255, 255, 255, 0.05);
+     color: rgba(255, 255, 255, 0.88);
+     font-family: var(--aoms-font-body);
+     font-size: 0.875rem;
+     font-weight: 500;
+     outline: none;
+     transition: all $t;
+
+     // Remove number input spinners
+     &[type="number"] {
+         // -moz-appearance: textfield;
+
+         &::-webkit-inner-spin-button,
+         &::-webkit-outer-spin-button {
+             -webkit-appearance: none;
+         }
+     }
+
+     &::placeholder {
+         color: rgba(255, 255, 255, 0.2);
+         font-weight: 400;
+     }
+
+     &:focus {
+         border-color: $gold;
+         background: rgba(255, 255, 255, 0.08);
+         box-shadow: 0 0 0 3px rgba($gold, 0.16);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &--error {
+         border-color: lighten($ruby, 20%);
+         background: rgba($ruby, 0.06);
+
+         &:focus {
+             border-color: lighten($ruby, 15%);
+             box-shadow: 0 0 0 3px rgba($ruby, 0.12);
+         }
+     }
+
+     // Date input color fix
+     &--date {
+         color-scheme: dark;
+     }
+ }
+
+ // ── Select ────────────────────────────────────────────────────────────────
+ .sif-select-wrap {
+     position: relative;
+
+     &__chevron {
+         position: absolute;
+         right: 0.625rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $champagne;
+         pointer-events: none;
+     }
+ }
+
+ .sif-select {
+     width: 100%;
+     height: 2.375rem;
+     padding: 0 2rem 0 0.75rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.18);
+     background: rgba(255, 255, 255, 0.05);
+     color: rgba(255, 255, 255, 0.88);
+     font-family: var(--aoms-font-body);
+     font-size: 0.875rem;
+     font-weight: 500;
+     outline: none;
+     appearance: none;
+     cursor: pointer;
+     transition: all $t;
+
+     &:focus {
+         border-color: $gold;
+         background: rgba(255, 255, 255, 0.08);
+         box-shadow: 0 0 0 3px rgba($gold, 0.16);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     option {
+         background: darken($midnight, 4%);
+         color: rgba(255, 255, 255, 0.88);
+     }
+ }
+
+ // ── Validation Error ──────────────────────────────────────────────────────
+ .sif-error {
+     font-size: 0.6875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: lighten($ruby, 28%);
+     margin: 0;
+     animation: sif-shake 260ms ease forwards;
+ }
+
+ // ── Actions ───────────────────────────────────────────────────────────────
+ .sif-actions {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.875rem 1.25rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+ }
+
+ .sif-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.375rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     border-radius: 4px;
+     cursor: pointer;
+     transition: all 160ms ease;
+     white-space: nowrap;
+
+     svg {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+     }
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // Clear button
+     &--reset {
+         flex: 0 0 auto;
+         padding: 0 0.875rem;
+         height: 2.375rem;
+         color: rgba(255, 255, 255, 0.45);
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.2);
+
+         &:hover:not(:disabled) {
+             color: $champagne;
+             border-color: rgba($champagne, 0.4);
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // Run Simulation — Royal Gold CTA
+     &--run {
+         flex: 1;
+         height: 2.375rem;
+         color: $midnight;
+         background: $gold;
+         border: none;
+         box-shadow: 0 4px 14px rgba($gold, 0.38);
+         letter-spacing: 0.03em;
+
+         &:hover:not(:disabled) {
+             background: lighten($gold, 6%);
+             box-shadow: 0 6px 22px rgba($gold, 0.55);
+             transform: translateY(-1px);
+         }
+
+         &:active:not(:disabled) {
+             transform: translateY(0);
+         }
+     }
+
+     &__spinner {
+         animation: sif-spin 1s linear infinite;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes sif-shake {
+     0% {
+         transform: translateX(0);
+     }
+
+     20% {
+         transform: translateX(-3px);
+     }
+
+     40% {
+         transform: translateX(3px);
+     }
+
+     60% {
+         transform: translateX(-2px);
+     }
+
+     80% {
+         transform: translateX(2px);
+     }
+
+     100% {
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes sif-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }

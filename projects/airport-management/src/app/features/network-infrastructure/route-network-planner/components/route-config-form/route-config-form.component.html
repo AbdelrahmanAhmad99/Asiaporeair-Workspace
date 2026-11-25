@@ -1,0 +1,324 @@
+<form class="rcf-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off"
+    aria-label="Route configuration form">
+
+    <!-- Same-endpoints cross-field error -->
+    @if (sameEndpoints) {
+    <div class="rcf-cross-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        <span>Origin and Destination hubs must be different airports.</span>
+    </div>
+    }
+
+    <!-- Backend error -->
+    @if (composerError()) {
+    <div class="rcf-backend-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <div class="rcf-backend-error__body">
+            <strong class="rcf-backend-error__title">Route Registry Error</strong>
+            <span class="rcf-backend-error__msg">{{ composerError() }}</span>
+        </div>
+    </div>
+    }
+
+    <!-- ════ SECTION 1 — Corridor Definition ════════════════════════ -->
+    <div class="rcf-card">
+
+        <header class="rcf-section-header">
+            <div class="rcf-section-header__icon-wrap" aria-hidden="true">
+                <svg class="rcf-section-header__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="rcf-section-header__title">Corridor Definition</h3>
+                <p class="rcf-section-header__subtitle">
+                    Select valid IATA hub codes for Origin and Destination
+                </p>
+            </div>
+
+            @if (isEditMode()) {
+            <span class="rcf-locked-badge">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0
+                     0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25
+                     2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                </svg>
+                Endpoints Locked
+            </span>
+            }
+        </header>
+
+        <!-- Hidden real controls -->
+        <input type="hidden" formControlName="originAirportIataCode">
+        <input type="hidden" formControlName="destinationAirportIataCode">
+
+        <div class="rcf-fields">
+
+            <!-- ── Origin Hub ──────────────────────────────────────────── -->
+            <div class="rcf-field rcf-field--hub" [class.rcf-field--error]="isInvalid('originAirportIataCode')"
+                [class.rcf-field--locked]="isEditMode()">
+
+                <label class="rcf-hub-label" for="rcf-origin">
+                    Origin Hub
+                    <span class="rcf-hub-label__req" aria-hidden="true">*</span>
+                </label>
+
+                <div class="rcf-hub-wrap" [class.rcf-hub-wrap--locked]="isEditMode()">
+
+                    <!-- Airport-type icon / spinner -->
+                    <div class="rcf-hub-wrap__icon" aria-hidden="true">
+                        @if (airportsLoading()) {
+                        <svg class="rcf-hub-wrap__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                         0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                         0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        } @else {
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11.25l1.5 1.5.75-.75V8.758l2.276-.61a3 3 0 1 0-3.675-3.675
+                         l-.61 2.277H12l-.75.75 1.5 1.5M15 11.25l-8.47 8.47c-.34.34-.8.53
+                         -1.28.53s-.94.19-1.28.53l-.97.97-.75-.75.97-.97c.34-.34.53-.8.53
+                         -1.28s.19-.94.53-1.28L12.75 9M15 11.25L12.75 9" />
+                        </svg>
+                        }
+                    </div>
+
+                    <!-- IATA confirmed badge -->
+                    @if (originConfirmed()) {
+                    <span class="rcf-iata-badge rcf-iata-badge--origin">
+                        {{ originConfirmed()!.iataCode }}
+                    </span>
+                    }
+
+                    <input id="rcf-origin" class="rcf-hub-input" type="text" [value]="originSearch()"
+                        (input)="onOriginInput($any($event.target).value)"
+                        (focus)="originPanelOpen.set(airports().length > 0 && !isEditMode())" (blur)="onOriginBlur()"
+                        [placeholder]="isEditMode() ? originConfirmed()?.iataCode : 'Search airport by name or IATA…'"
+                        [disabled]="isEditMode()" [attr.aria-expanded]="originPanelOpen()"
+                        [attr.aria-autocomplete]="'list'"
+                        [attr.aria-invalid]="isInvalid('originAirportIataCode') ? 'true' : null" role="combobox"
+                        autocomplete="off">
+
+                    @if (originSearch() && !isEditMode()) {
+                    <button class="rcf-hub-clear" type="button" (click)="clearOrigin()" aria-label="Clear origin">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    }
+
+                </div>
+
+                <!-- Origin dropdown -->
+                @if (originPanelOpen() && filteredOrigin().length > 0) {
+                <ul class="rcf-hub-panel" role="listbox" aria-label="Origin airports">
+                    @for (ap of filteredOrigin(); track ap.iataCode) {
+                    <li class="rcf-hub-option" role="option"
+                        [class.rcf-hub-option--selected]="originConfirmed()?.iataCode === ap.iataCode"
+                        (mousedown)="selectOrigin(ap)">
+                        <span class="rcf-hub-option__iata">{{ ap.iataCode }}</span>
+                        <span class="rcf-hub-option__details">
+                            <span class="rcf-hub-option__name">{{ ap.name }}</span>
+                            <span class="rcf-hub-option__loc">{{ ap.city }}, {{ ap.countryName }}</span>
+                        </span>
+                        @if (originConfirmed()?.iataCode === ap.iataCode) {
+                        <svg class="rcf-hub-option__check" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                        </svg>
+                        }
+                    </li>
+                    }
+                </ul>
+                }
+
+                @if (isInvalid('originAirportIataCode')) {
+                <span class="rcf-field-error" role="alert">
+                    @if (originCtrl.hasError('required')) { Origin hub is required. }
+                    @else if (originCtrl.hasError('invalidIata')) { Must be a valid 3–4 letter IATA code. }
+                </span>
+                }
+            </div>
+
+            <!-- Directional arrow (decorative) -->
+            <div class="rcf-corridor-arrow" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+            </div>
+
+            <!-- ── Destination Hub ──────────────────────────────────────── -->
+            <div class="rcf-field rcf-field--hub" [class.rcf-field--error]="isInvalid('destinationAirportIataCode')"
+                [class.rcf-field--locked]="isEditMode()">
+
+                <label class="rcf-hub-label" for="rcf-dest">
+                    Destination Hub
+                    <span class="rcf-hub-label__req" aria-hidden="true">*</span>
+                </label>
+
+                <div class="rcf-hub-wrap" [class.rcf-hub-wrap--locked]="isEditMode()">
+
+                    <div class="rcf-hub-wrap__icon" aria-hidden="true">
+                        @if (airportsLoading()) {
+                        <svg class="rcf-hub-wrap__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                         0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                         0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        } @else {
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                         0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                        </svg>
+                        }
+                    </div>
+
+                    @if (destConfirmed()) {
+                    <span class="rcf-iata-badge rcf-iata-badge--dest">
+                        {{ destConfirmed()!.iataCode }}
+                    </span>
+                    }
+
+                    <input id="rcf-dest" class="rcf-hub-input" type="text" [value]="destSearch()"
+                        (input)="onDestInput($any($event.target).value)"
+                        (focus)="destPanelOpen.set(airports().length > 0 && !isEditMode())" (blur)="onDestBlur()"
+                        [placeholder]="isEditMode() ? destConfirmed()?.iataCode : 'Search airport by name or IATA…'"
+                        [disabled]="isEditMode()" [attr.aria-expanded]="destPanelOpen()"
+                        [attr.aria-autocomplete]="'list'"
+                        [attr.aria-invalid]="isInvalid('destinationAirportIataCode') ? 'true' : null" role="combobox"
+                        autocomplete="off">
+
+                    @if (destSearch() && !isEditMode()) {
+                    <button class="rcf-hub-clear" type="button" (click)="clearDest()" aria-label="Clear destination">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    }
+
+                </div>
+
+                <!-- Destination dropdown -->
+                @if (destPanelOpen() && filteredDest().length > 0) {
+                <ul class="rcf-hub-panel" role="listbox" aria-label="Destination airports">
+                    @for (ap of filteredDest(); track ap.iataCode) {
+                    <li class="rcf-hub-option" role="option"
+                        [class.rcf-hub-option--selected]="destConfirmed()?.iataCode === ap.iataCode"
+                        (mousedown)="selectDest(ap)">
+                        <span class="rcf-hub-option__iata rcf-hub-option__iata--dest">{{ ap.iataCode }}</span>
+                        <span class="rcf-hub-option__details">
+                            <span class="rcf-hub-option__name">{{ ap.name }}</span>
+                            <span class="rcf-hub-option__loc">{{ ap.city }}, {{ ap.countryName }}</span>
+                        </span>
+                        @if (destConfirmed()?.iataCode === ap.iataCode) {
+                        <svg class="rcf-hub-option__check" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                        </svg>
+                        }
+                    </li>
+                    }
+                </ul>
+                }
+
+                @if (isInvalid('destinationAirportIataCode')) {
+                <span class="rcf-field-error" role="alert">
+                    @if (destCtrl.hasError('required')) { Destination hub is required. }
+                    @else if (destCtrl.hasError('invalidIata')) { Must be a valid 3–4 letter IATA code. }
+                </span>
+                }
+            </div>
+
+        </div><!-- /rcf-fields -->
+    </div><!-- /rcf-card -->
+
+    <!-- ════ SECTION 2 — Operational Metrics ════════════════════════ -->
+    <div class="rcf-card">
+
+        <header class="rcf-section-header">
+            <div class="rcf-section-header__icon-wrap" aria-hidden="true">
+                <svg class="rcf-section-header__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="rcf-section-header__title">Operational Metrics</h3>
+                <p class="rcf-section-header__subtitle">Great-circle distance and estimated block time</p>
+            </div>
+        </header>
+
+        <div class="rcf-fields rcf-fields--metrics">
+
+            <!-- Distance KM -->
+            <div class="rcf-field" [class.rcf-field--error]="isInvalid('distanceKm')">
+                <input id="rcf-dist" class="rcf-input" type="number" formControlName="distanceKm" min="1" max="25000"
+                    step="1" placeholder=" " (input)="onDistanceInput()"
+                    [attr.aria-invalid]="isInvalid('distanceKm') ? 'true' : null">
+                <label class="rcf-label" for="rcf-dist">
+                    Distance <span class="rcf-label__unit">km</span>
+                    <span class="rcf-label__req" aria-hidden="true">*</span>
+                </label>
+                @if (isInvalid('distanceKm')) {
+                <span class="rcf-field-error" role="alert">
+                    @if (distCtrl.hasError('required')) { Distance is required. }
+                    @else if (distCtrl.hasError('min')) { Minimum distance is 1 km. }
+                    @else if (distCtrl.hasError('max')) { Maximum supported distance is 25,000 km. }
+                </span>
+                }
+            </div>
+
+            <!-- Estimated Block Time (read-only derived) -->
+            <div class="rcf-field rcf-field--readonly">
+                <div class="rcf-input rcf-input--derived">
+                    {{ estimatedTime() }}
+                </div>
+                <label class="rcf-label rcf-label--floated" for="rcf-time">
+                    Estimated Block Time
+                </label>
+                <span class="rcf-hint">Calculated at 900 km/h cruise speed</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ════ Form Actions ════════════════════════════════════════════ -->
+    <div class="rcf-actions">
+        <button type="button" class="rcf-btn rcf-btn--cancel" (click)="cancel()" [disabled]="isSaving()">
+            Cancel
+        </button>
+
+        <button type="submit" class="rcf-btn rcf-btn--save" [disabled]="isSaving()">
+            @if (isSaving()) {
+            <svg class="rcf-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            {{ isEditMode() ? 'Updating…' : 'Architecting…' }}
+            } @else {
+            <svg class="rcf-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            {{ isEditMode() ? 'Save Refinement' : 'Architect Route' }}
+            }
+        </button>
+    </div>
+
+</form>

@@ -1,0 +1,93 @@
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+
+ // ── Wrapper ───────────────────────────────────────────────────────────────
+ .asi-wrap {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+
+     &--compact {
+         gap: 0;
+     }
+ }
+
+ // ── Dot ───────────────────────────────────────────────────────────────────
+ .asi-dot {
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 10px;
+     height: 10px;
+     flex-shrink: 0;
+
+     &::before {
+         content: '';
+         width: 8px;
+         height: 8px;
+         border-radius: 50%;
+         position: relative;
+         z-index: 1;
+     }
+
+     &__ring {
+         position: absolute;
+         inset: 0;
+         border-radius: 50%;
+         animation: asi-pulse 2s ease-out infinite;
+     }
+
+     // Active — Emerald Green
+     &--active {
+         &::before {
+             background: lighten($emerald, 35%);
+         }
+
+         .asi-dot__ring {
+             background: rgba($emerald, 0.35);
+         }
+     }
+
+     // Inactive — Amber
+     &--inactive {
+         &::before {
+             background: lighten($amber, 20%);
+         }
+
+         .asi-dot__ring {
+             background: rgba($amber, 0.3);
+             animation: none;
+         }
+     }
+ }
+
+ // ── Label ─────────────────────────────────────────────────────────────────
+ .asi-label {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+
+     .asi-wrap--active & {
+         color: lighten($emerald, 35%);
+     }
+
+     .asi-wrap--inactive & {
+         color: lighten($amber, 18%);
+     }
+ }
+
+ @keyframes asi-pulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.7;
+     }
+
+     100% {
+         transform: scale(2.4);
+         opacity: 0;
+     }
+ }

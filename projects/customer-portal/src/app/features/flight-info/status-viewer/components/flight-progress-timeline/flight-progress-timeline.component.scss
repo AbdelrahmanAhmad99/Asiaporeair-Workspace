@@ -1,0 +1,345 @@
+// ============================================================================
+// flight-progress-timeline.component.scss
+// Asiaporeair | Flight Progress Timeline
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$success : #22c55e;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+    display: block;
+}
+
+.fpt-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+}
+
+// ── §1 Phase label row ────────────────────────────────────────────────────────
+.fpt-phase-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.fpt-phase-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: $font;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+
+    &[data-phase="pre-departure"] {
+        color: $charcoal;
+    }
+
+    &[data-phase="airborne"] {
+        color: $royal-gold;
+    }
+
+    &[data-phase="arrived"] {
+        color: #15803d;
+    }
+}
+
+.fpt-airborne-icon {
+    animation: iconFlicker 2s ease-in-out infinite;
+}
+
+@keyframes iconFlicker {
+
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.fpt-time-remaining {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    color: $muted;
+    letter-spacing: 0.02em;
+}
+
+// ── §2 Progress track ─────────────────────────────────────────────────────────
+.fpt-track-wrap {
+    padding: 1.25rem 0 0.5rem;
+}
+
+.fpt-track {
+    position: relative;
+    height: 4px;
+    background: rgba($charcoal, 0.1);
+    border-radius: 2px;
+    margin: 0 10px;
+}
+
+.fpt-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(to right, $royal-gold, $champagne);
+    border-radius: 2px;
+    transition: width 1200ms ease;
+    min-width: 4px;
+}
+
+// ── §3 Endpoint dots ──────────────────────────────────────────────────────────
+.fpt-dot {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: $white;
+    border: 2px solid rgba($charcoal, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 400ms $ease;
+
+    &--origin {
+        left: -10px;
+    }
+
+    &--dest {
+        right: -10px;
+    }
+
+    &--passed {
+        border-color: $royal-gold;
+
+        .fpt-dot__inner {
+            background: $royal-gold;
+        }
+    }
+}
+
+.fpt-dot__inner {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba($charcoal, 0.25);
+    transition: background 400ms $ease;
+}
+
+// ── §4 Airplane marker ────────────────────────────────────────────────────────
+.fpt-plane-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: left 1200ms ease;
+    z-index: 2;
+
+    &--airborne {
+        .fpt-plane-glow {
+            animation: planeGlow 2.5s ease-in-out infinite;
+        }
+
+        .fpt-plane-svg {
+            animation: planeBob 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 4px rgba($royal-gold, 0.6));
+        }
+    }
+}
+
+.fpt-plane-glow {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba($royal-gold, 0.15);
+    opacity: 0;
+}
+
+@keyframes planeGlow {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+}
+
+@keyframes planeBob {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+.fpt-plane-svg {
+    position: relative;
+    z-index: 1;
+}
+
+// ── §5 Airports row ───────────────────────────────────────────────────────────
+.fpt-airports {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.fpt-airport {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    &--dest {
+        text-align: right;
+    }
+
+    &__iata {
+        font-family: $font;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: $charcoal;
+        line-height: 1;
+    }
+
+    &__city {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.62rem;
+        color: $muted;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    &__time {
+        font-family: $font;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: $royal-gold;
+        letter-spacing: -0.01em;
+    }
+}
+
+.fpt-centre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.fpt-progress-pct {
+    font-family: $font;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: $charcoal;
+    line-height: 1;
+}
+
+.fpt-duration {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    color: $muted;
+    letter-spacing: 0.02em;
+}
+
+// ── §6 Stats strip ────────────────────────────────────────────────────────────
+.fpt-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0.75rem 0 0;
+    border-top: 1px solid rgba($charcoal, 0.07);
+    animation: statsFade 400ms ease-out;
+}
+
+@keyframes statsFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fpt-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0 1.25rem;
+
+    &__label {
+        font-family: $font;
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba($charcoal, 0.35);
+    }
+
+    &__value {
+        font-family: $font;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        color: $charcoal;
+
+        &--gold {
+            color: $royal-gold;
+        }
+    }
+}
+
+.fpt-stat-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba($charcoal, 0.08);
+    flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .fpt-plane-glow,
+    .fpt-plane-svg,
+    .fpt-airborne-icon {
+        animation: none !important;
+    }
+
+    .fpt-progress,
+    .fpt-plane-marker {
+        transition: none !important;
+    }
+}

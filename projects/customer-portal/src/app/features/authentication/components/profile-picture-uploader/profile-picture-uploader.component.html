@@ -1,0 +1,41 @@
+<!-- profile-picture-uploader.component.html -->
+<div class="ppu" [class.ppu--dragging]="isDragging()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave()"
+    (drop)="onDrop($event)" role="group" aria-label="Profile picture upload">
+
+    <!-- Avatar preview -->
+    <div class="ppu__avatar">
+        @if (previewUrl()) {
+        <img class="ppu__preview" [src]="previewUrl()!" alt="Profile picture preview" />
+        <button class="ppu__clear" type="button" (click)="clearImage()" aria-label="Remove photo">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+        } @else {
+        <div class="ppu__placeholder" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+        </div>
+        }
+    </div>
+
+    <!-- Text + input -->
+    <div class="ppu__body">
+        <label class="ppu__trigger" for="profilePicInput">
+            <span class="ppu__trigger-text">
+                {{ previewUrl() ? 'Change photo' : 'Upload profile photo' }}
+            </span>
+            <span class="ppu__sub">JPG, PNG or WebP · Max 5MB <span class="ppu__optional">(optional)</span></span>
+        </label>
+        <input id="profilePicInput" type="file" accept="image/jpeg,image/png,image/webp" class="ppu__input"
+            (change)="onFileChange($event)" aria-label="Choose profile picture" />
+        @if (error()) {
+        <span class="ppu__error" role="alert">{{ error() }}</span>
+        }
+    </div>
+
+</div>

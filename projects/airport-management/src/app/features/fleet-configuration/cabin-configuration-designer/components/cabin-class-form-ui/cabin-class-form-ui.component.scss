@@ -1,0 +1,450 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $ruby: #710D06;
+ $amber: #B45309;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ .ccf {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(182, 143, 36, 0.28);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07);
+     animation: ccf-fadein 200ms ease forwards;
+     transition: background-color $t-base, border-color $t-base;
+ }
+
+ .ccf__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2.125rem;
+         height: 2.125rem;
+         border-radius: 7px;
+         background: rgba(182, 143, 36, 0.1);
+         border: 1px solid rgba(182, 143, 36, 0.22);
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+     }
+ }
+
+ .ccf__title {
+     font-size: 1rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+ }
+
+ .ccf__sub {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     margin-top: 0.125rem;
+     transition: color $t-fast;
+ }
+
+ // Error banner
+ .ccf__error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.625rem;
+     padding: 0.75rem 1rem;
+     border-radius: 8px;
+     background: rgba(113, 13, 6, 0.07);
+     border: 1px solid rgba(113, 13, 6, 0.2);
+     animation: ccf-fadein 150ms ease forwards;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $ruby;
+         flex-shrink: 0;
+         margin-top: 1px;
+     }
+
+     &__text {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: $ruby;
+         line-height: 1.4;
+     }
+ }
+
+ // Form fields layout
+ .ccf__fields {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 1rem;
+
+     @media (min-width: 640px) {
+         grid-template-columns: 1fr 1fr;
+     }
+ }
+
+ .ccf__field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3125rem;
+
+     &--error {
+         .ccf__select {
+             border-color: rgba(113, 13, 6, 0.5) !important;
+         }
+     }
+ }
+
+ .ccf__label {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-muted);
+     transition: color $t-fast;
+ }
+
+ .ccf__required {
+     color: $amber;
+     margin-left: 2px;
+ }
+
+ .ccf__optional {
+     font-size: 10px;
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     margin-left: 0.25rem;
+     text-transform: none;
+     letter-spacing: 0;
+ }
+
+ // Select
+ .ccf__select-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+
+     &--selected .ccf__select {
+         padding-left: 2.25rem;
+     }
+ }
+
+ .ccf__select-swatch {
+     position: absolute;
+     left: 0.75rem;
+     width: 12px;
+     height: 12px;
+     border-radius: 50%;
+     pointer-events: none;
+     flex-shrink: 0;
+     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+ }
+
+ .ccf__select {
+     appearance: none;
+     -webkit-appearance: none;
+     width: 100%;
+     padding: 0.6875rem 2.5rem 0.6875rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-primary);
+     background: var(--aoms-bg-card);
+     border: 1.5px solid rgba(226, 199, 128, 0.25);
+     border-radius: 8px;
+     outline: none;
+     cursor: pointer;
+     transition: border-color $t-fast, box-shadow $t-fast, background $t-base;
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.1);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+     option {
+         background: var(--aoms-bg-card);
+         color: var(--aoms-text-primary);
+     }
+ }
+
+ .ccf__select-wrap__chevron {
+     position: absolute;
+     right: 0.75rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 0.875rem;
+     height: 0.875rem;
+     pointer-events: none;
+     color: var(--aoms-text-muted);
+ }
+
+ // Floating label input
+ .ccf__fl-wrap {
+     position: relative;
+
+     &__input {
+         width: 100%;
+         padding: 1.25rem 1rem 0.5rem;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-primary);
+         background: var(--aoms-bg-card);
+         border: 1.5px solid rgba(226, 199, 128, 0.25);
+         border-radius: 8px;
+         outline: none;
+         appearance: none;
+         transition: border-color $t-fast, box-shadow $t-fast, background $t-base;
+
+         &::placeholder {
+             color: transparent;
+         }
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.1);
+
+             +.ccf__fl-wrap__label {
+                 transform: translateY(-0.5rem) scale(0.78);
+                 color: $gold;
+             }
+         }
+
+         &:not(:placeholder-shown)+.ccf__fl-wrap__label {
+             transform: translateY(-0.5rem) scale(0.78);
+             color: $gold;
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+     }
+
+     &__label {
+         position: absolute;
+         left: 1rem;
+         top: 50%;
+         transform: translateY(-50%);
+         transform-origin: left center;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+         background: var(--aoms-bg-card);
+         padding: 0 0.25rem;
+         border-radius: 2px;
+         transition: transform $t-fast, color $t-fast;
+     }
+ }
+
+ .ccf__field-error {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: $ruby;
+     padding-left: 0.125rem;
+     animation: ccf-fadein 150ms ease forwards;
+ }
+
+ .ccf__field-hint {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     line-height: 1.4;
+     transition: color $t-fast;
+ }
+
+ // Name preview
+ .ccf__preview {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.625rem 0.875rem;
+     border-radius: 6px;
+     background: rgba(182, 143, 36, 0.07);
+     border: 1px solid rgba(182, 143, 36, 0.18);
+     animation: ccf-fadein 200ms ease forwards;
+     transition: all $t-fast;
+
+     &__label {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         white-space: nowrap;
+     }
+
+     &__value {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 600;
+         color: $gold;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+     }
+ }
+
+ // Actions
+ .ccf__actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding-top: 0.5rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.1);
+ }
+
+ .ccf__cancel-btn {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.5rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     background: transparent;
+     border: none;
+     cursor: pointer;
+     outline: none;
+     transition: color $t-fast;
+
+     &:hover {
+         color: var(--aoms-text-secondary);
+         text-decoration: underline;
+         text-underline-offset: 3px;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+         border-radius: 3px;
+     }
+ }
+
+ .ccf__submit-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.6875rem 1.375rem;
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: #fff;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     box-shadow: 0 4px 14px rgba(182, 143, 36, 0.4), 0 0 0 0 rgba(226, 199, 128, 0);
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+         box-shadow: 0 6px 20px rgba(182, 143, 36, 0.55), 0 0 0 3px rgba(226, 199, 128, 0.25);
+         transform: translateY(-1px);
+     }
+
+     &:active:not(:disabled) {
+         transform: translateY(0);
+         box-shadow: 0 2px 8px rgba(182, 143, 36, 0.3);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: ccf-spin 1s linear infinite;
+         }
+     }
+ }
+
+ @keyframes ccf-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes ccf-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ :host-context(.aoms-dark) {
+
+     .ccf__select,
+     .ccf__fl-wrap__input {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.18);
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .ccf__fl-wrap__label {
+         background: transparent;
+     }
+
+     .ccf__fl-wrap__input:focus+.ccf__fl-wrap__label,
+     .ccf__fl-wrap__input:not(:placeholder-shown)+.ccf__fl-wrap__label {
+         color: $champagne;
+         background: rgba(5, 25, 55, 0.9);
+     }
+
+     .ccf__error-banner {
+         background: rgba(113, 13, 6, 0.14);
+         border-color: rgba(113, 13, 6, 0.3);
+     }
+
+     .ccf__error-banner__text {
+         color: #fca5a5;
+     }
+
+     .ccf__submit-btn {
+         box-shadow: 0 4px 14px rgba(182, 143, 36, 0.22);
+     }
+ }

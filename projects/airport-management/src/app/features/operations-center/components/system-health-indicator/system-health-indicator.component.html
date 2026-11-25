@@ -1,0 +1,46 @@
+<div class="health" [attr.data-tone]="diagnostic().tone">
+    <button #trigger type="button" class="pill" [attr.aria-expanded]="isOpen()" [attr.aria-controls]="panelId"
+        (click)="toggle()">
+        <span class="pill__signal" aria-hidden="true"></span>
+        <span class="pill__label">{{ diagnostic().label }}</span>
+        @if (latencyText(); as latency) {
+        <span class="pill__latency">{{ latency }}</span>
+        }
+        <svg class="pill__chevron" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="m6 9 6 6 6-6" />
+        </svg>
+    </button>
+
+    <span class="visually-hidden" role="status" [attr.aria-live]="liveRegionPoliteness()">
+        System status: {{ diagnostic().label }}
+    </span>
+
+    @if (isOpen()) {
+    <section class="panel" [id]="panelId" aria-label="System diagnostics">
+        @if (recovery().visible) {
+        <div class="panel__notice" [attr.data-tone]="recovery().tone">
+            <p class="panel__notice-title">{{ recovery().headline }}</p>
+            <p class="panel__notice-detail">{{ recovery().detail }}</p>
+        </div>
+        }
+
+        <ul class="panel__rows">
+            @for (row of diagnostic().rows; track row.id) {
+            <li class="row" [attr.data-status]="row.status">
+                <span class="row__signal" aria-hidden="true"></span>
+                <span class="row__label">{{ row.label }}</span>
+                <span class="row__reading">{{ row.reading }}</span>
+                <span class="row__status">{{ statusWord(row.status) }}</span>
+            </li>
+            }
+        </ul>
+
+        <footer class="panel__footer">
+            <span class="panel__synced">{{ lastConfirmedText() }}</span>
+            <button type="button" class="panel__refresh" [disabled]="isRefreshing()" (click)="requestRefresh()">
+                {{ isRefreshing() ? 'Refreshing' : 'Refresh telemetry' }}
+            </button>
+        </footer>
+    </section>
+    }
+</div>

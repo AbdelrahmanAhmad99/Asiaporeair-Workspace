@@ -1,0 +1,251 @@
+<div class="ffm-page">
+
+    <!-- ══ Sticky Header ══════════════════════════════════════════════ -->
+    <header class="ffm-header">
+        <div class="ffm-header__left">
+            <nav class="ffm-breadcrumb" aria-label="Breadcrumb">
+                <span class="ffm-breadcrumb__section">Ground Handling</span>
+                <svg class="ffm-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="ffm-breadcrumb__current">Final Manifest</span>
+            </nav>
+
+            <div class="ffm-title-row">
+                <h1 class="ffm-title">
+                    <svg class="ffm-title__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" />
+                    </svg>
+                    Flight Final Manifest
+                </h1>
+
+                @if (store.manifestFlightId()) {
+                <span class="ffm-flight-badge">Flight #{{ store.manifestFlightId() }}</span>
+                }
+
+                @if (store.isFullyBoarded() && !store.manifestLoading()) {
+                <span class="ffm-complete-badge">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                    Fully Boarded
+                </span>
+                }
+            </div>
+        </div>
+
+        <!-- Header controls -->
+        <div class="ffm-header__controls">
+
+            <!-- Export success toast -->
+            @if (store.exportSuccess()) {
+            <div class="ffm-toast ffm-toast--success" role="status" aria-live="polite">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="ffm-toast__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                <span>{{ store.exportSuccess() }}</span>
+                <button class="ffm-toast__dismiss" type="button" (click)="onDismissExportToast()" aria-label="Dismiss">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            }
+
+            <!-- Gate Terminal link -->
+            <button class="ffm-nav-btn" type="button" (click)="goToGateTerminal()" title="Return to Gate Terminal">
+                <svg class="ffm-nav-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5z" />
+                </svg>
+                Gate Terminal
+            </button>
+
+            <!-- Refresh -->
+            <button class="ffm-icon-btn" type="button" [disabled]="store.manifestLoading()" (click)="onRetry()"
+                aria-label="Refresh manifest data">
+                <svg class="ffm-icon-btn__icon" [class.ffm-icon-btn__icon--spin]="store.manifestLoading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Dark mode -->
+            <button class="ffm-icon-btn ffm-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+                @if (isDarkMode()) {
+                <svg class="ffm-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="ffm-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+        </div>
+    </header>
+
+    <!-- ══ Page Body ══════════════════════════════════════════════════ -->
+    <main class="ffm-body">
+
+        <!-- ── Error state ────────────────────────────────────────────── -->
+        @if (store.manifestError() && !store.manifestLoading()) {
+        <div class="ffm-error-plate" role="alert">
+            <div class="ffm-error-plate__inner">
+                <div class="ffm-error-plate__icon-wrap" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                </div>
+                <div class="ffm-error-plate__content">
+                    <p class="ffm-error-plate__title">Manifest Load Failure</p>
+                    <p class="ffm-error-plate__msg">{{ store.manifestError() }}</p>
+                </div>
+                <button class="ffm-error-plate__retry" type="button" (click)="onRetry()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Retry
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- ── Loading skeleton ────────────────────────────────────────── -->
+        @if (store.manifestLoading()) {
+        <div class="ffm-skeleton" aria-busy="true" aria-label="Loading manifest">
+            <div class="ffm-skeleton__stats">
+                @for (i of [1,2,3,4]; track i) {
+                <div class="ffm-skeleton__stat-card">
+                    <div class="ffm-shimmer ffm-shimmer--xl"></div>
+                    <div class="ffm-shimmer ffm-shimmer--sm"></div>
+                </div>
+                }
+            </div>
+            <div class="ffm-skeleton__body">
+                <div class="ffm-skeleton__grid">
+                    <div class="ffm-shimmer ffm-shimmer--full ffm-shimmer--tall"></div>
+                </div>
+                <div class="ffm-skeleton__side">
+                    @for (i of [1,2,3]; track i) {
+                    <div class="ffm-shimmer ffm-shimmer--full ffm-shimmer--card"></div>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- ══ Loaded: Command Center ═══════════════════════════════════ -->
+        @if (!store.manifestLoading() && !store.manifestError()) {
+
+        <!-- ── Stat Widgets Row ─────────────────────────────────────── -->
+        <div class="ffm-stats-row">
+
+            <!-- Total Booked -->
+            <div class="ffm-stat-card">
+                <div class="ffm-stat-card__accent" aria-hidden="true"></div>
+                <p class="ffm-stat-card__value">{{ store.manifestStats().totalBooked }}</p>
+                <p class="ffm-stat-card__label">Total Booked</p>
+                <svg class="ffm-stat-card__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+            </div>
+
+            <!-- Total Boarded -->
+            <div class="ffm-stat-card ffm-stat-card--boarded">
+                <div class="ffm-stat-card__accent" aria-hidden="true"></div>
+                <p class="ffm-stat-card__value ffm-stat-card__value--boarded">{{ store.manifestStats().totalBoarded }}
+                </p>
+                <p class="ffm-stat-card__label">Boarded</p>
+                <svg class="ffm-stat-card__icon ffm-stat-card__icon--boarded" fill="none" stroke="currentColor"
+                    stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+            </div>
+
+            <!-- No-Shows -->
+            <div class="ffm-stat-card" [class.ffm-stat-card--alert]="store.manifestStats().noShowCount > 0">
+                <div class="ffm-stat-card__accent" aria-hidden="true"></div>
+                <p class="ffm-stat-card__value"
+                    [class.ffm-stat-card__value--noshow]="store.manifestStats().noShowCount > 0"
+                    [class.ffm-stat-card__value--zero]="store.manifestStats().noShowCount === 0">
+                    {{ store.manifestStats().noShowCount }}
+                </p>
+                <p class="ffm-stat-card__label">No-Shows</p>
+                <svg class="ffm-stat-card__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+
+            <!-- Boarding Rate -->
+            <div class="ffm-stat-card ffm-stat-card--rate">
+                <div class="ffm-stat-card__accent" aria-hidden="true"></div>
+                <p class="ffm-stat-card__value ffm-stat-card__value--rate">{{ store.manifestStats().boardingRate }}%</p>
+                <p class="ffm-stat-card__label">Boarding Rate</p>
+                <!-- Mini progress bar inside stat card -->
+                <div class="ffm-stat-rate-bar">
+                    <div class="ffm-stat-rate-bar__fill" [style.width.%]="store.manifestStats().boardingRate"
+                        [class.ffm-stat-rate-bar__fill--complete]="store.isFullyBoarded()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export button: aligned to right edge of stat row -->
+            <div class="ffm-stat-card ffm-stat-card--export">
+                <aoms-manifest-export-button [disabled]="store.comparisonManifest().length === 0"
+                    [isLoading]="store.isClosingFlight()" (formatSelected)="onExportRequested($event)" />
+            </div>
+
+        </div>
+
+        <!-- ── Command Center Grid: Table (left) + Discrepancies (right) ─ -->
+        <div class="ffm-command-grid">
+
+            <!-- Comparison Table — center / dominant area -->
+            <section class="ffm-command-grid__table" aria-label="Passenger manifest comparison">
+                <h2 class="ffm-section-title">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="ffm-section-title__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75z" />
+                    </svg>
+                    Passenger Verification Grid
+                    <span class="ffm-section-title__count">{{ store.comparisonManifest().length }}</span>
+                </h2>
+                <aoms-manifest-comparison-table [entries]="store.comparisonManifest()"
+                    [loading]="store.manifestLoading()" />
+            </section>
+
+            <!-- Discrepancy panel — right column -->
+            <aside class="ffm-command-grid__side" aria-label="Boarding discrepancies">
+                <aoms-passenger-discrepancy-card [noShows]="store.noShows()" [loading]="store.manifestLoading()"
+                    (locatePassenger)="onLocatePassenger($event)" />
+            </aside>
+
+        </div>
+
+        } <!-- /loaded -->
+
+    </main>
+</div>

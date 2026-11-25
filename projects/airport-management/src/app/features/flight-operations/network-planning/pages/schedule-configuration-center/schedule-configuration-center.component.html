@@ -1,0 +1,286 @@
+<div class="scc-page">
+
+    <!-- ══ Sticky Command Header ═══════════════════════════════════ -->
+    <header class="scc-header">
+
+        <!-- Left: back + breadcrumb + title -->
+        <div class="scc-header-left">
+            <button class="scc-back-btn" (click)="returnToInventory()" aria-label="Return to schedule inventory"
+                title="Return to Inventory">
+                <svg class="scc-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <nav class="scc-breadcrumb" aria-label="Breadcrumb">
+                    <span class="scc-breadcrumb__section">Flight Operations</span>
+                    <svg class="scc-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <button class="scc-breadcrumb__link" (click)="returnToInventory()">
+                        Schedule Inventory
+                    </button>
+                    <svg class="scc-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="scc-breadcrumb__current">
+                        {{ isEditMode() ? 'Configuration' : 'New Schedule' }}
+                    </span>
+                </nav>
+
+                <h1 class="scc-title">
+                    {{ pageTitle() }}
+                    @if (isDirty()) {
+                    <span class="scc-title__dirty-dot" title="Unsaved changes" aria-label="Unsaved changes"></span>
+                    }
+                </h1>
+            </div>
+        </div>
+
+        <!-- Right: action suite -->
+        <div class="scc-action-bar">
+
+            <!-- Discard Draft — Ruby ghost -->
+            <button class="scc-btn scc-btn--ruby" type="button" (click)="discardDraft()" [disabled]="isAnyProcessing()"
+                aria-label="Discard unsaved draft">
+                <svg class="scc-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107
+                   1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077
+                   H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108
+                   48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165
+                   m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164
+                   -2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022
+                   -2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+                Discard Draft
+            </button>
+
+            <!-- Separator -->
+            <div class="scc-sep" aria-hidden="true"></div>
+
+            <!-- Return to Inventory — Sapphire outline -->
+            <button class="scc-btn scc-btn--outline" type="button" (click)="returnToInventory()"
+                [disabled]="isAnyProcessing()" aria-label="Return to Schedule Inventory">
+                <svg class="scc-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+                Inventory
+            </button>
+
+            <!-- Save Master Configuration — Royal Gold solid -->
+            <button class="scc-btn scc-btn--primary" type="button" (click)="headerSave()"
+                [disabled]="isAnyProcessing()">
+                @if (isSavingSchedule()) {
+                <svg class="scc-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                     0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                     0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Saving…
+                } @else {
+                <svg class="scc-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                Save Master Configuration
+                }
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="scc-body">
+
+        <!-- Config error banner -->
+        @if (configError()) {
+        <div class="scc-error-banner" role="alert">
+            <svg class="scc-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                   2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                   16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="scc-error-banner__body">
+                <strong class="scc-error-banner__title">Configuration Error</strong>
+                <span class="scc-error-banner__msg">{{ configError() }}</span>
+            </div>
+            <button class="scc-error-banner__dismiss" type="button" (click)="dismissConfigError()"
+                aria-label="Dismiss error">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- Loading state -->
+        @if (isConfigLoading()) {
+        <div class="scc-loading" aria-busy="true" aria-label="Loading schedule details">
+            <div class="scc-loading__pulse">
+                <svg class="scc-loading__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                     0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                     0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Loading schedule details…
+            </div>
+        </div>
+        }
+
+        @if (!isConfigLoading()) {
+        <!-- ── Section 1: Schedule Form ─────────────────────────── -->
+        <section class="scc-section">
+            <div class="scc-section-header">
+                <span class="scc-section-header__badge">01</span>
+                <h2 class="scc-section-header__title">Master Schedule Parameters</h2>
+            </div>
+
+            <aoms-schedule-form-ui [initialData]="schedule()" [airlines]="activeAirlines()"
+                [aircraftTypes]="activeAircraftTypes()" [isSaving]="isSavingSchedule()" [formError]="configError()"
+                (onSave)="onScheduleSave($event)" (onDirtyChange)="onDirtyChange($event)" />
+        </section>
+
+        <!-- ── Section 2: Timeline ──────────────────────────────── -->
+        <section class="scc-section">
+            <div class="scc-section-header">
+                <span class="scc-section-header__badge">02</span>
+                <h2 class="scc-section-header__title">Corridor Timeline</h2>
+                <span class="scc-section-header__sub">GANTT view of all flight legs</span>
+            </div>
+
+            <aoms-leg-timeline-visualizer [legs]="legs()" [totalBlockMins]="totalBlockMins()"
+                [hasTimeConflict]="hasTimeConflict()" [loading]="isLegSaving()"
+                (onLegClick)="openEditLegDialogByDefId($event)" />
+        </section>
+
+        <!-- ── Section 3: Leg Cards ─────────────────────────────── -->
+        <section class="scc-section">
+            <div class="scc-section-header">
+                <span class="scc-section-header__badge">03</span>
+                <h2 class="scc-section-header__title">Flight Leg Configuration</h2>
+                <span class="scc-section-header__sub">{{ legs().length }} leg{{ legs().length !== 1 ? 's' : '' }}
+                    defined</span>
+
+                <!-- Add Leg CTA -->
+                <button class="scc-add-leg-btn" type="button" (click)="openAddLegDialog()"
+                    [disabled]="isAnyProcessing() || !scheduleId()"
+                    [title]="!scheduleId() ? 'Save the schedule first' : 'Add a new flight leg'"
+                    aria-label="Add a new flight leg">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Add Leg
+                </button>
+            </div>
+
+            @if (!scheduleId() && !isEditMode()) {
+            <div class="scc-legs-hint" role="note">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0
+                       0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+                Save the master schedule above first to enable flight leg configuration.
+            </div>
+            }
+
+            <!-- Leg cards list -->
+            @if (legs().length > 0) {
+            <div class="scc-legs-list">
+                @for (leg of legs(); track leg.legDefId) {
+                <aoms-leg-item-card [leg]="leg" [isProcessing]="isAnyProcessing()" (onEdit)="openEditLegDialog($event)"
+                    (onRemove)="removeLeg($event)" />
+                }
+            </div>
+            }
+
+            @if (legs().length === 0 && scheduleId()) {
+            <div class="scc-legs-empty">
+                <p>No flight legs defined yet. Use "Add Leg" to begin structuring the corridor.</p>
+            </div>
+            }
+
+        </section>
+        }
+
+    </main>
+
+    <!-- ══ Unsaved Changes Modal (Amber) ════════════════════════ -->
+    @if (exitModalOpen()) {
+    <div class="scc-modal-backdrop" (click)="cancelExit()" aria-hidden="true"></div>
+
+    <div class="scc-modal" role="dialog" aria-modal="true" aria-label="Unsaved changes">
+
+        <div class="scc-modal__amber-bar" aria-hidden="true"></div>
+
+        <div class="scc-modal__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                   2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                   16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+        </div>
+
+        <h2 class="scc-modal__title">Discard Unsaved Configuration?</h2>
+        <p class="scc-modal__body">
+            Your schedule configuration has unsaved changes. Leaving this workspace will
+            discard all modifications.
+        </p>
+
+        <div class="scc-modal__actions">
+            <button class="scc-modal-btn scc-modal-btn--cancel" type="button" (click)="cancelExit()" autofocus>
+                Return to Composer
+            </button>
+            <button class="scc-modal-btn scc-modal-btn--confirm" type="button" (click)="confirmExit()">
+                Discard &amp; Leave
+            </button>
+        </div>
+    </div>
+    }
+
+    <!-- ══ Leg Config Dialog ═════════════════════════════════════ -->
+    @if (legDialogOpen()) {
+    <aoms-leg-config-dialog [editTarget]="editLegTarget()" [nextSequence]="nextLegSeq()" [isSaving]="isLegSaving()"
+        [airports]="activeAirports()" [formError]="legDialogError()" (onSave)="onLegSave($event)"
+        (onDismiss)="closeLegDialog()" />
+    }
+
+    <!-- ══ Toast Stack ════════════════════════════════════════════ -->
+    <div class="scc-toast-stack" role="region" aria-live="polite">
+        @for (toast of toasts(); track toast.id) {
+        <div class="scc-toast" [class.scc-toast--success]="toast.type === 'success'"
+            [class.scc-toast--error]="toast.type === 'error'" role="status">
+            <div class="scc-toast__icon-wrap" aria-hidden="true">
+                @if (toast.type === 'success') {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                }
+            </div>
+            <p class="scc-toast__msg">{{ toast.message }}</p>
+            <button class="scc-toast__dismiss" type="button" (click)="dismissToast(toast.id)" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+    </div>
+
+</div>

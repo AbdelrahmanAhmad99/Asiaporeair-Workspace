@@ -1,0 +1,1057 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby-deep: #8B0000;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .aac-page {
+     min-height: 100%;
+     background: var(--aoms-bg-primary, $off-white);
+     transition: background-color var(--aoms-transition-base, 250ms ease);
+     position: relative;
+ }
+
+ // ============================================================================
+ // 2. Sticky Command Header
+ // ============================================================================
+ .aac-header {
+     position: sticky;
+     top: 0;
+     z-index: 30;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.9375rem 1.5rem;
+     background: var(--aoms-bg-card, #ffffff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 14px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+ }
+
+ .aac-header-left {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     min-width: 0;
+ }
+
+ // Back arrow
+ .aac-back-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+         color: $midnight;
+         transform: translateX(-2px);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+     }
+ }
+
+ // Breadcrumb
+ .aac-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.2rem;
+
+     &__section {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__link {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         background: none;
+         border: none;
+         padding: 0;
+         cursor: pointer;
+         transition: color 150ms $ease;
+
+         &:hover {
+             color: $gold;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .aac-title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 20px;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+     transition: color 150ms $ease;
+ }
+
+ // Header right cluster
+ .aac-header-right {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-shrink: 0;
+ }
+
+ // Stat pills
+ .aac-stats {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-right: 0.25rem;
+ }
+
+ .aac-stat {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     padding: 0.2rem 0.6rem;
+     border-radius: 3px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     letter-spacing: 0.04em;
+
+     strong {
+         font-weight: 700;
+     }
+
+     &--total {
+         background: rgba($champagne, 0.1);
+         border: 1px solid rgba($champagne, 0.2);
+         color: var(--aoms-text-secondary, $charcoal);
+     }
+
+     &--suspended {
+         background: rgba($ruby-deep, 0.08);
+         border: 1px solid rgba($ruby-deep, 0.22);
+         color: lighten($ruby-deep, 20%);
+
+         strong {
+             color: lighten($ruby-deep, 20%);
+         }
+     }
+ }
+
+ // Shared header buttons
+ .aac-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.125rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     // Champagne ghost (Quick Navigate)
+     &--ghost {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.25);
+         color: $champagne;
+
+         &:hover {
+             background: rgba($champagne, 0.08);
+             border-color: $champagne;
+         }
+     }
+
+     // Sapphire outline (Back to Operations)
+     &--outline {
+         background: transparent;
+         border: 1px solid rgba($midnight, 0.25);
+         color: $midnight;
+
+         &:hover {
+             border-color: $midnight;
+             background: rgba($midnight, 0.06);
+         }
+     }
+ }
+
+ // Refresh icon button
+ .aac-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.08);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: aac-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .aac-body {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+ }
+
+ // ============================================================================
+ // 4. Deep Ruby Error Banner
+ // ============================================================================
+ .aac-error-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     padding: 0.875rem 1rem 0.875rem 1.125rem;
+     border-radius: 8px;
+
+     // Deep Ruby "vault" styling — more prominent than standard ruby
+     background: rgba($ruby-deep, 0.09);
+     border: 1px solid rgba($ruby-deep, 0.32);
+     border-left: 4px solid $ruby-deep;
+
+     flex-wrap: wrap;
+     animation: aac-error-enter 200ms $luxury both;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 6px;
+         background: rgba($ruby-deep, 0.12);
+         border: 1px solid rgba($ruby-deep, 0.25);
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+             color: lighten($ruby-deep, 20%);
+         }
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.2rem;
+         flex: 1;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 700;
+         color: lighten($ruby-deep, 15%);
+         margin: 0;
+     }
+
+     &__msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         line-height: 1.55;
+         color: rgba($ruby-deep, 0.85);
+         margin: 0;
+     }
+
+     &__dismiss {
+         flex-shrink: 0;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.375rem;
+         height: 1.375rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         border-radius: 3px;
+         color: rgba($ruby-deep, 0.5);
+         transition: color 150ms $ease;
+         margin-top: 0.1rem;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             color: $ruby-deep;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Controls Bar — filter toggle + search
+ // ============================================================================
+ .aac-controls {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     flex-wrap: wrap;
+ }
+
+ // Filter toggle group
+ .aac-filter-group {
+     display: flex;
+     align-items: center;
+     border-radius: 6px;
+     overflow: hidden;
+     border: 1px solid rgba($champagne, 0.2);
+     background: var(--aoms-bg-card, #ffffff);
+     box-shadow: 0 2px 8px rgba($midnight, 0.05);
+     flex-shrink: 0;
+ }
+
+ .aac-filter-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     height: 2.25rem;
+     padding: 0 0.875rem;
+     border: none;
+     border-right: 1px solid rgba($champagne, 0.15);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.03em;
+     cursor: pointer;
+     transition: all 150ms $ease;
+     white-space: nowrap;
+
+     &:last-child {
+         border-right: none;
+     }
+
+     &:hover:not(.aac-filter-btn--active) {
+         background: rgba($champagne, 0.08);
+         color: $gold;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+
+     &--active {
+         background: $midnight;
+         color: $champagne;
+         cursor: default;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         color: var(--aoms-text-muted);
+         transition: color 150ms $ease;
+     }
+
+     &.aac-filter-btn--active &__icon {
+         color: $champagne;
+     }
+ }
+
+ // Instant search
+ .aac-search {
+     position: relative;
+     display: flex;
+     align-items: center;
+     flex: 1;
+     min-width: 0;
+     max-width: 26rem;
+
+     &__icon {
+         position: absolute;
+         left: 0.875rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 1rem;
+         height: 1rem;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+
+         svg {
+             width: 100%;
+             height: 100%;
+         }
+     }
+
+     &__input {
+         width: 100%;
+         height: 2.25rem;
+         padding: 0 2rem 0 2.375rem;
+         border-radius: 6px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: var(--aoms-bg-card, #ffffff);
+         color: var(--aoms-text-primary, $charcoal);
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         outline: none;
+         transition:
+             border-color 180ms $ease,
+             box-shadow 180ms $ease;
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+         }
+
+         &:focus {
+             border-color: $champagne;
+             box-shadow: 0 0 0 3px rgba($champagne, 0.14);
+         }
+     }
+
+     &__clear {
+         position: absolute;
+         right: 0.625rem;
+         top: 50%;
+         transform: translateY(-50%);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         color: var(--aoms-text-muted);
+         cursor: pointer;
+         border-radius: 3px;
+         transition: color 150ms $ease;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             color: $ruby;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Quick Navigate Panel (Glassmorphism)
+ // ============================================================================
+ .aac-nav-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: 40;
+     background: rgba($midnight, 0.5);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+     animation: aac-fade-in 180ms $ease both;
+ }
+
+ .aac-nav-panel {
+     position: fixed;
+     z-index: 50;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: min(380px, calc(100vw - 2rem));
+
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.22);
+     box-shadow:
+         0 20px 56px rgba($midnight, 0.28),
+         0 0 0 1px rgba($champagne, 0.08);
+     overflow: hidden;
+     animation: aac-panel-enter 260ms $luxury both;
+
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+         padding: 1.25rem 1.25rem 0.875rem;
+         border-bottom: 1px solid rgba($champagne, 0.12);
+         background: linear-gradient(135deg, rgba($champagne, 0.04) 0%, transparent 60%);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 8px;
+         background: $midnight;
+         border: 1px solid rgba($champagne, 0.18);
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+             color: $champagne;
+         }
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 700;
+         color: var(--aoms-text-primary, $charcoal);
+         margin: 0 0 0.15rem;
+     }
+
+     &__subtitle {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+
+     &__close {
+         margin-left: auto;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.75rem;
+         height: 1.75rem;
+         border: 1px solid rgba($champagne, 0.18);
+         border-radius: 4px;
+         background: transparent;
+         cursor: pointer;
+         color: var(--aoms-text-muted);
+         transition: all 150ms $ease;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     &__body {
+         padding: 1.25rem;
+         display: flex;
+         flex-direction: column;
+         gap: 1rem;
+     }
+
+     &__field {
+         position: relative;
+     }
+
+     &__input {
+         width: 100%;
+         height: 3.375rem;
+         padding: 1.4rem 1rem 0.4rem;
+         border-radius: 8px;
+         border: 1px solid rgba($charcoal, 0.15);
+         background: $off-white;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 1.375rem;
+         font-weight: 800;
+         letter-spacing: 0.15em;
+         text-transform: uppercase;
+         text-align: center;
+         color: $gold;
+         outline: none;
+         transition:
+             border-color 180ms $ease,
+             box-shadow 180ms $ease;
+
+         &:focus {
+             border-color: $champagne;
+             background: #ffffff;
+             box-shadow: 0 0 0 3px rgba($champagne, 0.15);
+         }
+
+         &::placeholder {
+             font-weight: 400;
+             font-size: 13px;
+             letter-spacing: 0.04em;
+             color: var(--aoms-text-muted);
+         }
+     }
+
+     &__label {
+         position: absolute;
+         top: 0.45rem;
+         left: 1rem;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.5rem;
+     }
+ }
+
+ .aac-nav-panel-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     height: 2.25rem;
+     padding: 0 1rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.45;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($charcoal, 0.2);
+         color: var(--aoms-text-secondary);
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+         }
+     }
+
+     &--go {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+         font-weight: 700;
+
+         &:hover:not(:disabled) {
+             background: $champagne;
+             border-color: $champagne;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. Toast Notification Stack
+ // ============================================================================
+ .aac-toast-stack {
+     position: fixed;
+     bottom: 1.5rem;
+     right: 1.5rem;
+     z-index: 100;
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+     pointer-events: none;
+     width: min(360px, calc(100vw - 3rem));
+ }
+
+ .aac-toast {
+     pointer-events: auto;
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 10px;
+     box-shadow: 0 8px 32px rgba($midnight, 0.18);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     animation: aac-toast-in 260ms $luxury both;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 1.875rem;
+         height: 1.875rem;
+         border-radius: 6px;
+
+         svg {
+             width: 1.125rem;
+             height: 1.125rem;
+         }
+     }
+
+     &__msg {
+         flex: 1;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12.5px;
+         font-weight: 500;
+         line-height: 1.5;
+         margin: 0;
+     }
+
+     &__dismiss {
+         flex-shrink: 0;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         border-radius: 3px;
+         opacity: 0.45;
+         transition: opacity 150ms $ease;
+
+         svg {
+             width: 0.7rem;
+             height: 0.7rem;
+         }
+
+         &:hover {
+             opacity: 1;
+         }
+     }
+
+     // Success — emerald tinted
+     &--success {
+         background: rgba(236, 253, 245, 0.97);
+         border: 1px solid rgba($emerald, 0.3);
+
+         .aac-toast__icon-wrap {
+             background: rgba($emerald, 0.12);
+             border: 1px solid rgba($emerald, 0.25);
+         }
+
+         .aac-toast__icon-wrap svg {
+             color: #059669;
+         }
+
+         .aac-toast__msg,
+         .aac-toast__dismiss {
+             color: #065F46;
+         }
+     }
+
+     // Error — deep ruby tinted
+     &--error {
+         background: rgba(255, 240, 240, 0.97);
+         border: 1px solid rgba($ruby-deep, 0.3);
+
+         .aac-toast__icon-wrap {
+             background: rgba($ruby-deep, 0.1);
+             border: 1px solid rgba($ruby-deep, 0.25);
+         }
+
+         .aac-toast__icon-wrap svg {
+             color: lighten($ruby-deep, 20%);
+         }
+
+         .aac-toast__msg,
+         .aac-toast__dismiss {
+             color: $ruby-deep;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes aac-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes aac-fade-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes aac-panel-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 14px));
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%);
+     }
+ }
+
+ @keyframes aac-toast-in {
+     from {
+         opacity: 0;
+         transform: translateX(18px) scale(0.97);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0) scale(1);
+     }
+ }
+
+ @keyframes aac-error-enter {
+     from {
+         opacity: 0;
+         transform: translateX(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .aac-header {
+         box-shadow: 0 2px 18px rgba(0, 0, 0, 0.3);
+     }
+
+     .aac-back-btn:hover {
+         color: $champagne;
+     }
+
+     .aac-icon-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .aac-btn--outline {
+         border-color: rgba($champagne, 0.25);
+         color: $champagne;
+
+         &:hover {
+             background: rgba($champagne, 0.07);
+             border-color: $champagne;
+         }
+     }
+
+     .aac-stat--total {
+         color: rgba(255, 255, 255, 0.6);
+         background: rgba($champagne, 0.06);
+     }
+
+     .aac-error-banner {
+         background: rgba($ruby-deep, 0.2);
+         border-color: rgba($ruby-deep, 0.5);
+         border-left-color: lighten($ruby-deep, 15%);
+
+         &__title {
+             color: lighten($ruby-deep, 30%);
+         }
+
+         &__msg {
+             color: rgba(255, 200, 200, 0.8);
+         }
+     }
+
+     .aac-filter-group {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .aac-filter-btn:hover:not(.aac-filter-btn--active) {
+         background: rgba($champagne, 0.05);
+         color: $champagne;
+     }
+
+     .aac-search__input {
+         background: rgba(255, 255, 255, 0.05);
+         border-color: rgba($champagne, 0.12);
+         color: rgba(255, 255, 255, 0.85);
+
+         &::placeholder {
+             color: rgba(255, 255, 255, 0.3);
+         }
+
+         &:focus {
+             background: rgba(255, 255, 255, 0.08);
+         }
+     }
+
+     .aac-nav-panel {
+         background: #0d1f35;
+         border-color: rgba($champagne, 0.15);
+         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+     }
+
+     .aac-nav-panel__title {
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .aac-nav-panel__subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .aac-nav-panel__input {
+         background: rgba($midnight, 0.6);
+         border-color: rgba(255, 255, 255, 0.1);
+
+         &:focus {
+             background: rgba($midnight, 0.85);
+         }
+     }
+
+     .aac-nav-panel-btn--cancel {
+         border-color: rgba(255, 255, 255, 0.15);
+         color: rgba(255, 255, 255, 0.6);
+
+         &:hover {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+
+     .aac-toast--success {
+         background: rgba(6, 78, 59, 0.92);
+
+         .aac-toast__msg,
+         .aac-toast__dismiss {
+             color: #6ee7b7;
+         }
+     }
+
+     .aac-toast--error {
+         background: rgba($ruby-deep, 0.85);
+
+         .aac-toast__msg,
+         .aac-toast__dismiss {
+             color: #fca5a5;
+         }
+     }
+ }

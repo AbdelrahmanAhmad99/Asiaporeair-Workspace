@@ -1,0 +1,357 @@
+ // ── Design tokens ─────────────────────────────────────────────────────────
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+
+ $ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ── Animation delays for staggered "First-Class Entrance" ─────────────────
+ $stagger-1: 0ms;
+ $stagger-2: 60ms;
+ $stagger-3: 120ms;
+ $stagger-4: 180ms;
+ $stagger-5: 240ms;
+ $stagger-6: 300ms;
+
+ // ============================================================================
+ // 1. Hero container
+ // ============================================================================
+ .aic-hero {
+     position: relative;
+     border-radius: 12px;
+     background: $midnight;
+     overflow: hidden;
+
+     // Multi-layer gradient: primary sapphire + diagonal gold shimmer + vignette
+     background-image:
+         linear-gradient(140deg,
+             rgba($gold, 0.09) 0%,
+             transparent 50%),
+         linear-gradient(240deg,
+             rgba(16, 16, 86, 0.6) 0%,
+             transparent 70%);
+
+     // Thin champagne top border — premium edge highlight
+     border-top: 1px solid rgba($champagne, 0.2);
+     border-left: 1px solid rgba($champagne, 0.08);
+     border-right: 1px solid rgba($champagne, 0.08);
+     border-bottom: 1px solid rgba($champagne, 0.04);
+
+     // Deep, coloured soft shadow
+     box-shadow:
+         0 12px 48px rgba($midnight, 0.28),
+         0 1px 0 rgba($champagne, 0.14) inset;
+
+     // Component entry
+     animation: aic-card-enter 480ms $ease-luxury both;
+ }
+
+ // ============================================================================
+ // 2. Ghost typographic watermark
+ // ============================================================================
+ .aic-watermark {
+     position: absolute;
+     top: 50%;
+     right: -0.05em;
+     transform: translateY(-50%);
+
+     font-family: 'Montserrat', sans-serif;
+     font-weight: 900;
+     font-size: clamp(8rem, 22vw, 16rem);
+     line-height: 1;
+     letter-spacing: -0.06em;
+     color: transparent;
+     -webkit-text-stroke: 1px rgba($champagne, 0.055);
+     // text-stroke: 1px rgba($champagne, 0.055);
+
+     user-select: none;
+     pointer-events: none;
+     white-space: nowrap;
+     animation: aic-watermark-enter 600ms $ease-luxury 80ms both;
+ }
+
+ // ============================================================================
+ // 3. Content wrapper
+ // ============================================================================
+ .aic-content {
+     position: relative;
+     z-index: 1;
+     padding: 2.5rem 2.75rem 2.25rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+
+     @media (max-width: 640px) {
+         padding: 1.75rem 1.5rem 1.5rem;
+     }
+ }
+
+ // ============================================================================
+ // 4. Tag row (Operational + Country)
+ // ============================================================================
+ .aic-tag-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     margin-bottom: 1.5rem;
+     animation: aic-slide-up 360ms $ease-luxury $stagger-1 both;
+ }
+
+ .aic-tag {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.275rem 0.75rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+
+     &__dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+     }
+
+     // Operational — emerald
+     &--active {
+         background: rgba($emerald, 0.25);
+         border: 1px solid rgba($emerald, 0.45);
+         color: #6ee7b7;
+
+         .aic-tag__dot {
+             background: #6ee7b7;
+             animation: aic-pulse-emerald 2.4s ease-in-out infinite;
+         }
+     }
+
+     // Country ISO
+     &--country {
+         background: rgba($champagne, 0.1);
+         border: 1px solid rgba($champagne, 0.22);
+         color: $champagne;
+     }
+ }
+
+ // ============================================================================
+ // 5. IATA code — the visual anchor
+ // ============================================================================
+ .aic-iata-wrap {
+     display: flex;
+     align-items: flex-end;
+     gap: 0.75rem;
+     margin-bottom: 0.875rem;
+     animation: aic-slide-up 380ms $ease-luxury $stagger-2 both;
+ }
+
+ .aic-iata {
+     font-family: 'Montserrat', sans-serif;
+     font-weight: 900;
+     font-size: clamp(3rem, 8vw, 5.5rem);
+     line-height: 1;
+     letter-spacing: -0.04em;
+     color: $gold;
+     margin: 0;
+
+     // Royal Gold text shadow for luminosity depth
+     text-shadow:
+         0 0 40px rgba($gold, 0.35),
+         0 2px 12px rgba($midnight, 0.5);
+ }
+
+ .aic-iata-label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: rgba($gold, 0.5);
+     margin-bottom: 0.5rem;
+     flex-shrink: 0;
+ }
+
+ // ============================================================================
+ // 6. Airport full name
+ // ============================================================================
+ .aic-name {
+     font-family: 'Montserrat', sans-serif;
+     font-weight: 600;
+     font-size: clamp(1.125rem, 3vw, 1.625rem);
+     letter-spacing: -0.01em;
+     line-height: 1.2;
+     color: rgba($off-white, 0.92);
+     margin: 0 0 0.625rem;
+     animation: aic-slide-up 380ms $ease-luxury $stagger-3 both;
+ }
+
+ // ============================================================================
+ // 7. Location line
+ // ============================================================================
+ .aic-location {
+     display: flex;
+     align-items: center;
+     gap: 0.4rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 400;
+     color: rgba($off-white, 0.45);
+     margin: 0 0 1.5rem;
+     animation: aic-slide-up 380ms $ease-luxury $stagger-4 both;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: rgba($champagne, 0.4);
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 8. Divider
+ // ============================================================================
+ .aic-divider {
+     height: 1px;
+     width: 100%;
+     background: linear-gradient(90deg,
+             rgba($champagne, 0.22) 0%,
+             rgba($champagne, 0.05) 100%);
+     margin-bottom: 1.5rem;
+     animation: aic-slide-up 380ms $ease-luxury $stagger-4 both;
+ }
+
+ // ============================================================================
+ // 9. Technical identifier grid (ICAO, Lat, Lon, Alt)
+ // ============================================================================
+ .aic-tech-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+     gap: 0.375rem 2rem;
+     margin: 0;
+     animation: aic-slide-up 400ms $ease-luxury $stagger-5 both;
+ }
+
+ .aic-tech-item {
+     display: flex;
+     flex-direction: column;
+     gap: 0.2rem;
+ }
+
+ .aic-tech-item__label {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: rgba($off-white, 0.3);
+ }
+
+ .aic-tech-item__value {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 600;
+     color: rgba($off-white, 0.82);
+
+     // ICAO — Champagne Gold monospace
+     &--icao {
+         font-family: 'Courier New', monospace;
+         font-size: 15px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         color: $champagne;
+     }
+
+     // Coordinate — tight monospace
+     &--coord {
+         font-family: 'Courier New', monospace;
+         font-size: 12px;
+         font-weight: 600;
+         letter-spacing: 0.04em;
+         color: rgba($off-white, 0.6);
+     }
+ }
+
+ // ============================================================================
+ // 10. Keyframes
+ // ============================================================================
+ @keyframes aic-card-enter {
+     from {
+         opacity: 0;
+         transform: translateY(14px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes aic-watermark-enter {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes aic-slide-up {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes aic-pulse-emerald {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.4);
+     }
+
+     50% {
+         box-shadow: 0 0 0 4px rgba(110, 231, 183, 0);
+     }
+ }
+
+ // ============================================================================
+ // 11. Responsive
+ // ============================================================================
+ @media (max-width: 640px) {
+     .aic-tech-grid {
+         grid-template-columns: 1fr 1fr;
+     }
+
+     .aic-watermark {
+         font-size: 7rem;
+     }
+ }
+
+ // ============================================================================
+ // 12. Dark Mode — hero is already dark-first; deepen shadows only
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .aic-hero {
+         box-shadow:
+             0 16px 56px rgba(0, 0, 0, 0.5),
+             0 1px 0 rgba($champagne, 0.1) inset;
+     }
+ }

@@ -1,0 +1,374 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #9f1239;
+ $slate: #6C757D;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Sidebar shell — Midnight Sapphire panel
+ // ============================================================================
+ .nss-sidebar {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+     width: 17rem;
+     min-width: 17rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($gold, 0.14);
+     box-shadow:
+         0 8px 32px rgba($midnight, 0.28),
+         0 1px 0 rgba($champagne, 0.1) inset;
+     overflow: hidden;
+     align-self: flex-start;
+     position: sticky;
+     top: 5rem;
+     animation: nss-enter 400ms $luxury both;
+
+     @media (max-width: 1100px) {
+         display: none;
+     }
+
+     // collapses on smaller screens
+ }
+
+ // ============================================================================
+ // 2. Header
+ // ============================================================================
+ .nss-header {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 1.125rem 1.25rem 0.875rem;
+     background: rgba(255, 255, 255, 0.025);
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.875rem;
+         height: 1.875rem;
+         border-radius: 6px;
+         background: rgba($gold, 0.12);
+         border: 1px solid rgba($gold, 0.22);
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         color: $gold;
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         font-weight: 700;
+         letter-spacing: 0.08em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.6);
+         margin: 0;
+     }
+ }
+
+ // ============================================================================
+ // 3. Divider
+ // ============================================================================
+ .nss-divider {
+     height: 1px;
+     background: rgba($champagne, 0.1);
+     margin: 0;
+ }
+
+ // ============================================================================
+ // 4. Stat Widgets
+ // ============================================================================
+ .nss-widget {
+     position: relative;
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 1rem 1.25rem;
+     border-bottom: 1px solid rgba($champagne, 0.06);
+     transition: background 150ms $ease;
+
+     &:hover {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     &--shimmer {
+         pointer-events: none;
+     }
+
+     // ── Accent strip on left edge ────────────────────────────────────────────
+     &__accent {
+         position: absolute;
+         left: 0;
+         top: 15%;
+         bottom: 15%;
+         width: 3px;
+         border-radius: 0 2px 2px 0;
+
+         &--active {
+             background: #059669;
+         }
+
+         &--inactive {
+             background: rgba($slate, 0.55);
+         }
+
+         &--total {
+             background: $gold;
+         }
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.1rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9.5px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.45);
+     }
+
+     &__value {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 2rem;
+         font-weight: 700;
+         letter-spacing: -0.03em;
+         line-height: 1;
+
+         &--gold {
+             color: $gold;
+             text-shadow: 0 0 24px rgba($gold, 0.25);
+         }
+
+         &--slate {
+             color: rgba($champagne, 0.4);
+         }
+
+         &--champagne {
+             color: $champagne;
+         }
+     }
+
+     &__sub {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         color: rgba($champagne, 0.28);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 6px;
+
+         svg {
+             width: 0.9375rem;
+             height: 0.9375rem;
+         }
+
+         &--emerald {
+             background: rgba($emerald, 0.2);
+             border: 1px solid rgba($emerald, 0.35);
+
+             svg {
+                 color: #6ee7b7;
+             }
+         }
+
+         &--slate {
+             background: rgba($slate, 0.15);
+             border: 1px solid rgba($slate, 0.25);
+
+             svg {
+                 color: rgba($champagne, 0.4);
+             }
+         }
+
+         &--gold {
+             background: rgba($gold, 0.12);
+             border: 1px solid rgba($gold, 0.25);
+
+             svg {
+                 color: $champagne;
+             }
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Quick Actions
+ // ============================================================================
+ .nss-actions {
+     padding: 1rem 1.25rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.3);
+         margin: 0 0 0.25rem;
+     }
+ }
+
+ .nss-action-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     width: 100%;
+     height: 2.25rem;
+     padding: 0 0.875rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 12px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // Royal Gold solid
+     &--primary {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+
+         &:hover {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 4px 12px rgba($gold, 0.35);
+         }
+     }
+
+     // Sapphire outline
+     &--secondary {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.2);
+         color: rgba($champagne, 0.7);
+
+         &:hover {
+             border-color: rgba($champagne, 0.45);
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 6. Legend
+ // ============================================================================
+ .nss-legend {
+     padding: 0.75rem 1.25rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+     border-top: 1px solid rgba($champagne, 0.06);
+
+     &__item {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+     }
+
+     &__dot {
+         width: 7px;
+         height: 7px;
+         border-radius: 50%;
+         flex-shrink: 0;
+
+         &--summer {
+             background: $gold;
+         }
+
+         &--winter {
+             background: rgba($champagne, 0.4);
+         }
+     }
+
+     &__text {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: rgba($champagne, 0.3);
+     }
+ }
+
+ // ============================================================================
+ // 7. Shimmer
+ // ============================================================================
+ .nss-shimmer {
+     border-radius: 3px;
+     background: rgba($champagne, 0.07);
+     animation: nss-pulse 1.5s ease-in-out infinite;
+
+     &--label {
+         width: 55%;
+         height: 0.625rem;
+         margin-bottom: 0.4rem;
+     }
+
+     &--number {
+         width: 40%;
+         height: 1.75rem;
+     }
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes nss-enter {
+     from {
+         opacity: 0;
+         transform: translateX(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes nss-pulse {
+
+     0%,
+     100% {
+         opacity: 0.45;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }

@@ -1,0 +1,98 @@
+<!-- itinerary-timeline.component.html -->
+
+<div class="timeline-wrap" role="region" aria-label="Flight itinerary timeline">
+
+    <!-- Aircraft Meta -->
+    <div class="aircraft-meta">
+        <span class="flight-num">{{ detail.flightNumber }}</span>
+        <span class="meta-sep" aria-hidden="true">·</span>
+        <span class="aircraft-model">{{ detail.aircraftModel }}</span>
+        <span class="meta-sep" aria-hidden="true">·</span>
+        <span class="airline-name">{{ detail.airlineName }}</span>
+        <span class="meta-sep" aria-hidden="true">·</span>
+        <span class="fare-chip">{{ detail.fareDescription }}</span>
+    </div>
+
+    <!-- Timeline Track -->
+    <div class="timeline-track" role="group"
+        [attr.aria-label]="'Flight from ' + detail.originAirportCode + ' to ' + detail.destinationAirportCode">
+
+        <!-- Departure Node -->
+        <div class="timeline-node">
+            <div class="node-dot node-dot--depart" aria-hidden="true"></div>
+            <div class="node-content">
+                <div class="node-time-block">
+                    <span class="node-time">{{ depTime }}</span>
+                    <span class="node-date">{{ depDate }}</span>
+                </div>
+                <div class="node-airport">
+                    <span class="node-iata">{{ detail.originAirportCode }}</span>
+                    <span class="node-city">{{ detail.originAirportName }}</span>
+                </div>
+                <div class="node-label">Departure</div>
+            </div>
+        </div>
+
+        <!-- Track with plane -->
+        <div class="track-segment" aria-hidden="true">
+            <div class="track-line"></div>
+            <div class="track-plane-wrapper">
+                <svg class="track-plane" width="20" height="20" viewBox="0 0 24 24" fill="#B68F24">
+                    <path
+                        d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                </svg>
+                <div class="track-duration-pill">{{ duration }}</div>
+                <span class="track-fare">{{ detail.fareBasisCode }}</span>
+            </div>
+            <div class="track-line"></div>
+        </div>
+
+        <!-- Arrival Node -->
+        <div class="timeline-node timeline-node--arrival">
+            <div class="node-dot node-dot--arrive" aria-hidden="true"></div>
+            <div class="node-content node-content--right">
+                <div class="node-time-block">
+                    <span class="node-time">
+                        {{ arrTime }}
+                        <sup *ngIf="isNextDay" class="next-day-marker" aria-label="arrives next day">+1</sup>
+                    </span>
+                    <span class="node-date">{{ arrDate }}</span>
+                </div>
+                <div class="node-airport">
+                    <span class="node-iata">{{ detail.destinationAirportCode }}</span>
+                    <span class="node-city">{{ detail.destinationAirportName }}</span>
+                </div>
+                <div class="node-label">Arrival</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Fare Detail Row -->
+    <div class="fare-details-row">
+        <div class="fare-detail-chip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+            {{ detail.fareDescription }}
+        </div>
+        <div class="fare-detail-chip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <rect x="6" y="8" width="12" height="13" rx="2" />
+                <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+            </svg>
+            2 × 23kg Checked Baggage
+        </div>
+        <div class="fare-detail-chip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            {{ detail.paymentStatus }}
+        </div>
+    </div>
+
+</div>

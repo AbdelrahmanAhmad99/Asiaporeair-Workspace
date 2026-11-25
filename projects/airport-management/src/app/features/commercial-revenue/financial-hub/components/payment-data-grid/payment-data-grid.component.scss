@@ -1,0 +1,417 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 140ms ease;
+
+ // ── Container — Midnight Sapphire "Terminal" panel ────────────────────────
+ .pdg-container {
+     border-radius: 12px;
+     background: linear-gradient(180deg, $midnight, darken($midnight, 4%));
+     border: 1px solid rgba($gold, 0.16);
+     box-shadow: 0 8px 28px rgba($midnight, 0.35);
+     overflow: hidden;
+ }
+
+ .pdg-table-wrap {
+     max-height: 640px;
+     overflow-y: auto;
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+ }
+
+ // ── Table ─────────────────────────────────────────────────────────────────
+ .pdg-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+ }
+
+ // ── Sticky Header ─────────────────────────────────────────────────────────
+ .pdg-thead {
+     position: sticky;
+     top: 0;
+     z-index: 2;
+     background: $midnight;
+     box-shadow: 0 1px 0 rgba($champagne, 0.14);
+ }
+
+ .pdg-th {
+     padding: 0.75rem 1rem;
+     text-align: left;
+     font-size: 10px;
+     font-weight: 800;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: $champagne;
+     white-space: nowrap;
+
+     &--right {
+         text-align: right;
+     }
+
+     &--center {
+         text-align: center;
+     }
+
+     &--id {
+         min-width: 160px;
+     }
+ }
+
+ // ── Body Rows ─────────────────────────────────────────────────────────────
+ .pdg-tr {
+     cursor: pointer;
+     outline: none;
+     // Staggered entrance
+     animation: pdg-row-in 280ms ease forwards;
+     opacity: 0;
+
+     // 10% opacity alternating zebra stripes on Midnight Sapphire base
+     &:nth-child(even) {
+         background: rgba(255, 255, 255, 0.025);
+     }
+
+     &:nth-child(odd) {
+         background: rgba(255, 255, 255, 0.005);
+     }
+
+     &:not(:last-child) {
+         border-bottom: 1px solid rgba($champagne, 0.06);
+     }
+
+     &:hover,
+     &:focus-visible {
+         background: rgba($champagne, 0.08);
+     }
+
+     &:focus-visible {
+         box-shadow: inset 0 0 0 2px rgba($champagne, 0.4);
+     }
+
+     &--selected {
+         background: rgba($gold, 0.1) !important;
+         box-shadow: inset 3px 0 0 $gold;
+     }
+
+     &--skeleton,
+     &--empty,
+     &--loadmore {
+         cursor: default;
+         animation: none;
+         opacity: 1;
+
+         &:hover {
+             background: transparent;
+         }
+     }
+ }
+
+ // ── Cells ─────────────────────────────────────────────────────────────────
+ .pdg-td {
+     padding: 0.6875rem 1rem;
+     color: rgba(255, 255, 255, 0.78);
+     vertical-align: middle;
+
+     &--right {
+         text-align: right;
+     }
+
+     &--center {
+         text-align: center;
+     }
+
+     &--id {
+         font-variant-numeric: tabular-nums;
+     }
+
+     &--date {
+         font-size: 0.75rem;
+         color: rgba(255, 255, 255, 0.45);
+         white-space: nowrap;
+         font-variant-numeric: tabular-nums;
+     }
+ }
+
+ // ── Transaction ID Chip ────────────────────────────────────────────────────
+ .pdg-id-group {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-start;
+     gap: 0.1875rem;
+ }
+
+ .pdg-id-chip {
+     display: inline-flex;
+     align-items: center;
+     max-width: 180px;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     padding: 0.1875rem 0.5rem;
+     border-radius: 4px;
+     background: rgba($champagne, 0.06);
+     border: 1px solid rgba($champagne, 0.14);
+     font-family: 'Courier New', monospace;
+     font-size: 0.75rem;
+     color: rgba($champagne, 0.85);
+     letter-spacing: 0.02em;
+ }
+
+ // ── Booking / Payment ID ───────────────────────────────────────────────────
+ .pdg-booking-group {
+     display: flex;
+     flex-direction: column;
+     gap: 0.1875rem;
+ }
+
+ .pdg-booking-ref {
+     display: inline-flex;
+     align-items: center;
+     font-weight: 700;
+     font-size: 0.8125rem;
+     color: #ffffff;
+     letter-spacing: 0.02em;
+ }
+
+ .pdg-booking-id {
+     display: block;
+     font-size: 0.6875rem;
+     color: rgba(255, 255, 255, 0.45);
+ }
+
+ .pdg-booking {
+     display: block;
+     font-weight: 700;
+     color: #fff;
+ }
+
+ .pdg-payment-id {
+     display: block;
+     font-size: 0.6875rem;
+     color: rgba(255, 255, 255, 0.32);
+     margin-top: 0.0625rem;
+ }
+
+ .pdg-datetime {
+     display: block;
+     font-variant-numeric: tabular-nums;
+     font-size: 0.75rem;
+     color: rgba(255, 255, 255, 0.7);
+ }
+
+ // ── Amount (Royal Gold) ─────────────────────────────────────────────────────
+ .pdg-amount {
+     display: block;
+     font-size: 0.9375rem;
+     font-weight: 800;
+     font-variant-numeric: tabular-nums;
+     letter-spacing: -0.01em;
+     color: $gold;
+
+     &--refunded {
+         color: rgba($champagne, 0.55);
+         text-decoration: line-through;
+         text-decoration-color: rgba($champagne, 0.35);
+     }
+ }
+
+ .pdg-refund-tag {
+     display: inline-flex;
+     align-items: center;
+     margin-top: 0.1875rem;
+     padding: 0.0625rem 0.375rem;
+     border-radius: 100px;
+     font-size: 0.625rem;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     color: $champagne;
+     background: rgba($champagne, 0.1);
+     border: 1px solid rgba($champagne, 0.22);
+ }
+
+ // ── Provider / Method ──────────────────────────────────────────────────────
+ .pdg-provider {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     font-size: 0.8125rem;
+     font-weight: 600;
+     color: rgba(255, 255, 255, 0.65);
+
+     svg {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+         color: rgba($champagne, 0.6);
+     }
+ }
+
+ // ── Empty State — Luxury ────────────────────────────────────────────────────
+ .pdg-td--empty {
+     padding: 0;
+ }
+
+ .pdg-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 4rem 1.5rem;
+     text-align: center;
+
+     &__icon {
+         width: 7rem;
+         height: 7rem;
+         margin-bottom: 0.25rem;
+     }
+
+     &__title {
+         font-size: 1.0625rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 800;
+         color: $champagne;
+         margin: 0;
+         letter-spacing: -0.01em;
+     }
+
+     &__message {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.4);
+         max-width: 420px;
+         line-height: 1.6;
+         margin: 0;
+     }
+
+     &__reset {
+         display: inline-flex;
+         align-items: center;
+         margin-top: 0.5rem;
+         padding: 0.5rem 1.25rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.3);
+         background: transparent;
+         color: $champagne;
+         font-family: var(--aoms-font-body);
+         font-size: 0.8125rem;
+         font-weight: 700;
+         cursor: pointer;
+         transition: all $t;
+
+         &:hover {
+             background: rgba($champagne, 0.08);
+             border-color: $champagne;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+ }
+
+ // ── Load More Row ────────────────────────────────────────────────────────
+ .pdg-td--loadmore {
+     text-align: center;
+     padding: 1rem;
+     font-size: 0.8125rem;
+     color: rgba($champagne, 0.6);
+     font-weight: 600;
+ }
+
+ .pdg-loadmore-spinner {
+     display: inline-block;
+     width: 1rem;
+     height: 1rem;
+     margin-right: 0.5rem;
+     vertical-align: -2px;
+     animation: pdg-spin 1s linear infinite;
+ }
+
+ // ── Infinite scroll sentinel ──────────────────────────────────────────────
+ .pdg-sentinel {
+     height: 1px;
+     width: 100%;
+ }
+
+ // ── Skeleton Loading ──────────────────────────────────────────────────────
+ .pdg-sk {
+     display: inline-block;
+     border-radius: 4px;
+     background: linear-gradient(90deg,
+             rgba(255, 255, 255, 0.03) 0%,
+             rgba($champagne, 0.1) 50%,
+             rgba(255, 255, 255, 0.03) 100%);
+     background-size: 200% 100%;
+     animation: pdg-shimmer 1.5s ease-in-out infinite;
+
+     &--id {
+         width: 120px;
+         height: 18px;
+         border-radius: 4px;
+     }
+
+     &--booking {
+         width: 90px;
+         height: 14px;
+     }
+
+     &--amount {
+         width: 70px;
+         height: 18px;
+     }
+
+     &--provider {
+         width: 80px;
+         height: 14px;
+     }
+
+     &--badge {
+         width: 70px;
+         height: 18px;
+         border-radius: 100px;
+     }
+
+     &--date {
+         width: 100px;
+         height: 14px;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes pdg-row-in {
+     from {
+         opacity: 0;
+         transform: translateY(6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes pdg-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes pdg-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }

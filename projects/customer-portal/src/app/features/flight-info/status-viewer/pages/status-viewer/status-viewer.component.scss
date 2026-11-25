@@ -1,0 +1,670 @@
+// ============================================================================
+// flight-status-viewer.component.scss
+// Asiaporeair | "Your Journey, Live" — Flight Status Viewer Page
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$error : #C53030;
+$success : #16a34a;
+$warn : #f97316;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ── §1 Page shell ─────────────────────────────────────────────────────────────
+:host {
+    display: block;
+    font-family: $font;
+    background: $ivory;
+    min-height: 100vh;
+}
+
+.fsv-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+// ── §2 Hero header ────────────────────────────────────────────────────────────
+.fsv-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba($champagne, 0.08);
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1.5px;
+        background: linear-gradient(to right,
+                transparent, rgba($royal-gold, 0.3), $champagne,
+                rgba($royal-gold, 0.3), transparent);
+    }
+
+    &__particles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    &__geo {
+        position: absolute;
+        right: -100px;
+        top: -100px;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        border: 1px solid rgba($royal-gold, 0.05);
+        pointer-events: none;
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 50px;
+            border-radius: 50%;
+            border: 1px solid rgba($royal-gold, 0.04);
+        }
+    }
+
+    &__inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 1.75rem 2rem 2.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    &__quick-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__rule {
+        height: 1px;
+        background: linear-gradient(to right,
+                transparent, rgba($royal-gold, 0.2) 10%,
+                $royal-gold 40%, $champagne 60%, $royal-gold 80%,
+                rgba($royal-gold, 0.2) 90%, transparent);
+        margin-bottom: 2rem;
+    }
+
+    &__title-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    &__flight-id {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    &__icon-ring {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.08);
+        border: 1.5px solid rgba($champagne, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: iconPulse 3.5s ease-in-out infinite;
+        flex-shrink: 0;
+    }
+
+    &__flight-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        text-align: left;
+    }
+
+    &__title {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: $white;
+        margin: 0;
+        line-height: 1;
+
+        &--empty {
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+        }
+    }
+
+    &__airline {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        color: rgba($white, 0.45);
+        letter-spacing: 0.02em;
+        margin: 0;
+    }
+
+    &__subtitle {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        color: rgba($white, 0.4);
+        margin: 0;
+    }
+
+    &__badge-wrap {
+        flex-shrink: 0;
+    }
+
+    &__route-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 1.25rem;
+        background: rgba($royal-gold, 0.07);
+        border: 1px solid rgba($champagne, 0.18);
+        border-radius: 20px;
+        font-family: $font;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    &__route-iata {
+        font-size: 0.88rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        color: $champagne;
+    }
+
+    &__route-sep {
+        color: rgba($champagne, 0.25);
+        font-size: 0.8rem;
+    }
+
+    &__route-date {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        color: rgba($white, 0.45);
+        letter-spacing: 0.01em;
+    }
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 16px rgba($royal-gold, 0.08);
+    }
+
+    50% {
+        box-shadow: 0 0 32px rgba($royal-gold, 0.24);
+    }
+}
+
+// ── §3 Brand / nav ────────────────────────────────────────────────────────────
+.fsv-brand {
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+}
+
+.fsv-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: $font;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba($white, 0.45);
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.15);
+    border-radius: 3px;
+    padding: 0.35rem 0.875rem;
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        color: $champagne;
+        border-color: rgba($champagne, 0.4);
+        background: rgba($champagne, 0.05);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+
+    &--ghost {
+        border-color: transparent;
+
+        &:hover {
+            background: rgba($champagne, 0.05);
+        }
+    }
+}
+
+// ── §4 Particles ──────────────────────────────────────────────────────────────
+.fsv-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($champagne, 0.12);
+    animation: twinkle 3s ease-in-out infinite;
+
+    @for $i from 1 through 12 {
+        &:nth-child(#{$i}) {
+            width: #{2 + ($i % 3)}px;
+            height: #{2 + ($i % 3)}px;
+            // top: #{5 + ($i * 7) % 88}%;
+            // left: #{3 + ($i * 9) % 95}%;
+            animation-delay: #{$i * 0.22}s;
+            animation-duration: #{2.5 + $i * 0.2}s;
+        }
+    }
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.05;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+// ── §5 Body ───────────────────────────────────────────────────────────────────
+.fsv-body {
+    flex: 1;
+    padding: 2.5rem 2rem 4rem;
+    background: $ivory;
+}
+
+.fsv-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+// ── §6 Empty state ────────────────────────────────────────────────────────────
+.fsv-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 5rem 2rem;
+    text-align: center;
+
+    &__icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba($royal-gold, 0.07);
+        border: 1.5px solid rgba($royal-gold, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: iconPulse 3.5s ease-in-out infinite;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: $charcoal;
+        margin: 0;
+    }
+
+    &__body {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        color: $muted;
+        line-height: 1.65;
+        max-width: 440px;
+        margin: 0;
+    }
+}
+
+// ── §7 Data grid ──────────────────────────────────────────────────────────────
+.fsv-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+// ── §8 Section cards (timeline + cabin) ───────────────────────────────────────
+.fsv-section-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.09);
+    box-shadow: 0 4px 12px rgba($midnight, 0.06), 0 12px 32px rgba($midnight, 0.04);
+    overflow: hidden;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 1.25rem 1.75rem 0;
+        flex-wrap: wrap;
+    }
+
+    &__body {
+        padding: 1.25rem 1.75rem 1.5rem;
+    }
+}
+
+.fsv-section-title {
+    font-family: $font;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: $charcoal;
+    margin: 0;
+    flex: 1;
+}
+
+// ── §9 Cabin grid ─────────────────────────────────────────────────────────────
+.fsv-low-inv-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba($warn, 0.1);
+    border: 1px solid rgba($warn, 0.25);
+    font-family: $font;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: darken($warn, 15%);
+}
+
+.fsv-cabin-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1.25rem 1.75rem 1.5rem;
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.fsv-cabin-card {
+    background: rgba($charcoal, 0.02);
+    border: 1px solid rgba($charcoal, 0.08);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    transition: border-color $t, box-shadow $t;
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.2);
+        box-shadow: 0 2px 10px rgba($midnight, 0.06);
+    }
+
+    &--low {
+        border-color: rgba($warn, 0.2);
+        background: rgba($warn, 0.02);
+    }
+
+    &--full {
+        border-color: rgba($error, 0.15);
+        background: rgba($error, 0.02);
+        opacity: 0.65;
+    }
+}
+
+.fsv-cabin-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.fsv-cabin-name {
+    font-family: $font;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: $charcoal;
+}
+
+.fsv-cabin-seats {
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: $success;
+
+    &--low {
+        color: $warn;
+    }
+
+    &--full {
+        color: $error;
+    }
+}
+
+// Occupancy bar
+.fsv-cabin-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba($charcoal, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+
+    &__fill {
+        height: 100%;
+        background: linear-gradient(to right, $royal-gold, $champagne);
+        border-radius: 2px;
+        transition: width 800ms $ease;
+
+        &--low {
+            background: linear-gradient(to right, $warn, lighten($warn, 12%));
+        }
+
+        &--full {
+            background: $error;
+        }
+    }
+}
+
+.fsv-cabin-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    color: $muted;
+}
+
+.fsv-cabin-layout {
+    font-size: 0.58rem;
+    font-weight: 600;
+    color: rgba($royal-gold, 0.65);
+    letter-spacing: 0.04em;
+}
+
+// ── §10 Action bar ────────────────────────────────────────────────────────────
+.fsv-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.fsv-cta-primary,
+.fsv-action-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    background: $midnight;
+    border: 1px solid rgba($champagne, 0.2);
+    font-family: $font;
+    font-size: 0.77rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: background $t, box-shadow $t, transform $t, border-color $t;
+
+    &:hover {
+        background: lighten($midnight, 7%);
+        border-color: rgba($champagne, 0.4);
+        box-shadow: 0 6px 20px rgba($midnight, 0.25);
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.fsv-action-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.8rem 1.25rem;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($charcoal, 0.12);
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba($charcoal, 0.55);
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.3);
+        color: $royal-gold;
+        background: rgba($royal-gold, 0.03);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §11 Responsive ────────────────────────────────────────────────────────────
+@media (max-width: 860px) {
+    .fsv-hero__inner {
+        padding: 1.5rem 1.25rem 2rem;
+    }
+
+    .fsv-body {
+        padding: 2rem 1.25rem 3rem;
+    }
+
+    .fsv-hero__flight-id {
+        flex-direction: column;
+    }
+
+    .fsv-hero__flight-text {
+        text-align: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .fsv-hero__inner {
+        padding: 1.25rem 1rem 1.5rem;
+    }
+
+    .fsv-body {
+        padding: 1.5rem 1rem 2.5rem;
+    }
+
+    .fsv-section-card__body,
+    .fsv-cabin-grid {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    .fsv-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+// ── §12 Focus ─────────────────────────────────────────────────────────────────
+:focus-visible {
+    outline: 2px solid $royal-gold;
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+// ── §13 Reduced motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+
+    .fsv-hero__icon-ring,
+    .fsv-empty__icon,
+    .fsv-particle {
+        animation: none !important;
+    }
+
+    .fsv-cabin-bar__fill,
+    .fsv-action-primary,
+    .fsv-action-ghost,
+    .fsv-nav-btn {
+        transition: none !important;
+    }
+}

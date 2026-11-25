@@ -1,0 +1,192 @@
+// itinerary-confirmation-card.component.scss
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    display: block;
+}
+
+.itinerary-card {
+    font-family: var(--font);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1.125rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(5, 25, 55, 0.07);
+    flex-wrap: wrap;
+}
+
+.header-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: rgba(5, 25, 55, 0.05);
+    border: 1px solid rgba(182, 143, 36, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--royal-gold);
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.card-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.02em;
+}
+
+.card-subtitle {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.fare-badge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 4px 10px;
+    background: rgba(5, 25, 55, 0.06);
+    border: 1px solid rgba(5, 25, 55, 0.12);
+    border-radius: 100px;
+    color: var(--charcoal);
+}
+
+// ── Segment ───────────────────────────────────────────────────────────────────
+.segment {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 1.5rem 1.5rem 1rem;
+}
+
+.endpoint {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 90px;
+
+    &--right {
+        text-align: right;
+        align-items: flex-end;
+    }
+}
+
+.ep-time {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.05em;
+    line-height: 1;
+}
+
+.ep-iata {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--midnight);
+    letter-spacing: 0.05em;
+}
+
+.ep-city {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.ep-date {
+    font-size: 0.58rem;
+    color: var(--text-muted);
+}
+
+.flight-path {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.path-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(182, 143, 36, 0.4);
+    flex-shrink: 0;
+}
+
+.path-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(182, 143, 36, 0.3), rgba(182, 143, 36, 0.1));
+}
+
+.path-mid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 0 8px;
+    flex-shrink: 0;
+}
+
+.path-plane {
+    transform: rotate(90deg);
+}
+
+.path-duration {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.path-direct {
+    font-size: 0.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(182, 143, 36, 0.6);
+}
+
+// ── Fare Strip ────────────────────────────────────────────────────────────────
+.fare-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0.875rem 1.5rem;
+    background: rgba(5, 25, 55, 0.02);
+    border-top: 1px solid rgba(5, 25, 55, 0.06);
+}
+
+.fare-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-sec);
+    padding: 4px 10px;
+    background: rgba(5, 25, 55, 0.04);
+    border: 1px solid rgba(5, 25, 55, 0.08);
+    border-radius: 100px;
+
+    svg {
+        color: var(--royal-gold);
+    }
+}

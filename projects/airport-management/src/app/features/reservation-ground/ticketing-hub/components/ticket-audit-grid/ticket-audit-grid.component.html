@@ -1,0 +1,177 @@
+<div class="tag-container">
+
+    <!-- ── Loading shimmer ──────────────────────────────────────────── -->
+    @if (loading() && tickets().length === 0) {
+    <div class="tag-shimmer-list" aria-busy="true" aria-label="Loading audit records">
+        @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+        <div class="tag-shimmer-row">
+            <div class="tag-shimmer tag-shimmer--code"></div>
+            <div class="tag-shimmer tag-shimmer--pill"></div>
+            <div class="tag-shimmer tag-shimmer--name"></div>
+            <div class="tag-shimmer tag-shimmer--flight"></div>
+            <div class="tag-shimmer tag-shimmer--date"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Pre-search idle state ────────────────────────────────────── -->
+    @if (!hasSearched() && !loading()) {
+    <div class="tag-idle" role="status">
+        <div class="tag-idle__ring" aria-hidden="true"></div>
+        <p class="tag-idle__label">Vault Standby</p>
+        <p class="tag-idle__hint">Configure filters and execute a search to retrieve audit records.</p>
+    </div>
+    }
+
+    <!-- ── Empty state ──────────────────────────────────────────────── -->
+    @if (isEmpty()) {
+    <div class="tag-empty" role="status">
+        <svg class="tag-empty__icon" viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="1.2"
+            aria-hidden="true">
+            <rect x="10" y="15" width="60" height="35" rx="3" stroke-opacity="0.35" />
+            <line x1="20" y1="25" x2="60" y2="25" stroke-opacity="0.25" />
+            <line x1="20" y1="32" x2="50" y2="32" stroke-opacity="0.2" />
+            <line x1="20" y1="39" x2="45" y2="39" stroke-opacity="0.15" />
+            <line x1="58" y1="5" x2="72" y2="19" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round" />
+            <line x1="72" y1="5" x2="58" y2="19" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <p class="tag-empty__title">No Audit Records Located</p>
+        <p class="tag-empty__sub">Adjust your search parameters and retry the vault query.</p>
+    </div>
+    }
+
+    <!-- ── Data table with CDK Virtual Scroll ───────────────────────── -->
+    @if (tickets().length > 0) {
+    <div class="tag-table-shell">
+
+        <!-- Sticky header (outside virtual scroll viewport) -->
+        <div class="tag-header-row" role="row" aria-label="Ticket audit grid header">
+            <div class="tag-th tag-th--code" role="columnheader">Ticket Code</div>
+            <div class="tag-th tag-th--status" role="columnheader">Status</div>
+            <div class="tag-th tag-th--pax" role="columnheader">Passenger</div>
+            <div class="tag-th tag-th--flight" role="columnheader">Flight</div>
+            <div class="tag-th tag-th--route" role="columnheader">Route</div>
+            <div class="tag-th tag-th--seat" role="columnheader">Seat</div>
+            <div class="tag-th tag-th--date" role="columnheader">Issued</div>
+            <div class="tag-th tag-th--actions" role="columnheader" aria-label="Actions"></div>
+        </div>
+
+        <!-- CDK virtual scroll viewport -->
+        <cdk-virtual-scroll-viewport class="tag-viewport" [itemSize]="rowHeight" [style.height]="gridHeight()"
+            role="rowgroup" aria-label="Ticket audit records">
+
+            <div *cdkVirtualFor="let ticket of tickets(); trackBy: trackByTicketId; templateCacheSize: 20"
+                class="tag-row" [class.tag-row--voided]="isVoided(ticket)" [class.tag-row--loading]="actionLoading()"
+                role="row" [attr.aria-label]="'Ticket ' + ticket.ticketCode">
+
+                <!-- Ticket Code -->
+                <div class="tag-cell tag-cell--code" role="cell">
+                    <span class="tag-ticket-code" [class.tag-ticket-code--voided]="isVoided(ticket)">
+                        {{ ticket.ticketCode }}
+                    </span>
+                </div>
+
+                <!-- Status Badge -->
+                <div class="tag-cell tag-cell--status" role="cell">
+                    <aoms-ticket-security-badge [status]="ticket.status" />
+                </div>
+
+                <!-- Passenger -->
+                <div class="tag-cell tag-cell--pax" role="cell">
+                    <span class="tag-pax-name" [class.tag-pax-name--voided]="isVoided(ticket)">
+                        {{ ticket.passengerFirstName }} {{ ticket.passengerLastName }}
+                    </span>
+                    @if (ticket.passengerPassportNumber) {
+                    <span class="tag-pax-passport">{{ ticket.passengerPassportNumber }}</span>
+                    }
+                </div>
+
+                <!-- Flight Number -->
+                <div class="tag-cell tag-cell--flight" role="cell">
+                    <span class="tag-flight">{{ ticket.flightNumber }}</span>
+                </div>
+
+                <!-- Route: ORG → DST -->
+                <div class="tag-cell tag-cell--route" role="cell">
+                    <span class="tag-route">
+                        {{ ticket.originAirportCode }}
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="tag-route__arrow" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                        </svg>
+                        {{ ticket.destinationAirportCode }}
+                    </span>
+                </div>
+
+                <!-- Seat -->
+                <div class="tag-cell tag-cell--seat" role="cell">
+                    <span class="tag-seat">{{ ticket.seatNumber || '—' }}</span>
+                </div>
+
+                <!-- Issue Date -->
+                <div class="tag-cell tag-cell--date" role="cell">
+                    <span class="tag-date">{{ formatDate(ticket.issueDate) }}</span>
+                </div>
+
+                <!-- Row Actions -->
+                <div class="tag-cell tag-cell--actions" role="cell" (click)="$event.stopPropagation()">
+
+                    <!-- Status update dropdown (hidden for voided) -->
+                    @if (!isVoided(ticket)) {
+                    <div class="tag-status-select-wrap">
+                        <select class="tag-status-select" [disabled]="actionLoading()"
+                            (change)="onStatusChange(ticket, $event)" title="Update status"
+                            [attr.aria-label]="'Update status for ticket ' + ticket.ticketCode">
+                            <option value="">Update…</option>
+                            @for (opt of statusOptions; track opt.value) {
+                            <option [value]="opt.value" [selected]="opt.value === ticket.status">
+                                {{ opt.label }}
+                            </option>
+                            }
+                        </select>
+                        <svg class="tag-status-select__caret" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </div>
+                    }
+
+                    <!-- Void button -->
+                    @if (isVoidable(ticket)) {
+                    <button class="tag-action-btn tag-action-btn--void" type="button" [disabled]="actionLoading()"
+                        (click)="onVoid(ticket, $event)" [title]="'Void ticket ' + ticket.ticketCode"
+                        [attr.aria-label]="'Void ticket ' + ticket.ticketCode">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                    </button>
+                    }
+
+                </div>
+
+            </div>
+
+        </cdk-virtual-scroll-viewport>
+
+        <!-- Row count footer -->
+        <div class="tag-footer" aria-live="polite">
+            <span class="tag-footer__count">
+                Displaying <strong>{{ tickets().length }}</strong> records
+                @if (actionLoading()) {
+                <span class="tag-footer__spinner" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                </span>
+                }
+            </span>
+        </div>
+    </div>
+    }
+
+</div>

@@ -1,0 +1,88 @@
+<div class="cat">
+
+    <!-- ── Left: Breadcrumb + Title ──────────────────────────── -->
+    <div class="cat__left">
+
+        <nav class="cat__breadcrumb" aria-label="Breadcrumb">
+            <button class="cat__breadcrumb__back" type="button" (click)="backTriggered.emit()"
+                aria-label="Back to Aircraft Explorer">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    class="cat__breadcrumb__back__arrow" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                Aircraft Explorer
+            </button>
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="cat__breadcrumb__sep"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+            </svg>
+            @if (tailNumber()) {
+            <span class="cat__breadcrumb__tail">{{ tailNumber() }}</span>
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="cat__breadcrumb__sep"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+            </svg>
+            }
+            <span class="cat__breadcrumb__current">Configurations</span>
+        </nav>
+
+        <div class="cat__title-row">
+            <h2 class="cat__title">
+                LOPA Versions
+                @if (!tailNumber()) { }
+                @if (tailNumber()) {
+                <span class="cat__title__tail">— {{ tailNumber() }}</span>
+                }
+            </h2>
+            @if (configCount() > 0) {
+            <span class="cat__count-badge">{{ configCount() }}</span>
+            }
+        </div>
+
+    </div>
+
+    <!-- ── Right: Search + New Config ────────────────────────── -->
+    <div class="cat__right">
+
+        <!-- Search -->
+        <div class="cat__search-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="cat__search-wrap__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            <input class="cat__search-wrap__input" type="text" placeholder="Filter configurations…"
+                [ngModel]="searchValue" (ngModelChange)="onSearchInput($event)" aria-label="Filter LOPA versions" />
+            @if (searchValue) {
+            <button class="cat__search-wrap__clear" type="button" (click)="onClearSearch()" aria-label="Clear filter">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="cat__search-wrap__clear__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+            }
+        </div>
+
+        <!-- Refresh -->
+        <button class="cat__icon-btn" type="button" [disabled]="loading()" (click)="refreshTriggered.emit()"
+            aria-label="Refresh configurations">
+            <svg class="cat__icon-btn__icon" [class.cat__icon-btn__icon--spin]="loading()" fill="none"
+                stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+        </button>
+
+        <!-- New Configuration -->
+        <button class="cat__new-btn" type="button" (click)="newConfig.emit()">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="cat__new-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            New Configuration
+        </button>
+
+    </div>
+
+</div>

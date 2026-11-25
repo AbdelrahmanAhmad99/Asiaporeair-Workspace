@@ -1,0 +1,184 @@
+ // ── Design tokens (local fallbacks to CSS vars) ───────────────────────────
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $off-white: #F8F9FA;
+
+ // Track dimensions
+ $track-w: 3rem; // 48px
+ $track-h: 1.625rem; // 26px
+ $track-radius: 13px; // pill
+
+ // Thumb dimensions (slightly smaller than track height)
+ $thumb-size: 1.25rem; // 20px
+ $thumb-inset: 0.1875rem; // 3px gap from edge
+
+ // Easing
+ $ease-luxury: cubic-bezier(0.34, 1.56, 0.64, 1);
+ $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+ // ── Wrapper ───────────────────────────────────────────────────────────────
+ .sts-wrapper {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+
+     &--disabled {
+         opacity: 0.45;
+         pointer-events: none;
+         cursor: not-allowed;
+     }
+ }
+
+ // ── Field label ───────────────────────────────────────────────────────────
+ .sts-field-label {
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 11px;
+     font-weight: 600;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: var(--aoms-text-muted);
+     transition: color var(--aoms-transition-fast, 150ms ease);
+ }
+
+ // ── Toggle group (track + label side by side) ─────────────────────────────
+ .sts-group {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+ }
+
+ // ── Track ─────────────────────────────────────────────────────────────────
+ .sts-track {
+     position: relative;
+     display: inline-flex;
+     align-items: center;
+     width: $track-w;
+     height: $track-h;
+     border-radius: $track-radius;
+     border: none;
+     padding: 0;
+     cursor: pointer;
+     flex-shrink: 0;
+     transition:
+         background-color 0.3s $ease-smooth,
+         box-shadow 0.3s $ease-smooth;
+
+     // Remove default button chrome
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+
+     // ── OFF state ─────────────────────────────────────────────────────────
+     &--off {
+         background-color: rgba($charcoal, 0.15);
+         box-shadow:
+             inset 0 1px 3px rgba($midnight, 0.15),
+             0 0 0 1px rgba($charcoal, 0.2);
+     }
+
+     // ── ON state ──────────────────────────────────────────────────────────
+     &--on {
+         background-color: $gold;
+         box-shadow:
+             inset 0 1px 3px rgba($midnight, 0.2),
+             0 0 0 1px rgba($gold, 0.4),
+             // Signature golden outer glow
+             0 0 12px rgba($gold, 0.35),
+             0 0 24px rgba($gold, 0.15);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 3px;
+     }
+
+     // Hover: slightly lighten the gold / deepen the off state
+     &--off:hover {
+         background-color: rgba($charcoal, 0.22);
+     }
+
+     &--on:hover {
+         background-color: $champagne;
+         box-shadow:
+             inset 0 1px 3px rgba($midnight, 0.2),
+             0 0 0 1px rgba($champagne, 0.5),
+             0 0 16px rgba($champagne, 0.4),
+             0 0 32px rgba($champagne, 0.18);
+     }
+ }
+
+ // ── Thumb ─────────────────────────────────────────────────────────────────
+ .sts-thumb {
+     position: absolute;
+     top: $thumb-inset;
+     left: $thumb-inset;
+     width: $thumb-size;
+     height: $thumb-size;
+
+     // Squircle-style thumb: high border-radius on a square element
+     border-radius: 8px;
+
+     background: #ffffff;
+     transition:
+         transform 0.3s $ease-luxury,
+         box-shadow 0.3s $ease-smooth,
+         background 0.3s $ease-smooth;
+
+     // OFF shadow (neutral)
+     box-shadow: 0 1px 4px rgba($midnight, 0.25), 0 0 0 0.5px rgba($midnight, 0.08);
+
+     // ── ON position ───────────────────────────────────────────────────────
+     &--on {
+         // Translate right: track-width - thumb-size - 2 * inset
+         transform: translateX(calc(#{$track-w} - #{$thumb-size} - #{$thumb-inset * 2}));
+         background: #ffffff;
+
+         // Elevated gold-tinted shadow when active
+         box-shadow:
+             0 2px 6px rgba($midnight, 0.3),
+             0 0 0 1px rgba($gold, 0.25);
+     }
+ }
+
+ // ── State label (Active / Inactive) ──────────────────────────────────────
+ .sts-state-label {
+     font-family: var(--aoms-font-body, 'Montserrat', sans-serif);
+     font-size: 13px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     transition: color 0.25s $ease-smooth;
+
+     &--on {
+         color: $gold;
+     }
+
+     &--off {
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ============================================================================
+ // Dark Mode Overrides  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .sts-track--off {
+         background-color: rgba(255, 255, 255, 0.08);
+         box-shadow:
+             inset 0 1px 3px rgba(0, 0, 0, 0.3),
+             0 0 0 1px rgba(255, 255, 255, 0.08);
+
+         &:hover {
+             background-color: rgba(255, 255, 255, 0.12);
+         }
+     }
+
+     .sts-thumb {
+         background: rgba(255, 255, 255, 0.9);
+     }
+
+     .sts-state-label--off {
+         color: rgba(255, 255, 255, 0.35);
+     }
+ }

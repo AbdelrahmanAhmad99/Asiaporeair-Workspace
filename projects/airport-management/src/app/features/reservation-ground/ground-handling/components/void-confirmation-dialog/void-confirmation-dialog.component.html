@@ -1,0 +1,104 @@
+<!-- Backdrop -->
+<div class="vcd-backdrop" (click)="onBackdropClick()" aria-hidden="true">
+</div>
+
+<!-- Dialog Panel -->
+<div class="vcd-panel" role="alertdialog" aria-modal="true" aria-labelledby="vcd-bp-title"
+    aria-describedby="vcd-bp-desc">
+
+    <!-- Ruby accent bar — signals destructive action -->
+    <div class="vcd-panel__accent" aria-hidden="true"></div>
+
+    <!-- ── Warning Icon ──────────────────────────────────────────── -->
+    <div class="vcd-icon-wrap" aria-hidden="true">
+        <!-- Animated triple ring -->
+        <span class="vcd-icon-ring vcd-icon-ring--3"></span>
+        <span class="vcd-icon-ring vcd-icon-ring--2"></span>
+        <span class="vcd-icon-ring vcd-icon-ring--1"></span>
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="vcd-icon">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+        </svg>
+    </div>
+
+    <!-- ── Title + Pass info ──────────────────────────────────────── -->
+    <h2 class="vcd-title" id="vcd-bp-title">Void Boarding Pass</h2>
+    <p class="vcd-pass-id" aria-label="Pass identifier">PASS-{{ passId() }}</p>
+
+    <!-- Passenger context card -->
+    <div class="vcd-context-card" id="vcd-bp-desc" aria-label="Pass details">
+        <div class="vcd-context-row">
+            <span class="vcd-context-key">Passenger</span>
+            <span class="vcd-context-val">{{ passengerName() }}</span>
+        </div>
+        <div class="vcd-context-row">
+            <span class="vcd-context-key">Ticket</span>
+            <span class="vcd-context-val vcd-context-val--mono">{{ ticketCode() }}</span>
+        </div>
+        <div class="vcd-context-row">
+            <span class="vcd-context-key">Seat</span>
+            <span class="vcd-context-val vcd-context-val--seat">{{ seatNumber() }}</span>
+        </div>
+    </div>
+
+    <!-- ── Critical Warning ───────────────────────────────────────── -->
+    <div class="vcd-warning" role="note">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="vcd-warning__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <p>
+            This is a <strong>Point of No Return.</strong> Voiding this boarding pass will
+            permanently revoke the passenger's right to board and cannot be undone without
+            issuing a new document through the Ticket Issuance Console.
+        </p>
+    </div>
+
+    <!-- Error from store -->
+    @if (error()) {
+    <div class="vcd-api-error" role="alert" aria-live="assertive">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="vcd-api-error__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        {{ error() }}
+    </div>
+    }
+
+    <!-- ── Actions ────────────────────────────────────────────────── -->
+    <div class="vcd-actions">
+        <!-- Cancel — neutral ghost -->
+        <button class="vcd-btn vcd-btn--cancel" type="button" [disabled]="isProcessing()" (click)="onCancel()">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+            </svg>
+            Keep Document
+        </button>
+
+        <!-- Confirm — Deep Ruby Red, Gold border accent -->
+        <button class="vcd-btn vcd-btn--confirm" type="button" [disabled]="isProcessing()" (click)="onConfirm()">
+            @if (isProcessing()) {
+            <svg class="vcd-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Voiding…
+            } @else {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+            Confirm Void
+            }
+        </button>
+    </div>
+
+    <!-- ESC hint -->
+    @if (!isProcessing()) {
+    <p class="vcd-esc-hint" aria-hidden="true">Press <kbd>Esc</kbd> to cancel</p>
+    }
+
+</div>

@@ -1,0 +1,246 @@
+<div class="red-page">
+
+    <!-- ══ Sticky Command Header ═════════════════════════════════════ -->
+    <header class="red-header">
+
+        <!-- Left: breadcrumb + title -->
+        <div class="red-header-left">
+            <nav class="red-breadcrumb" aria-label="Breadcrumb">
+                <span class="red-breadcrumb__section">Network &amp; Infrastructure</span>
+                <svg class="red-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="red-breadcrumb__current">Route Explorer</span>
+            </nav>
+            <h1 class="red-title">Air-Network Command</h1>
+        </div>
+
+        <!-- Right: executive toolbar -->
+        <div class="red-toolbar">
+
+            <!-- Hub Explorer — text ghost -->
+            <button class="red-btn red-btn--ghost" type="button" (click)="openHubExplorer()" title="Hub Explorer"
+                aria-label="Navigate to Airport Hub Explorer">
+                <svg class="red-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z" />
+                </svg>
+                Hub Explorer
+            </button>
+
+            <!-- Global Network Audit — Gold outline -->
+            <button class="red-btn red-btn--outline" type="button" (click)="openNetworkAudit()"
+                title="Global Network Audit" aria-label="Open Route Recovery Center">
+                <svg class="red-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25
+                   0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375
+                   7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125
+                   -1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504
+                   1.125 1.125 1.125z" />
+                </svg>
+                Network Audit
+            </button>
+
+            <!-- Refresh icon -->
+            <button class="red-icon-btn" (click)="refresh()" [disabled]="loading()" aria-label="Refresh route data"
+                title="Refresh">
+                <svg class="red-icon-btn__icon" [class.red-icon-btn__icon--spin]="loading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Separator -->
+            <div class="red-sep" aria-hidden="true"></div>
+
+            <!-- Compose New Route — Solid Royal Gold (primary CTA) -->
+            <button class="red-btn red-btn--primary" type="button" (click)="composeNewRoute()"
+                aria-label="Compose a new air route">
+                <svg class="red-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Compose New Route
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="red-body">
+
+        <!-- Error banner -->
+        @if (error()) {
+        <div class="red-error-banner" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="red-error-banner__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                   0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <span class="red-error-banner__msg">{{ error() }}</span>
+            <button class="red-error-banner__dismiss" type="button" (click)="dismissError()" aria-label="Dismiss error">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+
+        <!-- Stats widgets -->
+        <aoms-route-stats-widgets [statistics]="statistics()" [loading]="loading()" />
+
+        <!-- Search form -->
+        <aoms-route-search-form [loading]="loading()" [hasActiveFilter]="hasFilter()" (onSearch)="onSearch($event)"
+            (onReset)="onReset()" />
+
+        <!-- Data grid -->
+        <aoms-route-data-grid [routes]="routes()" [loading]="loading()" [recordLabel]="recordLabel()"
+            (onAnalyze)="router.navigate(['/aoms/network-infrastructure/route-network-planner/analysis', $event])"
+            (onModify)="router.navigate(['/aoms/network-infrastructure/route-network-planner/composer', $event])"
+            (onDeactivate)="openDeactivateModal($event)" />
+
+        <!-- Pagination bar -->
+        @if (!loading() && pagination().totalPages > 1) {
+        <div class="red-pagination" role="navigation" aria-label="Pagination">
+            <button class="red-page-btn" type="button" (click)="prevPage()" [disabled]="!canGoPrev()"
+                aria-label="Previous page">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+                Prev
+            </button>
+
+            <span class="red-page-info">
+                Page <strong>{{ pagination().pageNumber }}</strong>
+                of <strong>{{ pagination().totalPages }}</strong>
+            </span>
+
+            <button class="red-page-btn" type="button" (click)="nextPage()" [disabled]="!canGoNext()"
+                aria-label="Next page">
+                Next
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+        </div>
+        }
+
+    </main>
+
+    <!-- ══ Deactivation Confirmation Modal ══════════════════════════ -->
+    @if (showModal()) {
+    <div class="red-backdrop" (click)="closeModal()" aria-hidden="true"></div>
+
+    <div class="red-modal" role="dialog" aria-modal="true"
+        [attr.aria-label]="'Confirm deactivation of route ' + (targetRoute()?.originAirportIataCode ?? '') + ' to ' + (targetRoute()?.destinationAirportIataCode ?? '')">
+
+        <!-- Ruby accent bar -->
+        <div class="red-modal__ruby-bar" aria-hidden="true"></div>
+
+        <!-- Header -->
+        <div class="red-modal__header">
+            <div class="red-modal__icon-wrap" aria-hidden="true">
+                <svg class="red-modal__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1
+                     5.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="red-modal__title">Deactivate Air Corridor</h2>
+                <p class="red-modal__subtitle">This corridor will be removed from the active flight network.</p>
+            </div>
+        </div>
+
+        <!-- Route summary -->
+        @if (targetRoute(); as route) {
+        <div class="red-modal__route-strip">
+            <span class="red-modal__iata red-modal__iata--origin">{{ route.originAirportIataCode }}</span>
+            <svg class="red-modal__route-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+            </svg>
+            <span class="red-modal__iata red-modal__iata--dest">{{ route.destinationAirportIataCode }}</span>
+            <span class="red-modal__distance">{{ route.distanceKm.toLocaleString() }} km</span>
+        </div>
+        }
+
+        <!-- Warning -->
+        <p class="red-modal__warning">
+            Deactivating this corridor will suspend all future scheduling on this route.
+            Active flights will not be affected, but no new schedules can be assigned.
+            This can be reversed from the <strong>Network Audit</strong>.
+        </p>
+
+        <!-- Modal error -->
+        @if (modalError()) {
+        <div class="red-modal__error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{ modalError() }}
+        </div>
+        }
+
+        <!-- Actions -->
+        <div class="red-modal__actions">
+            <button class="red-modal-btn red-modal-btn--cancel" type="button" (click)="closeModal()"
+                [disabled]="isDeactivating()" autofocus>
+                Cancel
+            </button>
+
+            <button class="red-modal-btn red-modal-btn--confirm" type="button" (click)="confirmDeactivation()"
+                [disabled]="isDeactivating()">
+                @if (isDeactivating()) {
+                <svg class="red-modal-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                       0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                       0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Deactivating…
+                } @else {
+                Confirm Deactivation
+                }
+            </button>
+        </div>
+
+    </div>
+    }
+
+    <!-- ══ Toast Stack ══════════════════════════════════════════════ -->
+    <div class="red-toast-stack" role="region" aria-live="polite">
+        @for (toast of toasts(); track toast.id) {
+        <div class="red-toast" [class.red-toast--success]="toast.type === 'success'"
+            [class.red-toast--error]="toast.type === 'error'" role="status">
+            <div class="red-toast__icon-wrap" aria-hidden="true">
+                @if (toast.type === 'success') {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                }
+            </div>
+            <p class="red-toast__msg">{{ toast.message }}</p>
+            <button class="red-toast__dismiss" type="button" (click)="dismissToast(toast.id)" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+    </div>
+
+</div>

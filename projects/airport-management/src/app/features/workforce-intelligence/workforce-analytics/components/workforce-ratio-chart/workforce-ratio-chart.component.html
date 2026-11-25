@@ -1,0 +1,131 @@
+<!-- workforce-ratio-chart.component.html -->
+
+<div class="wrc">
+
+    <!-- ══ Header ════════════════════════════════════════════════ -->
+    <div class="wrc__header">
+        <div class="wrc__header__left">
+            <div class="wrc__header__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="wrc__header__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6z M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5z" />
+                </svg>
+            </div>
+            <div>
+                <p class="wrc__title">Role Distribution</p>
+                <p class="wrc__subtitle">Real-time personnel breakdown by function</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ Chart Area ════════════════════════════════════════════ -->
+    @if (loading()) {
+    <div class="wrc__shimmer" aria-busy="true">
+        <div class="wrc-sh wrc-sh--donut"></div>
+        <div class="wrc__legend-shimmer">
+            @for (r of [1,2,3,4]; track r) {
+            <div class="wrc__legend-sh-row">
+                <div class="wrc-sh wrc-sh--dot"></div>
+                <div class="wrc-sh wrc-sh--leg-label"></div>
+                <div class="wrc-sh wrc-sh--leg-val"></div>
+            </div>
+            }
+        </div>
+    </div>
+    }
+
+    @if (!loading()) {
+    <div class="wrc__body">
+
+        <!-- Donut SVG -->
+        <div class="wrc__donut-wrap">
+            <svg class="wrc__donut" viewBox="0 0 160 160" aria-label="Role distribution donut chart" role="img">
+
+                <!-- Outer glow ring -->
+                <circle cx="80" cy="80" r="68" fill="none" stroke="rgba(226,199,128,0.05)" stroke-width="2" />
+
+                <!-- Track circle -->
+                <circle cx="80" cy="80" r="58" fill="none" stroke="rgba(226,199,128,0.08)" stroke-width="10" />
+
+                <!-- Segments -->
+                @for (seg of segments(); track trackByRole($index, seg)) {
+                <path class="wrc__segment" [attr.d]="seg.arcPath" fill="none" stroke-width="10" stroke-linecap="butt"
+                    [attr.stroke]="colourFor(seg.slice.colorKey).stroke"
+                    [style.filter]="'drop-shadow(0 0 3px ' + colourFor(seg.slice.colorKey).stroke + '66)'"
+                    [attr.aria-label]="seg.slice.label + ': ' + seg.slice.count">
+                    <title>{{ seg.slice.label }}: {{ seg.slice.count }} ({{ seg.slice.pct }}%)</title>
+                </path>
+                }
+
+                <!-- Centre glow backdrop -->
+                <circle cx="80" cy="80" r="44" fill="rgba(5,25,55,0.8)" />
+                <circle cx="80" cy="80" r="42" fill="none" stroke="rgba(182,143,36,0.1)" stroke-width="1" />
+
+                <!-- Centre: total count -->
+                <text x="80" y="73" text-anchor="middle" dominant-baseline="middle" class="wrc__center-label"
+                    font-family="var(--aoms-font-body)" font-size="9">
+                    TOTAL
+                </text>
+                <text x="80" y="88" text-anchor="middle" dominant-baseline="middle" class="wrc__center-value"
+                    font-family="var(--aoms-font-heading)" font-size="20" font-weight="800">
+                    {{ kpis().totalWorkforce | number }}
+                </text>
+            </svg>
+        </div>
+
+        <!-- Legend -->
+        <div class="wrc__legend" role="list">
+            @for (seg of segments(); track trackByRole($index, seg)) {
+            <div class="wrc__legend-item" role="listitem">
+
+                <!-- Icon + colour dot -->
+                <div class="wrc__legend-icon-wrap" [style.background]="colourFor(seg.slice.colorKey).fill"
+                    [style.border-color]="colourFor(seg.slice.colorKey).stroke + '55'" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="wrc__legend-icon" [style.color]="colourFor(seg.slice.colorKey).stroke">
+                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="seg.slice.iconPath" />
+                    </svg>
+                </div>
+
+                <!-- Label + pct -->
+                <div class="wrc__legend-text">
+                    <span class="wrc__legend-label">{{ seg.slice.label }}</span>
+                    <span class="wrc__legend-bar-wrap" aria-hidden="true">
+                        <span class="wrc__legend-bar" [style.width.%]="seg.slice.pct"
+                            [style.background]="colourFor(seg.slice.colorKey).stroke"></span>
+                    </span>
+                </div>
+
+                <div class="wrc__legend-meta">
+                    <span class="wrc__legend-count">{{ seg.slice.count | number }}</span>
+                    <span class="wrc__legend-pct">{{ seg.slice.pct | number:'1.0-1' }}%</span>
+                </div>
+
+            </div>
+            }
+        </div>
+
+    </div>
+
+    <!-- ══ Department Breakdown ════════════════════════════════ -->
+    @if (kpis().deptSlices.length > 0) {
+    <div class="wrc__dept">
+        <p class="wrc__dept__title">Department Distribution</p>
+        <div class="wrc__dept__bars">
+            @for (dept of topDeptSlices(); track dept.dept) {
+            <div class="wrc__dept__bar-row">
+                <span class="wrc__dept__bar-label">{{ dept.dept }}</span>
+                <div class="wrc__dept__bar-track" aria-hidden="true">
+                    <div class="wrc__dept__bar-fill" [style.width.%]="dept.pct"
+                        [class.wrc__dept__bar-fill--top]="$first"></div>
+                </div>
+                <span class="wrc__dept__bar-count">{{ dept.count | number }}</span>
+            </div>
+            }
+        </div>
+    </div>
+    }
+
+    }
+
+</div>

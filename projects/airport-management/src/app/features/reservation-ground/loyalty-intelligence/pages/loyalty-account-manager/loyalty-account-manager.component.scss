@@ -1,0 +1,1361 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ivory: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Page Shell ─────────────────────────────────────────────────────────
+ .lam-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary, $ivory);
+     transition: background-color $t-base;
+ }
+
+ // ── 2. Sticky Header ──────────────────────────────────────────────────────
+ .lam-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card, #fff);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+     }
+ }
+
+ .lam-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .lam-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+ }
+
+ .lam-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary, $charcoal);
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .lam-count-badge {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-muted);
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     background: rgba($midnight, 0.05);
+     border: 1px solid rgba($champagne, 0.12);
+ }
+
+ // Toast
+ .lam-toast {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.375rem 0.875rem;
+     border-radius: 6px;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     max-width: 360px;
+     animation: lam-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         opacity: 0.6;
+         color: inherit;
+         border-radius: 2px;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             opacity: 1;
+         }
+     }
+
+     &--success {
+         color: lighten($emerald, 30%);
+         background: rgba($emerald, 0.08);
+         border: 1px solid rgba($emerald, 0.2);
+     }
+ }
+
+ .lam-nav-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0 0.75rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     font-weight: 600;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     &:hover {
+         border-color: $champagne;
+         color: $gold;
+         background: rgba($champagne, 0.06);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .lam-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: lam-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── 3. Body ───────────────────────────────────────────────────────────────
+ .lam-body {
+     flex: 1;
+     padding: 1.25rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     overflow-y: auto;
+ }
+
+ // ── 4. Error Banners ──────────────────────────────────────────────────────
+ .lam-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.75rem 1rem;
+     border-radius: 8px;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 20%);
+     background: rgba($ruby, 0.07);
+     border: 1px solid rgba($ruby, 0.2);
+     border-left: 3px solid $gold; // luxury gold-bordered error
+     animation: lam-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+         color: $gold;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         margin-left: auto;
+         width: 1.5rem;
+         height: 1.5rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         color: rgba($champagne, 0.5);
+         border-radius: 3px;
+         flex-shrink: 0;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             color: $champagne;
+         }
+     }
+
+     &--action {
+         background: rgba($amber, 0.06);
+         border-left-color: $amber;
+         color: lighten($amber, 18%);
+     }
+ }
+
+ // ── 5. Workspace Grid ─────────────────────────────────────────────────────
+ .lam-workspace {
+     display: grid;
+     grid-template-columns: 360px 1fr;
+     gap: 1.25rem;
+     align-items: start;
+     flex: 1;
+
+     @media (max-width: 1024px) {
+         grid-template-columns: 1fr;
+     }
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.75rem;
+     }
+
+     &__profile {
+         position: sticky;
+         top: calc(var(--aoms-topbar-height, 64px) + 1.25rem);
+
+         @media (max-width: 1024px) {
+             position: static;
+         }
+     }
+ }
+
+ // ── 6. Search Bar ─────────────────────────────────────────────────────────
+ .lam-search-bar {
+     display: flex;
+     flex-wrap: wrap;
+     align-items: flex-end;
+     gap: 0.625rem;
+     padding: 0.875rem 1.125rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 8px rgba($midnight, 0.04);
+
+     &__field {
+         display: flex;
+         align-items: center;
+         flex: 1 1 180px;
+         position: relative;
+
+         &--main {
+             flex: 2 1 220px;
+         }
+     }
+
+     &__icon {
+         position: absolute;
+         left: 0.625rem;
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.7;
+         pointer-events: none;
+     }
+
+     &__input {
+         width: 100%;
+         height: 2.125rem;
+         padding: 0 0.75rem 0 2.125rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: rgba($midnight, 0.025);
+         font-family: 'Courier New', monospace;
+         font-size: 0.875rem;
+         font-weight: 600;
+         letter-spacing: 0.04em;
+         color: var(--aoms-text-primary, $charcoal);
+         outline: none;
+         transition: border-color $t-fast, box-shadow $t-fast;
+         // -webkit-appearance: none;
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+             opacity: 0.55;
+             font-family: var(--aoms-font-body);
+             letter-spacing: 0;
+         }
+
+         &:hover:not(:disabled) {
+             border-color: rgba($champagne, 0.4);
+         }
+
+         &:focus:not(:disabled) {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba($gold, 0.12);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+     }
+ }
+
+ .lam-select-wrap {
+     position: relative;
+     flex: 0 1 130px;
+
+     &__caret {
+         position: absolute;
+         right: 0.625rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+     }
+ }
+
+ .lam-select {
+     width: 100%;
+     height: 2.125rem;
+     padding: 0 2rem 0 0.75rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: rgba($midnight, 0.025);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+     cursor: pointer;
+     outline: none;
+     -webkit-appearance: none;
+     appearance: none;
+     transition: border-color $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: rgba($champagne, 0.4);
+     }
+
+     &:focus:not(:disabled) {
+         border-color: $gold;
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+ }
+
+ .lam-toggle-wrap {
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+     align-self: flex-end;
+ }
+
+ .lam-toggle {
+     position: relative;
+     width: 38px;
+     height: 22px;
+     border-radius: 100px;
+     border: 1.5px solid rgba($champagne, 0.25);
+     background: rgba($midnight, 0.06);
+     cursor: pointer;
+     transition: all $t-base;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &__thumb {
+         position: absolute;
+         top: 2px;
+         left: 2px;
+         width: 14px;
+         height: 14px;
+         border-radius: 50%;
+         background: rgba($champagne, 0.4);
+         transition: transform $t-base, background $t-base;
+     }
+
+     &--on {
+         background: rgba($gold, 0.15);
+         border-color: $gold;
+
+         .lam-toggle__thumb {
+             transform: translateX(16px);
+             background: $gold;
+         }
+     }
+ }
+
+ .lam-toggle-label {
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+ }
+
+ .lam-search-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: none;
+     background: $gold;
+     color: $midnight;
+     cursor: pointer;
+     align-self: flex-end;
+     box-shadow: 0 3px 10px rgba($gold, 0.35);
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+
+     &:hover:not(:disabled) {
+         background: lighten($gold, 6%);
+         box-shadow: 0 4px 14px rgba($gold, 0.5);
+         transform: translateY(-1px);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         transform: none;
+         box-shadow: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .lam-clear-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.25);
+     background: transparent;
+     color: var(--aoms-text-muted);
+     cursor: pointer;
+     align-self: flex-end;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         color: var(--aoms-text-secondary);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .lam-spin {
+     animation: lam-spin 1s linear infinite;
+ }
+
+ // ── 7. Member List ────────────────────────────────────────────────────────
+ .lam-member-list {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 8px rgba($midnight, 0.04);
+     overflow: hidden;
+     max-height: 520px;
+     overflow-y: auto;
+
+     scrollbar-width: thin;
+     scrollbar-color: rgba($gold, 0.2) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($gold, 0.18);
+         border-radius: 2px;
+     }
+ }
+
+ .lam-shimmer-list {
+     display: flex;
+     flex-direction: column;
+     padding: 0.5rem;
+     gap: 0.375rem;
+ }
+
+ .lam-shimmer-row {
+     height: 52px;
+     border-radius: 8px;
+     background: linear-gradient(90deg, rgba($midnight, 0.05) 25%, rgba($midnight, 0.1) 50%, rgba($midnight, 0.05) 75%);
+     background-size: 200% 100%;
+     animation: lam-shimmer 1.4s infinite;
+ }
+
+ .lam-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     padding: 3rem 1.5rem;
+     gap: 0.5rem;
+
+     &__label {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__hint {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ .lam-member-row {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 0.75rem 1rem;
+     border: none;
+     background: transparent;
+     width: 100%;
+     text-align: left;
+     cursor: pointer;
+     border-bottom: 1px solid rgba($champagne, 0.07);
+     transition: background $t-fast;
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.07);
+     }
+
+     &--selected {
+         background: rgba($gold, 0.08) !important;
+         border-left: 3px solid $gold;
+     }
+
+     &--inactive {
+         opacity: 0.6;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $gold;
+         outline-offset: -2px;
+     }
+
+     &__info {
+         display: flex;
+         flex-direction: column;
+         gap: 0.0625rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__name {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-primary, $charcoal);
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+     }
+
+     &__card {
+         font-size: 10px;
+         font-family: 'Courier New', monospace;
+         color: var(--aoms-text-muted);
+         letter-spacing: 0.05em;
+     }
+
+     &__right {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-end;
+         gap: 0.25rem;
+         flex-shrink: 0;
+     }
+
+     &__points {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: $gold;
+         font-variant-numeric: tabular-nums;
+     }
+ }
+
+ // ── 8. Pagination ─────────────────────────────────────────────────────────
+ .lam-pagination {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.75rem;
+
+     &__btn {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: transparent;
+         color: var(--aoms-text-secondary);
+         cursor: pointer;
+         transition: all $t-fast;
+
+         svg {
+             width: 1rem;
+             height: 1rem;
+         }
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             background: rgba($champagne, 0.07);
+             color: $gold;
+         }
+
+         &:disabled {
+             opacity: 0.3;
+             cursor: not-allowed;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     &__info {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+
+         strong {
+             color: $gold;
+         }
+     }
+ }
+
+ // ── 9. No Selection State ─────────────────────────────────────────────────
+ .lam-no-selection {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 3rem 1.5rem;
+     text-align: center;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px dashed rgba($champagne, 0.12);
+
+     &__icon {
+         width: 64px;
+         height: 64px;
+         color: rgba($champagne, 0.25);
+         margin-bottom: 0.25rem;
+     }
+
+     &__label {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: rgba($champagne, 0.45);
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+     }
+
+     &__hint {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: rgba($champagne, 0.25);
+         line-height: 1.5;
+         max-width: 220px;
+     }
+ }
+
+ // ── 10. Detail Shimmer ────────────────────────────────────────────────────
+ .lam-detail-shimmer {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.12);
+     padding: 1.25rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+ }
+
+ .lam-shimmer {
+     border-radius: 4px;
+     background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+     background-size: 200% 100%;
+     animation: lam-shimmer 1.4s infinite;
+
+     &--badge {
+         height: 40px;
+         width: 120px;
+         border-radius: 100px;
+     }
+
+     &--title {
+         height: 22px;
+         width: 60%;
+     }
+
+     &--card {
+         height: 100px;
+         border-radius: 12px;
+     }
+
+     &--row {
+         height: 14px;
+         width: 80%;
+     }
+ }
+
+ // ── 11. Profile Panel ─────────────────────────────────────────────────────
+ .lam-profile {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 4px 20px rgba($midnight, 0.25);
+     overflow: hidden;
+     animation: lam-fadein 240ms ease forwards;
+
+     &__header {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         padding: 1.125rem 1.25rem 0;
+     }
+
+     &__close {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.75rem;
+         height: 1.75rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.15);
+         background: transparent;
+         color: rgba($champagne, 0.4);
+         cursor: pointer;
+         transition: all $t-fast;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             border-color: rgba($champagne, 0.4);
+             color: $champagne;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+     }
+
+     &__identity {
+         display: flex;
+         align-items: flex-start;
+         justify-content: space-between;
+         gap: 0.5rem;
+         padding: 0.875rem 1.25rem 0;
+     }
+
+     &__name {
+         font-size: 1.0625rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: $champagne;
+         line-height: 1.15;
+     }
+
+     &__card {
+         font-size: 10px;
+         font-family: 'Courier New', monospace;
+         color: rgba($champagne, 0.35);
+         letter-spacing: 0.07em;
+         margin-top: 0.125rem;
+     }
+
+     &__actions {
+         display: flex;
+         flex-direction: column;
+         gap: 0.5rem;
+         padding: 1rem 1.25rem 1.25rem;
+         border-top: 1px solid rgba($champagne, 0.07);
+         margin-top: 0.875rem;
+     }
+ }
+
+ // ── 12. Admin Action Buttons ──────────────────────────────────────────────
+ .lam-action-btn {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.5625rem 1rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     cursor: pointer;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &--tier {
+         border: 1px solid rgba($gold, 0.35);
+         background: rgba($gold, 0.08);
+         color: $champagne;
+
+         &:hover:not(:disabled) {
+             background: $gold;
+             color: $midnight;
+             box-shadow: 0 3px 10px rgba($gold, 0.4);
+         }
+     }
+
+     &--points {
+         border: 1px solid rgba($emerald, 0.3);
+         background: rgba($emerald, 0.07);
+         color: lighten($emerald, 30%);
+
+         &:hover:not(:disabled) {
+             background: rgba($emerald, 0.15);
+             border-color: rgba($emerald, 0.5);
+         }
+     }
+
+     &--delete {
+         border: 1px solid rgba($ruby, 0.3);
+         background: rgba($ruby, 0.07);
+         color: lighten($ruby, 25%);
+
+         &:hover:not(:disabled) {
+             background: $ruby;
+             color: #fff;
+             border-color: $ruby;
+             box-shadow: 0 3px 10px rgba($ruby, 0.4);
+         }
+     }
+ }
+
+ // ── 13. Tier / Points Modals ──────────────────────────────────────────────
+ .lam-modal-bd {
+     position: fixed;
+     inset: 0;
+     z-index: 49;
+     background: rgba($midnight, 0.75);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+     animation: lam-fade 200ms ease forwards;
+ }
+
+ .lam-modal {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 50;
+     width: min(480px, calc(100vw - 2rem));
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 0 0 1.5rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+     overflow: hidden;
+     animation: lam-enter 260ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     >*:not(.lam-modal__accent) {
+         padding-left: 1.5rem;
+         padding-right: 1.5rem;
+     }
+
+     &__accent {
+         height: 3px;
+         flex-shrink: 0;
+         background: linear-gradient(to right, transparent, rgba($gold, 0.5), rgba($champagne, 0.85), rgba($gold, 0.5), transparent);
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3rem;
+         height: 3rem;
+         border-radius: 50%;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.25);
+         color: $champagne;
+         margin-top: 0.5rem;
+
+         svg {
+             width: 1.5rem;
+             height: 1.5rem;
+         }
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.5rem;
+     }
+
+     &__title {
+         font-size: 1.125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: 'Courier New', monospace;
+         color: rgba($champagne, 0.45);
+         letter-spacing: 0.05em;
+     }
+
+     &__error {
+         padding: 0.5rem 0.75rem;
+         border-radius: 6px;
+         background: rgba($ruby, 0.08);
+         border: 1px solid rgba($ruby, 0.2);
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: lighten($ruby, 28%);
+         line-height: 1.4;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding-top: 0.25rem;
+         border-top: 1px solid rgba(255, 255, 255, 0.06);
+     }
+
+     &__btn {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.375rem;
+         padding: 0.5rem 1rem;
+         border-radius: 4px;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         cursor: pointer;
+         outline: none;
+         white-space: nowrap;
+         transition: all $t-fast;
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         &--cancel {
+             color: rgba(255, 255, 255, 0.45);
+             background: transparent;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+
+             &:hover {
+                 color: rgba(255, 255, 255, 0.75);
+                 border-color: rgba(255, 255, 255, 0.22);
+                 background: rgba(255, 255, 255, 0.05);
+             }
+         }
+
+         &--confirm {
+             color: $midnight;
+             background: $gold;
+             border: none;
+             box-shadow: 0 4px 14px rgba($gold, 0.4);
+
+             &:hover:not(:disabled) {
+                 background: lighten($gold, 6%);
+                 box-shadow: 0 6px 18px rgba($gold, 0.55);
+                 transform: translateY(-1px);
+             }
+
+             &:disabled {
+                 opacity: 0.4;
+                 cursor: not-allowed;
+                 transform: none;
+                 box-shadow: none;
+             }
+         }
+     }
+ }
+
+ // Tier selector
+ .lam-tier-selector {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 0.5rem;
+     margin-top: 0.5rem;
+ }
+
+ .lam-tier-option {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.25rem;
+     padding: 0.75rem;
+     border-radius: 8px;
+     border: 1.5px solid rgba($champagne, 0.12);
+     background: rgba(255, 255, 255, 0.03);
+     cursor: pointer;
+     transition: all $t-fast;
+
+     &:hover {
+         border-color: rgba($gold, 0.35);
+         background: rgba($gold, 0.06);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--active {
+         border-color: $gold;
+         background: rgba($gold, 0.1);
+         box-shadow: 0 0 10px rgba($gold, 0.18);
+     }
+
+     &__name {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: $champagne;
+     }
+
+     &__current-label {
+         font-size: 9px;
+         color: $gold;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         font-weight: 700;
+     }
+ }
+
+ // Points form
+ .lam-pts-form {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+ }
+
+ .lam-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3rem;
+
+     &__label {
+         font-size: 9.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba($champagne, 0.45);
+     }
+
+     &__input,
+     &__textarea {
+         width: 100%;
+         padding: 0.5rem 0.75rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.18);
+         background: rgba(255, 255, 255, 0.04);
+         font-family: var(--aoms-font-body);
+         font-size: 0.8125rem;
+         font-weight: 500;
+         color: rgba(255, 255, 255, 0.85);
+         outline: none;
+         transition: border-color $t-fast;
+
+         &::placeholder {
+             color: rgba($champagne, 0.3);
+         }
+
+         &:focus {
+             border-color: $gold;
+             background: rgba($gold, 0.03);
+         }
+     }
+
+     &__textarea {
+         resize: none;
+     }
+
+     &__hint {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         color: rgba($champagne, 0.3);
+     }
+ }
+
+ .lam-required {
+     color: lighten($ruby, 25%);
+ }
+
+ // ── 14. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes lam-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes lam-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes lam-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 14px)) scale(0.94);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%) scale(1);
+     }
+ }
+
+ @keyframes lam-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes lam-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── 15. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .lam-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .lam-search-bar {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     .lam-search-bar__input {
+         background: rgba(255, 255, 255, 0.04);
+         color: rgba(255, 255, 255, 0.85);
+
+         &:focus:not(:disabled) {
+             background: rgba($gold, 0.04);
+         }
+     }
+
+     .lam-select {
+         background: rgba(255, 255, 255, 0.04);
+         color: rgba(255, 255, 255, 0.85);
+     }
+
+     .lam-member-list {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     .lam-member-row:hover {
+         background: rgba($champagne, 0.06);
+     }
+
+     .lam-shimmer-row {
+         background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+         background-size: 200% 100%;
+     }
+ }

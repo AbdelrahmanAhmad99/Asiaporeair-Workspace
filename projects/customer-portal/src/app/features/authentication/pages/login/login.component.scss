@@ -1,0 +1,273 @@
+ $midnight : #051937;
+ $royal-gold : #B68F24;
+ $champagne : #E2C780;
+ $ivory : #F8F9FA;
+ $white : #FFFFFF;
+ $charcoal : #101056;
+ $muted : #718096;
+ $font : 'Montserrat',
+ 'Inter',
+ -apple-system,
+ sans-serif;
+ $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+ @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+ :host {
+     display: block;
+ }
+
+ // ── Shell ──────────────────────────────────────────────────────────────────────
+ .login-shell {
+     position: relative;
+     min-height: 100dvh;
+     display: flex;
+     flex-direction: column;
+     font-family: $font;
+ }
+
+ // ── Background ─────────────────────────────────────────────────────────────────
+ .login-shell__bg {
+     position: fixed;
+     inset: 0;
+     z-index: 0;
+ }
+
+ .login-shell__bg-image {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     object-position: center 25%;
+ }
+
+ .login-shell__bg-overlay {
+     position: absolute;
+     inset: 0;
+     // background:
+     //     linear-gradient(120deg,
+     //         rgba($midnight, 0.96) 0%,
+     //         rgba($midnight, 0.82) 45%,
+     //         rgba($midnight, 0.55) 100%);
+     background:
+         linear-gradient(135deg,
+             rgba($midnight, 0.52) 40%,
+             rgba($midnight, 0.45) 45%,
+             rgba($midnight, 0.40) 50%);
+ }
+
+ // ── Main layout ────────────────────────────────────────────────────────────────
+ .login-main {
+     position: relative;
+     z-index: 5;
+     flex: 1;
+     display: grid;
+     grid-template-columns: 1fr 480px;
+     gap: 0;
+     max-width: 1240px;
+     margin: 0 auto;
+     width: 100%;
+     padding: 40px 40px 0;
+     align-items: center;
+
+     @media (max-width: 1060px) {
+         grid-template-columns: 1fr;
+         justify-items: center;
+         padding: 32px 20px 0;
+     }
+ }
+
+ // ── Brand panel (left) ─────────────────────────────────────────────────────────
+ .login-brand {
+     padding-right: 56px;
+
+     @media (max-width: 1060px) {
+         display: none;
+     }
+
+     &__badge {
+         margin: 0;
+         padding: 0;
+         display: flex;
+         flex-direction: column;
+         gap: 28px;
+     }
+
+     &__pre-line {
+         width: 48px;
+         height: 2px;
+         background: $royal-gold;
+     }
+
+     &__quote {
+         font-size: clamp(1.1rem, 2vw, 1.45rem);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         line-height: 1.55;
+         color: rgba($white, 0.88);
+         margin: 0;
+         font-style: italic;
+     }
+
+     &__stats {
+         display: flex;
+         align-items: center;
+         gap: 20px;
+     }
+
+     &__stat {
+         display: flex;
+         flex-direction: column;
+         gap: 2px;
+     }
+
+     &__stat-num {
+         font-size: 1.5rem;
+         font-weight: 800;
+         letter-spacing: -0.03em;
+         color: $champagne;
+         line-height: 1;
+     }
+
+     &__stat-label {
+         font-size: 11px;
+         font-weight: 500;
+         color: rgba($white, 0.42);
+         letter-spacing: 0.03em;
+         line-height: 1.4;
+     }
+
+     &__stat-divider {
+         width: 1px;
+         height: 36px;
+         background: rgba($royal-gold, 0.25);
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Form card ──────────────────────────────────────────────────────────────────
+ .login-panel {
+     width: 100%;
+     max-width: 480px;
+
+     &__card {
+         background: rgba($white, 0.98);
+         border-radius: 16px;
+         border: 1px solid rgba($champagne, 0.18);
+         box-shadow: 0 28px 70px rgba($midnight, 0.28);
+         padding: 36px 36px 32px;
+
+         @media (max-width: 480px) {
+             padding: 24px 18px;
+             border-radius: 12px;
+         }
+     }
+
+     &__header {
+         margin-bottom: 24px;
+     }
+
+     &__eyebrow {
+         font-size: 10px;
+         font-weight: 700;
+         letter-spacing: 0.2em;
+         text-transform: uppercase;
+         color: $royal-gold;
+         margin: 0 0 8px;
+     }
+
+     &__title {
+         font-size: clamp(1.35rem, 3vw, 1.7rem);
+         font-weight: 800;
+         letter-spacing: -0.03em;
+         color: $charcoal;
+         margin: 0 0 7px;
+         line-height: 1.15;
+     }
+
+     &__subtitle {
+         font-size: 13px;
+         color: $muted;
+         line-height: 1.6;
+         margin: 0;
+     }
+
+     &__register {
+         text-align: center;
+         font-size: 13px;
+         color: $muted;
+         margin: 18px 0 0;
+     }
+
+     &__register-link {
+         color: $royal-gold;
+         font-weight: 600;
+         text-decoration: none;
+         transition: color 200ms $ease;
+
+         &:hover {
+             color: darken($royal-gold, 8%);
+             text-decoration: underline;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $royal-gold;
+             border-radius: 2px;
+         }
+     }
+ }
+
+ // ── Divider ────────────────────────────────────────────────────────────────────
+ .login-divider {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+     margin: 18px 0;
+
+     &__line {
+         flex: 1;
+         height: 1px;
+         background: rgba($champagne, 0.35);
+     }
+
+     &__text {
+         font-size: 11px;
+         font-weight: 500;
+         color: rgba($muted, 0.65);
+         white-space: nowrap;
+         letter-spacing: 0.04em;
+     }
+ }
+
+ // ── Error alert ────────────────────────────────────────────────────────────────
+ .login-error-alert {
+     display: flex;
+     align-items: flex-start;
+     gap: 10px;
+     padding: 12px 14px;
+     border-radius: 8px;
+     background: rgba(#B91C1C, 0.06);
+     border: 1px solid rgba(#B91C1C, 0.22);
+     font-size: 13px;
+     font-weight: 500;
+     color: #991B1B;
+     margin-bottom: 16px;
+     line-height: 1.5;
+     animation: errorIn 200ms $ease;
+
+     svg {
+         flex-shrink: 0;
+         margin-top: 1px;
+     }
+ }
+
+ @keyframes errorIn {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }

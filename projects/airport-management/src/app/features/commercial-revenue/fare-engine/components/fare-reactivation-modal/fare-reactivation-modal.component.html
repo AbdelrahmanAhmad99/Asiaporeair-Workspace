@@ -1,0 +1,85 @@
+<div class="frm-modal" role="alertdialog" aria-modal="true" aria-labelledby="frm-title">
+
+    <!-- Gold accent rule -->
+    <div class="frm-rule" aria-hidden="true"></div>
+
+    <!-- ── Content ──────────────────────────────────────────────────── -->
+    @if (!isProcessing()) {
+
+    <!-- Restoration Icon -->
+    <div class="frm-icon-wrap" aria-hidden="true">
+        <svg class="frm-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+    </div>
+
+    <!-- Header -->
+    <div class="frm-body">
+        <h2 class="frm-title" id="frm-title">Data Restoration Protocol</h2>
+
+        <!-- Target Code + Description -->
+        <div class="frm-target">
+            <span class="frm-target__code">{{ fareCode() }}</span>
+            @if (fareDescription()) {
+            <span class="frm-target__desc">{{ fareDescription() }}</span>
+            }
+        </div>
+
+        <p class="frm-copy">
+            Restoring this fare basis code will immediately re-publish it to the active pricing engine,
+            making it available for new bookings across all applicable routes and fare classes.
+        </p>
+
+        <!-- Info pill -->
+        <div class="frm-info-pill">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            The code will be instantly visible to the commercial booking engine upon confirmation.
+        </div>
+    </div>
+
+    <!-- Error state -->
+    @if (error()) {
+    <div class="frm-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        {{ error() }}
+    </div>
+    }
+
+    <!-- Actions -->
+    <div class="frm-actions">
+        <button class="frm-btn frm-btn--cancel" type="button" (click)="cancelled.emit()">
+            Cancel
+        </button>
+        <button class="frm-btn frm-btn--confirm" type="button" (click)="confirmed.emit()"
+            aria-label="Confirm reactivation of fare code">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Reactivate Code
+        </button>
+    </div>
+
+    }
+
+    <!-- ── Processing State ─────────────────────────────────────────── -->
+    @if (isProcessing()) {
+    <div class="frm-loading" aria-live="polite" aria-busy="true">
+        <svg class="frm-loading__spinner" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        <p>Restoring <strong>{{ fareCode() }}</strong></p>
+        <span>Synchronizing with the Pricing Engine…</span>
+    </div>
+    }
+
+</div>

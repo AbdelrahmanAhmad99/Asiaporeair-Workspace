@@ -1,0 +1,208 @@
+<div class="ficr-page">
+
+  <!-- ══ Sticky Command Header ═══════════════════════════════════ -->
+  <header class="ficr-header">
+
+    <!-- Left: breadcrumb + title + live badge -->
+    <div class="ficr-header-left">
+      <nav class="ficr-breadcrumb" aria-label="Breadcrumb">
+        <span class="ficr-breadcrumb__section">Flight Operations</span>
+        <svg class="ficr-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+        </svg>
+        <span class="ficr-breadcrumb__current">Control Room</span>
+      </nav>
+
+      <div class="ficr-title-row">
+        <h1 class="ficr-title">Flight Instance Control Room</h1>
+
+        @if (liveCount() > 0 && !loading()) {
+        <div class="ficr-live-badge" role="status" aria-label="{{ liveCount() }} live flights">
+          <span class="ficr-live-badge__dot" aria-hidden="true"></span>
+          {{ liveCount() }} Live
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Right: command bar -->
+    <div class="ficr-command-bar">
+      <!-- Refresh icon -->
+      <button class="ficr-icon-btn" (click)="refresh()" [disabled]="loading()" title="Refresh"
+        aria-label="Refresh instances">
+        <svg class="ficr-icon-btn__icon" [class.ficr-icon-btn__icon--spin]="loading()" fill="none" stroke="currentColor"
+          stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+      </button>
+
+      <div class="ficr-sep" aria-hidden="true"></div>
+
+      <!-- Fleet Assignment Overview — Sapphire outline -->
+      <button class="ficr-btn ficr-btn--outline" type="button" (click)="goToFleetAssignment()"
+        aria-label="Fleet Assignment Overview">
+        <svg class="ficr-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                   0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+        </svg>
+        Fleet Assignment
+      </button>
+
+      <!-- Generate Bulk Instances — Champagne Gold ghost -->
+      <button class="ficr-btn ficr-btn--ghost" type="button" (click)="generateBulkInstances()"
+        aria-label="Generate Bulk Flight Instances">
+        <svg class="ficr-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25
+                   2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0
+                   21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5
+                   m-9-3.75h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008z" />
+        </svg>
+        Generate Bulk
+      </button>
+
+      <!-- Create Ad-Hoc Flight — Royal Gold solid -->
+      <button class="ficr-btn ficr-btn--primary" type="button" (click)="createAdHocFlight()"
+        aria-label="Create an Ad-Hoc flight instance">
+        <svg class="ficr-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Create Ad-Hoc Flight
+      </button>
+    </div>
+  </header>
+
+  <!-- ══ Status Badge Strip ════════════════════════════════════ -->
+  @if (!loading() && statusSummary().total > 0) {
+  <div class="ficr-status-strip" role="region" aria-label="Operational status summary">
+    <div class="ficr-badge ficr-badge--scheduled">
+      <span class="ficr-badge__count">{{ statusSummary().scheduled }}</span>
+      <span class="ficr-badge__label">Scheduled</span>
+    </div>
+    <div class="ficr-badge ficr-badge--delayed">
+      <span class="ficr-badge__count">{{ statusSummary().delayed }}</span>
+      <span class="ficr-badge__label">Delayed</span>
+    </div>
+    <div class="ficr-badge ficr-badge--boarding">
+      <span class="ficr-badge__count">{{ statusSummary().boarding }}</span>
+      <span class="ficr-badge__label">Boarding</span>
+    </div>
+    <div class="ficr-badge ficr-badge--inflight">
+      <span class="ficr-badge__count">{{ statusSummary().inFlight }}</span>
+      <span class="ficr-badge__label">In Flight</span>
+    </div>
+    <div class="ficr-badge ficr-badge--arrived">
+      <span class="ficr-badge__count">{{ statusSummary().arrived }}</span>
+      <span class="ficr-badge__label">Arrived</span>
+    </div>
+    <div class="ficr-badge ficr-badge--cancelled">
+      <span class="ficr-badge__count">{{ statusSummary().cancelled }}</span>
+      <span class="ficr-badge__label">Cancelled</span>
+    </div>
+    <div class="ficr-badge-sep ficr-badge-sep--right" aria-hidden="true"></div>
+    <div class="ficr-badge ficr-badge--total">
+      <span class="ficr-badge__count">{{ statusSummary().total }}</span>
+      <span class="ficr-badge__label">Total</span>
+    </div>
+  </div>
+  }
+
+  <!-- ══ Page Body ════════════════════════════════════════════ -->
+  <main class="ficr-body">
+
+    <!-- Global dispatch error banner -->
+    @if (dispatchError()) {
+    <div class="ficr-error-banner" role="alert">
+      <svg class="ficr-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                   2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                   16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
+      <div class="ficr-error-banner__body">
+        <strong class="ficr-error-banner__title">Dispatch Registry Error</strong>
+        <span class="ficr-error-banner__msg">{{ dispatchError() }}</span>
+      </div>
+      <button class="ficr-error-banner__dismiss" type="button" (click)="dismissError()" aria-label="Dismiss error">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    }
+
+    <!-- Search bar -->
+    <aoms-instance-search-bar [loading]="loading()" [hasActiveFilter]="hasFilter()"
+      (onFilterChange)="onFilterChange($event)" (onReset)="onFilterReset()" />
+
+    <!-- Data table -->
+    <aoms-instance-data-table [instances]="instances()" [loading]="loading()" [recordLabel]="recordLabel()"
+      [cancellingId]="cancellingId()" [isProcessing]="isProcessing()" (onAnalyse)="onAnalyse($event)"
+      (onCancel)="openCancellationDialog($event)" />
+
+    <!-- Pagination -->
+    @if (!loading() && pagination().totalPages > 1) {
+    <div class="ficr-pagination" role="navigation" aria-label="Instance pagination">
+      <button class="ficr-page-btn" type="button" (click)="prevPage()" [disabled]="!canGoPrev()"
+        aria-label="Previous page">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>
+        Prev
+      </button>
+      <span class="ficr-page-info">
+        Page <strong>{{ pagination().pageNumber }}</strong>
+        of <strong>{{ pagination().totalPages }}</strong>
+      </span>
+      <button class="ficr-page-btn" type="button" (click)="nextPage()" [disabled]="!canGoNext()" aria-label="Next page">
+        Next
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+    </div>
+    }
+
+  </main>
+
+  <!-- ══ Cancellation Dialog (Safety Net) ══════════════════════ -->
+  @if (showDialog() && cancelTarget()) {
+  <aoms-flight-cancellation-dialog [instance]="cancelTarget()!" [isProcessing]="isCancelling()"
+    [apiError]="dialogApiError()" (onConfirm)="onCancellationConfirmed($event)"
+    (onDismiss)="dismissCancellationDialog()" />
+  }
+
+  <!-- ══ Toast Stack ════════════════════════════════════════════ -->
+  <div class="ficr-toast-stack" role="region" aria-live="polite">
+    @for (toast of toasts(); track toast.id) {
+    <div class="ficr-toast" [class.ficr-toast--success]="toast.type === 'success'"
+      [class.ficr-toast--error]="toast.type === 'error'" role="status">
+      <div class="ficr-toast__icon-wrap" aria-hidden="true">
+        @if (toast.type === 'success') {
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+        </svg>
+        } @else {
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        }
+      </div>
+      <p class="ficr-toast__msg">{{ toast.message }}</p>
+      <button class="ficr-toast__dismiss" type="button" (click)="dismissToast(toast.id)" aria-label="Dismiss">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    }
+  </div>
+
+</div>

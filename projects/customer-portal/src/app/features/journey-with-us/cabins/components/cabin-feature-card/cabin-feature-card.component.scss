@@ -1,0 +1,253 @@
+// ============================================================================
+// cabin-feature-card.component.scss
+// Asiaporeair | Cabin Feature Card — Wide Horizontal Luxury Card
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 360ms $ease;
+
+:host {
+    display: block;
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── Card shell ────────────────────────────────────────────────────────────────
+.cfc {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    background: $white;
+    border: 1px solid rgba($champagne, 0.25);
+    box-shadow: 0 4px 28px rgba($midnight, 0.07);
+    min-height: 280px;
+    transition: box-shadow $t, transform $t;
+
+    animation: cardIn 600ms $ease both;
+    animation-delay: var(--anim-delay, 0ms);
+
+    &:hover {
+        box-shadow: 0 16px 50px rgba($midnight, 0.14);
+        transform: translateY(-3px);
+
+        .cfc__image {
+            transform: scale(1.04);
+        }
+
+        .cfc__cta-arrow {
+            transform: translateX(6px);
+        }
+
+        .cfc__divider {
+            width: 80px;
+        }
+
+        .cfc__badge {
+            background: darken($royal-gold, 5%);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+
+    &--flipped {
+        .cfc__image-wrap {
+            order: 2;
+        }
+
+        .cfc__content {
+            order: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+
+        &--flipped .cfc__image-wrap {
+            order: unset;
+        }
+
+        &--flipped .cfc__content {
+            order: unset;
+        }
+    }
+}
+
+// ── Image half ────────────────────────────────────────────────────────────────
+.cfc__image-wrap {
+    position: relative;
+    overflow: hidden;
+    min-height: 220px;
+}
+
+.cfc__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform $t;
+}
+
+.cfc__badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    background: $royal-gold;
+    font-family: $font;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $midnight;
+    transition: background $t;
+}
+
+// ── Content half ──────────────────────────────────────────────────────────────
+.cfc__content {
+    display: flex;
+    align-items: center;
+    padding: 32px 36px;
+
+    @media (max-width: 1000px) {
+        padding: 24px 24px;
+    }
+
+    @media (max-width: 768px) {
+        padding: 24px 20px;
+    }
+}
+
+.cfc__content-inner {
+    width: 100%;
+}
+
+.cfc__tagline {
+    font-family: $font;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: $royal-gold;
+    margin: 0 0 8px;
+}
+
+.cfc__title {
+    font-family: $font;
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: $charcoal;
+    margin: 0 0 14px;
+    line-height: 1.15;
+}
+
+.cfc__divider {
+    height: 2px;
+    width: 40px;
+    background: linear-gradient(90deg, $royal-gold, $champagne);
+    border-radius: 1px;
+    margin-bottom: 14px;
+    transition: width 400ms $ease;
+}
+
+.cfc__desc {
+    font-family: $font;
+    font-size: 0.82rem;
+    color: $muted;
+    line-height: 1.65;
+    margin: 0 0 22px;
+}
+
+// ── Specs ─────────────────────────────────────────────────────────────────────
+.cfc__specs {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 12px 24px;
+    margin-bottom: 24px;
+    width: fit-content;
+}
+
+.cfc__spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cfc__spec-value {
+    font-family: $font;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: -0.01em;
+}
+
+.cfc__spec-label {
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $muted;
+}
+
+// ── CTA ───────────────────────────────────────────────────────────────────────
+.cfc__cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cfc__cta-text {
+    font-family: $font;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $charcoal;
+}
+
+.cfc__cta-arrow {
+    color: $royal-gold;
+    transition: transform 280ms $ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cfc {
+        animation: none;
+        transition: none;
+    }
+
+    .cfc__image,
+    .cfc__cta-arrow,
+    .cfc__divider {
+        transition: none;
+    }
+}

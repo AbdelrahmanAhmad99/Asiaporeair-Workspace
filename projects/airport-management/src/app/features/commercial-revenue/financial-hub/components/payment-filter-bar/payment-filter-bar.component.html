@@ -1,0 +1,100 @@
+<div class="pfb-bar">
+
+    <form class="pfb-form" [formGroup]="form" novalidate>
+
+        <!-- Booking ID -->
+        <div class="pfb-field pfb-field--booking">
+            <label class="pfb-label" for="pfb-booking-id">Booking ID</label>
+            <input id="pfb-booking-id" class="pfb-input" type="number" formControlName="bookingId"
+                placeholder="e.g. 10234" min="0" autocomplete="off" aria-label="Filter by booking ID" />
+        </div>
+
+        <!-- Amount Range -->
+        <div class="pfb-field pfb-field--amount">
+            <label class="pfb-label">Amount Range</label>
+            <div class="pfb-range">
+                <div class="pfb-input-prefix-wrap">
+                    <span class="pfb-input-prefix">Min</span>
+                    <input class="pfb-input pfb-input--prefixed" type="number" formControlName="minAmount"
+                        placeholder="0.00" min="0" step="0.01" autocomplete="off" aria-label="Minimum amount" />
+                </div>
+                <span class="pfb-range__sep" aria-hidden="true">—</span>
+                <div class="pfb-input-prefix-wrap">
+                    <span class="pfb-input-prefix">Max</span>
+                    <input class="pfb-input pfb-input--prefixed" type="number" formControlName="maxAmount"
+                        placeholder="9999.99" min="0" step="0.01" autocomplete="off" aria-label="Maximum amount" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Range -->
+        <div class="pfb-field pfb-field--dates">
+            <label class="pfb-label">Date Range</label>
+            <div class="pfb-range">
+                <input class="pfb-input pfb-input--date" type="date" formControlName="startDate"
+                    aria-label="Start date" />
+                <span class="pfb-range__sep" aria-hidden="true">—</span>
+                <input class="pfb-input pfb-input--date" type="date" formControlName="endDate" aria-label="End date" />
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="pfb-field pfb-field--status">
+            <label class="pfb-label" for="pfb-status">Status</label>
+            <div class="pfb-select-wrap">
+                <select id="pfb-status" class="pfb-select" formControlName="status" aria-label="Filter by status">
+                    <option value="">All Statuses</option>
+                    @for (s of statusOptions; track s) {
+                    <option [value]="s">{{ s }}</option>
+                    }
+                </select>
+                <svg class="pfb-select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Payment Method / Provider -->
+        <div class="pfb-field pfb-field--provider">
+            <label class="pfb-label" for="pfb-provider">Provider</label>
+            <div class="pfb-select-wrap">
+                <select id="pfb-provider" class="pfb-select" formControlName="paymentMethod"
+                    aria-label="Filter by provider">
+                    <option value="">All Providers</option>
+                    @for (m of methodOptions; track m) {
+                    <option [value]="m">{{ methodLabel(m) }}</option>
+                    }
+                </select>
+                <svg class="pfb-select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="pfb-field pfb-field--actions">
+            <button class="pfb-btn pfb-btn--search" type="button" (click)="onSearch()" [disabled]="loading()">
+                @if (loading()) {
+                <svg class="pfb-btn__spinner" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+                </svg>
+                }
+                Search
+            </button>
+            <button class="pfb-btn pfb-btn--reset" type="button" (click)="onReset()" [disabled]="loading()">
+                Reset
+            </button>
+        </div>
+
+    </form>
+
+</div>

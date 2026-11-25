@@ -1,0 +1,60 @@
+<div class="aw-shell">
+
+    <header class="aw-hero">
+        <div class="aw-hero__inner">
+            <nav class="aw-bc" aria-label="Breadcrumb">
+                <a href="/" class="aw-bc__link">Home</a><span class="aw-bc__sep">›</span>
+                <a href="/journey-with-us/our-story" class="aw-bc__link">Our Story</a>
+                <span class="aw-bc__sep">›</span>
+                <span class="aw-bc__cur">Awards</span>
+            </nav>
+            <div class="aw-hero__pre">
+                <div class="aw-hero__line"></div>
+                <span class="aw-hero__ey">Recognised by the World</span>
+            </div>
+            <h1 class="aw-hero__title">Awards & Recognition</h1>
+            <p class="aw-hero__sub">
+                Independently judged by the world's most rigorous aviation bodies,
+                our awards reflect the experiences of millions of passengers. We are
+                honoured — and motivated — by every one of them.
+            </p>
+        </div>
+    </header>
+
+    <!-- Grand awards -->
+    <section class="aw-grand" aria-labelledby="aw-grand-title">
+        <div class="aw-inner">
+            <div class="aw-sec-hdr">
+                <div class="aw-sec-hdr__line"></div>
+                <div>
+                    <p class="aw-sec-hdr__ey">Headline Recognition</p>
+                    <h2 class="aw-sec-hdr__title" id="aw-grand-title">Grand Awards</h2>
+                </div>
+            </div>
+            <div class="aw-grand__grid">
+                @for (award of grandAwards(); track award.id; let i = $index) {
+                <app-award-medal-badge [award]="award" [animDelay]="i * 80"></app-award-medal-badge>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- All awards -->
+    <section class="aw-all" aria-labelledby="aw-all-title">
+        <div class="aw-inner">
+            <div class="aw-sec-hdr">
+                <div class="aw-sec-hdr__line"></div>
+                <div>
+                    <p class="aw-sec-hdr__ey">Full Recognition</p>
+                    <h2 class="aw-sec-hdr__title" id="aw-all-title">All Awards — {{ currentYear }}</h2>
+                </div>
+            </div>
+            <div class="aw-all__grid">
+                @for (award of standardAwards(); track award.id; let i = $index) {
+                <app-award-medal-badge [award]="award" [animDelay]="i * 60"></app-award-medal-badge>
+                }
+            </div>
+        </div>
+    </section>
+
+</div>

@@ -1,0 +1,137 @@
+// booking-inventory-list.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$error: #d95f5f;
+$success: #2E7D52;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$t: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.inventory-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.75rem 0.5rem;
+    border-radius: 8px;
+    transition: background $t;
+
+    &:hover {
+        background: rgba($midnight, 0.02);
+    }
+
+    &--staged {
+        background: rgba($error, 0.04);
+    }
+}
+
+.inv-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: lighten($success, 20%);
+
+    &.dot--remove {
+        background: $error;
+    }
+}
+
+.inv-info {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.inv-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $charcoal;
+}
+
+.inv-qty {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: $text-muted;
+}
+
+.removal-label {
+    font-size: 0.6rem;
+    color: $error;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.inv-price {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: $charcoal;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.btn-remove,
+.btn-undo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $t;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.btn-remove {
+    background: rgba($error, 0.07);
+    border: 1px solid rgba($error, 0.25);
+    color: $error;
+
+    &:hover {
+        background: rgba($error, 0.14);
+        border-color: rgba($error, 0.45);
+    }
+}
+
+.btn-undo {
+    background: rgba($success, 0.07);
+    border: 1px solid rgba($success, 0.25);
+    color: darken($success, 5%);
+
+    &:hover {
+        background: rgba($success, 0.14);
+    }
+}
+
+.non-removable-label {
+    font-size: 0.58rem;
+    color: $text-muted;
+    font-style: italic;
+    flex-shrink: 0;
+}

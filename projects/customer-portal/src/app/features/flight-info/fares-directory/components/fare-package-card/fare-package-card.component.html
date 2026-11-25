@@ -1,0 +1,138 @@
+<!-- ============================================================================
+     fare-package-card.component.html
+     Asiaporeair | Premium Fare Package Card
+     States: compact (default) · expanded (benefits + accordion)
+     ============================================================================ -->
+
+<article class="fpc-card" [class.fpc-card--expanded]="isExpanded()" [class.fpc-card--first]="cabinInfo.tier === 'first'"
+    [class.fpc-card--business]="cabinInfo.tier === 'business'" [class.fpc-card--premium]="cabinInfo.tier === 'premium'"
+    [style.animation-delay]="(index * 70) + 'ms'" [attr.aria-label]="'Fare package: ' + fare.code" role="article">
+
+    <!-- ── Gold top accent bar ─────────────────────────────────────────── -->
+    <div class="fpc-bar" aria-hidden="true"></div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         CARD HEADER
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="fpc-header">
+
+        <!-- Code + cabin badge -->
+        <div class="fpc-header__left">
+            <div class="fpc-code-badge" [attr.data-tier]="cabinInfo.tier" aria-label="Fare code {{ fare.code }}">
+                {{ fare.code }}
+            </div>
+            <span class="fpc-cabin-label" [attr.data-tier]="cabinInfo.tier">
+                {{ cabinInfo.label }}
+            </span>
+        </div>
+
+        <!-- Indicative pricing -->
+        <div class="fpc-price-block" aria-label="Starting from {{ indicativePrice }} SGD">
+            <span class="fpc-price-from">from</span>
+            <span class="fpc-price-value">SGD {{ indicativePrice | number:'1.0-0' }}</span>
+        </div>
+
+    </div>
+
+    <!-- ── Description ────────────────────────────────────────────────── -->
+    <div class="fpc-description">
+        <h3 class="fpc-description__title">{{ fare.description }}</h3>
+        @if (!isExpanded()) {
+        <p class="fpc-description__short">
+            {{ shortDescription }}
+        </p>
+        }
+    </div>
+
+    <!-- ── Compact benefits preview (when not expanded) ──────────────── -->
+    @if (!isExpanded()) {
+    <div class="fpc-benefits-preview">
+        <app-fare-benefits-list [code]="fare.code" [description]="fare.description" [rules]="fare.rules"
+            [compact]="true">
+        </app-fare-benefits-list>
+    </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         EXPANDED SECTION — Full benefits + rules accordion
+    ══════════════════════════════════════════════════════════════════════ -->
+    @if (isExpanded()) {
+    <div class="fpc-expanded" [@.disabled]="false">
+
+        <!-- Divider -->
+        <div class="fpc-expanded__divider" aria-hidden="true">
+            <div class="fpc-expanded__divider-line"></div>
+            <span class="fpc-expanded__divider-label">Complete Fare Package</span>
+            <div class="fpc-expanded__divider-line"></div>
+        </div>
+
+        <!-- Full benefits list -->
+        <section class="fpc-expanded__section" aria-label="All fare inclusions">
+            <h4 class="fpc-expanded__section-title">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="2"
+                    aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                What's Included
+            </h4>
+            <app-fare-benefits-list [code]="fare.code" [description]="fare.description" [rules]="fare.rules"
+                [compact]="false">
+            </app-fare-benefits-list>
+        </section>
+
+        <!-- Rules & conditions accordion -->
+        <section class="fpc-expanded__section" aria-label="Fare conditions and rules">
+            <h4 class="fpc-expanded__section-title">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                    aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                    <line x1="8" y1="8" x2="16" y2="8" />
+                    <line x1="8" y1="16" x2="12" y2="16" />
+                </svg>
+                Conditions & Policies
+            </h4>
+            <app-fare-rules-accordion [code]="fare.code" [rules]="fare.rules">
+            </app-fare-rules-accordion>
+        </section>
+
+    </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         ACTION ROW
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="fpc-actions">
+
+        <!-- Primary CTA -->
+        <button class="fpc-cta-primary" type="button" (click)="fareSelected.emit(fare)"
+            [attr.aria-label]="'Begin your journey with fare ' + fare.code">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <path
+                    d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            Begin Your Journey
+        </button>
+
+        <!-- Toggle expand/collapse -->
+        <button class="fpc-cta-secondary" type="button" (click)="toggleExpanded()" [attr.aria-expanded]="isExpanded()"
+            [attr.aria-label]="isExpanded() ? 'Collapse fare details' : 'View fare conditions'">
+            @if (isExpanded()) {
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <polyline points="18 15 12 9 6 15" />
+            </svg>
+            Collapse Details
+            } @else {
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+            </svg>
+            View Conditions
+            }
+        </button>
+
+    </div>
+
+</article>

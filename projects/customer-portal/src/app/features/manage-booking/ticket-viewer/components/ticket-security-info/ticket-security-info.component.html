@@ -1,0 +1,66 @@
+<!-- ticket-security-info.component.html -->
+<div class="security-info" role="region" aria-label="Conditions of carriage and security information">
+
+    <!-- Collapsed toggle row -->
+    <button class="toggle-row" [attr.aria-expanded]="isExpanded" aria-controls="security-body"
+        (click)="toggleExpand.emit()">
+        <div class="toggle-icon" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+        </div>
+        <span class="toggle-label">Conditions of Carriage &amp; Important Notices</span>
+        <svg class="toggle-chevron" [class.toggle-chevron--open]="isExpanded" width="13" height="13" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9" />
+        </svg>
+    </button>
+
+    <!-- Expanded body -->
+    <div *ngIf="isExpanded" [@expand] id="security-body">
+
+        <div class="sections-grid">
+            <div *ngFor="let sec of sections" class="sec-item">
+
+                <button class="sec-header" [attr.aria-expanded]="openSectionId === sec.id"
+                    [attr.aria-controls]="'sec-body-' + sec.id" (click)="toggleSection(sec.id)">
+                    <div class="sec-icon" aria-hidden="true">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1">
+                            <path [attr.d]="sec.icon" />
+                        </svg>
+                    </div>
+                    <span class="sec-title">{{ sec.title }}</span>
+                    <svg class="sec-chevron" [class.sec-chevron--open]="openSectionId === sec.id" width="12" height="12"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </button>
+
+                <div *ngIf="openSectionId === sec.id" [@expand] [id]="'sec-body-' + sec.id" class="sec-body">
+                    <ul class="sec-list" role="list">
+                        <li *ngFor="let item of sec.items" class="sec-list-item">
+                            <span class="list-bullet" aria-hidden="true">—</span>
+                            <span>{{ item }}</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Legal footer -->
+        <div class="legal-footer" role="note">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            This e-ticket is issued subject to Asiaporeair General Conditions of Carriage and applicable tariffs. For
+            full terms, visit asiaporeair.com/legal/conditions-of-carriage.
+        </div>
+
+    </div>
+
+</div>

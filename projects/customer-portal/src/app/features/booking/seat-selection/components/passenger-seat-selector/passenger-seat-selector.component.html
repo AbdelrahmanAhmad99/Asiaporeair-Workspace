@@ -1,0 +1,72 @@
+<!-- passenger-seat-selector.component.html -->
+
+<div class="pax-selector" role="list" aria-label="Passengers awaiting seat assignment">
+
+    <div *ngFor="let pax of passengers(); trackBy: trackByPax" class="pax-row"
+        [class.pax-row--active]="activePassengerId() === pax.passengerId"
+        [class.pax-row--assigned]="!!pax.seatNumber && !pax.isAssigning" [class.pax-row--assigning]="pax.isAssigning"
+        (click)="onSelect(pax.passengerId)" role="listitem"
+        [attr.aria-current]="activePassengerId() === pax.passengerId ? 'step' : null"
+        [attr.aria-label]="pax.label + (pax.seatNumber ? ', seat ' + pax.seatNumber + ' assigned' : ', no seat selected')">
+
+        <!-- Passenger Avatar -->
+        <div class="pax-avatar" [class.avatar--active]="activePassengerId() === pax.passengerId"
+            [class.avatar--assigned]="!!pax.seatNumber" aria-hidden="true">
+            <ng-container *ngIf="!pax.seatNumber && !pax.isAssigning">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+            </ng-container>
+            <ng-container *ngIf="pax.seatNumber && !pax.isAssigning">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            </ng-container>
+            <ng-container *ngIf="pax.isAssigning">
+                <span class="mini-spinner" aria-hidden="true"></span>
+            </ng-container>
+        </div>
+
+        <!-- Passenger Info -->
+        <div class="pax-info">
+            <span class="pax-name">{{ pax.label }}</span>
+            <span class="pax-status">
+                <ng-container *ngIf="pax.isAssigning">Securing seat…</ng-container>
+                <ng-container *ngIf="!pax.isAssigning && pax.seatNumber">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                    </svg>
+                    Seat {{ pax.seatNumber }}
+                </ng-container>
+                <ng-container *ngIf="!pax.isAssigning && !pax.seatNumber">
+                    Select a seat on the map
+                </ng-container>
+            </span>
+        </div>
+
+        <!-- Seat Chip or Change Button -->
+        <div class="pax-actions">
+            <span *ngIf="pax.seatNumber && !pax.isAssigning" class="seat-chip" aria-hidden="true">
+                {{ pax.seatNumber }}
+            </span>
+            <button *ngIf="pax.seatNumber && !pax.isAssigning" class="change-btn"
+                (click)="onChangeSeat($event, pax.passengerId)" [attr.aria-label]="'Change seat for ' + pax.label">
+                Change
+            </button>
+            <span *ngIf="!pax.seatNumber && !pax.isAssigning" class="unassigned-chip" aria-hidden="true">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                </svg>
+            </span>
+        </div>
+
+    </div>
+
+</div>

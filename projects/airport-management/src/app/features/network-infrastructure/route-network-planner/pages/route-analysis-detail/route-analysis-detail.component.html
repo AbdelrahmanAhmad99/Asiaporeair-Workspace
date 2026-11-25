@@ -1,0 +1,215 @@
+<div class="rad-page">
+
+    <!-- ══ Sticky Tactical Header ════════════════════════════════════ -->
+    <header class="rad-header">
+
+        <!-- Left: back + breadcrumb + title -->
+        <div class="rad-header-left">
+
+            <button class="rad-back-btn" (click)="backToExplorer()" aria-label="Back to Network Explorer"
+                title="Back to Explorer">
+                <svg class="rad-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <nav class="rad-breadcrumb" aria-label="Breadcrumb">
+                    <span class="rad-breadcrumb__section">Network &amp; Infrastructure</span>
+                    <svg class="rad-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <button class="rad-breadcrumb__link" (click)="backToExplorer()">
+                        Route Explorer
+                    </button>
+                    <svg class="rad-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="rad-breadcrumb__current">Corridor Analysis</span>
+                </nav>
+                <h1 class="rad-title">{{ pageTitle() }}</h1>
+            </div>
+
+        </div>
+
+        <!-- Right: 4-button tactical nav bar -->
+        @if (selectedRoute()) {
+        <div class="rad-nav-bar">
+
+            <!-- Manage Operators — Champagne Gold ghost -->
+            <button class="rad-btn rad-btn--ghost" type="button" (click)="manageOperators()" title="Manage Operators"
+                aria-label="Manage route operators">
+                <svg class="rad-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952
+                     4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786
+                     -3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645
+                     -6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375
+                     3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0zm8.25 2.25a2.625 2.625
+                     0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0z" />
+                </svg>
+                Manage Operators
+            </button>
+
+            <!-- Refresh icon -->
+            <button class="rad-icon-btn" (click)="refresh()" [disabled]="loading()" aria-label="Refresh analysis"
+                title="Refresh">
+                <svg class="rad-icon-btn__icon" [class.rad-icon-btn__icon--spin]="loading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                     0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                     0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Separator -->
+            <div class="rad-sep" aria-hidden="true"></div>
+
+            <!-- Deactivate Corridor — Luxury Ruby ghost -->
+            @if (selectedRoute()?.isActive) {
+            <button class="rad-btn rad-btn--ruby" type="button" [routerLink]="['../../explorer']"
+                title="Deactivate Corridor" aria-label="Navigate to explorer to deactivate this corridor">
+                <svg class="rad-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1
+                       5.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>
+                Deactivate
+            </button>
+            }
+
+            <!-- Edit Route — Royal Gold solid (primary CTA) -->
+            <button class="rad-btn rad-btn--primary" type="button" (click)="editRoute()"
+                aria-label="Edit route parameters">
+                <svg class="rad-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652
+                     L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5
+                     4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                </svg>
+                Edit Parameters
+            </button>
+
+        </div>
+        }
+
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="rad-body">
+
+        <!-- ── Analysis Error ─────────────────────────────────────────── -->
+        @if (analysisError()) {
+        <div class="rad-error-banner" role="alert">
+            <svg class="rad-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                   0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <div class="rad-error-banner__body">
+                <strong class="rad-error-banner__title">Analysis Unavailable</strong>
+                <span class="rad-error-banner__msg">{{ analysisError() }}</span>
+            </div>
+            <button class="rad-error-banner__action" type="button" (click)="backToExplorer()">
+                Back to Explorer
+            </button>
+        </div>
+        }
+
+        <!-- ── Loading Skeleton ───────────────────────────────────────── -->
+        @if (loading() && !selectedRoute()) {
+        <div class="rad-skeleton" aria-busy="true" aria-label="Loading corridor analysis">
+
+            <!-- Connection card skeleton -->
+            <div class="rad-sk__card">
+                <div class="rad-sk__top-strip">
+                    <div class="rad-sk__pill"></div>
+                    <div class="rad-sk__id"></div>
+                </div>
+                <div class="rad-sk__corridor">
+                    <div class="rad-sk__iata"></div>
+                    <div class="rad-sk__link-line"></div>
+                    <div class="rad-sk__disc"></div>
+                    <div class="rad-sk__link-line"></div>
+                    <div class="rad-sk__iata"></div>
+                </div>
+                <div class="rad-sk__badge-strip">
+                    @for (n of [1,2,3]; track n) {
+                    <div class="rad-sk__badge-metric"></div>
+                    }
+                </div>
+            </div>
+
+            <!-- Related panel skeleton -->
+            <div class="rad-sk__panel">
+                <div class="rad-sk__pane">
+                    <div class="rad-sk__pane-header"></div>
+                    @for (n of [1,2,3,4]; track n) {
+                    <div class="rad-sk__row"></div>
+                    }
+                </div>
+                <div class="rad-sk__pane">
+                    <div class="rad-sk__pane-header"></div>
+                    @for (n of [1,2,3,4]; track n) {
+                    <div class="rad-sk__row"></div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        }
+
+        <!-- ══ Main Intelligence View ═════════════════════════════════ -->
+        @if (selectedRoute(); as route) {
+
+        <!-- "The Golden Link" Connection Card -->
+        <aoms-route-connection-card [route]="route" [flightTime]="flightTime()" [distanceNm]="distanceNm()"
+            [codeshareCount]="codeshareCount()" />
+
+        <!-- Operators section header -->
+        @if (route.operators.length > 0) {
+        <section class="rad-operators-section" aria-label="Assigned operators">
+            <header class="rad-operators-section__header">
+                <div class="rad-operators-section__icon-wrap" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                        class="rad-operators-section__icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="rad-operators-section__title">Assigned Operators</h3>
+                    <p class="rad-operators-section__subtitle">{{ route.operators.length }} airline{{
+                        route.operators.length !== 1 ? 's' : '' }} operating this corridor</p>
+                </div>
+            </header>
+            <div class="rad-operators-grid">
+                @for (op of route.operators; track op.airlineIataCode) {
+                <div class="rad-operator-chip" [class.rad-operator-chip--active]="op.isActive"
+                    [class.rad-operator-chip--inactive]="!op.isActive">
+                    <span class="rad-operator-chip__iata">{{ op.airlineIataCode }}</span>
+                    @if (op.isCodeshare) {
+                    <span class="rad-operator-chip__codeshare">CS</span>
+                    }
+                    <span class="rad-operator-chip__dot" [class.rad-operator-chip__dot--active]="op.isActive"
+                        aria-hidden="true"></span>
+                </div>
+                }
+            </div>
+        </section>
+        }
+
+        <!-- Alternative Corridors Intelligence Panel -->
+        <aoms-related-routes-panel [originRoutes]="originRoutes()" [destRoutes]="destRoutes()"
+            [currentRouteId]="route.routeId" [currentOrigin]="currentOrigin()" [currentDest]="currentDest()"
+            [loading]="loading()" (analyzeRoute)="onAnalyzeRoute($event)" />
+
+        }
+
+    </main>
+
+</div>

@@ -1,0 +1,276 @@
+ // ----------------------------------------------------------------------------
+ // 1. Card Shell
+ // ----------------------------------------------------------------------------
+ .range-card {
+     display: flex;
+     flex-direction: column;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 4px 20px rgba(5, 25, 55, 0.07);
+     overflow: hidden;
+     transition:
+         background-color var(--aoms-transition-base),
+         border-color var(--aoms-transition-base),
+         box-shadow var(--aoms-transition-base);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Card Header
+ // ----------------------------------------------------------------------------
+ .range-card__header {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 0.875rem 1.125rem;
+     background: rgba(5, 25, 55, 0.03);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+     transition: background var(--aoms-transition-base);
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.75rem;
+         height: 1.75rem;
+         border-radius: 6px;
+         background: rgba(182, 143, 36, 0.1);
+         border: 1px solid rgba(182, 143, 36, 0.18);
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-gold);
+     }
+ }
+
+ .range-card__title {
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: var(--aoms-text-secondary);
+     transition: color var(--aoms-transition-fast);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Gauge Wrapper
+ // ----------------------------------------------------------------------------
+ .range-card__gauge-wrap {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     padding: 1.25rem 1.5rem 1.5rem;
+     gap: 1rem;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. SVG Arc Gauge
+ // ----------------------------------------------------------------------------
+ .range-card__svg {
+     width: 100%;
+     max-width: 240px;
+     height: auto;
+ }
+
+ // Arc fill — animated stroke-dasharray draw
+ .range-arc__fill {
+     stroke-dasharray: 600;
+     stroke-dashoffset: 600;
+     animation: arc-draw 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.2s;
+ }
+
+ // SVG text styles (embedded in the SVG coordinate system)
+ .range-arc__pct-value {
+     font-size: 2.25rem; // SVG user units (240 viewBox)
+     font-family: var(--aoms-font-heading), 'Montserrat', sans-serif;
+     font-weight: 700;
+     fill: var(--aoms-text-primary);
+     letter-spacing: -0.03em;
+ }
+
+ .range-arc__pct-label {
+     font-size: 0.75rem; // SVG user units
+     font-family: var(--aoms-font-body), 'Inter', sans-serif;
+     fill: var(--aoms-text-muted);
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+ }
+
+ // Category-specific arc fill tints
+ .range-card[data-category="short"] .range-arc__fill {
+     stroke: #b45309;
+ }
+
+ .range-card[data-category="medium"] .range-arc__fill {
+     stroke: url(#range-arc-grad);
+ }
+
+ .range-card[data-category="long"] .range-arc__fill {
+     stroke: url(#range-arc-grad);
+ }
+
+ .range-card[data-category="ultra-long"] .range-arc__fill {
+     stroke: url(#range-arc-grad);
+     filter: drop-shadow(0 0 6px rgba(226, 199, 128, 0.5));
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Stats Row (km + miles)
+ // ----------------------------------------------------------------------------
+ .range-card__stats {
+     display: flex;
+     align-items: center;
+     gap: 1.5rem;
+     width: 100%;
+     justify-content: center;
+ }
+
+ .range-stat {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.125rem;
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+         transition: color var(--aoms-transition-fast);
+     }
+
+     &__value {
+         font-size: 1.25rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: var(--aoms-text-primary);
+         font-variant-numeric: tabular-nums;
+         transition: color var(--aoms-transition-fast);
+     }
+
+     &__unit {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+     }
+
+     &__divider {
+         width: 1px;
+         height: 2.5rem;
+         background: rgba(226, 199, 128, 0.18);
+         flex-shrink: 0;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Category Tag
+ // ----------------------------------------------------------------------------
+ .range-card__category {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.3125rem 1rem;
+     border-radius: 100px;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     border: 1px solid;
+     transition: all var(--aoms-transition-fast);
+
+     // Default (medium/long/ultra-long) — gold
+     background: rgba(182, 143, 36, 0.1);
+     border-color: rgba(182, 143, 36, 0.3);
+     color: #7c5c10;
+
+     &[data-category="short"] {
+         background: rgba(180, 83, 9, 0.08);
+         border-color: rgba(180, 83, 9, 0.25);
+         color: #92400e;
+     }
+
+     &[data-category="ultra-long"] {
+         background: rgba(6, 78, 59, 0.08);
+         border-color: rgba(6, 78, 59, 0.25);
+         color: #064e3b;
+     }
+
+     &[data-category="unknown"] {
+         background: rgba(5, 25, 55, 0.05);
+         border-color: rgba(5, 25, 55, 0.12);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 7. Shimmer skeleton
+ // ----------------------------------------------------------------------------
+ .range-card__shimmer-arc {
+     width: 200px;
+     height: 200px;
+     border-radius: 50%;
+     background: conic-gradient(rgba(182, 143, 36, 0.1) 0deg,
+             rgba(182, 143, 36, 0.08) 360deg);
+     animation: rg-pulse 1.5s ease-in-out infinite;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 8. Keyframes
+ // ----------------------------------------------------------------------------
+ @keyframes arc-draw {
+     to {
+         stroke-dashoffset: 0;
+     }
+ }
+
+ @keyframes rg-pulse {
+
+     0%,
+     100% {
+         opacity: 0.5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode Overrides (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .range-card {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+     }
+
+     .range-card__header {
+         background: rgba(255, 255, 255, 0.03);
+     }
+
+     .range-arc__pct-value {
+         fill: rgba(255, 255, 255, 0.9);
+     }
+
+     .range-arc__pct-label {
+         fill: rgba(255, 255, 255, 0.4);
+     }
+
+     .range-card__category {
+         color: var(--aoms-champagne);
+
+         &[data-category="short"] {
+             color: #fbbf24;
+         }
+
+         &[data-category="ultra-long"] {
+             color: #34d399;
+         }
+     }
+ }

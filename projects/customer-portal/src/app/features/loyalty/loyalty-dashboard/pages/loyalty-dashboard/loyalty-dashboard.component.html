@@ -1,0 +1,213 @@
+<!-- ============================================================
+     loyalty-dashboard.component.html
+     Asiaporeair | Loyalty & Frequent Flyer Dashboard Page
+     ============================================================ -->
+
+<div class="loyalty-page">
+
+  <!-- ══════════════════════════════════════════════════════════
+       TOP NAVIGATION BAR (Midnight Sapphire)
+  ══════════════════════════════════════════════════════════ -->
+  <header class="loyalty-nav" role="banner">
+    <div class="loyalty-nav__inner">
+
+      <!-- Brand mark -->
+      <div class="loyalty-nav__brand">
+        <svg class="brand-diamond" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.2"
+             stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true" width="22" height="22">
+          <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+          <line x1="12" y1="2" x2="12" y2="22"/>
+          <line x1="2" y1="8.5" x2="22" y2="8.5"/>
+          <line x1="2" y1="15.5" x2="22" y2="15.5"/>
+        </svg>
+        <span class="loyalty-nav__brand-name">Asiaporeair Loyalty</span>
+      </div>
+
+      <!-- Quick actions -->
+      <nav class="loyalty-nav__actions" aria-label="Loyalty navigation">
+        @for (link of quickLinks; track link.id) {
+          <a class="loyalty-nav__link"
+             [routerLink]="link.route"
+             [id]="link.id + '-nav'"
+             [attr.aria-label]="link.label">
+            {{ link.label }}
+          </a>
+        }
+      </nav>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO GREETING STRIP
+  ══════════════════════════════════════════════════════════ -->
+  <section class="loyalty-hero" aria-label="Welcome banner">
+    <div class="loyalty-hero__inner">
+
+      @if (store.isLoadingLoyalty()) {
+        <div class="loyalty-hero__skeleton">
+          <div class="hero-skeleton-line hero-skeleton-line--wide"></div>
+          <div class="hero-skeleton-line hero-skeleton-line--medium"></div>
+        </div>
+      } @else if (store.loyaltyError()) {
+        <!-- empty: error handled in main body -->
+      } @else {
+        <div class="loyalty-hero__text">
+          <p class="loyalty-hero__greeting">Welcome back,</p>
+          <h1 class="loyalty-hero__name">
+            {{ store.loyaltyProfile()?.linkedUserName ?? 'Valued Member' }}
+          </h1>
+          <p class="loyalty-hero__sub">
+            Your exclusive Asiaporeair loyalty dashboard awaits.
+          </p>
+        </div>
+
+        <!-- Card number pill -->
+        <div class="loyalty-hero__card-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" width="16" height="16">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          <span>{{ store.loyaltyProfile()?.cardNumber ?? '—' }}</span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MAIN BODY
+  ══════════════════════════════════════════════════════════ -->
+  <main class="loyalty-body" id="loyalty-main-content" role="main">
+    <div class="loyalty-body__inner">
+
+      <!-- ── Error State ──────────────────────────────────────── -->
+      @if (store.loyaltyError() && !store.isLoadingLoyalty()) {
+        <div class="loyalty-error" role="alert" aria-live="assertive">
+          <svg class="loyalty-error__icon" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" width="32" height="32">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <div class="loyalty-error__body">
+            <h2 class="loyalty-error__title">Unable to Load Your Profile</h2>
+            <p class="loyalty-error__message">{{ store.loyaltyError() }}</p>
+            <button id="btn-retry-loyalty"
+                    class="loyalty-btn loyalty-btn--primary"
+                    (click)="retryLoad()">
+              Retry
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- ── Main Grid (shown while loading or on success) ───── -->
+      @if (!store.loyaltyError()) {
+        <div class="loyalty-grid">
+
+          <!-- ── LEFT COLUMN ──────────────────────────────────── -->
+          <div class="loyalty-grid__col loyalty-grid__col--left">
+
+            <!-- Tier Status Card -->
+            <app-tier-status-card
+              [tier]="store.currentTier()"
+              [cardNumber]="store.loyaltyProfile()?.cardNumber ?? ''"
+              [isActive]="store.loyaltyProfile()?.isActive ?? true"
+              [benefits]="store.currentTierConfig().benefits"
+              [isLoading]="store.isLoadingLoyalty()">
+            </app-tier-status-card>
+
+            <!-- Miles Balance Widget -->
+            <app-miles-balance-widget
+              [milesBalance]="store.milesBalance()"
+              [milesExpiringSoon]="store.milesExpiringSoon()"
+              [progressPercent]="store.tierProgressPercent()"
+              [isLoading]="store.isLoadingLoyalty()">
+            </app-miles-balance-widget>
+
+          </div>
+
+          <!-- ── RIGHT COLUMN ─────────────────────────────────── -->
+          <div class="loyalty-grid__col loyalty-grid__col--right">
+
+            <!-- Tier Progress Bar -->
+            <app-tier-progress-bar
+              [currentTier]="store.currentTier()"
+              [nextTier]="store.nextTierConfig()?.name ?? null"
+              [currentPoints]="store.milesBalance()"
+              [targetPoints]="store.currentTierConfig().maxPoints === Infinity
+                ? store.milesBalance()
+                : store.currentTierConfig().maxPoints"
+              [progressPct]="store.tierProgressPercent()"
+              [isLoading]="store.isLoadingLoyalty()">
+            </app-tier-progress-bar>
+
+            <!-- ── Quick Links Grid ────────────────────────────── -->
+            <div class="quick-links" role="navigation" aria-label="Loyalty quick links">
+              <h2 class="quick-links__title">Quick Access</h2>
+              <div class="quick-links__grid">
+                @for (link of quickLinks; track link.id) {
+                  <a class="quick-link-card"
+                     [routerLink]="link.route"
+                     [id]="link.id + '-card'"
+                     [attr.aria-label]="'Navigate to ' + link.label">
+
+                    <!-- Icon -->
+                    @if (link.icon === 'history') {
+                      <svg class="quick-link-card__icon" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="1.5"
+                           stroke-linecap="round" stroke-linejoin="round"
+                           aria-hidden="true" width="28" height="28">
+                        <polyline points="1 4 1 10 7 10"/>
+                        <path d="M3.51 15a9 9 0 101.03-4.15L1 10"/>
+                        <polyline points="12 7 12 12 15 15"/>
+                      </svg>
+                    }
+                    @if (link.icon === 'star') {
+                      <svg class="quick-link-card__icon" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="1.5"
+                           stroke-linecap="round" stroke-linejoin="round"
+                           aria-hidden="true" width="28" height="28">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                    }
+                    @if (link.icon === 'gift') {
+                      <svg class="quick-link-card__icon" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="1.5"
+                           stroke-linecap="round" stroke-linejoin="round"
+                           aria-hidden="true" width="28" height="28">
+                        <polyline points="20 12 20 22 4 22 4 12"/>
+                        <rect x="2" y="7" width="20" height="5"/>
+                        <line x1="12" y1="22" x2="12" y2="7"/>
+                        <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/>
+                        <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/>
+                      </svg>
+                    }
+
+                    <span class="quick-link-card__label">{{ link.label }}</span>
+
+                    <!-- Chevron -->
+                    <svg class="quick-link-card__chevron" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.5"
+                         stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true" width="16" height="16">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                  </a>
+                }
+              </div>
+            </div>
+
+          </div>
+        </div>
+      }
+
+    </div><!-- /.loyalty-body__inner -->
+  </main>
+
+</div><!-- /.loyalty-page -->

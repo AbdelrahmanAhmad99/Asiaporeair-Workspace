@@ -1,0 +1,394 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ============================================================================
+ // 1. Search Hub Container
+ // ============================================================================
+ .search-hub {
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+     padding: 1.25rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.06);
+     transition:
+         background-color $t-base,
+         border-color $t-base,
+         box-shadow $t-base;
+ }
+
+ // ============================================================================
+ // 2. Row Layouts
+ // ============================================================================
+ .search-hub__primary-row {
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+
+     @media (min-width: 768px) {
+         flex-direction: row;
+         align-items: flex-end;
+         gap: 0.75rem;
+     }
+ }
+
+ .search-hub__secondary-row {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+     align-items: stretch;
+
+     @media (min-width: 640px) {
+         flex-direction: row;
+         align-items: flex-end;
+     }
+ }
+
+ .search-hub__spacer {
+     flex: 1;
+ }
+
+ // ============================================================================
+ // 3. Field Wrapper
+ // ============================================================================
+ .search-hub__field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+     flex: 1;
+     min-width: 0;
+
+     &--wide {
+         flex: 2;
+     }
+
+     &--hours {
+         flex: 1;
+         max-width: 180px;
+     }
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+         padding-left: 0.125rem;
+         transition: color $t-fast;
+     }
+ }
+
+ // ============================================================================
+ // 4. Floating Label Input Wrapper
+ // ============================================================================
+ .fl-input-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+
+     &__icon {
+         position: absolute;
+         left: 0.875rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 1rem;
+         height: 1rem;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+         transition: color $t-fast;
+     }
+
+     &__input {
+         width: 100%;
+         padding: 1.25rem 1rem 0.5rem 2.5rem;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-primary);
+         background: var(--aoms-bg-card);
+         border: 1.5px solid rgba(226, 199, 128, 0.25);
+         border-radius: 8px;
+         outline: none;
+         appearance: none;
+         -moz-appearance: textfield;
+         transition:
+             border-color $t-fast,
+             box-shadow $t-fast,
+             background $t-base;
+
+         &::-webkit-outer-spin-button,
+         &::-webkit-inner-spin-button {
+             -webkit-appearance: none;
+         }
+
+         &::placeholder {
+             color: transparent;
+         }
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+         }
+
+         // Float label when focused or value present
+         &:focus+.fl-input-wrap__label,
+         &:not(:placeholder-shown)+.fl-input-wrap__label {
+             transform: translateY(-0.5rem) scale(0.78);
+             color: $gold;
+         }
+
+         &--with-unit {
+             padding-right: 3rem;
+         }
+     }
+
+     // Floating label (no icon version — only for tail search with icon)
+     &__label {
+         position: absolute;
+         left: 2.5rem;
+         top: 50%;
+         transform: translateY(-50%);
+         transform-origin: left center;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+         background: var(--aoms-bg-card);
+         padding: 0 0.25rem;
+         border-radius: 2px;
+         transition:
+             transform $t-fast,
+             color $t-fast;
+     }
+
+     // For non-icon inputs (hours fields): left padding without icon
+     &:not(:has(.fl-input-wrap__icon)) {
+         .fl-input-wrap__input {
+             padding-left: 1rem;
+         }
+
+         .fl-input-wrap__label {
+             left: 1rem;
+         }
+     }
+
+     &__unit {
+         position: absolute;
+         right: 0.875rem;
+         top: 50%;
+         transform: translateY(-50%);
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+     }
+
+     // Icon colour changes on focus
+     &:focus-within .fl-input-wrap__icon {
+         color: $champagne;
+     }
+ }
+
+ // ============================================================================
+ // 5. Select Wrapper
+ // ============================================================================
+ .select-wrap {
+     position: relative;
+
+     &__select {
+         appearance: none;
+         -webkit-appearance: none;
+         width: 100%;
+         padding: 0.6875rem 2.5rem 0.6875rem 1rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-primary);
+         background: var(--aoms-bg-card);
+         border: 1.5px solid rgba(226, 199, 128, 0.25);
+         border-radius: 8px;
+         outline: none;
+         cursor: pointer;
+         transition:
+             border-color $t-fast,
+             box-shadow $t-fast,
+             background $t-base,
+             color $t-fast;
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+         }
+
+         option {
+             background: var(--aoms-bg-card);
+             color: var(--aoms-text-primary);
+         }
+     }
+
+     &__chevron {
+         position: absolute;
+         right: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         pointer-events: none;
+         color: var(--aoms-text-muted);
+         transition: color $t-fast;
+     }
+
+     &:focus-within .select-wrap__chevron {
+         color: $champagne;
+     }
+ }
+
+ // ============================================================================
+ // 6. Reset Button
+ // ============================================================================
+ .search-hub__reset-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.6875rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-secondary);
+     background: transparent;
+     border: 1.5px solid rgba(226, 199, 128, 0.22);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     flex-shrink: 0;
+     white-space: nowrap;
+     transition: all $t-fast;
+
+     &:hover {
+         color: var(--aoms-text-primary);
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.07);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 7. Apply Filters CTA Button (Royal Gold Gradient)
+ // ============================================================================
+ .search-hub__apply-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.6875rem 1.375rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: #ffffff;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     flex-shrink: 0;
+     white-space: nowrap;
+     box-shadow: 0 4px 12px rgba(182, 143, 36, 0.38);
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+         box-shadow: 0 6px 16px rgba(182, 143, 36, 0.48);
+         transform: translateY(-1px);
+     }
+
+     &:active:not(:disabled) {
+         box-shadow: 0 2px 8px rgba(182, 143, 36, 0.3);
+         transform: translateY(0);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: as-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 8. Keyframes
+ // ============================================================================
+ @keyframes as-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .search-hub {
+         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+     }
+
+     .fl-input-wrap__input,
+     .select-wrap__select {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.18);
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .fl-input-wrap__label {
+         background: transparent;
+     }
+
+     .fl-input-wrap__input:focus+.fl-input-wrap__label,
+     .fl-input-wrap__input:not(:placeholder-shown)+.fl-input-wrap__label {
+         color: $champagne;
+         background: rgba(5, 25, 55, 0.9);
+     }
+
+     .search-hub__apply-btn {
+         box-shadow: 0 4px 12px rgba(182, 143, 36, 0.22);
+
+         &:hover:not(:disabled) {
+             box-shadow: 0 6px 16px rgba(182, 143, 36, 0.35);
+         }
+     }
+ }

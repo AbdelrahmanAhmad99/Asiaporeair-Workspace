@@ -1,0 +1,184 @@
+<!-- ============================================================================
+     personal-info.component.html
+     Asiaporeair | "Digital Identity Hub" — Personal Information Page
+     ============================================================================ -->
+
+<div class="pi-shell" [@pageEnter]="'animate'">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       PAGE HEADER — Midnight Sapphire Banner
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="pi-hero pi-animate" role="banner">
+        <div class="pi-hero__inner">
+
+            <!-- Breadcrumb -->
+            <nav class="pi-hero__breadcrumb" aria-label="Breadcrumb">
+                <a class="pi-breadcrumb__link" routerLink="/">Home</a>
+                <span class="pi-breadcrumb__sep" aria-hidden="true">›</span>
+                <span class="pi-breadcrumb__current">My Profile</span>
+            </nav>
+
+            <div class="pi-hero__content">
+
+                <!-- Avatar -->
+                <div class="pi-hero__avatar-wrap">
+                    <app-profile-avatar-uploader [avatarUrl]="store.profilePictureUrl()"
+                        [displayName]="store.displayName()" [loyaltyTier]="store.loyaltyTier()"
+                        [isLoading]="store.isLoading()"
+                        (avatarSelected)="onAvatarSelected($event)"></app-profile-avatar-uploader>
+                </div>
+
+                <!-- Identity info -->
+                <div class="pi-hero__identity">
+                    @if (store.isLoading()) {
+                    <div class="pi-hero__skeleton-name" aria-hidden="true"></div>
+                    <div class="pi-hero__skeleton-email" aria-hidden="true"></div>
+                    <div class="pi-hero__skeleton-miles" aria-hidden="true"></div>
+                    } @else {
+                    <h1 class="pi-hero__name">{{ store.displayName() }}</h1>
+                    <p class="pi-hero__email">{{ store.email() }}</p>
+                    <div class="pi-hero__loyalty">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"
+                            aria-hidden="true">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span class="pi-hero__loyalty-tier">{{ store.loyaltyTier() }} Member</span>
+                        <span class="pi-hero__loyalty-miles">
+                            {{ store.loyaltyMiles().toLocaleString('en-US') }} miles
+                        </span>
+                        <span class="pi-hero__loyalty-sep" aria-hidden="true">·</span>
+                        <span class="pi-hero__member-since">
+                            Member since {{ store.dateCreated() | date:'MMM yyyy' }}
+                        </span>
+                    </div>
+                    }
+                </div>
+
+            </div>
+
+            <!-- Gold accent rule -->
+            <div class="pi-hero__rule" aria-hidden="true"></div>
+        </div>
+    </header>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT GRID
+  ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="pi-content" role="main">
+        <div class="pi-content__inner">
+
+            <!-- Left Column: Forms -->
+            <div class="pi-col pi-col--forms">
+
+                <!-- Page Title -->
+                <div class="pi-section-header pi-animate">
+                    <h2 class="pi-section-header__title">Personal Information</h2>
+                    <p class="pi-section-header__subtitle">
+                        Your details are used for all bookings and must match your official travel documents.
+                    </p>
+                </div>
+
+                <!-- Personal Details Form -->
+                <div class="pi-animate">
+                    <app-personal-details-form [firstName]="store.firstName()" [lastName]="store.lastName()"
+                        [dateOfBirth]="store.dateOfBirth()" [address]="store.address()"
+                        [passportNumber]="store.passportNumber()" [nationality]="store.nationality()"
+                        [isSaving]="store.isSavingPersonal()" [saveState]="store.personalSaveState()"
+                        [isLoading]="store.isLoading()"
+                        (formSave)="onPersonalDetailsSave($event)"></app-personal-details-form>
+                </div>
+
+                <!-- Contact Details Form -->
+                <div class="pi-animate">
+                    <app-contact-details-form [email]="store.email()" [phoneNumber]="store.phoneNumber()"
+                        [isEmailVerified]="true" [isSaving]="store.isSavingContact()"
+                        [saveState]="store.contactSaveState()" [isLoading]="store.isLoading()"
+                        (formSave)="onContactDetailsSave($event)"></app-contact-details-form>
+                </div>
+
+                <!-- Error Banner -->
+                @if (store.errorMessage()) {
+                <div class="pi-error-banner pi-animate" [@fadeUp] role="alert">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    {{ store.errorMessage() }}
+                </div>
+                }
+
+            </div>
+
+            <!-- Right Column: Navigation Cards -->
+            <aside class="pi-col pi-col--nav" aria-label="Profile sections">
+
+                <div class="pi-nav-header pi-animate">
+                    <h3 class="pi-nav-header__title">Your Account</h3>
+                    <p class="pi-nav-header__subtitle">Manage all aspects of your travel profile</p>
+                </div>
+
+                <nav class="pi-nav-grid pi-animate" aria-label="Profile navigation">
+                    @for (link of profileNavLinks; track trackByRoute($index, link)) {
+                    <button class="pi-nav-card" type="button" (click)="navigateTo(link.route)"
+                        [attr.aria-label]="'Navigate to ' + link.label">
+                        <!-- Icon -->
+                        <div class="pi-nav-card__icon" [innerHTML]="link.icon" aria-hidden="true"></div>
+
+                        <!-- Text -->
+                        <div class="pi-nav-card__body">
+                            <span class="pi-nav-card__label">{{ link.label }}</span>
+                            <span class="pi-nav-card__desc">{{ link.description }}</span>
+                        </div>
+
+                        <!-- Chevron -->
+                        <svg class="pi-nav-card__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+                    }
+                </nav>
+
+                <!-- Loyalty Milestone Card -->
+                @if (!store.isLoading()) {
+                <div class="pi-loyalty-card pi-animate" [@fadeUp]>
+                    <div class="pi-loyalty-card__header">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"
+                            aria-hidden="true">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>Asiaporeair Loyalty</span>
+                    </div>
+                    <div class="pi-loyalty-card__tier">{{ store.loyaltyTier() }}</div>
+                    <div class="pi-loyalty-card__miles-label">Miles Balance</div>
+                    <div class="pi-loyalty-card__miles-value">
+                        {{ store.loyaltyMiles().toLocaleString('en-US') }}
+                    </div>
+                    <!-- Progress bar to next tier (visual only) -->
+                    <div class="pi-loyalty-card__progress-wrap" role="progressbar" aria-valuenow="65" aria-valuemin="0"
+                        aria-valuemax="100" aria-label="Progress to next tier">
+                        <div class="pi-loyalty-card__progress-bar" style="width: 65%"></div>
+                    </div>
+                    <p class="pi-loyalty-card__progress-label">65% to Gold tier</p>
+                    <button class="pi-loyalty-card__cta" type="button" (click)="navigateTo('/loyalty/earn')">
+                        Earn More Miles
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </button>
+                </div>
+                }
+
+            </aside>
+
+        </div>
+    </main>
+
+</div>

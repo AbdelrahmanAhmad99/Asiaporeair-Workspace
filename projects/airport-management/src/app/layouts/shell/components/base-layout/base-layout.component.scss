@@ -1,0 +1,91 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AOMS Base Layout — Enterprise Shell Grid Styles
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--aoms-bg-primary);
+  transition: background-color var(--aoms-transition-smooth);
+
+  // ── Sidebar ─────────────────────────────────────────────────────────────
+  &__sidebar {
+    flex-shrink: 0;
+    height: 100vh;
+    z-index: 40;
+  }
+
+  // ── Main Container ──────────────────────────────────────────────────────
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0; // Prevent overflow issues
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  // ── Topbar ──────────────────────────────────────────────────────────────
+  &__topbar {
+    flex-shrink: 0;
+    z-index: 30;
+  }
+
+  // ── Content Area ────────────────────────────────────────────────────────
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--aoms-bg-primary);
+    transition: background-color var(--aoms-transition-smooth);
+  }
+
+  &__content-inner {
+    padding: 24px;
+    min-height: 100%;
+    animation: contentEntry 400ms ease-out;
+  }
+
+  // ── Footer ──────────────────────────────────────────────────────────────
+  &__footer {
+    flex-shrink: 0;
+    position: relative;
+  }
+}
+
+// ── Content Entry Animation ─────────────────────────────────────────────────
+@keyframes contentEntry {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Responsive: Tablet ──────────────────────────────────────────────────────
+@media (max-width: 1024px) {
+  .shell {
+    &__content-inner {
+      padding: 16px;
+    }
+  }
+}
+
+// ── Responsive: Mobile ──────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .shell {
+    &__content-inner {
+      padding: 12px;
+    }
+  }
+}

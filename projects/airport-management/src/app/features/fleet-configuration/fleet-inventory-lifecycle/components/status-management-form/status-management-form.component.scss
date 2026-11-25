@@ -1,0 +1,297 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $t-fast: 160ms ease;
+
+ .smf-card {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07);
+     transition: background-color var(--aoms-transition-base), border-color var(--aoms-transition-base);
+ }
+
+ .smf-card__header {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 7px;
+         background: rgba(182, 143, 36, 0.1);
+         border: 1px solid rgba(182, 143, 36, 0.2);
+         flex-shrink: 0;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+     }
+ }
+
+ .smf-title {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary);
+ }
+
+ .smf-sub {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     margin-top: 0.125rem;
+ }
+
+ .smf-body {
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+ }
+
+ // Current status
+ .smf-current {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     padding: 0.3125rem 0.75rem;
+     border-radius: 100px;
+     background: rgba(5, 25, 55, 0.04);
+     border: 1px solid rgba(226, 199, 128, 0.15);
+     align-self: flex-start;
+
+     &__label {
+         font-weight: 500;
+         color: var(--aoms-text-muted);
+     }
+
+     &__value {
+         font-weight: 700;
+         color: var(--aoms-text-secondary);
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+     }
+ }
+
+ // Field group
+ .smf-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3125rem;
+
+     &__label {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__required {
+         color: #b45309;
+         margin-left: 0.125rem;
+     }
+
+     &__hint {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         font-style: italic;
+         padding-left: 0.125rem;
+     }
+ }
+
+ // Select
+ .smf-select-wrap {
+     position: relative;
+ }
+
+ .smf-select {
+     appearance: none;
+     -webkit-appearance: none;
+     width: 100%;
+     padding: 0.6875rem 2.5rem 0.6875rem 1rem;
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-primary);
+     background: var(--aoms-bg-card);
+     border: 1.5px solid rgba(226, 199, 128, 0.25);
+     border-radius: 8px;
+     outline: none;
+     cursor: pointer;
+     transition: border-color $t-fast, box-shadow $t-fast, background $t-fast;
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+     option {
+         background: var(--aoms-bg-card);
+         color: var(--aoms-text-primary);
+     }
+ }
+
+ .smf-select-wrap__chevron {
+     position: absolute;
+     right: 0.75rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 0.875rem;
+     height: 0.875rem;
+     pointer-events: none;
+     color: var(--aoms-text-muted);
+ }
+
+ // Reason container — animated reveal
+ .smf-reason-container {
+     max-height: 0;
+     overflow: hidden;
+     opacity: 0;
+     transition: max-height 400ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
+
+     &--visible {
+         max-height: 200px;
+         opacity: 1;
+     }
+ }
+
+ .smf-textarea {
+     width: 100%;
+     padding: 0.75rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-primary);
+     background: var(--aoms-bg-card);
+     border: 1.5px solid rgba(226, 199, 128, 0.25);
+     border-radius: 8px;
+     outline: none;
+     resize: vertical;
+     min-height: 80px;
+     transition: border-color $t-fast, box-shadow $t-fast;
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+     }
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+ }
+
+ .smf-textarea-footer {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     padding: 0 0.125rem;
+ }
+
+ .smf-textarea-footer__warning {
+     color: #b45309;
+     font-weight: 500;
+ }
+
+ .smf-chars {
+     color: var(--aoms-text-muted);
+     margin-left: auto;
+ }
+
+ // Submit button
+ .smf-submit-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.6875rem 1.375rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: #fff;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     align-self: flex-end;
+     box-shadow: 0 4px 12px rgba(182, 143, 36, 0.35);
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+         box-shadow: 0 6px 16px rgba(182, 143, 36, 0.45);
+         transform: translateY(-1px);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: smf-spin 1s linear infinite;
+         }
+     }
+ }
+
+ @keyframes smf-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ :host-context(.aoms-dark) {
+
+     .smf-select,
+     .smf-textarea {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.18);
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .smf-submit-btn {
+         box-shadow: 0 4px 12px rgba(182, 143, 36, 0.22);
+     }
+ }

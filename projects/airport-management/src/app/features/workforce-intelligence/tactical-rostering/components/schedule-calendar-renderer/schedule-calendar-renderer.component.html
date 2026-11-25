@@ -1,0 +1,97 @@
+<!-- schedule-calendar-renderer.component.html -->
+
+<div class="scr" [attr.data-view]="view()">
+
+    <!-- ══ Day-of-Week Header Row ═══════════════════════════════ -->
+    <div class="scr__dow-row" role="row" aria-hidden="true">
+        @for (label of dowLabels; track label) {
+        <div class="scr__dow-cell">{{ label }}</div>
+        }
+    </div>
+
+    <!-- ══ Loading Shimmer ════════════════════════════════════════ -->
+    @if (loading()) {
+    <div class="scr__shimmer-grid" aria-busy="true">
+        @for (row of shimmerRows; track $index) {
+        <div class="scr__shimmer-row">
+            @for (col of shimmerCols; track $index) {
+            <div class="scr__shimmer-cell">
+                <div class="scr-sh scr-sh--num"></div>
+                @if ($index % 3 === 0) { <div class="scr-sh scr-sh--event"></div> }
+                @if ($index % 5 === 0) { <div class="scr-sh scr-sh--event"></div> }
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ══ Monthly Grid ═══════════════════════════════════════════ -->
+    @if (!loading() && view() === 'monthly') {
+    <div class="scr__month-grid" role="grid">
+        @for (week of monthDays(); track $index) {
+        <div class="scr__week-row" role="row">
+            @for (day of week; track trackByIso($index, day)) {
+            <div class="scr__day-cell" [class.scr__day-cell--today]="day.isToday"
+                [class.scr__day-cell--other-month]="!day.isCurrentMonth" [class.scr__day-cell--weekend]="day.isWeekend"
+                role="gridcell" [attr.aria-label]="day.date.toDateString() + ', ' + day.events.length + ' events'">
+
+                <!-- Day number -->
+                <div class="scr__day-num" [class.scr__day-num--today]="day.isToday" aria-hidden="true">
+                    {{ day.dayNum }}
+                </div>
+
+                <!-- Events (max 3 visible, +N overflow) -->
+                @if (day.events.length > 0) {
+                <div class="scr__events">
+                    @for (ev of day.events.slice(0, 3); track trackByEvent($index, ev)) {
+                    <aoms-duty-event-strip [event]="ev" [compact]="false" [showTooltip]="true"
+                        (eventClicked)="eventClicked.emit($event)" />
+                    }
+                    @if (day.events.length > 3) {
+                    <div class="scr__overflow-badge">
+                        +{{ day.events.length - 3 }} more
+                    </div>
+                    }
+                </div>
+                }
+
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ══ Weekly Grid ════════════════════════════════════════════ -->
+    @if (!loading() && view() === 'weekly') {
+    <div class="scr__week-grid" role="grid">
+        @for (day of weekDays(); track trackByIso($index, day)) {
+        <div class="scr__week-col" [class.scr__week-col--today]="day.isToday"
+            [class.scr__week-col--weekend]="day.isWeekend" role="gridcell" [attr.aria-label]="day.date.toDateString()">
+
+            <!-- Column date header -->
+            <div class="scr__week-col__header">
+                <span class="scr__week-col__dow">{{ dowLabels[day.date.getDay()] }}</span>
+                <span class="scr__week-col__num" [class.scr__week-col__num--today]="day.isToday">{{ day.dayNum }}</span>
+            </div>
+
+            <!-- Events stacked -->
+            <div class="scr__week-col__events">
+                @for (ev of day.events; track trackByEvent($index, ev)) {
+                <aoms-duty-event-strip [event]="ev" [compact]="true" [showTooltip]="true"
+                    (eventClicked)="eventClicked.emit($event)" />
+                }
+                @if (day.events.length === 0) {
+                <div class="scr__week-col__empty" aria-hidden="true">
+                    <span>—</span>
+                </div>
+                }
+            </div>
+
+        </div>
+        }
+    </div>
+    }
+
+</div>

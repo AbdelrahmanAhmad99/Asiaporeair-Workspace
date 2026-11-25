@@ -1,0 +1,300 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $row-h: 44px;
+ $t-fast: 150ms ease;
+
+ // ── 1. Container ──────────────────────────────────────────────────────────
+ .phg-container {
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 10px rgba($midnight, 0.05);
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+ }
+
+ // ── 2. Header ─────────────────────────────────────────────────────────────
+ .phg-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+     padding: 0.875rem 1.25rem;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &__title {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__icon {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .phg-count-badge {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-muted);
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     background: rgba($midnight, 0.05);
+     border: 1px solid rgba($champagne, 0.12);
+ }
+
+ // ── 3. Empty State ────────────────────────────────────────────────────────
+ .phg-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     text-align: center;
+     gap: 0.5rem;
+     padding: 3rem 1.5rem;
+
+     &__icon {
+         width: 64px;
+         height: 48px;
+         color: var(--aoms-text-muted);
+         opacity: 0.35;
+         margin-bottom: 0.25rem;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__sub {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ── 4. Table Shell ────────────────────────────────────────────────────────
+ .phg-table-shell {
+     display: flex;
+     flex-direction: column;
+ }
+
+ // ── 5. Sticky Header ──────────────────────────────────────────────────────
+ .phg-thead-row {
+     display: grid;
+     grid-template-columns: 150px 90px 130px 1.6fr 100px;
+     align-items: center;
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 1;
+ }
+
+ .phg-th {
+     padding: 0 1rem;
+     height: 36px;
+     display: flex;
+     align-items: center;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 2px solid rgba($champagne, 0.1);
+ }
+
+ // ── 6. Virtual / Plain List ───────────────────────────────────────────────
+ .phg-viewport {
+     scrollbar-width: thin;
+     scrollbar-color: rgba($gold, 0.2) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($gold, 0.18);
+         border-radius: 2px;
+     }
+ }
+
+ .phg-plain-list {
+     max-height: 528px;
+     overflow-y: auto;
+     scrollbar-width: thin;
+     scrollbar-color: rgba($gold, 0.2) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($gold, 0.18);
+         border-radius: 2px;
+     }
+ }
+
+ // ── 7. Rows ───────────────────────────────────────────────────────────────
+ .phg-row {
+     display: grid;
+     grid-template-columns: 150px 90px 130px 1.6fr 100px;
+     align-items: center;
+     height: $row-h;
+     border-bottom: 1px solid rgba($champagne, 0.06);
+     transition: background $t-fast;
+
+     &:nth-child(even) {
+         background: rgba($midnight, 0.018);
+     }
+
+     &:hover {
+         background: rgba($champagne, 0.07);
+     }
+
+     &--credit {
+         border-left: 3px solid transparent;
+
+         &:hover {
+             background: rgba($emerald, 0.05);
+         }
+     }
+
+     &--debit {
+         border-left: 3px solid rgba($amber, 0.25);
+
+         &:hover {
+             background: rgba($amber, 0.06);
+         }
+     }
+ }
+
+ // ── 8. Cells ──────────────────────────────────────────────────────────────
+ .phg-cell {
+     padding: 0 1rem;
+     display: flex;
+     align-items: center;
+     overflow: hidden;
+     white-space: nowrap;
+
+     &--reason {
+         flex-direction: column;
+         align-items: flex-start;
+         justify-content: center;
+         gap: 0.0625rem;
+     }
+ }
+
+ .phg-date {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-secondary);
+ }
+
+ // ── 9. Type Badge ─────────────────────────────────────────────────────────
+ .phg-type-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+     }
+
+     &--credit {
+         color: lighten($emerald, 30%);
+         background: rgba($emerald, 0.12);
+         border: 1px solid rgba($emerald, 0.25);
+     }
+
+     &--debit {
+         color: lighten($amber, 22%);
+         background: rgba($amber, 0.1);
+         border: 1px solid rgba($amber, 0.22);
+     }
+ }
+
+ // ── 10. Amount — the key color-coded field ────────────────────────────────
+ .phg-amount {
+     font-family: var(--aoms-font-heading);
+     font-size: 0.9375rem;
+     font-weight: 700;
+     font-variant-numeric: tabular-nums;
+
+     &--credit {
+         color: lighten($emerald, 28%);
+     }
+
+     &--debit {
+         color: darken($amber, 5%);
+     }
+ }
+
+ // ── 11. Reason & Comments ─────────────────────────────────────────────────
+ .phg-reason {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 100%;
+ }
+
+ .phg-comments {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     max-width: 100%;
+ }
+
+ // ── 12. Admin ─────────────────────────────────────────────────────────────
+ .phg-admin {
+     font-size: 0.75rem;
+     font-family: 'Courier New', monospace;
+     color: var(--aoms-text-muted);
+ }
+
+ // ── 13. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .phg-row:nth-child(even) {
+         background: rgba(255, 255, 255, 0.02);
+     }
+
+     .phg-row:hover {
+         background: rgba($champagne, 0.06);
+     }
+
+     .phg-row--debit {
+         background: rgba($amber, 0.04);
+     }
+ }

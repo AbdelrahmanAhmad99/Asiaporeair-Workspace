@@ -1,0 +1,430 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ // Cabin class colour palette for distribution bars + chips
+ $first-color: #B68F24; // Royal Gold — First / Suites
+ $biz-color: #1E40AF; // Deep Blue — Business
+ $premium-color: #5B21B6; // Violet — Premium Economy
+ $eco-color: #374151; // Dark Slate — Economy
+ $other-color: #6B7280; // Gray — Unknown
+
+ // ============================================================================
+ // 1. Card Shell
+ // ============================================================================
+ .cvc {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 4px 20px rgba(5, 25, 55, 0.08);
+     overflow: hidden;
+     transition:
+         transform $t-fast,
+         box-shadow $t-fast,
+         border-color $t-fast,
+         background $t-base;
+
+     &:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 8px 28px rgba(5, 25, 55, 0.12);
+     }
+
+     // Primary config — Royal Gold border glow
+     &--primary {
+         border-color: rgba(182, 143, 36, 0.45);
+         box-shadow: 0 4px 20px rgba(5, 25, 55, 0.08), 0 0 0 1px rgba(182, 143, 36, 0.15) inset;
+
+         &:hover {
+             border-color: rgba(182, 143, 36, 0.65);
+             box-shadow: 0 8px 28px rgba(5, 25, 55, 0.12), 0 0 0 1px rgba(182, 143, 36, 0.25) inset;
+         }
+     }
+
+     // Processing state
+     &--deleting {
+         opacity: 0.6;
+         pointer-events: none;
+     }
+ }
+
+ // ============================================================================
+ // 2. Primary Config Stripe (top-left corner accent)
+ // ============================================================================
+ .cvc__primary-stripe {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 4px;
+     height: 100%;
+     border-radius: 12px 0 0 12px;
+     background: linear-gradient(to bottom, $gold, $champagne 50%, rgba($gold, 0.2));
+ }
+
+ // ============================================================================
+ // 3. Card Header
+ // ============================================================================
+ .cvc__header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 0.5rem;
+     flex-wrap: wrap;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-wrap: wrap;
+         flex: 1;
+         min-width: 0;
+     }
+ }
+
+ .cvc__name {
+     font-size: 1rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.015em;
+     color: var(--aoms-text-primary);
+     overflow: hidden;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     max-width: 260px;
+     transition: color $t-fast;
+ }
+
+ .cvc__primary-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.25rem;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     color: $gold;
+     background: rgba(182, 143, 36, 0.1);
+     border: 1px solid rgba(182, 143, 36, 0.28);
+     white-space: nowrap;
+     flex-shrink: 0;
+
+     &__icon {
+         width: 0.6875rem;
+         height: 0.6875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .cvc__id-pill {
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+     background: rgba(5, 25, 55, 0.04);
+     border: 1px solid rgba(226, 199, 128, 0.12);
+     border-radius: 100px;
+     padding: 0.125rem 0.5rem;
+     white-space: nowrap;
+     flex-shrink: 0;
+ }
+
+ // ============================================================================
+ // 4. Seat Capacity
+ // ============================================================================
+ .cvc__capacity {
+     display: flex;
+     align-items: baseline;
+     gap: 0.375rem;
+
+     &__value {
+         font-size: 1.875rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.03em;
+         font-variant-numeric: tabular-nums;
+         color: var(--aoms-text-primary);
+         transition: color $t-fast;
+     }
+
+     &__label {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+         transition: color $t-fast;
+     }
+ }
+
+ // ============================================================================
+ // 5. Class Distribution Bar + Chips
+ // ============================================================================
+ .cvc__distrib {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+ }
+
+ .cvc__distrib__bar {
+     display: flex;
+     height: 8px;
+     border-radius: 100px;
+     overflow: hidden;
+     gap: 2px;
+ }
+
+ .cvc__distrib__seg {
+     height: 100%;
+     border-radius: 100px;
+     transition: opacity $t-fast;
+     min-width: 4px;
+
+     &--first {
+         background: $first-color;
+     }
+
+     &--business {
+         background: $biz-color;
+     }
+
+     &--premium {
+         background: $premium-color;
+     }
+
+     &--economy {
+         background: $eco-color;
+     }
+
+     &--other {
+         background: $other-color;
+     }
+ }
+
+ .cvc__distrib__chips {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.3125rem;
+ }
+
+ .cvc__distrib__chip {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     white-space: nowrap;
+     background: rgba(5, 25, 55, 0.04);
+     border: 1px solid rgba(226, 199, 128, 0.1);
+     color: var(--aoms-text-secondary);
+     transition: color $t-fast, background $t-fast;
+
+     &__dot {
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         flex-shrink: 0;
+     }
+
+     &--first .cvc__distrib__chip__dot {
+         background: $first-color;
+     }
+
+     &--business .cvc__distrib__chip__dot {
+         background: $biz-color;
+     }
+
+     &--premium .cvc__distrib__chip__dot {
+         background: $premium-color;
+     }
+
+     &--economy .cvc__distrib__chip__dot {
+         background: $eco-color;
+     }
+
+     &--other .cvc__distrib__chip__dot {
+         background: $other-color;
+     }
+ }
+
+ // No classes placeholder
+ .cvc__no-classes {
+     display: flex;
+     align-items: center;
+     gap: 0.4375rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-style: italic;
+     color: var(--aoms-text-muted);
+     opacity: 0.7;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         color: $amber;
+     }
+ }
+
+ // ============================================================================
+ // 6. Card Footer
+ // ============================================================================
+ .cvc__footer {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.5rem;
+     padding-top: 0.75rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.1);
+     flex-wrap: wrap;
+     transition: border-color $t-fast;
+
+     &__secondary {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // Ghost secondary buttons
+ .cvc__ghost-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.3125rem 0.625rem;
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+     background: transparent;
+     border: 1px solid rgba(226, 199, 128, 0.16);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         color: var(--aoms-text-secondary);
+         border-color: rgba(226, 199, 128, 0.35);
+         background: rgba(226, 199, 128, 0.05);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     // Danger variant (delete)
+     &--danger {
+         &:hover:not(:disabled) {
+             color: $ruby;
+             border-color: rgba(113, 13, 6, 0.3);
+             background: rgba(113, 13, 6, 0.05);
+         }
+     }
+ }
+
+ // Primary "Enter Design Studio" button
+ .cvc__studio-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.5rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: #fff;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     box-shadow: 0 4px 12px rgba(182, 143, 36, 0.35);
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+         box-shadow: 0 6px 16px rgba(182, 143, 36, 0.5);
+         transform: translateY(-1px);
+     }
+
+     &:active:not(:disabled) {
+         transform: translateY(0);
+         box-shadow: 0 2px 8px rgba(182, 143, 36, 0.3);
+     }
+
+     &:disabled {
+         opacity: 0.42;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 7. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .cvc {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+         &--primary {
+             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(182, 143, 36, 0.12) inset;
+         }
+     }
+
+     .cvc__id-pill {
+         background: rgba(255, 255, 255, 0.04);
+     }
+
+     .cvc__distrib__chip {
+         background: rgba(255, 255, 255, 0.04);
+     }
+
+     .cvc__studio-btn {
+         box-shadow: 0 4px 12px rgba(182, 143, 36, 0.22);
+     }
+
+     .cvc__ghost-btn--danger:hover:not(:disabled) {
+         color: #fca5a5;
+         border-color: rgba(252, 165, 165, 0.25);
+         background: rgba(252, 165, 165, 0.06);
+     }
+ }

@@ -1,0 +1,196 @@
+<div class="bpsg-container">
+
+    <!-- ── Filter Bar ─────────────────────────────────────────────── -->
+    <div class="bpsg-filter-bar">
+
+        <!-- Passenger name search -->
+        <div class="bpsg-filter-field bpsg-filter-field--wide">
+            <div class="bpsg-filter-field__wrap">
+                <svg class="bpsg-filter-field__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                <input class="bpsg-filter-field__input" type="text" placeholder="Passenger name…" autocomplete="off"
+                    [value]="currentFilter().passengerNameContains" (input)="onNameInput($any($event.target).value)"
+                    [disabled]="isScanning()" aria-label="Filter by passenger name" />
+            </div>
+        </div>
+
+        <!-- Seat number search -->
+        <div class="bpsg-filter-field bpsg-filter-field--narrow">
+            <div class="bpsg-filter-field__wrap">
+                <svg class="bpsg-filter-field__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                </svg>
+                <input class="bpsg-filter-field__input bpsg-filter-field__input--mono" type="text" placeholder="Seat…"
+                    autocomplete="off" [value]="currentFilter().seatNumber ?? ''"
+                    (input)="onSeatInput($any($event.target).value)" [disabled]="isScanning()"
+                    aria-label="Filter by seat number" />
+            </div>
+        </div>
+
+        <!-- Boarded filter pills -->
+        <div class="bpsg-boarded-toggle" role="group" aria-label="Boarding status filter">
+            <button class="bpsg-toggle-pill" [class.bpsg-toggle-pill--active]="currentFilter().hasBoarded === null"
+                type="button" [disabled]="isScanning()" (click)="onBoardedToggle(null)">
+                All
+            </button>
+            <button class="bpsg-toggle-pill bpsg-toggle-pill--pending"
+                [class.bpsg-toggle-pill--active]="currentFilter().hasBoarded === false" type="button"
+                [disabled]="isScanning()" (click)="onBoardedToggle(false)">
+                Awaiting
+            </button>
+            <button class="bpsg-toggle-pill bpsg-toggle-pill--boarded"
+                [class.bpsg-toggle-pill--active]="currentFilter().hasBoarded === true" type="button"
+                [disabled]="isScanning()" (click)="onBoardedToggle(true)">
+                Boarded
+            </button>
+        </div>
+
+        <!-- Clear filters -->
+        @if (hasActiveFilter()) {
+        <button class="bpsg-clear-btn" type="button" (click)="onReset()" [disabled]="isScanning()"
+            aria-label="Clear all filters">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        }
+
+    </div>
+
+    <!-- ── Result count ───────────────────────────────────────────── -->
+    <div class="bpsg-count-bar">
+        <span class="bpsg-count-bar__text" aria-live="polite" aria-atomic="true">
+            {{ passes().length }} passenger{{ passes().length !== 1 ? 's' : '' }} shown
+        </span>
+        @if (isScanning()) {
+        <span class="bpsg-count-bar__scanning-badge" aria-live="assertive">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="bpsg-scan-spin"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Scanning…
+        </span>
+        }
+    </div>
+
+    <!-- ── Data Table ─────────────────────────────────────────────── -->
+    <div class="bpsg-table-wrap">
+
+        @if (passes().length === 0) {
+        <div class="bpsg-empty" role="status">
+            <svg class="bpsg-empty__icon" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.2"
+                aria-hidden="true">
+                <rect x="4" y="12" width="56" height="28" rx="3" stroke-opacity="0.3" />
+                <line x1="12" y1="22" x2="52" y2="22" stroke-opacity="0.2" />
+                <line x1="12" y1="30" x2="40" y2="30" stroke-opacity="0.15" />
+            </svg>
+            <p class="bpsg-empty__msg">No boarding passes match your filters.</p>
+        </div>
+        }
+
+        @if (passes().length > 0) {
+        <table class="bpsg-table" aria-label="Boarding pass selection grid">
+            <thead>
+                <tr class="bpsg-thead-row">
+                    <th class="bpsg-th bpsg-th--seq" scope="col">#</th>
+                    <th class="bpsg-th bpsg-th--name" scope="col">Passenger</th>
+                    <th class="bpsg-th bpsg-th--seat" scope="col">Seat</th>
+                    <th class="bpsg-th bpsg-th--class" scope="col">Class</th>
+                    <th class="bpsg-th bpsg-th--board" scope="col">Boarding</th>
+                    <th class="bpsg-th bpsg-th--status" scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (pass of passes(); track trackByPassId($index, pass)) {
+
+                <!-- Computed states for this row -->
+                @let boarded = isBoarded(pass.passId);
+                @let selected = isSelected(pass.passId);
+
+                <tr class="bpsg-row" [class.bpsg-row--boarded]="boarded" [class.bpsg-row--selected]="selected"
+                    [class.bpsg-row--scanning]="selected && isScanning()"
+                    [class.bpsg-row--disabled]="isScanning() && !selected" (click)="onRowClick(pass)"
+                    (keydown)="onRowKeydown($event, pass)" tabindex="0" role="button"
+                    [attr.aria-disabled]="isScanning() && !selected ? 'true' : null" [attr.aria-pressed]="selected"
+                    [attr.aria-label]="pass.passengerName + ' seat ' + pass.seatNumber + (boarded ? ' already boarded' : ' — click to scan')">
+
+                    <!-- Sequence number -->
+                    <td class="bpsg-cell bpsg-cell--seq">
+                        <span class="bpsg-seq" [class.bpsg-seq--selected]="selected">
+                            {{ pass.sequenceNumber }}
+                        </span>
+                    </td>
+
+                    <!-- Passenger name + frequent flyer -->
+                    <td class="bpsg-cell bpsg-cell--name">
+                        <div class="bpsg-name-block">
+                            <span class="bpsg-pax-name" [class.bpsg-pax-name--boarded]="boarded">
+                                {{ pass.passengerName }}
+                            </span>
+                            @if (pass.frequentFlyerNumber) {
+                            <span class="bpsg-ff-badge" title="Frequent Flyer Member">FF</span>
+                            }
+                        </div>
+                    </td>
+
+                    <!-- Seat number -->
+                    <td class="bpsg-cell bpsg-cell--seat">
+                        <span class="bpsg-seat" [class.bpsg-seat--selected]="selected">
+                            {{ pass.seatNumber }}
+                        </span>
+                    </td>
+
+                    <!-- Cabin class -->
+                    <td class="bpsg-cell bpsg-cell--class">
+                        <span class="bpsg-class-badge"
+                            [class.bpsg-class-badge--first]="pass.cabinClass?.toLowerCase()?.includes('first') || pass.cabinClass?.toLowerCase()?.includes('suite')"
+                            [class.bpsg-class-badge--business]="pass.cabinClass?.toLowerCase()?.includes('business')"
+                            [class.bpsg-class-badge--economy]="pass.cabinClass?.toLowerCase()?.includes('economy')">
+                            {{ pass.cabinClass || '—' }}
+                        </span>
+                    </td>
+
+                    <!-- Boarding time -->
+                    <td class="bpsg-cell bpsg-cell--board">
+                        <span class="bpsg-time">{{ formattedBoarding(pass.boardingTime) }}</span>
+                    </td>
+
+                    <!-- Boarding status -->
+                    <td class="bpsg-cell bpsg-cell--status">
+                        @if (selected && isScanning()) {
+                        <!-- Active scan indicator -->
+                        <span class="bpsg-status-badge bpsg-status-badge--scanning">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                class="bpsg-scan-spin" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                            Scanning
+                        </span>
+                        } @else if (boarded) {
+                        <span class="bpsg-status-badge bpsg-status-badge--boarded">
+                            <span class="bpsg-status-badge__dot" aria-hidden="true"></span>
+                            Boarded
+                        </span>
+                        } @else {
+                        <span class="bpsg-status-badge bpsg-status-badge--pending">
+                            Awaiting
+                        </span>
+                        }
+                    </td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+
+    </div>
+
+</div>

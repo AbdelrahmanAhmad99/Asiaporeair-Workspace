@@ -1,0 +1,203 @@
+  :host {
+      display: block;
+  }
+
+  $midnight : #051937;
+  $royal-gold : #B68F24;
+  $champagne : #E2C780;
+  $ivory : #F8F9FA;
+  $white : #FFFFFF;
+  $charcoal : #101056;
+  $muted : #718096;
+  $font : 'Montserrat',
+  'Inter',
+  sans-serif;
+  $ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+  .oc__header {
+      text-align: center;
+      margin-bottom: 44px;
+  }
+
+  .oc__eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba($royal-gold, .7);
+      margin-bottom: 10px;
+  }
+
+  .oc__eyebrow-line {
+      flex: 0 0 32px;
+      height: 1px;
+      background: rgba($royal-gold, .3);
+  }
+
+  .oc__title {
+      font-family: $font;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 300;
+      letter-spacing: -.03em;
+      color: $charcoal;
+      margin: 0 0 8px;
+
+      strong {
+          font-weight: 800;
+          color: $midnight;
+      }
+  }
+
+  .oc__sub {
+      font-size: 13px;
+      color: $muted;
+      margin: 0;
+  }
+
+  .oc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+
+      @media(max-width:900px) {
+          grid-template-columns: 1fr 1fr;
+      }
+
+      @media(max-width:560px) {
+          grid-template-columns: 1fr;
+      }
+  }
+
+  .oc-card {
+      border-radius: 12px;
+      overflow: hidden;
+      background: $white;
+      border: 1px solid rgba($royal-gold, .12);
+      box-shadow: 0 4px 20px rgba($midnight, .08);
+      transition: transform 300ms $ease, box-shadow 300ms $ease;
+      animation: cardUp 480ms $ease both;
+
+      &:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 48px rgba($midnight, .16);
+
+          .oc-card__img {
+              transform: scale(1.07);
+          }
+      }
+  }
+
+  @keyframes cardUp {
+      from {
+          opacity: 0;
+          transform: translateY(20px)
+      }
+
+      to {
+          opacity: 1;
+          transform: translateY(0)
+      }
+  }
+
+  .oc-card__img-wrap {
+      position: relative;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+  }
+
+  .oc-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 600ms $ease;
+  }
+
+  .oc-card__img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba($midnight, .35) 0%, transparent 60%);
+  }
+
+  .oc-card__badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba($royal-gold, .18);
+      border: 1px solid rgba($champagne, .35);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: $champagne;
+      backdrop-filter: blur(8px);
+  }
+
+  .oc-card__body {
+      padding: 20px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+  }
+
+  .oc-card__validity {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      color: rgba($muted, .7);
+      margin: 0;
+  }
+
+  .oc-card__title {
+      font-family: $font;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: $charcoal;
+      margin: 0;
+  }
+
+  .oc-card__sub {
+      font-size: 13px;
+      color: $muted;
+      line-height: 1.55;
+      margin: 0;
+  }
+
+  .oc-card__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 4px;
+      padding: 9px 18px;
+      border-radius: 4px;
+      background: $midnight;
+      border: 1px solid rgba($royal-gold, .3);
+      font-family: $font;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: $champagne;
+      text-decoration: none;
+      width: fit-content;
+      transition: background 240ms $ease, border-color 240ms $ease, color 240ms $ease;
+
+      &:hover {
+          background: $royal-gold;
+          border-color: $royal-gold;
+          color: $midnight;
+      }
+
+      &:focus-visible {
+          outline: 2px solid $royal-gold;
+          outline-offset: 3px;
+      }
+  }

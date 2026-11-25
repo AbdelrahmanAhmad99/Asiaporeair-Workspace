@@ -1,0 +1,69 @@
+<!-- cancellation-reason-form.component.html -->
+
+<div class="reason-form-card" role="region" aria-label="Reason for cancellation">
+
+    <div class="card-header">
+        <div class="card-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+            </svg>
+        </div>
+        <div>
+            <h2 class="card-title">Please share the nature of your change in plans</h2>
+            <p class="card-sub">Your response helps us improve our service and process your refund accurately.</p>
+        </div>
+    </div>
+
+    <form [formGroup]="form" class="form-body" [@formSlideIn] novalidate aria-label="Cancellation reason form">
+
+        <!-- Preset options -->
+        <div class="form-item" role="group" aria-label="Select a reason">
+            <label class="field-label">Reason for Cancellation</label>
+            <div class="preset-grid">
+                <button *ngFor="let preset of presets" type="button" class="preset-chip"
+                    [class.preset-chip--active]="form.get('preset')?.value === preset" [disabled]="disabled"
+                    (click)="form.get('preset')?.setValue(preset)"
+                    [attr.aria-pressed]="form.get('preset')?.value === preset" [attr.aria-label]="preset">
+                    {{ preset }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Free-text details -->
+        <div class="form-item">
+            <label class="field-label" for="reason-details">
+                Additional Details
+                <span class="field-optional">(optional — but appreciated)</span>
+            </label>
+            <div class="textarea-wrap" [class.textarea-wrap--error]="!!detailsError">
+                <textarea id="reason-details" class="reason-textarea" formControlName="details" [disabled]="disabled"
+                    placeholder="Please describe the circumstances of your change in plans…" rows="4" maxlength="500"
+                    [attr.aria-describedby]="detailsError ? 'reason-err' : 'reason-count'"
+                    [attr.aria-invalid]="!!detailsError">
+                </textarea>
+                <div class="textarea-meta">
+                    <span *ngIf="detailsError" id="reason-err" class="field-error" role="alert">{{ detailsError
+                        }}</span>
+                    <span *ngIf="!detailsError" class="spacer"></span>
+                    <span id="reason-count" class="char-count" aria-live="polite"
+                        [attr.aria-label]="(form.get('details')?.value?.length ?? 0) + ' of 500 characters'">
+                        {{ form.get('details')?.value?.length ?? 0 }}/500
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Character minimum hint -->
+        <div class="form-item min-hint-row" *ngIf="combinedLength < 10 && combinedLength > 0">
+            <span class="min-hint" role="status" aria-live="polite">
+                {{ 10 - combinedLength }} more character{{ 10 - combinedLength !== 1 ? 's' : '' }} needed to proceed.
+            </span>
+        </div>
+
+    </form>
+
+</div>

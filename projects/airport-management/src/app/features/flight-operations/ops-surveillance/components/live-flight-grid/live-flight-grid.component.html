@@ -1,0 +1,171 @@
+<div class="lfg-card">
+
+    <!-- ── Sticky Midnight Sapphire Header ─────────────────────── -->
+    <div class="lfg-head" role="row" aria-label="Flight grid header">
+        <div class="lfg-th" role="columnheader">Instance</div>
+        <div class="lfg-th" role="columnheader">Flight No.</div>
+        <div class="lfg-th lfg-th--corridor" role="columnheader">Corridor</div>
+        <div class="lfg-th" role="columnheader">Sched. Dep</div>
+        <div class="lfg-th" role="columnheader">Actual Dep</div>
+        <div class="lfg-th" role="columnheader">Sched. Arr</div>
+        <div class="lfg-th" role="columnheader">Actual Arr</div>
+        <div class="lfg-th" role="columnheader">Tail No.</div>
+        <div class="lfg-th lfg-th--status" role="columnheader">Status</div>
+        <div class="lfg-th lfg-th--actions" role="columnheader" aria-label="Actions"></div>
+    </div>
+
+    <!-- ── Loading shimmer ─────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="lfg-shimmer-list" aria-busy="true" aria-label="Loading live flight data">
+        @for (r of shimmerRows; track $index) {
+        <div class="lfg-shimmer-row" [class.lfg-shimmer-row--odd]="$index % 2 !== 0">
+            @for (w of ['36px','60px','80px','64px','64px','64px','64px','56px','80px','48px']; track $index) {
+            <div class="lfg-sk" [style.width]="w"></div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Empty state ─────────────────────────────────────────── -->
+    @if (!loading() && flights().length === 0) {
+    <div class="lfg-empty">
+        <div class="lfg-empty__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                   0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+        </div>
+        <p class="lfg-empty__title">No active flights in this window.</p>
+        <p class="lfg-empty__sub">Adjust the date range or filters to display live operations.</p>
+    </div>
+    }
+
+    <!-- ── CDK Virtual Scroll data rows ───────────────────────── -->
+    @if (!loading() && flights().length > 0) {
+    <div class="lfg-viewport" [attr.aria-label]="recordLabel() + ' in live operations'">
+        @for (f of flights(); track f.instanceId; let even = $even) {
+        <div class="lfg-row" [class.lfg-row--even]="even" [class.lfg-row--odd]="!even"
+            [class.lfg-row--selected]="isSelected(f)" [class.lfg-row--critical]="isCriticalDelay(f)"
+            (click)="onSelect.emit(f)" role="row" tabindex="0" (keydown.enter)="onSelect.emit(f)"
+            [attr.aria-selected]="isSelected(f)" [attr.aria-label]="f.flightNo + ' · ' + (f.status)">
+
+            <!-- ID Info: Instance + Schedule -->
+            <div class="lfg-td" role="cell">
+                <div class="lfg-ids">
+                    <span class="lfg-instance-id" title="Instance ID">#{{ f.instanceId }}</span>
+                    <span class="lfg-schedule-id" title="Schedule ID">S{{ f.scheduleId }}</span>
+                </div>
+            </div>
+
+            <!-- Flight & Airline Info -->
+            <div class="lfg-td" role="cell">
+                <div class="lfg-flight-no">
+                    <span>{{ f.airlineIataCode }} {{ f.flightNo }}</span>
+                    <span class="lfg-airline-name" [title]="f.airlineName">{{ f.airlineName }}</span>
+                </div>
+            </div>
+
+            <!-- Corridor: City + IATA -->
+            <div class="lfg-td lfg-td--corridor" role="cell">
+                <div class="lfg-corridor">
+                    <div class="lfg-corridor__point">
+                        <span class="lfg-corridor__iata lfg-corridor__iata--gold" [title]="f.originAirportName">
+                            {{ f.originIataCode ?? f.originAirportIata ?? '—' }}
+                        </span>
+                        <span class="lfg-corridor__city">{{ f.originCity }}</span>
+                    </div>
+
+                    <svg class="lfg-corridor__arrow" fill="none" stroke="currentColor" stroke-width="1.25"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                    </svg>
+
+                    <div class="lfg-corridor__point">
+                        <span class="lfg-corridor__iata lfg-corridor__iata--champagne"
+                            [title]="f.destinationAirportName">
+                            {{ f.destinationIataCode ?? f.destinationAirportIata ?? '—' }}
+                        </span>
+                        <span class="lfg-corridor__city">{{ f.destinationCity }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sched Dep -->
+            <div class="lfg-td" role="cell">
+                <span class="lfg-time">{{ f.scheduledDeparture | date:'HH:mm' }}</span>
+            </div>
+
+            <!-- Actual Dep -->
+            <div class="lfg-td" role="cell">
+                @if (f.actualDeparture) {
+                <span class="lfg-time lfg-time--actual">{{ f.actualDeparture | date:'HH:mm' }}</span>
+                } @else {
+                <span class="lfg-time lfg-time--empty">—</span>
+                }
+            </div>
+
+            <!-- Sched Arr -->
+            <div class="lfg-td" role="cell">
+                <span class="lfg-time">{{ f.scheduledArrival | date:'HH:mm' }}</span>
+            </div>
+
+            <!-- Actual Arr -->
+            <div class="lfg-td" role="cell">
+                @if (f.actualArrival) {
+                <span class="lfg-time lfg-time--actual">{{ f.actualArrival | date:'HH:mm' }}</span>
+                } @else {
+                <span class="lfg-time lfg-time--empty">—</span>
+                }
+            </div>
+
+            <!-- Aircraft Info -->
+            <div class="lfg-td" role="cell">
+                <div class="lfg-tail">
+                    @if (f.assignedAircraftTailNumber || f.tailNumber) {
+                    <span class="lfg-tail-val">{{ f.assignedAircraftTailNumber ?? f.tailNumber }}</span>
+                    <span class="lfg-model">{{ f.assignedAircraftModel ?? f.scheduledAircraftModel ?? '—' }}</span>
+                    } @else {
+                    <span class="lfg-tail--unassigned">Unassigned</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Inline Status Dropdown -->
+            <div class="lfg-td lfg-td--status" role="cell" (click)="$event.stopPropagation()">
+                <aoms-status-update-dropdown [currentStatus]="f.status" [validTransitions]="validTransitionsFor(f)"
+                    [isUpdating]="isUpdating() && isSelected(f)" (onStatusChange)="onDropdownChange(f, $event)" />
+            </div>
+
+            <!-- Actions -->
+            <div class="lfg-td lfg-td--actions" role="cell" (click)="$event.stopPropagation()">
+                @if (!isTerminal(f)) {
+                <button class="lfg-action-btn" type="button" [disabled]="isUpdating()" (click)="onAdjustTime.emit(f)"
+                    [attr.aria-label]="'Adjust times for flight ' + f.flightNo" title="Adjust actual times">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                    </svg>
+                </button>
+                }
+
+                @if (isCriticalDelay(f)) {
+                <div class="lfg-critical-dot" title="Critical delay: > 15 min" aria-label="Critical delay"
+                    aria-hidden="true"></div>
+                }
+            </div>
+
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Footer -->
+    @if (!loading() && flights().length > 0) {
+    <div class="lfg-footer">
+        <span class="lfg-footer__label">{{ recordLabel() }}</span>
+    </div>
+    }
+
+</div>

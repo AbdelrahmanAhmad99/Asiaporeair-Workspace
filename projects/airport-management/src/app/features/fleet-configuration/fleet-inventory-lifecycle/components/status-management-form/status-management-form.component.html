@@ -1,0 +1,97 @@
+<div class="smf-card">
+
+    <div class="smf-card__header">
+        <div class="smf-card__header__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="smf-card__header__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75m-10.5.75a8.25 8.25 0 1 1 16.5 0 8.25 8.25 0 0 1-16.5 0z" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="smf-title">Readiness Control</h3>
+            <p class="smf-sub">Update operational status of this aircraft</p>
+        </div>
+    </div>
+
+    <div class="smf-body">
+
+        <!-- Current status chip -->
+        <div class="smf-current">
+            <span class="smf-current__label">Current:</span>
+            <span class="smf-current__value">{{ currentStatus() || '—' }}</span>
+        </div>
+
+        <!-- Status select + description -->
+        <div class="smf-field">
+            <label class="smf-field__label" for="smf-status">New Operational Status</label>
+            <div class="smf-select-wrap">
+                <select class="smf-select" id="smf-status" [ngModel]="selectedStatus()"
+                    (ngModelChange)="onStatusChange($event)" [disabled]="isProcessing()" aria-required="true">
+                    <option value="" disabled>Select status…</option>
+                    @for (opt of statusOptions; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                </select>
+                <svg class="smf-select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                </svg>
+            </div>
+
+            @if (selectedOption()) {
+            <p class="smf-field__hint">{{ selectedOption()!.description }}</p>
+            }
+        </div>
+
+        <!-- Reason field — animated reveal when status requires it -->
+        <div class="smf-reason-container" [class.smf-reason-container--visible]="requiresReason()">
+            <div class="smf-field">
+                <label class="smf-field__label" for="smf-reason">
+                    Reason for Status Change
+                    <span class="smf-field__required" aria-label="required">*</span>
+                </label>
+                <textarea class="smf-textarea" id="smf-reason" rows="3" [maxlength]="REASON_MAX" [ngModel]="reason()"
+                    (ngModelChange)="reason.set($event)" [disabled]="isProcessing()"
+                    placeholder="Describe the operational constraint or reason for this status change…"
+                    [attr.aria-required]="requiresReason()" [attr.aria-describedby]="'smf-chars'">
+        </textarea>
+                <div class="smf-textarea-footer">
+                    <span class="smf-textarea-footer__warning">
+                        @if (requiresReason() && reasonChars() < 5) { Minimum 5 characters required. } </span>
+                            <span class="smf-chars" id="smf-chars">
+                                {{ reasonChars() }} / {{ REASON_MAX }}
+                            </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commit Button -->
+        <button class="smf-submit-btn" type="button" [disabled]="!isValid() || isProcessing()" (click)="onSubmit()"
+            aria-label="Commit operational status change">
+
+            @if (!isProcessing()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="smf-submit-btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0
+                   2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25
+                   2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+            </svg>
+            Commit Status Update
+            }
+
+            @if (isProcessing()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="smf-submit-btn__icon smf-submit-btn__icon--spin" aria-busy="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                   3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                   13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Updating Registry…
+            }
+
+        </button>
+
+    </div>
+
+</div>

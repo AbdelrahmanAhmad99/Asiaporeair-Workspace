@@ -1,0 +1,225 @@
+<!-- ============================================================================
+     boarding-pass-preview.component.html
+     Asiaporeair | Premium Digital Boarding Pass
+     Anatomy: Header · Route Bar · Seat Hero · Details Grid · QR Strip · Stub
+     ============================================================================ -->
+
+<div class="bp-card" id="boarding-pass-card" role="region" aria-label="Boarding pass">
+
+    <!-- ══════════════════════════════════════════════════
+         HEADER — Brand + Flight number
+    ══════════════════════════════════════════════════ -->
+    <div class="bp-header">
+
+        <!-- Airline branding -->
+        <div class="bp-header__brand">
+            <div class="bp-header__brand-icon" aria-hidden="true">
+                <!-- Stylised "A" plane motif -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                </svg>
+            </div>
+            <div class="bp-header__brand-text">
+                <span class="bp-header__airline">ASIAPOREAIR</span>
+                <span class="bp-header__tagline">Your World. Elevated.</span>
+            </div>
+        </div>
+
+        <!-- Flight number + cabin badge -->
+        <div class="bp-header__right">
+            <span class="bp-flight-num">{{ flightNumber }}</span>
+            <span class="bp-cabin-badge">
+                {{ cabinClassShort }} · {{ cabinClass }}
+            </span>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         ROUTE BAR — Prominent SIN → LHR display
+    ══════════════════════════════════════════════════ -->
+    <div class="bp-route" role="group" aria-label="Flight route">
+
+        <div class="bp-route__leg bp-route__leg--origin">
+            <span class="bp-route__iata" aria-label="Origin: {{ origin }}">{{ origin }}</span>
+            <span class="bp-route__time">{{ formattedDeparture }}</span>
+            <span class="bp-route__date">{{ formattedDepartureDate }}</span>
+        </div>
+
+        <!-- Flight path graphic -->
+        <div class="bp-route__arc" aria-hidden="true">
+            <div class="bp-route__line"></div>
+            <svg class="bp-route__plane" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1" stroke-linecap="round">
+                <path
+                    d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            <div class="bp-route__duration-label">
+                <!-- Duration computed approximately from times -->
+            </div>
+        </div>
+
+        <div class="bp-route__leg bp-route__leg--dest">
+            <span class="bp-route__iata" aria-label="Destination: {{ destination }}">{{ destination }}</span>
+            <span class="bp-route__time">{{ formattedArrival }}</span>
+        </div>
+
+    </div>
+
+    <!-- Divider with perforated edge (CSS-only) -->
+    <div class="bp-perforation" aria-hidden="true">
+        <div class="bp-perforation__line"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         SEAT HERO + DETAILS GRID
+    ══════════════════════════════════════════════════ -->
+    <div class="bp-body">
+
+        <!-- LEFT: Seat hero -->
+        <div class="bp-seat-hero" aria-label="Seat {{ seatNumber }}">
+            <span class="bp-seat-hero__label">SEAT</span>
+            <span class="bp-seat-hero__number">{{ seatNumber || '–' }}</span>
+            <span class="bp-seat-hero__group">{{ boardingGroup }}</span>
+        </div>
+
+        <!-- DIVIDER (vertical) -->
+        <div class="bp-body__vdivider" aria-hidden="true"></div>
+
+        <!-- RIGHT: Details grid -->
+        <div class="bp-details">
+
+            <div class="bp-detail-item">
+                <span class="bp-detail-item__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        stroke-linecap="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </span>
+                <div class="bp-detail-item__content">
+                    <span class="bp-detail-item__label">Passenger</span>
+                    <span class="bp-detail-item__val bp-detail-item__val--name">
+                        {{ passengerName }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="bp-detail-item">
+                <span class="bp-detail-item__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        stroke-linecap="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                </span>
+                <div class="bp-detail-item__content">
+                    <span class="bp-detail-item__label">Boarding</span>
+                    <span class="bp-detail-item__val">{{ formattedBoardingTime }}</span>
+                </div>
+            </div>
+
+            <div class="bp-detail-item">
+                <span class="bp-detail-item__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        stroke-linecap="round">
+                        <path
+                            d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                        <path d="M13 5v2M13 17v2M13 11v2" />
+                    </svg>
+                </span>
+                <div class="bp-detail-item__content">
+                    <span class="bp-detail-item__label">Reference</span>
+                    <span class="bp-detail-item__val bp-detail-item__val--pnr">
+                        {{ bookingReference }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="bp-detail-item">
+                <span class="bp-detail-item__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        stroke-linecap="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                </span>
+                <div class="bp-detail-item__content">
+                    <span class="bp-detail-item__label">Seq. No.</span>
+                    <span class="bp-detail-item__val">{{ sequenceNumber | number:'3.0-0' }}</span>
+                </div>
+            </div>
+
+            <!-- Pre-check badge (if applicable) -->
+            @if (precheckStatus) {
+            <div class="bp-precheck" aria-label="TSA Pre-check approved">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                PRE✓
+            </div>
+            }
+
+            <!-- Frequent flyer if present -->
+            @if (frequentFlyerNumber) {
+            <div class="bp-detail-item">
+                <span class="bp-detail-item__icon" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        stroke-linecap="round">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                </span>
+                <div class="bp-detail-item__content">
+                    <span class="bp-detail-item__label">Loyalty</span>
+                    <span class="bp-detail-item__val">{{ frequentFlyerNumber }}</span>
+                </div>
+            </div>
+            }
+
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TEAR LINE + QR STRIP
+    ══════════════════════════════════════════════════ -->
+    <div class="bp-perforation bp-perforation--bottom" aria-hidden="true">
+        <div class="bp-perforation__line"></div>
+    </div>
+
+    <div class="bp-qr-strip">
+
+        <!-- QR code visual -->
+        <div class="bp-qr-wrap" aria-label="Boarding pass QR code">
+            @if (!qrReady) {
+            <!-- Shimmer placeholder -->
+            <div class="bp-qr-shimmer" aria-busy="true" aria-label="Loading QR code"></div>
+            } @else {
+            <!-- SVG dot-matrix QR representation -->
+            <svg class="bp-qr-svg" [attr.width]="21 * 6" [attr.height]="21 * 6" viewBox="0 0 126 126" role="img"
+                aria-label="QR code for boarding pass {{ bookingReference }}">
+                @for (row of qrDotMatrix; track $index; let r = $index) {
+                @for (cell of row; track $index; let c = $index) {
+                @if (cell) {
+                <rect [attr.x]="c * 6" [attr.y]="r * 6" width="5" height="5" rx="0.8" fill="#051937" />
+                }
+                }
+                }
+            </svg>
+            }
+        </div>
+
+        <!-- Ticket code barcode label -->
+        <div class="bp-ticket-info">
+            <span class="bp-ticket-code" aria-label="Ticket code">{{ ticketCode }}</span>
+            <span class="bp-ticket-hint">Scan at gate or present to crew</span>
+        </div>
+
+    </div>
+
+</div>

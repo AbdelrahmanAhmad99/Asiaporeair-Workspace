@@ -1,0 +1,93 @@
+<div class="kw-shell">
+
+    <!-- Hero -->
+    <header class="kw-hero">
+        <div class="kw-hero__inner">
+            <nav class="kw-bc" aria-label="Breadcrumb">
+                <a href="/" class="kw-bc__link">Home</a><span class="kw-bc__sep">›</span>
+                <a href="/journey-with-us/entertainment" class="kw-bc__link">Entertainment</a>
+                <span class="kw-bc__sep">›</span>
+                <span class="kw-bc__cur">SkyWorld</span>
+            </nav>
+            <div class="kw-hero__pre">
+                <div class="kw-hero__line"></div><span class="kw-hero__ey">Inflight Entertainment</span>
+            </div>
+            <h1 class="kw-hero__title">SkyWorld</h1>
+            <p class="kw-hero__sub">Over 1,800 on-demand titles from the world's leading studios — updated before every
+                departure. Your entertainment, curated for altitude.</p>
+        </div>
+        <div class="kw-hero__img-band" aria-hidden="true">
+            <img src="assets/images/journey-with-us/krisworld-hero.png" alt="" class="kw-hero__bg" loading="eager" />
+            <div class="kw-hero__overlay"></div>
+        </div>
+    </header>
+
+    <!-- Category filter + grid -->
+    <section class="kw-content">
+        <div class="kw-inner">
+            <div class="kw-sec-hdr">
+                <div class="kw-sec-line"></div>
+                <div>
+                    <p class="kw-sec-ey">Browse by Category</p>
+                    <h2 class="kw-sec-title">What's On Board</h2>
+                </div>
+            </div>
+
+            <!-- Filter tabs -->
+            <div class="kw-filters" role="tablist" aria-label="Filter by media type">
+                @for (f of filters; track f.value) {
+                <button class="kw-filter" [class.kw-filter--active]="activeFilter() === f.value" type="button"
+                    role="tab" [attr.aria-selected]="activeFilter() === f.value" (click)="setFilter(f.value)">{{ f.label
+                    }}</button>
+                }
+            </div>
+
+            <!-- Cards -->
+            <div class="kw-grid" role="tabpanel">
+                @for (cat of filteredCategories(); track cat.id; let i = $index) {
+                <app-media-category-card [category]="cat" [animDelay]="i * 60"></app-media-category-card>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Personalisation callout -->
+    <div class="kw-personalise">
+        <div class="kw-personalise__inner">
+            <div class="kw-personalise__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+            </div>
+            <div class="kw-personalise__text">
+                <strong>Your Preferences, Remembered</strong>
+                <p>Log in to your Voyager account before your flight and SkyWorld will resume your watchlist, remember
+                    your music playlists, and suggest content based on your past choices.</p>
+            </div>
+            <a class="kw-personalise__cta" href="/loyalty/sign-in">Sign In to Voyager</a>
+        </div>
+    </div>
+
+    <!-- Screen sizes by cabin -->
+    <section class="kw-screens">
+        <div class="kw-inner">
+            <div class="kw-sec-hdr">
+                <div class="kw-sec-line"></div>
+                <div>
+                    <p class="kw-sec-ey">Cabin Screens</p>
+                    <h2 class="kw-sec-title">Display Size by Class</h2>
+                </div>
+            </div>
+            <div class="kw-screen-grid">
+                @for (screen of cabinScreens; track screen.cabin) {
+                <div class="kw-screen-item">
+                    <span class="kw-screen-size">{{ screen.size }}</span>
+                    <span class="kw-screen-cabin">{{ screen.cabin }}</span>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+</div>

@@ -1,0 +1,101 @@
+<div class="ptc-card" role="figure" aria-label="Pricing timeline chart">
+
+    <!-- ── Header ─────────────────────────────────────────────────── -->
+    <div class="ptc-header">
+        <div>
+            <h3 class="ptc-header__title">Pricing Timeline</h3>
+            <p class="ptc-header__sub">Base price trend over the last 6 months</p>
+        </div>
+
+        @if (!loading() && data().length > 1) {
+        <span class="ptc-trend" [class]="'ptc-trend--' + trendDirection()">
+            @if (trendDirection() === 'up') {
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8m0 0v8m0-8-9 9" />
+            </svg>
+            } @else if (trendDirection() === 'down') {
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 17H8m0 0v-8m0 8 9-9" />
+            </svg>
+            } @else {
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+            </svg>
+            }
+            {{ trendPercentLabel() }} over period
+        </span>
+        }
+    </div>
+
+    <!-- ── Skeleton Loading ──────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="ptc-skeleton" aria-hidden="true">
+        <div class="ptc-sk ptc-sk--chart"></div>
+    </div>
+    }
+
+    <!-- ── Chart ─────────────────────────────────────────────────── -->
+    @if (!loading() && plottedPoints().length > 0) {
+    <div class="ptc-chart-wrap">
+        <svg class="ptc-svg" [attr.viewBox]="'0 0 ' + vbWidth + ' ' + vbHeight" preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg">
+
+            <defs>
+                <linearGradient id="ptcAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#E2C780" stop-opacity="0.28" />
+                    <stop offset="100%" stop-color="#E2C780" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="ptcLineGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#B68F24" />
+                    <stop offset="100%" stop-color="#E2C780" />
+                </linearGradient>
+            </defs>
+
+            <!-- Gridlines -->
+            @for (line of gridLines(); track line.value) {
+            <g class="ptc-gridline">
+                <line [attr.x1]="36" [attr.x2]="vbWidth - 36" [attr.y1]="line.y" [attr.y2]="line.y" />
+                <text [attr.x]="8" [attr.y]="line.y + 4">{{ currencySymbol() }}{{ fmtPrice(line.value) }}</text>
+            </g>
+            }
+
+            <!-- Area fill beneath the line -->
+            <path class="ptc-area" [attr.d]="areaPath()" fill="url(#ptcAreaGradient)" />
+
+            <!-- Price trend line — Champagne Gold stroke -->
+            <path class="ptc-line" [attr.d]="linePath()" fill="none" stroke="url(#ptcLineGradient)" />
+
+            <!-- Data points -->
+            @for (pt of plottedPoints(); track pt.label) {
+            <g class="ptc-point" [class.ptc-point--current]="pt.isCurrent">
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" class="ptc-point__halo" />
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" class="ptc-point__dot" />
+                <text [attr.x]="pt.x" [attr.y]="vbHeight - 12" class="ptc-point__label">{{ pt.label }}</text>
+                @if (pt.isCurrent) {
+                <text [attr.x]="pt.x" [attr.y]="pt.y - 14" class="ptc-point__price ptc-point__price--current">
+                    {{ currencySymbol() }}{{ fmtPrice(pt.price) }}
+                </text>
+                }
+            </g>
+            }
+
+        </svg>
+    </div>
+    }
+
+    <!-- ── Empty State ───────────────────────────────────────────── -->
+    @if (!loading() && plottedPoints().length === 0) {
+    <div class="ptc-empty">
+        <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+        </svg>
+        <p>No pricing history available for this product yet.</p>
+    </div>
+    }
+
+    <p class="ptc-disclaimer">
+        Illustrative trend data — historical pricing analytics integration pending.
+    </p>
+
+</div>

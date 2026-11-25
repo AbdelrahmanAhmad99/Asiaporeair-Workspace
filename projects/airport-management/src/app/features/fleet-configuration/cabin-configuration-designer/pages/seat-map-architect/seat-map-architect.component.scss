@@ -1,0 +1,714 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+ $t-spring: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+
+ // ============================================================================
+ // 1. Page Shell — fills the full feature area
+ // ============================================================================
+ .sma-page {
+     display: flex;
+     flex-direction: column;
+     height: 100%;
+     min-height: 0; // allow inner flex children to shrink
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+     overflow: hidden;
+ }
+
+ // ============================================================================
+ // 2. Sticky Header
+ // ============================================================================
+ .sma-header {
+     position: relative;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.15);
+     box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base, box-shadow $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+     }
+
+     &__error {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.375rem;
+         padding: 0.375rem 0.75rem;
+         border-radius: 6px;
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: $ruby;
+         background: rgba(113, 13, 6, 0.07);
+         border: 1px solid rgba(113, 13, 6, 0.18);
+         max-width: 280px;
+         transition: all $t-fast;
+
+         &__icon {
+             width: 0.875rem;
+             height: 0.875rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ // Breadcrumb
+ .sma-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__back {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.3125rem;
+         padding: 0;
+         border: none;
+         background: none;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-secondary);
+         cursor: pointer;
+         outline: none;
+         transition: color $t-fast;
+
+         &:hover {
+             color: $midnight;
+         }
+
+         &:hover &__arrow {
+             transform: translateX(-3px);
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 3px;
+             border-radius: 3px;
+         }
+
+         &__arrow {
+             width: 0.875rem;
+             height: 0.875rem;
+             flex-shrink: 0;
+             transition: transform $t-fast;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__cabin {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // Title row
+ .sma-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+ }
+
+ .sma-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .sma-cabin-badge {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.125rem 0.5625rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     border: 1px solid;
+     white-space: nowrap;
+     transition: all $t-fast;
+ }
+
+ .sma-seat-count {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.04em;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     background: rgba(5, 25, 55, 0.05);
+     border: 1px solid rgba(226, 199, 128, 0.12);
+     transition: all $t-fast;
+ }
+
+ // Icon buttons
+ .sma-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.07);
+         color: $midnight;
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: sma-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Body — canvas + sidebar two-column layout
+ // ============================================================================
+ .sma-body {
+     display: flex;
+     flex: 1;
+     min-height: 0;
+     overflow: hidden;
+ }
+
+ // ============================================================================
+ // 4. Canvas Area — scrollable, holds the grid
+ // ============================================================================
+ .sma-canvas-area {
+     flex: 1;
+     min-width: 0;
+     display: flex;
+     flex-direction: column;
+     overflow: hidden;
+     padding: 1.5rem 1.75rem;
+ }
+
+ .sma-canvas-scroll {
+     flex: 1;
+     overflow: auto;
+     padding: 0.5rem;
+
+     // Champagne Gold custom scrollbars (matching CBES aesthetic)
+     &::-webkit-scrollbar {
+         width: 6px;
+         height: 6px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: rgba(5, 25, 55, 0.03);
+         border-radius: 3px;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba(182, 143, 36, 0.25);
+         border-radius: 3px;
+
+         &:hover {
+             background: rgba(182, 143, 36, 0.4);
+         }
+     }
+
+     &::-webkit-scrollbar-corner {
+         background: transparent;
+     }
+ }
+
+ // ============================================================================
+ // 5. Loading Shimmer — matches seat-grid aesthetic exactly
+ // ============================================================================
+ .sma-canvas-loading {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 1rem;
+     background: linear-gradient(180deg,
+             rgba(5, 25, 55, 0.04) 0%,
+             rgba(5, 25, 55, 0.02) 50%,
+             rgba(5, 25, 55, 0.04) 100%);
+     border: 1px solid rgba(226, 199, 128, 0.12);
+     border-radius: 12px;
+     max-width: 480px;
+
+     &__text {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(182, 143, 36, 0.4);
+         letter-spacing: 0.04em;
+         padding-top: 0.25rem;
+         align-self: center;
+     }
+ }
+
+ .sma-shimmer-grid {
+     display: flex;
+     flex-direction: column;
+     gap: 6px;
+     width: 100%;
+ }
+
+ .sma-shimmer-row {
+     display: flex;
+     align-items: center;
+     gap: 4px;
+ }
+
+ .sma-shimmer-num {
+     width: 30px;
+     height: 10px;
+     border-radius: 3px;
+     background: rgba(182, 143, 36, 0.07);
+     animation: sma-pulse 1.4s ease-in-out infinite;
+     flex-shrink: 0;
+ }
+
+ .sma-shimmer-seat {
+     width: 36px;
+     height: 36px;
+     border-radius: 5px 5px 3px 3px;
+     background: rgba(182, 143, 36, 0.07);
+     animation: sma-pulse 1.4s ease-in-out infinite;
+     flex-shrink: 0;
+ }
+
+ // ============================================================================
+ // 6. Empty Canvas State
+ // ============================================================================
+ .sma-canvas-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 4rem 2rem;
+     text-align: center;
+
+     &__icon-wrap {
+         width: 3.5rem;
+         height: 3.5rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         border-radius: 12px;
+         background: rgba(182, 143, 36, 0.07);
+         color: rgba(182, 143, 36, 0.4);
+         margin-bottom: 0.25rem;
+     }
+
+     &__icon {
+         width: 1.75rem;
+         height: 1.75rem;
+     }
+
+     &__title {
+         font-size: 1rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-secondary);
+         transition: color $t-fast;
+     }
+
+     &__sub {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         max-width: 340px;
+         line-height: 1.5;
+         transition: color $t-fast;
+     }
+ }
+
+ // ============================================================================
+ // 7. Tactical Sidebar
+ // ============================================================================
+ .sma-sidebar {
+     width: 260px;
+     flex-shrink: 0;
+     border-left: 1px solid rgba(226, 199, 128, 0.12);
+     overflow-y: auto;
+     overflow-x: hidden;
+     transition: background-color $t-base;
+
+     // Champagne scrollbar
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba(226, 199, 128, 0.18);
+         border-radius: 2px;
+     }
+
+     @media (max-width: 1024px) {
+         width: 240px;
+     }
+ }
+
+ // ============================================================================
+ // 8. Deletion Modal
+ // ============================================================================
+ .sma-modal-bd {
+     position: fixed;
+     inset: 0;
+     z-index: 49;
+     background: rgba(5, 25, 55, 0.75);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+     animation: sma-fade 200ms ease forwards;
+ }
+
+ .sma-modal {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 50;
+     width: min(440px, calc(100vw - 2rem));
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 0 0 1.375rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba(113, 13, 6, 0.45);
+     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(113, 13, 6, 0.1) inset;
+     overflow: hidden;
+     animation: sma-enter 260ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     >*:not(.sma-modal__rule):not(.sma-modal__loading) {
+         padding-left: 1.5rem;
+         padding-right: 1.5rem;
+     }
+
+     &__rule {
+         height: 3px;
+         flex-shrink: 0;
+         background: linear-gradient(to right, rgba(113, 13, 6, 0.4), lighten($ruby, 15%), rgba(113, 13, 6, 0.4));
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 3rem;
+         height: 3rem;
+         border-radius: 50%;
+         background: rgba(113, 13, 6, 0.14);
+         border: 1px solid rgba(113, 13, 6, 0.35);
+         margin-top: 0.625rem;
+     }
+
+     &__icon {
+         width: 1.5rem;
+         height: 1.5rem;
+         color: lighten($ruby, 28%);
+     }
+
+     &__body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.375rem;
+     }
+
+     &__title {
+         font-size: 1.125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     &__seat-id {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: $champagne;
+         font-style: italic;
+     }
+
+     &__copy {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         line-height: 1.5;
+         color: rgba(255, 255, 255, 0.55);
+     }
+
+     &__error-box {
+         padding: 0.75rem 1rem;
+         border-radius: 6px;
+         background: rgba(113, 13, 6, 0.1);
+         border: 1px solid rgba(113, 13, 6, 0.22);
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: lighten($ruby, 35%);
+         line-height: 1.4;
+     }
+
+     &__actions {
+         display: flex;
+         align-items: center;
+         justify-content: flex-end;
+         gap: 0.625rem;
+         padding-top: 0.25rem;
+         border-top: 1px solid rgba(255, 255, 255, 0.07);
+     }
+
+     &__btn {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.375rem;
+         padding: 0.5rem 1rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         border-radius: 4px;
+         cursor: pointer;
+         outline: none;
+         white-space: nowrap;
+         transition: all $t-fast;
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         &--cancel {
+             color: rgba(255, 255, 255, 0.5);
+             background: transparent;
+             border: 1px solid rgba(255, 255, 255, 0.12);
+
+             &:hover {
+                 color: rgba(255, 255, 255, 0.8);
+                 background: rgba(255, 255, 255, 0.06);
+                 border-color: rgba(255, 255, 255, 0.25);
+             }
+         }
+
+         &--confirm {
+             color: #fff;
+             background: $ruby;
+             border: none;
+             box-shadow: 0 4px 14px rgba(113, 13, 6, 0.5);
+
+             &:hover {
+                 background: lighten($ruby, 8%);
+                 box-shadow: 0 6px 18px rgba(113, 13, 6, 0.65);
+                 transform: translateY(-1px);
+             }
+         }
+     }
+
+     &__loading {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 0.75rem;
+         padding: 2.5rem 1.5rem;
+         text-align: center;
+
+         p {
+             font-size: 0.875rem;
+             font-family: var(--aoms-font-body);
+             color: rgba(255, 255, 255, 0.5);
+         }
+
+         &__spinner {
+             width: 1.75rem;
+             height: 1.75rem;
+             color: lighten($ruby, 25%);
+             animation: sma-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 9. Keyframes
+ // ============================================================================
+ @keyframes sma-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes sma-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 14px)) scale(0.94);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%) scale(1);
+     }
+ }
+
+ @keyframes sma-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes sma-pulse {
+
+     0%,
+     100% {
+         opacity: 0.45;
+     }
+
+     50% {
+         opacity: 0.9;
+     }
+ }
+
+ // ============================================================================
+ // 10. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .sma-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .sma-breadcrumb__back:hover {
+         color: $champagne;
+     }
+
+     .sma-icon-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .sma-header__error {
+         background: rgba(113, 13, 6, 0.14);
+         border-color: rgba(113, 13, 6, 0.3);
+         color: #fca5a5;
+     }
+
+     .sma-canvas-scroll {
+         &::-webkit-scrollbar-track {
+             background: rgba(255, 255, 255, 0.02);
+         }
+
+         &::-webkit-scrollbar-thumb {
+             background: rgba(182, 143, 36, 0.2);
+         }
+     }
+
+     .sma-canvas-loading {
+         background: linear-gradient(180deg,
+                 rgba(226, 199, 128, 0.03) 0%,
+                 rgba(226, 199, 128, 0.01) 50%,
+                 rgba(226, 199, 128, 0.03) 100%);
+         border-color: rgba(226, 199, 128, 0.08);
+     }
+
+     .sma-shimmer-seat,
+     .sma-shimmer-num {
+         background: rgba(226, 199, 128, 0.06);
+     }
+
+     .sma-seat-count {
+         background: rgba(255, 255, 255, 0.05);
+         border-color: rgba(226, 199, 128, 0.1);
+     }
+ }

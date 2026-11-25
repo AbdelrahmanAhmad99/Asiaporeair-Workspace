@@ -1,0 +1,200 @@
+<div class="tfp-panel" [class.tfp-panel--loading]="loading()">
+
+    <!-- ── Quick Lookup ───────────────────────────────────────────── -->
+    <section class="tfp-section tfp-section--quick">
+        <h3 class="tfp-section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="tfp-section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            Quick Lookup
+        </h3>
+        <div class="tfp-quick-wrap">
+            <input class="tfp-quick-input" type="text" placeholder="Ticket code…" autocomplete="off" spellcheck="false"
+                [value]="quickCode()" (input)="onQuickCodeChange($any($event.target).value)"
+                (keydown)="onQuickKeydown($event)" [disabled]="loading()" aria-label="Quick ticket code lookup" />
+            <button class="tfp-quick-btn" type="button" [disabled]="!quickCode().trim() || loading()"
+                (click)="onQuickLookup()" aria-label="Look up ticket">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+        </div>
+    </section>
+
+    <div class="tfp-divider" aria-hidden="true"></div>
+
+    <!-- ── Main Filters ───────────────────────────────────────────── -->
+    <section class="tfp-section" (keydown)="onFieldKeydown($event)">
+        <h3 class="tfp-section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="tfp-section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+            </svg>
+            Audit Filters
+        </h3>
+
+        <!-- Ticket Code -->
+        <div class="tfp-field">
+            <label class="tfp-field__label" for="tfp-code">Ticket Code</label>
+            <div class="tfp-field__wrap">
+                <svg class="tfp-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                </svg>
+                <input id="tfp-code" class="tfp-field__input tfp-field__input--mono" type="text" autocomplete="off"
+                    spellcheck="false" placeholder="e.g. TKT-20250101" [value]="draft().ticketCode"
+                    (input)="onFieldChange('ticketCode', $any($event.target).value)" [disabled]="loading()"
+                    aria-label="Filter by ticket code" />
+            </div>
+        </div>
+
+        <!-- Booking Reference / PNR -->
+        <div class="tfp-field">
+            <label class="tfp-field__label" for="tfp-pnr">PNR / Booking Ref</label>
+            <div class="tfp-field__wrap">
+                <svg class="tfp-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5-3.9 19.5m-2.1-19.5-3.9 19.5" />
+                </svg>
+                <input id="tfp-pnr" class="tfp-field__input tfp-field__input--mono" type="text" autocomplete="off"
+                    spellcheck="false" placeholder="e.g. ABC123" [value]="draft().bookingReference"
+                    (input)="onFieldChange('bookingReference', $any($event.target).value)" [disabled]="loading()"
+                    aria-label="Filter by PNR or booking reference" />
+            </div>
+        </div>
+
+        <!-- Passenger Name -->
+        <div class="tfp-field">
+            <label class="tfp-field__label" for="tfp-pax-name">Passenger Name</label>
+            <div class="tfp-field__wrap">
+                <svg class="tfp-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                <input id="tfp-pax-name" class="tfp-field__input" type="text" placeholder="Search by name…"
+                    autocomplete="off" [value]="draft().passengerNameContains"
+                    (input)="onFieldChange('passengerNameContains', $any($event.target).value)" [disabled]="loading()"
+                    aria-label="Filter by passenger name" />
+            </div>
+        </div>
+
+        <!-- Passport -->
+        <div class="tfp-field">
+            <label class="tfp-field__label" for="tfp-passport">Passport / Doc ID</label>
+            <div class="tfp-field__wrap">
+                <svg class="tfp-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3" />
+                </svg>
+                <input id="tfp-passport" class="tfp-field__input tfp-field__input--mono" type="text"
+                    placeholder="Document number" autocomplete="off" spellcheck="false"
+                    [value]="draft().passengerPassport"
+                    (input)="onFieldChange('passengerPassport', $any($event.target).value)" [disabled]="loading()"
+                    aria-label="Filter by passport or document number" />
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="tfp-field">
+            <label class="tfp-field__label" for="tfp-status">Status</label>
+            <div class="tfp-field__wrap tfp-field__wrap--select">
+                <svg class="tfp-field__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+                <select id="tfp-status" class="tfp-field__select" [value]="draft().status"
+                    (change)="onFieldChange('status', $any($event.target).value)" [disabled]="loading()"
+                    aria-label="Filter by ticket status">
+                    @for (opt of statusOptions; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                </select>
+                <svg class="tfp-field__caret" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="tfp-divider" aria-hidden="true"></div>
+
+    <!-- ── Date Range ─────────────────────────────────────────────── -->
+    <section class="tfp-section">
+        <h3 class="tfp-section__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="tfp-section__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+            Issue Date Range
+        </h3>
+
+        <div class="tfp-field">
+            <label class="tfp-field__label" for="tfp-date-from">From</label>
+            <input id="tfp-date-from" class="tfp-field__input tfp-field__input--date" type="date"
+                [value]="draft().issueDateFrom" (input)="onFieldChange('issueDateFrom', $any($event.target).value)"
+                [disabled]="loading()" aria-label="Issue date from" />
+        </div>
+
+        <div class="tfp-field">
+            <label class="tfp-field__label" for="tfp-date-to">To</label>
+            <input id="tfp-date-to" class="tfp-field__input tfp-field__input--date" type="date"
+                [value]="draft().issueDateTo" (input)="onFieldChange('issueDateTo', $any($event.target).value)"
+                [disabled]="loading()" aria-label="Issue date to" />
+        </div>
+    </section>
+
+    <div class="tfp-divider" aria-hidden="true"></div>
+
+    <!-- ── Compliance Toggle ───────────────────────────────────────── -->
+    <section class="tfp-section">
+        <div class="tfp-toggle-row">
+            <div class="tfp-toggle-info">
+                <p class="tfp-toggle-info__label">Include Deleted</p>
+                <p class="tfp-toggle-info__sub">Show soft-deleted vault records</p>
+            </div>
+            <button class="tfp-toggle" type="button" role="switch" [attr.aria-checked]="draft().includeDeleted"
+                [class.tfp-toggle--on]="draft().includeDeleted"
+                (click)="onFieldChange('includeDeleted', !draft().includeDeleted)" [disabled]="loading()">
+                <span class="tfp-toggle__thumb"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- ── Actions ────────────────────────────────────────────────── -->
+    <div class="tfp-actions">
+        @if (hasActiveFilters() && !loading()) {
+        <button class="tfp-btn tfp-btn--clear" type="button" (click)="onClear()">
+            Clear All
+        </button>
+        }
+        <button class="tfp-btn tfp-btn--search" type="button" [disabled]="loading()" (click)="onSubmit()">
+            @if (loading()) {
+            <svg class="tfp-btn__icon tfp-btn__icon--spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Searching Vault…
+            } @else {
+            <svg class="tfp-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            Search Vault
+            }
+        </button>
+    </div>
+
+</div>

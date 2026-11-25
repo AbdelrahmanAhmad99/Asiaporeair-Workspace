@@ -1,0 +1,273 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Wrap
+ // ============================================================================
+ .sud-wrap {
+     position: relative;
+     display: inline-flex;
+     align-items: center;
+ }
+
+ // ============================================================================
+ // 2. Trigger button
+ // ============================================================================
+ .sud-trigger {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4rem;
+     height: 2rem;
+     padding: 0 0.5rem;
+     border: 1px solid transparent;
+     border-radius: 4px;
+     background: transparent;
+     cursor: pointer;
+     transition: all 150ms $ease;
+
+     &:hover:not(:disabled):not(.sud-trigger--terminal) {
+         background: rgba($champagne, 0.07);
+         border-color: rgba($champagne, 0.2);
+     }
+
+     &--open {
+         background: rgba($champagne, 0.08);
+         border-color: rgba($champagne, 0.25);
+     }
+
+     &--terminal {
+         cursor: default;
+     }
+
+     &--updating {
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__chevron {
+         width: 0.8125rem;
+         height: 0.8125rem;
+         color: rgba($champagne, 0.35);
+         flex-shrink: 0;
+         transition: transform 200ms $ease;
+
+         &--open {
+             transform: rotate(180deg);
+         }
+     }
+
+     &__spin {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: rgba($champagne, 0.5);
+         flex-shrink: 0;
+         animation: sud-spin 0.9s linear infinite;
+     }
+ }
+
+ // ============================================================================
+ // 3. Status pill
+ // ============================================================================
+ .sud-pill {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.35rem;
+     padding: 0.2rem 0.55rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+     white-space: nowrap;
+
+     &__dot {
+         width: 5px;
+         height: 5px;
+         border-radius: 50%;
+         background: currentColor;
+         flex-shrink: 0;
+     }
+
+     &.status--scheduled {
+         background: rgba($amber, 0.15);
+         color: $amber;
+     }
+
+     &.status--delayed {
+         background: rgba($ruby, 0.15);
+         color: lighten($ruby, 10%);
+     }
+
+     &.status--boarding {
+         background: rgba(59, 130, 246, .15);
+         color: #60a5fa;
+     }
+
+     &.status--departed {
+         background: rgba($emerald, 0.15);
+         color: #34d399;
+     }
+
+     &.status--inflight {
+         background: rgba($emerald, 0.2);
+         color: #059669;
+         box-shadow: 0 0 6px rgba(5, 150, 105, .2);
+     }
+
+     &.status--arrived {
+         background: rgba(108, 117, 125, .15);
+         color: rgba(255, 255, 255, .55);
+     }
+
+     &.status--cancelled {
+         background: rgba($ruby, 0.1);
+         color: rgba($ruby, 0.7);
+     }
+
+     &.status--diverted {
+         background: rgba($amber, 0.12);
+         color: $amber;
+     }
+ }
+
+ // ============================================================================
+ // 4. Floating Midnight Sapphire menu per spec
+ // ============================================================================
+ .sud-menu {
+     position: absolute;
+     top: calc(100% + 6px);
+     left: 0;
+     z-index: 50;
+     min-width: 12rem;
+     margin: 0;
+     padding: 0.375rem 0;
+     list-style: none;
+
+     border-radius: 10px;
+     background: darken($midnight, 2%);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow:
+         0 10px 36px rgba($midnight, 0.65),
+         0 0 0 1px rgba($champagne, 0.06);
+     animation: sud-menu-open 180ms $luxury both;
+
+     &__empty {
+         padding: 1rem 1.25rem;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: rgba($champagne, 0.35);
+         text-align: center;
+     }
+
+     // ── Menu item ─────────────────────────────────────────────────────────
+     &__item {
+         display: flex;
+         align-items: center;
+         gap: 0.625rem;
+         padding: 0.625rem 1.25rem 0.625rem 0.875rem;
+         cursor: pointer;
+         position: relative;
+         transition: background-color 120ms $ease;
+
+         &:hover {
+             background: rgba($champagne, 0.06);
+
+             .sud-menu__gold-indicator {
+                 opacity: 1;
+             }
+         }
+
+         &[aria-selected='true'] .sud-menu__gold-indicator {
+             opacity: 1;
+         }
+     }
+
+     // Royal Gold left-edge indicator per spec
+     &__gold-indicator {
+         position: absolute;
+         left: 0;
+         top: 4px;
+         bottom: 4px;
+         width: 3px;
+         border-radius: 0 2px 2px 0;
+         background: $gold;
+         opacity: 0;
+         transition: opacity 150ms $ease;
+     }
+
+     &__icon {
+         font-size: 14px;
+         flex-shrink: 0;
+         width: 1.25rem;
+         text-align: center;
+     }
+
+     &__label-wrap {
+         display: flex;
+         flex-direction: column;
+         gap: 0.05rem;
+         flex: 1;
+         min-width: 0;
+     }
+
+     &__label {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 600;
+         color: rgba($champagne, 0.85);
+         white-space: nowrap;
+     }
+
+     &__status-code {
+         font-family: 'Courier New', monospace;
+         font-size: 9px;
+         letter-spacing: 0.06em;
+         color: rgba($champagne, 0.3);
+         text-transform: uppercase;
+     }
+
+     &__check {
+         flex-shrink: 0;
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+     }
+ }
+
+ // ============================================================================
+ // 5. Keyframes
+ // ============================================================================
+ @keyframes sud-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes sud-menu-open {
+     from {
+         opacity: 0;
+         transform: translateY(-6px) scale(0.98);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }

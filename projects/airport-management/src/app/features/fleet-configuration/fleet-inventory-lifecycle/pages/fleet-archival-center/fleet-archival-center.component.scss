@@ -1,0 +1,446 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $t-fast: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ============================================================================
+ // 1. Page Shell
+ // ============================================================================
+ .fac-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ============================================================================
+ // 2. Sticky Header
+ // ============================================================================
+ .fac-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba(226, 199, 128, 0.15);
+     box-shadow: 0 2px 12px rgba(5, 25, 55, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     transition: background-color $t-base, box-shadow $t-base;
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+     }
+ }
+
+ // Breadcrumb
+ .fac-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-bottom: 0.25rem;
+
+     &__back {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.3125rem;
+         padding: 0;
+         border: none;
+         background: none;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-secondary);
+         cursor: pointer;
+         outline: none;
+         transition: color $t-fast;
+
+         &:hover {
+             color: $midnight;
+
+             .fac-breadcrumb__back__arrow {
+                 transform: translateX(-3px);
+             }
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 3px;
+             border-radius: 3px;
+         }
+
+         &__arrow {
+             width: 0.875rem;
+             height: 0.875rem;
+             flex-shrink: 0;
+             transition: transform $t-fast;
+         }
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+         flex-shrink: 0;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $amber; // amber accent = archive zone identity
+         transition: color $t-fast;
+     }
+ }
+
+ // Title row
+ .fac-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+ }
+
+ .fac-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary);
+     transition: color $t-fast;
+
+     &__icon {
+         width: 1.1875rem;
+         height: 1.1875rem;
+         color: $amber;
+         flex-shrink: 0;
+     }
+ }
+
+ // Archive count badge
+ .fac-count-badge {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     min-width: 1.625rem;
+     height: 1.625rem;
+     padding: 0 0.4375rem;
+     border-radius: 100px;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: $amber;
+     background: rgba(180, 83, 9, 0.1);
+     border: 1px solid rgba(180, 83, 9, 0.25);
+     transition: all $t-fast;
+ }
+
+ // Icon Buttons
+ .fac-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.07);
+         color: $midnight;
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: fac-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 3. Page Body
+ // ============================================================================
+ .fac-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ // ============================================================================
+ // 4. Error Banner
+ // ============================================================================
+ .fac-error {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1.125rem;
+     border-radius: 8px;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: $ruby;
+     background: rgba(113, 13, 6, 0.08);
+     border: 1px solid rgba(113, 13, 6, 0.2);
+     animation: fac-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 5. Archive Stats Bar
+ // ============================================================================
+ .fac-stats-bar {
+     display: flex;
+     align-items: center;
+     gap: 0;
+     padding: 0.875rem 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.15);
+     box-shadow: 0 2px 10px rgba(5, 25, 55, 0.05);
+     flex-wrap: wrap;
+     transition: background-color $t-base, border-color $t-base;
+     animation: fac-fadein 250ms ease forwards;
+
+     &__div {
+         width: 1px;
+         height: 2rem;
+         background: rgba(226, 199, 128, 0.13);
+         flex-shrink: 0;
+         margin: 0 1.125rem;
+     }
+
+     &__sub {
+         flex: 1;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         line-height: 1.4;
+         margin-left: 1.125rem;
+
+         @media (max-width: 639px) {
+             display: none;
+         }
+     }
+ }
+
+ .fac-stat {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.125rem;
+     flex-shrink: 0;
+
+     &__value {
+         font-size: 1.375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.025em;
+         color: $amber;
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+         white-space: nowrap;
+     }
+
+     &--muted .fac-stat__value {
+         color: var(--aoms-text-secondary);
+         font-size: 1.125rem;
+     }
+ }
+
+ // ============================================================================
+ // 6. Search Bar
+ // ============================================================================
+ .fac-search-bar {
+     &__input-wrap {
+         position: relative;
+         display: flex;
+         align-items: center;
+     }
+
+     &__icon {
+         position: absolute;
+         left: 1rem;
+         width: 1rem;
+         height: 1rem;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+         transition: color $t-fast;
+     }
+
+     &__input {
+         width: 100%;
+         padding: 0.75rem 2.5rem;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-primary);
+         background: var(--aoms-bg-card);
+         border: 1.5px solid rgba(226, 199, 128, 0.22);
+         border-radius: 8px;
+         outline: none;
+         transition: border-color $t-fast, box-shadow $t-fast, background $t-base;
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+         }
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.1);
+
+             +.fac-search-bar__icon {
+                 color: $champagne;
+             }
+         }
+     }
+
+     &__clear {
+         position: absolute;
+         right: 0.875rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: none;
+         cursor: pointer;
+         outline: none;
+         color: var(--aoms-text-muted);
+         opacity: 0.7;
+         transition: opacity $t-fast;
+
+         &:hover {
+             opacity: 1;
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+             border-radius: 3px;
+         }
+
+         &__icon {
+             width: 1rem;
+             height: 1rem;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 7. Keyframes
+ // ============================================================================
+ @keyframes fac-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes fac-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ // ============================================================================
+ // 8. Dark Mode
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .fac-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .fac-breadcrumb__back:hover {
+         color: $champagne;
+     }
+
+     .fac-icon-btn:hover:not(:disabled) {
+         color: $champagne;
+     }
+
+     .fac-error {
+         background: rgba(113, 13, 6, 0.15);
+         border-color: rgba(113, 13, 6, 0.35);
+         color: #fca5a5;
+     }
+
+     .fac-search-bar__input {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.18);
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .fac-stats-bar {
+         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+     }
+ }

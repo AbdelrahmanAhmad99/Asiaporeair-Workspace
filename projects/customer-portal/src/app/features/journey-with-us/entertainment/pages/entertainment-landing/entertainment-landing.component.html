@@ -1,0 +1,159 @@
+<!-- ============================================================================
+     entertainment-landing.component.html
+     Asiaporeair | Entertainment Hub Landing Page
+     ============================================================================ -->
+
+<div class="el-shell">
+
+    <!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
+    <header class="el-hero" role="banner">
+        <div class="el-hero__inner">
+
+            <nav class="el-hero__bc" aria-label="Breadcrumb">
+                @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+                @if (!last) {
+                <a [href]="crumb.route ?? '#'" class="el-hero__bc-link">{{ crumb.label }}</a>
+                <span class="el-hero__bc-sep" aria-hidden="true">›</span>
+                } @else {
+                <span class="el-hero__bc-cur">{{ crumb.label }}</span>
+                }
+                }
+            </nav>
+
+            <div class="el-hero__content">
+                <div>
+                    <div class="el-hero__pre-block" aria-hidden="true">
+                        <div class="el-hero__pre-line"></div>
+                        <span class="el-hero__eyebrow">Inflight Entertainment</span>
+                    </div>
+                    <h1 class="el-hero__title">A World of Discovery</h1>
+                    <p class="el-hero__subtitle">
+                        Thousands of movies, TV series, albums, and games — all curated
+                        for the discerning traveller. Your preferences are saved and waiting
+                        for you on your next Asiaporeair flight.
+                    </p>
+                </div>
+
+                <!-- Content count badges -->
+                <div class="el-hero__counts" aria-label="Content statistics">
+                    <div class="el-hero__count">
+                        <span class="el-hero__count-num">1,800+</span>
+                        <span class="el-hero__count-label">Entertainment titles</span>
+                    </div>
+                    <div class="el-hero__count">
+                        <span class="el-hero__count-num">5,000+</span>
+                        <span class="el-hero__count-label">Music albums</span>
+                    </div>
+                    <div class="el-hero__count">
+                        <span class="el-hero__count-num">150+</span>
+                        <span class="el-hero__count-label">Games & interactives</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Decorative screen glow band -->
+        <div class="el-hero__glow-band" aria-hidden="true">
+            <div class="el-hero__glow-inner"></div>
+        </div>
+    </header>
+
+    <!-- ══ HUB NAVIGATION CARDS ══════════════════════════════════════════════ -->
+    <section class="el-hub" aria-labelledby="el-hub-title">
+        <div class="el-hub__inner">
+
+            <header class="el-hub__header">
+                <div class="el-hub__header-line" aria-hidden="true"></div>
+                <div>
+                    <p class="el-hub__eyebrow">Explore</p>
+                    <h2 class="el-hub__title" id="el-hub-title">Entertainment at Altitude</h2>
+                    <p class="el-hub__subtitle">
+                        From our curated on-demand library to high-speed Wi-Fi connectivity —
+                        discover everything Asiaporeair offers to enrich your time in the sky.
+                    </p>
+                </div>
+            </header>
+
+            <div class="el-hub__grid">
+                @for (section of hubSections(); track trackById($index, section); let i = $index) {
+                <app-hub-navigation-card [section]="section" [index]="i"></app-hub-navigation-card>
+                }
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ MEDIA CATEGORIES GRID ═════════════════════════════════════════════ -->
+    <section class="el-media" aria-labelledby="el-media-title">
+        <div class="el-media__inner">
+
+            <header class="el-media__header">
+                <div class="el-media__header-line" aria-hidden="true"></div>
+                <div>
+                    <p class="el-media__eyebrow">Content Library</p>
+                    <h2 class="el-media__title" id="el-media-title">What's Playing</h2>
+                    <p class="el-media__subtitle">
+                        Explore the breadth of our inflight content collection.
+                        Updated before every flight with the latest releases.
+                    </p>
+                </div>
+            </header>
+
+            <div class="el-media__grid">
+                @for (cat of mediaCategories(); track trackById($index, cat); let i = $index) {
+                <app-media-category-card [category]="cat" [animDelay]="i * 65"></app-media-category-card>
+                }
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══ SCREEN TECH CALLOUT ════════════════════════════════════════════════ -->
+    <section class="el-screen-tech" aria-labelledby="el-screen-title">
+        <div class="el-screen-tech__inner">
+            <div class="el-screen-tech__text">
+                <p class="el-screen-tech__eyebrow">The Display</p>
+                <h2 class="el-screen-tech__title" id="el-screen-title">Cinema Quality in Your Suite</h2>
+                <div class="el-screen-tech__divider" aria-hidden="true"></div>
+                <p class="el-screen-tech__desc">
+                    Our Suites are equipped with a 32" HD touchscreen — the largest in-seat
+                    personal screen of any commercial airline cabin. Paired with
+                    audiophile-grade noise-cancelling headphones, it delivers an immersive
+                    experience that rivals any home cinema.
+                </p>
+                <ul class="el-screen-tech__specs" aria-label="Screen specifications">
+                    <li>
+                        <span class="el-screen-tech__spec-val">32"</span>
+                        <span class="el-screen-tech__spec-label">Suites screen size</span>
+                    </li>
+                    <li>
+                        <span class="el-screen-tech__spec-val">HD</span>
+                        <span class="el-screen-tech__spec-label">Display resolution</span>
+                    </li>
+                    <li>
+                        <span class="el-screen-tech__spec-val">Touch</span>
+                        <span class="el-screen-tech__spec-label">Interactive controls</span>
+                    </li>
+                    <li>
+                        <span class="el-screen-tech__spec-val">ANC</span>
+                        <span class="el-screen-tech__spec-label">Noise-cancelling audio</span>
+                    </li>
+                </ul>
+                <a class="el-screen-tech__cta" routerLink="/journey-with-us/entertainment/krisworld">
+                    Explore SkyWorld
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </a>
+            </div>
+            <div class="el-screen-tech__image-wrap" aria-hidden="true">
+                <img src="assets/images/journey-with-us/ent-screen.png" alt="" class="el-screen-tech__image"
+                    loading="lazy" />
+            </div>
+        </div>
+    </section>
+
+</div>

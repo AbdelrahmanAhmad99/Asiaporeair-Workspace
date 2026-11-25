@@ -1,0 +1,247 @@
+<!-- ============================================================================
+     ancillaries.component.html
+     Asiaporeair | "Personalise Your Journey" — Ancillaries Smart Page
+     ============================================================================ -->
+
+<div class="ancillaries-shell" [@pageEnter]>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       TOP CONTEXT BAR
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="context-bar" role="banner" aria-label="Booking progress">
+        <div class="context-inner">
+
+            <div class="context-journey">
+                <span class="context-label">Your Journey</span>
+                <span class="context-route">{{ journeyLabel() || 'Booking Flow' }}</span>
+            </div>
+
+            <nav class="progress-stepper" aria-label="Booking steps">
+                <div class="step step--done">
+                    <span class="step-num" aria-hidden="true">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </span>
+                    <span class="step-name">Flights</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step step--done">
+                    <span class="step-num" aria-hidden="true">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </span>
+                    <span class="step-name">Passengers</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step step--active" aria-current="step">
+                    <span class="step-num">3</span>
+                    <span class="step-name">Enhancements</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-name">Seats</span>
+                </div>
+                <div class="step-line" aria-hidden="true"></div>
+                <div class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-name">Payment</span>
+                </div>
+            </nav>
+
+            <button class="back-btn" (click)="onBack()" aria-label="Return to passenger details">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back
+            </button>
+        </div>
+    </header>
+
+    <!-- Journey Band -->
+    <div class="journey-band" *ngIf="flightSummary()" aria-label="Selected flight">
+        <div class="journey-band-inner">
+            <div class="journey-detail-row">
+                <span class="journey-route-pill">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="#B68F24" aria-hidden="true">
+                        <path
+                            d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                    {{ flightSummary()!.route }}
+                </span>
+                <span class="journey-dot" aria-hidden="true">·</span>
+                <span class="journey-detail">{{ flightSummary()!.airline }}</span>
+                <span class="journey-dot" aria-hidden="true">·</span>
+                <span class="journey-detail">{{ flightSummary()!.cabinClass }}</span>
+                <span class="journey-dot" aria-hidden="true">·</span>
+                <span class="journey-detail">{{ flightSummary()!.fareName }}</span>
+            </div>
+            <div class="journey-pax-count">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                {{ passengerLabels().length }} {{ passengerLabels().length === 1 ? 'Traveller' : 'Travellers' }}
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT GRID
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div class="content-grid">
+
+        <!-- ── LEFT: Main Ancillary Column ───────────────────────────────────── -->
+        <main class="main-column" role="main">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Personalise Your Flight</h1>
+                <p class="page-subtitle">
+                    Elevate every moment of your journey. Select complements tailored to your
+                    travel style — from refined dining to seamless connectivity.
+                </p>
+            </div>
+
+            <!-- ── Loading Skeleton ─────────────────────────────────────────── -->
+            <div *ngIf="isLoadingProducts()" class="skeleton-grid" aria-label="Loading enhancements" aria-busy="true">
+                <div class="skeleton-cat-card" *ngFor="let i of [1,2,3,4]">
+                    <div class="skel skel--icon"></div>
+                    <div class="skel skel--title"></div>
+                    <div class="skel skel--desc"></div>
+                </div>
+            </div>
+
+            <!-- ── Error State ──────────────────────────────────────────────── -->
+            <div *ngIf="productsError() && !isLoadingProducts()" class="error-banner" role="alert">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {{ productsError() }}
+            </div>
+
+            <!-- ── Category Cards Grid ──────────────────────────────────────── -->
+            <div *ngIf="!isLoadingProducts() && categories().length > 0" class="categories-grid"
+                [@cardStagger]="categories().length" role="list" aria-label="Enhancement categories">
+
+                <div *ngFor="let cat of categories(); trackBy: trackByCategory" role="listitem">
+
+                    <app-ancillary-category-card [categoryKey]="cat.key" [label]="cat.meta.label"
+                        [description]="cat.meta.description" [iconKey]="cat.meta.iconKey"
+                        [productCount]="cat.products.length" [selectedCount]="getCategorySelectedCount(cat.key)"
+                        [isExpanded]="activeCategoryKey() === cat.key" (cardClick)="toggleCategory(cat.key)">
+                    </app-ancillary-category-card>
+
+                    <!-- Expanded Product Panel -->
+                    <div *ngIf="activeCategoryKey() === cat.key" class="product-panel" [@panelExpand] role="region"
+                        [attr.aria-label]="cat.meta.label + ' options'">
+
+                        <!-- Passenger Tab Bar -->
+                        <div class="pax-tabs" role="tablist" [attr.aria-label]="'Select passenger'">
+                            <button *ngFor="let pax of passengerLabels()" class="pax-tab"
+                                [class.pax-tab--active]="activePaxIndex() === pax.index"
+                                (click)="setActivePax(pax.index)" role="tab"
+                                [attr.aria-selected]="activePaxIndex() === pax.index"
+                                [attr.aria-controls]="'pax-panel-' + pax.index">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1" aria-hidden="true">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                                {{ pax.label }}
+                            </button>
+                        </div>
+
+                        <!-- Product Items for Active Passenger -->
+                        <div class="product-items-grid" [id]="'pax-panel-' + activePaxIndex()" role="tabpanel">
+                            <app-ancillary-item-selector *ngFor="let product of cat.products; trackBy: trackByProduct"
+                                [product]="product" [currency]="currency()"
+                                [quantity]="getQuantity(activePaxIndex(), product.productId)"
+                                (quantityChange)="onQuantityChange(activePaxIndex(), product.productId, $event)">
+                            </app-ancillary-item-selector>
+                        </div>
+
+                    </div>
+                    <!-- /product-panel -->
+                </div>
+            </div>
+
+            <!-- ── Empty State (no products) ───────────────────────────────── -->
+            <div *ngIf="!isLoadingProducts() && !productsError() && categories().length === 0" class="empty-state"
+                role="status">
+                <div class="empty-icon" aria-hidden="true">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="0.8">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                </div>
+                <h3 class="empty-title">No Enhancements Available</h3>
+                <p class="empty-desc">Enhancement services are not available for this flight. You may proceed to seat
+                    selection.</p>
+            </div>
+
+            <!-- ── Booking Error ────────────────────────────────────────────── -->
+            <div *ngIf="bookingError()" class="booking-error-banner" role="alert" aria-live="assertive">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {{ bookingError() }}
+            </div>
+
+            <!-- ── Bottom CTA ────────────────────────────────────────────────── -->
+            <div class="bottom-cta-row">
+                <button class="back-link-btn" (click)="onBack()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back to Passenger Details
+                </button>
+
+                <button class="confirm-btn" (click)="onConfirmAndBook()" [class.btn--loading]="isBookingLoading()"
+                    [attr.aria-busy]="isBookingLoading()" aria-label="Confirm booking and proceed to seat selection">
+                    <span *ngIf="!isBookingLoading()">Confirm & Proceed to Your Private Suite</span>
+                    <span *ngIf="isBookingLoading()" class="btn-loading-inner">
+                        <span class="spinner" aria-hidden="true"></span>
+                        Securing Your Journey…
+                    </span>
+                    <svg *ngIf="!isBookingLoading()" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
+        </main>
+
+        <!-- ── RIGHT: Sticky Summary Sidebar ─────────────────────────────────── -->
+        <aside class="summary-aside" [@summarySlide] aria-label="Booking summary">
+            <app-selection-summary-sticky [lineItems]="selectionLineItems()" [baseFareTotal]="baseFareTotal()"
+                [ancillariesTotalCost]="ancillariesTotalCost()" [grandTotal]="grandTotal()" [currency]="currency()"
+                [isBookingLoading]="isBookingLoading()" [flightSummary]="flightSummary()"
+                (confirmBooking)="onConfirmAndBook()">
+            </app-selection-summary-sticky>
+        </aside>
+
+    </div>
+    <!-- /content-grid -->
+
+</div>
+
+<!-- ── Confirmation Modal ────────────────────────────────────────────────────── -->
+<app-booking-confirmation-modal *ngIf="showConfirmModal()" [booking]="confirmedBooking()!" [currency]="currency()"
+    [@fadeIn] (dismiss)="onModalDismiss()">
+</app-booking-confirmation-modal>

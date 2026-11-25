@@ -1,0 +1,163 @@
+// ============================================================================
+// journey-landing.component.scss
+// Asiaporeair | Journey With Us Landing — Hub Page Styles
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $white;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ── Hub Section ───────────────────────────────────────────────────────────────
+.jl-hub {
+    background: $ivory;
+    padding: 64px 0 72px;
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+
+        @media (max-width: 768px) {
+            padding: 0 20px;
+        }
+    }
+
+    // ── Header ────────────────────────────────────────────────────────────────
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 44px;
+    }
+
+    &__header-line {
+        width: 3px;
+        min-height: 80px;
+        background: linear-gradient($royal-gold, $champagne);
+        border-radius: 2px;
+        flex-shrink: 0;
+        margin-top: 4px;
+    }
+
+    &__header-eyebrow {
+        font-family: $font;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin: 0 0 6px;
+    }
+
+    &__header-title {
+        font-family: $font;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: $charcoal;
+        margin: 0 0 8px;
+        line-height: 1.15;
+    }
+
+    &__header-subtitle {
+        font-family: $font;
+        font-size: 0.84rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.65;
+        max-width: 520px;
+    }
+
+    // ── Card Grid ─────────────────────────────────────────────────────────────
+    &__grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__row {
+        display: grid;
+        gap: 20px;
+
+        &--top {
+            grid-template-columns: repeat(3, 1fr);
+
+            @media (max-width: 900px) {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            @media (max-width: 600px) {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        &--bottom {
+            grid-template-columns: repeat(2, 1fr);
+
+            @media (max-width: 600px) {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}
+
+// ── Tagline scrolling strip ───────────────────────────────────────────────────
+.jl-tagline-strip {
+    background: $midnight;
+    padding: 14px 0;
+    overflow: hidden;
+    border-top: 1px solid rgba($royal-gold, 0.2);
+    border-bottom: 1px solid rgba($royal-gold, 0.2);
+
+    &__inner {
+        display: flex;
+        gap: 28px;
+        white-space: nowrap;
+        animation: scrollRight 28s linear infinite;
+        font-family: $font;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba($champagne, 0.6);
+    }
+
+    &__dot {
+        color: $royal-gold;
+        font-size: 0.5rem;
+        line-height: 1.5;
+    }
+}
+
+@keyframes scrollRight {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .jl-tagline-strip__inner {
+        animation: none;
+    }
+}

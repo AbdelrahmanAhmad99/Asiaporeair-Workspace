@@ -1,0 +1,1291 @@
+// ================================================================
+//  flight-search-engine.component.scss
+//  Asiaporeair | "Begin Your Journey" — Luxury Midnight Theme
+// ================================================================
+
+// ── Design Tokens ─────────────────────────────────────────────
+:root {
+  --color-midnight: #051937;
+  --color-royal-gold: #B68F24;
+  --color-champagne: #E2C780;
+  --color-off-white: #F8F9FA;
+  --color-navy: #101056;
+  --color-glass: rgba(5, 25, 55, 0.82);
+  --color-glass-lite: rgba(5, 25, 55, 0.55);
+  --color-border: rgba(182, 143, 36, 0.20);
+  --color-border-act: rgba(182, 143, 36, 0.55);
+  --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+  --ls: -0.02em;
+  --ls-caps: 0.07em;
+  --t: 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  --r-card: 12px;
+  --r-btn: 4px;
+  --r-field: 6px;
+}
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$off-white : #f8f9faee;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+// ── Search Engine Container ───────────────────────────────────
+.search-engine {
+  width: 100%;
+  background: $off-white;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: var(--r-card);
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 10px 30px rgba(5, 25, 55, 0.12),
+    0 1px 0 rgba(226, 199, 128, 0.10) inset;
+  overflow: visible;
+  font-family: var(--font);
+  position: relative;
+
+  // Gold top accent
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-royal-gold) 30%, var(--color-champagne) 65%, transparent);
+    border-radius: var(--r-card) var(--r-card) 0 0;
+  }
+}
+
+// ── Tab Navigation ────────────────────────────────────────────
+.tab-nav {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding: 0 1.25rem;
+  border-bottom: 1px solid rgba(182, 143, 36, 0.12);
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.875rem 1.25rem 0.75rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba($midnight, 0.45);
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--t), border-color var(--t);
+  margin-bottom: -1px;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: rgba($midnight, 0.7);
+  }
+
+  &.active {
+    color: var(--color-champagne);
+    border-bottom-color: var(--color-royal-gold);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: -2px;
+    border-radius: 4px 4px 0 0;
+  }
+}
+
+// ── Tab Panels ────────────────────────────────────────────────
+.tab-panel {
+  padding: 1.5rem 1.5rem 1.75rem;
+}
+
+// ── Journey Type Row ──────────────────────────────────────────
+.journey-type-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.journey-type-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.journey-type-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem 0.3rem 0.5rem;
+  border: 1px solid rgba(182, 143, 36, 0.2);
+  border-radius: 99px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-champagne);
+  background: transparent;
+  transition: all var(--t);
+  user-select: none;
+
+  &.active {
+    border-color: var(--color-royal-gold);
+    color: var(--color-champagne);
+    background: rgba(182, 143, 36, 0.1);
+
+    .journey-radio-dot {
+      background: var(--color-royal-gold);
+      border-color: var(--color-royal-gold);
+      box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.18);
+    }
+  }
+
+  &:hover:not(.active) {
+    color: rgba(248, 249, 250, 0.75);
+    border-color: rgba(182, 143, 36, 0.38);
+  }
+}
+
+.journey-radio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(182, 143, 36, 0.35);
+  transition: all var(--t);
+  flex-shrink: 0;
+}
+
+// ── Flexible Fares Toggle ─────────────────────────────────────
+.flex-fares-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 34px;
+  height: 18px;
+  border-radius: 99px;
+  background: rgba(182, 143, 36, 0.12);
+  border: 1px solid rgba(182, 143, 36, 0.25);
+  transition: background var(--t), border-color var(--t);
+
+  input:checked~.toggle-track &,
+  .flex-fares-toggle input:checked+& {
+    background: rgba(182, 143, 36, 0.12);
+    border-color: var(--color-royal-gold);
+  }
+}
+
+// Sibling trick: when checkbox is checked, style the track
+.flex-fares-toggle input:checked+.toggle-track {
+  background: rgba(182, 143, 36, 0.3);
+  border-color: var(--color-royal-gold);
+
+  .toggle-thumb {
+    transform: translateX(16px);
+    background: var(--color-royal-gold);
+  }
+}
+
+.toggle-thumb {
+  position: absolute;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(226, 199, 128, 0.5);
+  transition: transform var(--t), background var(--t);
+}
+
+.toggle-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-midnight);
+}
+
+// ── Segment Section ───────────────────────────────────────────
+.segments-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.segment-label {
+  margin-bottom: 0.25rem;
+}
+
+.segment-number {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-royal-gold);
+}
+
+.route-fields {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr 1fr;
+  gap: 0.625rem;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Field Wrap ────────────────────────────────────────────────
+.field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: relative;
+  min-width: 0;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.55);
+  margin-bottom: 0.125rem;
+  user-select: none;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// ── Airport Input ─────────────────────────────────────────────
+.airport-field-wrapper {
+  position: relative;
+  border: 2px solid rgba(128, 144, 163, 0.226);
+  border-radius: var(--r-field);
+  background: var(--color-off-white);
+  transition: border-color var(--t), background var(--t);
+
+  &:focus-within,
+  &.active {
+    border-color: rgba(128, 144, 163, 0.626);
+    background: var(--color-off-white);
+  }
+}
+
+.airport-input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-off-white);
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: var(--ls);
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: rgba(30, 35, 39, 0.247);
+    font-weight: 400;
+  }
+
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px rgba(5, 25, 55, 0.8) inset;
+    -webkit-text-fill-color: var(--color-off-white);
+  }
+
+  &[type="date"] {
+    color-scheme: dark;
+
+    &::-webkit-calendar-picker-indicator {
+      filter: invert(0.55) sepia(1) saturate(3) hue-rotate(5deg);
+      cursor: pointer;
+    }
+  }
+}
+
+.date-native {
+  padding: 0.55rem 0.75rem;
+}
+
+// ── Swap Button ───────────────────────────────────────────────
+.swap-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  margin-top: 1.4rem; // align with field body
+  background: rgba(182, 143, 36, 0.18);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-champagne);
+  cursor: pointer;
+  transition: all var(--t);
+
+  &:hover {
+    background: rgba(182, 143, 36, 0.18);
+    border-color: var(--color-royal-gold);
+    color: var(--color-champagne);
+    transform: rotate(180deg);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: 2px;
+  }
+}
+
+// ── Suggestions Dropdown ──────────────────────────────────────
+.suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(245, 243, 243, 0.97);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(182, 143, 36, 0.22);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(5, 25, 55, 0.4);
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t);
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(182, 143, 36, 0.1);
+    outline: none;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(182, 143, 36, 0.07);
+  }
+}
+
+.suggestion-iata {
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.822);
+  background: rgba(14, 23, 70, 0.822);
+  padding: 0.3rem;
+  margin: 0.2rem;
+  min-width: 32px;
+}
+
+.suggestion-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-city {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-off-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-name {
+  font-size: 0.6875rem;
+  font-weight: 300;
+  color: rgba(40, 41, 41, 0.582);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Date Trigger Button ───────────────────────────────────────
+.date-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  background: var(--color-off-white);
+  border: 2px solid rgba(128, 144, 163, 0.226);
+  border-radius: var(--r-field);
+  color: var(--color-off-white);
+  font-family: var(--font);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--t);
+  text-align: left;
+  gap: 0.5rem;
+
+  &.has-value {
+    color: var(--color-off-white);
+  }
+
+  &.active,
+  &:hover {
+    border-color: rgba(128, 144, 163, 0.626);
+    background: var(--color-off-white);
+  }
+
+  &.error {
+    border-color: rgba(220, 80, 80, 0.6);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: 1px;
+  }
+}
+
+.date-display {
+  font-weight: 500;
+  letter-spacing: var(--ls);
+  color: var(--color-off-white);
+}
+
+.date-placeholder {
+  color: rgba(4, 4, 5, 0.226);
+  font-weight: 400;
+}
+
+.date-chevron {
+  flex-shrink: 0;
+  color: rgba(226, 199, 128, 0.45);
+  transition: transform var(--t);
+
+  .date-trigger.active & {
+    transform: rotate(180deg);
+  }
+}
+
+// ── Calendar Panel ────────────────────────────────────────────
+.calendar-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 110;
+  min-width: 280px;
+}
+
+.calendar {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(182, 143, 36, 0.22);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(5, 25, 55, 0.45);
+  padding: 0.875rem;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.875rem;
+}
+
+.cal-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(224, 181, 70, 0.884);
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(224, 181, 70, 0.884);
+  cursor: pointer;
+  transition: all var(--t);
+
+  &:hover {
+    border-color: var(--color-royal-gold);
+    color: var(--color-champagne);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: 2px;
+  }
+}
+
+.cal-month-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: var(--ls);
+  color: var(--color-off-white);
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.375rem;
+}
+
+.cal-weekday {
+  text-align: center;
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(224, 181, 70, 0.884);
+  padding: 0.4rem 0;
+}
+
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-cell-empty {
+  aspect-ratio: 1;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 180ms ease;
+
+  &:hover:not(.disabled) {
+    background: rgba(182, 143, 36, 0.15);
+    border-color: rgba(182, 143, 36, 0.3);
+    color: var(--color-champagne);
+  }
+
+  &.today:not(.selected) {
+    border-color: rgba(182, 143, 36, 0.35);
+    color: var(--color-champagne);
+    font-weight: 600;
+  }
+
+  &.selected {
+    background: var(--color-royal-gold);
+    border-color: var(--color-royal-gold);
+    color: var(--color-midnight);
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(182, 143, 36, 0.3);
+  }
+
+  &.disabled {
+    opacity: 0.22;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: 1px;
+  }
+}
+
+// ── Remove / Add Segment Buttons ──────────────────────────────
+.remove-segment-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  margin-top: 1.4rem;
+  background: rgba(220, 70, 70, 0.08);
+  border: 1px solid rgba(220, 70, 70, 0.2);
+  border-radius: 50%;
+  color: rgba(220, 100, 100, 0.6);
+  cursor: pointer;
+  transition: all var(--t);
+
+  &:hover {
+    background: rgba(220, 70, 70, 0.18);
+    color: rgba(220, 100, 100, 1);
+    border-color: rgba(220, 70, 70, 0.5);
+  }
+
+  &:focus-visible {
+    outline: 1px solid rgba(220, 70, 70, 0.6);
+    outline-offset: 2px;
+  }
+}
+
+.add-segment-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.875rem;
+  background: transparent;
+  border: 1px dashed rgba(182, 143, 36, 0.3);
+  border-radius: 4px;
+  color: rgba(226, 199, 128, 0.6);
+  font-family: var(--font);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--t);
+
+  &:hover {
+    border-color: var(--color-royal-gold);
+    color: var(--color-champagne);
+    background: rgba(182, 143, 36, 0.06);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: 2px;
+  }
+}
+
+// ── Bottom Controls Row ───────────────────────────────────────
+.bottom-controls {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.control-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.875rem;
+  background: $midnight;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-field);
+  color: rgba(248, 249, 250, 0.973);
+  font-family: var(--font);
+  font-size: 0.775rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--t);
+
+  &:hover {
+    border-color: var(--color-border-act);
+    color: var(--color-off-white);
+  }
+
+  .control-group.open & {
+    border-color: var(--color-royal-gold);
+    color: var(--color-champagne);
+    background: $midnight
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: 2px;
+  }
+}
+
+.control-value {
+  font-weight: 600;
+  color: rgba(246, 247, 248, 0.966);
+  letter-spacing: var(--ls);
+}
+
+// ── Passenger Dropdown ────────────────────────────────────────
+.control-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 120;
+  background: rgba(245, 243, 243, 0.97);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(182, 143, 36, 0.22);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(5, 25, 55, 0.45);
+  min-width: 260px;
+  overflow: hidden;
+}
+
+.passenger-dropdown {
+  padding: 1rem;
+}
+
+.passenger-header {
+  margin-bottom: 0.875rem;
+}
+
+.dropdown-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--color-champagne);
+  margin: 0 0 0.2rem;
+}
+
+.dropdown-subtitle {
+  font-size: 0.6rem;
+  color: rgba(18, 18, 19, 0.733);
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.passenger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid rgba(182, 143, 36, 0.08);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}
+
+.passenger-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.passenger-type {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-off-white);
+  letter-spacing: 0.01em;
+}
+
+.passenger-age {
+  font-size: 0.6rem;
+  color: rgba(27, 27, 27, 0.678);
+  letter-spacing: 0.02em;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.counter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(182, 143, 36, 0.897);
+  background: transparent;
+  color: rgba(182, 143, 36, 0.897);
+  transition: all var(--t);
+
+  &:not(:disabled):hover {
+    border-color: var(--color-royal-gold);
+    color: var(--color-champagne);
+    background: rgba(182, 143, 36, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: 1px;
+  }
+}
+
+.counter-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-off-white);
+  min-width: 16px;
+  text-align: center;
+  letter-spacing: var(--ls);
+}
+
+.passenger-note {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.65rem;
+  color: rgba(226, 199, 128, 0.6);
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+.dropdown-confirm-btn {
+  display: block;
+  width: 100%;
+  margin-top: 0.875rem;
+  padding: 0.5rem;
+  background: $midnight;
+  border: 1px solid rgba(4, 29, 66, 0.801);
+  border-radius: var(--r-btn);
+  color: rgba(255, 255, 255, 0.938);
+  font-family: var(--font);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--t);
+
+  &:hover {
+    background: rgba(182, 143, 36, 0.22);
+    border-color: var(--color-royal-gold);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-royal-gold);
+    outline-offset: 2px;
+  }
+}
+
+// ── Cabin Dropdown ────────────────────────────────────────────
+.cabin-dropdown {
+  padding: 0.375rem 0;
+  min-width: 220px;
+}
+
+.cabin-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--t);
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(182, 143, 36, 0.09);
+    outline: none;
+  }
+
+  &.selected {
+    background: rgba(182, 143, 36, 0.06);
+  }
+}
+
+.cabin-option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cabin-option-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-off-white);
+  letter-spacing: 0.01em;
+}
+
+.cabin-option-sub {
+  font-size: 0.625rem;
+  color: rgb(165, 133, 53);
+  letter-spacing: 0.02em;
+}
+
+// ── Search Button ─────────────────────────────────────────────
+.search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.625rem;
+  background: $midnight;
+  background-size: 200% 200%;
+  border: none;
+  border-radius: var(--r-btn);
+  color: rgba(255, 255, 255, 0.911);
+  font-family: var(--font);
+  font-size: 0.775rem;
+  font-weight: 700;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-position var(--t), box-shadow var(--t), transform var(--t);
+  box-shadow: 0 4px 14px rgba(182, 143, 36, 0.28);
+  text-decoration: none;
+  margin-left: auto;
+
+  &:hover:not(:disabled) {
+    background-position: 100% 0;
+    box-shadow: 0 6px 22px rgba(182, 143, 36, 0.42);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(182, 143, 36, 0.25);
+  }
+
+  &:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-champagne);
+    outline-offset: 3px;
+  }
+}
+
+.search-btn-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ── Error Banner ──────────────────────────────────────────────
+.error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  margin-top: 0.875rem;
+  border-radius: 6px;
+  background: rgba(180, 40, 40, 0.1);
+  border: 1px solid rgba(220, 80, 80, 0.2);
+  font-size: 0.75rem;
+  color: rgba(248, 200, 200, 0.9);
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+}
+
+// ── Validation Error ──────────────────────────────────────────
+.field-error {
+  font-size: 0.65rem;
+  color: rgba(220, 100, 100, 0.85);
+  letter-spacing: 0.01em;
+  margin: 0;
+  padding-left: 0.25rem;
+}
+
+// ── Flight Status Tab ─────────────────────────────────────────
+// .status-panel {}
+
+// .status-form {}
+
+.status-fields {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.status-fields .field-wrap {
+  flex: 1;
+  min-width: 140px;
+}
+
+.status-fields .search-btn {
+  margin-left: 0;
+  flex-shrink: 0;
+  padding: 0.6rem 1.25rem;
+}
+
+.status-result-card {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: rgba(5, 25, 55, 0.55);
+  border: 1px solid rgba(182, 143, 36, 0.2);
+  border-radius: 10px;
+}
+
+.status-result-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.status-flight-number {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: var(--ls);
+  color: var(--color-off-white);
+}
+
+.status-badge {
+  padding: 0.2rem 0.625rem;
+  border-radius: 99px;
+  background: rgba(182, 143, 36, 0.15);
+  border: 1px solid rgba(182, 143, 36, 0.28);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-champagne);
+}
+
+.status-result-route {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-point {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 60px;
+}
+
+.status-iata {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-off-white);
+}
+
+.status-city {
+  font-size: 0.675rem;
+  color: rgba(226, 199, 128, 0.55);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-time {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-champagne);
+  margin-top: 0.25rem;
+}
+
+.status-divider {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-flight-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(182, 143, 36, 0.35), transparent);
+}
+
+.status-duration {
+  font-size: 0.6rem;
+  color: rgba(226, 199, 128, 0.45);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+// ── Check-in Tab ──────────────────────────────────────────────
+// .checkin-panel {}
+
+.checkin-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+}
+
+.checkin-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 1px solid rgba(182, 143, 36, 0.2);
+  background: rgba(182, 143, 36, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.checkin-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: var(--ls);
+  color: var(--color-off-white);
+  margin: 0;
+}
+
+.checkin-desc {
+  font-size: 0.8125rem;
+  font-weight: 300;
+  color: rgba(226, 199, 128, 0.6);
+  line-height: 1.6;
+  max-width: 380px;
+  margin: 0;
+}
+
+.checkin-btn {
+  display: inline-flex;
+  margin-left: 0;
+  margin-top: 0.5rem;
+}
+
+// ── Utility ───────────────────────────────────────────────────
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// ── Responsive ────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .tab-panel {
+    padding: 1.25rem 1rem 1.5rem;
+  }
+
+  .bottom-controls {
+    flex-wrap: wrap;
+  }
+
+  .search-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .journey-type-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .route-fields {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .swap-btn {
+    margin-top: 0;
+    width: 100%;
+    height: 28px;
+    border-radius: 4px;
+  }
+
+  .status-fields {
+    flex-direction: column;
+  }
+
+  .status-fields .search-btn {
+    width: 100%;
+  }
+
+  .calendar-panel {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+// ── Reduced Motion ────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+
+  .spinner,
+  .swap-btn {
+    animation: none;
+    transition: none;
+  }
+
+  .search-btn,
+  .tab-btn,
+  .date-trigger,
+  .counter-btn {
+    transition: none;
+  }
+}

@@ -1,0 +1,206 @@
+<div class="ctg-container">
+
+  <!-- ── Loading Skeleton ─────────────────────────────────────────────── -->
+  @if (loading()) {
+  <div class="ctg-table-wrap">
+    <table class="ctg-table" aria-label="Loading crew compliance data…" aria-busy="true">
+      <thead class="ctg-thead">
+        <tr>
+          <th class="ctg-th ctg-th--id">Member ID</th>
+          <th class="ctg-th ctg-th--name">Full Name</th>
+          <th class="ctg-th ctg-th--rank">Rank</th>
+          <th class="ctg-th ctg-th--base">Base</th>
+          <th class="ctg-th ctg-th--status">Compliance</th>
+          <th class="ctg-th ctg-th--actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of shimmerRows; track $index) {
+        <tr class="ctg-row ctg-row--shimmer" [class.ctg-row--alt]="$index % 2 !== 0">
+          <td class="ctg-td">
+            <div class="ctg-shimmer ctg-shimmer--sm"></div>
+          </td>
+          <td class="ctg-td">
+            <div class="ctg-cell-name">
+              <div class="ctg-avatar ctg-avatar--shimmer"></div>
+              <div class="ctg-shimmer ctg-shimmer--md"></div>
+            </div>
+          </td>
+          <td class="ctg-td">
+            <div class="ctg-cell-rank">
+              <div class="ctg-shimmer ctg-shimmer--icon"></div>
+              <div class="ctg-shimmer ctg-shimmer--sm"></div>
+            </div>
+          </td>
+          <td class="ctg-td">
+            <div class="ctg-shimmer ctg-shimmer--xs"></div>
+          </td>
+          <td class="ctg-td">
+            <div class="ctg-shimmer ctg-shimmer--badge"></div>
+          </td>
+          <td class="ctg-td">
+            <div class="ctg-shimmer ctg-shimmer--btn"></div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <!-- ── Empty State ──────────────────────────────────────────────────── -->
+  @else if (crewMembers().length === 0) {
+  <div class="ctg-empty">
+    <div class="ctg-empty__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0z" />
+      </svg>
+    </div>
+    <p class="ctg-empty__title">No Crew Records Found</p>
+    <p class="ctg-empty__subtitle">
+      Adjust your search parameters or clear the active filters to view crew data.
+    </p>
+  </div>
+  }
+
+  <!-- ── Data Grid ────────────────────────────────────────────────────── -->
+  @else {
+  <div class="ctg-table-wrap">
+    <table class="ctg-table" aria-label="Crew Operational Directory — Technical Compliance Grid">
+      <thead class="ctg-thead">
+        <tr>
+          <th class="ctg-th ctg-th--id" scope="col">Member ID</th>
+          <th class="ctg-th ctg-th--name" scope="col">Full Name</th>
+          <th class="ctg-th ctg-th--rank" scope="col">Rank</th>
+          <th class="ctg-th ctg-th--base" scope="col">Base</th>
+          <th class="ctg-th ctg-th--status" scope="col">Compliance</th>
+          <th class="ctg-th ctg-th--actions" scope="col">
+            <span class="sr-only">Actions</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody [@gridRows]="crewMembers().length">
+        @for (member of crewMembers(); track trackByMember($index, member)) {
+        <tr class="ctg-row" [class.ctg-row--alt]="$index % 2 !== 0" [class.ctg-row--inactive]="!member.isActive">
+          <!-- Member ID -->
+          <td class="ctg-td ctg-td--id">
+            <span class="ctg-member-id">#{{ member.employeeId }}</span>
+          </td>
+
+          <!-- Full Name + Avatar -->
+          <td class="ctg-td ctg-td--name">
+            <div class="ctg-cell-name">
+              <div class="ctg-avatar" [class.ctg-avatar--inactive]="!member.isActive"
+                [attr.aria-label]="member.fullName">
+                {{ initials(member) }}
+              </div>
+              <div class="ctg-name-group">
+                <span class="ctg-name-primary">{{ member.fullName }}</span>
+                @if (!member.isActive) {
+                <span class="ctg-name-tag ctg-name-tag--inactive">Inactive</span>
+                }
+              </div>
+            </div>
+          </td>
+
+          <!-- Rank (Icon + Label) -->
+          <td class="ctg-td ctg-td--rank">
+            <div class="ctg-cell-rank" [class]="rankConfig(member.rank).cssClass">
+              <svg class="ctg-rank-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path [attr.d]="rankConfig(member.rank).iconPath" />
+              </svg>
+              <span class="ctg-rank-label">{{ member.rank || '—' }}</span>
+            </div>
+          </td>
+
+          <!-- Base Airport IATA -->
+          <td class="ctg-td ctg-td--base">
+            <span class="ctg-base-badge">{{ member.baseAirportIata }}</span>
+          </td>
+
+          <!-- Compliance Status Badge -->
+          <td class="ctg-td ctg-td--status">
+            <div class="ctg-status-badge" [class]="statusClass(member.overallComplianceStatus)">
+              <span class="ctg-status-dot"></span>
+              <span class="ctg-status-label">
+                {{ statusLabel(member.overallComplianceStatus) }}
+              </span>
+            </div>
+          </td>
+
+          <!-- Actions -->
+          <td class="ctg-td ctg-td--actions">
+            <button class="ctg-action-btn" type="button" title="View Technical Profile"
+              (click)="viewProfileClicked.emit(member.employeeId)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+                <path fill-rule="evenodd"
+                  d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41z"
+                  clip-rule="evenodd" />
+              </svg>
+              <span>Profile</span>
+            </button>
+          </td>
+
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Pagination ─────────────────────────────────────────────────── -->
+  @if (pagination(); as p) {
+  <div class="ctg-pagination">
+
+    <!-- Record count summary -->
+    <p class="ctg-pagination__summary">
+      Showing <strong>{{ startIndex }}–{{ endIndex }}</strong> of
+      <strong>{{ p.total }}</strong> crew records
+    </p>
+
+    <!-- Page controls -->
+    <div class="ctg-pagination__controls">
+
+      <!-- Prev -->
+      <button class="ctg-page-btn ctg-page-btn--nav" type="button" [disabled]="!p.hasPrev" (click)="prevPage.emit()"
+        title="Previous page" aria-label="Go to previous page">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0z"
+            clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <!-- Page numbers -->
+      @for (n of pageNumbers(); track n) {
+      @if (isEllipsis(n)) {
+      <span class="ctg-page-ellipsis">…</span>
+      } @else {
+      <button class="ctg-page-btn" type="button" [class.ctg-page-btn--active]="n === p.page"
+        (click)="pageChanged.emit(n)" [attr.aria-label]="'Go to page ' + n"
+        [attr.aria-current]="n === p.page ? 'page' : null">{{ n }}</button>
+      }
+      }
+
+      <!-- Next -->
+      <button class="ctg-page-btn ctg-page-btn--nav" type="button" [disabled]="!p.hasNext" (click)="nextPage.emit()"
+        title="Next page" aria-label="Go to next page">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06z"
+            clip-rule="evenodd" />
+        </svg>
+      </button>
+
+    </div><!-- /controls -->
+
+  </div><!-- /ctg-pagination -->
+  }
+
+  }<!-- /data grid -->
+
+</div><!-- /ctg-container -->

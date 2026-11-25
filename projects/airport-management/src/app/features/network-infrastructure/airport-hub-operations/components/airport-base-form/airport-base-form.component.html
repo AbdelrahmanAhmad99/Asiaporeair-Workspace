@@ -1,0 +1,262 @@
+<form class="abf-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off"
+    aria-label="Airport base configuration form">
+
+    <div class="abf-card">
+
+        <!-- ══ Section 1: Core Identity ═══════════════════════════════ -->
+        <section class="abf-section" aria-labelledby="abf-section-identity">
+            <header class="abf-section__header">
+                <div class="abf-section__icon-wrap" aria-hidden="true">
+                    <svg class="abf-section__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                     0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="abf-section-identity" class="abf-section__title">Core Identity</h3>
+                    <p class="abf-section__subtitle">IATA / ICAO codes and full airport name</p>
+                </div>
+            </header>
+
+            <div class="abf-fields">
+
+                <!-- IATA Code -->
+                <div class="abf-field" [class.abf-field--error]="isInvalid('iataCode') || isDuplicateIata()"
+                    [class.abf-field--locked]="isEditMode()">
+                    <input id="iataCode" class="abf-input" type="text" formControlName="iataCode" maxlength="3"
+                        placeholder=" "
+                        [attr.aria-invalid]="(isInvalid('iataCode') || isDuplicateIata()) ? 'true' : 'false'">
+                    <label class="abf-label" for="iataCode">
+                        IATA Code <span class="abf-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isEditMode()) {
+                    <span class="abf-field__lock" aria-label="Locked in edit mode" title="IATA cannot be changed">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0
+                         2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25
+                         2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                        </svg>
+                    </span>
+                    }
+                    @if (isInvalid('iataCode')) {
+                    <span class="abf-error" role="alert">
+                        @if (iataCtrl.hasError('required')) { IATA code is required. }
+                        @else if (iataCtrl.hasError('minlength') || iataCtrl.hasError('maxlength')) { Must be exactly 3
+                        letters. }
+                        @else if (iataCtrl.hasError('uppercaseOnly')) { Uppercase letters only (e.g. SIN). }
+                    </span>
+                    }
+                    @if (isDuplicateIata() && !isInvalid('iataCode')) {
+                    <span class="abf-error" role="alert">This IATA code already exists in the network.</span>
+                    }
+                    <span class="abf-hint">3 uppercase letters · e.g. SIN, DXB</span>
+                </div>
+
+                <!-- ICAO Code -->
+                <div class="abf-field" [class.abf-field--error]="isInvalid('icaoCode')"
+                    [class.abf-field--locked]="isEditMode()">
+                    <input id="icaoCode" class="abf-input" type="text" formControlName="icaoCode" maxlength="4"
+                        placeholder=" " [attr.aria-invalid]="isInvalid('icaoCode') ? 'true' : 'false'">
+                    <label class="abf-label" for="icaoCode">
+                        ICAO Code <span class="abf-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isEditMode()) {
+                    <span class="abf-field__lock" aria-label="Locked in edit mode" title="ICAO cannot be changed">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0
+                         2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25
+                         2.25v6.75a2.25 2.25 0 0 0 2.25 2.25z" />
+                        </svg>
+                    </span>
+                    }
+                    @if (isInvalid('icaoCode')) {
+                    <span class="abf-error" role="alert">
+                        @if (icaoCtrl.hasError('required')) { ICAO code is required. }
+                        @else if (icaoCtrl.hasError('minlength') || icaoCtrl.hasError('maxlength')) { Must be exactly 4
+                        letters. }
+                        @else if (icaoCtrl.hasError('uppercaseOnly')) { Uppercase letters only (e.g. WSSS). }
+                    </span>
+                    }
+                    <span class="abf-hint">4 uppercase letters · e.g. WSSS, OMDB</span>
+                </div>
+
+                <!-- Airport Name -->
+                <div class="abf-field abf-field--wide" [class.abf-field--error]="isInvalid('name')">
+                    <input id="name" class="abf-input" type="text" formControlName="name" maxlength="120"
+                        placeholder=" " [attr.aria-invalid]="isInvalid('name') ? 'true' : 'false'">
+                    <label class="abf-label" for="name">
+                        Airport Name <span class="abf-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isInvalid('name')) {
+                    <span class="abf-error" role="alert">
+                        @if (nameCtrl.hasError('required')) { Airport name is required. }
+                        @else if (nameCtrl.hasError('minlength')) { Minimum 3 characters. }
+                        @else if (nameCtrl.hasError('maxlength')) { Maximum 120 characters. }
+                    </span>
+                    }
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Divider ──────────────────────────────────────────────── -->
+        <div class="abf-divider" aria-hidden="true"></div>
+
+        <!-- ══ Section 2: Location & Country ══════════════════════════ -->
+        <section class="abf-section" aria-labelledby="abf-section-location">
+            <header class="abf-section__header">
+                <div class="abf-section__icon-wrap" aria-hidden="true">
+                    <svg class="abf-section__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5
+                     7.5 0 1 1 15 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="abf-section-location" class="abf-section__title">Location &amp; Node Assignment</h3>
+                    <p class="abf-section__subtitle">City, country, and geographic coordinates</p>
+                </div>
+            </header>
+
+            <div class="abf-fields">
+
+                <!-- City -->
+                <div class="abf-field" [class.abf-field--error]="isInvalid('city')">
+                    <input id="city" class="abf-input" type="text" formControlName="city" maxlength="80" placeholder=" "
+                        [attr.aria-invalid]="isInvalid('city') ? 'true' : 'false'">
+                    <label class="abf-label" for="city">
+                        City <span class="abf-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isInvalid('city')) {
+                    <span class="abf-error" role="alert">
+                        @if (cityCtrl.hasError('required')) { City is required. }
+                        @else if (cityCtrl.hasError('minlength')) { Minimum 2 characters. }
+                    </span>
+                    }
+                </div>
+
+                <!-- Country Dropdown — foolproof select only -->
+                <div class="abf-field abf-field--select" [class.abf-field--error]="isInvalid('countryIsoCode')">
+                    <select id="countryIsoCode" class="abf-select" formControlName="countryIsoCode"
+                        [attr.aria-invalid]="isInvalid('countryIsoCode') ? 'true' : 'false'">
+                        <option value="" disabled hidden></option>
+                        @for (country of availableCountries(); track country.isoCode) {
+                        <option [value]="country.isoCode">
+                            {{ country.name }} ({{ country.isoCode }})
+                        </option>
+                        }
+                    </select>
+                    <label class="abf-label abf-label--select" for="countryIsoCode">
+                        Country <span class="abf-label__req" aria-hidden="true">*</span>
+                    </label>
+                    <!-- Custom chevron -->
+                    <div class="abf-select__chevron" aria-hidden="true">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                        </svg>
+                    </div>
+                    @if (isInvalid('countryIsoCode')) {
+                    <span class="abf-error" role="alert">Please select a country.</span>
+                    }
+                </div>
+
+                <!-- Latitude -->
+                <div class="abf-field" [class.abf-field--error]="isInvalid('latitude')">
+                    <input id="latitude" class="abf-input" type="number" formControlName="latitude" step="0.000001"
+                        placeholder=" " [attr.aria-invalid]="isInvalid('latitude') ? 'true' : 'false'">
+                    <label class="abf-label" for="latitude">
+                        Latitude <span class="abf-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isInvalid('latitude')) {
+                    <span class="abf-error" role="alert">
+                        @if (latCtrl.hasError('required')) { Latitude is required. }
+                        @else { Must be between –90 and 90. }
+                    </span>
+                    }
+                    <span class="abf-hint">–90 to 90 · e.g. 1.359167</span>
+                </div>
+
+                <!-- Longitude -->
+                <div class="abf-field" [class.abf-field--error]="isInvalid('longitude')">
+                    <input id="longitude" class="abf-input" type="number" formControlName="longitude" step="0.000001"
+                        placeholder=" " [attr.aria-invalid]="isInvalid('longitude') ? 'true' : 'false'">
+                    <label class="abf-label" for="longitude">
+                        Longitude <span class="abf-label__req" aria-hidden="true">*</span>
+                    </label>
+                    @if (isInvalid('longitude')) {
+                    <span class="abf-error" role="alert">
+                        @if (lonCtrl.hasError('required')) { Longitude is required. }
+                        @else { Must be between –180 and 180. }
+                    </span>
+                    }
+                    <span class="abf-hint">–180 to 180 · e.g. 103.989441</span>
+                </div>
+
+                <!-- Altitude (optional) -->
+                <div class="abf-field" [class.abf-field--error]="isInvalid('altitude')">
+                    <input id="altitude" class="abf-input" type="number" formControlName="altitude" step="1"
+                        placeholder=" " [attr.aria-invalid]="isInvalid('altitude') ? 'true' : 'false'">
+                    <label class="abf-label" for="altitude">Elevation (m) <span
+                            class="abf-label__opt">Optional</span></label>
+                    @if (isInvalid('altitude')) {
+                    <span class="abf-error" role="alert">Must be between –500 and 9,000 metres.</span>
+                    }
+                    <span class="abf-hint">Metres above sea level</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Divider ──────────────────────────────────────────────── -->
+        <div class="abf-divider" aria-hidden="true"></div>
+
+        <!-- ══ Form Actions ════════════════════════════════════════════ -->
+        <footer class="abf-actions">
+
+            <!-- API save error -->
+            @if (saveError()) {
+            <div class="abf-save-error" role="alert">
+                <svg class="abf-save-error__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <span>{{ saveError() }}</span>
+            </div>
+            }
+
+            <!-- Cancel -->
+            <button type="button" class="abf-btn abf-btn--cancel" (click)="cancel()" [disabled]="isLoading()">
+                Cancel
+            </button>
+
+            <!-- Save -->
+            <button type="submit" class="abf-btn abf-btn--save" [disabled]="isLoading()">
+                @if (isLoading()) {
+                <svg class="abf-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                     0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                     0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Saving…
+                } @else {
+                <svg class="abf-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                {{ isEditMode() ? 'Save Configuration' : 'Register Airport' }}
+                }
+            </button>
+
+        </footer>
+
+    </div>
+
+</form>

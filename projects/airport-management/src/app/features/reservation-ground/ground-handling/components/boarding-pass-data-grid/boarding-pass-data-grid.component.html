@@ -1,0 +1,131 @@
+<div class="bpdg-container">
+
+    <!-- ── Loading shimmer rows ─────────────────────────────────────── -->
+    @if (loading() && passes().length === 0) {
+    <div class="bpdg-shimmer-list" aria-busy="true" aria-label="Loading boarding passes">
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+        <div class="bpdg-shimmer-row">
+            <div class="bpdg-shimmer bpdg-shimmer--id"></div>
+            <div class="bpdg-shimmer bpdg-shimmer--name"></div>
+            <div class="bpdg-shimmer bpdg-shimmer--seat"></div>
+            <div class="bpdg-shimmer bpdg-shimmer--flight"></div>
+            <div class="bpdg-shimmer bpdg-shimmer--seq"></div>
+            <div class="bpdg-shimmer bpdg-shimmer--status"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ── Pre-search idle ──────────────────────────────────────────── -->
+    @if (!hasSearched() && !loading()) {
+    <div class="bpdg-idle" role="status">
+        <svg class="bpdg-idle__icon" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 64 48"
+            aria-hidden="true">
+            <rect x="4" y="12" width="56" height="28" rx="3" stroke-opacity="0.3" stroke-width="1.5" />
+            <line x1="12" y1="22" x2="52" y2="22" stroke-opacity="0.2" />
+            <line x1="12" y1="30" x2="40" y2="30" stroke-opacity="0.15" />
+        </svg>
+        <p class="bpdg-idle__label">Security Terminal Ready</p>
+        <p class="bpdg-idle__hint">Configure filters and initiate a search to retrieve boarding pass records.</p>
+    </div>
+    }
+
+    <!-- ── Empty results ────────────────────────────────────────────── -->
+    @if (isEmpty()) {
+    <div class="bpdg-empty" role="status">
+        <svg class="bpdg-empty__icon" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 64 48"
+            aria-hidden="true">
+            <rect x="4" y="12" width="56" height="28" rx="3" stroke-opacity="0.3" />
+            <line x1="25" y1="5" x2="39" y2="19" stroke-width="2" stroke-linecap="round" stroke-opacity="0.4" />
+            <line x1="39" y1="5" x2="25" y2="19" stroke-width="2" stroke-linecap="round" stroke-opacity="0.4" />
+        </svg>
+        <p class="bpdg-empty__label">No Records Found</p>
+        <p class="bpdg-empty__hint">Adjust your search filters and retry the security query.</p>
+    </div>
+    }
+
+    <!-- ── Data table ───────────────────────────────────────────────── -->
+    @if (passes().length > 0) {
+    <div class="bpdg-table-wrap">
+        <table class="bpdg-table" aria-label="Boarding pass security audit grid">
+            <thead>
+                <tr class="bpdg-thead-row">
+                    <th class="bpdg-th bpdg-th--id" scope="col">Pass ID</th>
+                    <th class="bpdg-th bpdg-th--name" scope="col">Passenger</th>
+                    <th class="bpdg-th bpdg-th--seat" scope="col">Seat</th>
+                    <th class="bpdg-th bpdg-th--flight" scope="col">Flight</th>
+                    <th class="bpdg-th bpdg-th--board" scope="col">Boards</th>
+                    <th class="bpdg-th bpdg-th--seq" scope="col">Seq</th>
+                    <th class="bpdg-th bpdg-th--action" scope="col" aria-label="Actions"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (pass of passes(); track trackByPassId($index, pass)) {
+                <tr class="bpdg-row" [class.bpdg-row--selected]="isSelected(pass.passId)"
+                    [class.bpdg-row--precheck]="pass.precheckStatus === true" (click)="onRowClick(pass)"
+                    (keydown)="onRowKeydown($event, pass)" tabindex="0" role="button"
+                    [attr.aria-selected]="isSelected(pass.passId)"
+                    [attr.aria-label]="'Inspect boarding pass for ' + pass.passengerName + ', seat ' + pass.seatNumber">
+
+                    <!-- Pass ID -->
+                    <td class="bpdg-cell bpdg-cell--id">
+                        <span class="bpdg-pass-id" [class.bpdg-pass-id--selected]="isSelected(pass.passId)">
+                            {{ pass.passId }}
+                        </span>
+                    </td>
+
+                    <!-- Passenger Name + Frequent Flyer indicator -->
+                    <td class="bpdg-cell bpdg-cell--name">
+                        <div class="bpdg-name-wrap">
+                            <span class="bpdg-name" [class.bpdg-name--selected]="isSelected(pass.passId)">
+                                {{ pass.passengerName }}
+                            </span>
+                            @if (pass.frequentFlyerNumber) {
+                            <span class="bpdg-ff-dot" title="Frequent Flyer member" aria-label="Frequent Flyer"></span>
+                            }
+                        </div>
+                    </td>
+
+                    <!-- Seat -->
+                    <td class="bpdg-cell bpdg-cell--seat">
+                        <span class="bpdg-seat" [class.bpdg-seat--selected]="isSelected(pass.passId)">
+                            {{ pass.seatNumber }}
+                        </span>
+                    </td>
+
+                    <!-- Flight Number -->
+                    <td class="bpdg-cell bpdg-cell--flight">
+                        <span class="bpdg-flight">{{ pass.flightNumber }}</span>
+                    </td>
+
+                    <!-- Boarding Time -->
+                    <td class="bpdg-cell bpdg-cell--board">
+                        <span class="bpdg-time">{{ formatTime(pass.boardingTime) }}</span>
+                    </td>
+
+                    <!-- Sequence Number -->
+                    <td class="bpdg-cell bpdg-cell--seq">
+                        <span class="bpdg-seq">#{{ pass.sequenceNumber }}</span>
+                    </td>
+
+                    <!-- Actions: Void button -->
+                    <td class="bpdg-cell bpdg-cell--action" (click)="$event.stopPropagation()">
+                        <button class="bpdg-void-btn" type="button" [disabled]="voidLoading()"
+                            (click)="onVoidClick(pass, $event)" [title]="'Void boarding pass for ' + pass.passengerName"
+                            [attr.aria-label]="'Void boarding pass for ' + pass.passengerName">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                            </svg>
+                        </button>
+                    </td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+</div>

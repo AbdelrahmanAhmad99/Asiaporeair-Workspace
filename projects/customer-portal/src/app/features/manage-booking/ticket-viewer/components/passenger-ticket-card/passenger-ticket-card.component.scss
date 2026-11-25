@@ -1,0 +1,163 @@
+// passenger-ticket-card.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.pax-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.pax-name-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.25rem;
+    background: rgba($midnight, 0.03);
+    border-bottom: 1px solid rgba($charcoal, 0.07);
+}
+
+.pax-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: rgba($midnight, 0.07);
+    border: 1px solid rgba($midnight, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+}
+
+.name-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.pax-label {
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $text-muted;
+}
+
+.pax-name {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: 0.04em;
+}
+
+.boarding-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 4px 10px;
+    background: $midnight;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.bg-label {
+    font-size: 0.52rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba($champagne, 0.5);
+}
+
+.bg-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: $champagne;
+    line-height: 1;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.detail-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba($charcoal, 0.04);
+    border-right: 1px solid rgba($charcoal, 0.04);
+
+    &:nth-child(even) {
+        border-right: none;
+    }
+
+    &:last-child,
+    &:nth-last-child(2) {
+        border-bottom: none;
+    }
+}
+
+.cell-key {
+    font-size: 0.57rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: $text-muted;
+}
+
+.cell-val {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $charcoal;
+    letter-spacing: -0.01em;
+
+    &--mono {
+        font-family: 'Courier New', monospace;
+        letter-spacing: 0.06em;
+    }
+
+    &--accent {
+        font-size: 0.88rem;
+        color: $royal-gold;
+        letter-spacing: 0.04em;
+        font-weight: 800;
+    }
+
+    &--status {
+        text-transform: capitalize;
+        color: darken(#2E7D52, 5%);
+    }
+}
+
+@media (max-width: 400px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-cell {
+        border-right: none;
+    }
+}
+
+@media print {
+    .pax-name-banner {
+        background: #f9f9f9;
+    }
+
+    .boarding-group {
+        background: #333;
+    }
+}

@@ -1,0 +1,194 @@
+// ============================================================================
+// check-in-policy-notice.component.scss
+// Asiaporeair | Check-in Policy Accordion
+// ============================================================================
+
+$midnight : #051937;
+$gold : #B68F24;
+$champagne : #E2C780;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+:host {
+    display: block;
+}
+
+.policy-card {
+    background: rgba($midnight, 0.04);
+    border: 1px solid rgba($gold, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color $t, box-shadow $t;
+
+    &--open {
+        border-color: rgba($gold, 0.28);
+        box-shadow: 0 4px 20px rgba($midnight, 0.06);
+    }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.policy-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background $t;
+
+    &:hover {
+        background: rgba($gold, 0.03);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $gold;
+        outline-offset: -2px;
+    }
+
+    &__left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: $charcoal;
+    }
+
+    &__sub {
+        font-family: $font;
+        font-size: 0.62rem;
+        color: $muted;
+        letter-spacing: 0.01em;
+    }
+}
+
+.policy-icon-ring {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba($gold, 0.08);
+    border: 1px solid rgba($champagne, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.policy-chevron {
+    color: rgba($charcoal, 0.35);
+    flex-shrink: 0;
+    transition: transform $t, color $t;
+
+    &.rotated {
+        transform: rotate(180deg);
+    }
+
+    .policy-header:hover & {
+        color: $gold;
+    }
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────
+.policy-body {
+    border-top: 1px solid rgba($gold, 0.12);
+    padding: 0.75rem 0;
+    animation: accordionOpen 220ms $ease both;
+}
+
+@keyframes accordionOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── Policy items ──────────────────────────────────────────────────────────────
+.policy-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 0.75rem 1.25rem;
+    transition: background $t;
+
+    &:hover {
+        background: rgba($gold, 0.02);
+    }
+
+    &--highlight {
+        background: rgba($gold, 0.04);
+        border-left: 2px solid rgba($champagne, 0.45);
+
+        .policy-item__title {
+            color: darken($gold, 5%);
+        }
+
+        .policy-item__icon-col {
+            color: $champagne;
+        }
+    }
+
+    &__icon-col {
+        flex-shrink: 0;
+        margin-top: 2px;
+        color: rgba($gold, 0.6);
+    }
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: 0.73rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: $charcoal;
+    }
+
+    &__detail {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.68rem;
+        color: $muted;
+        line-height: 1.55;
+        margin: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .policy-body {
+        animation: none !important;
+    }
+
+    .policy-chevron {
+        transition: none !important;
+    }
+}

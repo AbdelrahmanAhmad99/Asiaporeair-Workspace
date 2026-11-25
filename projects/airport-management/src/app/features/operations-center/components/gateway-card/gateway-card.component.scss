@@ -1,0 +1,400 @@
+@use '../gateway-tokens' as t;
+
+:host {
+    @include t.gw-tokens;
+    display: block;
+    height: 100%;
+    font-family: var(--gw-font-body);
+}
+
+.visually-hidden {
+    @include t.gw-visually-hidden;
+}
+
+.icon {
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25; // ultra-thin line art, ~1px at rendered size
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+// ── Glass shell ──────────────────────────────────────────────────────────────
+.gw {
+    --accent: var(--gw-gold);
+    --icon: var(--gw-champagne);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.125rem 1.125rem 1rem;
+    color: var(--gw-ivory);
+    background: var(--gw-glass);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--gw-gold-border);
+    border-radius: var(--gw-radius-card);
+    box-shadow: var(--gw-shadow-rest);
+    transition:
+        transform 180ms ease-in-out,
+        border-color 180ms ease-in-out,
+        box-shadow 180ms ease-in-out;
+
+    &[data-access='GRANTED']:hover {
+        transform: translateY(-2px);
+        border-color: var(--gw-gold);
+        box-shadow: var(--gw-shadow-hover);
+    }
+
+    // Locked: gold and champagne give way to a neutral slate. Text stays AA-legible.
+    &[data-access='LOCKED'] {
+        --accent: var(--gw-slate);
+        --icon: var(--gw-slate);
+        background: rgba(248, 249, 250, 0.03);
+        border-color: var(--gw-champagne-hairline);
+        box-shadow: none;
+    }
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+.gw__head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: 0.75rem;
+}
+
+.gw__icon {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--icon);
+    border: 1px solid var(--gw-champagne-hairline);
+    border-radius: var(--gw-radius-card);
+}
+
+.gw__heading {
+    min-width: 0;
+}
+
+.gw__title {
+    margin: 0;
+    font-family: var(--gw-font-heading);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.gw__description {
+    margin: 0.25rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--gw-ivory-muted);
+}
+
+.gw__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    padding: 0.1875rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--gw-ivory);
+    background: rgba(248, 249, 250, 0.1);
+    border: 1px solid var(--gw-champagne-hairline);
+    border-radius: var(--gw-radius-button);
+    white-space: nowrap;
+}
+
+// ── Live telemetry badge ─────────────────────────────────────────────────────
+.telemetry {
+    --tone: var(--gw-emerald-signal);
+    margin-top: 0.875rem;
+    padding: 0.5rem 0.75rem 0.625rem;
+    background: var(--gw-inset);
+    border: 1px solid var(--gw-champagne-hairline);
+    border-radius: var(--gw-radius-button);
+
+    &[data-tone='WATCH'] {
+        --tone: var(--gw-amber-signal);
+    }
+
+    &[data-tone='CRITICAL'] {
+        --tone: var(--gw-ruby-signal);
+    }
+
+    &[data-tone='PENDING'] {
+        --tone: var(--gw-ivory-muted);
+    }
+}
+
+.telemetry__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--tone);
+}
+
+.telemetry__dot {
+    position: relative;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    background: var(--tone);
+    border-radius: 50%;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 1px solid var(--tone);
+        border-radius: 50%;
+        animation: pulse 2.4s ease-out infinite;
+    }
+}
+
+// Distinct cadence per state so status is legible without colour.
+.telemetry[data-tone='WATCH'] .telemetry__dot::after {
+    animation-duration: 1.2s;
+}
+
+.telemetry[data-tone='CRITICAL'] .telemetry__dot::after {
+    animation: none;
+    inset: -3px;
+}
+
+.telemetry[data-tone='PENDING'] .telemetry__dot::after {
+    animation: none;
+    opacity: 0;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+.telemetry__metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0.375rem 0 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.metric {
+    --value: var(--gw-ivory);
+    display: flex;
+    flex-direction: column-reverse; // DOM order is dt then dd (valid, label-first for AT); visually the value sits on top
+    align-items: flex-start;
+    row-gap: 0.125rem;
+    min-width: 0;
+
+    &+& {
+        padding-left: 0.75rem;
+        border-left: 1px solid var(--gw-champagne-hairline);
+    }
+
+    &[data-tone='WARN'] {
+        --value: var(--gw-amber-signal);
+    }
+
+    &[data-tone='BAD'] {
+        --value: var(--gw-ruby-signal);
+    }
+}
+
+.metric__value {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--value);
+}
+
+.metric__label {
+    font-size: 0.6875rem;
+    color: var(--gw-ivory-muted);
+}
+
+// ── Restriction (locked) ─────────────────────────────────────────────────────
+.restriction {
+    margin-top: 0.875rem;
+    padding: 0.5rem 0.75rem;
+    border-inline-start: 2px solid var(--gw-slate);
+}
+
+.restriction__note {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.restriction__clearance {
+    margin: 0.1875rem 0 0;
+    font-size: 0.75rem;
+    color: var(--gw-ivory-muted);
+}
+
+// ── Sub-links ────────────────────────────────────────────────────────────────
+.links {
+    flex: 1; // soaks up spare height so every footer sits on the same baseline across the grid
+    margin-top: 0.75rem;
+}
+
+.links__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.links__item+.links__item {
+    border-top: 1px solid var(--gw-champagne-hairline);
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--gw-ivory);
+    text-decoration: none;
+    border-inline-start: 2px solid transparent;
+    border-radius: var(--gw-radius-button);
+    transition:
+        background-color 160ms ease-in-out,
+        border-color 160ms ease-in-out;
+
+    // Active state: thin Royal Gold edge, per the navigation spec.
+    &:hover {
+        background: var(--gw-champagne-wash);
+        border-inline-start-color: var(--gw-gold);
+    }
+
+    &:focus-visible {
+        @include t.gw-focus-ring;
+    }
+
+    &--locked {
+        color: var(--gw-ivory-muted);
+        cursor: not-allowed;
+
+        &:hover {
+            background: transparent;
+            border-inline-start-color: transparent;
+        }
+    }
+}
+
+.link__arrow {
+    color: var(--gw-ivory-muted);
+    transition:
+        transform 160ms ease-in-out,
+        color 160ms ease-in-out;
+}
+
+.link:hover .link__arrow {
+    color: var(--gw-gold);
+    transform: translateX(2px);
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+.gw__foot {
+    margin-top: auto;
+    padding-top: 0.75rem;
+}
+
+// A locked card has no sub-link block to absorb height, so its footer takes the bottom edge.
+.restriction+.gw__foot {
+    margin-top: auto;
+}
+
+.cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5625rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--gw-sapphire); // on Royal Gold: 5.8:1
+    text-decoration: none;
+    background: var(--gw-gold);
+    border-radius: var(--gw-radius-button);
+    transition: background-color 160ms ease-in-out;
+
+    &:hover {
+        background: var(--gw-champagne);
+    }
+
+    &:focus-visible {
+        @include t.gw-focus-ring;
+    }
+}
+
+.cta__arrow {
+    transition: transform 160ms ease-in-out;
+}
+
+.cta:hover .cta__arrow {
+    transform: translateX(3px);
+}
+
+.request {
+    width: 100%;
+    padding: 0.5625rem 0.75rem;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--gw-champagne);
+    background: transparent;
+    border: 1px solid var(--gw-champagne-hairline);
+    border-radius: var(--gw-radius-button);
+    cursor: pointer;
+    transition: background-color 160ms ease-in-out;
+
+    &:hover {
+        background: var(--gw-champagne-wash);
+    }
+
+    &:focus-visible {
+        @include t.gw-focus-ring;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .gw,
+    .link,
+    .link__arrow,
+    .cta,
+    .cta__arrow,
+    .request {
+        transition: none;
+    }
+
+    .gw[data-access='GRANTED']:hover {
+        transform: none;
+    }
+
+    .telemetry__dot::after {
+        animation: none;
+        opacity: 0;
+    }
+
+    .telemetry[data-tone='CRITICAL'] .telemetry__dot::after {
+        opacity: 0.9;
+    }
+}

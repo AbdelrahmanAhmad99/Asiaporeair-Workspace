@@ -1,0 +1,363 @@
+<div class="eng-deck" [formGroup]="form">
+
+    <!-- ══ Section Navigation Tabs ═════════════════════════════════ -->
+    <nav class="eng-deck__tabs" role="tablist" aria-label="Technical specification sections">
+        @for (section of sections; track section.id) {
+        <button class="eng-deck__tab" role="tab" [class.eng-deck__tab--active]="activeSection() === section.id"
+            [class.eng-deck__tab--valid]="sectionValid()[section.id]"
+            [attr.aria-selected]="activeSection() === section.id" [attr.id]="'tab-' + section.id"
+            [attr.aria-controls]="'panel-' + section.id" type="button" (click)="setActiveSection(section.id)">
+
+            <!-- Section icon -->
+            <svg class="eng-deck__tab__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="section.iconPath" />
+            </svg>
+
+            <span class="eng-deck__tab__label">{{ section.title }}</span>
+
+            <!-- Valid checkmark -->
+            @if (sectionValid()[section.id]) {
+            <svg class="eng-deck__tab__check" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+            }
+
+        </button>
+        }
+    </nav>
+
+    <!-- ══ Section Panels ══════════════════════════════════════════ -->
+
+    <!-- ── Section 1: Primary Identity ──────────────────────────── -->
+    <section class="eng-deck__panel" [class.eng-deck__panel--active]="activeSection() === 'identity'"
+        [class.eng-deck__panel--valid]="sectionValid()['identity']" id="panel-identity" role="tabpanel"
+        aria-labelledby="tab-identity">
+
+        <div class="eng-deck__panel__header">
+            <div class="eng-deck__panel__header__icon-wrap" aria-hidden="true">
+                <svg class="eng-deck__panel__header__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="sections[0].iconPath" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="eng-deck__panel__title">{{ sections[0].title }}</h3>
+                <p class="eng-deck__panel__sub">{{ sections[0].sub }}</p>
+            </div>
+        </div>
+
+        <div class="eng-deck__fields">
+
+            <!-- Manufacturer -->
+            <div class="form-field" [class.form-field--valid]="isFieldValid('manufacturer')"
+                [class.form-field--invalid]="isFieldInvalid('manufacturer')">
+
+                <div class="form-field__input-wrap">
+                    <input class="form-field__input" id="field-manufacturer" type="text" formControlName="manufacturer"
+                        placeholder=" " autocomplete="organization" list="manufacturers-datalist" aria-required="true"
+                        [attr.aria-describedby]="isFieldInvalid('manufacturer') ? 'err-manufacturer' : null" />
+
+                    <label class="form-field__label" for="field-manufacturer">
+                        Manufacturer
+                        <span class="form-field__label__required" aria-hidden="true">*</span>
+                    </label>
+
+                    <!-- State icon -->
+                    <div class="form-field__state-icon" aria-hidden="true">
+                        @if (isFieldValid('manufacturer')) {
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        }
+                        @if (isFieldInvalid('manufacturer')) {
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                        }
+                    </div>
+                </div>
+
+                <!-- Datalist for autocomplete suggestions -->
+                <datalist id="manufacturers-datalist">
+                    @for (mfr of knownManufacturers; track mfr) {
+                    <option [value]="mfr">{{ mfr }}</option>
+                    }
+                </datalist>
+
+                @if (isFieldInvalid('manufacturer')) {
+                <span class="form-field__error" id="err-manufacturer" role="alert">
+                    {{ fieldError('manufacturer') }}
+                </span>
+                }
+
+                <span class="form-field__hint">
+                    e.g. Airbus, Boeing, Embraer, Bombardier
+                </span>
+            </div>
+
+            <!-- Aircraft Model -->
+            <div class="form-field" [class.form-field--valid]="isFieldValid('model')"
+                [class.form-field--invalid]="isFieldInvalid('model')">
+
+                <div class="form-field__input-wrap">
+                    <input class="form-field__input" id="field-model" type="text" formControlName="model"
+                        placeholder=" " autocomplete="off" aria-required="true"
+                        [attr.aria-describedby]="isFieldInvalid('model') ? 'err-model' : null" />
+
+                    <label class="form-field__label" for="field-model">
+                        Aircraft Model Designation
+                        <span class="form-field__label__required" aria-hidden="true">*</span>
+                    </label>
+
+                    <div class="form-field__state-icon" aria-hidden="true">
+                        @if (isFieldValid('model')) {
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        }
+                        @if (isFieldInvalid('model')) {
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                        }
+                    </div>
+                </div>
+
+                @if (isFieldInvalid('model')) {
+                <span class="form-field__error" id="err-model" role="alert">
+                    {{ fieldError('model') }}
+                </span>
+                }
+
+                <span class="form-field__hint">
+                    e.g. A350-900, 777-300ER, E195-E2
+                </span>
+            </div>
+
+        </div>
+
+        <!-- Section Navigation -->
+        <div class="eng-deck__panel__nav">
+            <button class="eng-deck__nav-btn" type="button" (click)="setActiveSection('performance')">
+                Next: Performance Specs
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="eng-deck__nav-btn__arrow" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+            </button>
+        </div>
+
+    </section>
+
+    <!-- ── Section 2: Performance Specifications ─────────────────── -->
+    <section class="eng-deck__panel" [class.eng-deck__panel--active]="activeSection() === 'performance'"
+        [class.eng-deck__panel--valid]="sectionValid()['performance']" id="panel-performance" role="tabpanel"
+        aria-labelledby="tab-performance">
+
+        <div class="eng-deck__panel__header">
+            <div class="eng-deck__panel__header__icon-wrap" aria-hidden="true">
+                <svg class="eng-deck__panel__header__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="sections[1].iconPath" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="eng-deck__panel__title">{{ sections[1].title }}</h3>
+                <p class="eng-deck__panel__sub">{{ sections[1].sub }}</p>
+            </div>
+        </div>
+
+        <div class="eng-deck__fields eng-deck__fields--two-col">
+
+            <!-- Max Range -->
+            <div class="form-field" [class.form-field--valid]="isFieldValid('rangeKm')"
+                [class.form-field--invalid]="isFieldInvalid('rangeKm')">
+
+                <div class="form-field__input-wrap">
+                    <input class="form-field__input form-field__input--with-unit" id="field-rangeKm" type="number"
+                        formControlName="rangeKm" placeholder=" " min="100" max="25000"
+                        [attr.aria-describedby]="isFieldInvalid('rangeKm') ? 'err-rangeKm' : null" />
+
+                    <label class="form-field__label" for="field-rangeKm">
+                        Maximum Range
+                    </label>
+
+                    <span class="form-field__unit">km</span>
+
+                    <div class="form-field__state-icon" aria-hidden="true">
+                        @if (isFieldValid('rangeKm')) {
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        }
+                    </div>
+                </div>
+
+                @if (isFieldInvalid('rangeKm')) {
+                <span class="form-field__error" id="err-rangeKm" role="alert">
+                    {{ fieldError('rangeKm') }}
+                </span>
+                }
+
+                <span class="form-field__hint">Operational range at full payload (100–25,000 km)</span>
+            </div>
+
+            <!-- Cruising Velocity -->
+            <div class="form-field" [class.form-field--valid]="isFieldValid('cruisingVelocity')"
+                [class.form-field--invalid]="isFieldInvalid('cruisingVelocity')">
+
+                <div class="form-field__input-wrap">
+                    <input class="form-field__input form-field__input--with-unit" id="field-cruisingVelocity"
+                        type="number" formControlName="cruisingVelocity" placeholder=" " min="200" max="1200"
+                        [attr.aria-describedby]="isFieldInvalid('cruisingVelocity') ? 'err-cruisingVelocity' : null" />
+
+                    <label class="form-field__label" for="field-cruisingVelocity">
+                        Cruising Speed
+                    </label>
+
+                    <span class="form-field__unit">km/h</span>
+
+                    <div class="form-field__state-icon" aria-hidden="true">
+                        @if (isFieldValid('cruisingVelocity')) {
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        }
+                    </div>
+                </div>
+
+                @if (isFieldInvalid('cruisingVelocity')) {
+                <span class="form-field__error" id="err-cruisingVelocity" role="alert">
+                    {{ fieldError('cruisingVelocity') }}
+                </span>
+                }
+
+                <span class="form-field__hint">Typical cruise at altitude (200–1,200 km/h)</span>
+            </div>
+
+        </div>
+
+        <div class="eng-deck__panel__nav">
+            <button class="eng-deck__nav-btn eng-deck__nav-btn--back" type="button"
+                (click)="setActiveSection('identity')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="eng-deck__nav-btn__arrow" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                Primary Identity
+            </button>
+            <button class="eng-deck__nav-btn" type="button" (click)="setActiveSection('payload')">
+                Next: Payload &amp; Capacity
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="eng-deck__nav-btn__arrow" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+            </button>
+        </div>
+
+    </section>
+
+    <!-- ── Section 3: Payload & Capacity ──────────────────────────── -->
+    <section class="eng-deck__panel" [class.eng-deck__panel--active]="activeSection() === 'payload'"
+        [class.eng-deck__panel--valid]="sectionValid()['payload']" id="panel-payload" role="tabpanel"
+        aria-labelledby="tab-payload">
+
+        <div class="eng-deck__panel__header">
+            <div class="eng-deck__panel__header__icon-wrap" aria-hidden="true">
+                <svg class="eng-deck__panel__header__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="sections[2].iconPath" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="eng-deck__panel__title">{{ sections[2].title }}</h3>
+                <p class="eng-deck__panel__sub">{{ sections[2].sub }}</p>
+            </div>
+        </div>
+
+        <div class="eng-deck__fields eng-deck__fields--two-col">
+
+            <!-- Max Seats -->
+            <div class="form-field" [class.form-field--valid]="isFieldValid('maxSeats')"
+                [class.form-field--invalid]="isFieldInvalid('maxSeats')">
+
+                <div class="form-field__input-wrap">
+                    <input class="form-field__input form-field__input--with-unit" id="field-maxSeats" type="number"
+                        formControlName="maxSeats" placeholder=" " min="1" max="1000"
+                        [attr.aria-describedby]="isFieldInvalid('maxSeats') ? 'err-maxSeats' : null" />
+
+                    <label class="form-field__label" for="field-maxSeats">
+                        Maximum Seating Configuration
+                    </label>
+
+                    <span class="form-field__unit">seats</span>
+
+                    <div class="form-field__state-icon" aria-hidden="true">
+                        @if (isFieldValid('maxSeats')) {
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        }
+                    </div>
+                </div>
+
+                @if (isFieldInvalid('maxSeats')) {
+                <span class="form-field__error" id="err-maxSeats" role="alert">
+                    {{ fieldError('maxSeats') }}
+                </span>
+                }
+
+                <span class="form-field__hint">Total passenger capacity in high-density layout (1–1,000)</span>
+            </div>
+
+            <!-- Cargo Capacity -->
+            <div class="form-field" [class.form-field--valid]="isFieldValid('cargoCapacity')"
+                [class.form-field--invalid]="isFieldInvalid('cargoCapacity')">
+
+                <div class="form-field__input-wrap">
+                    <input class="form-field__input form-field__input--with-unit" id="field-cargoCapacity" type="number"
+                        formControlName="cargoCapacity" placeholder=" " min="0" max="2000"
+                        [attr.aria-describedby]="isFieldInvalid('cargoCapacity') ? 'err-cargoCapacity' : null" />
+
+                    <label class="form-field__label" for="field-cargoCapacity">
+                        Cargo Volume Envelope
+                    </label>
+
+                    <span class="form-field__unit">m³</span>
+
+                    <div class="form-field__state-icon" aria-hidden="true">
+                        @if (isFieldValid('cargoCapacity')) {
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        }
+                    </div>
+                </div>
+
+                @if (isFieldInvalid('cargoCapacity')) {
+                <span class="form-field__error" id="err-cargoCapacity" role="alert">
+                    {{ fieldError('cargoCapacity') }}
+                </span>
+                }
+
+                <span class="form-field__hint">Total lower-deck cargo volume (0–2,000 m³)</span>
+            </div>
+
+        </div>
+
+        <div class="eng-deck__panel__nav">
+            <button class="eng-deck__nav-btn eng-deck__nav-btn--back" type="button"
+                (click)="setActiveSection('performance')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="eng-deck__nav-btn__arrow" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                Performance Specs
+            </button>
+        </div>
+
+    </section>
+
+</div>

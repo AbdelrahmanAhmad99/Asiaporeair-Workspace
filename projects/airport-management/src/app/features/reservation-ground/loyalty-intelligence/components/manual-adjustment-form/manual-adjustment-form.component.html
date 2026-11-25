@@ -1,0 +1,139 @@
+<div class="maf-form" [class.maf-form--success]="showSuccess">
+
+    <!-- Gold accent bar -->
+    <div class="maf-form__accent" aria-hidden="true"></div>
+
+    <!-- Success flash overlay -->
+    @if (showSuccess) {
+    <div class="maf-success-flash" aria-live="assertive" aria-label="Adjustment applied successfully">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        <span>Adjustment Applied</span>
+    </div>
+    }
+
+    <div class="maf-form__inner">
+        <h3 class="maf-form__title">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="maf-form__title-icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.862 4.487 18.549 2.8a1.875 1.875 0 1 1 2.651 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+            </svg>
+            Manual Points Adjustment
+        </h3>
+
+        <!-- ── Type Toggle: Add / Subtract ──────────────────────────── -->
+        <div class="maf-field">
+            <label class="maf-label">Transaction Type</label>
+            <div class="maf-type-toggle" role="group" aria-label="Transaction type">
+                <button class="maf-type-toggle__btn maf-type-toggle__btn--add"
+                    [class.maf-type-toggle__btn--active]="type() === 'add'" type="button" [disabled]="isProcessing()"
+                    (click)="setType('add')" [attr.aria-pressed]="type() === 'add'">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Credit Miles
+                </button>
+                <button class="maf-type-toggle__btn maf-type-toggle__btn--subtract"
+                    [class.maf-type-toggle__btn--active]="type() === 'subtract'" type="button"
+                    [disabled]="isProcessing()" (click)="setType('subtract')"
+                    [attr.aria-pressed]="type() === 'subtract'">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                    </svg>
+                    Deduct Miles
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Amount ──────────────────────────────────────────────── -->
+        <div class="maf-field">
+            <label class="maf-label" for="maf-amount">
+                Amount
+                <span class="maf-label__required" aria-label="required">*</span>
+            </label>
+            <div class="maf-amount-wrap">
+                <span class="maf-amount-wrap__prefix" [class.maf-amount-wrap__prefix--subtract]="type() === 'subtract'"
+                    aria-hidden="true">
+                    {{ type() === 'add' ? '+' : '−' }}
+                </span>
+                <input id="maf-amount" class="maf-amount-input" type="number" min="1" step="1" placeholder="0"
+                    [value]="amount() || ''" (input)="onAmountInput($any($event.target).value)"
+                    [disabled]="isProcessing()"
+                    [attr.aria-label]="'Points amount to ' + (type() === 'add' ? 'credit' : 'deduct')" />
+                <span class="maf-amount-wrap__unit" aria-hidden="true">pts</span>
+            </div>
+        </div>
+
+        <!-- ── Reason Code ─────────────────────────────────────────── -->
+        <div class="maf-field">
+            <label class="maf-label" for="maf-reason">
+                Reason Code
+                <span class="maf-label__required" aria-label="required">*</span>
+                <span class="maf-label__hint">Required for audit compliance</span>
+            </label>
+            <div class="maf-select-wrap">
+                <select id="maf-reason" class="maf-select" [value]="reasonCode()"
+                    (change)="onReasonCodeChange($any($event.target).value)" [disabled]="isProcessing()"
+                    aria-required="true">
+                    <option value="">— Select reason code —</option>
+                    @for (opt of reasonCodes; track opt.code) {
+                    <option [value]="opt.code">{{ opt.label }}</option>
+                    }
+                </select>
+                <svg class="maf-select-wrap__caret" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- ── Comments ────────────────────────────────────────────── -->
+        <div class="maf-field">
+            <label class="maf-label" for="maf-comments">
+                Audit Comments
+                <span class="maf-label__optional">(optional)</span>
+            </label>
+            <textarea id="maf-comments" class="maf-textarea" rows="3"
+                placeholder="Additional context for the regulatory audit log…" [value]="comments()"
+                (input)="onCommentsInput($any($event.target).value)" [disabled]="isProcessing()">
+      </textarea>
+        </div>
+
+        <!-- ── Actions ─────────────────────────────────────────────── -->
+        <div class="maf-actions">
+            <!-- Reset -->
+            @if (amount() > 0 || reasonCode() || comments()) {
+            <button class="maf-btn maf-btn--reset" type="button" [disabled]="isProcessing()" (click)="onReset()">
+                Clear
+            </button>
+            }
+
+            <!-- Submit — Royal Gold gradient with glow -->
+            <button class="maf-btn maf-btn--submit" type="button" [disabled]="!canSubmit()"
+                [class.maf-btn--submit-add]="type() === 'add'" [class.maf-btn--submit-subtract]="type() === 'subtract'"
+                (click)="onSubmit()">
+                @if (isProcessing()) {
+                <svg class="maf-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Processing…
+                } @else if (type() === 'add') {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Confirm Credit
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                </svg>
+                Confirm Deduction
+                }
+            </button>
+        </div>
+
+    </div>
+</div>

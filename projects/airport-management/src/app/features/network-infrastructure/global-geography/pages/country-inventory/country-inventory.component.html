@@ -1,0 +1,96 @@
+<!-- ── Page Shell ──────────────────────────────────────────────── -->
+<div class="ci-page">
+
+  <!-- ══ Sticky Page Header ════════════════════════════════════════ -->
+  <header class="ci-header">
+
+    <!-- Left: Breadcrumb + Title -->
+    <div>
+      <nav class="ci-breadcrumb" aria-label="Breadcrumb">
+        <span class="ci-breadcrumb__section">Network &amp; Infrastructure</span>
+        <svg class="ci-breadcrumb__separator" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+        </svg>
+        <span class="ci-breadcrumb__current">Global Geography</span>
+      </nav>
+      <h1 class="ci-title">Country Inventory</h1>
+    </div>
+
+    <!-- Right: Control Buttons -->
+    <div class="ci-header-controls">
+
+      <!-- Refresh Button -->
+      <button class="ci-icon-btn" (click)="store.loadAll()" [disabled]="store.loading()" aria-label="Refresh data"
+        title="Refresh data">
+        <svg class="ci-icon-btn__icon" [class.ci-icon-btn__icon--spinning]="store.loading()" fill="none"
+          stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                   3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                   13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+      </button>
+
+      <!--
+        Dark / Light Mode Toggle
+        Toggles the `.aoms-dark` class on the <html> element globally.
+        This triggers all CSS variable overrides defined in styles.scss.
+      -->
+      <button class="ci-icon-btn ci-icon-btn--gold" (click)="toggleDarkMode()"
+        [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+        [attr.title]="isDarkMode() ? 'Light Mode' : 'Dark Mode'">
+
+        <!-- Sun icon — shown in dark mode -->
+        @if (isDarkMode()) {
+        <svg class="ci-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591
+                     M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636
+                     5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+        </svg>
+        }
+
+        <!-- Moon icon — shown in light mode -->
+        @if (!isDarkMode()) {
+        <svg class="ci-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75
+                     0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365
+                     21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+        </svg>
+        }
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ══ Page Body ═════════════════════════════════════════════════ -->
+  <main class="ci-body">
+
+    <!-- Error Banner -->
+    @if (store.error()) {
+    <div class="ci-error-banner" role="alert">
+      <svg class="ci-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71
+                   c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
+      {{ store.error() }}
+    </div>
+    }
+
+    <!-- Statistics Cards Row -->
+    <aoms-country-stats-cards [stats]="store.stats()" [loading]="store.loading()" />
+
+    <!-- Filter Bar -->
+    <aoms-country-filter-bar [continents]="store.continents()" [initialFilters]="store.filters()"
+      (filtersChanged)="onFiltersChanged($event)" (addCountry)="navigateToCreate()"
+      (resetFilters)="store.resetFilters()" />
+
+    <!-- Data Table -->
+    <aoms-country-data-table [countries]="store.filteredCountries()" [loading]="store.loading()"
+      (actionTriggered)="onTableAction($event)" />
+
+  </main>
+</div>

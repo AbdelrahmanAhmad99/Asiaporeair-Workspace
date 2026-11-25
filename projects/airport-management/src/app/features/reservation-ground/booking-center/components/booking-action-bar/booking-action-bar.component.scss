@@ -1,0 +1,134 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ruby: #710D06;
+ $t: 150ms ease;
+
+ .bab-bar {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.12);
+     padding: 1rem 1.25rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+
+     &__title {
+         font-size: 9.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: rgba($champagne, 0.4);
+         margin-bottom: 0.125rem;
+     }
+
+     &__archived-note {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: rgba($champagne, 0.35);
+         font-style: italic;
+         line-height: 1.4;
+         padding-top: 0.25rem;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ .bab-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.5rem;
+     width: 100%;
+     padding: 0.625rem 1rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     letter-spacing: 0.02em;
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+         transform: none !important;
+         box-shadow: none !important;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: bab-spin 1s linear infinite;
+         }
+     }
+
+     // Update Status — Gold CTA
+     &--status {
+         border: 1px solid rgba($gold, 0.45);
+         background: rgba($gold, 0.1);
+         color: $champagne;
+
+         &:hover:not(:disabled) {
+             background: rgba($gold, 0.2);
+             border-color: $gold;
+             box-shadow: 0 4px 14px rgba($gold, 0.2);
+         }
+     }
+
+     // Issue Tickets — Champagne Primary
+     &--tickets {
+         border: 1px solid rgba($champagne, 0.35);
+         background: rgba($champagne, 0.08);
+         color: rgba(255, 255, 255, 0.85);
+
+         &:hover:not(:disabled) {
+             background: rgba($champagne, 0.15);
+             border-color: $champagne;
+             color: #fff;
+             box-shadow: 0 4px 14px rgba($champagne, 0.25);
+         }
+     }
+
+     // Cancel — Ruby Danger
+     &--cancel {
+         border: 1px solid rgba($ruby, 0.4);
+         background: rgba($ruby, 0.1);
+         color: lighten($ruby, 30%);
+
+         &:hover:not(:disabled) {
+             background: $ruby;
+             border-color: $ruby;
+             color: #fff;
+             box-shadow: 0 4px 14px rgba($ruby, 0.45);
+         }
+     }
+ }
+
+ @keyframes bab-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }

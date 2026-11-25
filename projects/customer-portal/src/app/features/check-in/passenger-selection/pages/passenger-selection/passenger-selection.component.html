@@ -1,0 +1,248 @@
+<!-- ============================================================================
+     passenger-selection.component.html
+     Asiaporeair | Step 2 — Passenger Manifest & Boarding Pass Generation
+     ============================================================================ -->
+
+<div class="ps-shell">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HERO HEADER
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="ps-hero" [@headerSlide] role="banner">
+
+        <!-- Particle field -->
+        <div class="ps-hero__particles" aria-hidden="true">
+            @for (p of [1,2,3,4,5,6,7,8,9,10]; track p) {
+            <span class="ps-particle"></span>
+            }
+        </div>
+
+        <div class="ps-hero__inner">
+
+            <!-- Top utility row -->
+            <div class="ps-hero__nav-row">
+                <span class="ps-brand" aria-hidden="true">ASIAPOREAIR</span>
+
+                <button class="ps-back-btn" type="button" (click)="onBack()" aria-label="Return to booking search">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <line x1="19" y1="12" x2="5" y2="12" />
+                        <polyline points="12 19 5 12 12 5" />
+                    </svg>
+                    Return to Search
+                </button>
+            </div>
+
+            <!-- Gold rule -->
+            <div class="ps-hero__rule" aria-hidden="true"></div>
+
+            <!-- Title block -->
+            <div class="ps-hero__title-block">
+                <div class="ps-hero__icon-ring" aria-hidden="true">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                        stroke-linecap="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+
+                <h1 class="ps-hero__title">
+                    Passenger <span class="ps-hero__title-accent">Manifest</span>
+                </h1>
+
+                <!-- Flight summary pill -->
+                @if (currentBooking()) {
+                <div class="ps-flight-pill" [@fadeIn]>
+                    <span class="ps-flight-pill__pnr">
+                        {{ currentBooking()!.bookingReference }}
+                    </span>
+                    <span class="ps-flight-pill__sep" aria-hidden="true">·</span>
+                    <span class="ps-flight-pill__route">{{ flightRoute() }}</span>
+                    @if (departureTime()) {
+                    <span class="ps-flight-pill__sep" aria-hidden="true">·</span>
+                    <span class="ps-flight-pill__time">{{ departureTime() }}</span>
+                    }
+                </div>
+                }
+
+                <p class="ps-hero__subtitle">
+                    Select a traveller and generate their boarding pass to complete check-in.
+                </p>
+            </div>
+
+            <!-- Stepper — Step 2 active -->
+            <app-check-in-stepper [activeStep]="checkInStep()"></app-check-in-stepper>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN BODY
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="ps-body" role="main">
+        <div class="ps-layout">
+
+            <!-- ── LEFT: Passenger cards ─────────────────────────────── -->
+            <section class="ps-cards-col" aria-label="Passenger manifest">
+
+                <!-- Guard: no booking in store (direct URL hit) -->
+                @if (isMissingBooking()) {
+                <div class="ps-guard" [@fadeIn] role="alert">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <p>No active booking found. Please&nbsp;
+                        <button type="button" (click)="onBack()">retrieve your itinerary</button>
+                        &nbsp;first.
+                    </p>
+                </div>
+                }
+
+                <!-- Global generation error banner -->
+                @if (generationError()) {
+                <div class="ps-global-error" [@fadeIn] role="alert" aria-live="assertive">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                    <span>{{ generationError() }}</span>
+                </div>
+                }
+
+                <!-- Passenger card list -->
+                @if (!isMissingBooking() && passengers().length > 0) {
+                <div class="ps-card-list" [@listStagger]>
+                    @for (passenger of passengers(); track passenger.passengerId; let i = $index) {
+                    <div class="pax-card-host">
+                        <app-passenger-check-in-card [index]="i + 1"
+                            [fullName]="passenger.firstName + ' ' + passenger.lastName"
+                            [cabinClass]="passenger.cabinClassName ?? null"
+                            [seatNumber]="passenger.assignedSeatNumber ?? null"
+                            [passportNumber]="passenger.passportNumber ?? null"
+                            [isGenerating]="isGeneratingFor(passenger.passengerId)"
+                            [isCheckedIn]="isCheckedInFor(passenger.passengerId)"
+                            [errorMessage]="getErrorFor(passenger.passengerId)"
+                            (generatePass)="onGeneratePass(passenger)" (viewPass)="onViewPass(passenger.passengerId)">
+                        </app-passenger-check-in-card>
+                    </div>
+                    }
+                </div>
+                }
+
+                <!-- Empty passengers state (edge case: booking with 0 passengers) -->
+                @if (!isMissingBooking() && passengers().length === 0) {
+                <div class="ps-empty" [@fadeIn]>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                        aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                    </svg>
+                    <p>No passengers found for this booking. Please contact our concierge team.</p>
+                </div>
+                }
+
+            </section>
+
+            <!-- ── RIGHT: Booking summary sidebar ───────────────────── -->
+            <aside class="ps-sidebar" aria-label="Booking summary">
+
+                <!-- Progress summary card -->
+                @if (!isMissingBooking()) {
+                <div class="ps-summary-card" [@summaryReveal]>
+
+                    <div class="ps-summary-card__header">
+                        <span class="ps-summary-card__label">Check-in Progress</span>
+                        <span class="ps-summary-card__count"
+                            aria-label="{{ checkedInCount() }} of {{ passengers().length }} passengers checked in">
+                            {{ checkedInCount() }} / {{ passengers().length }}
+                        </span>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div class="ps-progress-track" role="progressbar" [attr.aria-valuenow]="checkedInCount()"
+                        [attr.aria-valuemax]="passengers().length" aria-label="Check-in progress">
+                        <div class="ps-progress-bar" [style.width.%]="passengers().length
+                                ? (checkedInCount() / passengers().length) * 100
+                                : 0">
+                        </div>
+                    </div>
+
+                    <!-- Passenger pill list -->
+                    <ul class="ps-pax-summary-list" aria-label="Passenger status list">
+                        @for (p of passengers(); track p.passengerId; let i = $index) {
+                        <li class="ps-pax-pill" [class.ps-pax-pill--done]="isCheckedInFor(p.passengerId)"
+                            [class.ps-pax-pill--loading]="isGeneratingFor(p.passengerId)">
+
+                            <span class="ps-pax-pill__dot" aria-hidden="true"></span>
+
+                            <span class="ps-pax-pill__name">
+                                {{ p.firstName }} {{ p.lastName }}
+                            </span>
+
+                            @if (isCheckedInFor(p.passengerId)) {
+                            <svg class="ps-pax-pill__check" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" aria-label="Checked in">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            }
+                        </li>
+                        }
+                    </ul>
+
+                    <!-- All done celebration -->
+                    @if (allPassengersChecked()) {
+                    <div class="ps-all-done" [@fadeIn] role="status">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" aria-hidden="true">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                        All passengers checked in. Your boarding passes are ready.
+                    </div>
+                    }
+
+                </div>
+                }
+
+                <!-- Booking info card -->
+                @if (currentBooking()) {
+                <div class="ps-info-card" [@fadeIn]>
+                    <div class="ps-info-row">
+                        <span class="ps-info-label">Flight</span>
+                        <span class="ps-info-val">{{ currentBooking()!.flightNumber }}</span>
+                    </div>
+                    <div class="ps-info-row">
+                        <span class="ps-info-label">Route</span>
+                        <span class="ps-info-val">{{ flightRoute() }}</span>
+                    </div>
+                    <div class="ps-info-row">
+                        <span class="ps-info-label">Departure</span>
+                        <span class="ps-info-val">{{ departureTime() }}</span>
+                    </div>
+                    <div class="ps-info-row">
+                        <span class="ps-info-label">Reference</span>
+                        <span class="ps-info-val ps-info-val--pnr">
+                            {{ currentBooking()!.bookingReference }}
+                        </span>
+                    </div>
+                    <div class="ps-info-row">
+                        <span class="ps-info-label">Airline</span>
+                        <span class="ps-info-val">{{ currentBooking()!.airlineName }}</span>
+                    </div>
+                </div>
+                }
+
+            </aside>
+
+        </div>
+    </main>
+
+</div>

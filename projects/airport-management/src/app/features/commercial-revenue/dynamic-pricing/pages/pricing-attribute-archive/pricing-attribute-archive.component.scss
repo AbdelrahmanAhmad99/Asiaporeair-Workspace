@@ -1,0 +1,400 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ── Page Shell ────────────────────────────────────────────────────────────
+ .paa-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ── Sticky Header ─────────────────────────────────────────────────────────
+ .paa-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base, box-shadow $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+         flex-wrap: wrap;
+         justify-content: flex-end;
+     }
+ }
+
+ .paa-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .paa-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     flex-wrap: wrap;
+ }
+
+ .paa-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary);
+     transition: color $t;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .paa-kpi-badge {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.125rem 0.625rem;
+     border-radius: 100px;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     letter-spacing: 0.03em;
+     color: var(--aoms-text-muted);
+     background: rgba($midnight, 0.05);
+     border: 1px solid rgba($champagne, 0.12);
+     animation: paa-fadein 200ms ease forwards;
+ }
+
+ .paa-success-toast {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.375rem 0.875rem;
+     border-radius: 6px;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: $emerald;
+     background: rgba($emerald, 0.08);
+     border: 1px solid rgba($emerald, 0.2);
+     animation: paa-fadein 200ms ease forwards;
+     white-space: nowrap;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── CTA Button (Royal Gold) ───────────────────────────────────────────────
+ .paa-cta-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0 0.875rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: none;
+     background: $gold;
+     color: $midnight;
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     font-weight: 700;
+     letter-spacing: 0.03em;
+     cursor: pointer;
+     box-shadow: 0 4px 14px rgba($gold, 0.38);
+     transition: all $t;
+     white-space: nowrap;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:hover {
+         background: lighten($gold, 6%);
+         box-shadow: 0 6px 20px rgba($gold, 0.55);
+         transform: translateY(-1px);
+     }
+
+     &:active {
+         transform: translateY(0);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── Return to Manager (Champagne Gold outline) ────────────────────────────
+ .paa-nav-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0 0.875rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.3);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.02em;
+     cursor: pointer;
+     transition: all $t;
+     white-space: nowrap;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         transition: transform $t;
+     }
+
+     &:hover {
+         border-color: $champagne;
+         color: $champagne;
+         background: rgba($champagne, 0.06);
+         box-shadow: 0 0 12px rgba($champagne, 0.12);
+
+         svg {
+             transform: translateX(-2px);
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── Icon Buttons ──────────────────────────────────────────────────────────
+ .paa-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: paa-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── Page Body ─────────────────────────────────────────────────────────────
+ .paa-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ // ── Error Banner ──────────────────────────────────────────────────────────
+ .paa-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.08);
+     border: 1px solid rgba($ruby, 0.22);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 25%);
+     animation: paa-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+
+     span {
+         flex: 1;
+         line-height: 1.4;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         border-radius: 4px;
+         border: none;
+         background: transparent;
+         color: rgba(255, 255, 255, 0.38);
+         cursor: pointer;
+         transition: all $t;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             background: rgba($ruby, 0.12);
+             color: rgba(255, 255, 255, 0.7);
+         }
+     }
+ }
+
+ // ── Modal Backdrop ────────────────────────────────────────────────────────
+ .paa-modal-bd {
+     position: fixed;
+     inset: 0;
+     z-index: 49;
+     background: rgba($midnight, 0.72);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+     animation: paa-fade 200ms ease forwards;
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes paa-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes paa-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes paa-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .paa-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .paa-nav-btn:hover {
+         color: $champagne;
+     }
+
+     .paa-error-banner {
+         background: rgba($ruby, 0.14);
+         border-color: rgba($ruby, 0.3);
+         color: #fca5a5;
+     }
+ }

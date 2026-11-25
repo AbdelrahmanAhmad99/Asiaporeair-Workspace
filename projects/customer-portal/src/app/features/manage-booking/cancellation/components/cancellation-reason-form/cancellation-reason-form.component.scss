@@ -1,0 +1,220 @@
+// cancellation-reason-form.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$charcoal: #101056;
+$white: #FFFFFF;
+$error: #d95f5f;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$t: 240ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.reason-form-card {
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.09);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba($midnight, 0.06);
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 1.125rem 1.25rem;
+    border-bottom: 1px solid rgba($charcoal, 0.07);
+    background: rgba($charcoal, 0.02);
+}
+
+.card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    background: rgba($charcoal, 0.05);
+    border: 1px solid rgba($charcoal, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+}
+
+.card-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: -0.02em;
+    margin: 0 0 2px;
+    line-height: 1.3;
+}
+
+.card-sub {
+    font-size: 0.62rem;
+    color: $text-muted;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.form-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: $text-sec;
+}
+
+.field-optional {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    font-style: italic;
+    color: $text-muted;
+}
+
+// ── Preset chips ──────────────────────────────────────────────────────────────
+.preset-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.preset-chip {
+    display: inline-flex;
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid rgba($charcoal, 0.15);
+    border-radius: 100px;
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: $text-sec;
+    cursor: pointer;
+    transition: all $t;
+    white-space: nowrap;
+
+    &:hover:not(:disabled) {
+        border-color: $royal-gold;
+        color: $charcoal;
+        background: rgba($royal-gold, 0.05);
+    }
+
+    &--active {
+        background: $midnight;
+        border-color: rgba($champagne, 0.3);
+        color: $champagne;
+        font-weight: 600;
+    }
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── Textarea ──────────────────────────────────────────────────────────────────
+.textarea-wrap {
+    position: relative;
+    border: 1.5px solid rgba($charcoal, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color $t;
+
+    &:focus-within {
+        border-color: $royal-gold;
+    }
+
+    &--error {
+        border-color: $error;
+
+        &:focus-within {
+            border-color: $error;
+        }
+    }
+}
+
+.reason-textarea {
+    width: 100%;
+    padding: 12px;
+    resize: vertical;
+    min-height: 100px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: $font;
+    font-size: 0.8rem;
+    color: $charcoal;
+    line-height: 1.55;
+
+    &::placeholder {
+        color: rgba($charcoal, 0.3);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.textarea-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 12px 8px;
+    background: rgba($charcoal, 0.02);
+    border-top: 1px solid rgba($charcoal, 0.06);
+}
+
+.field-error {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: lighten($error, 10%);
+}
+
+.spacer {
+    flex: 1;
+}
+
+.char-count {
+    font-size: 0.6rem;
+    color: $text-muted;
+}
+
+// ── Min hint ──────────────────────────────────────────────────────────────────
+// .min-hint-row {}
+
+.min-hint {
+    font-size: 0.65rem;
+    color: darken($royal-gold, 5%);
+    font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .preset-chip {
+        transition: none !important;
+    }
+
+    .textarea-wrap {
+        transition: none !important;
+    }
+}

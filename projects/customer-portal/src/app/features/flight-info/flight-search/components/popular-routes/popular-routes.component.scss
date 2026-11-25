@@ -1,0 +1,407 @@
+// ============================================================================
+// popular-routes.component.scss
+// Asiaporeair | Premium Route Grid
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 280ms $ease;
+
+:host {
+    display: block;
+}
+
+// ── §1 Section ────────────────────────────────────────────────────────────────
+.pr-section {
+    padding: 0;
+}
+
+// ── §2 Header ─────────────────────────────────────────────────────────────────
+.pr-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    &__left {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: $font;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba($royal-gold, 0.7);
+    }
+
+    &__eyebrow-line {
+        flex: 0 0 28px;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($royal-gold, 0.4));
+
+        &:last-child {
+            background: linear-gradient(to left, transparent, rgba($royal-gold, 0.4));
+        }
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 300;
+        letter-spacing: -0.03em;
+        color: $charcoal;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    &__title-accent {
+        font-weight: 700;
+        color: $midnight;
+    }
+
+    &__sub {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.6;
+        max-width: 440px;
+    }
+}
+
+// ── §3 Grid ───────────────────────────────────────────────────────────────────
+.pr-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+
+    @media (max-width: 1100px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 580px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── §4 Route Card ─────────────────────────────────────────────────────────────
+.pr-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 1px solid rgba($royal-gold, 0.12);
+    box-shadow: 0 4px 16px rgba($midnight, 0.12);
+    transition: transform $t, box-shadow $t, border-color $t;
+    animation: cardFadeUp 500ms $ease both;
+
+    &:hover {
+        transform: translateY(-5px) scale(1.01);
+        box-shadow:
+            0 16px 40px rgba($midnight, 0.2),
+            0 0 0 1px rgba($royal-gold, 0.25);
+        border-color: rgba($royal-gold, 0.3);
+
+        .pr-card__cta {
+            background: $royal-gold;
+            color: $midnight;
+            border-color: $royal-gold;
+        }
+
+        .pr-card__stripe {
+            width: 100%;
+        }
+
+        .pr-card__arc-line {
+            background: linear-gradient(to right, transparent, rgba($champagne, 0.8));
+        }
+    }
+
+    &:focus-within {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+@keyframes cardFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── §5 Card layers ────────────────────────────────────────────────────────────
+.pr-card__bg {
+    position: absolute;
+    inset: 0;
+    background-color: $midnight; // Fallback
+    background-image: var(--card-gradient, linear-gradient(160deg, #051937, #0a3060));
+    background-size: cover;
+    background-position: center;
+    transition: transform 800ms $ease;
+
+    .pr-card:hover & {
+        transform: scale(1.1);
+    }
+}
+
+.pr-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+            rgba($midnight, 0.95) 0%,
+            rgba($midnight, 0.4) 40%,
+            transparent 100%);
+    pointer-events: none;
+}
+
+.pr-card__stripe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 40%;
+    background: linear-gradient(to right, $royal-gold, $champagne);
+    transition: width 400ms $ease;
+    border-radius: 0 0 2px 0;
+}
+
+// ── §6 Card body ──────────────────────────────────────────────────────────────
+.pr-card__body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.375rem 1.25rem 1.25rem;
+    flex: 1;
+    gap: 0.875rem;
+}
+
+// ── §7 Route display ──────────────────────────────────────────────────────────
+.pr-card__route {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pr-card__iata {
+    font-family: $font;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: $white;
+    line-height: 1;
+    text-shadow: 0 1px 4px rgba($midnight, 0.5);
+}
+
+.pr-card__arc {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.pr-card__arc-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba($champagne, 0.5));
+    transition: background $t;
+
+    &:last-child {
+        background: linear-gradient(to left, transparent, rgba($champagne, 0.5));
+    }
+}
+
+// ── §8 Destination ────────────────────────────────────────────────────────────
+.pr-card__destination {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pr-card__city {
+    font-family: $font;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: $white;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.pr-card__country {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.67rem;
+    color: rgba($champagne, 0.6);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+// ── §9 Footer ─────────────────────────────────────────────────────────────────
+.pr-card__footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pr-card__price-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pr-card__price-label {
+    font-family: $font;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba($champagne, 0.5);
+}
+
+.pr-card__price {
+    font-family: $font;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $champagne;
+    letter-spacing: -0.01em;
+    line-height: 1;
+}
+
+.pr-card__cabin {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.58rem;
+    color: rgba($champagne, 0.5);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+// ── §10 CTA button ────────────────────────────────────────────────────────────
+.pr-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.45rem 0.875rem;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($champagne, 0.35);
+    font-family: $font;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: background $t, color $t, border-color $t, box-shadow $t;
+    white-space: nowrap;
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+// ── §11 Skeleton ──────────────────────────────────────────────────────────────
+@keyframes shimmer {
+    0% {
+        background-position: -300% center;
+    }
+
+    100% {
+        background-position: 300% center;
+    }
+}
+
+%shimmer {
+    background: linear-gradient(90deg,
+            rgba($royal-gold, 0.05) 0%,
+            rgba($champagne, 0.15) 50%,
+            rgba($royal-gold, 0.05) 100%);
+    background-size: 300% 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.pr-skeleton {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba($charcoal, 0.08);
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pr-skel {
+    @extend %shimmer;
+
+    &--img {
+        flex: 1;
+        border-radius: 0;
+    }
+
+    &--iata {
+        height: 20px;
+        width: 60%;
+        margin: 0.75rem 1.25rem 0;
+    }
+
+    &--title {
+        height: 14px;
+        width: 80%;
+        margin: 0.5rem 1.25rem;
+    }
+
+    &--price {
+        height: 12px;
+        width: 45%;
+        margin: 0 1.25rem 1.25rem;
+    }
+}
+
+.pr-skel-body {
+    background: rgba($charcoal, 0.04);
+    display: flex;
+    flex-direction: column;
+}
+
+// ── §12 Reduced motion ────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+    .pr-card {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .pr-skel {
+        animation: none !important;
+    }
+}

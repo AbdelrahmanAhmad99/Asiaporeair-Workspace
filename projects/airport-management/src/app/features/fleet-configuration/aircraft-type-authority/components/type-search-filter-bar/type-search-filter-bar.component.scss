@@ -1,0 +1,357 @@
+ // ----------------------------------------------------------------------------
+ // 1. Control Bar Container
+ // ----------------------------------------------------------------------------
+ .ctrl-bar {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+     padding: 1rem 1.25rem;
+     border-radius: 12px;
+     background-color: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     box-shadow: 0 4px 20px rgba(5, 25, 55, 0.06);
+     transition:
+         background-color var(--aoms-transition-base),
+         border-color var(--aoms-transition-base),
+         box-shadow var(--aoms-transition-base);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Main Row (Search + Manufacturer + CTA)
+ // ----------------------------------------------------------------------------
+ .ctrl-bar__main-row {
+     display: flex;
+     flex-direction: column;
+     align-items: stretch;
+     gap: 0.75rem;
+
+     @media (min-width: 768px) {
+         flex-direction: row;
+         align-items: center;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Search Input
+ // ----------------------------------------------------------------------------
+ .ctrl-bar__search {
+     position: relative;
+     flex: 1;
+     min-width: 0;
+
+     &__icon {
+         position: absolute;
+         left: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         pointer-events: none;
+         color: var(--aoms-text-muted);
+         width: 1rem;
+         height: 1rem;
+         transition: color var(--aoms-transition-fast);
+     }
+
+     &__input {
+         width: 100%;
+         padding: 0.625rem 1rem 0.625rem 2.25rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-primary);
+         background: transparent;
+         border: 1px solid rgba(226, 199, 128, 0.25);
+         border-radius: 4px;
+         outline: none;
+         transition:
+             border-color var(--aoms-transition-fast),
+             box-shadow var(--aoms-transition-fast),
+             color var(--aoms-transition-fast);
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+         }
+
+         &:focus {
+             border-color: transparent;
+             box-shadow: 0 0 0 2px var(--aoms-champagne);
+         }
+     }
+
+     &:focus-within .ctrl-bar__search__icon {
+         color: var(--aoms-champagne);
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Manufacturer Dropdown
+ // ----------------------------------------------------------------------------
+ .ctrl-bar__manufacturer {
+     position: relative;
+     flex-shrink: 0;
+
+     &__icon {
+         position: absolute;
+         left: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         pointer-events: none;
+         color: var(--aoms-text-muted);
+         width: 0.875rem;
+         height: 0.875rem;
+         transition: color var(--aoms-transition-fast);
+     }
+
+     &__select {
+         appearance: none;
+         -webkit-appearance: none;
+         padding: 0.625rem 2.25rem 0.625rem 2.25rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         color: var(--aoms-text-primary);
+         background-color: var(--aoms-bg-card);
+         border: 1px solid rgba(226, 199, 128, 0.25);
+         border-radius: 4px;
+         min-width: 200px;
+         cursor: pointer;
+         outline: none;
+         transition:
+             border-color var(--aoms-transition-fast),
+             box-shadow var(--aoms-transition-fast),
+             background-color var(--aoms-transition-fast),
+             color var(--aoms-transition-fast);
+
+         &:focus {
+             border-color: transparent;
+             box-shadow: 0 0 0 2px var(--aoms-champagne);
+         }
+
+         option {
+             background-color: var(--aoms-bg-card);
+             color: var(--aoms-text-primary);
+         }
+     }
+
+     &__chevron {
+         position: absolute;
+         right: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         pointer-events: none;
+         color: var(--aoms-text-muted);
+         width: 0.875rem;
+         height: 0.875rem;
+         transition: color var(--aoms-transition-fast);
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Vertical Divider
+ // ----------------------------------------------------------------------------
+ .ctrl-bar__divider {
+     display: none;
+     width: 1px;
+     height: 2rem;
+     background: rgba(226, 199, 128, 0.2);
+     flex-shrink: 0;
+
+     @media (min-width: 768px) {
+         display: block;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. Reset Button
+ // ----------------------------------------------------------------------------
+ .ctrl-bar__reset-btn {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.625rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-secondary);
+     background: transparent;
+     border: 1px solid rgba(226, 199, 128, 0.25);
+     border-radius: 4px;
+     flex-shrink: 0;
+     cursor: pointer;
+     outline: none;
+     transition: all var(--aoms-transition-fast);
+
+     &:hover {
+         color: var(--aoms-text-primary);
+         border-color: var(--aoms-champagne);
+         background: rgba(226, 199, 128, 0.08);
+     }
+
+     &:focus-visible {
+         outline: 2px solid var(--aoms-champagne);
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 7. Add Aircraft Type CTA Button (Royal Gold Gradient)
+ // ----------------------------------------------------------------------------
+ .ctrl-bar__add-btn {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.625rem 1.25rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: #ffffff;
+     background: linear-gradient(135deg, var(--aoms-gold) 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     flex-shrink: 0;
+     cursor: pointer;
+     outline: none;
+     box-shadow: 0 4px 14px rgba(182, 143, 36, 0.38);
+     transition: all var(--aoms-transition-fast);
+     white-space: nowrap;
+
+     &:hover {
+         background: linear-gradient(135deg, #c8a030 0%, var(--aoms-gold) 100%);
+         box-shadow: 0 6px 18px rgba(182, 143, 36, 0.48);
+         transform: translateY(-1px);
+     }
+
+     &:active {
+         background: #a07820;
+         box-shadow: 0 2px 8px rgba(182, 143, 36, 0.3);
+         transform: translateY(0);
+     }
+
+     &:focus-visible {
+         outline: 2px solid var(--aoms-champagne);
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 8. Range Suitability Row
+ // ----------------------------------------------------------------------------
+ .ctrl-bar__range-row {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-start;
+     gap: 0.625rem;
+     padding-top: 0.625rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.12);
+
+     @media (min-width: 640px) {
+         flex-direction: row;
+         align-items: center;
+     }
+ }
+
+ .ctrl-bar__range-label {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-muted);
+     white-space: nowrap;
+     flex-shrink: 0;
+     transition: color var(--aoms-transition-fast);
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-gold);
+         flex-shrink: 0;
+     }
+ }
+
+ .ctrl-bar__range-toggles {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.5rem;
+ }
+
+ // Range Preset Pills
+ .ctrl-bar__range-pill {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.3125rem 0.875rem;
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-secondary);
+     background: transparent;
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     border-radius: 100px; // Full pill
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     transition: all var(--aoms-transition-fast);
+
+     &:hover {
+         border-color: var(--aoms-champagne);
+         color: var(--aoms-text-primary);
+         background: rgba(226, 199, 128, 0.08);
+     }
+
+     &:focus-visible {
+         outline: 2px solid var(--aoms-champagne);
+         outline-offset: 2px;
+     }
+
+     // Active state
+     &--active {
+         background: rgba(182, 143, 36, 0.12);
+         border-color: var(--aoms-gold);
+         color: var(--aoms-midnight);
+         font-weight: 600;
+
+         &:hover {
+             background: rgba(182, 143, 36, 0.18);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 9. Dark Mode Overrides (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .ctrl-bar {
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+     }
+
+     .ctrl-bar__search__input,
+     .ctrl-bar__manufacturer__select {
+         border-color: rgba(226, 199, 128, 0.18);
+     }
+
+     .ctrl-bar__range-pill--active {
+         color: var(--aoms-champagne);
+     }
+
+     .ctrl-bar__add-btn {
+         box-shadow: 0 4px 14px rgba(182, 143, 36, 0.25);
+
+         &:hover {
+             box-shadow: 0 6px 18px rgba(182, 143, 36, 0.35);
+         }
+     }
+ }

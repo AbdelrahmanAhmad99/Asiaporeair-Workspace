@@ -1,0 +1,468 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Panel Shell ────────────────────────────────────────────────────────
+ .tfp-panel {
+     display: flex;
+     flex-direction: column;
+     height: 100%;
+     padding: 1rem 0 1.25rem;
+     transition: opacity $t-base;
+
+     &--loading {
+         opacity: 0.72;
+         pointer-events: none;
+     }
+ }
+
+ // ── 2. Sections ───────────────────────────────────────────────────────────
+ .tfp-section {
+     padding: 0 1.25rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+
+     &--quick {
+         padding-bottom: 0.125rem;
+     }
+
+     &__title {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-size: 9.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.09em;
+         color: var(--aoms-text-muted);
+         margin-bottom: 0.125rem;
+     }
+
+     &__icon {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .tfp-divider {
+     height: 1px;
+     background: rgba($champagne, 0.09);
+     margin: 0.75rem 1.25rem;
+     flex-shrink: 0;
+ }
+
+ // ── 3. Quick Lookup ───────────────────────────────────────────────────────
+ .tfp-quick-wrap {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+ }
+
+ .tfp-quick-input {
+     flex: 1;
+     height: 2.125rem;
+     padding: 0 0.75rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: rgba($midnight, 0.025);
+     font-family: 'Courier New', monospace;
+     font-size: 0.8125rem;
+     font-weight: 600;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-primary, $charcoal);
+     outline: none;
+     transition: border-color $t-fast, box-shadow $t-fast;
+     // -webkit-appearance: none;
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+         opacity: 0.55;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         letter-spacing: 0;
+     }
+
+     &:hover:not(:disabled) {
+         border-color: rgba($champagne, 0.45);
+     }
+
+     &:focus:not(:disabled) {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.13);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+ }
+
+ .tfp-quick-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: none;
+     background: $gold;
+     color: $midnight;
+     cursor: pointer;
+     flex-shrink: 0;
+     box-shadow: 0 3px 10px rgba($gold, 0.35);
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+
+     &:hover:not(:disabled) {
+         background: lighten($gold, 6%);
+         box-shadow: 0 4px 14px rgba($gold, 0.5);
+         transform: translateY(-1px);
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+         transform: none;
+         box-shadow: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── 4. Filter Fields ──────────────────────────────────────────────────────
+ .tfp-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3125rem;
+
+     &__label {
+         font-size: 9.5px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: var(--aoms-text-muted);
+         padding-left: 0.25rem;
+         transition: color $t-fast;
+     }
+
+     &__wrap {
+         position: relative;
+         display: flex;
+         align-items: center;
+
+         // &--select {}
+
+         &:focus-within .tfp-field__icon {
+             color: $gold;
+         }
+
+         &:focus-within .tfp-field__label {
+             color: $gold;
+         }
+     }
+
+     &__icon {
+         position: absolute;
+         left: 0.625rem;
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.7;
+         pointer-events: none;
+         flex-shrink: 0;
+         transition: color $t-fast;
+     }
+
+     &__caret {
+         position: absolute;
+         right: 0.625rem;
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+     }
+
+     &__input {
+         width: 100%;
+         height: 2.125rem;
+         padding: 0 0.75rem 0 2.125rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: rgba($midnight, 0.025);
+         font-family: var(--aoms-font-body);
+         font-size: 0.8125rem;
+         font-weight: 500;
+         color: var(--aoms-text-primary, $charcoal);
+         outline: none;
+         transition: border-color $t-fast, box-shadow $t-fast;
+         -webkit-appearance: none;
+         appearance: none;
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+             opacity: 0.55;
+         }
+
+         &:hover:not(:disabled) {
+             border-color: rgba($champagne, 0.4);
+             background: rgba($midnight, 0.035);
+         }
+
+         &:focus:not(:disabled) {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba($gold, 0.13);
+             background: rgba($gold, 0.02);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+
+         &--mono {
+             font-family: 'Courier New', monospace;
+             font-size: 0.875rem;
+             font-weight: 600;
+             letter-spacing: 0.04em;
+         }
+
+         &--date {
+             padding-left: 0.75rem;
+             cursor: pointer;
+             color-scheme: light;
+         }
+     }
+
+     &__select {
+         width: 100%;
+         height: 2.125rem;
+         padding: 0 2rem 0 2.125rem;
+         border-radius: 4px;
+         border: 1px solid rgba($champagne, 0.2);
+         background: rgba($midnight, 0.025);
+         font-family: var(--aoms-font-body);
+         font-size: 0.8125rem;
+         font-weight: 500;
+         color: var(--aoms-text-primary, $charcoal);
+         outline: none;
+         cursor: pointer;
+         -webkit-appearance: none;
+         appearance: none;
+         transition: border-color $t-fast, box-shadow $t-fast;
+
+         &:hover:not(:disabled) {
+             border-color: rgba($champagne, 0.4);
+         }
+
+         &:focus:not(:disabled) {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba($gold, 0.13);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+     }
+ }
+
+ // ── 5. Toggle Row ─────────────────────────────────────────────────────────
+ .tfp-toggle-row {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+ }
+
+ .tfp-toggle-info {
+     flex: 1;
+     min-width: 0;
+
+     &__label {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &__sub {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         margin-top: 0.0625rem;
+     }
+ }
+
+ .tfp-toggle {
+     position: relative;
+     width: 38px;
+     height: 22px;
+     border-radius: 100px;
+     border: 1.5px solid rgba($champagne, 0.25);
+     background: rgba($midnight, 0.08);
+     cursor: pointer;
+     flex-shrink: 0;
+     transition: all $t-base;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.4;
+         cursor: not-allowed;
+     }
+
+     &__thumb {
+         position: absolute;
+         top: 2px;
+         left: 2px;
+         width: 14px;
+         height: 14px;
+         border-radius: 50%;
+         background: rgba($champagne, 0.45);
+         transition: transform $t-base, background $t-base;
+     }
+
+     &--on {
+         background: rgba($gold, 0.15);
+         border-color: $gold;
+         box-shadow: 0 0 8px rgba($gold, 0.25);
+
+         .tfp-toggle__thumb {
+             transform: translateX(16px);
+             background: $gold;
+         }
+     }
+ }
+
+ // ── 6. Actions ────────────────────────────────────────────────────────────
+ .tfp-actions {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+     padding: 0.875rem 1.25rem 0;
+     margin-top: auto;
+     border-top: 1px solid rgba($champagne, 0.09);
+ }
+
+ .tfp-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.375rem;
+     width: 100%;
+     height: 2.125rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     cursor: pointer;
+     outline: none;
+     transition: all $t-fast;
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: tfp-spin 1s linear infinite;
+         }
+     }
+
+     // Search — Gold CTA (subtle glow)
+     &--search {
+         border: none;
+         background: $gold;
+         color: $midnight;
+         box-shadow: 0 4px 14px rgba($gold, 0.35);
+
+         &:hover:not(:disabled) {
+             background: lighten($gold, 6%);
+             box-shadow: 0 6px 18px rgba($gold, 0.5);
+             transform: translateY(-1px);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+             transform: none;
+             box-shadow: none;
+         }
+     }
+
+     // Clear — ghost
+     &--clear {
+         border: 1px solid rgba($champagne, 0.28);
+         background: transparent;
+         color: rgba($champagne, 0.7);
+
+         &:hover {
+             border-color: $champagne;
+             color: $gold;
+             background: rgba($champagne, 0.06);
+         }
+     }
+ }
+
+ // ── 7. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes tfp-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ── 8. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+
+     .tfp-quick-input,
+     .tfp-field__input,
+     .tfp-field__select {
+         background: rgba(255, 255, 255, 0.04);
+         color: rgba(255, 255, 255, 0.85);
+
+         &:hover:not(:disabled) {
+             background: rgba(255, 255, 255, 0.06);
+         }
+
+         &:focus:not(:disabled) {
+             background: rgba($gold, 0.05);
+         }
+     }
+
+     .tfp-toggle {
+         background: rgba(255, 255, 255, 0.05);
+     }
+
+     .tfp-field__input--date {
+         color-scheme: dark;
+     }
+ }

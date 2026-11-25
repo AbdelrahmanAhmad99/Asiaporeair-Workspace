@@ -1,0 +1,598 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 160ms ease;
+ $t-base: 240ms ease;
+
+ // ── Page Shell ────────────────────────────────────────────────────────────
+ .agc-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ── Sticky Header ─────────────────────────────────────────────────────────
+ .agc-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: var(--aoms-bg-card);
+     border-bottom: 1px solid rgba($champagne, 0.15);
+     box-shadow: 0 2px 12px rgba($midnight, 0.06);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     transition: background-color $t-base, box-shadow $t-base;
+
+     &__left {
+         display: flex;
+         flex-direction: column;
+         gap: 0.25rem;
+         flex: 1;
+     }
+
+     &__controls {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         margin-top: 0.25rem;
+         flex-wrap: wrap;
+         justify-content: flex-end;
+     }
+ }
+
+ .agc-breadcrumb {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+
+     &__section {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 400;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: var(--aoms-text-muted);
+     }
+
+     &__sep {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+
+     &__current {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: $gold;
+     }
+ }
+
+ .agc-title-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+ }
+
+ .agc-title {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1;
+     color: var(--aoms-text-primary);
+     transition: color $t;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+ }
+
+ .agc-total-badge {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-muted);
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     background: rgba($midnight, 0.05);
+     border: 1px solid rgba($champagne, 0.12);
+ }
+
+ .agc-success-toast {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.375rem 0.875rem;
+     border-radius: 6px;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: $emerald;
+     background: rgba($emerald, 0.08);
+     border: 1px solid rgba($emerald, 0.2);
+     animation: agc-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Search Bar ────────────────────────────────────────────────────────────
+ .agc-search-wrap {
+     position: relative;
+     flex-shrink: 0;
+
+     &__icon {
+         position: absolute;
+         left: 0.625rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $champagne;
+         pointer-events: none;
+     }
+ }
+
+ .agc-search-input {
+     height: 2.125rem;
+     width: 200px;
+     padding: 0 0.75rem 0 2rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: var(--aoms-bg-primary);
+     color: var(--aoms-text-primary);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 500;
+     outline: none;
+     transition: all $t;
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+         font-weight: 400;
+     }
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba($gold, 0.12);
+         width: 240px;
+     }
+ }
+
+ // ── CTA Button (Royal Gold glow) ──────────────────────────────────────────
+ .agc-cta-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0 1rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: none;
+     background: $gold;
+     color: $midnight;
+     font-family: var(--aoms-font-body);
+     font-size: 12px;
+     font-weight: 700;
+     letter-spacing: 0.03em;
+     cursor: pointer;
+     box-shadow: 0 4px 14px rgba($gold, 0.38);
+     transition: all $t;
+     white-space: nowrap;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &:hover {
+         background: lighten($gold, 6%);
+         box-shadow: 0 6px 20px rgba($gold, 0.55);
+         transform: translateY(-1px);
+     }
+
+     &:active {
+         transform: translateY(0);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── Icon Buttons ──────────────────────────────────────────────────────────
+ .agc-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: agc-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── Page Body ─────────────────────────────────────────────────────────────
+ .agc-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+     overflow-y: auto;
+ }
+
+ // ── Error Banner (Ruby Red Glassmorphism) ─────────────────────────────────
+ .agc-error-banner {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: rgba($ruby, 0.08);
+     border: 1px solid rgba($ruby, 0.22);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: lighten($ruby, 25%);
+     animation: agc-fadein 200ms ease forwards;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+     }
+
+     span {
+         flex: 1;
+         line-height: 1.4;
+     }
+
+     &__dismiss {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.5rem;
+         height: 1.5rem;
+         border-radius: 4px;
+         border: none;
+         background: transparent;
+         color: rgba(255, 255, 255, 0.38);
+         cursor: pointer;
+         transition: all $t;
+
+         svg {
+             width: 0.875rem;
+             height: 0.875rem;
+         }
+
+         &:hover {
+             background: rgba($ruby, 0.12);
+             color: rgba(255, 255, 255, 0.7);
+         }
+     }
+ }
+
+ // ── Record Count Label ────────────────────────────────────────────────────
+ .agc-record-label {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+     letter-spacing: 0.02em;
+     margin: -0.25rem 0 -0.5rem;
+ }
+
+ // ── Product Grid ──────────────────────────────────────────────────────────
+ .agc-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+     gap: 1.125rem;
+ }
+
+ // ── Skeleton Card (Gold Shimmer) ──────────────────────────────────────────
+ .agc-card-skeleton {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+     padding: 1.5rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.1);
+     background: var(--aoms-bg-card);
+     box-shadow: 0 4px 16px rgba($midnight, 0.05);
+ }
+
+ // Gold Shimmer skeleton elements
+ .agc-sk {
+     display: block;
+     border-radius: 6px;
+     background: linear-gradient(90deg,
+             rgba($midnight, 0.05) 0%,
+             rgba($gold, 0.12) 40%,
+             rgba($champagne, 0.18) 50%,
+             rgba($gold, 0.12) 60%,
+             rgba($midnight, 0.05) 100%);
+     background-size: 300% 100%;
+     animation: agc-gold-shimmer 1.8s ease-in-out infinite;
+
+     &--icon {
+         width: 3rem;
+         height: 3rem;
+         border-radius: 50%;
+     }
+
+     &--title {
+         width: 65%;
+         height: 18px;
+     }
+
+     &--badge {
+         width: 45%;
+         height: 14px;
+         border-radius: 100px;
+     }
+
+     &--price {
+         width: 35%;
+         height: 22px;
+     }
+
+     &--actions {
+         width: 100%;
+         height: 34px;
+         border-radius: 4px;
+         margin-top: 0.25rem;
+     }
+ }
+
+ // ── Empty State ───────────────────────────────────────────────────────────
+ .agc-empty {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 4rem 1rem;
+     text-align: center;
+
+     svg {
+         width: 3.5rem;
+         height: 3.5rem;
+         color: rgba($champagne, 0.2);
+         margin: 0 auto;
+         display: block;
+     }
+
+     h3 {
+         font-size: 1.125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: var(--aoms-text-secondary);
+         margin: 0;
+     }
+
+     p {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         margin: 0;
+         max-width: 380px;
+         line-height: 1.5;
+     }
+ }
+
+ .agc-reset-btn {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.5rem 1.25rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.28);
+     background: transparent;
+     color: $champagne;
+     font-family: var(--aoms-font-body);
+     font-size: 0.875rem;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all $t;
+     margin-top: 0.25rem;
+
+     &:hover {
+         background: rgba($champagne, 0.08);
+         border-color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── Pagination ────────────────────────────────────────────────────────────
+ .agc-pagination {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.25rem;
+     padding-top: 0.5rem;
+ }
+
+ .agc-page-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     min-width: 2rem;
+     height: 2rem;
+     padding: 0 0.375rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.18);
+     background: transparent;
+     color: var(--aoms-text-secondary);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all $t;
+
+     svg {
+         width: 1rem;
+         height: 1rem;
+     }
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         color: $gold;
+         background: rgba($champagne, 0.07);
+     }
+
+     &:disabled {
+         opacity: 0.3;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--active {
+         background: $midnight;
+         color: $champagne;
+         border-color: $midnight;
+
+         &:hover {
+             background: lighten($midnight, 6%);
+         }
+     }
+ }
+
+ // ── Modal Backdrop ────────────────────────────────────────────────────────
+ .agc-modal-bd {
+     position: fixed;
+     inset: 0;
+     z-index: 49;
+     background: rgba($midnight, 0.72);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+     animation: agc-fade 200ms ease forwards;
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes agc-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes agc-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes agc-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // Gold Shimmer — distinct from the standard champagne shimmer used in grids
+ @keyframes agc-gold-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .agc-header {
+         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+     }
+
+     .agc-search-input {
+         background: rgba(255, 255, 255, 0.04);
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .agc-error-banner {
+         background: rgba($ruby, 0.14);
+         border-color: rgba($ruby, 0.3);
+         color: #fca5a5;
+     }
+ }

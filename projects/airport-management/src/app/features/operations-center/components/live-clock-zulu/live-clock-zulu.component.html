@@ -1,0 +1,19 @@
+<div class="clock" role="timer" aria-label="Operations clock" aria-live="off">
+    <div class="clock__zulu">
+        <span class="clock__caption">Zulu</span>
+        <time class="clock__zulu-time" [attr.datetime]="zuluIso()">
+            {{ zuluDigits() }}<abbr class="clock__suffix" title="Coordinated Universal Time">Z</abbr>
+        </time>
+        <span class="clock__date">{{ zuluDate() }}</span>
+        <span class="clock__progress" aria-hidden="true">
+            <span class="clock__progress-bar" [class.is-reset]="isMinuteReset()"
+                [style.transform]="progressTransform()"></span>
+        </span>
+    </div>
+
+    <div class="clock__local">
+        <span class="clock__caption">{{ hubTimeZone().name }}</span>
+        <span class="clock__local-time">{{ localDigits() }}</span>
+        <span class="clock__date">{{ hubTimeZone().code }}, {{ offsetLabel() }}</span>
+    </div>
+</div>

@@ -1,0 +1,212 @@
+// price-breakdown-accordion.component.scss — Light Theme
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+$midnight  : #051937;
+$royal-gold: #B68F24;
+$champagne : #E2C780;
+$charcoal  : #101056;
+$white     : #FFFFFF;
+$font      : 'Inter', 'Montserrat', -apple-system, sans-serif;
+$ease      : cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $white;
+}
+
+.accordion-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0.875rem 1.25rem;
+    background: transparent;
+    border: none;
+    font-family: $font;
+    cursor: pointer;
+    transition: background 200ms $ease;
+
+    &:hover { background: rgba($midnight, 0.025); }
+    &--open { background: rgba($royal-gold, 0.04); }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: -2px;
+    }
+}
+
+.panel-left {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.panel-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.panel-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: $midnight;
+    letter-spacing: -0.01em;
+}
+
+svg.chevron {
+    color: rgba($midnight, 0.35);
+    transition: transform 280ms $ease;
+    flex-shrink: 0;
+
+    &.chevron--open {
+        transform: rotate(180deg);
+        color: $royal-gold;
+    }
+}
+
+.panel-amount {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: rgba($midnight, 0.75);
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+}
+
+.panel-divider {
+    height: 1px;
+    margin: 0 1.25rem;
+    background: linear-gradient(to right, transparent, rgba($royal-gold, 0.18), transparent);
+}
+
+.panel-body {
+    overflow: hidden;
+}
+
+.line-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0.625rem 1.5rem;
+    border-bottom: 1px solid rgba($midnight, 0.04);
+
+    &:last-child { border-bottom: none; }
+}
+
+.line-label {
+    font-size: 0.7rem;
+    color: rgba($midnight, 0.60);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.line-value {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba($midnight, 0.78);
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &--muted {
+        color: rgba($midnight, 0.35);
+        font-style: italic;
+    }
+}
+
+.tax-code {
+    font-size: 0.6rem;
+    color: rgba($midnight, 0.35);
+}
+
+.qty-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: rgba($royal-gold, 0.80);
+}
+
+.fare-chip {
+    padding: 1px 6px;
+    background: rgba($royal-gold, 0.07);
+    border: 1px solid rgba($royal-gold, 0.18);
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: darken($royal-gold, 5%);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+// Grand total footer — dark navy for visual anchor
+.grand-total {
+    background: $midnight;
+    border-top: 1px solid rgba($royal-gold, 0.30);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba($champagne, 0.45), transparent);
+    }
+}
+
+.grand-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+}
+
+.grand-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.grand-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba($white, 0.65);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.grand-note {
+    font-size: 0.55rem;
+    color: rgba($white, 0.32);
+}
+
+.grand-amount-group {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.grand-currency {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba($champagne, 0.72);
+    letter-spacing: 0.04em;
+    align-self: flex-start;
+    margin-top: 3px;
+}
+
+.grand-amount {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: $champagne;
+    letter-spacing: -0.04em;
+    line-height: 1;
+}

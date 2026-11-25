@@ -1,0 +1,133 @@
+:host {
+    display: block;
+}
+
+.stepper {
+    padding: 2rem 0 1.5rem;
+}
+
+.stepper__track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+}
+
+/* ── Step node ── */
+.stepper__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+.stepper__bubble {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(226, 199, 128, 0.25);
+    background: rgba(5, 25, 55, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.35);
+    transition: all 320ms cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.stepper__step--active .stepper__bubble {
+    border-color: #B68F24;
+    background: rgba(182, 143, 36, 0.12);
+    color: #E2C780;
+    box-shadow:
+        0 0 0 4px rgba(182, 143, 36, 0.08),
+        0 0 20px rgba(182, 143, 36, 0.25);
+}
+
+.stepper__step--completed .stepper__bubble {
+    border-color: rgba(182, 143, 36, 0.5);
+    background: rgba(182, 143, 36, 0.08);
+    color: #B68F24;
+}
+
+.stepper__num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ── Labels ── */
+.stepper__labels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-align: center;
+}
+
+.stepper__label {
+    font-family: 'Montserrat', 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.28);
+    transition: color 320ms;
+    white-space: nowrap;
+}
+
+.stepper__sublabel {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.03em;
+    color: rgba(255, 255, 255, 0.18);
+    transition: color 320ms;
+    white-space: nowrap;
+}
+
+.stepper__step--active .stepper__label {
+    color: #E2C780;
+}
+
+.stepper__step--active .stepper__sublabel {
+    color: rgba(226, 199, 128, 0.6);
+}
+
+.stepper__step--completed .stepper__label {
+    color: rgba(226, 199, 128, 0.55);
+}
+
+/* ── Connector ── */
+.stepper__connector {
+    flex: 1;
+    list-style: none;
+    padding: 0 0.5rem;
+    margin-bottom: 2.2rem;
+    /* aligns with bubble center */
+}
+
+.stepper__line {
+    height: 1px;
+    background: rgba(226, 199, 128, 0.12);
+    transition: background 400ms;
+    min-width: 40px;
+}
+
+.stepper__connector--filled .stepper__line {
+    background: linear-gradient(90deg, rgba(182, 143, 36, 0.5), rgba(182, 143, 36, 0.2));
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    .stepper__sublabel {
+        display: none;
+    }
+
+    .stepper__connector {
+        padding: 0 0.25rem;
+    }
+}

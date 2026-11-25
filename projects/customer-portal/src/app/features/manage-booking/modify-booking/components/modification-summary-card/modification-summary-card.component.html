@@ -1,0 +1,83 @@
+<!-- modification-summary-card.component.html -->
+
+<div class="summary-card" role="complementary" aria-label="Flight booking summary">
+
+    <!-- Booking Ref -->
+    <div class="summary-pnr" aria-label="Booking reference: {{ detail.bookingReference }}">
+        <span class="pnr-label">Booking Ref</span>
+        <span class="pnr-value">{{ detail.bookingReference }}</span>
+    </div>
+
+    <div class="gold-rule" aria-hidden="true"></div>
+
+    <!-- Flight Info -->
+    <div class="flight-summary">
+        <div class="flight-number">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path
+                    d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            {{ detail.flightNumber }}
+        </div>
+
+        <div class="route-strip">
+            <div class="route-endpoint">
+                <span class="route-iata">{{ detail.originAirportCode }}</span>
+                <span class="route-city">{{ detail.originAirportName }}</span>
+            </div>
+            <div class="route-arrow" aria-hidden="true">→</div>
+            <div class="route-endpoint route-endpoint--right">
+                <span class="route-iata">{{ detail.destinationAirportCode }}</span>
+                <span class="route-city">{{ detail.destinationAirportName }}</span>
+            </div>
+        </div>
+
+        <div class="dep-row">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span class="dep-date">{{ depDate }}</span>
+            <span class="dep-sep" aria-hidden="true">·</span>
+            <span class="dep-time">{{ depTime }}</span>
+        </div>
+    </div>
+
+    <div class="gold-rule" aria-hidden="true"></div>
+
+    <!-- Passenger Progress -->
+    <div class="pax-progress" aria-label="Passenger update progress: {{ savedCount }} of {{ totalCount }} saved">
+        <div class="progress-label">
+            <span>Passengers Updated</span>
+            <span class="progress-fraction">{{ savedCount }}/{{ totalCount }}</span>
+        </div>
+        <div class="progress-bar-track" role="progressbar" [attr.aria-valuenow]="savedCount" [attr.aria-valuemin]="0"
+            [attr.aria-valuemax]="totalCount">
+            <div class="progress-bar-fill" [style.width.%]="totalCount ? (savedCount / totalCount) * 100 : 0">
+            </div>
+        </div>
+
+        <div *ngFor="let draft of drafts" class="pax-progress-row">
+            <span class="pax-progress-name">{{ draft.firstName }} {{ draft.lastName }}</span>
+            <span *ngIf="draft.savedAt" class="pax-status-saved" aria-label="Saved">✓</span>
+            <span *ngIf="draft.isDirty && !draft.savedAt" class="pax-status-dirty" aria-label="Unsaved changes">●</span>
+            <span *ngIf="!draft.isDirty && !draft.savedAt" class="pax-status-idle" aria-label="No changes">—</span>
+        </div>
+    </div>
+
+    <!-- Unsaved warning -->
+    <div *ngIf="hasUnsaved && dirtyCount > 0" class="unsaved-warning" role="note">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+        {{ dirtyCount }} passenger{{ dirtyCount > 1 ? 's have' : ' has' }} unsaved changes.
+    </div>
+
+</div>

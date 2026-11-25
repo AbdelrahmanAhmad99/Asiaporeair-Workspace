@@ -1,0 +1,171 @@
+<div class="aaa-page">
+
+    <!-- ══ Sticky Command Header ═════════════════════════════════════ -->
+    <header class="aaa-header">
+
+        <!-- Left: back + breadcrumb + title -->
+        <div class="aaa-header-left">
+            <button class="aaa-back-btn" (click)="returnToOperations()"
+                aria-label="Return to Airport Operations Dashboard" title="Return to Operations">
+                <svg class="aaa-back-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+            <div>
+                <nav class="aaa-breadcrumb" aria-label="Breadcrumb">
+                    <span class="aaa-breadcrumb__section">Network &amp; Infrastructure</span>
+                    <svg class="aaa-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <button class="aaa-breadcrumb__link" (click)="returnToOperations()">Airport Hub</button>
+                    <svg class="aaa-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="aaa-breadcrumb__current">Archive &amp; Audit</span>
+                </nav>
+                <h1 class="aaa-title">Network Audit Registry</h1>
+            </div>
+        </div>
+
+        <!-- Right: counters + actions -->
+        <div class="aaa-header-right">
+            <!-- Metric pills -->
+            <div class="aaa-stats">
+                <span class="aaa-stat aaa-stat--total">
+                    <strong>{{ totalCount() }}</strong> total
+                </span>
+                <span class="aaa-stat aaa-stat--deactivated">
+                    <strong>{{ deactivatedCount() }}</strong> deactivated
+                </span>
+            </div>
+
+            <!-- Refresh -->
+            <button class="aaa-icon-btn" (click)="refresh()" [disabled]="loading()" aria-label="Refresh audit log"
+                title="Refresh">
+                <svg class="aaa-icon-btn__icon" [class.aaa-icon-btn__icon--spin]="loading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Return to Operations (primary) -->
+            <button class="aaa-return-btn" (click)="returnToOperations()"
+                aria-label="Return to live operations dashboard">
+                <svg class="aaa-return-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                   0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+                Return to Operations
+            </button>
+        </div>
+
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <main class="aaa-body">
+
+        <!-- ── Audit error banner ────────────────────────────────────── -->
+        @if (auditError()) {
+        <div class="aaa-error-banner" role="alert">
+            <svg class="aaa-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                   0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                   0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            {{ auditError() }}
+        </div>
+        }
+
+        <!-- ── Controls Bar: filter toggle + search ──────────────────── -->
+        <div class="aaa-controls">
+
+            <!-- Filter Toggle Group -->
+            <div class="aaa-filter-group" role="group" aria-label="Audit view filter">
+                @for (opt of filterOptions; track opt.value) {
+                <button class="aaa-filter-btn" type="button"
+                    [class.aaa-filter-btn--active]="currentFilter() === opt.value" (click)="setFilter(opt.value)"
+                    [attr.aria-pressed]="currentFilter() === opt.value" [attr.aria-label]="'Filter: ' + opt.label">
+                    <svg class="aaa-filter-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="opt.icon" />
+                    </svg>
+                    {{ opt.label }}
+                </button>
+                }
+            </div>
+
+            <!-- Search within Audit -->
+            <div class="aaa-search">
+                <div class="aaa-search__icon-wrap" aria-hidden="true">
+                    <svg class="aaa-search__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0
+                     0 10.607 10.607z" />
+                    </svg>
+                </div>
+                <input class="aaa-search__input" type="text" [value]="searchQuery()" (input)="onSearchInput($event)"
+                    placeholder="Search IATA, ICAO, Name, City…" aria-label="Search within audit registry"
+                    autocomplete="off">
+                @if (searchQuery()) {
+                <button class="aaa-search__clear" type="button" (click)="clearSearch()" aria-label="Clear search">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                }
+            </div>
+
+        </div>
+
+        <!-- ── Audit Registry Table ───────────────────────────────────── -->
+        <aoms-archived-airport-list [records]="records()" [loading]="loading()" [restoringCode]="restoringCode()"
+            [activeSet]="activeSet()" (restore)="onRestore($event)" />
+
+    </main>
+
+    <!-- ══ Toast Notification Stack ═══════════════════════════════════ -->
+    <div class="aaa-toast-stack" role="region" aria-label="Notifications" aria-live="polite">
+        @for (toast of toastQueue(); track toast.id) {
+        <div class="aaa-toast" [class.aaa-toast--success]="toast.type === 'success'"
+            [class.aaa-toast--error]="toast.type === 'error'" [class.aaa-toast--info]="toast.type === 'info'"
+            role="status">
+
+            <!-- Icon -->
+            <div class="aaa-toast__icon-wrap" aria-hidden="true">
+                @if (toast.type === 'success') {
+                <svg class="aaa-toast__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                } @else if (toast.type === 'error') {
+                <svg class="aaa-toast__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                }
+            </div>
+
+            <!-- Message -->
+            <p class="aaa-toast__msg">{{ toast.message }}</p>
+
+            <!-- Dismiss -->
+            <button class="aaa-toast__dismiss" type="button" (click)="dismissToast(toast.id)"
+                aria-label="Dismiss notification">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+        </div>
+        }
+    </div>
+
+</div>

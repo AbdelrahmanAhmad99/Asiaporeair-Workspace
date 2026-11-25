@@ -1,0 +1,88 @@
+<div class="wf-shell">
+
+    <!-- Hero -->
+    <header class="wf-hero">
+        <div class="wf-hero__inner">
+            <nav class="wf-bc" aria-label="Breadcrumb">
+                <a href="/" class="wf-bc__link">Home</a><span class="wf-bc__sep">›</span>
+                <a href="/journey-with-us/entertainment" class="wf-bc__link">Entertainment</a>
+                <span class="wf-bc__sep">›</span>
+                <span class="wf-bc__cur">Wi-Fi Connectivity</span>
+            </nav>
+            <div class="wf-hero__pre">
+                <div class="wf-hero__line"></div><span class="wf-hero__ey">Stay Connected</span>
+            </div>
+            <h1 class="wf-hero__title">Wi-Fi Connectivity</h1>
+            <p class="wf-hero__sub">High-speed satellite Wi-Fi across our long-haul fleet — available from take-off to
+                landing. Choose the plan that works for your journey.</p>
+        </div>
+        <div class="wf-hero__img-band" aria-hidden="true">
+            <img src="assets/images/journey-with-us/wifi-hero.png" alt="" class="wf-hero__bg" loading="eager" />
+            <div class="wf-hero__ov"></div>
+        </div>
+    </header>
+
+    <!-- Plans -->
+    <section class="wf-plans" aria-labelledby="wf-plans-title">
+        <div class="wf-inner">
+            <div class="wf-sec-hdr">
+                <div class="wf-sec-line"></div>
+                <div>
+                    <p class="wf-sec-ey">Choose Your Plan</p>
+                    <h2 class="wf-sec-title" id="wf-plans-title">Connectivity Options</h2>
+                    <p class="wf-sec-sub">
+                        Select a plan on board via the SkyWorld portal or pre-purchase through Manage Booking.
+                        Suites and First Class passengers enjoy complimentary unlimited connectivity.
+                    </p>
+                </div>
+            </div>
+
+            <div class="wf-plans__grid">
+                @for (plan of plans(); track plan.id; let i = $index) {
+                <app-connectivity-speed-badge [plan]="plan" [animDelay]="i * 80"></app-connectivity-speed-badge>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="wf-how">
+        <div class="wf-inner">
+            <div class="wf-sec-hdr">
+                <div class="wf-sec-line"></div>
+                <div>
+                    <p class="wf-sec-ey">Getting Connected</p>
+                    <h2 class="wf-sec-title">How to Connect on Board</h2>
+                </div>
+            </div>
+
+            <div class="wf-steps">
+                @for (step of connectSteps; track step.num) {
+                <div class="wf-step">
+                    <div class="wf-step__num" aria-hidden="true">{{ step.num }}</div>
+                    <h3 class="wf-step__title">{{ step.title }}</h3>
+                    <p class="wf-step__desc">{{ step.desc }}</p>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Coverage + notes -->
+    <div class="wf-note">
+        <div class="wf-inner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <p>
+                Wi-Fi availability may vary by aircraft type and flight path. Coverage is subject
+                to satellite availability over certain regions including polar routes. Prices shown
+                are indicative and may differ at time of purchase.
+            </p>
+        </div>
+    </div>
+
+</div>

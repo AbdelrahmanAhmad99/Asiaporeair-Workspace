@@ -1,0 +1,178 @@
+<!-- ============================================================================
+     add-services.component.html
+     Asiaporeair | "Enhance Your Suite Experience" — Add Services
+     ============================================================================ -->
+
+<div class="services-shell" [class.modal-open]="flowState() === 'checkout'">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         PAGE HEADER (Midnight Sapphire)
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="services-header" [@pageEnter] role="banner">
+        <div class="header-inner">
+
+            <button class="back-link" (click)="onBack()" aria-label="Return to booking details">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Booking Details
+            </button>
+
+            <div class="header-title-block">
+                <span class="header-eyebrow" aria-hidden="true">ASIAPOREAIR · JOURNEY ENHANCEMENTS</span>
+                <h1 class="header-title">Enhance Your Suite Experience</h1>
+                <p class="header-subtitle" *ngIf="bookingReference()">
+                    Booking <strong>{{ bookingReference() }}</strong> — select services to elevate your journey.
+                </p>
+            </div>
+
+            <div class="gold-rule" aria-hidden="true"></div>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ERROR BANNER
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="errorMessage() && !isLoading()" class="alert-error" role="alert" aria-live="assertive">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        {{ errorMessage() }}
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN BODY (Ivory background)
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="services-body" role="main">
+
+        <!-- ── Loading skeletons ────────────────────────────────────────────── -->
+        <div *ngIf="isLoading()" class="skeleton-grid" aria-busy="true">
+            <div class="skel-card" *ngFor="let i of [1,2,3,4,5,6]" aria-label="Loading service">
+                <div class="skel skel--icon"></div>
+                <div class="skel skel--title"></div>
+                <div class="skel skel--desc"></div>
+                <div class="skel skel--price"></div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="!isLoading()">
+
+            <!-- ── Currently Included Services ──────────────────────────────── -->
+            <section *ngIf="currentAncillaries().length > 0" class="section-currently-included"
+                aria-labelledby="included-heading">
+                <h2 class="section-title" id="included-heading">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Currently Included
+                </h2>
+                <app-booking-inventory-list [ancillaries]="currentAncillaries()" [stagedRemovals]="ancillaryCart()"
+                    (stageRemoval)="onStageRemoval($event)" (unstageRemoval)="onUnstageRemoval($event)">
+                </app-booking-inventory-list>
+            </section>
+
+            <!-- ── Category Tab Bar ─────────────────────────────────────────── -->
+            <section *ngIf="availableProducts().length > 0; else totalEmptyState" class="section-marketplace" aria-label="Service marketplace">
+                <div class="marketplace-header">
+                    <h2 class="section-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        Available Enhancements
+                    </h2>
+                    <span class="product-count" *ngIf="filteredProducts().length > 0" aria-live="polite">
+                        {{ filteredProducts().length }} services found
+                    </span>
+                </div>
+
+                <app-ancillary-category-tabs [categories]="categories()" [activeCategory]="activeCategory()"
+                    (categoryChange)="onCategoryChange($event)">
+                </app-ancillary-category-tabs>
+
+                <!-- Product Grid -->
+                <div *ngIf="filteredProducts().length > 0" class="product-grid" [@cardsStagger]="filteredProducts().length" role="list"
+                    aria-label="Available services">
+                    <app-product-catalog-card *ngFor="let product of filteredProducts(); trackBy: trackByProduct"
+                        [product]="product" [cartQuantity]="getCartQuantity(product.productId)" role="listitem"
+                        (addToCart)="onAddToCart($event)" (decrement)="onDecrementCart($event)"
+                        (removeFromCart)="onRemoveFromCart($event)">
+                    </app-product-catalog-card>
+                </div>
+
+                <!-- Category-Specific Empty State -->
+                <div *ngIf="filteredProducts().length === 0" class="category-empty-state" [@fadeIn]>
+                    <p>No products found in <strong>{{ activeCategory() }}</strong> category.</p>
+                </div>
+            </section>
+
+            <!-- ── Full Data Empty State (Template) ────────────────────────── -->
+            <ng-template #totalEmptyState>
+                <div class="empty-state-container" [@fadeIn]>
+                    <div class="empty-state-content">
+                        <div class="empty-logo-wrapper">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" class="empty-logo-svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="0.5" opacity="0.3" />
+                                <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-state-title">Ancillary Services Offline</h3>
+                        <p class="empty-state-text">
+                            We are currently unable to retrieve the enhancement catalog for this flight instance. 
+                            Please verify your connection or attempt to refresh the results.
+                        </p>
+                        <button class="btn-refresh-services" (click)="loadServicesData()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+                            </svg>
+                            Refresh Catalog
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+
+        </ng-container>
+
+    </main>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         STICKY PRICE BAR (bottom-fixed, visible when cart has items)
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <app-sticky-price-bar *ngIf="hasCartItems() && flowState() === 'browsing'" [cartItemCount]="cartItemCount()"
+        [deltaAmount]="deltaAmount()" [currency]="'SGD'" [isPaymentRequired]="isPaymentRequired()"
+        (proceedToPayment)="onProceedToPayment()" [@slideModal]>
+    </app-sticky-price-bar>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         PAYMENT MODAL OVERLAY
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="flowState() === 'checkout' || flowState() === 'processing'" class="modal-backdrop" [@fadeIn]
+        role="dialog" aria-modal="true" aria-label="Secure ancillary payment" (click)="onCancelCheckout()">
+        <div (click)="$event.stopPropagation()" [@slideModal]>
+            <app-ancillary-payment-modal [cart]="ancillaryCart()" [deltaAmount]="deltaAmount()" [currency]="'SGD'"
+                [bookingId]="bookingId" [isProcessing]="flowState() === 'processing'" (cancel)="onCancelCheckout()"
+                (paymentSuccess)="onPaymentSuccess()" (paymentFailed)="onPaymentFailed($event)">
+            </app-ancillary-payment-modal>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         SUCCESS TOAST
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <div *ngIf="successToast()" class="success-toast" [@fadeIn] role="status" aria-live="polite" aria-atomic="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+        </svg>
+        Services confirmed. Redirecting to your booking…
+    </div>
+
+</div>

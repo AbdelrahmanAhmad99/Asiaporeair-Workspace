@@ -1,0 +1,201 @@
+// itinerary-summary-card.component.scss
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    display: block;
+}
+
+.itinerary-card {
+    padding: 0 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: var(--font);
+}
+
+.flight-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0 8px;
+    border-bottom: 1px solid rgba(5, 25, 55, 0.06);
+}
+
+.flight-number {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.02em;
+}
+
+.flight-sep {
+    color: rgba(5, 25, 55, 0.2);
+}
+
+.flight-aircraft,
+.flight-airline {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+// ── Segment Visual ────────────────────────────────────────────────────────────
+.segment {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.segment-endpoint {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 80px;
+
+    &--right {
+        text-align: right;
+        align-items: flex-end;
+    }
+}
+
+.endpoint-time {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.endpoint-iata {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--midnight);
+    letter-spacing: 0.04em;
+}
+
+.endpoint-city {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.endpoint-date {
+    font-size: 0.58rem;
+    color: var(--text-muted);
+}
+
+.segment-path {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.path-line {
+    flex: 1;
+    width: 100%;
+    height: 1px;
+    background: rgba(5, 25, 55, 0.1);
+}
+
+.path-plane-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    justify-content: center;
+}
+
+.path-plane {
+    transform: rotate(90deg);
+    flex-shrink: 0;
+}
+
+.path-duration {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+// ── Fare Chips ────────────────────────────────────────────────────────────────
+.fare-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.fare-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-sec);
+    padding: 3px 8px;
+    background: rgba(5, 25, 55, 0.04);
+    border: 1px solid rgba(5, 25, 55, 0.08);
+    border-radius: 100px;
+    letter-spacing: 0.02em;
+
+    svg {
+        color: var(--royal-gold);
+        flex-shrink: 0;
+    }
+}
+
+// ── Fare Cost Row ─────────────────────────────────────────────────────────────
+.fare-cost-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    background: rgba(5, 25, 55, 0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(5, 25, 55, 0.06);
+}
+
+.fare-cost-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fare-cost-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--charcoal);
+}
+
+.fare-cost-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.fare-cost-line {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+}
+
+.fare-cost-amounts {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.fare-amount {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}

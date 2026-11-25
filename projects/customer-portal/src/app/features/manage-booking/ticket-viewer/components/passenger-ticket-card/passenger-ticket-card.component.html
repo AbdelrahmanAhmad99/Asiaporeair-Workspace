@@ -1,0 +1,54 @@
+<!-- passenger-ticket-card.component.html -->
+<div class="pax-card" role="region" aria-label="Passenger details">
+
+    <div class="pax-name-banner" aria-label="Passenger: {{ fullName }}">
+        <div class="pax-icon" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+        </div>
+        <div class="name-block">
+            <span class="pax-label">Passenger Name</span>
+            <span class="pax-name">{{ fullName }}</span>
+        </div>
+        <div class="boarding-group" [attr.aria-label]="'Boarding group ' + boardingGroup">
+            <span class="bg-label">Group</span>
+            <span class="bg-value">{{ boardingGroup }}</span>
+        </div>
+    </div>
+
+    <div class="details-grid" role="table" aria-label="Passenger document details">
+        <div class="detail-cell" role="row">
+            <span class="cell-key" role="rowheader">Date of Birth</span>
+            <span class="cell-val" role="cell">{{ dobDisplay }}</span>
+        </div>
+        <div class="detail-cell" role="row">
+            <span class="cell-key" role="rowheader">Passport</span>
+            <span class="cell-val cell-val--mono" role="cell"
+                [attr.aria-label]="'Passport ending ' + (ticket.passengerPassportNumber?.slice(-4) || 'not on file')">
+                {{ maskedPassport }}
+            </span>
+        </div>
+        <div class="detail-cell" role="row" *ngIf="ticket.frequentFlyerNumber">
+            <span class="cell-key" role="rowheader">Frequent Flyer</span>
+            <span class="cell-val" role="cell">{{ ticket.frequentFlyerNumber }}</span>
+        </div>
+        <div class="detail-cell" role="row">
+            <span class="cell-key" role="rowheader">Seat Number</span>
+            <span class="cell-val cell-val--accent" role="cell"
+                [attr.aria-label]="'Seat ' + (ticket.seatNumber || 'TBA')">
+                {{ ticket.seatNumber || 'TBA' }}
+            </span>
+        </div>
+        <div class="detail-cell" role="row">
+            <span class="cell-key" role="rowheader">Cabin</span>
+            <span class="cell-val" role="cell">{{ ticket.cabinClass }}</span>
+        </div>
+        <div class="detail-cell" role="row">
+            <span class="cell-key" role="rowheader">Ticket Status</span>
+            <span class="cell-val cell-val--status" role="cell">{{ ticket.status }}</span>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,207 @@
+<div class="idt-card">
+  <div class="idt-scroll">
+    <table class="idt-table" role="grid" aria-label="Flight instance control room — operational data grid">
+
+      <!-- ── Sticky Midnight Sapphire Header ─────────────────────── -->
+      <thead class="idt-head">
+        <tr>
+          @for (col of columns; track col.key) {
+          <th class="idt-th" [class.idt-col--md-hidden]="col.hideMd" [class.idt-col--lg-hidden]="col.hideLg"
+            scope="col">
+            {{ col.label }}
+          </th>
+          }
+        </tr>
+      </thead>
+
+      <!-- ── Shimmer ─────────────────────────────────────────────── -->
+      @if (loading()) {
+      <tbody aria-busy="true" aria-label="Loading flight instances">
+        @for (row of shimmerRows; track $index) {
+        <tr class="idt-tr idt-tr--even">
+          @for (col of columns; track col.key) {
+          <td class="idt-td" [class.idt-col--md-hidden]="col.hideMd" [class.idt-col--lg-hidden]="col.hideLg">
+            @if (col.key !== 'actions' && col.key !== 'od') {
+            <div class="idt-shimmer" [style.width]="col.shimmerWidth"></div>
+            }
+            @if (col.key === 'od') {
+            <div class="idt-od-shimmer">
+              <div class="idt-shimmer" style="width:36px"></div>
+              <div class="idt-shimmer" style="width:12px; opacity:0.4"></div>
+              <div class="idt-shimmer" style="width:36px"></div>
+            </div>
+            }
+          </td>
+          }
+        </tr>
+        }
+      </tbody>
+      }
+
+      <!-- ── Data Rows ─────────────────────────────────────────────── -->
+      @if (!loading()) {
+      <tbody [@instanceTable]="instances().length">
+
+        @for (inst of instances(); track inst.instanceId; let even = $even) {
+        <tr class="idt-tr" [class.idt-tr--even]="even" [class.idt-tr--odd]="!even"
+          [class.idt-tr--cancelled]="isCancelled(inst.status)"
+          [class.idt-tr--cancelling]="isCancelling(inst.instanceId)"
+          [attr.aria-label]="inst.flightNo + ' from ' + (inst.originCity || 'N/A') + ' to ' + (inst.destinationCity || 'N/A')">
+
+          <!-- IDs -->
+          <td class="idt-td">
+            <div class="idt-info-group">
+              <span class="idt-id">Inst: #{{ inst.instanceId }}</span>
+              <span class="idt-id">Sched: #{{ inst.scheduleId }}</span>
+            </div>
+          </td>
+
+          <!-- Flight & Airline -->
+          <td class="idt-td">
+            <div class="idt-info-group">
+              <span class="idt-main-val">{{ inst.flightNo }}</span>
+              <span class="idt-sub-val">{{ inst.airlineName }} ({{ inst.airlineIataCode }})</span>
+            </div>
+          </td>
+
+          <!-- Aircraft -->
+          <td class="idt-td">
+            <div class="idt-info-group">
+              <div class="idt-pair">
+                <span class="idt-main-val">{{ inst.assignedAircraftTailNumber || inst.tailNumber || 'TBD' }}</span>
+                <span class="idt-pill idt-pill--model">{{ inst.assignedAircraftModel || 'No Unit' }}</span>
+              </div>
+              <span class="idt-sub-val">Scheduled: {{ inst.scheduledAircraftModel || '—' }}</span>
+            </div>
+          </td>
+
+          <!-- Origin -->
+          <td class="idt-td">
+            <div class="idt-info-group">
+              <div class="idt-pair">
+                <span class="idt-iata">{{ inst.originIataCode || inst.originAirportIata }}</span>
+                <span class="idt-city">{{ inst.originCity }}</span>
+              </div>
+              <span class="idt-airport-name">{{ inst.originAirportName }}</span>
+            </div>
+          </td>
+
+          <!-- Destination -->
+          <td class="idt-td">
+            <div class="idt-info-group">
+              <div class="idt-pair">
+                <span class="idt-iata">{{ inst.destinationIataCode || inst.destinationAirportIata }}</span>
+                <span class="idt-city">{{ inst.destinationCity }}</span>
+              </div>
+              <span class="idt-airport-name">{{ inst.destinationAirportName }}</span>
+            </div>
+          </td>
+
+          <!-- Schedule vs Actual -->
+          <td class="idt-td">
+            <div class="idt-times-grid">
+              <div class="idt-time-row">
+                <span class="idt-time-label">SCHED:</span>
+                <span class="idt-time-val">
+                  {{ (inst.scheduledDeparture | date:'HH:mm') || '—' }} → {{ (inst.scheduledArrival | date:'HH:mm') ||
+                  '—' }}
+                </span>
+              </div>
+              <div class="idt-time-row" [class.idt-time-row--actual]="inst.actualDeparture || inst.actualArrival">
+                <span class="idt-time-label">ACTUAL:</span>
+                @if (inst.actualDeparture || inst.actualArrival) {
+                <span class="idt-time-val">
+                  {{ (inst.actualDeparture | date:'HH:mm') || '—' }} → {{ (inst.actualArrival | date:'HH:mm') || '—' }}
+                </span>
+                } @else {
+                <span class="idt-time-val idt-time-val--pending">Pending...</span>
+                }
+              </div>
+            </div>
+          </td>
+
+          <!-- Status Pill with Pulsing Dot -->
+          <td class="idt-td">
+            <div class="idt-status-pill" [ngClass]="'idt-status-pill--' + statusMeta(inst.status).cls"
+              [attr.aria-label]="statusMeta(inst.status).label">
+              <span class="idt-status-dot" [class.idt-status-dot--pulse]="statusMeta(inst.status).pulse"
+                aria-hidden="true">
+              </span>
+              {{ statusMeta(inst.status).label }}
+            </div>
+          </td>
+
+          <!-- Actions -->
+          <td class="idt-td idt-td--actions">
+            @if (isCancelling(inst.instanceId)) {
+            <div class="idt-spinner" aria-label="Cancelling…" aria-live="polite">
+              <svg class="idt-spinner__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+            </div>
+            } @else {
+            <div class="idt-actions">
+
+              <!-- Analyse / View Details -->
+              <button class="idt-action-btn idt-action-btn--analyse" type="button" [disabled]="isProcessing()"
+                (click)="onAnalyse.emit(inst.instanceId)" [attr.aria-label]="'Analyse flight ' + inst.flightNo"
+                title="Analyse / View Details">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12
+                                 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577
+                                 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z
+                                 M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                </svg>
+              </button>
+
+              <!-- Cancel (only for non-terminal statuses) -->
+              @if (canCancel(inst.status)) {
+              <button class="idt-action-btn idt-action-btn--cancel" type="button" [disabled]="isProcessing()"
+                (click)="onCancel.emit(inst.instanceId)" [attr.aria-label]="'Cancel flight ' + inst.flightNo"
+                title="Cancel Flight Instance">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
+              }
+
+            </div>
+            }
+          </td>
+
+        </tr>
+        }
+
+        <!-- Empty state -->
+        @if (instances().length === 0) {
+        <tr>
+          <td [attr.colspan]="columns.length" class="idt-empty">
+            <div class="idt-empty__inner">
+              <div class="idt-empty__icon-wrap" aria-hidden="true">
+                <svg class="idt-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                               0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+                </svg>
+              </div>
+              <p class="idt-empty__title">No flight instances for this period.</p>
+              <p class="idt-empty__sub">Adjust the date range or filters to find active operations.</p>
+            </div>
+          </td>
+        </tr>
+        }
+
+      </tbody>
+      }
+    </table>
+  </div>
+
+  <!-- Footer -->
+  @if (!loading() && instances().length > 0) {
+  <div class="idt-footer">
+    <span class="idt-footer__label">{{ recordLabel() }}</span>
+  </div>
+  }
+
+</div>

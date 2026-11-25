@@ -1,0 +1,279 @@
+ // ----------------------------------------------------------------------------
+ // 1. Hero Container
+ //    Full-width dark sapphire card with golden gradient overlay.
+ //    Squircle corners (12px) per design system.
+ // ----------------------------------------------------------------------------
+ .hero {
+     position: relative;
+     border-radius: 12px;
+     background: var(--aoms-midnight, #051937);
+     overflow: hidden;
+
+     // Layered gradient: primary dark base + luxurious gold shimmer from top-right
+     background-image:
+         linear-gradient(135deg,
+             rgba(182, 143, 36, 0.07) 0%,
+             transparent 55%),
+         linear-gradient(220deg,
+             rgba(5, 25, 55, 0.0) 0%,
+             rgba(16, 16, 86, 0.55) 100%);
+
+     // Soft deep-blue shadow — no black per spec
+     box-shadow:
+         0 8px 40px rgba(5, 25, 55, 0.22),
+         0 1px 0 rgba(226, 199, 128, 0.12) inset;
+
+     // Thin Champagne Gold top highlight line
+     border-top: 1px solid rgba(226, 199, 128, 0.18);
+
+     // Entry animation
+     animation: hero-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 2. Decorative Typographic Watermark
+ //    Large ghost initials placed absolutely behind the content.
+ // ----------------------------------------------------------------------------
+ .hero__watermark {
+     position: absolute;
+     top: 50%;
+     right: -0.1em;
+     transform: translateY(-50%);
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 900;
+     font-size: clamp(7rem, 18vw, 13rem);
+     line-height: 1;
+     letter-spacing: -0.06em;
+     color: transparent;
+
+     // Ghost outline effect with gold tint
+     -webkit-text-stroke: 1px rgba(226, 199, 128, 0.06);
+     // text-stroke: 1px rgba(226, 199, 128, 0.06);
+
+     user-select: none;
+     pointer-events: none;
+     white-space: nowrap;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 3. Hero Content Wrapper
+ // ----------------------------------------------------------------------------
+ .hero__content {
+     position: relative;
+     z-index: 1;
+     padding: 2.5rem 2.5rem 2rem;
+
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 4. Top Row — Continent Tag + Airport Chip
+ // ----------------------------------------------------------------------------
+ .hero__top-row {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     margin-bottom: 1.25rem;
+ }
+
+ .hero__continent-tag {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.3rem 0.75rem;
+     border-radius: 4px;
+     background: rgba(226, 199, 128, 0.1);
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: var(--aoms-champagne, #E2C780);
+ }
+
+ .hero__continent-icon {
+     width: 0.875rem;
+     height: 0.875rem;
+     flex-shrink: 0;
+ }
+
+ .hero__airport-chip {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.3rem 0.75rem;
+     border-radius: 4px;
+     background: rgba(6, 78, 59, 0.25);
+     border: 1px solid rgba(6, 78, 59, 0.45);
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: #6ee7b7;
+ }
+
+ .hero__airport-icon {
+     width: 0.875rem;
+     height: 0.875rem;
+     flex-shrink: 0;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 5. Country Name
+ // ----------------------------------------------------------------------------
+ .hero__country-name {
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 700;
+     font-size: clamp(2rem, 5vw, 3.25rem);
+     letter-spacing: -0.03em;
+     line-height: 1.05;
+     color: #ffffff;
+     margin: 0 0 1rem;
+
+     // Subtle text shadow for depth
+     text-shadow: 0 2px 16px rgba(5, 25, 55, 0.4);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 6. ISO Code Row
+ // ----------------------------------------------------------------------------
+ .hero__iso-row {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     margin-bottom: 1.5rem;
+ }
+
+ .hero__iso-badge {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.3rem 0.875rem;
+     border-radius: 4px;
+     font-family: var(--aoms-font-body);
+     font-weight: 800;
+     font-size: 16px;
+     letter-spacing: 0.12em;
+     text-transform: uppercase;
+     color: var(--aoms-champagne, #E2C780);
+     background: rgba(182, 143, 36, 0.15);
+     border: 1px solid rgba(182, 143, 36, 0.3);
+ }
+
+ .hero__iso-label {
+     font-family: var(--aoms-font-body);
+     font-size: 11px;
+     font-weight: 400;
+     letter-spacing: 0.06em;
+     text-transform: uppercase;
+     color: rgba(255, 255, 255, 0.3);
+ }
+
+ // ----------------------------------------------------------------------------
+ // 7. Divider
+ // ----------------------------------------------------------------------------
+ .hero__divider {
+     width: 100%;
+     height: 1px;
+     background: linear-gradient(90deg,
+             rgba(226, 199, 128, 0.2) 0%,
+             rgba(226, 199, 128, 0.04) 100%);
+     margin-bottom: 1.5rem;
+ }
+
+ // ----------------------------------------------------------------------------
+ // 8. Meta Grid (dl)
+ // ----------------------------------------------------------------------------
+ .hero__meta-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+     gap: 0.25rem 2rem;
+     margin: 0;
+ }
+
+ .hero__meta-item {
+     display: flex;
+     flex-direction: column;
+     gap: 0.2rem;
+ }
+
+ .hero__meta-label {
+     font-family: var(--aoms-font-body);
+     font-size: 10px;
+     font-weight: 600;
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     color: rgba(255, 255, 255, 0.35);
+ }
+
+ .hero__meta-value {
+     font-family: var(--aoms-font-body);
+     font-size: 15px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     color: rgba(255, 255, 255, 0.85);
+
+     // Accent variant (phone code)
+     &--accent {
+         color: #ffffff;
+         font-variant-numeric: tabular-nums;
+     }
+
+     // Gold variant (airport count, key numbers)
+     &--gold {
+         color: var(--aoms-champagne, #E2C780);
+         font-weight: 700;
+     }
+ }
+
+ // ----------------------------------------------------------------------------
+ // 9. Entry Animation
+ // ----------------------------------------------------------------------------
+ @keyframes hero-enter {
+     from {
+         opacity: 0;
+         transform: translateY(12px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ // ============================================================================
+ // 10. Responsive
+ // ============================================================================
+ @media (max-width: 640px) {
+     .hero__content {
+         padding: 1.75rem 1.25rem 1.5rem;
+     }
+
+     .hero__country-name {
+         font-size: 1.875rem;
+     }
+
+     .hero__meta-grid {
+         grid-template-columns: 1fr 1fr;
+     }
+
+     .hero__watermark {
+         font-size: 8rem;
+         opacity: 0.6;
+     }
+ }
+
+ // ============================================================================
+ // 11. Dark Mode Overrides  (.aoms-dark on <html>)
+ //     The hero is already dark-first; dark-mode slightly deepens the shadows.
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .hero {
+         box-shadow:
+             0 8px 48px rgba(0, 0, 0, 0.45),
+             0 1px 0 rgba(226, 199, 128, 0.1) inset;
+     }
+ }

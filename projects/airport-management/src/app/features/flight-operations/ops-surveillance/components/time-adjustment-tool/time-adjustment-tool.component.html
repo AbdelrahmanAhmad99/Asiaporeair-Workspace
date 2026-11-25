@@ -1,0 +1,151 @@
+<!-- Backdrop -->
+<div class="tat-backdrop" (click)="onDismiss.emit()" aria-hidden="true"></div>
+
+<div class="tat-panel" role="dialog" aria-modal="true"
+    [attr.aria-label]="'Adjust actual times for flight ' + flight().flightNo">
+
+    <!-- Gold accent bar -->
+    <div class="tat-panel__gold-bar" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <div class="tat-panel__header">
+        <div class="tat-panel__clock-icon" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+        </div>
+        <div>
+            <h2 class="tat-panel__title">Actual Time Adjustment</h2>
+            <div class="tat-panel__subtitle">
+                <span class="tat-flight-no">{{ flight().flightNo }}</span>
+                @if (flight().originAirportIata && flight().destinationAirportIata) {
+                <span class="tat-corridor">
+                    {{ flight().originAirportIata }} → {{ flight().destinationAirportIata }}
+                </span>
+                }
+            </div>
+        </div>
+        <button class="tat-panel__close" type="button" (click)="onDismiss.emit()" [disabled]="isUpdating()"
+            aria-label="Close time adjustment tool">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Terminal state notice -->
+    @if (isTerminal()) {
+    <div class="tat-terminal-notice" role="status">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        This flight has reached a terminal status — time adjustments are locked.
+    </div>
+    }
+
+    <!-- API Error -->
+    @if (apiError()) {
+    <div class="tat-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1
+                 5.636 5.636m12.728 12.728L5.636 5.636" />
+        </svg>
+        <span>{{ apiError() }}</span>
+    </div>
+    }
+
+    <!-- Form -->
+    <form class="tat-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+        <!-- Reference: scheduled times -->
+        <div class="tat-scheduled-strip">
+            <div class="tat-scheduled-strip__item">
+                <span class="tat-scheduled-strip__label">Sched. Dep</span>
+                <span class="tat-scheduled-strip__time">
+                    <div class="tat-sched-val">{{ flight().scheduledDeparture | date:'dd MMM · HH:mm' }}</div>
+                </span>
+            </div>
+            <svg class="tat-scheduled-strip__arrow" fill="none" stroke="currentColor" stroke-width="1.25"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+            </svg>
+            <div class="tat-scheduled-strip__item tat-scheduled-strip__item--dest">
+                <span class="tat-scheduled-strip__label">Sched. Arr</span>
+                <span class="tat-scheduled-strip__time">
+                    <div class="tat-sched-val">{{ flight().scheduledArrival | date:'dd MMM · HH:mm' }}</div>
+                </span>
+            </div>
+        </div>
+
+        <!-- Actual Departure -->
+        <div class="tat-field">
+            <label class="tat-label" for="tat-dep">
+                <div class="tat-label__icon-wrap" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                    </svg>
+                </div>
+                Actual Departure
+            </label>
+            <input id="tat-dep" class="tat-input" type="datetime-local" formControlName="actualDepartureTime"
+                [attr.aria-disabled]="isTerminal() ? 'true' : null">
+        </div>
+
+        <!-- Delay warning -->
+        @if (departureDelayWarning()) {
+        <div class="tat-delay-warning" role="status" aria-live="polite">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                   2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                   16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            {{ departureDelayWarning() }}
+        </div>
+        }
+
+        <!-- Actual Arrival -->
+        <div class="tat-field">
+            <label class="tat-label" for="tat-arr">
+                <div class="tat-label__icon-wrap" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                    </svg>
+                </div>
+                Actual Arrival
+            </label>
+            <input id="tat-arr" class="tat-input" type="datetime-local" formControlName="actualArrivalTime"
+                [attr.aria-disabled]="isTerminal() ? 'true' : null">
+        </div>
+
+        <!-- Actions -->
+        <div class="tat-actions">
+            <button class="tat-btn tat-btn--cancel" type="button" (click)="onDismiss.emit()" [disabled]="isUpdating()">
+                Cancel
+            </button>
+            <button class="tat-btn tat-btn--save" type="submit" [disabled]="isTerminal() || isUpdating()">
+                @if (isUpdating()) {
+                <svg class="tat-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                     0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                     0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Updating…
+                } @else {
+                <svg class="tat-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                Confirm Times
+                }
+            </button>
+        </div>
+
+    </form>
+
+</div>

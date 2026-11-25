@@ -1,0 +1,84 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $t: 140ms ease;
+
+ // ── Filter Bar ────────────────────────────────────────────────────────────
+ .acf-bar {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     flex-wrap: wrap;
+     padding: 0.625rem 0.875rem;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.14);
+     border-radius: 12px;
+     box-shadow: 0 2px 10px rgba($midnight, 0.15);
+ }
+
+ // ── Filter Button ─────────────────────────────────────────────────────────
+ .acf-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.3125rem 0.875rem;
+     height: 2rem;
+     border-radius: 8px;
+     border: 1px solid rgba($champagne, 0.12);
+     background: transparent;
+     color: rgba(255, 255, 255, 0.45);
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+     font-weight: 500;
+     cursor: pointer;
+     transition: all $t;
+     white-space: nowrap;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         opacity: 0.6;
+         transition: opacity $t;
+     }
+
+     &:hover:not(:disabled):not(.acf-btn--active) {
+         color: $champagne;
+         background: rgba($champagne, 0.07);
+         border-color: rgba($champagne, 0.25);
+
+         .acf-btn__icon {
+             opacity: 1;
+         }
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // ── Active State — 1px Royal Gold border + Champagne Gold text ──
+     &--active {
+         color: $champagne;
+         background: rgba($gold, 0.12);
+         border: 1px solid $gold;
+         font-weight: 700;
+         box-shadow: 0 0 10px rgba($gold, 0.18);
+
+         .acf-btn__icon {
+             opacity: 1;
+             color: $champagne;
+         }
+
+         &:hover {
+             background: rgba($gold, 0.18);
+             box-shadow: 0 0 14px rgba($gold, 0.28);
+         }
+     }
+ }

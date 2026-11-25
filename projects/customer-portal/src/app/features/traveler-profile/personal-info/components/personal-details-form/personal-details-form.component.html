@@ -1,0 +1,165 @@
+<!-- ============================================================================
+     personal-details-form.component.html
+     Asiaporeair | Personal Details — Floating Label Form
+     ============================================================================ -->
+
+<div class="pdf-card">
+
+    <!-- Card Header -->
+    <div class="pdf-card__header">
+        <div class="pdf-card__title-block">
+            <div class="pdf-card__icon-wrap" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="pdf-card__title">Personal Details</h3>
+                <p class="pdf-card__subtitle">Name, date of birth, and travel documents</p>
+            </div>
+        </div>
+
+        <!-- Edit / Cancel Toggle -->
+        @if (!isLoading) {
+        <button class="pdf-card__edit-btn" [class.is-editing]="isEditing()" type="button" (click)="toggleEdit()"
+            [attr.aria-label]="isEditing() ? 'Cancel editing personal details' : 'Edit personal details'">
+            @if (!isEditing()) {
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Edit
+            } @else {
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Cancel
+            }
+        </button>
+        }
+    </div>
+
+    <!-- Skeleton Loader -->
+    @if (isLoading) {
+    <div class="pdf-skeleton" aria-busy="true" aria-label="Loading personal details">
+        @for (i of [1, 2, 3, 4]; track i) {
+        <div class="pdf-skeleton__field"></div>
+        }
+    </div>
+    }
+
+    <!-- Form -->
+    @if (!isLoading) {
+    <form [formGroup]="form" (ngSubmit)="onSave()" novalidate class="pdf-form" autocomplete="off">
+
+        <!-- Row 1: First Name + Last Name -->
+        <div class="pdf-form__row pdf-form__row--2col">
+
+            <!-- First Name -->
+            <div class="pdf-field" [class.is-active]="form.get('firstName')?.value"
+                [class.has-error]="hasError('firstName', 'required') || hasError('firstName', 'minlength')">
+                <input id="pdf-firstName" class="pdf-field__input" type="text" formControlName="firstName"
+                    autocomplete="given-name" placeholder=" " aria-required="true" />
+                <label class="pdf-field__label" for="pdf-firstName">First Name</label>
+                <div class="pdf-field__border"></div>
+                @if (hasError('firstName', 'required')) {
+                <span class="pdf-field__error" role="alert">First name is required</span>
+                }
+                @if (hasError('firstName', 'minlength')) {
+                <span class="pdf-field__error" role="alert">Minimum 2 characters</span>
+                }
+            </div>
+
+            <!-- Last Name -->
+            <div class="pdf-field" [class.is-active]="form.get('lastName')?.value"
+                [class.has-error]="hasError('lastName', 'required')">
+                <input id="pdf-lastName" class="pdf-field__input" type="text" formControlName="lastName"
+                    autocomplete="family-name" placeholder=" " aria-required="true" />
+                <label class="pdf-field__label" for="pdf-lastName">Last Name</label>
+                <div class="pdf-field__border"></div>
+                @if (hasError('lastName', 'required')) {
+                <span class="pdf-field__error" role="alert">Last name is required</span>
+                }
+            </div>
+
+        </div>
+
+        <!-- Row 2: Date of Birth -->
+        <div class="pdf-form__row pdf-form__row--2col">
+            <div class="pdf-field" [class.is-active]="form.get('dateOfBirth')?.value">
+                <input id="pdf-dob" class="pdf-field__input" type="date" formControlName="dateOfBirth" autocomplete="bday"
+                    placeholder=" " />
+                <label class="pdf-field__label pdf-field__label--date" for="pdf-dob">Date of Birth</label>
+                <div class="pdf-field__border"></div>
+            </div>
+
+            <!-- Address -->
+            <div class="pdf-field" [class.is-active]="form.get('address')?.value">
+                <input id="pdf-address" class="pdf-field__input" type="text" formControlName="address"
+                    autocomplete="street-address" placeholder=" " />
+                <label class="pdf-field__label" for="pdf-address">Residential Address</label>
+                <div class="pdf-field__border"></div>
+            </div>
+        </div>
+
+        <!-- Row 3: Passport + Nationality -->
+        <div class="pdf-form__row pdf-form__row--2col">
+
+            <!-- Passport Number -->
+            <div class="pdf-field" [class.is-active]="form.get('passportNumber')?.value"
+                [class.has-error]="hasError('passportNumber', 'pattern')">
+                <input id="pdf-passport" class="pdf-field__input pdf-field__input--mono" type="text"
+                    formControlName="passportNumber" autocomplete="off" placeholder=" " maxlength="9"
+                    style="text-transform: uppercase;" />
+                <label class="pdf-field__label" for="pdf-passport">Passport Number</label>
+                <div class="pdf-field__border"></div>
+                @if (hasError('passportNumber', 'pattern')) {
+                <span class="pdf-field__error" role="alert">6–9 alphanumeric characters</span>
+                }
+            </div>
+
+            <!-- Nationality -->
+            <div class="pdf-field" [class.is-active]="form.get('nationality')?.value">
+                <input id="pdf-nationality" class="pdf-field__input" type="text" formControlName="nationality"
+                    autocomplete="country-name" placeholder=" " />
+                <label class="pdf-field__label" for="pdf-nationality">Nationality</label>
+                <div class="pdf-field__border"></div>
+            </div>
+
+        </div>
+
+        <!-- Save Button -->
+        @if (isEditing()) {
+        <div class="pdf-form__actions">
+            <button class="pdf-save-btn" type="submit" [disabled]="form.invalid || isSaving"
+                [class.is-saving]="isSaving">
+                @if (isSaving) {
+                <span class="pdf-save-btn__spinner" aria-hidden="true"></span>
+                Saving…
+                } @else if (saveState === 'success') {
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Saved
+                } @else {
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2l11 0 5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
+                </svg>
+                Save Changes
+                }
+            </button>
+        </div>
+        }
+
+    </form>
+    }
+
+</div>

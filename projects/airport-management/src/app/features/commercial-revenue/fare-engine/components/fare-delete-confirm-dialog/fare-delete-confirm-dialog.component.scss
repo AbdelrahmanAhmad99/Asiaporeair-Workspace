@@ -1,0 +1,304 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $ruby: #710D06;
+ $t: 160ms ease;
+
+ // ── Modal Panel ───────────────────────────────────────────────────────────
+ .fdcd-modal {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 50;
+     width: min(480px, calc(100vw - 2rem));
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 0 0 1.5rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($ruby, 0.4);
+     box-shadow:
+         0 24px 64px rgba(0, 0, 0, 0.55),
+         0 0 0 1px rgba($ruby, 0.08) inset;
+     overflow: hidden;
+     animation: fdcd-enter 280ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     // All direct children get horizontal padding except the rule & loading block
+     >*:not(.fdcd-rule):not(.fdcd-loading) {
+         padding-left: 1.5rem;
+         padding-right: 1.5rem;
+     }
+ }
+
+ // ── Ruby Red Accent Rule ──────────────────────────────────────────────────
+ .fdcd-rule {
+     height: 3px;
+     flex-shrink: 0;
+     background: linear-gradient(to right,
+             rgba($ruby, 0.35),
+             lighten($ruby, 18%),
+             rgba($ruby, 0.35));
+ }
+
+ // ── Warning Icon ──────────────────────────────────────────────────────────
+ .fdcd-icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 3rem;
+     height: 3rem;
+     border-radius: 50%;
+     flex-shrink: 0;
+     margin-top: 0.625rem;
+     background: rgba($ruby, 0.14);
+     border: 1px solid rgba($ruby, 0.3);
+ }
+
+ .fdcd-icon {
+     width: 1.5rem;
+     height: 1.5rem;
+     color: lighten($ruby, 28%);
+ }
+
+ // ── Body ──────────────────────────────────────────────────────────────────
+ .fdcd-body {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+ }
+
+ .fdcd-title {
+     font-size: 1.25rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     color: rgba(255, 255, 255, 0.92);
+     margin: 0;
+ }
+
+ // ── Target Code + Description ─────────────────────────────────────────────
+ .fdcd-target {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+
+     &__code {
+         display: inline-block;
+         padding: 0.25rem 0.625rem;
+         border-radius: 4px;
+         background: rgba($ruby, 0.12);
+         border: 1px solid rgba($ruby, 0.3);
+         font-family: 'Courier New', monospace;
+         font-size: 0.875rem;
+         font-weight: 700;
+         color: lighten($ruby, 35%);
+         letter-spacing: 0.05em;
+     }
+
+     &__desc {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: $champagne;
+         font-style: italic;
+     }
+ }
+
+ .fdcd-copy {
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     line-height: 1.55;
+     color: rgba(255, 255, 255, 0.5);
+     margin: 0;
+ }
+
+ // ── Warning Pill ──────────────────────────────────────────────────────────
+ .fdcd-warning-pill {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.375rem 0.75rem;
+     border-radius: 100px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.25);
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: lighten($ruby, 30%);
+     letter-spacing: 0.02em;
+     width: fit-content;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Error State ───────────────────────────────────────────────────────────
+ .fdcd-error {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.625rem;
+     padding: 0.75rem 1rem;
+     border-radius: 6px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.22);
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: lighten($ruby, 38%);
+     line-height: 1.4;
+
+     svg {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+         margin-top: 0.1rem;
+     }
+ }
+
+ // ── Action Buttons ────────────────────────────────────────────────────────
+ .fdcd-actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding-top: 0.375rem;
+     border-top: 1px solid rgba(255, 255, 255, 0.07);
+ }
+
+ .fdcd-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.5625rem 1.125rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     white-space: nowrap;
+     transition: all $t;
+
+     svg {
+         width: 0.9rem;
+         height: 0.9rem;
+         flex-shrink: 0;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // Cancel — Champagne Gold outline
+     &--cancel {
+         color: rgba(255, 255, 255, 0.5);
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.25);
+
+         &:hover {
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+             border-color: $champagne;
+         }
+     }
+
+     // Confirm — Ruby Red with pulse glow
+     &--confirm {
+         color: #fff;
+         background: $ruby;
+         border: none;
+         box-shadow: 0 4px 16px rgba($ruby, 0.5);
+         animation: fdcd-pulse 2.2s ease-in-out infinite;
+
+         &:hover {
+             background: lighten($ruby, 8%);
+             box-shadow: 0 6px 22px rgba($ruby, 0.68);
+             transform: translateY(-1px);
+             animation-play-state: paused;
+         }
+
+         &:active {
+             transform: translateY(0);
+             animation-play-state: running;
+         }
+     }
+ }
+
+ // ── Processing / Loading State ────────────────────────────────────────────
+ .fdcd-loading {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 2.75rem 1.5rem;
+     text-align: center;
+
+     p {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: rgba(255, 255, 255, 0.8);
+         margin: 0;
+
+         strong {
+             color: lighten($ruby, 30%);
+         }
+     }
+
+     span {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         color: rgba(255, 255, 255, 0.35);
+     }
+
+     &__spinner {
+         width: 2rem;
+         height: 2rem;
+         color: lighten($ruby, 22%);
+         animation: fdcd-spin 1s linear infinite;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes fdcd-enter {
+     from {
+         opacity: 0;
+         transform: translate(-50%, calc(-50% + 16px)) scale(0.93);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%) scale(1);
+     }
+ }
+
+ @keyframes fdcd-pulse {
+     0% {
+         box-shadow: 0 4px 16px rgba($ruby, 0.5);
+     }
+
+     50% {
+         box-shadow: 0 4px 28px rgba($ruby, 0.8), 0 0 0 4px rgba($ruby, 0.12);
+     }
+
+     100% {
+         box-shadow: 0 4px 16px rgba($ruby, 0.5);
+     }
+ }
+
+ @keyframes fdcd-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }

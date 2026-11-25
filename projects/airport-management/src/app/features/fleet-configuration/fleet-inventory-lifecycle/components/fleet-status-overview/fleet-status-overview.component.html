@@ -1,0 +1,49 @@
+<div class="kpi-grid">
+
+    <!-- ── Loading shimmer ─────────────────────────────────────── -->
+    @if (loading()) {
+    @for (c of shimmerCards; track $index) {
+    <div class="kpi-card kpi-card--shimmer" aria-hidden="true">
+        <div class="kpi-card__shimmer-icon"></div>
+        <div class="kpi-card__shimmer-label"></div>
+        <div class="kpi-card__shimmer-value"></div>
+        <div class="kpi-card__shimmer-trend"></div>
+    </div>
+    }
+    }
+
+    <!-- ── Live KPI cards ──────────────────────────────────────── -->
+    @if (!loading()) {
+    @for (card of cards(); track card.id) {
+    <div class="kpi-card" [attr.data-variant]="card.variant">
+
+        <!-- Gold accent left stripe -->
+        <div class="kpi-card__accent" aria-hidden="true"></div>
+
+        <!-- Top row: icon + trend -->
+        <div class="kpi-card__top">
+            <div class="kpi-card__icon-wrap" aria-hidden="true">
+                <svg class="kpi-card__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="card.iconPath" />
+                </svg>
+            </div>
+
+            @if (card.trend) {
+            <span class="kpi-card__trend">{{ card.trend }}</span>
+            }
+        </div>
+
+        <!-- Label -->
+        <p class="kpi-card__label">{{ card.label }}</p>
+
+        <!-- Value -->
+        <p class="kpi-card__value">{{ card.value }}</p>
+
+        <!-- Sub-label -->
+        <p class="kpi-card__sub">{{ card.subLabel }}</p>
+
+    </div>
+    }
+    }
+
+</div>

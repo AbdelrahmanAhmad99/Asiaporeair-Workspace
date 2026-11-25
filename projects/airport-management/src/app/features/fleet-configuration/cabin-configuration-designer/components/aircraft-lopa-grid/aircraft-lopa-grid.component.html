@@ -1,0 +1,187 @@
+<div class="alg-card">
+
+    <!-- ══ Column Header ═════════════════════════════════════════ -->
+    <div class="alg-header" role="row">
+        <div class="alg-header__cell alg-col--tail" role="columnheader">Tail Number</div>
+        <div class="alg-header__cell alg-col--model" role="columnheader">Model / Type</div>
+        <div class="alg-header__cell alg-col--status" role="columnheader">Status</div>
+        <div class="alg-header__cell alg-col--config" role="columnheader">Config Version</div>
+        <div class="alg-header__cell alg-col--pax" role="columnheader">Pax Cap.</div>
+        <div class="alg-header__cell alg-col--actions" role="columnheader">
+            <span class="sr-only">Actions</span>
+        </div>
+    </div>
+
+    <!-- ══ Loading Shimmer ═══════════════════════════════════════ -->
+    @if (loading()) {
+    <div class="alg-body" aria-busy="true">
+        @for (r of shimmerRows; track $index) {
+        <div class="alg-row alg-row--shimmer" [class.alg-row--even]="$even">
+            <div class="alg-col--tail">
+                <div class="alg-sh alg-sh--md"></div>
+            </div>
+            <div class="alg-col--model">
+                <div class="alg-sh"></div>
+                <div class="alg-sh alg-sh--sub"></div>
+            </div>
+            <div class="alg-col--status">
+                <div class="alg-sh alg-sh--pill"></div>
+            </div>
+            <div class="alg-col--config">
+                <div class="alg-sh"></div>
+            </div>
+            <div class="alg-col--pax">
+                <div class="alg-sh alg-sh--sm"></div>
+            </div>
+            <div class="alg-col--actions">
+                <div class="alg-sh alg-sh--btn"></div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- ══ Data Rows ════════════════════════════════════════════ -->
+    @if (!loading()) {
+    <div class="alg-body" role="rowgroup" [@lopaRows]="rows().length">
+
+        @for (row of rows(); track row.tailNumber; let even = $even) {
+        <div class="alg-row" [class.alg-row--even]="even" [class.alg-row--odd]="!even"
+            [class.alg-row--no-config]="row.configurations.length === 0" role="row">
+
+            <!-- Tail Number -->
+            <div class="alg-col--tail" role="gridcell">
+                <span class="alg__tail">{{ row.tailNumber }}</span>
+            </div>
+
+            <!-- Model / Manufacturer -->
+            <div class="alg-col--model" role="gridcell">
+                <span class="alg__model">{{ row.aircraftTypeModel ?? '—' }}</span>
+                <span class="alg__airline">{{ row.airlineName }}</span>
+            </div>
+
+            <!-- Status Badge -->
+            <div class="alg-col--status" role="gridcell">
+                <span class="status-badge" [ngClass]="statusBadge(row.status).cssClass">
+                    @if (statusBadge(row.status).pulse) {
+                    <span class="status-badge__pulse" aria-hidden="true"></span>
+                    } @else {
+                    <span class="status-badge__dot" aria-hidden="true"></span>
+                    }
+                    {{ statusBadge(row.status).label }}
+                </span>
+            </div>
+
+            <!-- Config Version -->
+            <div class="alg-col--config" role="gridcell">
+                @if (row.configurations.length > 0) {
+                <span class="alg__config">
+                    {{ row.primaryConfigLabel }}
+                </span>
+                @if (row.configurations.length > 1) {
+                <span class="alg__config-count">+{{ row.configurations.length - 1 }} more</span>
+                }
+                } @else {
+                <span class="alg__config-none">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="alg__config-none__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                    Layout Pending
+                </span>
+                }
+            </div>
+
+            <!-- Pax Capacity -->
+            <div class="alg-col--pax" role="gridcell">
+                <span class="alg__pax">
+                    {{ row.totalPaxCapacity > 0 ? row.totalPaxCapacity : '—' }}
+                </span>
+            </div>
+
+            <!-- Manage LOPA Action -->
+            <div class="alg-col--actions" role="gridcell">
+                <button class="alg__manage-btn" type="button" (click)="manageLopa.emit(row.tailNumber)"
+                    [attr.aria-label]="'Manage LOPA configuration for ' + row.tailNumber">
+
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        class="alg__manage-btn__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5" />
+                    </svg>
+
+                    <span class="alg__manage-btn__label">Manage LOPA</span>
+
+                    <!-- Expanding golden underline — drawn via ::after in SCSS -->
+                </button>
+            </div>
+
+        </div>
+        }
+
+        <!-- ── Empty State ──────────────────────────────────────── -->
+        @if (rows().length === 0) {
+        <div class="alg-empty" role="status">
+            <div class="alg-empty__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="alg-empty__icon">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3" />
+                </svg>
+            </div>
+            <p class="alg-empty__title">No Aircraft Found</p>
+            <p class="alg-empty__sub">
+                Adjust the filters above to locate fleet assets for LOPA management.
+            </p>
+        </div>
+        }
+
+    </div>
+    }
+
+    <!-- ══ Pagination Footer ════════════════════════════════════ -->
+    @if (!loading() && pagination() && pagination()!.total > 0) {
+    <div class="alg-pagination">
+
+        <span class="alg-pagination__info">
+            Showing
+            <strong>{{ (pagination()!.page - 1) * pagination()!.size + 1 }}</strong>–
+            <strong>{{ Math.min(pagination()!.page * pagination()!.size, pagination()!.total) }}</strong>
+            of <strong>{{ pagination()!.total }}</strong> assets
+        </span>
+
+        <div class="alg-pagination__controls">
+
+            <button class="alg-pagination__btn" type="button" [disabled]="!pagination()!.hasPrev"
+                (click)="prevPage.emit()" aria-label="Previous page">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    class="alg-pagination__btn__icon" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+            </button>
+
+            @for (pg of pageNumbers; track pg) {
+            @if (pg < 0) { <span class="alg-pagination__ellipsis" aria-hidden="true">…</span>
+                } @else {
+                <button class="alg-pagination__page" type="button"
+                    [class.alg-pagination__page--active]="pg === pagination()!.page"
+                    [attr.aria-current]="pg === pagination()!.page ? 'page' : null" (click)="pageChanged.emit(pg)">
+                    {{ pg }}
+                </button>
+                }
+                }
+
+                <button class="alg-pagination__btn" type="button" [disabled]="!pagination()!.hasNext"
+                    (click)="nextPage.emit()" aria-label="Next page">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                        class="alg-pagination__btn__icon" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+
+        </div>
+
+    </div>
+    }
+
+</div>

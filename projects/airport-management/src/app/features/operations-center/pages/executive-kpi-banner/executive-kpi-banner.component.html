@@ -1,0 +1,11 @@
+<section class="banner" aria-labelledby="aoms-kpi-banner-heading">
+    <h2 id="aoms-kpi-banner-heading" class="visually-hidden">Executive operational indicators</h2>
+
+    <ul class="grid">
+        @for (card of cards(); track card.id) {
+        <li class="grid__item">
+            <aoms-kpi-metric-card [card]="card" />
+        </li>
+        }
+    </ul>
+</section>

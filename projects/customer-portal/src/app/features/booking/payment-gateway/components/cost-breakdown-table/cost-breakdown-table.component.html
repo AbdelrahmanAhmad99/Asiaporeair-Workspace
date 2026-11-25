@@ -1,0 +1,71 @@
+<!-- cost-breakdown-table.component.html -->
+
+<div class="breakdown-wrapper" aria-label="Full cost breakdown">
+
+    <div *ngFor="let pax of bookingDetail().passengers" class="pax-section">
+        <div class="pax-header">
+            <span class="pax-header-name">{{ pax.firstName }} {{ pax.lastName }}</span>
+        </div>
+
+        <table class="breakdown-table" role="table"
+            [attr.aria-label]="'Cost breakdown for ' + pax.firstName + ' ' + pax.lastName">
+            <thead class="visually-hidden">
+                <tr>
+                    <th>Service</th>
+                    <th>Amount ({{ currency() }})</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Air Fare -->
+                <tr class="table-row table-row--category">
+                    <td class="row-label row-label--strong">Air Fare</td>
+                    <td class="row-amount row-amount--strong">{{ formatPrice(airFare()) }}</td>
+                </tr>
+
+                <!-- Taxes Header -->
+                <tr class="table-row table-row--category">
+                    <td class="row-label row-label--category" colspan="2">Airport / Government Taxes</td>
+                </tr>
+
+                <!-- Individual Tax Lines -->
+                <tr *ngFor="let tax of taxLines" class="table-row table-row--tax">
+                    <td class="row-label">
+                        {{ tax.label }}
+                        <span class="tax-code">({{ tax.code }})</span>
+                    </td>
+                    <td class="row-amount">{{ formatPrice(tax.amount) }}</td>
+                </tr>
+
+                <!-- Add-Ons -->
+                <ng-container *ngIf="bookingDetail().ancillarySales?.length">
+                    <tr class="table-row table-row--category">
+                        <td class="row-label row-label--category" colspan="2">Add Ons</td>
+                    </tr>
+                    <tr *ngFor="let sale of bookingDetail().ancillarySales" class="table-row table-row--tax">
+                        <td class="row-label">
+                            {{ sale.productName }} <span class="tax-code">×{{ sale.quantity }}</span>
+                        </td>
+                        <td class="row-amount">{{ formatPrice(sale.pricePaid * sale.quantity) }}</td>
+                    </tr>
+                </ng-container>
+
+                <!-- Sub-total -->
+                <tr class="table-row table-row--subtotal">
+                    <td class="row-label row-label--strong">Sub-total</td>
+                    <td class="row-amount row-amount--strong">{{ currency() }} {{
+                        formatPrice(bookingDetail().totalPrice) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Grand Total -->
+    <div class="grand-total-row" aria-label="Grand total">
+        <span class="grand-label">Grand Total</span>
+        <div class="grand-right">
+            <span class="grand-amount">{{ currency() }} {{ formatPrice(bookingDetail().totalPrice) }}</span>
+            <span class="grand-note">Includes discounts, taxes and surcharges</span>
+        </div>
+    </div>
+
+</div>

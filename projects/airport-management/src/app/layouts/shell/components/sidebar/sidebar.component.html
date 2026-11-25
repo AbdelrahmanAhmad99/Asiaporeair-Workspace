@@ -1,0 +1,129 @@
+<!-- Sidebar Component — AOMS Luxury Midnight Navigation -->
+<aside
+  class="sidebar"
+  [class.sidebar--collapsed]="store.isSidebarCollapsed()"
+  role="navigation"
+  aria-label="AOMS Main Navigation">
+
+  <!-- ── Brand Header ──────────────────────────────────────────────────────── -->
+  <div class="sidebar__brand">
+    <div class="sidebar__logo">
+      <!-- Asiaporeair Logomark (Stylized "A" in gold) -->
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="sidebar__logo-icon">
+        <rect width="36" height="36" rx="8" fill="#B68F24" fill-opacity="0.15"/>
+        <path d="M18 6L28 28H22L20 23H16L14 28H8L18 6ZM17 19H19L18 15.5L17 19Z"
+              fill="#B68F24" stroke="#E2C780" stroke-width="0.5"/>
+      </svg>
+      @if (!store.isSidebarCollapsed()) {
+        <div class="sidebar__brand-text">
+          <span class="sidebar__brand-name">Asiaporeair</span>
+          <span class="sidebar__brand-sub">AOMS</span>
+        </div>
+      }
+    </div>
+
+    <!-- Toggle Button -->
+    <button
+      class="sidebar__toggle"
+      (click)="toggleSidebar()"
+      [attr.aria-label]="store.isSidebarCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+           [class.sidebar__toggle-icon--flipped]="store.isSidebarCollapsed()">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── Divider ───────────────────────────────────────────────────────────── -->
+  <div class="sidebar__divider"></div>
+
+  <!-- ── Navigation Items ──────────────────────────────────────────────────── -->
+  <nav class="sidebar__nav" role="menubar">
+    <ul class="sidebar__list">
+      @for (item of filteredNavItems(); track item.id) {
+        <li class="sidebar__item" role="none">
+          <!-- Parent Navigation Link -->
+          @if (item.children.length > 0) {
+            <!-- Expandable Group -->
+            <button
+              class="sidebar__link"
+              [class.sidebar__link--active]="isActiveRoute(item.id)"
+              (click)="onNavClick(item)"
+              role="menuitem"
+              [attr.aria-expanded]="isGroupExpanded(item.id)"
+              [attr.title]="store.isSidebarCollapsed() ? item.label : null"
+              type="button">
+              <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="item.icon"/>
+              </svg>
+              @if (!store.isSidebarCollapsed()) {
+                <span class="sidebar__label">{{ item.label }}</span>
+                @if (item.badge) {
+                  <span class="sidebar__badge">{{ item.badge }}</span>
+                }
+                <svg class="sidebar__chevron"
+                     [class.sidebar__chevron--open]="isGroupExpanded(item.id)"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              }
+            </button>
+
+            <!-- Children List -->
+            @if (!store.isSidebarCollapsed() && isGroupExpanded(item.id)) {
+              <ul class="sidebar__children" role="menu">
+                @for (child of item.children; track child.id) {
+                  <li role="none">
+                    <a class="sidebar__child-link"
+                       [routerLink]="child.route"
+                       routerLinkActive="sidebar__child-link--active"
+                       (click)="onChildClick(child, item)"
+                       role="menuitem">
+                      <span class="sidebar__child-dot"></span>
+                      <span class="sidebar__child-label">{{ child.label }}</span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            }
+          } @else {
+            <!-- Simple Link (No Children) -->
+            <a class="sidebar__link"
+               [routerLink]="item.route"
+               routerLinkActive="sidebar__link--active"
+               (click)="store.setActiveRoute(item.id, item.label)"
+               role="menuitem"
+               [attr.title]="store.isSidebarCollapsed() ? item.label : null">
+              <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="item.icon"/>
+              </svg>
+              @if (!store.isSidebarCollapsed()) {
+                <span class="sidebar__label">{{ item.label }}</span>
+                @if (item.badge) {
+                  <span class="sidebar__badge">{{ item.badge }}</span>
+                }
+              }
+            </a>
+          }
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <!-- ── Bottom Section (Role Badge) ───────────────────────────────────────── -->
+  <div class="sidebar__footer">
+    <div class="sidebar__role-badge">
+      <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+      </svg>
+      @if (!store.isSidebarCollapsed()) {
+        <span class="sidebar__role-text">{{ store.userRole() }}</span>
+      }
+    </div>
+  </div>
+</aside>

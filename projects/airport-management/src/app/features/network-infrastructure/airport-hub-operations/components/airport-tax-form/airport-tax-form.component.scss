@@ -1,0 +1,395 @@
+ $midnight-sapphire: #051937;
+ $royal-gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $luxury-ruby: #D32F2F;
+ $error-rose: #9f1239;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Card (squircle 12px)
+ // ============================================================================
+ .atf-card {
+     border-radius: 12px;
+     overflow: hidden;
+     background: var(--aoms-bg-card, #ffffff);
+     border: 1px solid rgba($champagne, 0.2);
+     box-shadow: 0 4px 22px rgba($midnight-sapphire, 0.07);
+     animation: atf-enter 360ms $luxury both;
+     transition:
+         background-color var(--aoms-transition-base, 250ms ease),
+         border-color var(--aoms-transition-base, 250ms ease);
+ }
+
+ // ============================================================================
+ // 2. Card header — Champagne Gold accent
+ // ============================================================================
+ .atf-header {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 1.25rem 1.5rem;
+     background: linear-gradient(135deg,
+             rgba($champagne, 0.06) 0%,
+             transparent 60%);
+     border-bottom: 1px solid rgba($champagne, 0.18);
+ }
+
+ .atf-header__icon-wrap {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.5rem;
+     height: 2.5rem;
+     border-radius: 8px;
+     background: $midnight-sapphire;
+     border: 1px solid rgba($champagne, 0.2);
+ }
+
+ .atf-header__icon {
+     width: 1.125rem;
+     height: 1.125rem;
+     color: $champagne;
+ }
+
+ .atf-header__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 700;
+     letter-spacing: -0.01em;
+     color: var(--aoms-text-primary, $charcoal);
+     margin: 0 0 0.2rem;
+ }
+
+ .atf-header__subtitle {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: var(--aoms-text-muted);
+     margin: 0;
+ }
+
+ // "Planned" badge
+ .atf-badge {
+     margin-left: auto;
+     flex-shrink: 0;
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3rem;
+     padding: 0.2rem 0.6rem;
+     border-radius: 3px;
+     background: rgba($royal-gold, 0.08);
+     border: 1px solid rgba($royal-gold, 0.2);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 9px;
+     font-weight: 700;
+     letter-spacing: 0.09em;
+     text-transform: uppercase;
+     color: $royal-gold;
+
+     &__icon {
+         width: 0.7rem;
+         height: 0.7rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 3. Form
+ // ============================================================================
+ .atf-form {
+     padding: 1.5rem;
+ }
+
+ .atf-grid {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 1.25rem;
+
+     @media (max-width: 640px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ // ============================================================================
+ // 4. Individual field
+ // ============================================================================
+ .atf-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+
+     &--error {
+         .atf-input {
+             border-color: $error-rose !important;
+             background: rgba($error-rose, 0.04);
+
+             &:focus {
+                 box-shadow: 0 0 0 3px rgba($error-rose, 0.12) !important;
+             }
+         }
+
+         .atf-label {
+             color: $error-rose !important;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 5. Input wrapper (holds prefix + input + floating label)
+ // ============================================================================
+ .atf-input-wrap {
+     position: relative;
+     display: flex;
+ }
+
+ // Currency / symbol prefix block
+ .atf-prefix {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 2.5rem;
+     height: 3.375rem;
+     background: rgba($midnight-sapphire, 0.04);
+     border: 1px solid rgba($charcoal, 0.15);
+     border-right: none;
+     border-radius: 8px 0 0 8px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 700;
+     color: var(--aoms-text-muted);
+     transition:
+         border-color 180ms $ease,
+         color 180ms $ease;
+
+     &--sym {
+         font-size: 18px;
+         font-weight: 400;
+     }
+ }
+
+ // Highlight prefix when inner input is focused
+ .atf-input-wrap:focus-within .atf-prefix {
+     border-color: $champagne;
+     color: $champagne;
+ }
+
+ // ============================================================================
+ // 6. Input
+ // ============================================================================
+ .atf-input {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     border: none;
+     background: none;
+
+     flex: 1;
+     height: 3.375rem;
+     padding: 1.4rem 0.875rem 0.4rem;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 14px;
+     font-weight: 500;
+     color: var(--aoms-text-primary, $charcoal);
+
+     background: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+
+     transition:
+         border-color 180ms $ease,
+         background 180ms $ease,
+         box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $champagne;
+         background: #ffffff;
+         box-shadow:
+             0 0 0 3px rgba($champagne, 0.15),
+             0 0 14px rgba($champagne, 0.08);
+     }
+
+     // Remove number spinners
+     &[type='number']::-webkit-inner-spin-button,
+     &[type='number']::-webkit-outer-spin-button {
+         -webkit-appearance: none;
+         appearance: none;
+     }
+
+     // Prefixed variant — left border removed, left radius removed
+     &--prefixed {
+         border-left: none;
+         border-radius: 0 8px 8px 0;
+         padding-left: 0.75rem;
+     }
+ }
+
+ // ============================================================================
+ // 7. Floating label
+ // ============================================================================
+ .atf-label {
+     position: absolute;
+     top: 50%;
+     left: 2.75rem; // account for prefix width + gap
+     transform: translateY(-50%);
+     pointer-events: none;
+
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+
+     transition:
+         top 180ms $ease,
+         font-size 180ms $ease,
+         font-weight 180ms $ease,
+         color 180ms $ease,
+         letter-spacing 180ms $ease,
+         transform 180ms $ease;
+
+     // Float when input has value or is focused
+     .atf-input:focus~&,
+     .atf-input:not(:placeholder-shown)~& {
+         top: 0.45rem;
+         transform: translateY(0);
+         font-size: 9px;
+         font-weight: 700;
+         letter-spacing: 0.09em;
+         text-transform: uppercase;
+         color: $champagne;
+     }
+
+     // Non-prefixed variant
+     &--prefixed {
+         left: 2.75rem;
+     }
+
+     &__unit {
+         font-size: 0.8em;
+         opacity: 0.7;
+         font-weight: 400;
+         margin-left: 0.2em;
+         letter-spacing: 0;
+         text-transform: none;
+     }
+ }
+
+ // Focus: champagne label
+ .atf-input:focus~.atf-label {
+     color: $champagne !important;
+ }
+
+ // ============================================================================
+ // 8. Validation error
+ // ============================================================================
+ .atf-error {
+     display: block;
+     margin-top: 0.35rem;
+     padding: 0.25rem 0.6rem;
+     border-radius: 4px;
+     background: rgba($error-rose, 0.05);
+     border-left: 2px solid $error-rose;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     font-weight: 500;
+     color: $error-rose;
+     animation: atf-error-in 180ms $luxury both;
+ }
+
+ // ============================================================================
+ // 9. Disclaimer note
+ // ============================================================================
+ .atf-note {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.5rem;
+     margin-top: 1.25rem;
+     padding: 0.75rem 1rem;
+     border-radius: 6px;
+     background: rgba($champagne, 0.06);
+     border: 1px solid rgba($champagne, 0.18);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     line-height: 1.6;
+     color: var(--aoms-text-muted);
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         color: rgba($champagne, 0.7);
+         margin-top: 0.1rem;
+     }
+ }
+
+ // ============================================================================
+ // 10. Keyframes
+ // ============================================================================
+ @keyframes atf-enter {
+     from {
+         opacity: 0;
+         transform: translateY(8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes atf-error-in {
+     from {
+         opacity: 0;
+         transform: translateX(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ // ============================================================================
+ // 11. Dark Mode  (.aoms-dark on <html>)
+ // ============================================================================
+ :host-context(.aoms-dark) {
+     .atf-card {
+         background: rgba(255, 255, 255, 0.03);
+         box-shadow: 0 4px 28px rgba(0, 0, 0, 0.3);
+     }
+
+     .atf-header__title {
+         color: rgba(255, 255, 255, 0.88);
+     }
+
+     .atf-header__subtitle {
+         color: rgba(255, 255, 255, 0.38);
+     }
+
+     .atf-input {
+         background: rgba($midnight-sapphire, 0.55);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.88);
+
+         &:focus {
+             background: rgba($midnight-sapphire, 0.8);
+         }
+     }
+
+     .atf-prefix {
+         background: rgba($midnight-sapphire, 0.8);
+         border-color: rgba(255, 255, 255, 0.1);
+         color: rgba(255, 255, 255, 0.35);
+     }
+
+     .atf-note {
+         background: rgba($champagne, 0.04);
+         border-color: rgba($champagne, 0.1);
+         color: rgba(255, 255, 255, 0.35);
+     }
+ }

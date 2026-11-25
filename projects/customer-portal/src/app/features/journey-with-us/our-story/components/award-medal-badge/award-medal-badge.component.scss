@@ -1,0 +1,172 @@
+  :host {
+      display: block;
+  }
+
+  @keyframes badgeIn {
+      from {
+          opacity: 0;
+          transform: translateY(16px);
+      }
+
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  .amb {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 22px 24px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1px solid rgba(226, 199, 128, .2);
+      box-shadow: 0 3px 16px rgba(5, 25, 55, .06);
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+      animation: badgeIn 540ms cubic-bezier(.4, 0, .2, 1) both;
+      animation-delay: var(--delay, 0ms);
+
+      &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 36px rgba(5, 25, 55, .12);
+          border-color: rgba(182, 143, 36, .4);
+      }
+
+      /* Grand award — top gold bar + larger icon */
+      &--grand {
+          position: relative;
+          overflow: hidden;
+          border-color: rgba(182, 143, 36, .3);
+          background: linear-gradient(135deg, #FFFFFF 80%, rgba(182, 143, 36, .03));
+
+          &::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              height: 3px;
+              background: linear-gradient(90deg, #B68F24, #E2C780, transparent);
+          }
+
+          .amb__icon-wrap {
+              width: 60px;
+              height: 60px;
+          }
+
+          .amb__icon {
+              width: 36px;
+              height: 36px;
+          }
+
+          .amb__title {
+              font-size: 1rem;
+          }
+      }
+  }
+
+  .amb__icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      background: rgba(182, 143, 36, .08);
+      border: 1px solid rgba(182, 143, 36, .22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .28s ease;
+
+      .amb:hover & {
+          background: rgba(182, 143, 36, .14);
+      }
+  }
+
+  .amb__icon {
+      stroke: #B68F24;
+  }
+
+  .amb__body {
+      flex: 1;
+      min-width: 0;
+  }
+
+  .amb__category {
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(182, 143, 36, .7);
+      margin: 0 0 4px;
+  }
+
+  .amb__title {
+      font-family: 'Montserrat', 'Inter', sans-serif;
+      font-size: .88rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: #101056;
+      margin: 0 0 8px;
+      line-height: 1.25;
+  }
+
+  .amb__consecutive {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      margin-bottom: 8px;
+  }
+
+  .amb__consec-num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      color: #B68F24;
+      line-height: 1;
+  }
+
+  .amb__consec-label {
+      font-size: .65rem;
+      font-weight: 500;
+      color: #718096;
+  }
+
+  .amb__org-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+  }
+
+  .amb__org-line {
+      width: 16px;
+      height: 1px;
+      background: rgba(182, 143, 36, .4);
+      flex-shrink: 0;
+  }
+
+  .amb__org {
+      font-size: .65rem;
+      color: #718096;
+      font-style: italic;
+      line-height: 1.4;
+  }
+
+  .amb__year {
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      color: rgba(16, 16, 86, .35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+      .amb {
+          animation: none;
+          transition: none;
+      }
+
+      .amb__icon-wrap {
+          transition: none;
+      }
+  }

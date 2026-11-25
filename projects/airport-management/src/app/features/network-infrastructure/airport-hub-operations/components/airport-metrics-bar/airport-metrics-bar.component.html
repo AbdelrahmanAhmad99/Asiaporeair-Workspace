@@ -1,0 +1,46 @@
+<div class="amb-bar" role="region" aria-label="Airport network metrics">
+
+    <!-- ══ Loading Shimmer ══════════════════════════════════════════ -->
+    @if (loading()) {
+    @for (s of shimmerWidgets; track $index) {
+    <div class="amb-widget amb-widget--shimmer" aria-hidden="true">
+        <div class="amb-shimmer amb-shimmer--icon"></div>
+        <div class="amb-shimmer--body">
+            <div class="amb-shimmer amb-shimmer--value"></div>
+            <div class="amb-shimmer amb-shimmer--label"></div>
+        </div>
+    </div>
+    }
+    }
+
+    <!-- ══ Metric Widgets ═══════════════════════════════════════════ -->
+    @if (!loading()) {
+    @for (widget of widgets; track widget.id; let i = $index) {
+    <div class="amb-widget" [class]="'amb-widget ' + widget.accentClass" [style.animation-delay]="(i * 80) + 'ms'"
+        role="group" [attr.aria-label]="widget.label">
+
+        <!-- Icon -->
+        <div class="amb-widget__icon-wrap" aria-hidden="true">
+            <svg class="amb-widget__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="widget.iconPath" />
+            </svg>
+        </div>
+
+        <!-- Content -->
+        <div class="amb-widget__content">
+            <span class="amb-widget__value" [attr.aria-label]="widget.label + ': ' + widget.getValue(metrics())">
+                {{ widget.getValue(metrics()) }}
+            </span>
+            <span class="amb-widget__label">{{ widget.label }}</span>
+            <span class="amb-widget__sublabel">{{ widget.sublabel }}</span>
+        </div>
+
+        <!-- Decorative accent line -->
+        <div class="amb-widget__accent" aria-hidden="true"></div>
+
+    </div>
+    }
+    }
+
+</div>

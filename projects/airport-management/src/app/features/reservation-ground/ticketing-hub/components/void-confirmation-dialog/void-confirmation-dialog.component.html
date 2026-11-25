@@ -1,0 +1,117 @@
+<!-- Backdrop -->
+<div class="vcd-backdrop" (click)="onBackdropClick()" (keydown)="onKeydown($event)" aria-hidden="true">
+</div>
+
+<!-- Dialog Panel -->
+<div class="vcd-panel" role="alertdialog" aria-modal="true" aria-labelledby="vcd-title" aria-describedby="vcd-desc"
+    (keydown)="onKeydown($event)">
+
+    <!-- Ruby accent bar -->
+    <div class="vcd-panel__accent-bar" aria-hidden="true"></div>
+
+    <!-- ── Warning Icon ──────────────────────────────────────────── -->
+    <div class="vcd-icon-wrap" aria-hidden="true">
+        <div class="vcd-icon-ring vcd-icon-ring--outer"></div>
+        <div class="vcd-icon-ring vcd-icon-ring--inner"></div>
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="vcd-icon">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+        </svg>
+    </div>
+
+    <!-- ── Header ────────────────────────────────────────────────── -->
+    <div class="vcd-header">
+        <h2 class="vcd-title" id="vcd-title">Void Ticket</h2>
+        <p class="vcd-ticket-code" aria-label="Ticket code">{{ ticketCode() }}</p>
+    </div>
+
+    <!-- ── Warning copy ──────────────────────────────────────────── -->
+    <div class="vcd-body" id="vcd-desc">
+        <div class="vcd-warning-banner" role="note" aria-label="Warning: irreversible action">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="vcd-warning-banner__icon" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <p>
+                This action is <strong>permanent and irreversible.</strong>
+                The ticket will be invalidated and flagged in the regulatory audit log.
+                All associated boarding privileges will be revoked immediately.
+            </p>
+        </div>
+
+        <!-- ── Reason Textarea ─────────────────────────────────────── -->
+        <div class="vcd-reason-field">
+            <div class="vcd-reason-field__label-row">
+                <label class="vcd-reason-field__label" for="vcd-reason">
+                    Void Reason
+                    <span class="vcd-reason-field__required" aria-label="required">*</span>
+                </label>
+                <span class="vcd-reason-field__char-count"
+                    [class.vcd-reason-field__char-count--valid]="charCount() >= 5" aria-live="polite"
+                    [attr.aria-label]="charCount() + ' characters entered'">
+                    {{ charCount() }} / 5 min
+                </span>
+            </div>
+
+            <textarea id="vcd-reason" class="vcd-textarea" rows="4" maxlength="500"
+                placeholder="e.g. Passenger name correction required, duplicate issuance, flight cancellation by operations…"
+                autocomplete="off" spellcheck="true" [value]="reason()" [disabled]="isProcessing()"
+                (input)="onReasonInput($any($event.target).value)" (keydown.escape)="onCancel()" aria-required="true"
+                [attr.aria-invalid]="charCount() > 0 && charCount() < 5 ? 'true' : null"
+                aria-describedby="vcd-reason-hint">
+      </textarea>
+
+            <p id="vcd-reason-hint" class="vcd-reason-hint">
+                Minimum 5 characters required. This reason will appear permanently in the audit trail.
+            </p>
+
+            <!-- Inline validation message -->
+            @if (charCount() > 0 && charCount() < 5) { <p class="vcd-reason-error" role="alert">
+                Please provide at least 5 characters for the void reason.
+                </p>
+                }
+        </div>
+
+        <!-- Error from store -->
+        @if (error()) {
+        <div class="vcd-api-error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="vcd-api-error__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{ error() }}
+        </div>
+        }
+    </div>
+
+    <!-- ── Action Buttons ────────────────────────────────────────── -->
+    <footer class="vcd-footer">
+        <!-- Cancel -->
+        <button class="vcd-btn vcd-btn--cancel" type="button" [disabled]="isProcessing()" (click)="onCancel()">
+            Keep Ticket
+        </button>
+
+        <!-- Confirm Void — Ruby Red with Gold border -->
+        <button class="vcd-btn vcd-btn--confirm" type="button" [disabled]="!canConfirm()"
+            [attr.aria-disabled]="!canConfirm()" (click)="onConfirm()">
+            @if (isProcessing()) {
+            <svg class="vcd-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Voiding…
+            } @else {
+            <svg class="vcd-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+            Confirm Void
+            }
+        </button>
+    </footer>
+
+</div>

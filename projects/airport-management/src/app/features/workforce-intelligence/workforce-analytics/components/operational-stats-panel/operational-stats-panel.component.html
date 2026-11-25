@@ -1,0 +1,223 @@
+<!-- operational-stats-panel.component.html -->
+
+<div class="osp">
+
+    <!-- Glass backdrop -->
+    <div class="osp__glass" aria-hidden="true"></div>
+
+    <!-- ── Header ─────────────────────────────────────────────── -->
+    <div class="osp__header">
+        <div class="osp__header__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__header__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
+            </svg>
+        </div>
+        <div>
+            <p class="osp__title">Operational Data Engine</p>
+            <p class="osp__subtitle">Real-time crew performance metrics</p>
+        </div>
+        @if (kpis().lastUpdated) {
+        <span class="osp__sync-tag" aria-live="polite">
+            {{ kpis().lastUpdated }}
+        </span>
+        }
+    </div>
+
+    <!-- ── Loading Shimmer ────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="osp__shimmer-grid" aria-busy="true">
+        @for (r of shimmerRows; track $index) {
+        <div class="osp-sh osp-sh--stat"></div>
+        }
+    </div>
+    }
+
+    <!-- ── KPI Grid ──────────────────────────────────────────── -->
+    @if (!loading()) {
+
+    <!-- Section 1: Performance Metrics -->
+    <div class="osp__section-label">Performance Indicators</div>
+    <div class="osp__grid">
+
+        <div class="osp__stat osp__stat--performance">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <div class="osp__stat__body">
+                <p class="osp__stat__label">Avg Monthly Flight Hours</p>
+                <p class="osp__stat__value">{{ kpis().avgFlightHours | number:'1.0-1' }}<span
+                        class="osp__stat__unit">h</span></p>
+            </div>
+        </div>
+
+        <div class="osp__stat" [ngClass]="coverageClass()">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+            <div class="osp__stat__body">
+                <p class="osp__stat__label">Flight Coverage Ratio</p>
+                <p class="osp__stat__value">{{ kpis().flightCoveragePct | number:'1.0-0' }}<span
+                        class="osp__stat__unit">%</span></p>
+                <div class="osp__stat__bar-track" aria-hidden="true">
+                    <div class="osp__stat__bar-fill" [style.width.%]="kpis().flightCoveragePct"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="osp__stat" [ngClass]="restClass()">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <div class="osp__stat__body">
+                <p class="osp__stat__label">Rest Period Compliance</p>
+                <p class="osp__stat__value">{{ kpis().restCompliancePct | number:'1.0-0' }}<span
+                        class="osp__stat__unit">%</span></p>
+                <div class="osp__stat__bar-track" aria-hidden="true">
+                    <div class="osp__stat__bar-fill" [style.width.%]="kpis().restCompliancePct"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Section 2: Crew Composition -->
+    <div class="osp__section-label">Crew Composition</div>
+    <div class="osp__grid">
+
+        <div class="osp__stat osp__stat--neutral">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197" />
+            </svg>
+            <div class="osp__stat__body">
+                <p class="osp__stat__label">Total Crew Roster</p>
+                <p class="osp__stat__value osp__stat__value--champagne">{{ kpis().totalCrew | number }}</p>
+            </div>
+        </div>
+
+        <div class="osp__stat osp__stat--cobalt">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+            <div class="osp__stat__body">
+                <p class="osp__stat__label">Flight Deck Pilots</p>
+                <p class="osp__stat__value osp__stat__value--cobalt">{{ kpis().pilotCount | number }}</p>
+            </div>
+        </div>
+
+        <div class="osp__stat osp__stat--crew">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            <div class="osp__stat__body">
+                <p class="osp__stat__label">Cabin Crew Attendants</p>
+                <p class="osp__stat__value osp__stat__value--crew">{{ kpis().attendantCount | number }}</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Section 3: Status Breakdown -->
+    <div class="osp__section-label">Status Breakdown</div>
+    <div class="osp__grid osp__grid--status">
+
+        <div class="osp__badge-stat osp__badge-stat--leave">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__badge-stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+            <span class="osp__badge-stat__val">{{ kpis().onLeave | number }}</span>
+            <span class="osp__badge-stat__label">On Leave</span>
+        </div>
+
+        <div class="osp__badge-stat osp__badge-stat--training">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__badge-stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A59.905 59.905 0 0 1 12 3.493a59.902 59.902 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0 1 12 13.489a50.702 50.702 0 0 1 10.741-3.342" />
+            </svg>
+            <span class="osp__badge-stat__val">{{ kpis().training | number }}</span>
+            <span class="osp__badge-stat__label">Training</span>
+        </div>
+
+        <div class="osp__badge-stat osp__badge-stat--standby">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__badge-stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <span class="osp__badge-stat__val">{{ kpis().standby | number }}</span>
+            <span class="osp__badge-stat__label">On Standby</span>
+        </div>
+
+    </div>
+
+    <!-- Section 4: Compliance & Certifications -->
+    <div class="osp__section-label">Compliance & Certifications</div>
+    <div class="osp__grid osp__grid--status">
+
+        <div class="osp__badge-stat osp__badge-stat--expiring">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__badge-stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+            <span class="osp__badge-stat__val">{{ kpis().expiringCerts }}</span>
+            <span class="osp__badge-stat__label">Expiring Soon</span>
+        </div>
+
+        <div class="osp__badge-stat osp__badge-stat--expired">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__badge-stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            <span class="osp__badge-stat__val">{{ kpis().expiredCerts }}</span>
+            <span class="osp__badge-stat__label">Expired</span>
+        </div>
+
+        <div class="osp__badge-stat osp__badge-stat--compliant">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="osp__badge-stat__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            <span class="osp__badge-stat__val">{{ kpis().totalCrew - kpis().expiredCerts }}</span>
+            <span class="osp__badge-stat__label">Compliant</span>
+        </div>
+
+    </div>
+
+    <!-- Section 5: Base Breakdown -->
+    @if (topBases().length > 0) {
+    <div class="osp__section-label">Top Base Airports</div>
+    <div class="osp__bases">
+        @for (base of topBases(); track base.iata; let first = $first) {
+        <div class="osp__base-row">
+            <span class="osp__base-iata" [class.osp__base-iata--top]="first">{{ base.iata }}</span>
+            <div class="osp__base-track" aria-hidden="true">
+                <div class="osp__base-fill" [class.osp__base-fill--top]="first" [style.width.%]="base.pct"></div>
+            </div>
+            <span class="osp__base-count">{{ base.count | number }}</span>
+            <span class="osp__base-pct">{{ base.pct }}%</span>
+        </div>
+        }
+    </div>
+    }
+
+    }
+
+</div>

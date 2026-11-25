@@ -1,0 +1,397 @@
+// ============================================================================
+// fare-package-card.component.scss
+// Asiaporeair | Fare Package Card — Four cabin tier variants
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 260ms $ease;
+
+// ── Tier accent colours ───────────────────────────────────────────────────────
+$first-accent : #C8A84B; // warm antique gold
+$business-accent : $royal-gold;
+$premium-accent : #6366f1; // indigo
+$economy-accent : #0ea5e9; // sky blue
+
+:host {
+    display: block;
+}
+
+// ── §1 Card shell ─────────────────────────────────────────────────────────────
+.fpc-card {
+    background: $white;
+    border-radius: 12px;
+    border: 1px solid rgba($charcoal, 0.09);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba($midnight, 0.06), 0 12px 28px rgba($midnight, 0.04);
+    transition: box-shadow $t, border-color $t, transform $t;
+    animation: cardUp 440ms $ease both;
+
+    &:hover {
+        box-shadow: 0 8px 24px rgba($midnight, 0.1), 0 20px 48px rgba($midnight, 0.06);
+        border-color: rgba($royal-gold, 0.2);
+        transform: translateY(-3px);
+    }
+
+    // Tier border accents
+    &--first {
+        border-top: 3px solid $first-accent;
+    }
+
+    &--business {
+        border-top: 3px solid $business-accent;
+    }
+
+    &--premium {
+        border-top: 3px solid $premium-accent;
+    }
+
+    &--expanded {
+        border-color: rgba($royal-gold, 0.3);
+        box-shadow: 0 8px 32px rgba($midnight, 0.12), 0 0 0 1px rgba($royal-gold, 0.12);
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes cardUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── §2 Gold top bar (for Economy — others use border-top) ─────────────────────
+.fpc-bar {
+    height: 0;
+
+    .fpc-card:not(.fpc-card--first):not(.fpc-card--business):not(.fpc-card--premium) & {
+        height: 3px;
+        background: linear-gradient(90deg, $royal-gold, $champagne, $royal-gold);
+        background-size: 200% 100%;
+        animation: barShimmer 4s ease-in-out infinite;
+    }
+}
+
+@keyframes barShimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+// ── §3 Header ─────────────────────────────────────────────────────────────────
+.fpc-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    flex-wrap: wrap;
+
+    &__left {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        flex-wrap: wrap;
+    }
+}
+
+// Code badge
+.fpc-code-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: $midnight;
+    background: rgba($royal-gold, 0.12);
+    border: 1px solid rgba($royal-gold, 0.3);
+
+    &[data-tier="first"] {
+        background: rgba($first-accent, 0.12);
+        border-color: rgba($first-accent, 0.35);
+        color: darken($first-accent, 20%);
+    }
+
+    &[data-tier="business"] {
+        background: rgba($royal-gold, 0.12);
+    }
+
+    &[data-tier="premium"] {
+        background: rgba($premium-accent, 0.1);
+        border-color: rgba($premium-accent, 0.3);
+        color: darken($premium-accent, 10%);
+    }
+
+    &[data-tier="economy"] {
+        background: rgba($economy-accent, 0.1);
+        border-color: rgba($economy-accent, 0.25);
+        color: darken($economy-accent, 15%);
+    }
+}
+
+// Cabin label chip
+.fpc-cabin-label {
+    font-family: $font;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: $muted;
+    padding: 3px 8px;
+    border: 1px solid rgba($charcoal, 0.1);
+    border-radius: 20px;
+    background: rgba($charcoal, 0.03);
+
+    &[data-tier="first"] {
+        color: darken($first-accent, 15%);
+        border-color: rgba($first-accent, 0.25);
+        background: rgba($first-accent, 0.07);
+    }
+
+    &[data-tier="business"] {
+        color: darken($royal-gold, 10%);
+        border-color: rgba($royal-gold, 0.25);
+        background: rgba($royal-gold, 0.07);
+    }
+
+    &[data-tier="premium"] {
+        color: $premium-accent;
+        border-color: rgba($premium-accent, 0.25);
+        background: rgba($premium-accent, 0.07);
+    }
+}
+
+// ── §4 Price block ────────────────────────────────────────────────────────────
+.fpc-price-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+    flex-shrink: 0;
+}
+
+.fpc-price-from {
+    font-family: $font;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba($muted, 0.6);
+}
+
+.fpc-price-value {
+    font-family: $font;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: $royal-gold;
+    line-height: 1;
+}
+
+// ── §5 Description ────────────────────────────────────────────────────────────
+.fpc-description {
+    padding: 0 1.5rem 1rem;
+
+    &__title {
+        font-family: $font;
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        color: $charcoal;
+        margin: 0 0 0.375rem;
+        line-height: 1.35;
+    }
+
+    &__short {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.74rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.6;
+    }
+}
+
+// ── §6 Compact benefits preview ───────────────────────────────────────────────
+.fpc-benefits-preview {
+    padding: 0 1.5rem 1rem;
+    border-top: 1px solid rgba($charcoal, 0.06);
+    padding-top: 0.875rem;
+}
+
+// ── §7 Expanded content ───────────────────────────────────────────────────────
+.fpc-expanded {
+    animation: expandReveal 320ms $ease both;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    &__divider {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0 1.5rem;
+
+        &-line {
+            flex: 1;
+            height: 1px;
+            background: rgba($royal-gold, 0.2);
+        }
+
+        &-label {
+            font-family: $font;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba($royal-gold, 0.6);
+            white-space: nowrap;
+        }
+    }
+
+    &__section {
+        padding: 0 1.5rem;
+    }
+
+    &__section-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: $font;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: $charcoal;
+        margin: 0 0 0.875rem;
+    }
+}
+
+@keyframes expandReveal {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ── §8 Action row ─────────────────────────────────────────────────────────────
+.fpc-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem 1.25rem;
+    margin-top: auto;
+    border-top: 1px solid rgba($charcoal, 0.07);
+    flex-wrap: wrap;
+}
+
+.fpc-cta-primary {
+    flex: 1;
+    min-width: 160px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.7rem 1.25rem;
+    border-radius: 4px;
+    background: $midnight;
+    border: 1px solid rgba($champagne, 0.2);
+    font-family: $font;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $champagne;
+    cursor: pointer;
+    transition: background $t, box-shadow $t, transform $t, border-color $t;
+
+    &:hover {
+        background: lighten($midnight, 6%);
+        border-color: rgba($champagne, 0.4);
+        box-shadow: 0 4px 14px rgba($midnight, 0.25);
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+.fpc-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid rgba($charcoal, 0.12);
+    font-family: $font;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba($charcoal, 0.55);
+    cursor: pointer;
+    transition: all $t;
+
+    &:hover {
+        border-color: rgba($royal-gold, 0.3);
+        color: $royal-gold;
+        background: rgba($royal-gold, 0.03);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fpc-card {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .fpc-bar {
+        animation: none !important;
+    }
+
+    .fpc-expanded {
+        animation: none !important;
+    }
+
+    .fpc-cta-primary,
+    .fpc-cta-secondary {
+        transition: none !important;
+    }
+}

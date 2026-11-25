@@ -1,0 +1,507 @@
+// ============================================================================
+// entertainment-landing.component.scss
+// Asiaporeair | Entertainment Hub Landing — Page Styles
+// ============================================================================
+
+$midnight : #051937;
+$royal-gold : #B68F24;
+$champagne : #E2C780;
+$ivory : #F8F9FA;
+$white : #FFFFFF;
+$charcoal : #101056;
+$muted : #718096;
+$font : 'Montserrat',
+'Inter',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+$t : 300ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+    background: $white;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+.el-hero {
+    background: $midnight;
+    position: relative;
+    overflow: hidden;
+
+    // Deep space glow effect
+    &::before {
+        content: '';
+        position: absolute;
+        top: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 400px;
+        background: radial-gradient(ellipse, rgba($royal-gold, .06) 0%, transparent 65%);
+        pointer-events: none;
+    }
+
+    // Bottom-right deep blue highlight
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: -100px;
+        width: 400px;
+        height: 300px;
+        background: radial-gradient(ellipse, rgba(30, 80, 160, .12) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    &__inner {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 40px 56px;
+
+        @media (max-width: 768px) {
+            padding: 24px 20px 40px;
+        }
+    }
+
+    &__bc {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 26px;
+    }
+
+    &__bc-link {
+        font-size: 11px;
+        color: rgba($white, .4);
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+            color: $champagne;
+        }
+    }
+
+    &__bc-sep {
+        font-size: 12px;
+        color: rgba($white, .18);
+    }
+
+    &__bc-cur {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba($champagne, .65);
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 48px;
+        align-items: start;
+
+        @media (max-width: 840px) {
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+    }
+
+    &__pre-block {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+
+    &__pre-line {
+        width: 44px;
+        height: 1px;
+        background: $royal-gold;
+    }
+
+    &__eyebrow {
+        font-size: .6rem;
+        font-weight: 700;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        color: $royal-gold;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 800;
+        letter-spacing: -.04em;
+        color: $white;
+        margin: 0 0 14px;
+        line-height: 1.08;
+    }
+
+    &__subtitle {
+        font-size: .88rem;
+        color: rgba($white, .54);
+        line-height: 1.72;
+        margin: 0;
+        max-width: 500px;
+    }
+
+    // Content count badges panel
+    &__counts {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        border-left: 1px solid rgba($royal-gold, .2);
+        padding-left: 28px;
+
+        @media (max-width: 840px) {
+            flex-direction: row;
+            flex-wrap: wrap;
+            border-left: none;
+            border-top: 1px solid rgba($royal-gold, .18);
+            padding: 20px 0 0;
+            gap: 20px 32px;
+        }
+    }
+
+    &__count {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    &__count-num {
+        font-family: $font;
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -.03em;
+        color: $champagne;
+        line-height: 1.1;
+    }
+
+    &__count-label {
+        font-size: .66rem;
+        font-weight: 500;
+        color: rgba($white, .42);
+        max-width: 110px;
+        line-height: 1.4;
+    }
+
+    // Gold scan-line glow band at bottom
+    &__glow-band {
+        height: 2px;
+        background: linear-gradient(90deg, transparent 0%, $royal-gold 30%, $champagne 55%, transparent 100%);
+        opacity: .5;
+        position: relative;
+        overflow: visible;
+    }
+
+    &__glow-inner {
+        position: absolute;
+        top: -10px;
+        left: 0;
+        right: 0;
+        height: 22px;
+        background: linear-gradient(to bottom, transparent, rgba($royal-gold, .06), transparent);
+    }
+}
+
+// ── Hub section ───────────────────────────────────────────────────────────────
+.el-hub {
+    background: $ivory;
+    padding: 60px 0 68px;
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+
+        @media (max-width: 768px) {
+            padding: 0 20px;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 40px;
+    }
+
+    &__header-line {
+        width: 3px;
+        min-height: 70px;
+        background: linear-gradient($royal-gold, $champagne);
+        border-radius: 2px;
+        flex-shrink: 0;
+        margin-top: 4px;
+    }
+
+    &__eyebrow {
+        font-size: .6rem;
+        font-weight: 700;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin: 0 0 6px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        font-weight: 800;
+        letter-spacing: -.03em;
+        color: $charcoal;
+        margin: 0 0 8px;
+        line-height: 1.15;
+    }
+
+    &__subtitle {
+        font-size: .83rem;
+        color: $muted;
+        margin: 0;
+        line-height: 1.65;
+        max-width: 500px;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px;
+
+        @media (max-width: 640px) {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+// ── Media categories ──────────────────────────────────────────────────────────
+.el-media {
+    background: $midnight;
+    padding: 60px 0 72px;
+    border-top: 1px solid rgba($royal-gold, .1);
+    border-bottom: 1px solid rgba($royal-gold, .1);
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+
+        @media (max-width: 768px) {
+            padding: 0 20px;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 40px;
+    }
+
+    &__header-line {
+        width: 3px;
+        min-height: 66px;
+        background: linear-gradient($royal-gold, rgba($royal-gold, .3));
+        border-radius: 2px;
+        flex-shrink: 0;
+        margin-top: 4px;
+    }
+
+    &__eyebrow {
+        font-size: .6rem;
+        font-weight: 700;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin: 0 0 6px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+        font-weight: 800;
+        letter-spacing: -.03em;
+        color: $white;
+        margin: 0 0 6px;
+    }
+
+    &__subtitle {
+        font-size: .8rem;
+        color: rgba($white, .48);
+        margin: 0;
+        line-height: 1.6;
+        max-width: 460px;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+
+        @media (max-width: 900px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 540px) {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+// ── Screen tech callout ───────────────────────────────────────────────────────
+.el-screen-tech {
+    background: $white;
+
+    &__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 64px 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+
+        @media (max-width: 860px) {
+            grid-template-columns: 1fr;
+            gap: 36px;
+            padding: 48px 20px;
+        }
+    }
+
+    &__eyebrow {
+        font-size: .6rem;
+        font-weight: 700;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        color: $royal-gold;
+        margin: 0 0 8px;
+    }
+
+    &__title {
+        font-family: $font;
+        font-size: clamp(1.3rem, 2.8vw, 1.9rem);
+        font-weight: 800;
+        letter-spacing: -.035em;
+        color: $charcoal;
+        margin: 0 0 14px;
+        line-height: 1.12;
+    }
+
+    &__divider {
+        width: 44px;
+        height: 2px;
+        background: linear-gradient(90deg, $royal-gold, $champagne);
+        border-radius: 1px;
+        margin-bottom: 14px;
+    }
+
+    &__desc {
+        font-size: .84rem;
+        color: $muted;
+        line-height: 1.75;
+        margin: 0 0 28px;
+    }
+
+    &__specs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        list-style: none;
+        margin: 0 0 28px;
+        padding: 0;
+
+        @media (max-width: 600px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        li {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding: 12px 0;
+            border-top: 1px solid rgba($champagne, .3);
+        }
+    }
+
+    &__spec-val {
+        font-family: $font;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: $charcoal;
+        letter-spacing: -.02em;
+    }
+
+    &__spec-label {
+        font-size: .62rem;
+        font-weight: 500;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: $muted;
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 12px 24px;
+        border-radius: 4px;
+        background: $midnight;
+        border: 1px solid rgba($royal-gold, .35);
+        text-decoration: none;
+        font-family: $font;
+        font-size: .75rem;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: $champagne;
+        transition: background $t, border-color $t, color $t;
+
+        &:hover {
+            background: $royal-gold;
+            border-color: $royal-gold;
+            color: $midnight;
+
+            svg {
+                color: $midnight;
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid $royal-gold;
+            outline-offset: 3px;
+        }
+
+        svg {
+            color: $champagne;
+            transition: color $t;
+        }
+    }
+
+    &__image-wrap {
+        border-radius: 12px;
+        overflow: hidden;
+        aspect-ratio: 4 / 3;
+        box-shadow: 0 8px 40px rgba($midnight, .12);
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform .45s $ease;
+
+        .el-screen-tech__image-wrap:hover & {
+            transform: scale(1.04);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .el-screen-tech__image {
+        transition: none;
+    }
+}

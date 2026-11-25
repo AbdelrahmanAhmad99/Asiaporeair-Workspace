@@ -1,0 +1,277 @@
+<!-- ============================================================================
+     fares-directory.component.html
+     Asiaporeair | Active Fare Directory
+     ============================================================================ -->
+
+<div class="fd-page">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HERO HEADER
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <header class="fd-hero" [@heroReveal] role="banner">
+
+        <!-- Ambient particles -->
+        <div class="fd-hero__particles" aria-hidden="true">
+            @for (p of [1,2,3,4,5,6,7,8,9,10]; track p) {
+            <span class="fd-particle"></span>
+            }
+        </div>
+
+        <div class="fd-hero__geo" aria-hidden="true"></div>
+
+        <div class="fd-hero__inner">
+
+            <!-- Nav row -->
+            <div class="fd-hero__nav-row">
+                <a class="fd-brand" href="/flight-info/search" aria-label="Asiaporeair home">
+                    ASIAPOREAIR
+                </a>
+                <nav class="fd-hero__quick-nav" aria-label="Section navigation">
+                    <a class="fd-nav-link" href="/flight-info/search">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
+                        Flight Search
+                    </a>
+                    <a class="fd-nav-link" href="/flight-info/status">Flight Status</a>
+                    <a class="fd-nav-link fd-nav-link--active" href="/flight-info/fares" aria-current="page">
+                        Fare Directory
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Gold rule -->
+            <div class="fd-hero__rule" aria-hidden="true"></div>
+
+            <!-- Title block -->
+            <div class="fd-hero__title-block">
+                <div class="fd-hero__icon-ring" aria-hidden="true">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                        stroke-linecap="round">
+                        <line x1="12" y1="1" x2="12" y2="23" />
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                </div>
+
+                <h1 class="fd-hero__title">
+                    Active <span class="fd-hero__title-accent">Fare Directory</span>
+                </h1>
+
+                <p class="fd-hero__subtitle">
+                    All currently available promotional fare packages, including full terms, conditions, and inclusions.
+                </p>
+
+                <!-- Count badge -->
+                @if (!isLoadingFares() && totalFaresCount() > 0) {
+                <div class="fd-hero__count-badge" [@fadeIn]>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1"
+                        aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    {{ totalFaresCount() }} active fare{{ totalFaresCount() !== 1 ? 's' : '' }} available
+                </div>
+                }
+
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MAIN BODY
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <main class="fd-body" role="main">
+        <div class="fd-container">
+
+            <!-- ── Filter + Search bar ─────────────────────────────── -->
+            @if (!isLoadingFares() && !faresError()) {
+            <div class="fd-controls" [@fadeIn] aria-label="Filter and search fares">
+
+                <!-- Cabin tier filter pills -->
+                <div class="fd-filters" role="group" aria-label="Filter by cabin class">
+                    @for (tab of [
+                    { id: 'all', label: 'All Fares', count: filterCounts().all },
+                    { id: 'first', label: 'First Class', count: filterCounts().first },
+                    { id: 'business', label: 'Business Suite', count: filterCounts().business },
+                    { id: 'premium', label: 'Premium Economy', count: filterCounts().premium },
+                    { id: 'economy', label: 'Economy', count: filterCounts().economy }
+                    ]; track tab.id) {
+                    @if (tab.count > 0 || tab.id === 'all') {
+                    <button class="fd-filter-pill" type="button"
+                        [class.fd-filter-pill--active]="activeFilter() === tab.id" (click)="setFilter($any(tab.id))"
+                        [attr.aria-pressed]="activeFilter() === tab.id"
+                        [attr.aria-label]="tab.label + ' — ' + tab.count + ' fares'">
+                        {{ tab.label }}
+                        @if (tab.count > 0) {
+                        <span class="fd-filter-pill__count">{{ tab.count }}</span>
+                        }
+                    </button>
+                    }
+                    }
+                </div>
+
+                <!-- Search box -->
+                <div class="fd-search-wrap">
+                    <div class="fd-search-input-shell" [class.fd-search-input-shell--active]="searchQuery().length > 0">
+                        <svg class="fd-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1" aria-hidden="true">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        <input class="fd-search-input" type="text" placeholder="Search fare code or description…"
+                            [value]="searchQuery()" (input)="onSearchInput($event)"
+                            aria-label="Search fare codes and descriptions" />
+                        @if (searchQuery().length > 0) {
+                        <button class="fd-search-clear" type="button" (click)="clearSearch()" aria-label="Clear search">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                        }
+                    </div>
+                </div>
+
+            </div>
+            }
+
+            <!-- ── Loading skeleton grid ───────────────────────────── -->
+            @if (isLoadingFares()) {
+            <div class="fd-skeleton-grid" aria-busy="true" aria-label="Loading fare packages">
+                @for (s of skeletonItems; track $index) {
+                <div class="fd-skeleton-card" [style.animation-delay]="($index * 60) + 'ms'">
+                    <div class="fd-skel fd-skel--bar"></div>
+                    <div class="fd-skel-body">
+                        <div class="fd-skel-header">
+                            <div class="fd-skel fd-skel--badge"></div>
+                            <div class="fd-skel fd-skel--price"></div>
+                        </div>
+                        <div class="fd-skel fd-skel--title"></div>
+                        <div class="fd-skel fd-skel--desc"></div>
+                        <div class="fd-skel fd-skel--desc fd-skel--desc-sm"></div>
+                        <div class="fd-skel-benefits">
+                            @for (b of [1,2,3,4]; track b) {
+                            <div class="fd-skel fd-skel--benefit"></div>
+                            }
+                        </div>
+                        <div class="fd-skel fd-skel--btn"></div>
+                    </div>
+                </div>
+                }
+            </div>
+            }
+
+            <!-- ── Error state ─────────────────────────────────────── -->
+            @if (faresError() && !isLoadingFares()) {
+            <div class="fd-error" [@fadeIn] role="alert">
+                <div class="fd-error__icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                </div>
+                <p class="fd-error__title">Fare Data Unavailable</p>
+                <p class="fd-error__body">{{ faresError() }}</p>
+                <button class="fd-error__retry" type="button" (click)="loadFares()">
+                    Retry
+                </button>
+            </div>
+            }
+
+            <!-- ── Fares grid ──────────────────────────────────────── -->
+            @if (!isLoadingFares() && !faresError() && filteredFares().length > 0) {
+            <div class="fd-grid" [@gridReveal]>
+                @for (fare of filteredFares(); track fare.code; let i = $index) {
+                <div class="fare-card-host">
+                    <app-fare-package-card [fare]="fare" [index]="i" (fareSelected)="onFareSelected($event)">
+                    </app-fare-package-card>
+                </div>
+                }
+            </div>
+            }
+
+            <!-- ── Empty search result ─────────────────────────────── -->
+            @if (!isLoadingFares() && !faresError() && filteredFares().length === 0 && totalFaresCount() > 0) {
+            <div class="fd-empty" [@fadeIn]>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                    aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    <line x1="8" y1="11" x2="14" y2="11" />
+                </svg>
+                <p class="fd-empty__title">No Fares Match Your Search</p>
+                <p class="fd-empty__body">Try a different cabin class or clear the search filter.</p>
+                <button class="fd-empty__clear" type="button" (click)="setFilter('all'); clearSearch()">
+                    Clear Filters
+                </button>
+            </div>
+            }
+
+            <!-- ══════════════════════════════════════════════════════
+                 QUICK LINKS — Navigation to other info pages
+            ══════════════════════════════════════════════════════ -->
+            @if (!isLoadingFares()) {
+            <div class="fd-quicklinks" role="complementary" aria-label="Explore more">
+
+                <div class="fd-quicklinks__header" aria-hidden="true">
+                    <div class="fd-quicklinks__line"></div>
+                    <span>Explore Further</span>
+                    <div class="fd-quicklinks__line"></div>
+                </div>
+
+                <div class="fd-quicklinks__grid">
+
+                    <button class="fd-quicklink-card" type="button" (click)="navigateToDestinations()"
+                        aria-label="Browse Asiaporeair destinations">
+                        <div class="fd-quicklink-card__icon" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                stroke-width="1">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
+                        <div class="fd-quicklink-card__text">
+                            <span class="fd-quicklink-card__title">Explore Destinations</span>
+                            <span class="fd-quicklink-card__sub">Discover where we fly</span>
+                        </div>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </button>
+
+                    <button class="fd-quicklink-card" type="button" (click)="navigateToFlightStatus()"
+                        aria-label="Check live flight status">
+                        <div class="fd-quicklink-card__icon" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                                stroke-width="1">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <div class="fd-quicklink-card__text">
+                            <span class="fd-quicklink-card__title">Flight Status Tracker</span>
+                            <span class="fd-quicklink-card__sub">Live departure & arrival updates</span>
+                        </div>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </button>
+
+                </div>
+
+            </div>
+            }
+
+        </div>
+    </main>
+
+</div>

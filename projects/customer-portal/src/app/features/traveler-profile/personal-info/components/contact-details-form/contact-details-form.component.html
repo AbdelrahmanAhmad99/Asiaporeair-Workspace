@@ -1,0 +1,165 @@
+<!-- ============================================================================
+     contact-details-form.component.html
+     Asiaporeair | Contact Details — Email (verified) + Phone with country code
+     ============================================================================ -->
+
+<div class="cdf-card" (click)="closeDropdown()">
+
+    <!-- Card Header -->
+    <div class="cdf-card__header">
+        <div class="cdf-card__title-block">
+            <div class="cdf-card__icon-wrap" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 5.53 5.54l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="cdf-card__title">Contact Details</h3>
+                <p class="cdf-card__subtitle">Email address and mobile number</p>
+            </div>
+        </div>
+
+        @if (!isLoading) {
+        <button class="cdf-card__edit-btn" [class.is-editing]="isEditing()" type="button"
+            (click)="$event.stopPropagation(); toggleEdit()"
+            [attr.aria-label]="isEditing() ? 'Cancel editing contact details' : 'Edit contact details'">
+            @if (!isEditing()) {
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Edit
+            } @else {
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Cancel
+            }
+        </button>
+        }
+    </div>
+
+    <!-- Skeleton -->
+    @if (isLoading) {
+    <div class="cdf-skeleton" aria-busy="true">
+        <div class="cdf-skeleton__row"></div>
+        <div class="cdf-skeleton__row cdf-skeleton__row--short"></div>
+    </div>
+    }
+
+    <!-- Content -->
+    @if (!isLoading) {
+    <div class="cdf-body">
+
+        <!-- Email Row (read-only with verified badge) -->
+        <div class="cdf-field cdf-field--email">
+            <div class="cdf-field__label-row">
+                <span class="cdf-field__static-label">Email Address</span>
+                @if (isEmailVerified) {
+                <span class="cdf-verified-badge" role="status" aria-label="Email verified">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Verified
+                </span>
+                } @else {
+                <span class="cdf-unverified-badge" role="status">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    Verify Email
+                </span>
+                }
+            </div>
+            <div class="cdf-field__static-value">{{ email || '—' }}</div>
+            <p class="cdf-field__hint">
+                To change your email, please contact our concierge support.
+            </p>
+        </div>
+
+        <!-- Phone Row -->
+        <form [formGroup]="form" (ngSubmit)="onSave()" (click)="$event.stopPropagation()" novalidate>
+            <div class="cdf-field" [class.is-editing]="isEditing()">
+                <div class="cdf-field__label-row">
+                    <span class="cdf-field__static-label">Mobile Number</span>
+                </div>
+
+                <div class="cdf-phone-row">
+
+                    <!-- Country Code Selector -->
+                    <div class="cdf-country-select" [class.is-open]="isCountryDropdownOpen()">
+                        <button class="cdf-country-select__trigger" type="button" [disabled]="!isEditing()"
+                            (click)="$event.stopPropagation(); isCountryDropdownOpen.set(!isCountryDropdownOpen())"
+                            [attr.aria-expanded]="isCountryDropdownOpen()" aria-haspopup="listbox"
+                            aria-label="Select country code">
+                            <span class="cdf-country-select__flag">{{ selectedCountry().flag }}</span>
+                            <span class="cdf-country-select__dial">{{ selectedCountry().dial }}</span>
+                            @if (isEditing()) {
+                            <svg class="cdf-country-select__chevron" width="10" height="10" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"
+                                [class.rotated]="isCountryDropdownOpen()">
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                            }
+                        </button>
+
+                        <!-- Dropdown -->
+                        @if (isCountryDropdownOpen()) {
+                        <ul class="cdf-country-select__dropdown" role="listbox" aria-label="Country codes">
+                            @for (country of countryCodes; track country.code) {
+                            <li class="cdf-country-select__option"
+                                [class.is-selected]="selectedCountry().code === country.code" role="option"
+                                [attr.aria-selected]="selectedCountry().code === country.code"
+                                (click)="$event.stopPropagation(); selectCountry(country)">
+                                <span>{{ country.flag }}</span>
+                                <span>{{ country.code }}</span>
+                                <span class="cdf-country-select__option-dial">{{ country.dial }}</span>
+                            </li>
+                            }
+                        </ul>
+                        }
+                    </div>
+
+                    <!-- Phone Input -->
+                    <div class="cdf-phone-input-wrap" [class.is-active]="form.get('phoneNumber')?.value">
+                        <input id="cdf-phone" class="cdf-phone-input" type="tel" formControlName="phoneNumber"
+                            autocomplete="tel-national" placeholder=" " aria-label="Phone number" />
+                        <label class="cdf-phone-label" for="cdf-phone">Phone Number</label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            @if (isEditing()) {
+            <div class="cdf-actions">
+                <button class="cdf-save-btn" type="submit" [disabled]="form.invalid || isSaving">
+                    @if (isSaving) {
+                    <span class="cdf-save-btn__spinner" aria-hidden="true"></span>
+                    Saving…
+                    } @else if (saveState === 'success') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Saved
+                    } @else {
+                    Save Changes
+                    }
+                </button>
+            </div>
+            }
+        </form>
+
+    </div>
+    }
+
+</div>

@@ -1,0 +1,79 @@
+<!-- product-catalog-card.component.html -->
+
+<div class="catalog-card" [class.catalog-card--in-cart]="isInCart"
+    [class.catalog-card--unavailable]="product.isAvailable === false"
+    [attr.aria-label]="product.name + ', ' + product.currency + ' ' + formatPrice(product.baseCost) + ' ' + product.unitOfMeasure">
+
+    <!-- Availability badge -->
+    <div *ngIf="product.isAvailable === false" class="unavail-badge" aria-label="Currently unavailable">
+        Unavailable
+    </div>
+
+    <!-- In-cart indicator ribbon -->
+    <div *ngIf="isInCart" class="in-cart-ribbon" aria-hidden="true">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12" />
+        </svg>
+        In your trip
+    </div>
+
+    <!-- Icon -->
+    <div class="card-icon" aria-hidden="true" [innerHTML]="categoryIconSvg"></div>
+
+    <!-- Content -->
+    <div class="card-content">
+        <h3 class="card-name">{{ product.name }}</h3>
+        <p class="card-desc">{{ product.description }}</p>
+    </div>
+
+    <!-- Price tag — glassmorphism overlay -->
+    <div class="price-overlay">
+        <div class="price-left">
+            <span class="price-currency">{{ product.currency }}</span>
+            <span class="price-amount">{{ formatPrice(product.baseCost) }}</span>
+        </div>
+        <span class="price-uom">{{ product.unitOfMeasure }}</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="card-actions" role="group" [attr.aria-label]="'Actions for ' + product.name">
+
+        <!-- Not in cart: single Add button -->
+        <button *ngIf="!isInCart" class="btn-add" [disabled]="product.isAvailable === false" (click)="onAdd()"
+            [attr.aria-label]="'Add ' + product.name + ' to trip'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add to Trip
+        </button>
+
+        <!-- In cart: quantity stepper -->
+        <div *ngIf="isInCart" class="qty-stepper" role="group"
+            [attr.aria-label]="'Quantity for ' + product.name">
+            <button class="step-btn step-btn--minus" (click)="onDecrement()" [attr.aria-label]="'Decrease quantity'">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+            </button>
+            <span class="qty-value" aria-live="polite" [attr.aria-label]="cartQuantity + ' selected'">
+                {{ cartQuantity }}
+            </span>
+            <button class="step-btn step-btn--plus" (click)="onAdd()" [disabled]="isMaxed"
+                [attr.aria-label]="'Increase quantity'">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Max quantity note -->
+    <p *ngIf="isMaxed && product.maxQuantity" class="max-note" aria-live="polite">
+        Maximum {{ product.maxQuantity }} per booking
+    </p>
+
+</div>

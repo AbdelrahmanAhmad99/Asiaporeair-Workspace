@@ -1,0 +1,197 @@
+<!-- ============================================================================
+     flight-status-card.component.html
+     Asiaporeair | Flight Status Card — Scheduled vs Actual Grid
+     ============================================================================ -->
+
+<article class="fsc-card" role="region" [attr.aria-label]="'Flight ' + flightNumber + ' status'">
+
+    <!-- ── Gold top accent bar ─────────────────────────────────────────── -->
+    <div class="fsc-bar" aria-hidden="true"></div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         HEADER — Flight ID + Status badge
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="fsc-header">
+
+        <div class="fsc-header__left">
+
+            <!-- Flight number + airline -->
+            <div class="fsc-flight-id">
+                <span class="fsc-flight-id__number">{{ flightNumber }}</span>
+                <span class="fsc-flight-id__sep" aria-hidden="true">·</span>
+                <span class="fsc-flight-id__airline">{{ airlineName }}</span>
+            </div>
+
+            <!-- Aircraft + tail -->
+            <div class="fsc-meta-row">
+                <div class="fsc-meta-chip">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <path
+                            d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                    {{ aircraftModel }}
+                </div>
+                @if (tailNumber) {
+                <div class="fsc-meta-chip">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <path
+                            d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                        <path d="M13 5v2M13 17v2M13 11v2" />
+                    </svg>
+                    {{ tailNumber }}
+                </div>
+                }
+                <div class="fsc-meta-chip">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    {{ formatDuration(durationMinutes) }}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Status badge -->
+        <div class="fsc-header__right">
+            <app-flight-status-badge [status]="status"></app-flight-status-badge>
+        </div>
+
+    </div>
+
+    <!-- Thin divider -->
+    <div class="fsc-divider" aria-hidden="true"></div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         ROUTE HEADER — Large IATA display
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="fsc-route-bar" role="group" aria-label="Route">
+
+        <div class="fsc-route-leg fsc-route-leg--origin">
+            <span class="fsc-route-iata" aria-label="Origin: {{ originIata }}">{{ originIata }}</span>
+            <span class="fsc-route-city">{{ originCity }}</span>
+        </div>
+
+        <div class="fsc-route-arc" aria-hidden="true">
+            <div class="fsc-arc-line fsc-arc-line--left"></div>
+            <svg class="fsc-arc-plane" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                stroke-width="1">
+                <path
+                    d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            <div class="fsc-arc-line fsc-arc-line--right"></div>
+            <span class="fsc-arc-duration">{{ formatDuration(durationMinutes) }}</span>
+        </div>
+
+        <div class="fsc-route-leg fsc-route-leg--dest">
+            <span class="fsc-route-iata" aria-label="Destination: {{ destinationIata }}">{{ destinationIata }}</span>
+            <span class="fsc-route-city">{{ destinationCity }}</span>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TIMES GRID — Scheduled vs Actual/Estimated
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="fsc-times-grid" role="grid" aria-label="Flight times">
+
+        <!-- Column headers -->
+        <div class="fsc-times-col fsc-times-col--header" role="rowheader">
+            <span class="fsc-col-header"></span>
+            <span class="fsc-col-header">Scheduled</span>
+            <span class="fsc-col-header">
+                @if (status.toLowerCase().includes('depart') || status.toLowerCase() === 'en route') {
+                Actual
+                } @else {
+                Estimated
+                }
+            </span>
+        </div>
+
+        <!-- Departure row -->
+        <div class="fsc-times-row" role="row">
+            <div class="fsc-times-label" role="rowheader">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+                <div>
+                    <span class="fsc-times-label__main">Departure</span>
+                    <span class="fsc-times-label__sub">{{ originName }}</span>
+                </div>
+            </div>
+
+            <div class="fsc-time-cell fsc-time-cell--scheduled" role="cell">
+                <span class="fsc-time-value">{{ formatTime(scheduledDeparture) }}</span>
+                <span class="fsc-time-date">{{ formatDate(scheduledDeparture) }}</span>
+            </div>
+
+            <div class="fsc-time-cell fsc-time-cell--actual" [class.fsc-time-cell--delayed]="departureIsDelayed"
+                role="cell">
+                <span class="fsc-time-value">{{ formatTime(actualDeparture || scheduledDeparture) }}</span>
+                @if (departureDelayMinutes) {
+                <span class="fsc-delay-pill" aria-label="{{ departureDelayMinutes }} minute delay">
+                    +{{ departureDelayMinutes }}m
+                </span>
+                } @else if (!actualDeparture) {
+                <span class="fsc-time-ontime" aria-label="On schedule">On Schedule</span>
+                }
+            </div>
+        </div>
+
+        <!-- Separator -->
+        <div class="fsc-times-sep" aria-hidden="true"></div>
+
+        <!-- Arrival row -->
+        <div class="fsc-times-row" role="row">
+            <div class="fsc-times-label" role="rowheader">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg>
+                <div>
+                    <span class="fsc-times-label__main">Arrival</span>
+                    <span class="fsc-times-label__sub">{{ destinationName }}</span>
+                </div>
+            </div>
+
+            <div class="fsc-time-cell fsc-time-cell--scheduled" role="cell">
+                <span class="fsc-time-value">{{ formatTime(scheduledArrival) }}</span>
+                <span class="fsc-time-date">{{ formatDate(scheduledArrival) }}</span>
+            </div>
+
+            <div class="fsc-time-cell fsc-time-cell--actual" [class.fsc-time-cell--delayed]="arrivalIsDelayed"
+                role="cell">
+                <span class="fsc-time-value">{{ formatTime(actualArrival || scheduledArrival) }}</span>
+                @if (arrivalDelayMinutes) {
+                <span class="fsc-delay-pill" aria-label="{{ arrivalDelayMinutes }} minute delay">
+                    +{{ arrivalDelayMinutes }}m
+                </span>
+                } @else if (!actualArrival) {
+                <span class="fsc-time-ontime">On Schedule</span>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         AMENITIES — If populated from IFlightDetailsDto
+    ══════════════════════════════════════════════════════════════════════ -->
+    @if (amenities.length > 0) {
+    <div class="fsc-amenities" role="list" aria-label="Onboard amenities">
+        <div class="fsc-amenities__label">Onboard Services</div>
+        <div class="fsc-amenities__chips">
+            @for (amenity of amenities; track amenity) {
+            <span class="fsc-amenity-chip" role="listitem">{{ amenity }}</span>
+            }
+        </div>
+    </div>
+    }
+
+</article>

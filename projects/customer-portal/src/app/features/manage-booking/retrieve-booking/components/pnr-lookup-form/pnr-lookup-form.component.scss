@@ -1,0 +1,317 @@
+// pnr-lookup-form.component.scss
+$midnight: #051937;
+$royal-gold: #B68F24;
+$champagne: #E2C780;
+$ivory: #F8F9FA;
+$charcoal: #101056;
+$white: #FFFFFF;
+$error: #d95f5f;
+$text-sec: #4a5568;
+$text-muted: #718096;
+$font: 'Inter', 'Montserrat', -apple-system, sans-serif;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$t: 260ms $ease;
+
+:host {
+    display: block;
+    font-family: $font;
+}
+
+.lookup-form-card {
+    background: $white;
+    border: 1px solid rgba($charcoal, 0.09);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba($midnight, 0.08), 0 1px 4px rgba($midnight, 0.05);
+}
+
+// ── Card Header ───────────────────────────────────────────────────────────────
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 1.25rem 1.5rem;
+    background: rgba($charcoal, 0.02);
+    border-bottom: 1px solid rgba($charcoal, 0.07);
+}
+
+.header-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    background: rgba($midnight, 0.05);
+    border: 1px solid rgba($midnight, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $royal-gold;
+}
+
+.card-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: $charcoal;
+    letter-spacing: -0.03em;
+    margin: 0 0 2px;
+}
+
+.card-sub {
+    font-size: 0.65rem;
+    color: $text-muted;
+    margin: 0;
+    line-height: 1.4;
+}
+
+// ── Form Body ─────────────────────────────────────────────────────────────────
+.form-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+// ── Floating Label Field ──────────────────────────────────────────────────────
+.floating-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba($charcoal, 0.02);
+    border: 1.5px solid rgba($charcoal, 0.14);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color $t;
+
+    &:focus-within {
+        border-color: $royal-gold;
+        background: rgba($royal-gold, 0.015);
+
+        .float-label {
+            top: 7px;
+            font-size: 0.58rem;
+            color: $royal-gold;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+
+        .field-icon {
+            color: $royal-gold;
+        }
+    }
+
+    &--filled {
+        .float-label {
+            top: 7px;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: $text-muted;
+        }
+    }
+
+    &--error {
+        border-color: $error;
+        background: rgba($error, 0.02);
+
+        &:focus-within {
+            border-color: $error;
+
+            .float-label {
+                color: $error;
+            }
+        }
+    }
+}
+
+.field-icon {
+    width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $text-muted;
+    transition: color $t;
+    padding-top: 2px;
+    pointer-events: none;
+}
+
+.float-input {
+    flex: 1;
+    padding: 22px 1rem 8px 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: $font;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: $charcoal;
+
+    &::placeholder {
+        color: transparent;
+    }
+
+    &--mono {
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
+}
+
+.float-label {
+    position: absolute;
+    left: 44px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: $text-muted;
+    pointer-events: none;
+    transition: top $t, font-size $t, color $t, font-weight $t, letter-spacing $t;
+    transform: none; // override translateY when at rest
+    top: 18px;
+}
+
+.field-example {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.6rem;
+    color: rgba($charcoal, 0.28);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.field-error {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.63rem;
+    font-weight: 600;
+    color: lighten($error, 10%);
+
+    svg {
+        flex-shrink: 0;
+        stroke: lighten($error, 10%);
+    }
+}
+
+// ── Submit Button ─────────────────────────────────────────────────────────────
+.btn-locate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, $midnight 0%, lighten($midnight, 8%) 100%);
+    border: 1.5px solid rgba($champagne, 0.2);
+    font-family: $font;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $champagne;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all $t;
+    box-shadow: 0 4px 16px rgba($midnight, 0.25);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, transparent 0%, rgba($royal-gold, 0.08) 100%);
+        opacity: 0;
+        transition: opacity $t;
+    }
+
+    &:hover:not(:disabled) {
+        background: linear-gradient(135deg, $royal-gold 0%, darken($royal-gold, 10%) 100%);
+        border-color: rgba($champagne, 0.35);
+        color: $midnight;
+        box-shadow: 0 6px 24px rgba($royal-gold, 0.35);
+        transform: translateY(-1px);
+
+        &::before {
+            opacity: 0;
+        }
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $royal-gold;
+        outline-offset: 3px;
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+}
+
+.btn-spinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba($champagne, 0.3);
+    border-top-color: $champagne;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ── Privacy Note ──────────────────────────────────────────────────────────────
+.privacy-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.62rem;
+    color: $text-muted;
+    line-height: 1.4;
+    margin: 0;
+
+    svg {
+        flex-shrink: 0;
+        color: $text-muted;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .floating-field,
+    .float-label,
+    .btn-locate,
+    .field-icon {
+        transition: none !important;
+    }
+
+    .btn-spinner {
+        animation: none !important;
+    }
+
+    .btn-locate:hover {
+        transform: none;
+    }
+}

@@ -1,0 +1,128 @@
+@if (isVisible()) {
+
+<!-- Backdrop -->
+<div class="rcm-backdrop" (click)="cancelled.emit()" aria-hidden="true"></div>
+
+<!-- Dialog -->
+<div class="rcm" role="dialog" aria-modal="true" [attr.aria-labelledby]="'rcm-title'" [attr.data-state]="modalState()">
+
+    <!-- Top gold accent rule -->
+    <div class="rcm__rule" aria-hidden="true"></div>
+
+    <!-- ── Confirm State ──────────────────────────────────────── -->
+    @if (modalState() === 'confirm') {
+
+    <div class="rcm__icon-wrap rcm__icon-wrap--confirm" aria-hidden="true">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="rcm__icon">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+        </svg>
+    </div>
+
+    <h2 class="rcm__title" id="rcm-title">Confirm Asset Re-entry into Service?</h2>
+
+    <p class="rcm__lead">
+        You are about to reactivate tail number
+        <strong class="rcm__tail">{{ tailNumber() }}</strong>
+        and return it to the Asiaporeair Active Fleet Registry.
+    </p>
+
+    <div class="rcm__notice-list">
+        <div class="rcm__notice">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="rcm__notice__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+            Aircraft will be re-assigned operational status and become schedulable.
+        </div>
+        <div class="rcm__notice">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="rcm__notice__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+            Historical flight hours and configuration records will be fully restored.
+        </div>
+        <div class="rcm__notice">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="rcm__notice__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            Verify certification and maintenance status prior to first flight assignment.
+        </div>
+    </div>
+
+    <div class="rcm__actions">
+        <button class="rcm__btn rcm__btn--cancel" type="button" (click)="cancelled.emit()">
+            Cancel
+        </button>
+        <button class="rcm__btn rcm__btn--confirm" type="button" (click)="confirmed.emit()">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="rcm__btn__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+            </svg>
+            Proceed with Reactivation
+        </button>
+    </div>
+
+    }
+
+    <!-- ── Loading State ──────────────────────────────────────── -->
+    @if (modalState() === 'loading') {
+
+    <div class="rcm__loading-body" aria-live="polite" aria-busy="true">
+        <div class="rcm__loading-spinner-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="rcm__loading-spinner">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+                     3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+                     13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+        </div>
+        <p class="rcm__loading-title">Initiating Service Restoration</p>
+        <p class="rcm__loading-sub">
+            Synchronizing {{ tailNumber() }} with the Active Fleet Registry…
+        </p>
+    </div>
+
+    }
+
+    <!-- ── Error State ────────────────────────────────────────── -->
+    @if (modalState() === 'error') {
+
+    <div class="rcm__error-body">
+
+        <div class="rcm__icon-wrap rcm__icon-wrap--error" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="rcm__icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                     2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                     0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+        </div>
+
+        <h2 class="rcm__title rcm__title--error" id="rcm-title">
+            {{ isConflict() ? 'Operational Barrier Detected' : 'Restoration Failure' }}
+        </h2>
+
+        <div class="rcm__error-box">
+            <p class="rcm__error-message">{{ errorMessage() }}</p>
+        </div>
+
+        @if (isConflict()) {
+        <p class="rcm__error-advice">
+            Resolve all compliance and registry conflicts before attempting re-entry.
+            Contact fleet administration for assistance.
+        </p>
+        }
+
+        <div class="rcm__actions">
+            <button class="rcm__btn rcm__btn--cancel" type="button" (click)="errorDismissed.emit()">
+                Dismiss &amp; Review
+            </button>
+        </div>
+
+    </div>
+
+    }
+
+</div>
+
+}

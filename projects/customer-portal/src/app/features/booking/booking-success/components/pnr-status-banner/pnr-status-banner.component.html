@@ -1,0 +1,70 @@
+<!-- pnr-status-banner.component.html -->
+
+<div class="banner-wrapper" role="region" aria-label="Booking status summary">
+
+    <!-- Status Row -->
+    <div class="status-row">
+        <div class="status-pill" [class.status-pill--success]="isSucceeded()" role="status"
+            [attr.aria-label]="statusLabel()">
+            <svg *ngIf="isSucceeded()" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            <svg *ngIf="!isSucceeded()" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ statusLabel() }}
+        </div>
+        <span class="confirmed-at" *ngIf="confirmedAt()">{{ confirmedAt() }}</span>
+    </div>
+
+    <!-- PNR Highlight Row -->
+    <div class="pnr-row">
+        <div class="pnr-block" [attr.aria-label]="'Your booking reference is ' + bookingReference()">
+            <span class="pnr-label-sm">Booking Reference</span>
+            <span class="pnr-value">{{ bookingReference() }}</span>
+        </div>
+        <button class="copy-btn" (click)="copyPnr()" aria-label="Copy booking reference to clipboard"
+            title="Copy reference">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Copy
+        </button>
+    </div>
+
+    <!-- Quick Stats Row -->
+    <div class="stats-row" role="list" aria-label="Booking summary figures">
+        <div class="stat-item" role="listitem">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            <div class="stat-content">
+                <span class="stat-label">Passengers</span>
+                <span class="stat-value">{{ passengerCount() }}</span>
+            </div>
+        </div>
+
+        <div class="stat-divider" aria-hidden="true"></div>
+
+        <div class="stat-item" role="listitem">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+            <div class="stat-content">
+                <span class="stat-label">Total Charged</span>
+                <span class="stat-value stat-value--price">{{ currency() }} {{ formatPrice(totalAmount()) }}</span>
+            </div>
+        </div>
+    </div>
+
+</div>

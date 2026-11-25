@@ -1,0 +1,107 @@
+<div class="base-card">
+
+  <!-- Card Header -->
+  <div class="base-card__header">
+    <div class="base-card__icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+      </svg>
+    </div>
+    <div>
+      <h3 class="base-card__title">Base Deployment</h3>
+      <p class="base-card__subtitle">Strategic Reposition Authority</p>
+    </div>
+  </div>
+
+  <!-- Current Base Highlight -->
+  <div class="current-base" [class.current-base--saved]="justSaved()">
+    <span class="current-base__label">CURRENT BASE</span>
+    <span class="current-base__iata">
+      @if (isLoading()) {
+      <span class="shimmer-inline"></span>
+      } @else {
+      {{ currentBase() || '—' }}
+      }
+    </span>
+    @if (justSaved()) {
+    <span class="current-base__confirm">✓ Reposition Confirmed</span>
+    }
+  </div>
+
+  <!-- Divider -->
+  <div class="base-divider"></div>
+
+  <!-- Searchable Dropdown -->
+  <div class="dropdown-wrap" #dropdownWrap>
+    <label class="field-label" for="base-selector">Reassign Base Airport</label>
+
+    <!-- Trigger Button -->
+    <button id="base-selector" class="dropdown-trigger" type="button" (click)="toggleDropdown()"
+      [disabled]="isProcessing() || isLoading()" [attr.aria-expanded]="isOpen()" aria-haspopup="listbox">
+      <span class="dropdown-trigger__label">{{ selectedLabel() }}</span>
+      <svg class="dropdown-trigger__chevron" [class.rotate]="isOpen()" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      </svg>
+    </button>
+
+    <!-- Dropdown Panel -->
+    @if (isOpen()) {
+    <div class="dropdown-panel" role="listbox" aria-label="Select airport">
+      <!-- Search input -->
+      <div class="dropdown-search-wrap">
+        <svg class="dropdown-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        </svg>
+        <input class="dropdown-search" type="text" placeholder="Search by IATA, city or airport…"
+          [value]="searchQuery()" (input)="onSearchInput($event)" autofocus aria-label="Search airports" />
+      </div>
+
+      <!-- Airport list -->
+      <ul class="dropdown-list">
+        @if (filteredAirports().length === 0) {
+        <li class="dropdown-empty">No airports match your query.</li>
+        }
+        @for (airport of filteredAirports(); track airport.iataCode) {
+        <li class="dropdown-option" [class.dropdown-option--current]="airport.iataCode === currentBase()"
+          [class.dropdown-option--selected]="airport.iataCode === selectedIata()" role="option"
+          [attr.aria-selected]="airport.iataCode === selectedIata()" (click)="selectAirport(airport.iataCode)">
+          <span class="option-iata">{{ airport.iataCode }}</span>
+          <span class="option-name">{{ airport.name }}</span>
+          <span class="option-city">{{ airport.city }}, {{ airport.countryIsoCode }}</span>
+          @if (airport.iataCode === currentBase()) {
+          <span class="option-current-badge">Current</span>
+          }
+        </li>
+        }
+      </ul>
+    </div>
+    }
+  </div>
+
+  <!-- Authorize Button -->
+  <button class="btn-authorize" [class.btn-authorize--active]="hasChange()" [disabled]="!hasChange() || isProcessing()"
+    (click)="authorizeUpdate()" id="authorize-base-btn">
+    @if (isProcessing()) {
+    <span class="spinner"></span>
+    Processing…
+    } @else {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+    </svg>
+    Authorize Reposition
+    }
+  </button>
+
+  <!-- Info note -->
+  @if (hasChange() && !isProcessing()) {
+  <p class="base-note">
+    This action will update the crew member's strategic deployment record.
+  </p>
+  }
+
+</div>

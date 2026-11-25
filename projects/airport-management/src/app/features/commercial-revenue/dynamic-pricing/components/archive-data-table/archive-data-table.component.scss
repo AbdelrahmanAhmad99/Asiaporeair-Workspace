@@ -1,0 +1,533 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+ $t: 140ms ease;
+
+ // ── Container ─────────────────────────────────────────────────────────────
+ .adt-container {
+     display: flex;
+     flex-direction: column;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba($champagne, 0.14);
+     box-shadow: 0 4px 20px rgba($midnight, 0.06);
+     overflow: hidden;
+     transition: background-color $t, box-shadow $t;
+ }
+
+ // ── Legend Bar ────────────────────────────────────────────────────────────
+ .adt-legend {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.5625rem 1.25rem;
+     background: rgba($midnight, 0.04);
+     border-bottom: 1px solid rgba($champagne, 0.08);
+     flex-wrap: wrap;
+
+     &__item {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.375rem;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         letter-spacing: 0.02em;
+     }
+
+     &__dot {
+         width: 7px;
+         height: 7px;
+         border-radius: 50%;
+         background: lighten($ruby, 22%);
+         flex-shrink: 0;
+     }
+
+     &__readonly {
+         display: inline-flex;
+         align-items: center;
+         gap: 0.3125rem;
+         padding: 0.1875rem 0.5rem;
+         border-radius: 100px;
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: rgba($champagne, 0.5);
+         background: rgba($champagne, 0.05);
+         border: 1px solid rgba($champagne, 0.12);
+         flex-shrink: 0;
+
+         svg {
+             width: 0.625rem;
+             height: 0.625rem;
+             flex-shrink: 0;
+         }
+     }
+ }
+
+ // ── Table Wrapper ─────────────────────────────────────────────────────────
+ .adt-table-wrap {
+     overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+ }
+
+ // ── Table ─────────────────────────────────────────────────────────────────
+ .adt-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-family: var(--aoms-font-body);
+     font-size: 0.8125rem;
+ }
+
+ // ── Header ────────────────────────────────────────────────────────────────
+ .adt-thead {
+     background: $midnight;
+     position: sticky;
+     top: 0;
+     z-index: 1;
+ }
+
+ .adt-th {
+     padding: 0.6875rem 0.875rem;
+     text-align: left;
+     font-size: 10px;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: $champagne;
+     white-space: nowrap;
+     border-bottom: 1px solid rgba($champagne, 0.1);
+
+     &--center {
+         text-align: center;
+     }
+
+     &--id {
+         min-width: 70px;
+     }
+
+     &--actions {
+         text-align: center;
+         width: 100px;
+     }
+ }
+
+ // ── Body Rows ─────────────────────────────────────────────────────────────
+ .adt-tr {
+     border-bottom: 1px solid rgba($champagne, 0.07);
+     // Staggered entrance animation
+     animation: adt-row-in 280ms ease forwards;
+     opacity: 0;
+
+     // Archived row base — subtle glass charcoal effect
+     background: rgba($midnight, 0.02);
+
+     &:nth-child(even) {
+         background: rgba($midnight, 0.04);
+     }
+
+     &:hover:not(.adt-tr--skeleton):not(.adt-tr--restoring) {
+         background: rgba($champagne, 0.06);
+     }
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     // Row being restored — slide out to the right with fade
+     &--restoring {
+         animation: adt-slide-out 380ms cubic-bezier(0.4, 0, 1, 1) forwards !important;
+         pointer-events: none;
+     }
+
+     &--skeleton {
+         pointer-events: none;
+     }
+ }
+
+ // ── Cells ─────────────────────────────────────────────────────────────────
+ .adt-td {
+     padding: 0.625rem 0.875rem;
+     // Slightly muted text to signal the read-only, archived nature
+     color: rgba(var(--aoms-text-primary-rgb, 16, 16, 86), 0.72);
+     vertical-align: middle;
+
+     &--center {
+         text-align: center;
+     }
+
+     &--id {
+         font-variant-numeric: tabular-nums;
+     }
+
+     &--actions {
+         text-align: center;
+         white-space: nowrap;
+     }
+
+     &--type {
+         font-weight: 600;
+         font-size: 0.8125rem;
+         color: var(--aoms-text-secondary);
+         opacity: 0.8;
+     }
+
+     &--value {
+         max-width: 180px;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+         opacity: 0.7;
+     }
+
+     // Empty state cell
+     &--empty {
+         text-align: center;
+         padding: 3.5rem 1rem;
+         color: var(--aoms-text-muted);
+
+         svg {
+             width: 2.5rem;
+             height: 2.5rem;
+             margin: 0 auto 0.75rem;
+             opacity: 0.25;
+             display: block;
+         }
+
+         p {
+             font-size: 0.9375rem;
+             font-weight: 600;
+             color: var(--aoms-text-secondary);
+             margin: 0 0 0.25rem;
+         }
+
+         span {
+             font-size: 0.8125rem;
+             color: var(--aoms-text-muted);
+         }
+     }
+ }
+
+ // ── ID Chip ───────────────────────────────────────────────────────────────
+ .adt-id-chip {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.1875rem 0.5rem;
+     border-radius: 4px;
+     background: rgba($midnight, 0.06);
+     border: 1px solid rgba($champagne, 0.1);
+     font-family: 'Courier New', monospace;
+     font-size: 0.75rem;
+     font-weight: 700;
+     color: rgba($charcoal, 0.55);
+     letter-spacing: 0.04em;
+ }
+
+ // ── Modifier Badge ────────────────────────────────────────────────────────
+ .adt-modifier {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.1875rem 0.5rem;
+     border-radius: 100px;
+     font-size: 0.75rem;
+     font-weight: 700;
+     font-variant-numeric: tabular-nums;
+     letter-spacing: 0.02em;
+     opacity: 0.75; // Dimmed — archived rule
+
+     &--positive {
+         color: $emerald;
+         background: rgba($emerald, 0.08);
+         border: 1px solid rgba($emerald, 0.18);
+     }
+
+     &--negative {
+         color: lighten($ruby, 22%);
+         background: rgba($ruby, 0.07);
+         border: 1px solid rgba($ruby, 0.14);
+     }
+
+     &--neutral {
+         color: var(--aoms-text-muted);
+         background: rgba($midnight, 0.04);
+         border: 1px solid rgba($champagne, 0.08);
+     }
+ }
+
+ // ── Priority Chip ─────────────────────────────────────────────────────────
+ .adt-priority {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.1875rem 0.4375rem;
+     border-radius: 100px;
+     font-size: 0.6875rem;
+     font-weight: 800;
+     letter-spacing: 0.04em;
+     opacity: 0.65; // Dimmed for archived
+
+     &--high {
+         color: $gold;
+         background: rgba($gold, 0.08);
+         border: 1px solid rgba($gold, 0.16);
+     }
+
+     &--mid {
+         color: $amber;
+         background: rgba($amber, 0.07);
+         border: 1px solid rgba($amber, 0.14);
+     }
+
+     &--low {
+         color: var(--aoms-text-muted);
+         background: rgba($midnight, 0.04);
+         border: 1px solid rgba($champagne, 0.08);
+     }
+ }
+
+ // ── Status Badge ──────────────────────────────────────────────────────────
+ .adt-status-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.1875rem 0.5625rem;
+     border-radius: 100px;
+     font-size: 0.6875rem;
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.04em;
+     white-space: nowrap;
+     // Archived = muted ruby tint, not full danger
+     color: rgba(lighten($ruby, 28%), 0.7);
+     background: rgba($ruby, 0.06);
+     border: 1px solid rgba($ruby, 0.14);
+
+     &__dot {
+         width: 5px;
+         height: 5px;
+         border-radius: 50%;
+         background: lighten($ruby, 22%);
+         opacity: 0.6;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Restore Button ────────────────────────────────────────────────────────
+ .adt-restore-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.3125rem 0.625rem;
+     border-radius: 4px;
+     border: 1px solid rgba($gold, 0.3);
+     background: rgba($gold, 0.06);
+     color: $gold;
+     font-family: var(--aoms-font-body);
+     font-size: 0.75rem;
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     cursor: pointer;
+     transition: all $t;
+     white-space: nowrap;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+     }
+
+     &:hover:not(:disabled) {
+         background: rgba($gold, 0.14);
+         border-color: $gold;
+         box-shadow: 0 0 12px rgba($gold, 0.28);
+         transform: translateY(-1px);
+     }
+
+     &:active:not(:disabled) {
+         transform: translateY(0);
+     }
+
+     &:disabled {
+         opacity: 0.35;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ // ── Restoring Row Spinner ─────────────────────────────────────────────────
+ .adt-restoring-indicator {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.75rem;
+     height: 1.75rem;
+     margin: 0 auto;
+
+     &__spinner {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+         animation: adt-spin 1s linear infinite;
+     }
+ }
+
+ // ── Skeleton Loading ──────────────────────────────────────────────────────
+ .adt-sk {
+     display: inline-block;
+     border-radius: 4px;
+     background: linear-gradient(90deg,
+             rgba($midnight, 0.06) 0%,
+             rgba($champagne, 0.11) 50%,
+             rgba($midnight, 0.06) 100%);
+     background-size: 200% 100%;
+     animation: adt-shimmer 1.5s ease-in-out infinite;
+
+     &--id {
+         width: 44px;
+         height: 20px;
+         border-radius: 4px;
+     }
+
+     &--type {
+         width: 110px;
+         height: 14px;
+     }
+
+     &--value {
+         width: 90px;
+         height: 14px;
+     }
+
+     &--mod {
+         width: 52px;
+         height: 18px;
+         border-radius: 100px;
+     }
+
+     &--num {
+         width: 36px;
+         height: 18px;
+         border-radius: 100px;
+     }
+
+     &--badge {
+         width: 64px;
+         height: 18px;
+         border-radius: 100px;
+     }
+
+     &--action {
+         width: 68px;
+         height: 24px;
+         border-radius: 4px;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+
+ // Staggered entrance: slide in from left (archive visual = "coming from storage")
+ @keyframes adt-row-in {
+     from {
+         opacity: 0;
+         transform: translateX(-8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ // Slide-out animation when a row is being restored back to active inventory
+ // Slides right (back into the "active" side) + fades
+ @keyframes adt-slide-out {
+     0% {
+         opacity: 1;
+         transform: translateX(0) scaleY(1);
+         max-height: 60px;
+     }
+
+     50% {
+         opacity: 0.4;
+         transform: translateX(40px) scaleY(0.85);
+     }
+
+     100% {
+         opacity: 0;
+         transform: translateX(120px) scaleY(0.5);
+         max-height: 0;
+         padding-top: 0;
+         padding-bottom: 0;
+     }
+ }
+
+ @keyframes adt-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes adt-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .adt-container {
+         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+     }
+
+     .adt-id-chip {
+         background: rgba($champagne, 0.05);
+         color: rgba($champagne, 0.4);
+         border-color: rgba($champagne, 0.1);
+     }
+
+     .adt-td--type {
+         color: rgba(255, 255, 255, 0.5);
+     }
+
+     .adt-td--value {
+         color: rgba(255, 255, 255, 0.4);
+     }
+
+     .adt-tr {
+         background: rgba(255, 255, 255, 0.015);
+     }
+
+     .adt-tr:nth-child(even) {
+         background: rgba(255, 255, 255, 0.025);
+     }
+
+     .adt-tr:hover:not(.adt-tr--skeleton):not(.adt-tr--restoring) {
+         background: rgba($champagne, 0.05);
+     }
+
+     .adt-sk {
+         background: linear-gradient(90deg,
+                 rgba(255, 255, 255, 0.04) 0%,
+                 rgba($champagne, 0.08) 50%,
+                 rgba(255, 255, 255, 0.04) 100%);
+         background-size: 200% 100%;
+     }
+ }

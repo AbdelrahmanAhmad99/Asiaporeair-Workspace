@@ -1,0 +1,268 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $t: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+
+ :host {
+     display: block;
+ }
+
+ .adf {
+     position: relative;
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+     padding: 1.25rem 1.375rem;
+     border-radius: 12px;
+     background: rgb(5, 25, 55);
+     border: 1px solid rgba(226, 199, 128, 0.2);
+     box-shadow: 0 8px 32px rgba(5, 25, 55, 0.3), 0 0 0 1px rgba(226, 199, 128, 0.05) inset;
+     backdrop-filter: blur(15px);
+     -webkit-backdrop-filter: blur(15px);
+ }
+
+ .adf__glass {
+     position: absolute;
+     inset: 0;
+     pointer-events: none;
+     background: linear-gradient(135deg, rgba(226, 199, 128, 0.04) 0%, transparent 50%, rgba(5, 25, 55, 0.3) 100%);
+ }
+
+ // Header
+ .adf__header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+     position: relative;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__title {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.08em;
+         color: rgba(226, 199, 128, 0.55);
+     }
+ }
+
+ .adf__range-label {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: rgba(226, 199, 128, 0.45);
+     font-variant-numeric: tabular-nums;
+     padding: 0.125rem 0.5rem;
+     border-radius: 100px;
+     background: rgba(226, 199, 128, 0.07);
+     border: 1px solid rgba(226, 199, 128, 0.12);
+     white-space: nowrap;
+ }
+
+ // Preset pills
+ .adf__presets {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.375rem;
+     position: relative;
+ }
+
+ .adf__preset {
+     position: relative;
+     display: inline-flex;
+     align-items: center;
+     padding: 0.3125rem 0.875rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: rgba(226, 199, 128, 0.5);
+     background: rgba(255, 255, 255, 0.04);
+     border: 1px solid rgba(226, 199, 128, 0.16);
+     border-radius: 100px;
+     cursor: pointer;
+     outline: none;
+     overflow: hidden;
+     transition: color $t, border-color $t, background $t;
+
+     // Center-out golden line on hover
+     &::after {
+         content: '';
+         position: absolute;
+         bottom: 0;
+         left: 50%;
+         transform: translateX(-50%);
+         width: 0;
+         height: 1.5px;
+         background: linear-gradient(to right, transparent, $gold, transparent);
+         transition: width 200ms ease;
+     }
+
+     &:hover:not(:disabled) {
+         color: $champagne;
+         border-color: rgba(226, 199, 128, 0.35);
+         background: rgba(226, 199, 128, 0.07);
+
+         &::after {
+             width: 80%;
+         }
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--active {
+         color: $midnight;
+         background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+         border-color: transparent;
+         font-weight: 700;
+         box-shadow: 0 2px 8px rgba(182, 143, 36, 0.35);
+
+         &::after {
+             display: none;
+         }
+     }
+ }
+
+ // Custom pickers
+ .adf__custom {
+     display: flex;
+     align-items: flex-end;
+     gap: 0.875rem;
+     flex-wrap: wrap;
+     animation: adf-in 200ms ease forwards;
+     position: relative;
+ }
+
+ .adf__date-pair {
+     display: flex;
+     align-items: flex-end;
+     gap: 0.625rem;
+     flex-wrap: wrap;
+     flex: 1;
+ }
+
+ .adf__field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3125rem;
+     flex: 1;
+     min-width: 140px;
+ }
+
+ .adf__field__label {
+     display: flex;
+     align-items: center;
+     gap: 0.3125rem;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.08em;
+     color: rgba(226, 199, 128, 0.4);
+ }
+
+ .adf__field__icon {
+     width: 0.75rem;
+     height: 0.75rem;
+     color: $gold;
+ }
+
+ .adf__date-input {
+     padding: 0.5rem 0.75rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     color: rgba(248, 249, 250, 0.9);
+     background: rgba(255, 255, 255, 0.06);
+     border: 1.5px solid rgba(226, 199, 128, 0.2);
+     border-radius: 8px;
+     outline: none;
+     color-scheme: dark;
+     width: 100%;
+     transition: border-color $t, box-shadow $t;
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+     }
+ }
+
+ .adf__arrow {
+     width: 1rem;
+     height: 1rem;
+     color: rgba(226, 199, 128, 0.35);
+     flex-shrink: 0;
+     margin-bottom: 0.5625rem;
+ }
+
+ .adf__apply-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.5rem 1.25rem;
+     flex-shrink: 0;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: $midnight;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     box-shadow: 0 4px 12px rgba(182, 143, 36, 0.38);
+     transition: all $t;
+
+     &:hover:not(:disabled) {
+         box-shadow: 0 6px 18px rgba(182, 143, 36, 0.55);
+         transform: translateY(-1px);
+     }
+
+     &:disabled {
+         opacity: 0.38;
+         cursor: not-allowed;
+         box-shadow: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+ }
+
+ @keyframes adf-in {
+     from {
+         opacity: 0;
+         transform: translateY(6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }

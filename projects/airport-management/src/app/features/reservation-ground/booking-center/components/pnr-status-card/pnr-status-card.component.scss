@@ -1,0 +1,440 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+ $t-spring: 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+ // ── 1. Card Shell ─────────────────────────────────────────────────────────
+ .psc-card {
+     position: relative;
+     border-radius: 12px;
+     background: var(--aoms-bg-card, #fff);
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 2px 10px rgba($midnight, 0.06);
+     padding: 0.875rem 1rem;
+     display: flex;
+     flex-direction: column;
+     gap: 0.625rem;
+     cursor: pointer;
+     outline: none;
+     overflow: hidden;
+     transition:
+         transform $t-spring,
+         box-shadow $t-base,
+         border-color $t-fast;
+
+     &:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 6px 22px rgba($midnight, 0.1);
+         border-color: rgba($champagne, 0.4);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // ── Status bar (left edge accent) ───────────────────────────────────
+     &__status-bar {
+         position: absolute;
+         top: 0;
+         left: 0;
+         bottom: 0;
+         width: 3px;
+         border-radius: 12px 0 0 12px;
+     }
+
+     // ── Status variants ──────────────────────────────────────────────────
+     &--confirmed {
+         .psc-card__status-bar {
+             background: $emerald;
+             box-shadow: 2px 0 8px rgba($emerald, 0.5);
+         }
+     }
+
+     &--waitlisted {
+         .psc-card__status-bar {
+             background: $amber;
+             box-shadow: 2px 0 8px rgba($amber, 0.45);
+         }
+     }
+
+     &--cancelled {
+         .psc-card__status-bar {
+             background: linear-gradient(to bottom, $ruby, lighten($ruby, 15%));
+             box-shadow: 2px 0 8px rgba($ruby, 0.5);
+         }
+
+         opacity: 0.88;
+     }
+
+     &--pending {
+         .psc-card__status-bar {
+             background: $gold;
+             box-shadow: 2px 0 8px rgba($gold, 0.4);
+         }
+     }
+
+     &--refunded {
+         .psc-card__status-bar {
+             background: rgba($charcoal, 0.5);
+         }
+
+         opacity: 0.8;
+     }
+
+     &--neutral {
+         .psc-card__status-bar {
+             background: rgba($champagne, 0.4);
+         }
+     }
+ }
+
+ // ── 2. Top Row: PNR + Status Pill ─────────────────────────────────────────
+ .psc-card__top {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.5rem;
+     padding-left: 0.625rem; // offset from status bar
+ }
+
+ .psc-card__pnr {
+     display: flex;
+     align-items: baseline;
+     gap: 0.375rem;
+ }
+
+ .psc-card__pnr-label {
+     font-size: 9px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.1em;
+     color: var(--aoms-text-muted);
+ }
+
+ .psc-card__pnr-code {
+     font-size: 1rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     color: var(--aoms-text-primary, $charcoal);
+     font-variant-numeric: tabular-nums;
+ }
+
+ // Status pill
+ .psc-card__status-pill {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.1875rem 0.5rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.06em;
+     white-space: nowrap;
+
+     &--confirmed {
+         color: $emerald;
+         background: rgba($emerald, 0.1);
+         border: 1px solid rgba($emerald, 0.2);
+     }
+
+     &--waitlisted {
+         color: $amber;
+         background: rgba($amber, 0.1);
+         border: 1px solid rgba($amber, 0.2);
+     }
+
+     &--cancelled {
+         color: lighten($ruby, 20%);
+         background: rgba($ruby, 0.1);
+         border: 1px solid rgba($ruby, 0.2);
+     }
+
+     &--pending {
+         color: $gold;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.2);
+     }
+
+     &--refunded {
+         color: var(--aoms-text-muted);
+         background: rgba($charcoal, 0.06);
+         border: 1px solid rgba($charcoal, 0.12);
+     }
+
+     &--neutral {
+         color: var(--aoms-text-muted);
+         background: rgba($midnight, 0.04);
+         border: 1px solid rgba($champagne, 0.2);
+     }
+ }
+
+ // Status pulse dot
+ .psc-card__status-dot {
+     width: 6px;
+     height: 6px;
+     border-radius: 50%;
+     flex-shrink: 0;
+     position: relative;
+
+     &--confirmed {
+         background: $emerald;
+
+         &::after {
+             content: '';
+             position: absolute;
+             inset: -2px;
+             border-radius: 50%;
+             background: rgba($emerald, 0.4);
+             animation: psc-pulse 2s ease-out infinite;
+         }
+     }
+
+     &--waitlisted {
+         background: $amber;
+
+         &::after {
+             content: '';
+             position: absolute;
+             inset: -2px;
+             border-radius: 50%;
+             background: rgba($amber, 0.4);
+             animation: psc-pulse 2s ease-out infinite;
+         }
+     }
+
+     &--cancelled {
+         background: lighten($ruby, 15%);
+     }
+
+     &--pending {
+         background: $gold;
+
+         &::after {
+             content: '';
+             position: absolute;
+             inset: -2px;
+             border-radius: 50%;
+             background: rgba($gold, 0.4);
+             animation: psc-pulse 2.5s ease-out infinite;
+         }
+     }
+
+     &--refunded,
+     &--neutral {
+         background: var(--aoms-text-muted);
+         opacity: 0.5;
+     }
+ }
+
+ // ── 3. Passenger Row ──────────────────────────────────────────────────────
+ .psc-card__passenger {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding-left: 0.625rem;
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__name {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-primary, $charcoal);
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         max-width: 180px;
+     }
+
+     &__extra {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-muted);
+         background: rgba($midnight, 0.05);
+         padding: 0.1rem 0.35rem;
+         border-radius: 100px;
+     }
+ }
+
+ // ── 4. Flight Info Row ────────────────────────────────────────────────────
+ .psc-card__flight {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding-left: 0.625rem;
+     gap: 0.5rem;
+ }
+
+ .psc-card__flight-route {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+ }
+
+ .psc-card__iata {
+     font-size: 1.125rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     color: $gold;
+ }
+
+ .psc-card__flight-arrow {
+     width: 1rem;
+     height: 1rem;
+     color: var(--aoms-text-muted);
+     flex-shrink: 0;
+ }
+
+ .psc-card__flight-num {
+     display: flex;
+     align-items: center;
+     gap: 0.3125rem;
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+
+     &__icon {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+ }
+
+ // ── 5. Departure Time ─────────────────────────────────────────────────────
+ .psc-card__departure {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding-left: 0.625rem;
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-muted);
+
+     &__icon {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ── 6. Footer: Price + Actions ────────────────────────────────────────────
+ .psc-card__footer {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding-left: 0.625rem;
+     padding-top: 0.5rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     margin-top: 0.125rem;
+ }
+
+ .psc-card__price {
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+     color: var(--aoms-text-primary, $charcoal);
+     font-variant-numeric: tabular-nums;
+ }
+
+ .psc-card__actions {
+     display: flex;
+     align-items: center;
+     gap: 0.3125rem;
+ }
+
+ .psc-card__action-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.875rem;
+     height: 1.875rem;
+     border-radius: 4px;
+     border: 1px solid rgba($champagne, 0.2);
+     background: transparent;
+     cursor: pointer;
+     transition: all $t-fast;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // Quick View — neutral
+     &--view {
+         color: var(--aoms-text-muted);
+
+         &:hover {
+             border-color: rgba($champagne, 0.5);
+             background: rgba($champagne, 0.07);
+             color: $gold;
+         }
+     }
+
+     // Deep Explore — gold accent
+     &--explore {
+         color: $gold;
+         border-color: rgba($gold, 0.25);
+
+         &:hover {
+             background: rgba($gold, 0.1);
+             border-color: $gold;
+             transform: translateY(-1px);
+         }
+     }
+ }
+
+ // ── 7. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes psc-pulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.7;
+     }
+
+     100% {
+         transform: scale(2.8);
+         opacity: 0;
+     }
+ }
+
+ // ── 8. Dark Mode ─────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .psc-card {
+         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+         &:hover {
+             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+         }
+     }
+
+     .psc-card__passenger__extra {
+         background: rgba(255, 255, 255, 0.06);
+     }
+ }

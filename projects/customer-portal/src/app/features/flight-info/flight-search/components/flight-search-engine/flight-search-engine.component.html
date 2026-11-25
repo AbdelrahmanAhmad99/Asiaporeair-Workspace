@@ -1,0 +1,635 @@
+<!-- ================================================================
+  flight-search-engine.component.html
+  Asiaporeair | "Begin Your Journey" — Flight Search Engine
+  ================================================================ -->
+
+<section class="search-engine" aria-label="Asiaporeair Flight Search">
+
+  <!-- ── Tab Navigation ─────────────────────────────────────────── -->
+  <nav class="tab-nav" role="tablist" aria-label="Search options">
+    <button role="tab" [attr.aria-selected]="activeTab() === 'book'" [class.active]="activeTab() === 'book'"
+      class="tab-btn" (click)="setActiveTab('book')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+        aria-hidden="true">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+      Begin Your Journey
+    </button>
+
+    <!-- Animated indicator -->
+    <div class="tab-indicator" aria-hidden="true"></div>
+  </nav>
+
+  <!-- ================================================================
+       TAB 1 — BOOK FLIGHTS
+       ================================================================ -->
+  <div *ngIf="activeTab() === 'book'" class="tab-panel" role="tabpanel" aria-label="Book flights" [@panelReveal]>
+    <form [formGroup]="bookForm" (ngSubmit)="onSearch()" novalidate>
+
+      <!-- ── Journey Type Row ───────────────────────────────────── -->
+      <div class="journey-type-row">
+        <div class="journey-type-group" role="group" aria-label="Journey type">
+          <label *ngFor="let type of ['RoundTrip', 'OneWay', 'MultiCity']" class="journey-type-label"
+            [class.active]="searchType() === type">
+            <input type="radio" name="searchType" [value]="type" [checked]="searchType() === type"
+              (change)="setSearchType($any(type))" class="sr-only" [attr.aria-label]="type" />
+            <span class="journey-radio-dot" aria-hidden="true"></span>
+            {{ type === 'RoundTrip' ? 'Round Trip' : type === 'OneWay' ? 'One Way' : 'Multi-City' }}
+          </label>
+        </div>
+
+        <!-- Flexible Fares Toggle -->
+        <label class="flex-fares-toggle" aria-label="Include flexible fares">
+          <input type="checkbox" class="sr-only" [checked]="flexibleFares()"
+            (change)="flexibleFares.set(!flexibleFares())" />
+          <span class="toggle-track" aria-hidden="true">
+            <span class="toggle-thumb"></span>
+          </span>
+          <span class="toggle-label">Flexible Fares</span>
+        </label>
+      </div>
+
+      <!-- ── Segments ─────────────────────────────────────────── -->
+      <div formArrayName="segments" class="segments-wrapper">
+        <div *ngFor="let seg of segments.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i"
+          class="segment-row" [@segmentEnter]>
+          <!-- Segment label for multi-city -->
+          <div *ngIf="searchType() === 'MultiCity'" class="segment-label">
+            <span class="segment-number">Flight {{ i + 1 }}</span>
+          </div>
+
+          <div class="route-fields">
+
+            <!-- ── Origin ───────────────────────────────── -->
+            <div class="field-wrap origin-field">
+              <label [for]="'origin_' + i" class="field-label">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                From
+              </label>
+              <div class="airport-field-wrapper" [class.active]="activeSuggestionField() === getFieldId(i, 'origin')">
+                <input type="text" [id]="'origin_' + i" formControlName="originDisplay" class="airport-input"
+                  placeholder="City or Airport" autocomplete="off"
+                  [attr.aria-label]="'Departure city or airport, segment ' + (i+1)"
+                  [attr.aria-invalid]="isSegmentFieldInvalid(i, 'originIataCode')"
+                  (focus)="openAirportSuggestions(getFieldId(i, 'origin'), seg.get('originDisplay')?.value)"
+                  (input)="onAirportInput(getFieldId(i, 'origin'), $any($event.target).value)" />
+                <!-- IATA hidden -->
+                <input type="hidden" formControlName="originIataCode" />
+
+                <!-- Suggestion Dropdown -->
+                <div *ngIf="activeSuggestionField() === getFieldId(i, 'origin') && airportSuggestions().length"
+                  class="suggestions-dropdown" [@dropdownReveal] [@staggerList] role="listbox"
+                  [attr.aria-label]="'Airport suggestions'">
+                  <button *ngFor="let airport of airportSuggestions()" type="button" role="option"
+                    class="suggestion-item" (click)="selectAirport(airport, i, 'origin')"
+                    [attr.aria-label]="airport.city + ' ' + airport.name + ' ' + airport.iata">
+                    <span class="suggestion-iata">{{ airport.iata }}</span>
+                    <span class="suggestion-info">
+                      <span class="suggestion-city">{{ airport.city }}</span>
+                      <span class="suggestion-name">{{ airport.name }}, {{ airport.country }}</span>
+                    </span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                      aria-hidden="true">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <p class="field-error" role="alert" *ngIf="isSegmentFieldInvalid(i, 'originIataCode')">Select a departure
+                airport.</p>
+            </div>
+
+            <!-- ── Swap Button ──────────────────────────── -->
+            <button type="button" class="swap-btn" (click)="swapRoute(i)"
+              [attr.aria-label]="'Swap origin and destination for segment ' + (i+1)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M7 16V4m0 0L3 8m4-4l4 4" />
+                <path d="M17 8v12m0 0l4-4m-4 4l-4-4" />
+              </svg>
+            </button>
+
+            <!-- ── Destination ──────────────────────────── -->
+            <div class="field-wrap destination-field">
+              <label [for]="'dest_' + i" class="field-label">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                To
+              </label>
+              <div class="airport-field-wrapper"
+                [class.active]="activeSuggestionField() === getFieldId(i, 'destination')">
+                <input type="text" [id]="'dest_' + i" formControlName="destinationDisplay" class="airport-input"
+                  placeholder="City or Airport" autocomplete="off"
+                  [attr.aria-label]="'Arrival city or airport, segment ' + (i+1)"
+                  [attr.aria-invalid]="isSegmentFieldInvalid(i, 'destinationIataCode')"
+                  (focus)="openAirportSuggestions(getFieldId(i, 'destination'), seg.get('destinationDisplay')?.value)"
+                  (input)="onAirportInput(getFieldId(i, 'destination'), $any($event.target).value)" />
+                <input type="hidden" formControlName="destinationIataCode" />
+
+                <div *ngIf="activeSuggestionField() === getFieldId(i, 'destination') && airportSuggestions().length"
+                  class="suggestions-dropdown" [@dropdownReveal] [@staggerList] role="listbox">
+                  <button *ngFor="let airport of airportSuggestions()" type="button" role="option"
+                    class="suggestion-item" (click)="selectAirport(airport, i, 'destination')"
+                    [attr.aria-label]="airport.city + ' ' + airport.name">
+                    <span class="suggestion-iata">{{ airport.iata }}</span>
+                    <span class="suggestion-info">
+                      <span class="suggestion-city">{{ airport.city }}</span>
+                      <span class="suggestion-name">{{ airport.name }}, {{ airport.country }}</span>
+                    </span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+                      aria-hidden="true">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <p class="field-error" role="alert" *ngIf="isSegmentFieldInvalid(i, 'destinationIataCode')">Select an
+                arrival airport.</p>
+            </div>
+
+            <!-- ── Departure Date ──────────────────────── -->
+            <div class="field-wrap date-field">
+              <label [for]="'dep_date_' + i" class="field-label">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                Departure
+              </label>
+              <button type="button" [id]="'dep_date_' + i" class="date-trigger"
+                [class.has-value]="seg.get('departureDate')?.value" [class.active]="activeDateField() === 'dep_' + i"
+                (click)="openDatePicker('dep_' + i)" [attr.aria-label]="'Select departure date for segment ' + (i+1)"
+                [attr.aria-expanded]="activeDateField() === 'dep_' + i">
+                <span *ngIf="seg.get('departureDate')?.value" class="date-display">
+                  {{ formatDateDisplay(seg.get('departureDate')?.value) }}
+                </span>
+                <span *ngIf="!seg.get('departureDate')?.value" class="date-placeholder">Select date</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  class="date-chevron" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+
+              <!-- Calendar Panel -->
+              <div *ngIf="activeDateField() === 'dep_' + i" class="calendar-panel" [@dropdownReveal] role="dialog"
+                [attr.aria-label]="'Departure date picker'">
+                <ng-container *ngTemplateOutlet="calendarTpl; context: { fieldId: 'dep_' + i }"></ng-container>
+              </div>
+
+              <p class="field-error" role="alert" *ngIf="isSegmentFieldInvalid(i, 'departureDate')">Departure date is
+                required.</p>
+            </div>
+
+            <!-- ── Return Date (RoundTrip only, first segment) ── -->
+            <div class="field-wrap date-field" *ngIf="searchType() === 'RoundTrip' && i === 0">
+              <label for="returnDate" class="field-label">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                Return
+              </label>
+              <button type="button" id="returnDate" class="date-trigger"
+                [class.has-value]="bookForm.get('returnDate')?.value"
+                [class.active]="activeDateField() === 'returnDate'" [class.error]="isReturnDateInvalid()"
+                (click)="openDatePicker('returnDate')" aria-label="Select return date"
+                [attr.aria-expanded]="activeDateField() === 'returnDate'">
+                <span *ngIf="bookForm.get('returnDate')?.value" class="date-display">
+                  {{ formatDateDisplay(bookForm.get('returnDate')?.value) }}
+                </span>
+                <span *ngIf="!bookForm.get('returnDate')?.value" class="date-placeholder">Select date</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                  class="date-chevron" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+
+              <div *ngIf="activeDateField() === 'returnDate'" class="calendar-panel" [@dropdownReveal] role="dialog"
+                aria-label="Return date picker">
+                <ng-container *ngTemplateOutlet="calendarTpl; context: { fieldId: 'returnDate' }"></ng-container>
+              </div>
+              <p class="field-error" role="alert" *ngIf="isReturnDateInvalid()">Return date must be after departure.</p>
+            </div>
+
+            <!-- ── Remove Segment (MultiCity) ─────────── -->
+            <button *ngIf="searchType() === 'MultiCity' && segments.length > 2" type="button" class="remove-segment-btn"
+              (click)="removeSegment(i)" [attr.aria-label]="'Remove flight ' + (i+1)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+
+          </div>
+          <!-- /route-fields -->
+        </div>
+        <!-- /segment row -->
+      </div>
+      <!-- /segments wrapper -->
+
+      <!-- ── Add Flight (MultiCity) ─────────────────────────── -->
+      <button *ngIf="searchType() === 'MultiCity' && segments.length < 5" type="button" class="add-segment-btn"
+        (click)="addSegment()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Add Another Flight
+      </button>
+
+      <!-- ── Bottom Controls Row ──────────────────────────────── -->
+      <div class="bottom-controls">
+
+        <!-- Passengers Selector -->
+        <div class="control-group" [class.open]="showPassengerDropdown()">
+          <button type="button" class="control-trigger" (click)="togglePassengerDropdown()"
+            [attr.aria-expanded]="showPassengerDropdown()" aria-haspopup="true" aria-label="Passengers">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+              aria-hidden="true">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            <span class="control-value">{{ passengerSummary }}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              aria-hidden="true">
+              <polyline [attr.points]="showPassengerDropdown() ? '18 15 12 9 6 15' : '6 9 12 15 18 9'" />
+            </svg>
+          </button>
+
+          <div *ngIf="showPassengerDropdown()" class="control-dropdown passenger-dropdown" [@dropdownReveal]
+            role="dialog" aria-label="Passenger selection">
+            <div class="passenger-header">
+              <p class="dropdown-title">Passengers</p>
+              <p class="dropdown-subtitle">Maximum 9 passengers per booking</p>
+            </div>
+
+            <!-- Adults -->
+            <div class="passenger-row">
+              <div class="passenger-info">
+                <span class="passenger-type">Adults</span>
+                <span class="passenger-age">12+ years</span>
+              </div>
+              <div class="counter">
+                <button type="button" class="counter-btn" (click)="adjustPassenger('adults', -1)"
+                  [disabled]="passengers().adults <= 1" aria-label="Decrease adults">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+                <span class="counter-value" aria-live="polite" [attr.aria-label]="passengers().adults + ' adults'">{{
+                  passengers().adults }}</span>
+                <button type="button" class="counter-btn" (click)="adjustPassenger('adults', 1)"
+                  [disabled]="totalPassengers() >= 9" aria-label="Increase adults">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Children -->
+            <div class="passenger-row">
+              <div class="passenger-info">
+                <span class="passenger-type">Children</span>
+                <span class="passenger-age">2–11 years</span>
+              </div>
+              <div class="counter">
+                <button type="button" class="counter-btn" (click)="adjustPassenger('children', -1)"
+                  [disabled]="passengers().children <= 0" aria-label="Decrease children">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+                <span class="counter-value" aria-live="polite"
+                  [attr.aria-label]="passengers().children + ' children'">{{ passengers().children }}</span>
+                <button type="button" class="counter-btn" (click)="adjustPassenger('children', 1)"
+                  [disabled]="totalPassengers() >= 9" aria-label="Increase children">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Infants -->
+            <div class="passenger-row">
+              <div class="passenger-info">
+                <span class="passenger-type">Infants</span>
+                <span class="passenger-age">Under 2 · on lap</span>
+              </div>
+              <div class="counter">
+                <button type="button" class="counter-btn" (click)="adjustPassenger('infants', -1)"
+                  [disabled]="passengers().infants <= 0" aria-label="Decrease infants">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+                <span class="counter-value" aria-live="polite" [attr.aria-label]="passengers().infants + ' infants'">{{
+                  passengers().infants }}</span>
+                <button type="button" class="counter-btn" (click)="adjustPassenger('infants', 1)"
+                  [disabled]="passengers().infants >= passengers().adults || totalPassengers() >= 9"
+                  aria-label="Increase infants">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <p class="passenger-note" *ngIf="passengers().infants >= passengers().adults">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1.5"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+              </svg>
+              Each infant must be accompanied by an adult.
+            </p>
+
+            <button type="button" class="dropdown-confirm-btn" (click)="showPassengerDropdown.set(false)">
+              Confirm Selection
+            </button>
+          </div>
+        </div>
+
+        <!-- Cabin Class Selector -->
+        <div class="control-group" [class.open]="showCabinDropdown()">
+          <button type="button" class="control-trigger" (click)="toggleCabinDropdown()"
+            [attr.aria-expanded]="showCabinDropdown()" aria-haspopup="listbox" aria-label="Cabin class">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+              aria-hidden="true">
+              <path d="M21 3H3l7 9.46V19l4 2v-8.54L21 3z" />
+            </svg>
+            <span class="control-value">{{ selectedCabin().label }}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              aria-hidden="true">
+              <polyline [attr.points]="showCabinDropdown() ? '18 15 12 9 6 15' : '6 9 12 15 18 9'" />
+            </svg>
+          </button>
+
+          <div *ngIf="showCabinDropdown()" class="control-dropdown cabin-dropdown" [@dropdownReveal] role="listbox"
+            aria-label="Cabin class options">
+            <button *ngFor="let cabin of CABIN_CLASSES" type="button" role="option" class="cabin-option"
+              [class.selected]="selectedCabin().value === cabin.value" (click)="selectCabin(cabin)"
+              [attr.aria-selected]="selectedCabin().value === cabin.value">
+              <div class="cabin-option-info">
+                <span class="cabin-option-label">{{ cabin.label }}</span>
+                <span class="cabin-option-sub">{{ cabin.sublabel }}</span>
+              </div>
+              <svg *ngIf="selectedCabin().value === cabin.value" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="#B68F24" stroke-width="2" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search CTA -->
+        <button type="submit" class="search-btn" [disabled]="isLoading()" [class.loading]="isLoading()"
+          aria-label="Search for flights">
+          <span *ngIf="!isLoading()" class="search-btn-inner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            Search Flights
+          </span>
+          <span *ngIf="isLoading()" class="search-btn-inner" aria-live="polite" aria-label="Searching, please wait">
+            <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" aria-hidden="true">
+              <path
+                d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+            </svg>
+            Searching…
+          </span>
+        </button>
+
+      </div>
+      <!-- /bottom controls -->
+
+      <!-- ── Error Banner ─────────────────────────────────────── -->
+      <div class="error-banner" role="alert" *ngIf="serverError()" [@fadeIn]>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1.5"
+          aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        {{ serverError() }}
+      </div>
+
+    </form>
+  </div>
+  <!-- /book tab -->
+
+  <!-- ================================================================
+       TAB 2 — FLIGHT STATUS
+       ================================================================ -->
+  <div *ngIf="activeTab() === 'status'" class="tab-panel status-panel" role="tabpanel" aria-label="Flight status"
+    [@panelReveal]>
+    <form [formGroup]="statusForm" (ngSubmit)="onCheckStatus()" novalidate class="status-form">
+
+      <div class="status-fields">
+
+        <!-- Flight Number -->
+        <div class="field-wrap">
+          <label for="flightNumber" class="field-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+              aria-hidden="true">
+              <path
+                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            Flight Number
+          </label>
+          <div class="airport-field-wrapper">
+            <input formControlName="flightNumber" type="text" id="flightNumber" class="airport-input"
+              placeholder="e.g. ASP101" autocomplete="off" aria-required="true" />
+          </div>
+          <p class="field-error" role="alert"
+            *ngIf="statusForm.get('flightNumber')?.invalid && statusForm.get('flightNumber')?.touched">
+            Enter a valid flight number (e.g. ASP101).
+          </p>
+        </div>
+
+        <!-- Flight Date -->
+        <div class="field-wrap date-field">
+          <label for="statusFlightDate" class="field-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+              aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Flight Date
+          </label>
+          <div class="airport-field-wrapper">
+            <input formControlName="flightDate" type="date" id="statusFlightDate" class="airport-input date-native"
+              aria-required="true" />
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="search-btn" [disabled]="statusLoading()" [class.loading]="statusLoading()"
+          aria-label="Check flight status">
+          <span class="search-btn-inner" *ngIf="!statusLoading()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Check Status
+          </span>
+          <span class="search-btn-inner" *ngIf="statusLoading()" aria-live="polite">
+            <svg class="spinner" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" aria-hidden="true">
+              <path
+                d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+            </svg>
+            Checking…
+          </span>
+        </button>
+      </div>
+
+      <!-- Status Result Card -->
+      <div *ngIf="statusResult()" class="status-result-card" [@fadeIn] role="region" aria-label="Flight status result">
+        <div class="status-result-header">
+          <span class="status-flight-number">{{ statusResult()!.flightNumber }}</span>
+          <span class="status-badge" [class]="'status-' + statusResult()!.flightNumber">{{ statusResult()!.airlineName
+            }}</span>
+        </div>
+        <div class="status-result-route">
+          <div class="status-point">
+            <span class="status-iata">{{ statusResult()!.originAirportIata }}</span>
+            <span class="status-city">{{ statusResult()!.originCity }}</span>
+            <span class="status-time">{{ statusResult()!.departureTime | date: 'HH:mm' }}</span>
+          </div>
+          <div class="status-divider" aria-hidden="true">
+            <div class="status-flight-line"></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+              aria-hidden="true">
+              <path
+                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+            </svg>
+            <div class="status-flight-line"></div>
+            <span class="status-duration">{{ formatDuration(statusResult()!.durationMinutes) }}</span>
+          </div>
+          <div class="status-point">
+            <span class="status-iata">{{ statusResult()!.destinationAirportIata }}</span>
+            <span class="status-city">{{ statusResult()!.destinationCity }}</span>
+            <span class="status-time">{{ statusResult()!.arrivalTime | date: 'HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Error -->
+      <div class="error-banner" role="alert" *ngIf="statusError()" [@fadeIn]>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1.5"
+          aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+        </svg>
+        {{ statusError() }}
+      </div>
+    </form>
+  </div>
+  <!-- /status tab -->
+
+  <!-- ================================================================
+       TAB 3 — BOARDING & SERVICES
+       ================================================================ -->
+  <div *ngIf="activeTab() === 'checkin'" class="tab-panel checkin-panel" role="tabpanel" aria-label="Online check-in"
+    [@panelReveal]>
+    <div class="checkin-content">
+      <div class="checkin-icon" aria-hidden="true">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#B68F24" stroke-width="1"
+          aria-hidden="true">
+          <polyline points="9 11 12 14 22 4" />
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+        </svg>
+      </div>
+      <h3 class="checkin-title">Boarding & Services</h3>
+      <p class="checkin-desc">Online check-in is available from 48 hours before your scheduled departure. Please have
+        your booking reference and passport ready.</p>
+      <a routerLink="/boarding" class="search-btn checkin-btn" role="button">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+        Proceed to Check-In
+      </a>
+    </div>
+  </div>
+  <!-- /checkin tab -->
+
+</section>
+
+<!-- ================================================================
+     CALENDAR TEMPLATE (reusable for all date fields)
+     ================================================================ -->
+<ng-template #calendarTpl let-fieldId="fieldId">
+  <div class="calendar">
+    <!-- Month navigation -->
+    <div class="calendar-header">
+      <button type="button" class="cal-nav-btn" (click)="prevMonth()" aria-label="Previous month">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          aria-hidden="true">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </button>
+      <span class="cal-month-label">{{ calendarMonthLabel() }}</span>
+      <button type="button" class="cal-nav-btn" (click)="nextMonth()" aria-label="Next month">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          aria-hidden="true">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Weekday headers -->
+    <div class="cal-weekdays" aria-hidden="true">
+      <span *ngFor="let wd of weekdays" class="cal-weekday">{{ wd }}</span>
+    </div>
+
+    <!-- Day cells -->
+    <div class="cal-days" role="grid" [attr.aria-label]="calendarMonthLabel()">
+      <ng-container *ngFor="let day of calendarDays(); trackBy: trackByIndex">
+        <div class="cal-cell-empty" *ngIf="!day" aria-hidden="true"></div>
+        <button *ngIf="day" type="button" role="gridcell" class="cal-day" [class.disabled]="isDateDisabled(day)"
+          [class.today]="isToday(day)" [class.selected]="isDateSelected(day, fieldId)" [disabled]="isDateDisabled(day)"
+          (click)="selectDate(day, fieldId)"
+          [attr.aria-label]="day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })"
+          [attr.aria-pressed]="isDateSelected(day, fieldId)" [attr.aria-disabled]="isDateDisabled(day)">
+          {{ day.getDate() }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

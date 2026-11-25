@@ -1,0 +1,292 @@
+<div class="tlm-page">
+
+    <!-- ══ Void Confirmation Dialog ══════════════════════════════════ -->
+    @if (showVoidDialog()) {
+    <aoms-void-confirmation-dialog [ticketCode]="store.selectedTicket()?.ticketCode ?? ''"
+        [isProcessing]="store.isProcessingAction()" [error]="store.lifecycleActionError()"
+        (confirmed)="onVoidConfirmed($event)" (cancelled)="onVoidCancelled()" />
+    }
+
+    <!-- ══ Sticky Admin Header ════════════════════════════════════════ -->
+    <header class="tlm-header">
+        <div class="tlm-header__left">
+            <nav class="tlm-breadcrumb" aria-label="Breadcrumb">
+                <span class="tlm-breadcrumb__section">Ticketing Hub</span>
+                <svg class="tlm-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="tlm-breadcrumb__current">Lifecycle Manager</span>
+            </nav>
+
+            <div class="tlm-title-row">
+                <h1 class="tlm-title">
+                    <svg class="tlm-title__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    </svg>
+                    Ticket Lifecycle Manager
+                </h1>
+
+                @if (store.selectedTicket()) {
+                <span class="tlm-ticket-code-badge">{{ store.selectedTicket()!.ticketCode }}</span>
+                <aoms-ticket-security-badge [status]="store.selectedTicket()!.status" />
+                }
+            </div>
+        </div>
+
+        <!-- Admin Controls -->
+        <div class="tlm-header__controls">
+            <!-- Success toast -->
+            @if (store.lifecycleActionSuccess()) {
+            <div class="tlm-toast tlm-toast--success" role="status" aria-live="polite">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="tlm-toast__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                {{ store.lifecycleActionSuccess() }}
+            </div>
+            }
+
+            <!-- Audit Vault link -->
+            <button class="tlm-nav-btn" type="button" (click)="goToAuditVault()" title="Open Audit Vault">
+                <svg class="tlm-nav-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M20.25 6.375c0 8.485-7.5 11.9-7.5 11.9s-7.5-3.415-7.5-11.9a7.5 7.5 0 0 1 15 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.5 9-4.5 4.5-2.25-2.25" />
+                </svg>
+                Audit Vault
+            </button>
+
+            <!-- Issuance Console link -->
+            @if (store.selectedTicket()?.bookingId) {
+            <button class="tlm-nav-btn" type="button" (click)="goToIssuanceConsole()" title="Open Issuance Console">
+                <svg class="tlm-nav-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                </svg>
+                Issuance Console
+            </button>
+            }
+
+            <!-- Refresh -->
+            <button class="tlm-icon-btn" type="button" [disabled]="store.lifecycleLoading()" (click)="onRetry()"
+                aria-label="Refresh lifecycle data">
+                <svg class="tlm-icon-btn__icon" [class.tlm-icon-btn__icon--spin]="store.lifecycleLoading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <!-- Dark mode -->
+            <button class="tlm-icon-btn tlm-icon-btn--gold" type="button" (click)="toggleDarkMode()"
+                [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
+                @if (isDarkMode()) {
+                <svg class="tlm-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+                </svg>
+                } @else {
+                <svg class="tlm-icon-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
+                </svg>
+                }
+            </button>
+        </div>
+    </header>
+
+    <!-- ══ Page Body ══════════════════════════════════════════════════ -->
+    <main class="tlm-body">
+
+        <!-- ── Loading skeleton ────────────────────────────────────────── -->
+        @if (store.lifecycleLoading()) {
+        <div class="tlm-skeleton" aria-busy="true" aria-label="Loading ticket lifecycle">
+            <div class="tlm-skeleton__card tlm-skeleton__card--tall">
+                <div class="tlm-shimmer tlm-shimmer--xl"></div>
+                <div class="tlm-shimmer tlm-shimmer--route"></div>
+                <div class="tlm-shimmer tlm-shimmer--lg"></div>
+                <div class="tlm-shimmer tlm-shimmer--md"></div>
+            </div>
+            <div class="tlm-skeleton__card">
+                <div class="tlm-shimmer tlm-shimmer--lg"></div>
+                @for (i of [1,2,3,4]; track i) {
+                <div class="tlm-shimmer tlm-shimmer--row"></div>
+                }
+            </div>
+        </div>
+        }
+
+        <!-- ── Critical error overlay ─────────────────────────────────── -->
+        @if (store.lifecycleError() && !store.lifecycleLoading()) {
+        <div class="tlm-error-overlay" role="alert">
+            <div class="tlm-error-overlay__card">
+                <div class="tlm-error-overlay__icon-wrap" aria-hidden="true">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    </svg>
+                </div>
+                <p class="tlm-error-overlay__title">Lifecycle Load Failure</p>
+                <p class="tlm-error-overlay__msg">{{ store.lifecycleError() }}</p>
+                <button class="tlm-error-overlay__retry" type="button" (click)="onRetry()">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Retry
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- ── Inline action error ────────────────────────────────────── -->
+        @if (store.lifecycleActionError() && !showVoidDialog()) {
+        <div class="tlm-inline-error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="tlm-inline-error__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{ store.lifecycleActionError() }}
+        </div>
+        }
+
+        <!-- ══ Lifecycle Command Grid ════════════════════════════════════ -->
+        @if (store.isLifecycleReady()) {
+        <div class="tlm-command-grid" [@.disabled]="true">
+
+            <!-- Left Column: E-Ticket Preview + Action Controls -->
+            <aside class="tlm-sidebar">
+
+                <!-- E-Ticket Preview -->
+                <aoms-electronic-ticket-preview [ticket]="store.selectedTicket()!" />
+
+                <!-- Admin Action Panel -->
+                <div class="tlm-action-panel">
+                    <p class="tlm-action-panel__title">Administrative Actions</p>
+
+                    <!-- Status update -->
+                    @if (!isCurrentlyVoided()) {
+                    <div class="tlm-status-update">
+                        <label class="tlm-status-update__label" for="tlm-status-select">Update Status</label>
+                        <div class="tlm-status-update__row">
+                            <div class="tlm-select-wrap">
+                                <select id="tlm-status-select" class="tlm-select"
+                                    [disabled]="store.isProcessingAction()" (change)="onStatusSelectChange($event)"
+                                    aria-label="Select new ticket status">
+                                    <option value="">— Select —</option>
+                                    @for (opt of statusOptions; track opt.value) {
+                                    <option [value]="opt.value"
+                                        [selected]="opt.value === store.selectedTicket()!.status">
+                                        {{ opt.label }}
+                                    </option>
+                                    }
+                                </select>
+                                <svg class="tlm-select-wrap__caret" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </div>
+                            <button class="tlm-apply-btn" type="button"
+                                [disabled]="!pendingStatus() || store.isProcessingAction()" (click)="onApplyStatus()">
+                                @if (store.isProcessingAction()) {
+                                <svg class="tlm-apply-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                </svg>
+                                } @else { Apply }
+                            </button>
+                        </div>
+                    </div>
+                    }
+
+                    <!-- Void button -->
+                    @if (!isCurrentlyVoided()) {
+                    <button class="tlm-void-btn" type="button" [disabled]="store.isProcessingAction()"
+                        (click)="onVoidRequested()">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            class="tlm-void-btn__icon" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        Void This Ticket
+                    </button>
+                    } @else {
+                    <div class="tlm-voided-notice" role="status">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                            aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        Ticket is permanently voided. No further actions available.
+                    </div>
+                    }
+
+                </div>
+            </aside>
+
+            <!-- Right Column: Passenger History -->
+            <section class="tlm-main-panel">
+
+                <!-- Ticket meta card -->
+                <div class="tlm-meta-card">
+                    <div class="tlm-meta-card__accent" aria-hidden="true"></div>
+                    <div class="tlm-meta-grid">
+                        <div class="tlm-meta">
+                            <span class="tlm-meta__key">Booking Ref</span>
+                            <span class="tlm-meta__val tlm-meta__val--mono">{{ store.selectedTicket()!.bookingReference
+                                }}</span>
+                        </div>
+                        <div class="tlm-meta">
+                            <span class="tlm-meta__key">Flight</span>
+                            <span class="tlm-meta__val">{{ store.selectedTicket()!.flightNumber }}</span>
+                        </div>
+                        <div class="tlm-meta">
+                            <span class="tlm-meta__key">Route</span>
+                            <span class="tlm-meta__val">
+                                {{ store.selectedTicket()!.originAirportCode }} → {{
+                                store.selectedTicket()!.destinationAirportCode }}
+                            </span>
+                        </div>
+                        <div class="tlm-meta">
+                            <span class="tlm-meta__key">Seat / Class</span>
+                            <span class="tlm-meta__val">{{ store.selectedTicket()!.seatNumber || '—' }} / {{
+                                store.selectedTicket()!.cabinClass }}</span>
+                        </div>
+                        <div class="tlm-meta">
+                            <span class="tlm-meta__key">Frequent Flyer</span>
+                            <span class="tlm-meta__val tlm-meta__val--mono">
+                                {{ store.selectedTicket()!.frequentFlyerNumber || 'Not enrolled' }}
+                            </span>
+                        </div>
+                        <div class="tlm-meta">
+                            <span class="tlm-meta__key">Passenger</span>
+                            <span class="tlm-meta__val">
+                                {{ store.selectedTicket()!.passengerFirstName }} {{
+                                store.selectedTicket()!.passengerLastName }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passenger ticket history -->
+                <aoms-passenger-ticket-history-list [history]="store.enrichedHistory()"
+                    [currentTicketId]="store.selectedTicket()!.ticketId" />
+
+            </section>
+
+        </div>
+        } <!-- /isLifecycleReady -->
+
+    </main>
+</div>

@@ -1,0 +1,598 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 160ms ease;
+ $t-base: 240ms ease;
+
+ .cih-page {
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     background-color: var(--aoms-bg-primary);
+     transition: background-color $t-base;
+ }
+
+ // ── Header ─────────────────────────────────────────────────────────────────
+ .cih-header {
+     position: sticky;
+     top: 0;
+     z-index: 20;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding: 0.875rem 1.75rem;
+     background: $midnight;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 2px 16px rgba(5, 25, 55, 0.4);
+     backdrop-filter: blur(12px);
+     -webkit-backdrop-filter: blur(12px);
+     flex-shrink: 0;
+     flex-wrap: wrap;
+     transition: box-shadow $t-base;
+
+     &__left {
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+         flex: 1;
+         flex-wrap: wrap;
+     }
+
+     &__right {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         flex-wrap: wrap;
+     }
+
+     &__branding {
+         display: flex;
+         align-items: center;
+         gap: 0.875rem;
+     }
+
+     // Animated radar ring
+     &__radar {
+         width: 2.25rem;
+         height: 2.25rem;
+         flex-shrink: 0;
+         color: $gold;
+
+         &__svg {
+             width: 100%;
+             height: 100%;
+             animation: cih-radar-glow 3s ease-in-out infinite;
+         }
+
+         &__sweep {
+             animation: cih-radar-sweep 3s linear infinite;
+             transform-origin: 12px 12px;
+         }
+     }
+
+     &__title {
+         font-size: 1.125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.02em;
+         color: rgba(255, 255, 255, 0.95);
+     }
+
+     &__sub {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: rgba(226, 199, 128, 0.4);
+         letter-spacing: 0.04em;
+     }
+ }
+
+ // Readiness badge
+ .cih-readiness-badge {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.3125rem 0.875rem;
+     border-radius: 100px;
+     font-family: var(--aoms-font-body);
+     border: 1px solid;
+     transition: all $t;
+     animation: cih-fadein 250ms ease forwards;
+
+     &[data-status="optimal"] {
+         background: rgba(6, 78, 59, 0.12);
+         border-color: rgba(6, 78, 59, 0.3);
+     }
+
+     &[data-status="nominal"] {
+         background: rgba(5, 150, 105, 0.1);
+         border-color: rgba(5, 150, 105, 0.3);
+     }
+
+     &[data-status="strained"] {
+         background: rgba(180, 83, 9, 0.12);
+         border-color: rgba(180, 83, 9, 0.3);
+     }
+
+     &[data-status="critical"] {
+         background: rgba(113, 13, 6, 0.12);
+         border-color: rgba(113, 13, 6, 0.3);
+         animation: cih-pulse-border 1.2s ease-in-out infinite;
+     }
+
+     &__pct {
+         font-size: 0.9375rem;
+         font-weight: 800;
+         font-family: var(--aoms-font-heading);
+         letter-spacing: -0.02em;
+         color: $champagne;
+     }
+
+     &__label {
+         font-size: 11px;
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+         color: rgba(226, 199, 128, 0.6);
+     }
+ }
+
+ .cih-sync-tag {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.3125rem;
+     padding: 0.1875rem 0.625rem;
+     border-radius: 100px;
+     font-size: 10px;
+     font-family: var(--aoms-font-body);
+     font-variant-numeric: tabular-nums;
+     color: rgba(226, 199, 128, 0.45);
+     background: rgba(226, 199, 128, 0.07);
+     border: 1px solid rgba(226, 199, 128, 0.14);
+
+     &__icon {
+         width: 0.75rem;
+         height: 0.75rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // Center-out golden line navigation buttons
+ .cih-nav-btn {
+     position: relative;
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.5rem 1rem;
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: rgba(226, 199, 128, 0.55);
+     background: rgba(255, 255, 255, 0.04);
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     overflow: hidden;
+     transition: color $t, border-color $t, background $t;
+
+     &::after {
+         content: '';
+         position: absolute;
+         bottom: 0;
+         left: 50%;
+         transform: translateX(-50%);
+         width: 0;
+         height: 2px;
+         background: linear-gradient(to right, transparent, $gold, transparent);
+         transition: width 220ms ease;
+     }
+
+     &:hover {
+         color: $champagne;
+         border-color: rgba(226, 199, 128, 0.38);
+         background: rgba(226, 199, 128, 0.06);
+
+         &::after {
+             width: 100%;
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ .cih-icon-btn {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 2.125rem;
+     height: 2.125rem;
+     border-radius: 4px;
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     background: transparent;
+     color: rgba(226, 199, 128, 0.45);
+     cursor: pointer;
+     outline: none;
+     transition: all $t;
+
+     &:hover:not(:disabled) {
+         border-color: $champagne;
+         background: rgba(226, 199, 128, 0.08);
+         color: $champagne;
+     }
+
+     &:disabled {
+         opacity: 0.35;
+         cursor: not-allowed;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--gold {
+         color: $gold;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+
+         &--spin {
+             animation: cih-spin 1s linear infinite;
+         }
+     }
+ }
+
+ // ── Body ───────────────────────────────────────────────────────────────────
+ .cih-body {
+     flex: 1;
+     padding: 1.5rem 1.75rem;
+     display: flex;
+     flex-direction: column;
+     gap: 1.375rem;
+     overflow-y: auto;
+ }
+
+ // ── Error Panel ───────────────────────────────────────────────────────────
+ .cih-error-panel {
+     position: relative;
+     overflow: hidden;
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 1.25rem;
+     padding: 1.25rem 1.375rem;
+     border-radius: 12px;
+     background: rgba(113, 13, 6, 0.1);
+     border: 1px solid rgba(113, 13, 6, 0.32);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     animation: cih-fadein 200ms ease forwards;
+
+     &__glass {
+         position: absolute;
+         inset: 0;
+         pointer-events: none;
+         background: linear-gradient(135deg, rgba(113, 13, 6, 0.1) 0%, transparent 60%);
+     }
+
+     &__left {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+         flex: 1;
+         position: relative;
+     }
+
+     &__icon {
+         width: 1.5rem;
+         height: 1.5rem;
+         color: lighten($ruby, 18%);
+         flex-shrink: 0;
+         margin-top: 1px;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: lighten($ruby, 22%);
+         margin-bottom: 0.375rem;
+     }
+
+     &__msg {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         line-height: 1.5;
+         color: lighten($ruby, 32%);
+     }
+
+     &__reinit {
+         position: relative;
+         display: inline-flex;
+         align-items: center;
+         gap: 0.4375rem;
+         flex-shrink: 0;
+         align-self: center;
+         padding: 0.5625rem 1.375rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: #fff;
+         background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+         border: 1px solid rgba(226, 199, 128, 0.3);
+         border-radius: 4px;
+         cursor: pointer;
+         outline: none;
+         box-shadow: 0 4px 14px rgba(182, 143, 36, 0.38);
+         transition: all $t;
+
+         &::after {
+             content: '';
+             position: absolute;
+             bottom: 0;
+             left: 50%;
+             transform: translateX(-50%);
+             width: 0;
+             height: 2px;
+             background: rgba(255, 255, 255, 0.5);
+             transition: width 220ms ease;
+         }
+
+         &:hover {
+             background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+             box-shadow: 0 6px 20px rgba(182, 143, 36, 0.55);
+             transform: translateY(-1px);
+
+             &::after {
+                 width: 100%;
+             }
+         }
+
+         &:focus-visible {
+             outline: 2px solid $champagne;
+             outline-offset: 2px;
+         }
+
+         &__icon {
+             width: 0.9375rem;
+             height: 0.9375rem;
+         }
+     }
+ }
+
+ // ── Cockpit Command Center Layout ──────────────────────────────────────────
+ .cih-cockpit {
+     display: grid;
+     grid-template-columns: 320px 1fr;
+     gap: 1.5rem;
+     align-items: start;
+
+     @media (max-width: 1024px) {
+         grid-template-columns: 1fr;
+     }
+
+     @media (min-width: 1440px) {
+         grid-template-columns: 380px 1fr;
+     }
+ }
+
+ .cih-cockpit__gauge-col {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+ }
+
+ .cih-cockpit__panel-col {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+ }
+
+ // ── Gauge Card ────────────────────────────────────────────────────────────
+ .cih-gauge-card {
+     position: relative;
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 1.5rem 1.375rem 1.25rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba(226, 199, 128, 0.18);
+     box-shadow: 0 6px 28px rgba(5, 25, 55, 0.4), 0 0 0 1px rgba(226, 199, 128, 0.05) inset;
+     transition: box-shadow $t-base;
+
+     &:hover {
+         box-shadow: 0 8px 36px rgba(5, 25, 55, 0.5);
+     }
+
+     // Royal Gold ambient glow behind the gauge
+     &__glow {
+         position: absolute;
+         top: 20%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         width: 200px;
+         height: 200px;
+         border-radius: 50%;
+         pointer-events: none;
+         background: radial-gradient(circle, rgba(182, 143, 36, 0.1) 0%, transparent 65%);
+     }
+
+     &__header {
+         text-align: center;
+         z-index: 1;
+     }
+
+     &__label {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: rgba(255, 255, 255, 0.8);
+         letter-spacing: -0.01em;
+     }
+
+     &__sub {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         color: rgba(226, 199, 128, 0.4);
+         letter-spacing: 0.05em;
+     }
+ }
+
+ // Mini pilot/crew stats below gauge
+ .cih-mini-stats {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 0.625rem;
+ }
+
+ .cih-mini-stat {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 0.75rem;
+     border-radius: 10px;
+     background: rgba(5, 25, 55, 0.5);
+     border: 1px solid rgba(226, 199, 128, 0.12);
+     transition: transform $t;
+
+     &:hover {
+         transform: translateY(-1px);
+     }
+
+     &--pilot {
+         border-color: rgba(37, 99, 235, 0.25);
+         background: rgba(6, 30, 82, 0.781);
+     }
+
+     &--crew {
+         border-color: rgba(5, 150, 105, 0.25);
+         background: rgba(3, 54, 41, 0.842);
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+
+         .cih-mini-stat--pilot & {
+             color: #93C5FD;
+         }
+
+         .cih-mini-stat--crew & {
+             color: #6EE7B7;
+         }
+     }
+
+     &__val {
+         font-size: 1.25rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 800;
+         letter-spacing: -0.03em;
+         color: rgba(255, 255, 255, 0.9);
+         font-variant-numeric: tabular-nums;
+     }
+
+     &__label {
+         font-size: 10px;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba(226, 199, 128, 0.4);
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes cih-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes cih-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes cih-radar-sweep {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes cih-radar-glow {
+
+     0%,
+     100% {
+         filter: drop-shadow(0 0 3px rgba(182, 143, 36, 0.4));
+     }
+
+     50% {
+         filter: drop-shadow(0 0 8px rgba(182, 143, 36, 0.7));
+     }
+ }
+
+ @keyframes cih-pulse-border {
+
+     0%,
+     100% {
+         box-shadow: 0 0 0 0 rgba(113, 13, 6, 0);
+     }
+
+     50% {
+         box-shadow: 0 0 0 4px rgba(113, 13, 6, 0.25);
+     }
+ }
+
+ // ── Dark Mode ──────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .cih-header {
+         box-shadow: 0 2px 20px rgba(0, 0, 0, 0.45);
+     }
+
+     .cih-nav-btn:hover {
+         background: rgba(226, 199, 128, 0.08);
+     }
+
+     .cih-gauge-card {
+         box-shadow: 0 6px 28px rgba(0, 0, 0, 0.45);
+     }
+
+     .cih-error-panel {
+         background: rgba(113, 13, 6, 0.15);
+         border-color: rgba(113, 13, 6, 0.4);
+     }
+ }

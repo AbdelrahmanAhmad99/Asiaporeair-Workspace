@@ -1,0 +1,46 @@
+<div class="pcb" role="region" aria-label="Promotional code entry">
+    <div class="pcb__inner">
+
+        <!-- Label side -->
+        <div class="pcb__text">
+            <svg class="pcb__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1" aria-hidden="true">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                <line x1="7" y1="7" x2="7.01" y2="7" />
+            </svg>
+            <div>
+                <p class="pcb__label">Have a promo code?</p>
+                <p class="pcb__sublabel">Apply your exclusive discount before searching.</p>
+            </div>
+        </div>
+
+        <!-- Input side -->
+        <form class="pcb__form" [formGroup]="form" (ngSubmit)="onApply()" novalidate>
+            <div class="pcb__field-wrap">
+                <input class="pcb__input" type="text" id="promo-code" formControlName="code" placeholder="e.g. VOYAGE25"
+                    autocomplete="off" [attr.aria-invalid]="appliedState() === 'error'" aria-label="Promotional code" />
+                <button class="pcb__btn" type="submit" [disabled]="form.invalid || isLoading()">
+                    @if (isLoading()) {
+                    <span class="pcb__spinner" aria-hidden="true"></span>
+                    <span class="sr-only">Verifying…</span>
+                    } @else {
+                    Apply
+                    }
+                </button>
+            </div>
+
+            @if (appliedState() === 'success') {
+            <p class="pcb__feedback pcb__feedback--success" role="status" aria-live="polite">
+                ✓ Promo code applied. Your discount will be reflected at checkout.
+            </p>
+            }
+
+            @if (appliedState() === 'error') {
+            <p class="pcb__feedback pcb__feedback--error" role="alert" aria-live="assertive">
+                This code is invalid or has expired. Please check and try again.
+            </p>
+            }
+        </form>
+
+    </div>
+</div>

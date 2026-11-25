@@ -1,0 +1,228 @@
+<div class="smi-page">
+
+    <!-- ══ Sticky Command Header ═══════════════════════════════════ -->
+    <header class="smi-header">
+        <div class="smi-header-left">
+            <nav class="smi-breadcrumb" aria-label="Breadcrumb">
+                <span class="smi-breadcrumb__section">Flight Operations</span>
+                <svg class="smi-breadcrumb__sep" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
+                <span class="smi-breadcrumb__current">Schedule Master Inventory</span>
+            </nav>
+            <h1 class="smi-title">Network Planning</h1>
+        </div>
+
+        <div class="smi-toolbar">
+            <!-- Refresh -->
+            <button class="smi-icon-btn" (click)="refresh()" [disabled]="isLoading()" aria-label="Refresh"
+                title="Refresh">
+                <svg class="smi-icon-btn__icon" [class.smi-icon-btn__icon--spin]="isLoading()" fill="none"
+                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+            </button>
+
+            <div class="smi-sep" aria-hidden="true"></div>
+
+            <!-- Audit Historical Logs — Sapphire outline -->
+            <button class="smi-btn smi-btn--outline" type="button" (click)="openAuditLogs()"
+                aria-label="View audit historical logs">
+                <svg class="smi-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25
+                   0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504
+                   1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504
+                   -1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                </svg>
+                Audit Logs
+            </button>
+
+            <!-- Construct New Schedule — Royal Gold solid -->
+            <button class="smi-btn smi-btn--primary" type="button" (click)="constructNewSchedule()"
+                aria-label="Construct a new master flight schedule">
+                <svg class="smi-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Construct New Schedule
+            </button>
+        </div>
+    </header>
+
+    <!-- ══ Page Body ════════════════════════════════════════════════ -->
+    <div class="smi-layout">
+
+        <!-- Main content area -->
+        <main class="smi-main">
+
+            <!-- Error banner -->
+            @if (errorMessage()) {
+            <div class="smi-error-banner" role="alert">
+                <svg class="smi-error-banner__icon" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                     0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898
+                     0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+                <div class="smi-error-banner__body">
+                    <strong class="smi-error-banner__title">Schedule Registry Error</strong>
+                    <span class="smi-error-banner__msg">{{ errorMessage() }}</span>
+                </div>
+                <button class="smi-error-banner__dismiss" type="button" (click)="dismissError()"
+                    aria-label="Dismiss error">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            }
+
+            <!-- Filter panel -->
+            <aoms-schedule-filter-panel [loading]="isLoading()" [hasActiveFilter]="hasFilter()"
+                (onFilterChange)="onFilterChange($event)" (onReset)="onFilterReset()" />
+
+            <!-- Data grid -->
+            <aoms-schedule-data-grid [schedules]="schedules()" [loading]="isLoading()" [recordLabel]="recordLabel()"
+                [deletingId]="deletingId()" [isProcessing]="isProcessing()" (onEdit)="onEdit($event)"
+                (onDelete)="openDeleteModal($event)" />
+
+            <!-- Pagination -->
+            @if (!isLoading() && pagination().totalPages > 1) {
+            <div class="smi-pagination" role="navigation" aria-label="Schedule pagination">
+                <button class="smi-page-btn" type="button" (click)="prevPage()" [disabled]="!canGoPrev()"
+                    aria-label="Previous page">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                    Prev
+                </button>
+
+                <span class="smi-page-info">
+                    Page <strong>{{ pagination().pageNumber }}</strong>
+                    of <strong>{{ pagination().totalPages }}</strong>
+                </span>
+
+                <button class="smi-page-btn" type="button" (click)="nextPage()" [disabled]="!canGoNext()"
+                    aria-label="Next page">
+                    Next
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+            }
+
+        </main>
+
+        <!-- Sidebar -->
+        <aoms-network-summary-sidebar [stats]="summaryStats()" [loading]="isLoading()"
+            (onNewSchedule)="constructNewSchedule()" (onAuditLogs)="openAuditLogs()" />
+
+    </div>
+
+    <!-- ══ Luxury Confirmation Modal ════════════════════════════════ -->
+    @if (showModal()) {
+    <div class="smi-backdrop" (click)="closeModal()" aria-hidden="true"></div>
+
+    <div class="smi-modal" role="dialog" aria-modal="true"
+        [attr.aria-label]="'Confirm removal of schedule ' + (targetSchedule()?.flightNo ?? '')">
+
+        <!-- Royal Gold accent bar -->
+        <div class="smi-modal__gold-bar" aria-hidden="true"></div>
+
+        <div class="smi-modal__header">
+            <div class="smi-modal__icon-wrap" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25
+                     2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0
+                     21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="smi-modal__title">Remove Master Schedule</h2>
+                <p class="smi-modal__subtitle">This action will remove the schedule from the inventory.</p>
+            </div>
+        </div>
+
+        @if (targetSchedule(); as sched) {
+        <div class="smi-modal__schedule-strip">
+            <span class="smi-modal__flight-no">{{ sched.flightNo }}</span>
+            <span class="smi-modal__route">Route #{{ sched.routeId }}</span>
+            <span class="smi-modal__id">#{{ sched.scheduleId }}</span>
+        </div>
+
+        <p class="smi-modal__warning">
+            Removing this master schedule will permanently delete its definition from
+            the network planning inventory. Any pending flight instances derived from this
+            schedule must be managed separately in the Operations Control Center.
+        </p>
+        }
+
+        <!-- Ruby modal error -->
+        @if (modalError()) {
+        <div class="smi-modal__error" role="alert">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {{ modalError() }}
+        </div>
+        }
+
+        <div class="smi-modal__actions">
+            <button class="smi-modal-btn smi-modal-btn--cancel" type="button" [disabled]="isDeleting()"
+                (click)="closeModal()" autofocus>
+                Cancel
+            </button>
+            <button class="smi-modal-btn smi-modal-btn--confirm" type="button" [disabled]="isDeleting()"
+                (click)="confirmDelete()">
+                @if (isDeleting()) {
+                <svg class="smi-modal-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                       0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                       0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                Removing…
+                } @else {
+                Confirm Removal
+                }
+            </button>
+        </div>
+
+    </div>
+    }
+
+    <!-- ══ Toast Stack ════════════════════════════════════════════ -->
+    <div class="smi-toast-stack" role="region" aria-live="polite">
+        @for (toast of toasts(); track toast.id) {
+        <div class="smi-toast" [class.smi-toast--success]="toast.type === 'success'"
+            [class.smi-toast--error]="toast.type === 'error'" role="status">
+            <div class="smi-toast__icon-wrap" aria-hidden="true">
+                @if (toast.type === 'success') {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                } @else {
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                }
+            </div>
+            <p class="smi-toast__msg">{{ toast.message }}</p>
+            <button class="smi-toast__dismiss" type="button" (click)="dismissToast(toast.id)" aria-label="Dismiss">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        }
+    </div>
+
+</div>

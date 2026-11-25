@@ -1,0 +1,596 @@
+// ============================================================================
+// seat-selection.component.scss
+// Asiaporeair | "Secure Your Preferred Suite" — Seat Selection
+// ============================================================================
+
+:host {
+    --midnight: #051937;
+    --royal-gold: #B68F24;
+    --champagne: #E2C780;
+    --ivory: #F8F9FA;
+    --charcoal: #101056;
+    --text-sec: #4a5568;
+    --text-muted: #718096;
+    --border: rgba(182, 143, 36, 0.15);
+    --shadow-soft: 0 10px 30px rgba(5, 25, 55, 0.08);
+    --radius: 12px;
+    --radius-btn: 4px;
+    --font: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --trans: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
+    font-family: var(--font);
+    background: var(--ivory);
+    min-height: 100vh;
+    letter-spacing: -0.01em;
+}
+
+// ── Context Bar ───────────────────────────────────────────────────────────────
+.context-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--midnight);
+    box-shadow: 0 2px 20px rgba(5, 25, 55, 0.35);
+}
+
+.context-inner {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.context-journey {
+    display: flex;
+    flex-direction: column;
+    min-width: 140px;
+}
+
+.context-label {
+    font-size: 0.57rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(226, 199, 128, 0.55);
+}
+
+.context-route {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
+
+.progress-stepper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    opacity: 0.4;
+    transition: opacity var(--trans);
+
+    &--active {
+        opacity: 1;
+
+        .step-num {
+            background: var(--royal-gold);
+            color: var(--midnight);
+            border-color: var(--royal-gold);
+            font-weight: 700;
+        }
+
+        .step-name {
+            color: #fff;
+            font-weight: 600;
+        }
+    }
+
+    &--done {
+        opacity: 0.8;
+
+        .step-num {
+            background: rgba(182, 143, 36, 0.2);
+            border-color: var(--royal-gold);
+            color: var(--champagne);
+        }
+
+        .step-name {
+            color: rgba(255, 255, 255, 0.65);
+        }
+    }
+}
+
+.step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    flex-shrink: 0;
+    transition: all var(--trans);
+}
+
+.step-name {
+    font-size: 0.62rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.step-line {
+    width: 24px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
+.context-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.skip-btn {
+    padding: 6px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-btn);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: var(--font);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--trans);
+
+    &:hover {
+        color: rgba(255, 255, 255, 0.7);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--champagne);
+        outline-offset: 2px;
+    }
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid rgba(182, 143, 36, 0.35);
+    border-radius: var(--radius-btn);
+    background: transparent;
+    color: var(--champagne);
+    font-family: var(--font);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--trans);
+    white-space: nowrap;
+
+    &:hover {
+        background: rgba(182, 143, 36, 0.1);
+        border-color: var(--royal-gold);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--champagne);
+        outline-offset: 2px;
+    }
+}
+
+// ── Journey Band ──────────────────────────────────────────────────────────────
+.journey-band {
+    background: rgba(5, 25, 55, 0.97);
+    border-bottom: 1px solid rgba(182, 143, 36, 0.12);
+}
+
+.journey-band-inner {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 10px 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.journey-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.journey-route-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--champagne);
+}
+
+.journey-dot {
+    color: rgba(226, 199, 128, 0.3);
+}
+
+.journey-detail {
+    font-size: 0.67rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 500;
+}
+
+.journey-detail--cabin {
+    color: var(--champagne);
+    font-weight: 700;
+}
+
+.journey-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-text {
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.progress-bar-track {
+    width: 80px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--royal-gold);
+    border-radius: 2px;
+    transition: width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+// ── Main Grid ─────────────────────────────────────────────────────────────────
+.main-grid {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+
+    @media (max-width: 1100px) {
+        grid-template-columns: 1fr;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+}
+
+// ── Left Rail ─────────────────────────────────────────────────────────────────
+.left-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 80px;
+
+    @media (max-width: 1100px) {
+        position: static;
+    }
+}
+
+.rail-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.rail-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--charcoal);
+    letter-spacing: -0.04em;
+    margin: 0;
+}
+
+.rail-sub {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.assign-error {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #991b1b;
+}
+
+.rail-cta {
+    margin-top: 4px;
+}
+
+.proceed-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px;
+    border: 1px solid rgba(5, 25, 55, 0.15);
+    border-radius: var(--radius-btn);
+    background: rgba(5, 25, 55, 0.06);
+    color: var(--text-muted);
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: not-allowed;
+    transition: all var(--trans);
+
+    &--ready {
+        background: var(--midnight);
+        color: var(--champagne);
+        border-color: var(--midnight);
+        cursor: pointer;
+
+        &:hover {
+            background: var(--royal-gold);
+            color: var(--midnight);
+            box-shadow: 0 8px 24px rgba(182, 143, 36, 0.25);
+            transform: translateY(-1px);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--royal-gold);
+            outline-offset: 2px;
+        }
+    }
+}
+
+// ── Cabin Area ────────────────────────────────────────────────────────────────
+.cabin-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    min-height: 600px;
+}
+
+// ── Loading State ─────────────────────────────────────────────────────────────
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.loading-cabin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 3rem 0;
+}
+
+.aircraft-skeleton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.skel-nose {
+    width: 120px;
+    height: 40px;
+    background: linear-gradient(90deg, rgba(5, 25, 55, 0.06) 25%, rgba(5, 25, 55, 0.12) 50%, rgba(5, 25, 55, 0.06) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 50% 50% 0 0;
+}
+
+.skel-body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 260px;
+}
+
+.skel-row {
+    height: 32px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(5, 25, 55, 0.05) 25%, rgba(5, 25, 55, 0.1) 50%, rgba(5, 25, 55, 0.05) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.loading-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+// ── Load Error ────────────────────────────────────────────────────────────────
+.load-error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: #fff;
+    border: 1px dashed rgba(182, 143, 36, 0.25);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 440px;
+    margin: 2rem auto;
+}
+
+.error-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(182, 143, 36, 0.05);
+    border: 1px solid rgba(182, 143, 36, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-msg {
+    font-size: 0.75rem;
+    color: var(--text-sec);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.skip-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: var(--midnight);
+    color: var(--champagne);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--trans);
+
+    &:hover {
+        background: var(--royal-gold);
+        color: var(--midnight);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: 2px;
+    }
+}
+
+// ── Cabin Tabs ────────────────────────────────────────────────────────────────
+.cabin-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(5, 25, 55, 0.08);
+    width: 100%;
+    max-width: 560px;
+    margin-bottom: 0;
+}
+
+.cabin-tab {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    font-family: var(--font);
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all var(--trans);
+
+    &:hover {
+        color: var(--charcoal);
+    }
+
+    &--active {
+        color: var(--charcoal);
+        border-bottom-color: var(--royal-gold);
+        background: rgba(182, 143, 36, 0.03);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--royal-gold);
+        outline-offset: -2px;
+    }
+}
+
+// ── Aircraft Nose / Tail Decoratives ─────────────────────────────────────────
+.aircraft-nose,
+.aircraft-tail {
+    width: 100%;
+    max-width: 560px;
+}
+
+.nose-svg,
+.tail-svg {
+    width: 100%;
+    display: block;
+}
+
+// ── Cabin Panel ───────────────────────────────────────────────────────────────
+.cabin-panel {
+    width: 100%;
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 900px) {
+    .step-name {
+        display: none;
+    }
+
+    .context-inner {
+        padding: 0 1rem;
+    }
+
+    .progress-stepper {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .journey-band-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -1,0 +1,65 @@
+<div class="fsf-panel">
+
+    <!-- Search field: Description / Code -->
+    <div class="fsf-field">
+        <label class="fsf-label" for="fsf-desc">
+            <svg class="fsf-label__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z" />
+            </svg>
+            Search Codes
+        </label>
+        <div class="fsf-input-wrap">
+            <input id="fsf-desc" class="fsf-input" type="text" placeholder="Fare basis code or description…"
+                [value]="descriptionValue()" [disabled]="loading()"
+                (input)="onDescriptionInput($any($event.target).value)" autocomplete="off" spellcheck="false"
+                aria-label="Search by fare basis code or description" />
+            @if (descriptionValue().length > 0) {
+            <button class="fsf-input__clear" type="button" (click)="onDescriptionInput('')"
+                aria-label="Clear description">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+            }
+        </div>
+    </div>
+
+    <!-- Cabin Class Selector -->
+    <div class="fsf-field fsf-field--sm">
+        <label class="fsf-label" for="fsf-cabin">
+            <svg class="fsf-label__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8.25 6.75h7.5M8.25 9.75h7.5M8.25 12.75h4.5M6.75 3h10.5A2.25 2.25 0 0 1 19.5 5.25v13.5A2.25 2.25 0 0 1 17.25 21H6.75A2.25 2.25 0 0 1 4.5 18.75V5.25A2.25 2.25 0 0 1 6.75 3z" />
+            </svg>
+            Cabin Class
+        </label>
+        <div class="fsf-select-wrap">
+            <select id="fsf-cabin" class="fsf-select" [value]="cabinClassValue()" [disabled]="loading()"
+                (change)="onCabinClassChange($any($event.target).value)" aria-label="Filter by cabin class">
+                @for (cls of cabinClasses; track cls.value) {
+                <option [value]="cls.value">{{ cls.label }}</option>
+                }
+            </select>
+            <svg class="fsf-select-wrap__chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Reset Button -->
+    @if (hasActiveFilters) {
+    <button class="fsf-reset-btn" type="button" [disabled]="loading()" (click)="onReset()"
+        aria-label="Reset all filters">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        Reset
+    </button>
+    }
+
+</div>

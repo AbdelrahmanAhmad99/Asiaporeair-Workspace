@@ -1,0 +1,157 @@
+<div class="pdg-container" role="region" aria-label="Transaction audit grid">
+
+    <div class="pdg-table-wrap">
+        <table class="pdg-table">
+
+            <!-- Sticky Header -->
+            <thead class="pdg-thead">
+                <tr>
+                    <th class="pdg-th pdg-th--id" scope="col">Payment & Transaction ID</th>
+                    <th class="pdg-th" scope="col">Booking Reference</th>
+                    <th class="pdg-th pdg-th--right" scope="col">Amount</th>
+                    <th class="pdg-th" scope="col">Payment Method</th>
+                    <th class="pdg-th pdg-th--center" scope="col">Status</th>
+                    <th class="pdg-th" scope="col">Transaction Date & Time</th>
+                </tr>
+            </thead>
+
+            <!-- Skeleton rows -->
+            @if (loading()) {
+            <tbody>
+                @for (row of skeletonRows; track $index) {
+                <tr class="pdg-tr pdg-tr--skeleton" aria-hidden="true">
+                    <td class="pdg-td"><span class="pdg-sk pdg-sk--id"></span></td>
+                    <td class="pdg-td"><span class="pdg-sk pdg-sk--booking"></span></td>
+                    <td class="pdg-td pdg-td--right"><span class="pdg-sk pdg-sk--amount"></span></td>
+                    <td class="pdg-td"><span class="pdg-sk pdg-sk--provider"></span></td>
+                    <td class="pdg-td pdg-td--center"><span class="pdg-sk pdg-sk--badge"></span></td>
+                    <td class="pdg-td"><span class="pdg-sk pdg-sk--date"></span></td>
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- Data rows -->
+            @if (!loading()) {
+            <tbody>
+
+                @for (tx of payments(); track trackByPaymentId($index, tx); let i = $index) {
+                <tr class="pdg-tr" [class.pdg-tr--selected]="selectedPaymentId() === tx.paymentId"
+                    [style.animation-delay]="getRowDelay(i)" (click)="rowClicked.emit(tx)" tabindex="0" role="button"
+                    [attr.aria-label]="'View transaction ' + tx.transactionId" (keydown.enter)="rowClicked.emit(tx)">
+
+                    <!-- Payment & Transaction ID -->
+                    <td class="pdg-td pdg-td--id">
+                        <div class="pdg-id-group">
+                            <span class="pdg-id-chip" [title]="tx.transactionId">{{ tx.transactionId }}</span>
+                            <span class="pdg-payment-id">Payment #{{ tx.paymentId }}</span>
+                        </div>
+                    </td>
+
+                    <!-- Booking Reference & ID -->
+                    <td class="pdg-td">
+                        <div class="pdg-booking-group">
+                            <span class="pdg-booking-ref" [title]="tx.bookingReference">{{ tx.bookingReference || ('BK-'
+                                + tx.bookingId) }}</span>
+                            <span class="pdg-booking-id">Booking #{{ tx.bookingId }}</span>
+                        </div>
+                    </td>
+
+                    <!-- Amount (Royal Gold) -->
+                    <td class="pdg-td pdg-td--right">
+                        <span class="pdg-amount" [class.pdg-amount--refunded]="tx.isRefunded">
+                            {{ formatAmount(tx.amount, tx.currency) }}
+                        </span>
+                        @if (tx.isRefunded) {
+                        <span class="pdg-refund-tag">Refunded</span>
+                        }
+                    </td>
+
+                    <!-- Provider / Method -->
+                    <td class="pdg-td">
+                        <span class="pdg-provider">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    [attr.d]="getProviderIconPath(tx.paymentMethod || tx.method || '')" />
+                            </svg>
+                            {{ getProviderLabel(tx.paymentMethod || tx.method || '') }}
+                        </span>
+                    </td>
+
+                    <!-- Status -->
+                    <td class="pdg-td pdg-td--center">
+                        <aoms-payment-status-badge [status]="tx.status" />
+                    </td>
+
+                    <!-- Date & Time -->
+                    <td class="pdg-td pdg-td--date">
+                        <span class="pdg-datetime">{{ formatDate(tx.transactionDate || tx.transactionDateTime || '')
+                            }}</span>
+                    </td>
+
+                </tr>
+                }
+
+                <!-- Empty state — Luxury custom SVG -->
+                @if (payments().length === 0) {
+                <tr class="pdg-tr pdg-tr--empty">
+                    <td class="pdg-td pdg-td--empty" colspan="6">
+                        <div class="pdg-empty">
+                            <svg class="pdg-empty__icon" viewBox="0 0 120 120" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <circle cx="60" cy="60" r="46" stroke="#E2C780" stroke-width="1.5"
+                                    stroke-dasharray="4 6" opacity="0.4" />
+                                <rect x="34" y="44" width="52" height="36" rx="6" stroke="#B68F24" stroke-width="2"
+                                    fill="rgba(182,143,36,0.06)" />
+                                <path d="M34 56h52" stroke="#B68F24" stroke-width="2" />
+                                <circle cx="46" cy="68" r="3" fill="#E2C780" />
+                                <path d="M56 68h18" stroke="#E2C780" stroke-width="2" stroke-linecap="round" />
+                                <path d="M60 24v10M60 86v10M24 60h10M86 60h10" stroke="#E2C780" stroke-width="1.5"
+                                    stroke-linecap="round" opacity="0.5" />
+                            </svg>
+                            <h3 class="pdg-empty__title">No Transactions Found</h3>
+                            <p class="pdg-empty__message">
+                                @if (hasActiveFilters()) {
+                                No transactions match the current audit criteria. Try widening your date range or
+                                clearing filters.
+                                } @else {
+                                No payment transactions were returned. Try searching again or adjust your filters.
+                                }
+                            </p>
+                            @if (hasActiveFilters()) {
+                            <button class="pdg-empty__reset" type="button" (click)="resetFiltersRequested.emit()">
+                                Clear Filters
+                            </button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+                }
+
+                <!-- Infinite scroll: loading-more indicator -->
+                @if (isLoadingMore()) {
+                <tr class="pdg-tr pdg-tr--loadmore" aria-hidden="true">
+                    <td class="pdg-td pdg-td--loadmore" colspan="6">
+                        <svg class="pdg-loadmore-spinner" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Loading more transactions…
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+            }
+
+        </table>
+
+        <!-- Infinite scroll sentinel -->
+        @if (!loading() && payments().length > 0) {
+        <div #sentinel class="pdg-sentinel" aria-hidden="true"></div>
+        }
+    </div>
+
+</div>

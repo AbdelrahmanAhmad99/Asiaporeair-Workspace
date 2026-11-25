@@ -1,0 +1,98 @@
+<!-- action-confirmation-modal.component.html -->
+
+<div class="modal-card" [@popIn] role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+
+    <!-- Header -->
+    <div class="modal-header">
+        <div class="modal-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2C780" stroke-width="1">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+        </div>
+        <h2 class="modal-heading" id="modal-heading">Confirm Passenger Update</h2>
+        <p class="modal-subheading">
+            Please review the changes below before saving to the booking.
+        </p>
+    </div>
+
+    <!-- Passenger Name -->
+    <div class="pax-identity" *ngIf="draft" aria-label="Passenger being updated">
+        <div class="pax-avatar" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+        </div>
+        <span class="pax-name">{{ draft.firstName }} {{ draft.lastName }}</span>
+    </div>
+
+    <!-- Change Summary -->
+    <div class="change-summary" *ngIf="pendingDto" aria-label="Changes to be saved">
+        <div class="summary-title">Changes to be saved</div>
+
+        <div class="change-row">
+            <span class="change-field">First Name</span>
+            <span class="change-old" *ngIf="draft?.firstName !== pendingDto.firstName">
+                {{ draft?.firstName }}
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </span>
+            <span class="change-new">{{ pendingDto.firstName }}</span>
+        </div>
+
+        <div class="change-row">
+            <span class="change-field">Last Name</span>
+            <span class="change-old" *ngIf="draft?.lastName !== pendingDto.lastName">
+                {{ draft?.lastName }}
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </span>
+            <span class="change-new">{{ pendingDto.lastName }}</span>
+        </div>
+
+        <div class="change-row" *ngIf="pendingDto.passportNumber !== undefined">
+            <span class="change-field">Passport</span>
+            <span class="change-old" *ngIf="draft?.passportNumber !== pendingDto.passportNumber">
+                {{ draft?.passportNumber || '—' }}
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </span>
+            <span class="change-new">{{ pendingDto.passportNumber || '—' }}</span>
+        </div>
+
+        <div class="change-row" *ngIf="pendingDto.dateOfBirth !== undefined">
+            <span class="change-field">Date of Birth</span>
+            <span class="change-old" *ngIf="draft?.dateOfBirth !== pendingDto.dateOfBirth">
+                {{ formatDate(draft?.dateOfBirth) }}
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </span>
+            <span class="change-new">{{ formatDate(pendingDto.dateOfBirth) }}</span>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+        <button class="btn-cancel" (click)="cancel.emit()" aria-label="Go back without saving">
+            Go Back
+        </button>
+        <button class="btn-confirm" (click)="confirm.emit()" aria-label="Confirm and save changes">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Confirm &amp; Save
+        </button>
+    </div>
+
+</div>

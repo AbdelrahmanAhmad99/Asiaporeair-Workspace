@@ -1,0 +1,138 @@
+<!-- crew-selector-modal.component.html -->
+
+<div class="csm-bd" (click)="closed.emit()" aria-hidden="true"></div>
+
+<div class="csm" role="dialog" aria-modal="true"
+    [attr.aria-label]="'Assign ' + (mode() === 'pilot' ? 'Pilot' : 'Cabin Crew')">
+
+    <!-- Rule -->
+    <div class="csm__rule" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <div class="csm__header">
+        <div class="csm__header__icon-wrap" aria-hidden="true">
+            @if (mode() === 'pilot') {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="csm__header__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+            } @else {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="csm__header__icon">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            }
+        </div>
+        <div>
+            <h2 class="csm__header__title">Assign {{ mode() === 'pilot' ? 'Pilot' : 'Cabin Crew' }}</h2>
+            <p class="csm__header__sub">Select one or more crew members to assign to this flight</p>
+        </div>
+        <button class="csm__close" type="button" (click)="closed.emit()" aria-label="Close modal">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Selection count -->
+    @if (selectedArr().length > 0) {
+    <div class="csm__selection-strip">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="csm__selection-strip__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+        </svg>
+        {{ selectedArr().length }} crew member{{ selectedArr().length !== 1 ? 's' : '' }} selected for assignment
+    </div>
+    }
+
+    <!-- Column headers -->
+    <div class="csm-hdr" aria-hidden="true">
+        <span></span><span>Name</span><span>Position</span><span>Base</span><span>Select</span>
+    </div>
+
+    <!-- Loading shimmer -->
+    @if (loading()) {
+    <div class="csm__body csm__body--loading" aria-busy="true">
+        @for (r of [1,2,3,4,5,6]; track r) {
+        <div class="csm__shimmer-row">
+            <div class="csm-sh csm-sh--avatar"></div>
+            <div class="csm-sh csm-sh--name"></div>
+            <div class="csm-sh csm-sh--pos"></div>
+            <div class="csm-sh csm-sh--base"></div>
+            <div class="csm-sh csm-sh--chk"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Crew list -->
+    @if (!loading()) {
+    <div class="csm__body" role="listbox" [attr.aria-multiselectable]="true">
+
+        @for (member of crewList(); track member.employeeId) {
+        <button class="csm__row" type="button" role="option"
+            [class.csm__row--selected]="selected().has(member.employeeId)"
+            [attr.aria-selected]="selected().has(member.employeeId)" (click)="toggle(member.employeeId)">
+
+            <!-- Avatar -->
+            <div class="csm__avatar" [class.csm__avatar--selected]="selected().has(member.employeeId)"
+                aria-hidden="true">{{ initials(member.fullName) }}</div>
+
+            <!-- Name + email -->
+            <div class="csm__name-col">
+                <span class="csm__name">{{ member.fullName }}</span>
+                <span class="csm__email">{{ member.email }}</span>
+            </div>
+
+            <!-- Position -->
+            <span class="csm__pos">{{ member.position || (mode() === 'pilot' ? 'Pilot' : 'Attendant') }}</span>
+
+            <!-- Base -->
+            <span class="csm__base">{{ member.crewBaseAirportIata || member.baseAirportIata }}</span>
+
+            <!-- Check indicator -->
+            <div class="csm__check" [class.csm__check--on]="selected().has(member.employeeId)" aria-hidden="true">
+                @if (selected().has(member.employeeId)) {
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="csm__check__icon">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                }
+            </div>
+
+        </button>
+        }
+
+        @if (crewList().length === 0) {
+        <div class="csm__empty">
+            <p>No available crew found</p>
+        </div>
+        }
+
+    </div>
+    }
+
+    <!-- Actions -->
+    <div class="csm__actions">
+        <button class="csm__cancel" type="button" (click)="closed.emit()">Cancel</button>
+        <button class="csm__confirm" type="button" [disabled]="selectedArr().length === 0 || isAssigning()"
+            [class.csm__confirm--pulsing]="isAssigning()" (click)="onConfirm()">
+            @if (!isAssigning()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="csm__confirm__icon"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Confirm Assignment {{ selectedArr().length > 0 ? '(' + selectedArr().length + ')' : '' }}
+            }
+            @if (isAssigning()) {
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                class="csm__confirm__icon csm__confirm__icon--spin" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Assigning…
+            }
+        </button>
+    </div>
+
+</div>

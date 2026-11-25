@@ -1,0 +1,514 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $t: 160ms ease;
+
+ // ── Card — Champagne Gold border emphasizes financial importance ──────────
+ .pag-card {
+     background: var(--aoms-bg-card);
+     border: 1.5px solid rgba($champagne, 0.4);
+     border-radius: 12px;
+     box-shadow:
+         0 4px 20px rgba($midnight, 0.06),
+         0 0 0 1px rgba($champagne, 0.08) inset;
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+ }
+
+ // ── Card Header ───────────────────────────────────────────────────────────
+ .pag-card-header {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     padding: 1rem 1.25rem;
+     border-bottom: 1px solid rgba($champagne, 0.18);
+     background: linear-gradient(to right, rgba($champagne, 0.06), transparent);
+
+     &__icon {
+         width: 1.375rem;
+         height: 1.375rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__title {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+         font-weight: 700;
+         color: var(--aoms-text-primary);
+         margin: 0;
+         letter-spacing: -0.01em;
+     }
+
+     &__sub {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         margin: 0;
+     }
+ }
+
+ // ── Form ──────────────────────────────────────────────────────────────────
+ .pag-form {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     padding: 1.25rem;
+ }
+
+ .pag-row {
+     display: grid;
+     grid-template-columns: 1fr 0.8fr;
+     gap: 0.875rem;
+
+     @media (max-width: 640px) {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ // ── Field ─────────────────────────────────────────────────────────────────
+ .pag-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+
+     &--grow {
+         flex: 1;
+     }
+ }
+
+ // ── Label ─────────────────────────────────────────────────────────────────
+ .pag-label {
+     display: flex;
+     align-items: center;
+     gap: 0.3125rem;
+     font-size: 11px;
+     font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 0.07em;
+     color: var(--aoms-text-secondary);
+     user-select: none;
+     cursor: default;
+
+     &__req {
+         color: lighten($ruby, 18%);
+         font-size: 13px;
+         line-height: 1;
+         font-family: var(--aoms-font-body);
+     }
+
+     &__hint {
+         font-size: 9px;
+         font-weight: 500;
+         text-transform: none;
+         letter-spacing: 0.02em;
+         color: var(--aoms-text-muted);
+         font-family: var(--aoms-font-body);
+         font-style: italic;
+     }
+ }
+
+ // ── Input with Currency Prefix (e.g. "$") ─────────────────────────────────
+ .pag-input-prefix-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+ }
+
+ .pag-input-prefix {
+     position: absolute;
+     left: 0.875rem;
+     font-size: 0.9rem;
+     font-weight: 700;
+     color: $gold;
+     pointer-events: none;
+     z-index: 1;
+ }
+
+ // ── Input with Percentage Suffix (e.g. "%") ───────────────────────────────
+ .pag-input-suffix-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+ }
+
+ .pag-input-suffix {
+     position: absolute;
+     right: 0.875rem;
+     font-size: 0.875rem;
+     font-weight: 700;
+     color: $champagne;
+     pointer-events: none;
+ }
+
+ // ── Number Input ──────────────────────────────────────────────────────────
+ .pag-input {
+     width: 100%;
+     height: 2.75rem;
+     padding: 0 0.875rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: rgba($charcoal, 0.04);
+     color: var(--aoms-text-primary);
+     font-family: var(--aoms-font-body);
+     font-size: 0.9375rem;
+     font-weight: 700;
+     font-variant-numeric: tabular-nums;
+     outline: none;
+     transition: all $t;
+
+     // Remove number spinners
+     &[type="number"] {
+         // -moz-appearance: textfield;
+
+         &::-webkit-inner-spin-button,
+         &::-webkit-outer-spin-button {
+             -webkit-appearance: none;
+         }
+     }
+
+     &::placeholder {
+         color: var(--aoms-text-muted);
+         font-weight: 400;
+         opacity: 0.6;
+     }
+
+     &:focus {
+         border-color: $gold;
+         background: rgba($charcoal, 0.06);
+         box-shadow: 0 0 0 3px rgba($gold, 0.14);
+     }
+
+     &--prefixed {
+         padding-left: 1.75rem;
+     }
+
+     &--suffixed {
+         padding-right: 2rem;
+     }
+
+     &--error {
+         border-color: lighten($ruby, 18%);
+         background: rgba($ruby, 0.04);
+         animation: pag-shake 360ms ease;
+
+         &:focus {
+             border-color: lighten($ruby, 12%);
+             box-shadow: 0 0 0 3px rgba($ruby, 0.1);
+         }
+     }
+ }
+
+ // ── Select ────────────────────────────────────────────────────────────────
+ .pag-select-wrap {
+     position: relative;
+
+     &__chevron {
+         position: absolute;
+         right: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         color: $champagne;
+         pointer-events: none;
+     }
+ }
+
+ .pag-select {
+     width: 100%;
+     height: 2.75rem;
+     padding: 0 2.5rem 0 0.875rem;
+     border-radius: 12px;
+     border: 1px solid rgba($champagne, 0.22);
+     background: rgba($charcoal, 0.04);
+     color: var(--aoms-text-primary);
+     font-family: var(--aoms-font-body);
+     font-size: 0.9rem;
+     font-weight: 600;
+     outline: none;
+     appearance: none;
+     cursor: pointer;
+     transition: all $t;
+
+     &:focus {
+         border-color: $gold;
+         background: rgba($charcoal, 0.06);
+         box-shadow: 0 0 0 3px rgba($gold, 0.14);
+     }
+
+     option {
+         background: var(--aoms-bg-card, #fff);
+         color: var(--aoms-text-primary, $charcoal);
+     }
+
+     &--error {
+         border-color: lighten($ruby, 18%);
+         animation: pag-shake 360ms ease;
+     }
+ }
+
+ // ── Validation Error ──────────────────────────────────────────────────────
+ .pag-error {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: lighten($ruby, 18%);
+     margin: 0;
+ }
+
+ // ── Hint ──────────────────────────────────────────────────────────────────
+ .pag-hint {
+     font-size: 0.6875rem;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     margin: 0;
+     opacity: 0.8;
+
+     &--small {
+         font-size: 0.625rem;
+         text-align: right;
+     }
+ }
+
+ // ── Tax Presets ───────────────────────────────────────────────────────────
+ .pag-presets {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     margin-top: 0.25rem;
+ }
+
+ .pag-preset-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     padding: 0.25rem 0.625rem;
+     border-radius: 100px;
+     border: 1px solid rgba($champagne, 0.28);
+     background: transparent;
+     color: var(--aoms-text-muted);
+     font-family: var(--aoms-font-body);
+     font-size: 0.75rem;
+     font-weight: 700;
+     cursor: pointer;
+     transition: all $t;
+     font-variant-numeric: tabular-nums;
+
+     &:hover:not(.pag-preset-btn--active) {
+         border-color: $champagne;
+         color: var(--aoms-text-secondary);
+         background: rgba($champagne, 0.08);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--active {
+         background: $gold;
+         border-color: $gold;
+         color: $midnight;
+         box-shadow: 0 2px 8px rgba($gold, 0.32);
+     }
+ }
+
+ // ── Net Price Calculator ──────────────────────────────────────────────────
+ .pag-net-price {
+     display: flex;
+     flex-direction: column;
+     gap: 0.4375rem;
+     padding: 1rem;
+     border-radius: 12px;
+     background: linear-gradient(135deg, rgba($gold, 0.07), rgba($champagne, 0.05));
+     border: 1px solid rgba($gold, 0.22);
+
+     &__row {
+         display: flex;
+         align-items: baseline;
+         justify-content: space-between;
+         gap: 0.5rem;
+
+         &--total {
+             padding-top: 0.125rem;
+         }
+     }
+
+     &__label {
+         font-size: 0.75rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 600;
+         color: var(--aoms-text-muted);
+
+         &--total {
+             font-size: 0.875rem;
+             font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+             font-weight: 800;
+             text-transform: uppercase;
+             letter-spacing: 0.06em;
+             color: var(--aoms-text-secondary);
+         }
+     }
+
+     &__value {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         font-variant-numeric: tabular-nums;
+         color: var(--aoms-text-secondary);
+         transition: color 200ms ease;
+
+         &--muted {
+             color: var(--aoms-text-muted);
+             font-weight: 500;
+         }
+
+         &--total {
+             font-size: 1.625rem;
+             font-family: var(--aoms-font-heading, 'Montserrat', sans-serif);
+             font-weight: 900;
+             letter-spacing: -0.02em;
+             color: $gold;
+         }
+     }
+
+     &__divider {
+         height: 1px;
+         background: rgba($gold, 0.2);
+         margin: 0.125rem 0;
+     }
+
+     &__caption {
+         font-size: 0.6875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         margin: 0.25rem 0 0;
+         line-height: 1.4;
+         opacity: 0.75;
+     }
+ }
+
+ // ── Skeleton Loading ──────────────────────────────────────────────────────
+ .pag-skeleton-wrap {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     padding: 1.25rem;
+ }
+
+ .pag-sk-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.375rem;
+ }
+
+ .pag-sk {
+     display: block;
+     border-radius: 6px;
+     background: linear-gradient(90deg,
+             rgba($midnight, 0.05) 0%,
+             rgba($champagne, 0.12) 50%,
+             rgba($midnight, 0.05) 100%);
+     background-size: 200% 100%;
+     animation: pag-shimmer 1.5s ease-in-out infinite;
+
+     &--label {
+         width: 90px;
+         height: 11px;
+         border-radius: 4px;
+     }
+
+     &--input {
+         width: 100%;
+         height: 2.75rem;
+         border-radius: 12px;
+     }
+
+     &--net {
+         width: 100%;
+         height: 5.5rem;
+         border-radius: 12px;
+         margin-top: 0.5rem;
+     }
+ }
+
+ // ── Keyframes ─────────────────────────────────────────────────────────────
+ @keyframes pag-shake {
+
+     0%,
+     100% {
+         transform: translateX(0);
+     }
+
+     20% {
+         transform: translateX(-3px);
+     }
+
+     40% {
+         transform: translateX(3px);
+     }
+
+     60% {
+         transform: translateX(-2px);
+     }
+
+     80% {
+         transform: translateX(2px);
+     }
+ }
+
+ @keyframes pag-shimmer {
+     0% {
+         background-position: 200% 0;
+     }
+
+     100% {
+         background-position: -200% 0;
+     }
+ }
+
+ // ── Dark Mode ─────────────────────────────────────────────────────────────
+ :host-context(.aoms-dark) {
+     .pag-card {
+         border-color: rgba($champagne, 0.25);
+     }
+
+     .pag-input,
+     .pag-select {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba($champagne, 0.18);
+         color: rgba(255, 255, 255, 0.88);
+
+         &::placeholder {
+             color: rgba(255, 255, 255, 0.25);
+         }
+
+         &:focus {
+             background: rgba(255, 255, 255, 0.07);
+         }
+
+         option {
+             background: darken($midnight, 4%);
+             color: rgba(255, 255, 255, 0.88);
+         }
+     }
+
+     .pag-net-price {
+         background: linear-gradient(135deg, rgba($gold, 0.1), rgba($champagne, 0.04));
+         border-color: rgba($gold, 0.3);
+     }
+
+     .pag-sk {
+         background: linear-gradient(90deg,
+                 rgba(255, 255, 255, 0.04) 0%,
+                 rgba($champagne, 0.09) 50%,
+                 rgba(255, 255, 255, 0.04) 100%);
+         background-size: 200% 100%;
+     }
+ }

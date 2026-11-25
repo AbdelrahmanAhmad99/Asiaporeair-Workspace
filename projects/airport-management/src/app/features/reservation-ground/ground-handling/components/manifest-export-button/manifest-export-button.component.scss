@@ -1,0 +1,212 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $charcoal: #101056;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── 1. Wrapper ────────────────────────────────────────────────────────────
+ .meb-wrap {
+     position: relative;
+     display: inline-block;
+ }
+
+ // ── 2. The Royal Button ───────────────────────────────────────────────────
+ .meb-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0 1.5rem;
+     height: 2.75rem;
+     border-radius: 12px; // Squircle standard for prominent CTAs
+     border: none;
+     background: linear-gradient(135deg, lighten($gold, 8%) 0%, $gold 45%, darken($gold, 6%) 100%);
+     color: $midnight;
+     font-family: var(--aoms-font-heading);
+     font-size: 0.9375rem;
+     font-weight: 700;
+     letter-spacing: 0.01em;
+     cursor: pointer;
+     white-space: nowrap;
+     box-shadow:
+         0 4px 18px rgba($gold, 0.4),
+         0 2px 6px rgba($midnight, 0.15),
+         inset 0 1px 0 rgba(255, 255, 255, 0.25);
+     transition: all $t-base;
+     position: relative;
+     overflow: hidden;
+
+     // Subtle shimmer sweep across the gradient on hover
+     &::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: -75%;
+         width: 50%;
+         height: 100%;
+         background: linear-gradient(120deg,
+                 transparent 0%,
+                 rgba(255, 255, 255, 0.35) 50%,
+                 transparent 100%);
+         transform: skewX(-20deg);
+         transition: left 600ms ease;
+     }
+
+     &:hover:not(:disabled) {
+         box-shadow:
+             0 8px 28px rgba($gold, 0.55),
+             0 4px 10px rgba($midnight, 0.2),
+             inset 0 1px 0 rgba(255, 255, 255, 0.35);
+         transform: translateY(-2px);
+
+         &::before {
+             left: 125%;
+         }
+     }
+
+     &:active:not(:disabled) {
+         transform: translateY(0px);
+         box-shadow:
+             0 3px 12px rgba($gold, 0.4),
+             inset 0 1px 0 rgba(255, 255, 255, 0.2);
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         transform: none;
+         box-shadow: none;
+
+         &::before {
+             display: none;
+         }
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+         position: relative;
+         z-index: 1;
+
+         &--spin {
+             animation: meb-spin 1s linear infinite;
+         }
+     }
+
+     &__caret {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         margin-left: 0.125rem;
+         transition: transform $t-fast;
+         position: relative;
+         z-index: 1;
+
+         &--open {
+             transform: rotate(180deg);
+         }
+     }
+ }
+
+ // ── 3. Dropdown Menu ──────────────────────────────────────────────────────
+ .meb-menu {
+     position: absolute;
+     top: calc(100% + 0.5rem);
+     right: 0;
+     z-index: 30;
+     width: 280px;
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+     padding: 0.5rem;
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow: 0 16px 40px rgba($midnight, 0.4);
+     animation: meb-menu-enter 180ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+     // Glassmorphism per AOMS sidebar/dropdown standard
+     backdrop-filter: blur(15px);
+     -webkit-backdrop-filter: blur(15px);
+ }
+
+ .meb-menu__item {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.625rem 0.75rem;
+     border-radius: 8px;
+     border: none;
+     background: transparent;
+     color: rgba($champagne, 0.8);
+     cursor: pointer;
+     text-align: left;
+     transition: all $t-fast;
+
+     svg {
+         width: 1.125rem;
+         height: 1.125rem;
+         flex-shrink: 0;
+         color: $gold;
+         margin-top: 0.0625rem;
+     }
+
+     &:hover {
+         background: rgba($gold, 0.1);
+         color: $champagne;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: -2px;
+     }
+ }
+
+ .meb-menu__text {
+     display: flex;
+     flex-direction: column;
+     gap: 0.125rem;
+ }
+
+ .meb-menu__label {
+     font-size: 0.8125rem;
+     font-family: var(--aoms-font-heading);
+     font-weight: 700;
+ }
+
+ .meb-menu__hint {
+     font-size: 10.5px;
+     font-family: var(--aoms-font-body);
+     color: rgba($champagne, 0.4);
+     line-height: 1.4;
+ }
+
+ // ── 4. Keyframes ─────────────────────────────────────────────────────────
+ @keyframes meb-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes meb-menu-enter {
+     from {
+         opacity: 0;
+         transform: translateY(-6px) scale(0.97);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }

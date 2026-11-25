@@ -1,0 +1,121 @@
+<aside class="nss-sidebar" role="complementary" aria-label="Network planning summary">
+
+    <!-- ── Sidebar Title ───────────────────────────────────────── -->
+    <div class="nss-header">
+        <div class="nss-header__icon-wrap" aria-hidden="true">
+            <svg class="nss-header__icon" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+            </svg>
+        </div>
+        <h2 class="nss-header__title">Network Status</h2>
+    </div>
+
+    <div class="nss-divider" aria-hidden="true"></div>
+
+    <!-- ── Stat Widgets ────────────────────────────────────────── -->
+    @if (loading()) {
+    @for (s of shimmerRows; track $index) {
+    <div class="nss-widget nss-widget--shimmer" aria-hidden="true">
+        <div class="nss-shimmer nss-shimmer--label"></div>
+        <div class="nss-shimmer nss-shimmer--number"></div>
+    </div>
+    }
+    }
+
+    @if (!loading()) {
+
+    <!-- Active Schedules -->
+    <div class="nss-widget" role="group" aria-label="Active schedules: {{ stats().active }}">
+        <div class="nss-widget__accent nss-widget__accent--active" aria-hidden="true"></div>
+        <div class="nss-widget__body">
+            <span class="nss-widget__label">Active Schedules</span>
+            <span class="nss-widget__value nss-widget__value--gold">
+                {{ stats().active.toLocaleString() }}
+            </span>
+            <span class="nss-widget__sub">Currently operating</span>
+        </div>
+        <div class="nss-widget__icon-wrap nss-widget__icon-wrap--emerald" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Inactive / Draft -->
+    <div class="nss-widget" role="group" aria-label="Inactive schedules: {{ stats().inactive }}">
+        <div class="nss-widget__accent nss-widget__accent--inactive" aria-hidden="true"></div>
+        <div class="nss-widget__body">
+            <span class="nss-widget__label">Inactive / Draft</span>
+            <span class="nss-widget__value nss-widget__value--slate">
+                {{ stats().inactive.toLocaleString() }}
+            </span>
+            <span class="nss-widget__sub">Pending activation</span>
+        </div>
+        <div class="nss-widget__icon-wrap nss-widget__icon-wrap--slate" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Total Registry -->
+    <div class="nss-widget" role="group" aria-label="Total schedules in registry: {{ stats().total }}">
+        <div class="nss-widget__accent nss-widget__accent--total" aria-hidden="true"></div>
+        <div class="nss-widget__body">
+            <span class="nss-widget__label">Registry Total</span>
+            <span class="nss-widget__value nss-widget__value--champagne">
+                {{ stats().total.toLocaleString() }}
+            </span>
+            <span class="nss-widget__sub">Master schedules</span>
+        </div>
+        <div class="nss-widget__icon-wrap nss-widget__icon-wrap--gold" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </div>
+    </div>
+
+    }
+
+    <div class="nss-divider" aria-hidden="true"></div>
+
+    <!-- ── Quick Actions ───────────────────────────────────────── -->
+    <div class="nss-actions">
+        <h3 class="nss-actions__label">Quick Actions</h3>
+
+        <button class="nss-action-btn nss-action-btn--primary" type="button" (click)="onNewSchedule.emit()"
+            aria-label="Construct a new master flight schedule">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            New Schedule
+        </button>
+
+        <button class="nss-action-btn nss-action-btn--secondary" type="button" (click)="onAuditLogs.emit()"
+            aria-label="View historical audit logs">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25
+                 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125
+                 -.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0
+                 -1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+            </svg>
+            Audit Logs
+        </button>
+    </div>
+
+    <!-- ── Legend ──────────────────────────────────────────────── -->
+    <div class="nss-legend">
+        <div class="nss-legend__item">
+            <span class="nss-legend__dot nss-legend__dot--summer" aria-hidden="true"></span>
+            <span class="nss-legend__text">Summer (Mar–Oct)</span>
+        </div>
+        <div class="nss-legend__item">
+            <span class="nss-legend__dot nss-legend__dot--winter" aria-hidden="true"></span>
+            <span class="nss-legend__text">Winter (Nov–Feb)</span>
+        </div>
+    </div>
+
+</aside>

@@ -1,0 +1,185 @@
+<!-- ============================================================================
+     passenger-check-in-card.component.html
+     Asiaporeair | Premium Passenger Card
+     States: idle · generating (skeleton) · checked-in · error
+     ============================================================================ -->
+
+<article class="pax-card" [class.pax-card--checked-in]="isCheckedIn"
+    [class.pax-card--generating]="isGenerating && !isCheckedIn" [class.pax-card--error]="!!errorMessage && !isCheckedIn"
+    [attr.aria-label]="'Passenger ' + index + ': ' + fullName">
+
+    <!-- ── Gold accent bar (top edge) ──────────────────────────────────── -->
+    <div class="pax-card__bar" aria-hidden="true"></div>
+
+    <!-- ══════════════════════════════════════════════
+         GENERATING STATE — Shimmer skeleton
+    ══════════════════════════════════════════════ -->
+    @if (isGenerating && !isCheckedIn) {
+    <div class="pax-card__inner pax-card__inner--skeleton" aria-busy="true"
+        aria-label="Generating boarding pass, please wait">
+
+        <div class="skel-avatar"></div>
+
+        <div class="skel-body">
+            <div class="skel skel--name"></div>
+            <div class="skel skel--detail"></div>
+            <div class="skel skel--detail skel--detail-sm"></div>
+        </div>
+
+        <div class="skel-cta"></div>
+
+        <div class="generating-hint" aria-hidden="true">
+            <svg class="spin-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B68F24"
+                stroke-width="2">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+            </svg>
+            <span>Issuing boarding pass…</span>
+        </div>
+
+    </div>
+    }
+
+    <!-- ══════════════════════════════════════════════
+         DEFAULT & CHECKED-IN STATE
+    ══════════════════════════════════════════════ -->
+    @if (!isGenerating || isCheckedIn) {
+    <div class="pax-card__inner">
+
+        <!-- ── Left: Avatar & identity ────────────────────────────────── -->
+        <div class="pax-identity">
+
+            <!-- Avatar bubble -->
+            <div class="pax-avatar" [class.pax-avatar--done]="isCheckedIn" aria-hidden="true">
+                @if (isCheckedIn) {
+                <!-- Checkmark -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                } @else {
+                <!-- Person icon -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+                }
+            </div>
+
+            <!-- Name + metadata -->
+            <div class="pax-meta">
+
+                <!-- PAX counter + status badge in one row -->
+                <div class="pax-meta__top-row">
+                    <span class="pax-counter" aria-label="Passenger {{ index }}">
+                        PAX {{ index | number:'2.0-0' }}
+                    </span>
+                    <span class="pax-status-badge" [class.pax-status-badge--checked]="isCheckedIn"
+                        [attr.aria-label]="statusLabel">
+                        {{ statusLabel }}
+                    </span>
+                </div>
+
+                <h3 class="pax-name">{{ fullName }}</h3>
+
+                <!-- Details row -->
+                <div class="pax-details" aria-label="Passenger details">
+
+                    <!-- Cabin class -->
+                    @if (cabinClass) {
+                    <span class="pax-detail-chip">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <path
+                                d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5S18 2 16.5 3.5L13 7 4.8 5.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                        </svg>
+                        {{ cabinClass }}
+                    </span>
+                    }
+
+                    <!-- Seat number -->
+                    <span class="pax-detail-chip" [class.pax-detail-chip--unassigned]="!seatNumber">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <path d="M20 9V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2" />
+                            <path d="M6 9v12" />
+                            <path d="M18 9v12" />
+                            <path d="M6 13h12" />
+                            <path d="M6 17h12" />
+                        </svg>
+                        @if (seatNumber) {
+                        Seat {{ seatNumber }}
+                        } @else {
+                        Seat TBA
+                        }
+                    </span>
+
+                    <!-- Passport (masked) -->
+                    @if (passportNumber) {
+                    <span class="pax-detail-chip">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" aria-hidden="true">
+                            <rect x="3" y="2" width="18" height="20" rx="2" />
+                            <circle cx="12" cy="9" r="2" />
+                            <path d="M9 19h6" />
+                        </svg>
+                        {{ maskedPassport }}
+                    </span>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Right: CTA area ─────────────────────────────────────────── -->
+        <div class="pax-actions">
+
+            <!-- Error inline notice -->
+            @if (errorMessage && !isCheckedIn) {
+            <div class="pax-error-notice" role="alert">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path
+                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                <span>{{ errorMessage }}</span>
+            </div>
+            }
+
+            <!-- "Checked-in" view pass button -->
+            @if (isCheckedIn) {
+            <button class="pax-btn pax-btn--view" type="button" (click)="viewPass.emit()"
+                aria-label="View boarding pass for {{ fullName }}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <path
+                        d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                    <path d="M13 5v2M13 17v2M13 11v2" />
+                </svg>
+                View Pass
+            </button>
+            }
+
+            <!-- "Generate boarding pass" primary CTA -->
+            @if (!isCheckedIn && !isGenerating) {
+            <button class="pax-btn pax-btn--generate" type="button" (click)="generatePass.emit()"
+                [attr.aria-label]="'Generate boarding pass for ' + fullName">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+                @if (errorMessage) {
+                Retry Generation
+                } @else {
+                Generate Boarding Pass
+                }
+            </button>
+            }
+
+        </div>
+    </div>
+    }
+
+</article>

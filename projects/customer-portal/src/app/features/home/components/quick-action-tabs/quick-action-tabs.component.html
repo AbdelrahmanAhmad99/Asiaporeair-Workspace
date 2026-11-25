@@ -1,0 +1,14 @@
+<div class="qat" role="tablist" aria-label="Quick actions">
+    @for (tab of tabs; track tab.id) {
+    <button class="qat__tab" [class.qat__tab--active]="activeTab === tab.id" role="tab" type="button"
+        [attr.aria-selected]="activeTab === tab.id" [attr.id]="'tab-' + tab.id" [attr.aria-controls]="'panel-' + tab.id"
+        (click)="tabChange.emit(tab.id)">
+        <svg class="qat__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.5" aria-hidden="true">
+            <path [attr.d]="tab.icon" />
+        </svg>
+        <span class="qat__label">{{ tab.label }}</span>
+        <span class="qat__underline" aria-hidden="true"></span>
+    </button>
+    }
+</div>

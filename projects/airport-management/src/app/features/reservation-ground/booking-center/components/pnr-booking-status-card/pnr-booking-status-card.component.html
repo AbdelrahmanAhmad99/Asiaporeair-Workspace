@@ -1,0 +1,80 @@
+<!-- pnr-booking-status-card.component.html -->
+
+<div class="pbsc-card" [class]="'pbsc-card--' + statusTheme()">
+
+    <!-- Gold/status accent line -->
+    <div class="pbsc-card__accent" aria-hidden="true"></div>
+
+    <!-- PNR Reference + Status Pill -->
+    <div class="pbsc-card__top">
+        <div class="pbsc-card__pnr-block">
+            <span class="pbsc-card__pnr-label">Booking Reference</span>
+            <span class="pbsc-card__pnr-code">{{ booking().bookingReference }}</span>
+        </div>
+        <div class="pbsc-card__status-pill" [class]="'pbsc-card__status-pill--' + statusTheme()">
+            <span class="pbsc-card__status-dot" [class]="'pbsc-card__status-dot--' + statusTheme()"
+                aria-hidden="true"></span>
+            {{ booking().paymentStatus }}
+        </div>
+    </div>
+
+    <!-- Route Hero -->
+    <div class="pbsc-card__route">
+        <div class="pbsc-card__route-node">
+            <span class="pbsc-card__iata">{{ booking().originAirportCode }}</span>
+            <span class="pbsc-card__airport-name">{{ booking().originAirportName }}</span>
+        </div>
+        <div class="pbsc-card__route-center" aria-hidden="true">
+            <div class="pbsc-card__route-line"></div>
+            <svg class="pbsc-card__route-plane" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+        </div>
+        <div class="pbsc-card__route-node pbsc-card__route-node--right">
+            <span class="pbsc-card__iata">{{ booking().destinationAirportCode }}</span>
+            <span class="pbsc-card__airport-name">{{ booking().destinationAirportName }}</span>
+        </div>
+    </div>
+
+    <!-- Flight Meta -->
+    <div class="pbsc-card__meta-grid">
+        <div class="pbsc-card__meta">
+            <span class="pbsc-card__meta-key">Flight</span>
+            <span class="pbsc-card__meta-val">{{ booking().flightNumber }}</span>
+        </div>
+        <div class="pbsc-card__meta">
+            <span class="pbsc-card__meta-key">Aircraft</span>
+            <span class="pbsc-card__meta-val">{{ booking().aircraftModel }}</span>
+        </div>
+        <div class="pbsc-card__meta pbsc-card__meta--full">
+            <span class="pbsc-card__meta-key">Departure</span>
+            <span class="pbsc-card__meta-val">{{ formattedDeparture() }}</span>
+        </div>
+        <div class="pbsc-card__meta pbsc-card__meta--full">
+            <span class="pbsc-card__meta-key">Arrival</span>
+            <span class="pbsc-card__meta-val">{{ formattedArrival() }}</span>
+        </div>
+        <div class="pbsc-card__meta">
+            <span class="pbsc-card__meta-key">Fare</span>
+            <span class="pbsc-card__meta-val pbsc-card__meta-val--mono">{{ booking().fareBasisCode }}</span>
+        </div>
+        <div class="pbsc-card__meta">
+            <span class="pbsc-card__meta-key">Airline</span>
+            <span class="pbsc-card__meta-val">{{ booking().airlineName }}</span>
+        </div>
+    </div>
+
+    <!-- Price footer -->
+    <div class="pbsc-card__footer">
+        <div class="pbsc-card__booked-by">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            {{ booking().userFullName }}
+        </div>
+        <span class="pbsc-card__price">{{ booking().totalPrice | currency:'USD':'symbol':'1.2-2' }}</span>
+    </div>
+</div>

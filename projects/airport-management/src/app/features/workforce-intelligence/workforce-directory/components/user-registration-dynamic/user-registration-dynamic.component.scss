@@ -1,0 +1,777 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $amber: #B45309;
+ $ruby: #710D06;
+ $error-rose: #9f1239;
+ $t: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+ $ease-luxury: cubic-bezier(0.4, 0, 0.2, 1);
+
+ .urd {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+ }
+
+ // ── Form Header ────────────────────────────────────────────────────────────
+ .urd__header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 1rem;
+     padding-bottom: 1.25rem;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.1);
+     margin-bottom: 1.25rem;
+ }
+
+ .urd__back-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0;
+     border: none;
+     background: none;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 600;
+     color: var(--aoms-text-secondary);
+     cursor: pointer;
+     outline: none;
+     transition: color $t;
+
+     &:hover {
+         color: $gold;
+
+         .urd__back-btn__icon {
+             transform: translateX(-3px);
+         }
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 3px;
+         border-radius: 3px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         transition: transform $t;
+     }
+ }
+
+ .urd__role-pill {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 0.25rem 0.75rem;
+     border-radius: 100px;
+     font-size: 12px;
+     font-family: var(--aoms-font-body);
+     color: $gold;
+     background: rgba(182, 143, 36, 0.1);
+     border: 1px solid rgba(182, 143, 36, 0.25);
+
+     strong {
+         font-weight: 700;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── Section ────────────────────────────────────────────────────────────────
+ .urd__section {
+     padding: 1.25rem 0 1.25rem;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.08);
+     display: flex;
+     flex-direction: column;
+     gap: 0.875rem;
+     animation: urd-fadein 250ms ease forwards;
+
+     &:last-of-type {
+         border-bottom: none;
+     }
+
+     &--active {
+         z-index: 100;
+         position: relative;
+     }
+
+     &__title {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         letter-spacing: -0.01em;
+         color: var(--aoms-text-primary);
+         transition: color $t;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__opt {
+         font-size: 12px;
+         font-weight: 400;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ // ── Grids ──────────────────────────────────────────────────────────────────
+ .urd__grid {
+     display: grid;
+     gap: 0.875rem;
+
+     &--2 {
+         grid-template-columns: 1fr;
+
+         @media (min-width: 640px) {
+             grid-template-columns: 1fr 1fr;
+         }
+     }
+
+     &--1 {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ // ── Floating Label Fields ──────────────────────────────────────────────────
+ .urd__fl-field {
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+
+     &--error .urd__fl-input {
+         border-color: rgba(113, 13, 6, 0.5);
+     }
+
+     &--password {
+         position: relative;
+     }
+
+     &--dropdown {
+         z-index: 50;
+     }
+ }
+
+ .urd__fl-input {
+     width: 100%;
+     height: 3.5rem; // Professional 56px height
+     padding: 1.5rem 1rem 0.5rem; // Precise padding for text baseline
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-primary);
+     background: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+     outline: none;
+     appearance: none;
+     -moz-appearance: textfield;
+     transition: border-color $t, box-shadow $t, background $t;
+
+     &::-webkit-outer-spin-button,
+     &::-webkit-inner-spin-button {
+         -webkit-appearance: none;
+     }
+
+     &::placeholder {
+         color: transparent;
+     }
+
+     &[type="date"] {
+         color-scheme: light;
+     }
+
+     &:focus {
+         border-color: $gold;
+         background-color: #ffffff;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.15);
+
+         &+.urd__fl-label {
+             top: 0.5rem;
+             transform: translateY(0);
+             font-size: 10px;
+             font-weight: 700;
+             letter-spacing: 0.05em;
+             text-transform: uppercase;
+             color: $gold;
+         }
+     }
+
+     &:not(:placeholder-shown)+.urd__fl-label {
+         top: 0.5rem;
+         transform: translateY(0);
+         font-size: 10px;
+         font-weight: 700;
+         letter-spacing: 0.05em;
+         text-transform: uppercase;
+     }
+
+     &--currency {
+         padding-left: 1rem;
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+ }
+
+ .urd__fl-label {
+     position: absolute;
+     left: 1rem;
+     top: 50%;
+     transform: translateY(-50%);
+     pointer-events: none;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     transition: all $t $ease-luxury;
+     background: transparent;
+
+     // Date fields often need to be floated by default or look like they have content
+     &--date {
+         top: 0.5rem !important;
+         transform: translateY(0) !important;
+         font-size: 10px !important;
+         font-weight: 700 !important;
+         text-transform: uppercase !important;
+     }
+ }
+
+ .urd__req {
+     color: $amber;
+     margin-left: 2px;
+ }
+
+ .urd__field-error {
+     font-size: 0.75rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: $ruby;
+     padding-left: 0.125rem;
+     animation: urd-fadein 150ms ease forwards;
+ }
+
+ .urd__field-sublabel {
+     font-size: 11px;
+     font-family: var(--aoms-font-body);
+     color: var(--aoms-text-muted);
+     padding-left: 0.125rem;
+ }
+
+ // ── Password Visibility Toggle ─────────────────────────────────────────────
+ .urd__pw-toggle {
+     position: absolute;
+     right: 0.875rem;
+     top: 50%;
+     transform: translateY(-50%);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 1.25rem;
+     height: 1.25rem;
+     border: none;
+     background: none;
+     cursor: pointer;
+     outline: none;
+     color: var(--aoms-text-muted);
+     transition: color $t;
+
+     &:hover {
+         color: $champagne;
+     }
+
+     &__icon {
+         width: 100%;
+         height: 100%;
+     }
+ }
+
+ // ── Password Strength Meter ────────────────────────────────────────────────
+ .urd__pw-strength {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     margin-top: 0.125rem;
+     animation: urd-fadein 200ms ease forwards;
+
+     &__bar {
+         flex: 1;
+         height: 4px;
+         background: rgba(226, 199, 128, 0.1);
+         border-radius: 100px;
+         overflow: hidden;
+     }
+
+     &__fill {
+         height: 100%;
+         border-radius: 100px;
+         transition: width 400ms ease, background 400ms ease;
+
+         &--0 {
+             background: transparent;
+         }
+
+         &--1 {
+             background: $ruby;
+         }
+
+         &--2 {
+             background: $amber;
+         }
+
+         &--3 {
+             background: $gold;
+         }
+
+         &--4 {
+             background: lighten($emerald, 35%);
+         }
+     }
+
+     &__label {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         white-space: nowrap;
+         transition: color 400ms ease;
+
+         &--0 {
+             color: transparent;
+         }
+
+         &--1 {
+             color: $ruby;
+         }
+
+         &--2 {
+             color: $amber;
+         }
+
+         &--3 {
+             color: $gold;
+         }
+
+         &--4 {
+             color: lighten($emerald, 35%);
+         }
+     }
+ }
+
+ // ── Airport Searchable Dropdown ────────────────────────────────────────────
+ .urd__airport-search {
+     position: relative;
+     display: flex;
+     align-items: center;
+
+     &__icon {
+         position: absolute;
+         left: 0.875rem;
+         width: 0.875rem;
+         height: 0.875rem;
+         color: var(--aoms-text-muted);
+         pointer-events: none;
+         transition: color $t;
+     }
+
+     &__input {
+         width: 100%;
+         height: 3.5rem;
+         padding: 0.6875rem 1rem 0.6875rem 2.5rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-primary);
+         background: $off-white;
+         border: 1px solid rgba($charcoal, 0.15);
+         border-radius: 8px;
+         outline: none;
+         transition: border-color $t, box-shadow $t, background $t;
+
+         &::placeholder {
+             color: var(--aoms-text-muted);
+             font-size: 0.875rem;
+         }
+
+         &:focus {
+             border-color: $gold;
+             box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+         }
+
+         &:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+         }
+     }
+
+     &__selected {
+         position: absolute;
+         right: 0.875rem;
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         font-weight: 700;
+         color: $gold;
+         background: rgba(182, 143, 36, 0.1);
+         padding: 0.125rem 0.375rem;
+         border-radius: 4px;
+     }
+ }
+
+ .urd__airport-dropdown {
+     position: absolute;
+     top: calc(100% + 4px);
+     left: 0;
+     right: 0;
+     z-index: 9999;
+     background-color: #ffffff;
+     background: #ffffff;
+     border: 1.5px solid $gold;
+     border-radius: 8px;
+     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+     max-height: 240px;
+     overflow-y: auto;
+     // Removed animation to ensure instant solid background visibility
+     opacity: 1 !important;
+     visibility: visible !important;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba(182, 143, 36, 0.2);
+         border-radius: 2px;
+     }
+
+     &__empty {
+         padding: 0.875rem 1rem;
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         font-style: italic;
+         text-align: center;
+     }
+ }
+
+ .urd__airport-option {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     width: 100%;
+     padding: 0.5625rem 1rem;
+     border: none;
+     background: none;
+     cursor: pointer;
+     outline: none;
+     text-align: left;
+     transition: background $t;
+
+     &:hover {
+         background: rgba(182, 143, 36, 0.05);
+     }
+
+     &:focus-visible {
+         background: rgba(182, 143, 36, 0.07);
+         outline: none;
+     }
+
+     &__iata {
+         font-size: 11px;
+         font-family: var(--aoms-font-heading);
+         font-weight: 800;
+         color: $gold;
+         width: 2.5rem;
+         flex-shrink: 0;
+     }
+
+     &__name {
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-primary);
+         flex: 1;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+         transition: color $t;
+     }
+
+     &__city {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+         transition: color $t;
+     }
+ }
+
+ // ── Select Wrap ────────────────────────────────────────────────────────────
+ .urd__select-wrap {
+     position: relative;
+
+     &__chev {
+         position: absolute;
+         right: 0.75rem;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0.875rem;
+         height: 0.875rem;
+         pointer-events: none;
+         color: var(--aoms-text-muted);
+     }
+ }
+
+ .urd__select {
+     appearance: none;
+     -webkit-appearance: none;
+     width: 100%;
+     height: 3.5rem;
+     padding: 0.6875rem 2.5rem 0.6875rem 1rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 500;
+     color: var(--aoms-text-primary);
+     background: $off-white;
+     border: 1px solid rgba($charcoal, 0.15);
+     border-radius: 8px;
+     outline: none;
+     cursor: pointer;
+     transition: border-color $t, box-shadow $t, background $t;
+
+     &:focus {
+         border-color: $gold;
+         box-shadow: 0 0 0 3px rgba(182, 143, 36, 0.12);
+     }
+
+     &:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+     }
+
+     option {
+         background: var(--aoms-bg-card);
+         color: var(--aoms-text-primary);
+     }
+ }
+
+ // ── File Picker ─────────────────────────────────────────────────────────────
+ .urd__file-picker {
+     display: flex;
+     align-items: center;
+     gap: 0.875rem;
+     padding: 0.875rem 1.125rem;
+     border-radius: 8px;
+     background: rgba(5, 25, 55, 0.03);
+     border: 1.5px dashed rgba(226, 199, 128, 0.22);
+     cursor: pointer;
+     transition: all $t;
+
+     &:hover {
+         border-color: rgba(182, 143, 36, 0.4);
+         background: rgba(182, 143, 36, 0.04);
+     }
+
+     &--has-file {
+         border-color: rgba(6, 78, 59, 0.35);
+         background: rgba(6, 78, 59, 0.04);
+         border-style: solid;
+     }
+
+     &__input {
+         position: absolute;
+         width: 1px;
+         height: 1px;
+         opacity: 0;
+         overflow: hidden;
+     }
+
+     &__icon {
+         width: 1.25rem;
+         height: 1.25rem;
+         color: var(--aoms-text-muted);
+         flex-shrink: 0;
+     }
+
+     &__label {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         transition: color $t;
+     }
+ }
+
+ // ── Actions ─────────────────────────────────────────────────────────────────
+ .urd__actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.75rem;
+     padding-top: 1.375rem;
+     border-top: 1px solid rgba(226, 199, 128, 0.1);
+     margin-top: 0.5rem;
+ }
+
+ .urd__cancel-btn {
+     display: inline-flex;
+     align-items: center;
+     padding: 0.6875rem 1.25rem;
+     font-size: 0.875rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 400;
+     color: var(--aoms-text-muted);
+     background: transparent;
+     border: none;
+     cursor: pointer;
+     outline: none;
+     transition: color $t;
+
+     &:hover {
+         color: var(--aoms-text-secondary);
+         text-decoration: underline;
+         text-underline-offset: 3px;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+         border-radius: 3px;
+     }
+ }
+
+ .urd__submit-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.4375rem;
+     padding: 0.6875rem 1.75rem;
+     font-size: 0.9375rem;
+     font-family: var(--aoms-font-body);
+     font-weight: 700;
+     color: #fff;
+     background: linear-gradient(135deg, $gold 0%, #c8a030 100%);
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     outline: none;
+     box-shadow: 0 4px 16px rgba(182, 143, 36, 0.4);
+     transition: all $t;
+
+     &:hover:not(:disabled) {
+         background: linear-gradient(135deg, #c8a030 0%, $gold 100%);
+         box-shadow: 0 6px 22px rgba(182, 143, 36, 0.55);
+         transform: translateY(-1px);
+     }
+
+     &:disabled {
+         opacity: 0.42;
+         cursor: not-allowed;
+         box-shadow: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &--pulsing {
+         animation: urd-btn-pulse 1s ease-in-out infinite;
+     }
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+
+         &--spin {
+             animation: urd-spin 1s linear infinite;
+         }
+     }
+ }
+
+ @keyframes urd-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes urd-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ @keyframes urd-btn-pulse {
+
+     0%,
+     100% {
+         box-shadow: 0 4px 16px rgba(182, 143, 36, 0.4);
+     }
+
+     50% {
+         box-shadow: 0 4px 28px rgba(182, 143, 36, 0.72);
+         transform: translateY(-1px);
+     }
+ }
+
+ :host-context(.aoms-dark) {
+
+     .urd__fl-input,
+     .urd__select,
+     .urd__airport-search__input {
+         background: rgba(255, 255, 255, 0.04);
+         border-color: rgba(226, 199, 128, 0.18);
+         color: rgba(255, 255, 255, 0.9);
+     }
+
+     .urd__fl-label {
+         background: transparent;
+     }
+
+     .urd__fl-input:focus+.urd__fl-label,
+     .urd__fl-input:not(:placeholder-shown)+.urd__fl-label {
+         color: $champagne;
+         background: rgba(5, 25, 55, 0.9);
+     }
+
+     .urd__airport-dropdown {
+         background: #122842 !important;
+         border-color: rgba(226, 199, 128, 0.3);
+         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+     }
+
+     .urd__file-picker {
+         background: rgba(255, 255, 255, 0.03);
+     }
+ }

@@ -1,0 +1,41 @@
+<div class="cqc" [class.cqc--compact]="compact">
+
+    <!-- Gold quote mark -->
+    <div class="cqc__quote-mark" aria-hidden="true">"</div>
+
+    <!-- Chef portrait -->
+    <div class="cqc__portrait-wrap">
+        <img class="cqc__portrait" [src]="chef.imagePath" [alt]="chef.name + ' portrait'" loading="lazy" />
+    </div>
+
+    <!-- Quote -->
+    <blockquote class="cqc__blockquote">
+        <p class="cqc__quote">{{ chef.quote }}</p>
+        <footer class="cqc__footer">
+            <div class="cqc__signature">
+                <span class="cqc__name">{{ chef.name }}</span>
+                <span class="cqc__title">{{ chef.title }}</span>
+            </div>
+            <div class="cqc__divider" aria-hidden="true"></div>
+            @if (!compact && chef.awards?.length) {
+            <ul class="cqc__awards" aria-label="Awards and recognition">
+                @for (award of chef.awards!; track award) {
+                <li class="cqc__award">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none"
+                        aria-hidden="true">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    {{ award }}
+                </li>
+                }
+            </ul>
+            }
+            <div class="cqc__signature-dish">
+                <span class="cqc__sig-label">Signature dish:</span>
+                {{ chef.signatureDish }}
+            </div>
+        </footer>
+    </blockquote>
+
+</div>

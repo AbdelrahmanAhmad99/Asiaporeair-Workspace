@@ -1,0 +1,813 @@
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $off-white: #F8F9FA;
+ $charcoal: #101056;
+ $ruby: #9f1239;
+ $emerald: #064E3B;
+ $amber: #B45309;
+
+ $ease: cubic-bezier(0.4, 0, 0.2, 1);
+ $luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+ // ============================================================================
+ // 1. Glassmorphism card — squircle 12px per spec
+ // ============================================================================
+ .bgf-card {
+     border-radius: 12px;
+     background: $midnight;
+     border: 1px solid rgba($champagne, 0.18);
+     box-shadow:
+         0 8px 32px rgba($midnight, 0.42),
+         0 1px 0 rgba($champagne, 0.08) inset;
+     // Removed overflow: hidden to prevent clipping of dropdown listbox
+     display: flex;
+     flex-direction: column;
+     animation: bgf-enter 350ms $luxury both;
+
+     &__accent-bar {
+         height: 3px;
+         background: linear-gradient(90deg, $midnight 0%, $gold 45%, $champagne 100%);
+         flex-shrink: 0;
+     }
+
+     &__header {
+         display: flex;
+         align-items: flex-start;
+         gap: 0.875rem;
+         padding: 1.25rem 1.5rem;
+         border-bottom: 1px solid rgba($champagne, 0.1);
+         background: rgba(255, 255, 255, 0.03);
+         flex-shrink: 0;
+     }
+
+     &__icon-wrap {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-shrink: 0;
+         width: 2.375rem;
+         height: 2.375rem;
+         border-radius: 7px;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.22);
+
+         svg {
+             width: 1.125rem;
+             height: 1.125rem;
+             color: $gold;
+         }
+     }
+
+     &__title {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 14px;
+         font-weight: 700;
+         color: $champagne;
+         margin: 0 0 0.2rem;
+     }
+
+     &__subtitle {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11px;
+         color: rgba($champagne, 0.4);
+         margin: 0;
+     }
+ }
+
+ // ============================================================================
+ // 2. Error banner
+ // ============================================================================
+ .bgf-error {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.625rem;
+     margin: 0.75rem 1.5rem 0;
+     padding: 0.75rem 1rem;
+     border-radius: 6px;
+     background: rgba($ruby, 0.1);
+     border: 1px solid rgba($ruby, 0.28);
+     border-left: 3px solid $ruby;
+     animation: bgf-slide 180ms $luxury both;
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+         color: $ruby;
+         margin-top: 0.1rem;
+     }
+
+     &__msg {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: lighten($ruby, 8%);
+         line-height: 1.5;
+         margin: 0;
+     }
+ }
+
+ // ============================================================================
+ // 3. Form
+ // ============================================================================
+ .bgf-form {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+     padding: 0;
+ }
+
+ // ============================================================================
+ // 4. Section
+ // ============================================================================
+ .bgf-section {
+     padding: 1.125rem 1.5rem;
+     border-bottom: 1px solid rgba($champagne, 0.08);
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+
+     &__label {
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         font-weight: 700;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.55);
+     }
+
+     &__num {
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.375rem;
+         height: 1.375rem;
+         border-radius: 50%;
+         background: rgba($gold, 0.1);
+         border: 1px solid rgba($gold, 0.22);
+         font-size: 8.5px;
+         font-weight: 800;
+         color: $gold;
+     }
+ }
+
+ .bgf-req {
+     color: $ruby;
+     margin-left: 0.1rem;
+ }
+
+ // ============================================================================
+ // 5. Field wrapper
+ // ============================================================================
+ .bgf-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.4rem;
+
+     &--error {
+         .bgf-combo {
+             border-color: rgba($ruby, 0.35) !important;
+         }
+
+         .bgf-date-input {
+             border-color: rgba($ruby, 0.35) !important;
+         }
+     }
+
+     &--date {
+         flex: 1;
+     }
+
+     &__err {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         color: lighten($ruby, 10%);
+         padding: 0.2rem 0.5rem;
+         border-radius: 3px;
+         background: rgba($ruby, 0.08);
+         border-left: 2px solid $ruby;
+         animation: bgf-slide 160ms $luxury both;
+     }
+ }
+
+ // ============================================================================
+ // 6. Searchable combobox — Midnight Sapphire with Champagne focus
+ // ============================================================================
+ .bgf-combo {
+     position: relative;
+     border-radius: 8px;
+     border: 1px solid rgba($champagne, 0.15);
+     background: rgba(255, 255, 255, 0.05);
+     transition: border-color 180ms $ease, box-shadow 180ms $ease;
+
+     &:focus-within,
+     &--open {
+         border-color: $champagne;
+         box-shadow: 0 0 0 3px rgba($champagne, 0.12), 0 0 10px rgba($champagne, 0.06);
+     }
+
+     &__input-wrap {
+         position: relative;
+         display: flex;
+         align-items: center;
+     }
+
+     &__icon {
+         position: absolute;
+         left: 0.875rem;
+         width: 0.9375rem;
+         height: 0.9375rem;
+         color: rgba($champagne, 0.4);
+         pointer-events: none;
+         transition: color 180ms $ease;
+
+         svg {
+             width: 100%;
+             height: 100%;
+         }
+     }
+
+     &:focus-within &__icon {
+         color: $champagne;
+     }
+
+     &__input {
+         width: 100%;
+         height: 3rem;
+         padding: 0 2.25rem 0 2.5rem;
+         border: none;
+         outline: none;
+         background: transparent;
+         border-radius: 8px;
+
+         font-family: 'Inter', 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 400;
+         color: rgba($champagne, 0.8);
+
+         &::placeholder {
+             color: rgba($champagne, 0.3);
+         }
+
+         &--confirmed {
+             font-family: 'Montserrat', sans-serif;
+             font-weight: 700;
+             color: $champagne;
+             letter-spacing: 0.01em;
+         }
+     }
+
+     &__clear {
+         position: absolute;
+         right: 0.75rem;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: 1.25rem;
+         height: 1.25rem;
+         border: none;
+         background: transparent;
+         cursor: pointer;
+         color: rgba($champagne, 0.3);
+         border-radius: 3px;
+         transition: color 150ms $ease;
+
+         svg {
+             width: 0.75rem;
+             height: 0.75rem;
+         }
+
+         &:hover {
+             color: $ruby;
+         }
+     }
+
+     // Dropdown list
+     &__list {
+         position: absolute;
+         top: calc(100% + 4px);
+         left: 0;
+         right: 0;
+         z-index: 20;
+         max-height: 14rem;
+         overflow-y: auto;
+         margin: 0;
+         padding: 0.375rem 0;
+         list-style: none;
+
+         border-radius: 10px;
+         background: darken($midnight, 2%);
+         border: 1px solid rgba($champagne, 0.18);
+         box-shadow: 0 10px 36px rgba($midnight, 0.55);
+         animation: bgf-dropdown 180ms $luxury both;
+
+         &::-webkit-scrollbar {
+             width: 4px;
+         }
+
+         &::-webkit-scrollbar-thumb {
+             background: rgba($champagne, 0.2);
+             border-radius: 2px;
+         }
+     }
+
+     &__option {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         gap: 0.5rem;
+         padding: 0.625rem 1rem;
+         cursor: pointer;
+         transition: background-color 120ms $ease;
+
+         &:hover {
+             background: rgba($champagne, 0.06);
+         }
+
+         &--selected {
+             background: rgba($gold, 0.08);
+         }
+     }
+
+     &__check {
+         flex-shrink: 0;
+         width: 1rem;
+         height: 1rem;
+         color: $gold;
+     }
+
+     &__empty {
+         padding: 1.25rem 1rem;
+         text-align: center;
+         font-family: 'Montserrat', sans-serif;
+         font-size: 12px;
+         color: rgba($champagne, 0.4);
+     }
+ }
+
+ // Airline option inside dropdown
+ .bgf-airline-option {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+     flex: 1;
+     min-width: 0;
+
+     &__badge {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 13px;
+         font-weight: 900;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         color: $gold;
+         flex-shrink: 0;
+         min-width: 2.5rem;
+     }
+
+     &__info {
+         display: flex;
+         flex-direction: column;
+         gap: 0.1rem;
+         min-width: 0;
+     }
+
+     &__name {
+         font-family: 'Inter', sans-serif;
+         font-size: 13px;
+         font-weight: 600;
+         color: rgba($champagne, 0.85);
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+     }
+
+     &__meta {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 9.5px;
+         letter-spacing: 0.04em;
+         color: rgba($champagne, 0.35);
+     }
+ }
+
+ // Confirmed airline summary strip
+ .bgf-airline-strip {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 0.625rem 0.875rem;
+     border-radius: 6px;
+     background: rgba($gold, 0.07);
+     border: 1px solid rgba($gold, 0.18);
+     animation: bgf-fade 200ms $luxury both;
+
+     &__iata {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 1.125rem;
+         font-weight: 900;
+         letter-spacing: 0.1em;
+         color: $gold;
+         flex-shrink: 0;
+     }
+
+     &__name {
+         font-family: 'Inter', sans-serif;
+         font-size: 13px;
+         font-weight: 600;
+         color: $champagne;
+         flex: 1;
+         min-width: 0;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+     }
+
+     &__region {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 10px;
+         letter-spacing: 0.06em;
+         text-transform: uppercase;
+         color: rgba($champagne, 0.45);
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================================
+ // 7. Validity hint
+ // ============================================================================
+ .bgf-validity-hint {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.5rem 0.75rem;
+     border-radius: 6px;
+     background: rgba($gold, 0.06);
+     border: 1px solid rgba($gold, 0.15);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: rgba($champagne, 0.6);
+     line-height: 1.4;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         color: $gold;
+     }
+
+     strong {
+         color: $champagne;
+         font-weight: 700;
+     }
+ }
+
+ // ============================================================================
+ // 8. Date Range
+ // ============================================================================
+ .bgf-date-row {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.5rem;
+     flex-wrap: wrap; // Allow stacking in narrow sidebars
+ }
+
+ .bgf-date-label {
+     display: flex;
+     align-items: center;
+     gap: 0.375rem;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 10px;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: rgba($champagne, 0.5);
+     margin-bottom: 0.375rem;
+
+     svg {
+         width: 0.8125rem;
+         height: 0.8125rem;
+         flex-shrink: 0;
+         color: $gold;
+     }
+ }
+
+ .bgf-date-arrow {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding-top: 1.8rem;
+     color: rgba($champagne, 0.2);
+     flex-shrink: 0;
+
+     @media (max-width: 400px) {
+         display: none; // Hide arrow when stacked
+     }
+
+     svg {
+         width: 1.125rem;
+         height: 1.125rem;
+     }
+ }
+
+ .bgf-date-input {
+     appearance: none;
+     -webkit-appearance: none;
+     outline: none;
+     width: 100%;
+     height: 2.75rem;
+     padding: 0 0.625rem;
+
+     font-family: 'Courier New', monospace;
+     font-size: 13px;
+     font-weight: 700;
+     letter-spacing: 0.04em;
+     color: $champagne;
+     cursor: pointer;
+
+     background: rgba(255, 255, 255, 0.04);
+     border: 1px solid rgba($champagne, 0.15);
+     border-radius: 8px;
+     transition: border-color 180ms $ease, background 180ms $ease, box-shadow 180ms $ease;
+
+     &:focus {
+         border-color: $gold;
+         background: rgba(255, 255, 255, 0.07);
+         box-shadow: 0 0 0 3px rgba($gold, 0.14);
+     }
+
+     &::-webkit-calendar-picker-indicator {
+         opacity: 0.4;
+         cursor: pointer;
+         filter: invert(0.85);
+     }
+ }
+
+ .bgf-day-estimate {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.45rem 0.75rem;
+     border-radius: 5px;
+     background: rgba($champagne, 0.06);
+     border: 1px solid rgba($champagne, 0.12);
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: rgba($champagne, 0.5);
+     animation: bgf-fade 200ms $ease both;
+
+     svg {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+         color: $gold;
+     }
+
+     strong {
+         color: $champagne;
+         font-weight: 700;
+         font-family: 'Montserrat', sans-serif;
+     }
+ }
+
+ // ============================================================================
+ // 9. Checkbox — custom Royal Gold styled
+ // ============================================================================
+ .bgf-checkbox-label {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.875rem;
+     cursor: pointer;
+ }
+
+ .bgf-checkbox {
+     position: absolute;
+     opacity: 0;
+     pointer-events: none;
+     width: 0;
+     height: 0;
+ }
+
+ .bgf-checkbox__visual {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-shrink: 0;
+     width: 1.25rem;
+     height: 1.25rem;
+     border-radius: 4px;
+     border: 1.5px solid rgba($champagne, 0.28);
+     background: rgba(255, 255, 255, 0.04);
+     margin-top: 0.1rem;
+     transition: all 180ms $ease;
+
+     svg {
+         width: 0.75rem;
+         height: 0.75rem;
+         color: $midnight;
+         display: none;
+     }
+
+     .bgf-checkbox:checked+& {
+         background: $gold;
+         border-color: $gold;
+         box-shadow: 0 0 8px rgba($gold, 0.35);
+
+         svg {
+             display: block;
+         }
+     }
+
+     .bgf-checkbox:focus+& {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+ }
+
+ .bgf-checkbox__text {
+     display: flex;
+     flex-direction: column;
+     gap: 0.2rem;
+ }
+
+ .bgf-checkbox__title {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     color: $champagne;
+ }
+
+ .bgf-checkbox__desc {
+     font-family: 'Montserrat', sans-serif;
+     font-size: 11px;
+     color: rgba($champagne, 0.4);
+     line-height: 1.55;
+ }
+
+ // ============================================================================
+ // 10. Warning notice
+ // ============================================================================
+ .bgf-warning {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.625rem;
+     padding: 0.875rem 1.5rem;
+     background: rgba($amber, 0.06);
+     border-top: 1px solid rgba($amber, 0.15);
+
+     svg {
+         width: 0.9375rem;
+         height: 0.9375rem;
+         flex-shrink: 0;
+         color: rgba($amber, 0.7);
+         margin-top: 0.1rem;
+     }
+
+     p {
+         font-family: 'Montserrat', sans-serif;
+         font-size: 11.5px;
+         color: rgba($champagne, 0.45);
+         line-height: 1.6;
+         margin: 0;
+
+         strong {
+             color: rgba($champagne, 0.75);
+             font-weight: 700;
+         }
+     }
+ }
+
+ // ============================================================================
+ // 11. Action buttons
+ // ============================================================================
+ .bgf-actions {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding: 1rem 1.5rem;
+     border-top: 1px solid rgba($champagne, 0.1);
+     background: rgba(255, 255, 255, 0.02);
+ }
+
+ .bgf-btn {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.375rem;
+     height: 2.5rem;
+     padding: 0 1.25rem;
+     border-radius: 4px;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;
+     font-weight: 600;
+     cursor: pointer;
+     white-space: nowrap;
+     transition: all 150ms $ease;
+
+     &:disabled {
+         opacity: 0.35;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     &__icon,
+     &__spin {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+
+     &__spin {
+         animation: bgf-spin 0.9s linear infinite;
+     }
+
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.18);
+         color: rgba($champagne, 0.55);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+         }
+     }
+
+     &--generate {
+         background: $gold;
+         border: 1px solid $gold;
+         color: $midnight;
+         font-weight: 700;
+         box-shadow: 0 4px 16px rgba($gold, 0.25);
+
+         &:hover:not(:disabled) {
+             background: $champagne;
+             border-color: $champagne;
+             box-shadow: 0 6px 22px rgba($gold, 0.4);
+         }
+     }
+ }
+
+ // ============================================================================
+ // 12. Keyframes
+ // ============================================================================
+ @keyframes bgf-enter {
+     from {
+         opacity: 0;
+         transform: translateX(-8px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes bgf-fade {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes bgf-slide {
+     from {
+         opacity: 0;
+         transform: translateX(-4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ @keyframes bgf-dropdown {
+     from {
+         opacity: 0;
+         transform: translateY(-6px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes bgf-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }

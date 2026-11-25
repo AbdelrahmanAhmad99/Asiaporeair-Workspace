@@ -1,0 +1,211 @@
+// ticket-qr-code.component.scss
+$midnight : #051937;
+$royal-gold: #B68F24;
+$champagne : #E2C780;
+$charcoal : #101056;
+$white : #FFFFFF;
+$error : #d95f5f;
+$text-muted: #718096;
+$font : 'Inter',
+'Montserrat',
+-apple-system,
+sans-serif;
+$ease : cubic-bezier(0.4, 0, 0.2, 1);
+
+:host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font;
+}
+
+.qr-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 1.125rem;
+    position: relative;
+}
+
+// ── Gold Frame ────────────────────────────────────────────────────────────────
+.qr-border {
+    position: relative;
+    padding: 8px;
+    border-radius: 10px;
+    background: $white;
+    box-shadow:
+        0 0 0 1.5px rgba($royal-gold, 0.55),
+        0 0 0 4px rgba($royal-gold, 0.08),
+        0 4px 18px rgba($midnight, 0.12);
+    transition: box-shadow 280ms $ease;
+
+    // Four decorative corner accents
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-color: $royal-gold;
+        border-style: solid;
+        border-width: 0;
+    }
+
+    &::before {
+        top: -1px;
+        left: -1px;
+        border-top-width: 2px;
+        border-left-width: 2px;
+        border-radius: 3px 0 0 0;
+    }
+
+    &::after {
+        top: -1px;
+        right: -1px;
+        border-top-width: 2px;
+        border-right-width: 2px;
+        border-radius: 0 3px 0 0;
+    }
+
+    // Bottom corners via inner pseudo on the svg wrapper
+    .qr-svg-wrap::before,
+    .qr-svg-wrap::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-color: $royal-gold;
+        border-style: solid;
+        border-width: 0;
+    }
+
+    .qr-svg-wrap::before {
+        bottom: 0;
+        left: 0;
+        border-bottom-width: 2px;
+        border-left-width: 2px;
+        border-radius: 0 0 0 3px;
+    }
+
+    .qr-svg-wrap::after {
+        bottom: 0;
+        right: 0;
+        border-bottom-width: 2px;
+        border-right-width: 2px;
+        border-radius: 0 0 3px 0;
+    }
+
+    &--void {
+        box-shadow:
+            0 0 0 1.5px rgba($error, 0.5),
+            0 0 0 4px rgba($error, 0.07),
+            0 4px 18px rgba($midnight, 0.1);
+
+        &::before,
+        &::after {
+            border-color: $error;
+        }
+    }
+}
+
+// relative wrapper needed for corner pseudo-elements
+.qr-border {
+    position: relative;
+}
+
+.qr-svg {
+    display: block;
+    border-radius: 4px;
+    // Subtle scan-line shimmer on load
+    animation: qr-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes qr-reveal {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+// ── Labels ────────────────────────────────────────────────────────────────────
+.qr-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-align: center;
+}
+
+.scan-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: $royal-gold;
+}
+
+.ticket-code-label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: $text-muted;
+    // Truncate very long codes
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// ── Void Overlay ──────────────────────────────────────────────────────────────
+.void-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    background: rgba($white, 0.82);
+    backdrop-filter: blur(3px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: $error;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+
+    svg {
+        opacity: 0.9;
+    }
+}
+
+// ── Print ─────────────────────────────────────────────────────────────────────
+@media print {
+    .qr-border {
+        box-shadow: 0 0 0 1px #B68F24 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .qr-svg {
+        width: 110px;
+        height: 110px;
+    }
+
+    .void-overlay {
+        display: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .qr-svg {
+        animation: none !important;
+    }
+}

@@ -1,0 +1,125 @@
+<div class="csb-bar" role="region" aria-label="Pricing intelligence metrics">
+
+    <!-- ── Skeleton Loading ──────────────────────────────────────── -->
+    @if (loading()) {
+    <div class="csb-skeleton" aria-hidden="true">
+        @for (i of [1,2,3]; track i) {
+        <div class="csb-sk-block">
+            <div class="csb-sk csb-sk--label"></div>
+            <div class="csb-sk csb-sk--value"></div>
+            <div class="csb-sk csb-sk--bar"></div>
+        </div>
+        }
+    </div>
+    }
+
+    @if (!loading() && marketData()) {
+
+    <!-- ══ Metric 1: Current Price vs Category Average ══════════════ -->
+    <div class="csb-metric csb-metric--price">
+        <div class="csb-metric__header">
+            <span class="csb-metric__label">Current Price vs. Category Average</span>
+            <span class="csb-health-badge" [ngClass]="healthStatusClass()">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="healthStatusIconPath()" />
+                </svg>
+                {{ healthStatus() }}
+            </span>
+        </div>
+
+        <div class="csb-price-row">
+            <div class="csb-price-value">
+                <span class="csb-price-value__amount">{{ currencySymbol() }}{{ fmt(marketData()!.currentPrice) }}</span>
+                <span class="csb-price-value__delta" [class]="'csb-delta--' + priceDeltaDirection()">
+                    @if (priceDeltaDirection() === 'up') {
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8m0 0v8m0-8-9 9" />
+                    </svg>
+                    } @else if (priceDeltaDirection() === 'down') {
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 17H8m0 0v-8m0 8 9-9" />
+                    </svg>
+                    } @else {
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                    </svg>
+                    }
+                    {{ priceDeltaLabel() }} vs. avg
+                </span>
+            </div>
+
+            <div class="csb-price-avg">
+                <span class="csb-price-avg__label">Category Avg</span>
+                <span class="csb-price-avg__value">{{ currencySymbol() }}{{ fmt(marketData()!.categoryAverage) }}</span>
+            </div>
+        </div>
+
+        <!-- Comparison track with category-average marker -->
+        <div class="csb-track" aria-hidden="true">
+            <div class="csb-track__avg-marker" [style.left.%]="categoryAverageMarkerPos()">
+                <span class="csb-track__avg-marker-line"></span>
+            </div>
+            <div class="csb-track__fill" [class]="'csb-track__fill--' + priceDeltaDirection()"
+                [style.width.%]="priceCompareFill()"></div>
+        </div>
+        <p class="csb-track__caption">Track scaled to 2× category average · gold marker = category average</p>
+    </div>
+
+    <!-- ══ Metric 2: Profitability Index (Luxury Meter) ═══════════════ -->
+    <div class="csb-metric csb-metric--profitability">
+        <div class="csb-metric__header">
+            <span class="csb-metric__label">Profitability Index</span>
+            <span class="csb-metric__value-inline">{{ profitabilityIndex() }} / 100</span>
+        </div>
+
+        <!-- Luxury arc-style meter rendered as a segmented bar -->
+        <div class="csb-meter" [ngClass]="'csb-meter--' + profitabilityTier()">
+            <div class="csb-meter__track">
+                <div class="csb-meter__fill" [style.width.%]="profitabilityIndex()"></div>
+                <div class="csb-meter__glow" [style.left.%]="profitabilityIndex()"></div>
+            </div>
+            <div class="csb-meter__ticks" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <p class="csb-meter__caption">
+            @switch (profitabilityTier()) {
+            @case ('high') { Strong margin profile relative to operational cost. }
+            @case ('mid') { Moderate margin — within acceptable revenue tolerance. }
+            @default { Margin pressure detected — consider a pricing review. }
+            }
+        </p>
+    </div>
+
+    <!-- ══ Metric 3: SKU Popularity Rank ═══════════════════════════════ -->
+    <div class="csb-metric csb-metric--popularity">
+        <div class="csb-metric__header">
+            <span class="csb-metric__label">System-Wide Popularity</span>
+        </div>
+
+        <div class="csb-rank-display">
+            <span class="csb-rank-display__rank">#{{ marketData()!.popularityRank }}</span>
+            <span class="csb-rank-display__of">of {{ marketData()!.totalInCategory }} SKUs in category</span>
+        </div>
+
+        <!-- Percentile bar -->
+        <div class="csb-track csb-track--popularity" aria-hidden="true">
+            <div class="csb-track__fill csb-track__fill--popularity" [style.width.%]="popularityPercentile()"></div>
+        </div>
+        <p class="csb-track__caption">{{ popularityPercentile() }}th percentile within category</p>
+    </div>
+
+    }
+
+    @if (!loading() && !marketData()) {
+    <div class="csb-empty">
+        <svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+        </svg>
+        <p>No pricing intelligence available for this product.</p>
+    </div>
+    }
+
+</div>

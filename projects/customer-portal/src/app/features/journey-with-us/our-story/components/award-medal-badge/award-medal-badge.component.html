@@ -1,0 +1,61 @@
+<article class="amb" [class.amb--grand]="award.isGrand" [style.--delay]="animDelay + 'ms'"
+    [attr.aria-label]="award.title + ' ' + award.year">
+    <!-- Icon -->
+    <div class="amb__icon-wrap" aria-hidden="true">
+        @switch (award.iconType) {
+        @case ('trophy') {
+        <svg class="amb__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+            <path d="M4 22h16" />
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+        </svg>
+        }
+        @case ('star') {
+        <svg class="amb__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1">
+            <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+        }
+        @case ('ribbon') {
+        <svg class="amb__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1">
+            <circle cx="12" cy="8" r="6" />
+            <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+        </svg>
+        }
+        @case ('globe') {
+        <svg class="amb__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        }
+        }
+    </div>
+
+    <!-- Text -->
+    <div class="amb__body">
+        <p class="amb__category">{{ award.category }}</p>
+        <h3 class="amb__title">{{ award.title }}</h3>
+
+        @if (award.consecutive) {
+        <div class="amb__consecutive">
+            <span class="amb__consec-num">{{ award.consecutive }}</span>
+            <span class="amb__consec-label">consecutive years</span>
+        </div>
+        }
+
+        <div class="amb__org-row">
+            <div class="amb__org-line" aria-hidden="true"></div>
+            <span class="amb__org">{{ award.organisation }}</span>
+        </div>
+        <span class="amb__year">{{ award.year }}</span>
+    </div>
+
+</article>

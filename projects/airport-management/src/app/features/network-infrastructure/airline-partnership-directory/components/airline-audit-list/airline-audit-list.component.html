@@ -1,0 +1,159 @@
+<div class="aal2-card">
+    <div class="aal2-scroll">
+        <table class="aal2-table" role="grid" aria-label="Airline partner audit registry">
+
+            <!-- ── Sticky Midnight Sapphire Header ─────────────────────── -->
+            <thead class="aal2-head">
+                <tr>
+                    @for (col of columns; track col.key) {
+                    <th class="aal2-th" [class.aal2-col--md-hidden]="col.hideOnMd"
+                        [class.aal2-col--lg-hidden]="col.hideOnLg" scope="col">
+                        {{ col.label }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+
+            <!-- ── Loading Shimmer ─────────────────────────────────────── -->
+            @if (loading()) {
+            <tbody aria-busy="true" aria-label="Loading audit records">
+                @for (row of shimmerRows; track $index) {
+                <tr class="aal2-tr aal2-tr--even">
+                    @for (col of columns; track col.key) {
+                    <td class="aal2-td aal2-td--compact" [class.aal2-col--md-hidden]="col.hideOnMd"
+                        [class.aal2-col--lg-hidden]="col.hideOnLg">
+                        @if (col.key === 'dot') {
+                        <div class="aal2-shimmer aal2-shimmer--dot"></div>
+                        } @else if (col.key === 'logo') {
+                        <div class="aal2-shimmer aal2-shimmer--circle"></div>
+                        } @else {
+                        <div class="aal2-shimmer" [style.width]="col.shimmerWidth"></div>
+                        }
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+            }
+
+            <!-- ── Data Rows ─────────────────────────────────────────────── -->
+            @if (!loading()) {
+            <tbody [@auditRows]="records().length">
+
+                @for (record of records(); track record.iataCode; let even = $even) {
+
+                <tr class="aal2-tr" [class.aal2-tr--even]="even" [class.aal2-tr--odd]="!even"
+                    [class.aal2-tr--deactivated]="!isActive(record.iataCode)"
+                    [class.aal2-tr--active]="isActive(record.iataCode)"
+                    [attr.aria-label]="record.name + (isActive(record.iataCode) ? ' — Active' : ' — Deactivated')">
+
+                    <!-- Status dot -->
+                    <td class="aal2-td aal2-td--compact aal2-td--dot">
+                        <span class="aal2-dot" [class.aal2-dot--active]="isActive(record.iataCode)"
+                            [class.aal2-dot--deactivated]="!isActive(record.iataCode)"
+                            [attr.title]="isActive(record.iataCode) ? 'Operational' : 'Deactivated'" aria-hidden="true">
+                        </span>
+                    </td>
+
+                    <!-- IATA badge -->
+                    <td class="aal2-td aal2-td--compact">
+                        <span class="aal2-iata-badge" [class.aal2-iata-badge--active]="isActive(record.iataCode)"
+                            [class.aal2-iata-badge--deactivated]="!isActive(record.iataCode)">
+                            {{ record.iataCode }}
+                        </span>
+                    </td>
+
+                    <!-- Logo circle -->
+                    <td class="aal2-td aal2-td--compact aal2-td--logo">
+                        <div class="aal2-logo" [class.aal2-logo--deactivated]="!isActive(record.iataCode)"
+                            [attr.aria-label]="record.name + ' logo'">
+                            {{ logoInitials(record.name) }}
+                        </div>
+                    </td>
+
+                    <!-- Partner name -->
+                    <td class="aal2-td aal2-td--compact">
+                        <span class="aal2-name" [class.aal2-name--deactivated]="!isActive(record.iataCode)">
+                            {{ record.name }}
+                        </span>
+                    </td>
+
+                    <!-- Callsign -->
+                    <td class="aal2-td aal2-td--compact aal2-col--md-hidden">
+                        <span class="aal2-callsign">{{ record.callsign }}</span>
+                    </td>
+
+                    <!-- Region -->
+                    <td class="aal2-td aal2-td--compact aal2-col--lg-hidden">
+                        <span class="aal2-region">{{ record.operatingRegion }}</span>
+                    </td>
+
+                    <!-- Status pill -->
+                    <td class="aal2-td aal2-td--compact">
+                        @if (isActive(record.iataCode)) {
+                        <span class="aal2-status-pill aal2-status-pill--active">Live</span>
+                        } @else {
+                        <span class="aal2-status-pill aal2-status-pill--deactivated">Suspended</span>
+                        }
+                    </td>
+
+                    <!-- Action: restore button (only for deactivated) -->
+                    <td class="aal2-td aal2-td--compact aal2-td--action">
+                        @if (!isActive(record.iataCode)) {
+                        <aoms-reactivate-action-button [iataCode]="record.iataCode" [restoringCode]="restoringCode()"
+                            [disabled]="loading()" [hasError]="isThisError(record.iataCode)"
+                            (reactivate)="onReactivate.emit($event)" />
+                        } @else {
+                        <span class="aal2-live-label">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                            </svg>
+                            Operational
+                        </span>
+                        }
+                    </td>
+
+                </tr>
+                }
+
+                <!-- ── Empty State ─────────────────────────────────────── -->
+                @if (records().length === 0) {
+                <tr>
+                    <td [attr.colspan]="columns.length" class="aal2-empty">
+                        <div class="aal2-empty__inner">
+                            <div class="aal2-empty__icon-wrap" aria-hidden="true">
+                                <svg class="aal2-empty__icon" fill="none" stroke="currentColor" stroke-width="1.25"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75
+                               12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875
+                               c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125
+                               1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75
+                               M8.25 21h8.25" />
+                                </svg>
+                            </div>
+                            <p class="aal2-empty__title">No records match the current filter.</p>
+                            <p class="aal2-empty__sub">Adjust the view filter or clear the search.</p>
+                        </div>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+            }
+
+        </table>
+    </div>
+
+    <!-- ── Table Footer ───────────────────────────────────────────── -->
+    @if (!loading() && records().length > 0) {
+    <div class="aal2-footer">
+        <span class="aal2-footer__count">
+            Showing <strong>{{ records().length }}</strong>
+            record{{ records().length !== 1 ? 's' : '' }}
+        </span>
+    </div>
+    }
+
+</div>

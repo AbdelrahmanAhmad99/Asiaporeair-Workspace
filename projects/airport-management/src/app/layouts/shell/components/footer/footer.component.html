@@ -1,0 +1,36 @@
+<!-- Footer Component — AOMS Technical Status Bar -->
+<footer class="footer" role="contentinfo">
+
+  <!-- ── System Version ────────────────────────────────────────────────────── -->
+  <div class="footer__section">
+    <span class="footer__label">AOMS</span>
+    <span class="footer__value">{{ systemVersion() }}</span>
+  </div>
+
+  <!-- ── Center: Copyright ─────────────────────────────────────────────────── -->
+  <div class="footer__section footer__section--center">
+    <span class="footer__copyright">© 2026 Asiaporeair — All Rights Reserved</span>
+  </div>
+
+  <!-- ── Right: Server Status + Local Time ─────────────────────────────────── -->
+  <div class="footer__section footer__section--right">
+    <!-- Server Status -->
+    <div class="footer__status">
+      <span class="footer__status-dot" [ngClass]="statusClass"></span>
+      <span class="footer__status-text">{{ statusLabel }}</span>
+    </div>
+
+    <div class="footer__separator"></div>
+
+    <!-- Airport Local Time -->
+    <div class="footer__clock">
+      <svg class="footer__clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+      <span class="footer__clock-time">{{ currentTime() }}</span>
+      <span class="footer__clock-tz">{{ timezone() }}</span>
+    </div>
+  </div>
+</footer>

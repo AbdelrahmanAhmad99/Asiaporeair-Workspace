@@ -1,0 +1,47 @@
+<div class="ce-shell">
+
+    <!-- Hero header -->
+    <header class="ce-hero">
+        <div class="ce-hero__inner">
+            <nav class="ce-bc" aria-label="Breadcrumb">
+                <a href="/" class="ce-bc__link">Home</a>
+                <span class="ce-bc__sep" aria-hidden="true">›</span>
+                <a href="/journey-with-us/dining" class="ce-bc__link">Dining</a>
+                <span class="ce-bc__sep" aria-hidden="true">›</span>
+                <span class="ce-bc__cur">Culinary Experts</span>
+            </nav>
+            <div class="ce-hero__pre-line" aria-hidden="true"></div>
+            <p class="ce-hero__eyebrow">The International Culinary Panel</p>
+            <h1 class="ce-hero__title">The Minds Behind the Menus</h1>
+            <p class="ce-hero__sub">
+                A collective of the world's most celebrated chefs, united by a shared conviction:
+                that extraordinary cuisine has no altitude limit.
+            </p>
+        </div>
+    </header>
+
+    <!-- Chef grid -->
+    <section class="ce-chefs" aria-labelledby="ce-chefs-title">
+        <div class="ce-chefs__inner">
+            <h2 class="ce-chefs__title" id="ce-chefs-title" style="display:none">Culinary Experts</h2>
+            <div class="ce-chefs__grid">
+                @for (chef of chefs(); track chef.id; let i = $index) {
+                <app-chef-quote-card [chef]="chef" [compact]="false"></app-chef-quote-card>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Panel philosophy strip -->
+    <div class="ce-philosophy">
+        <div class="ce-philosophy__inner">
+            <div class="ce-philosophy__line" aria-hidden="true"></div>
+            <blockquote class="ce-philosophy__quote">
+                "We believe that the highest expression of hospitality is a meal crafted
+                with intention, served with grace, and remembered long after landing."
+            </blockquote>
+            <p class="ce-philosophy__attr">— Asiaporeair International Culinary Panel</p>
+        </div>
+    </div>
+
+</div>

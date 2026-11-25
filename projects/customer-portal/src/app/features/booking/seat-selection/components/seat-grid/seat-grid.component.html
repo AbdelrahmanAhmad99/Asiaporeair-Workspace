@@ -1,0 +1,121 @@
+<!-- seat-grid.component.html -->
+
+<div class="grid-wrapper" [@rowsIn]>
+
+    <!-- Column Letter Headers -->
+    <div class="col-headers" aria-hidden="true">
+        <div class="row-num-spacer"></div>
+        <ng-container *ngFor="let col of columnHeaders()">
+            <div *ngIf="col !== null" class="col-letter">{{ col }}</div>
+            <div *ngIf="col === null" class="aisle-spacer aisle-spacer--header"></div>
+        </ng-container>
+        <div class="row-num-spacer"></div>
+    </div>
+
+    <!-- Seat Rows -->
+    <div *ngFor="let row of rows(); trackBy: trackByRow">
+
+        <!-- Exit Row Marker -->
+        <div *ngIf="row.isExitRow" class="exit-row-marker" aria-label="Emergency exit row">
+            <div class="exit-line" aria-hidden="true"></div>
+            <span class="exit-label">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    aria-hidden="true">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Emergency Exit
+            </span>
+            <div class="exit-line" aria-hidden="true"></div>
+        </div>
+
+        <div class="seat-row" role="row" [attr.aria-label]="'Row ' + row.rowNumber">
+            <!-- Row number left -->
+            <div class="row-num" aria-hidden="true">{{ row.rowNumber }}</div>
+
+            <!-- Seats + aisle -->
+            <ng-container *ngFor="let seat of row.seats; let si = index; trackBy: trackBySeat">
+                <!-- Actual seat -->
+                <app-seat-item *ngIf="seat !== null" [seat]="seat" [state]="getSeatState(seat)"
+                    [isHovered]="hoveredSeatId() === seat.seatId"
+                    [passengerIndex]="getPassengerIndexForSeat(seat.seatId)" [currency]="currency()"
+                    (seatClick)="seatClick.emit(seat)" (seatHover)="seatHover.emit($event ? seat : null)">
+                </app-seat-item>
+
+                <!-- Aisle gap -->
+                <div *ngIf="seat === null" class="aisle-spacer" aria-hidden="true"></div>
+            </ng-container>
+
+            <!-- Row number right -->
+            <div class="row-num" aria-hidden="true">{{ row.rowNumber }}</div>
+        </div>
+
+        <!-- Seat Popover anchored under selected seat -->
+        <div *ngIf="popoverSeat() && rows().indexOf(row) >= 0 && popoverSeat()!.seatNumber.startsWith(row.rowNumber.toString())"
+            class="popover-anchor">
+            <div class="seat-popover" [@popoverAnim] role="dialog"
+                [attr.aria-label]="'Seat details for ' + popoverSeat()!.seatNumber">
+
+                <button class="popover-close" (click)="closePopover.emit()" aria-label="Close seat details">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+
+                <div class="popover-head">
+                    <span class="popover-seat-num">{{ popoverSeat()!.seatNumber }}</span>
+                    <span class="popover-cabin">{{ popoverSeat()!.cabinClassName }}</span>
+                </div>
+
+                <div class="popover-attrs">
+                    <span *ngIf="popoverSeat()!.isWindow" class="attr-chip">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="3" />
+                            <circle cx="12" cy="12" r="4" />
+                        </svg>
+                        Window
+                    </span>
+                    <span *ngIf="popoverSeat()!.isAisle" class="attr-chip">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <path d="M5 12h14" />
+                            <path d="M12 5l7 7-7 7" />
+                        </svg>
+                        Aisle
+                    </span>
+                    <span *ngIf="popoverSeat()!.isExitRow" class="attr-chip attr-chip--exit">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" aria-hidden="true">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        Exit Row
+                    </span>
+                </div>
+
+                <div class="popover-price-row">
+                    <span class="popover-price-label">Seat Price</span>
+                    <span class="popover-price">{{ formatPrice(popoverSeat()!.seatPrice) }}</span>
+                </div>
+
+                <button class="popover-select-btn" (click)="confirmSeat.emit(popoverSeat()!)"
+                    aria-label="Secure seat {{ popoverSeat()!.seatNumber }}">
+                    Secure This Suite
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- /rows -->
+
+</div>

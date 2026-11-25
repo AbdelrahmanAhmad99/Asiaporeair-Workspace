@@ -1,0 +1,269 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AOMS Topbar — Glassmorphism & Luxury Midnight Styles
+// ─────────────────────────────────────────────────────────────────────────────
+
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--aoms-topbar-height);
+  padding: 0 24px;
+  background: var(--aoms-bg-topbar);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(var(--aoms-champagne-rgb), 0.1);
+  gap: 16px;
+
+  // ── Left Section ────────────────────────────────────────────────────────
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  // ── Breadcrumbs ─────────────────────────────────────────────────────────
+  &__breadcrumbs {
+    display: flex;
+  }
+
+  &__breadcrumb-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 4px;
+  }
+
+  &__breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__breadcrumb-link {
+    font-size: 11px;
+    color: rgba(var(--aoms-champagne-rgb), 0.6);
+    text-decoration: none;
+    transition: color var(--aoms-transition-fast);
+
+    &:hover {
+      color: var(--aoms-champagne);
+    }
+  }
+
+  &__breadcrumb-current {
+    font-size: 11px;
+    color: rgba(var(--aoms-champagne-rgb), 0.85);
+    font-weight: 500;
+  }
+
+  &__breadcrumb-sep {
+    width: 12px;
+    height: 12px;
+    color: rgba(var(--aoms-champagne-rgb), 0.3);
+  }
+
+  // ── Page Title ──────────────────────────────────────────────────────────
+  &__title {
+    font-family: var(--aoms-font-heading);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: var(--aoms-letter-heading);
+    color: #FFFFFF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Right Section ───────────────────────────────────────────────────────
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  // ── Search ──────────────────────────────────────────────────────────────
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all var(--aoms-transition-smooth);
+
+    &--open {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: var(--aoms-radius-squircle);
+      padding: 0 4px 0 12px;
+    }
+  }
+
+  &__search-input {
+    width: 240px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: #FFFFFF;
+    font-family: var(--aoms-font-body);
+    font-size: 13px;
+    outline: none;
+    animation: searchExpand 250ms ease-out;
+
+    &::placeholder {
+      color: rgba(var(--aoms-champagne-rgb), 0.4);
+    }
+
+    &:focus {
+      border-color: var(--aoms-champagne);
+    }
+  }
+
+  // ── Action Buttons ──────────────────────────────────────────────────────
+  &__action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: var(--aoms-radius-squircle);
+    cursor: pointer;
+    transition: all var(--aoms-transition-fast);
+    position: relative;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // ── Notification Badge ─────────────────────────────────────────────────
+  &__notification {
+    position: relative;
+  }
+
+  &__notification-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #FFFFFF;
+    background: var(--aoms-amber);
+    border-radius: 8px;
+    border: 2px solid var(--aoms-midnight);
+    animation: badgePulse 2s ease-in-out infinite;
+  }
+
+  // ── Divider ─────────────────────────────────────────────────────────────
+  &__divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(var(--aoms-champagne-rgb), 0.15);
+    margin: 0 4px;
+  }
+
+  // ── User Profile ────────────────────────────────────────────────────────
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: var(--aoms-radius-squircle);
+    cursor: pointer;
+    transition: background var(--aoms-transition-fast);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  &__avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--aoms-gold), var(--aoms-champagne));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__avatar-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--aoms-midnight);
+    letter-spacing: 0.02em;
+  }
+
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  &__user-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #FFFFFF;
+    white-space: nowrap;
+  }
+
+  &__user-role {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--aoms-champagne);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  &__user-chevron {
+    width: 14px;
+    height: 14px;
+    color: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+  }
+}
+
+// ── Animations ──────────────────────────────────────────────────────────────
+@keyframes searchExpand {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 240px;
+    opacity: 1;
+  }
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}

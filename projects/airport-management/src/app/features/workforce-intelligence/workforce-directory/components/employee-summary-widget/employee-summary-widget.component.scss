@@ -1,0 +1,167 @@
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $midnight: #051937;
+ $t: 180ms ease;
+
+ .esw {
+     display: flex;
+     flex-direction: column;
+     gap: 1.125rem;
+     padding: 1.375rem;
+     border-radius: 12px;
+     background: var(--aoms-bg-card);
+     border: 1px solid rgba(226, 199, 128, 0.17);
+     box-shadow: 0 4px 16px rgba(5, 25, 55, 0.07);
+     transition: background $t, border-color $t;
+ }
+
+ // ── Header ───────────────────────────────────────────────────────────────
+ .esw__header {
+     display: flex;
+     align-items: center;
+     gap: 0.75rem;
+
+     &__icon-wrap {
+         width: 2.25rem;
+         height: 2.25rem;
+         border-radius: 8px;
+         flex-shrink: 0;
+         background: rgba(182, 143, 36, 0.1);
+         border: 1px solid rgba(182, 143, 36, 0.2);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+     }
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $gold;
+     }
+
+     &__label {
+         font-size: 0.9375rem;
+         font-family: var(--aoms-font-heading);
+         font-weight: 700;
+         color: var(--aoms-text-primary);
+         letter-spacing: -0.01em;
+         transition: color $t;
+     }
+
+     &__sub {
+         font-size: 11px;
+         font-family: var(--aoms-font-body);
+         color: var(--aoms-text-muted);
+         transition: color $t;
+     }
+ }
+
+ // ── Data Table ────────────────────────────────────────────────────────────
+ .esw__data-table {
+     display: flex;
+     flex-direction: column;
+     gap: 0;
+ }
+
+ .esw__row {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 0.75rem;
+     padding: 0.5625rem 0;
+     border-bottom: 1px solid rgba(226, 199, 128, 0.07);
+     transition: background $t;
+
+     &:last-child {
+         border-bottom: none;
+     }
+
+     &--highlight {
+         background: rgba(182, 143, 36, 0.04);
+         margin: 0 -0.5rem;
+         padding: 0.5625rem 0.5rem;
+         border-radius: 6px;
+         border-bottom: none;
+     }
+
+     &__key {
+         display: flex;
+         align-items: center;
+         gap: 0.375rem;
+         flex-shrink: 0;
+         font-size: 0.8125rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-muted);
+         transition: color $t;
+         min-width: 100px;
+     }
+
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+
+     &__val {
+         font-size: 0.875rem;
+         font-family: var(--aoms-font-body);
+         font-weight: 500;
+         color: var(--aoms-text-secondary);
+         text-align: right;
+         transition: color $t;
+
+         &--id {
+             font-weight: 700;
+             color: $gold;
+             font-variant-numeric: tabular-nums;
+         }
+
+         &--mono {
+             font-family: 'Menlo', 'Monaco', monospace;
+             font-size: 0.75rem;
+             color: var(--aoms-text-muted);
+             max-width: 160px;
+             overflow: hidden;
+             text-overflow: ellipsis;
+             white-space: nowrap;
+         }
+
+         &--link {
+             color: $gold;
+             text-decoration: none;
+             font-size: 0.8125rem;
+             transition: color $t;
+
+             &:hover {
+                 color: $champagne;
+                 text-decoration: underline;
+                 text-underline-offset: 3px;
+             }
+         }
+
+         &--role {
+             font-size: 0.75rem;
+             font-weight: 700;
+             text-transform: uppercase;
+             letter-spacing: 0.05em;
+             color: var(--aoms-text-secondary);
+         }
+
+         &--tenure {
+             font-size: 0.875rem;
+             font-weight: 700;
+             color: $gold;
+         }
+     }
+ }
+
+ :host-context(.aoms-dark) {
+     .esw {
+         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+     }
+
+     .esw__row--highlight {
+         background: rgba(182, 143, 36, 0.06);
+     }
+ }

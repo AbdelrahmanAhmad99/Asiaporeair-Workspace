@@ -1,0 +1,198 @@
+<!-- Glassmorphism backdrop -->
+<div class="lcd-backdrop" (click)="onDismiss.emit()" aria-hidden="true"></div>
+
+<!-- Modal panel -->
+<div class="lcd-panel" role="dialog" aria-modal="true" [attr.aria-label]="dialogTitle()">
+
+    <!-- Champagne Gold accent bar per spec -->
+    <div class="lcd-panel__gold-bar" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <div class="lcd-panel__header">
+        <div class="lcd-panel__icon-wrap" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768
+                 0 0 1 3.27 20.875L5.999 12zm0 0h7.5" />
+            </svg>
+        </div>
+        <div>
+            <h2 class="lcd-panel__title">{{ dialogTitle() }}</h2>
+            <p class="lcd-panel__subtitle">Define segment pair, times, and day offsets for this leg.</p>
+        </div>
+        <button class="lcd-panel__close" type="button" (click)="onDismiss.emit()" [disabled]="isSaving()"
+            aria-label="Close">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Form error from store -->
+    @if (formError()) {
+    <div class="lcd-form-error" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        {{ formError() }}
+    </div>
+    }
+
+    <!-- Time conflict inline warning -->
+    @if (timeConflict()) {
+    <div class="lcd-time-conflict" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0
+                 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697
+                 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <div>
+            <strong>Time Conflict:</strong> Arrival must be after departure.
+            Increase the arrival offset or adjust departure time.
+        </div>
+    </div>
+    }
+
+    <!-- Form body -->
+    <form class="lcd-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off">
+
+        <!-- Row 0: Segment number -->
+        <div class="lcd-row lcd-row--narrow">
+            <div class="lcd-field" [class.lcd-field--error]="isInvalid('segmentNumber')">
+                <label class="lcd-label" for="lcd-seq">Segment # <span class="lcd-label__req">*</span></label>
+                <input id="lcd-seq" class="lcd-input lcd-input--narrow" type="number" formControlName="segmentNumber"
+                    min="1" max="20" step="1" placeholder="1"
+                    [attr.aria-invalid]="isInvalid('segmentNumber') ? 'true' : null">
+                @if (isInvalid('segmentNumber')) {
+                <span class="lcd-field__err" role="alert">{{ fieldError('segmentNumber') }}</span>
+                }
+            </div>
+        </div>
+
+        <!-- Row 1: Origin | Destination -->
+        <div class="lcd-row lcd-row--two">
+
+            <!-- Origin -->
+            <div class="lcd-hub-group">
+                <div class="lcd-hub-label lcd-hub-label--origin">
+                    <div class="lcd-hub-label__dot" aria-hidden="true"></div>
+                    Departure Hub
+                </div>
+
+                <div class="lcd-field" [class.lcd-field--error]="isInvalid('departureAirportIataCode')">
+                    <label class="lcd-label" for="lcd-origin">Airport <span class="lcd-label__req">*</span></label>
+                    <select id="lcd-origin" class="lcd-input lcd-input--iata lcd-input--gold"
+                        formControlName="departureAirportIataCode"
+                        [attr.aria-invalid]="isInvalid('departureAirportIataCode') ? 'true' : null">
+                        <option value="" disabled selected>Select</option>
+                        @for (apt of airports(); track apt.iataCode) {
+                        <option [value]="apt.iataCode">{{ apt.iataCode }} - {{ apt.name }}</option>
+                        }
+                    </select>
+                    @if (isInvalid('departureAirportIataCode')) {
+                    <span class="lcd-field__err" role="alert">{{ fieldError('departureAirportIataCode') }}</span>
+                    }
+                </div>
+
+                <div class="lcd-row lcd-row--two-narrow">
+                    <div class="lcd-field" [class.lcd-field--error]="isInvalid('departureTimeLocal')">
+                        <label class="lcd-label" for="lcd-dep-time">Departure <span
+                                class="lcd-label__req">*</span></label>
+                        <input id="lcd-dep-time" class="lcd-input lcd-input--time" type="time"
+                            formControlName="departureTimeLocal"
+                            [attr.aria-invalid]="isInvalid('departureTimeLocal') ? 'true' : null">
+                        @if (isInvalid('departureTimeLocal')) {
+                        <span class="lcd-field__err" role="alert">{{ fieldError('departureTimeLocal') }}</span>
+                        }
+                    </div>
+
+                    <div class="lcd-field" [class.lcd-field--error]="isInvalid('departureOffsetDays')">
+                        <label class="lcd-label" for="lcd-dep-off">Day +</label>
+                        <input id="lcd-dep-off" class="lcd-input lcd-input--narrow" type="number"
+                            formControlName="departureOffsetDays" min="0" max="3" step="1" placeholder="0"
+                            [attr.aria-invalid]="isInvalid('departureOffsetDays') ? 'true' : null">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider arrow -->
+            <div class="lcd-corridor-arrow" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+            </div>
+
+            <!-- Destination -->
+            <div class="lcd-hub-group">
+                <div class="lcd-hub-label lcd-hub-label--dest">
+                    <div class="lcd-hub-label__dot" aria-hidden="true"></div>
+                    Arrival Hub
+                </div>
+
+                <div class="lcd-field" [class.lcd-field--error]="isInvalid('arrivalAirportIataCode')">
+                    <label class="lcd-label" for="lcd-dest">Airport <span class="lcd-label__req">*</span></label>
+                    <select id="lcd-dest" class="lcd-input lcd-input--iata lcd-input--champagne"
+                        formControlName="arrivalAirportIataCode"
+                        [attr.aria-invalid]="isInvalid('arrivalAirportIataCode') ? 'true' : null">
+                        <option value="" disabled selected>Select</option>
+                        @for (apt of airports(); track apt.iataCode) {
+                        <option [value]="apt.iataCode">{{ apt.iataCode }} - {{ apt.name }}</option>
+                        }
+                    </select>
+                    @if (isInvalid('arrivalAirportIataCode')) {
+                    <span class="lcd-field__err" role="alert">{{ fieldError('arrivalAirportIataCode') }}</span>
+                    }
+                </div>
+
+                <div class="lcd-row lcd-row--two-narrow">
+                    <div class="lcd-field" [class.lcd-field--error]="isInvalid('arrivalTimeLocal')">
+                        <label class="lcd-label" for="lcd-arr-time">Arrival <span
+                                class="lcd-label__req">*</span></label>
+                        <input id="lcd-arr-time" class="lcd-input lcd-input--time" type="time"
+                            formControlName="arrivalTimeLocal" [class.lcd-input--conflict]="timeConflict()"
+                            [attr.aria-invalid]="isInvalid('arrivalTimeLocal') ? 'true' : null">
+                        @if (isInvalid('arrivalTimeLocal')) {
+                        <span class="lcd-field__err" role="alert">{{ fieldError('arrivalTimeLocal') }}</span>
+                        }
+                    </div>
+
+                    <div class="lcd-field" [class.lcd-field--error]="isInvalid('arrivalOffsetDays')">
+                        <label class="lcd-label" for="lcd-arr-off">Day +</label>
+                        <input id="lcd-arr-off" class="lcd-input lcd-input--narrow" type="number"
+                            formControlName="arrivalOffsetDays" min="0" max="3" step="1" placeholder="0"
+                            [attr.aria-invalid]="isInvalid('arrivalOffsetDays') ? 'true' : null">
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /lcd-row--two -->
+
+    </form>
+
+    <!-- Footer actions -->
+    <footer class="lcd-panel__footer">
+        <button class="lcd-btn lcd-btn--cancel" type="button" (click)="onDismiss.emit()" [disabled]="isSaving()">
+            Cancel
+        </button>
+        <button class="lcd-btn lcd-btn--save" type="button" (click)="submit()"
+            [disabled]="isSaving() || timeConflict()">
+            @if (isSaving()) {
+            <svg class="lcd-btn__spin" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993
+                   0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25
+                   0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Composing…
+            } @else {
+            <svg class="lcd-btn__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+            </svg>
+            {{ isEditMode() ? 'Save Changes' : 'Add Leg' }}
+            }
+        </button>
+    </footer>
+
+</div>

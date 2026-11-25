@@ -1,0 +1,119 @@
+<div class="pthl-container">
+
+    <!-- ── Section Header ───────────────────────────────────────────── -->
+    <header class="pthl-header">
+        <div class="pthl-header__left">
+            <h2 class="pthl-header__title">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="pthl-header__icon"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                </svg>
+                Passenger Ticket History
+            </h2>
+        </div>
+
+        <div class="pthl-header__badges">
+            @if (totalCount() > 0) {
+            <span class="pthl-badge pthl-badge--total" [attr.aria-label]="totalCount() + ' tickets total'">
+                {{ totalCount() }} ticket{{ totalCount() !== 1 ? 's' : '' }}
+            </span>
+            }
+            @if (voidedCount() > 0) {
+            <span class="pthl-badge pthl-badge--voided" [attr.aria-label]="voidedCount() + ' voided'">
+                {{ voidedCount() }} voided
+            </span>
+            }
+        </div>
+    </header>
+
+    <!-- ── High void rate audit alert ──────────────────────────────── -->
+    @if (hasHighVoidRate()) {
+    <div class="pthl-audit-alert" role="alert">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="pthl-audit-alert__icon"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <div>
+            <p class="pthl-audit-alert__title">High Void Rate Detected</p>
+            <p class="pthl-audit-alert__sub">
+                {{ voidedCount() }} of {{ totalCount() }} tickets for this passenger have been voided.
+                Consider escalating for compliance review.
+            </p>
+        </div>
+    </div>
+    }
+
+    <!-- ── Empty state ──────────────────────────────────────────────── -->
+    @if (!hasHistory()) {
+    <div class="pthl-empty" role="status">
+        <svg class="pthl-empty__icon" fill="none" stroke="currentColor" stroke-width="1.1" viewBox="0 0 64 48"
+            aria-hidden="true">
+            <rect x="4" y="10" width="56" height="30" rx="3" stroke-opacity="0.3" />
+            <line x1="12" y1="20" x2="52" y2="20" stroke-opacity="0.2" />
+            <line x1="12" y1="27" x2="40" y2="27" stroke-opacity="0.15" />
+            <line x1="12" y1="34" x2="36" y2="34" stroke-opacity="0.1" />
+        </svg>
+        <p class="pthl-empty__msg">No historical tickets found for this passenger.</p>
+    </div>
+    }
+
+    <!-- ── History Table ────────────────────────────────────────────── -->
+    @if (hasHistory()) {
+    <div class="pthl-table-wrap">
+        <table class="pthl-table" aria-label="Passenger ticket history">
+            <thead>
+                <tr class="pthl-thead-row">
+                    <th class="pthl-th pthl-th--indicator" scope="col" aria-label="Current indicator"></th>
+                    <th class="pthl-th pthl-th--code" scope="col">Ticket Code</th>
+                    <th class="pthl-th pthl-th--status" scope="col">Status</th>
+                    <th class="pthl-th pthl-th--date" scope="col">Issued</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (ticket of history(); track trackById($index, ticket)) {
+                <tr class="pthl-row" [class.pthl-row--current]="ticket.isCurrent"
+                    [class.pthl-row--voided]="isVoided(ticket)" [attr.aria-current]="ticket.isCurrent ? 'true' : null"
+                    [attr.aria-label]="ticket.ticketCode + (ticket.isCurrent ? ' — current ticket' : '')">
+
+                    <!-- Current indicator column -->
+                    <td class="pthl-cell pthl-cell--indicator" aria-hidden="true">
+                        @if (ticket.isCurrent) {
+                        <div class="pthl-current-dot" title="Current ticket">
+                            <span class="pthl-current-dot__ring"></span>
+                        </div>
+                        }
+                    </td>
+
+                    <!-- Ticket Code -->
+                    <td class="pthl-cell pthl-cell--code">
+                        <span class="pthl-code" [class.pthl-code--current]="ticket.isCurrent"
+                            [class.pthl-code--voided]="isVoided(ticket)">
+                            {{ ticket.ticketCode }}
+                        </span>
+                        @if (ticket.isCurrent) {
+                        <span class="pthl-current-label">Current</span>
+                        }
+                    </td>
+
+                    <!-- Status Badge -->
+                    <td class="pthl-cell pthl-cell--status">
+                        <aoms-ticket-security-badge [status]="ticket.status" />
+                    </td>
+
+                    <!-- Issue Date -->
+                    <td class="pthl-cell pthl-cell--date">
+                        <span class="pthl-date" [class.pthl-date--voided]="isVoided(ticket)">
+                            {{ ticket.issueDateFormatted }}
+                        </span>
+                    </td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+</div>

@@ -1,0 +1,137 @@
+<div class="vsg-wrapper" [@gridRows]>
+
+    <!-- Cabin name header strip -->
+    @if (cabinName()) {
+    <div class="vsg-cabin-header">
+        <div class="vsg-cabin-header__line" aria-hidden="true"></div>
+        <span class="vsg-cabin-header__name">{{ cabinName() }}</span>
+        <div class="vsg-cabin-header__line" aria-hidden="true"></div>
+    </div>
+    }
+
+    <!-- ── Column Letter Headers ─────────────────────────────────── -->
+    <div class="vsg-col-headers" aria-hidden="true">
+        <div class="vsg-row-num-spacer"></div>
+        @for (col of colHeaders(layout()); track trackByHeader($index, col)) {
+        @if (col !== null) {
+        <div class="vsg-col-letter">{{ col }}</div>
+        } @else {
+        <div class="vsg-aisle-spacer vsg-aisle-spacer--header"></div>
+        }
+        }
+        <div class="vsg-row-num-spacer"></div>
+    </div>
+
+    <!-- ── Seat Rows ─────────────────────────────────────────────── -->
+    @for (row of layout().rows; track trackByRow($index, row)) {
+
+    <!-- Exit row marker -->
+    @if (row.isExitRow) {
+    <div class="vsg-exit-marker" aria-label="Emergency exit row">
+        <div class="vsg-exit-marker__line" aria-hidden="true"></div>
+        <span class="vsg-exit-marker__label">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Emergency Exit
+        </span>
+        <div class="vsg-exit-marker__line" aria-hidden="true"></div>
+    </div>
+    }
+
+    <!-- Seat row -->
+    <div class="vsg-row" role="row" [attr.aria-label]="'Row ' + row.rowNumber" [class.vsg-row--exit]="row.isExitRow">
+
+        <!-- Row number — left -->
+        <div class="vsg-row-num" aria-hidden="true">{{ row.rowNumber }}</div>
+
+        <!-- Seats + aisle spacers -->
+        @for (cell of row.cells; track trackByCell($index, cell); let ci = $index) {
+
+        @if (cell !== null) {
+        <!-- Actual seat tile -->
+        <aoms-seat-unit [seat]="cell" [cabinType]="cabinType()" [isSelected]="selectedSeatId() === cell.seatId"
+            [isHovered]="hoveredSeatId() === cell.seatId" (seatClicked)="onSeatClicked($event)"
+            (seatHovered)="seatHovered.emit($event)" />
+        } @else {
+        <!-- Aisle spacer (null cell = aisle) or empty position -->
+        <div class="vsg-aisle-spacer" aria-hidden="true" (click)="onEmptyCellClicked(row, ci)" style="cursor: cell"
+            title="Add seat here"></div>
+        }
+
+        }
+
+        <!-- Row number — right -->
+        <div class="vsg-row-num" aria-hidden="true">{{ row.rowNumber }}</div>
+
+    </div>
+
+    }
+
+    <!-- ══ Blueprint Construction Wizard ════════════════════════ -->
+    <div class="vsg-blueprint-wizard">
+
+        @if (layout().rows.length > 0) {
+        <div class="vsg-wizard-context">
+            <span class="vsg-wizard-label">Seat Construction Blueprint</span>
+            <p class="vsg-wizard-sub">Define exact coordinates to expand the cabin layout</p>
+        </div>
+        }
+
+        <div class="vsg-wizard-form">
+            <!-- Row Input -->
+            <div class="vsg-field">
+                <label for="vsg-row-input">Row</label>
+                <input id="vsg-row-input" type="number" min="1" max="100" [value]="selectedRow()"
+                    (input)="$any($event.target).value && selectedRow.set(+$any($event.target).value)" />
+            </div>
+
+            <!-- Column Selection -->
+            <div class="vsg-field">
+                <label for="vsg-col-select">Column</label>
+                <select id="vsg-col-select" [value]="selectedCol()"
+                    (change)="selectedCol.set($any($event.target).value)">
+                    @for (c of availableCols; track c) {
+                    <option [value]="c">{{ c }}</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Execution Button -->
+            <button class="vsg-blueprint-btn" type="button" (click)="onManualAdd()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+                Construct Seat
+            </button>
+        </div>
+
+        @if (layout().rows.length > 0) {
+        <div class="vsg-wizard-divider"></div>
+
+        <button class="vsg-quick-row-btn" type="button"
+            (click)="emptyClicked.emit({row: layout().rows[layout().rows.length - 1].rowNumber + 1, col: 'A'})"
+            title="Quickly add next row starting at A">
+            + Next Row (A)
+        </button>
+        }
+    </div>
+
+    <!-- ══ Initial State Placeholder ════════════════════════════ -->
+    @if (layout().rows.length === 0) {
+    <div class="vsg-empty">
+        <div class="vsg-empty__icon-bg">
+            <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24" class="vsg-empty__icon">
+                <path
+                    d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+            </svg>
+        </div>
+        <p class="vsg-empty__title">Engineering Canvas Ready</p>
+        <p class="vsg-empty__text">Use the Blueprint Wizard below to initialize the first seat position.</p>
+    </div>
+    }
+
+</div>

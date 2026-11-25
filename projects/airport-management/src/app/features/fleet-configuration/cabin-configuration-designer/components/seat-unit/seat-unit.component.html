@@ -1,0 +1,58 @@
+<div class="seat-unit" [class]="sizeClass()" [class.seat-unit--selected]="effectiveState() === 'selected'"
+    [class.seat-unit--modified]="effectiveState() === 'modified'" [class.seat-unit--new]="effectiveState() === 'new'"
+    [class.seat-unit--pending-delete]="effectiveState() === 'pending-delete'" [class.seat-unit--empty]="!seat()"
+    [class.seat-unit--window]="seat()?.isWindow" [class.seat-unit--exit]="seat()?.isExitRow"
+    [class.seat-unit--aisle]="seat()?.isAisle" [class.seat-unit--hovered]="isHovered()"
+    [class]="'seat-unit ' + sizeClass() + ' cabin-type--' + cabinType()" [attr.role]="seat() ? 'button' : 'img'"
+    [attr.tabindex]="isInteractable() ? 0 : -1" [attr.aria-label]="ariaLabel()"
+    [attr.aria-pressed]="effectiveState() === 'selected' ? 'true' : null"
+    (click)="seat() && isInteractable() && seatClicked.emit(seat()!)" (keydown)="onKeydown($event)"
+    (mouseenter)="seatHovered.emit(seat())" (mouseleave)="seatHovered.emit(null)">
+
+    @if (seat()) {
+
+    <!-- Pending-delete X mark -->
+    @if (effectiveState() === 'pending-delete') {
+    <svg class="su-icon su-icon--delete" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+    }
+
+    <!-- New checkmark flash -->
+    @if (effectiveState() === 'new') {
+    <svg class="su-icon su-icon--new" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"
+        aria-hidden="true">
+        <polyline points="20 6 9 17 4 12" />
+    </svg>
+    }
+
+    <!-- Seat number (visible in default / modified / selected states) -->
+    @if (effectiveState() !== 'pending-delete' && effectiveState() !== 'new') {
+    <span class="su-label" aria-hidden="true">{{ seat()!.seatNumber }}</span>
+    }
+
+    <!-- Window indicator dot -->
+    @if (seat()!.isWindow && effectiveState() === 'default') {
+    <span class="su-window-dot" aria-hidden="true"></span>
+    }
+
+    <!-- Modified badge -->
+    @if (effectiveState() === 'modified') {
+    <span class="su-modified-dot" aria-hidden="true"></span>
+    }
+
+    <!-- Aisle marker (subtle right edge stripe) -->
+    @if (seat()!.isAisle) {
+    <span class="su-aisle-stripe" aria-hidden="true"></span>
+    }
+
+    }
+
+    <!-- Empty position ghost -->
+    @if (!seat()) {
+    <span class="su-empty-plus" aria-hidden="true">+</span>
+    }
+
+</div>

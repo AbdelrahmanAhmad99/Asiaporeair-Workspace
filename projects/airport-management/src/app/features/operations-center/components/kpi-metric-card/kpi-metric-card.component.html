@@ -1,0 +1,90 @@
+<a class="card" [routerLink]="card().route" [attr.data-card]="card().id" [attr.data-tone]="card().status.tone"
+    [attr.aria-label]="card().ariaLabel">
+    <div class="card__content" aria-hidden="true">
+        <div class="card__top">
+            <span class="card__title">{{ card().title }}</span>
+            <span class="status">
+                <span class="status__dot"></span>
+                <span class="status__label">{{ card().status.label }}</span>
+            </span>
+        </div>
+
+        <div class="card__reading">
+            <span class="card__value">{{ card().value }}</span>
+            @if (card().unit) {
+            <span class="card__unit">{{ card().unit }}</span>
+            }
+        </div>
+
+        @if (card().trend; as trend) {
+        <div class="trend" [attr.data-sentiment]="trend.sentiment">
+            <span class="trend__chip">
+                <svg class="icon" viewBox="0 0 24 24" width="14" height="14" focusable="false">
+                    @switch (trend.direction) {
+                    @case ('UP') {
+                    <path d="M7 17 17 7M8 7h9v9" />
+                    }
+                    @case ('DOWN') {
+                    <path d="M7 7l10 10M17 8v9H8" />
+                    }
+                    @default {
+                    <path d="M5 12h14" />
+                    }
+                    }
+                </svg>
+                {{ trend.label }}
+            </span>
+            <span class="trend__caption">{{ trend.caption }}</span>
+        </div>
+        }
+
+        @let visual = card().visual;
+        @if (visual.kind === 'METER') {
+        <div class="meter">
+            <div class="meter__track">
+                <span class="meter__fill" [style.--f]="visual.fraction"></span>
+                @if (visual.markerFraction !== null) {
+                <span class="meter__marker" [style.--m]="visual.markerFraction"></span>
+                }
+            </div>
+            <span class="meter__caption">{{ visual.caption }}</span>
+        </div>
+        } @else if (visual.kind === 'SEGMENTS') {
+        <div class="segments">
+            <div class="segments__bar">
+                @for (segment of visual.segments; track segment.id) {
+                <span class="segments__part" [attr.data-kind]="segment.kind"
+                    [style.flex-grow]="segment.fraction"></span>
+                }
+            </div>
+            <ul class="segments__legend">
+                @for (segment of visual.segments; track segment.id) {
+                <li class="segments__item">
+                    <span class="segments__swatch" [attr.data-kind]="segment.kind"></span>
+                    <span class="segments__label">{{ segment.label }}</span>
+                    <span class="segments__value">{{ segment.value }}</span>
+                </li>
+                }
+            </ul>
+        </div>
+        }
+
+        @if (card().facts.length > 0) {
+        <dl class="facts">
+            @for (fact of card().facts; track fact.label) {
+            <div class="fact" [attr.data-sentiment]="fact.sentiment">
+                <dt class="fact__label">{{ fact.label }}</dt>
+                <dd class="fact__value">{{ fact.value }}</dd>
+            </div>
+            }
+        </dl>
+        }
+
+        <div class="card__foot">
+            <span class="card__domain">{{ card().domainLabel }}</span>
+            <svg class="icon card__arrow" viewBox="0 0 24 24" width="16" height="16" focusable="false">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+        </div>
+    </div>
+</a>

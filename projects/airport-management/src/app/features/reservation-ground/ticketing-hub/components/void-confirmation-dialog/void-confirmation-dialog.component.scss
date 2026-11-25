@@ -1,0 +1,562 @@
+ // ── SCSS Variables (mirror parent tlm- palette exactly) ───────
+ $midnight: #051937;
+ $gold: #B68F24;
+ $champagne: #E2C780;
+ $ivory: #F8F9FA;
+ $charcoal: #101056;
+ $emerald: #064E3B;
+ $ruby: #710D06;
+ $amber: #B45309;
+
+ $t-fast: 150ms ease;
+ $t-base: 240ms ease;
+
+ // ── Derived ruby shades ───────────────────────────────────────
+ $ruby-light: lighten($ruby, 28%); // ~#D94B40 — readable text on dark bg
+ $ruby-medium: lighten($ruby, 16%); // ~#A52218 — mid shade
+ $ruby-bg: rgba($ruby, 0.08);
+ $ruby-border: rgba($ruby, 0.25);
+
+ // ============================================================
+ //  HOST — Full-screen overlay container
+ // ============================================================
+
+ :host {
+     // Sit above all page content including sticky header (z-index 20)
+     position: fixed;
+     inset: 0;
+     z-index: 100;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     // Padding so dialog never touches viewport edges on small screens
+     padding: 1.25rem;
+ }
+
+ // ============================================================
+ //  BACKDROP
+ // ============================================================
+
+ @keyframes vcd-backdrop-in {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ .vcd-backdrop {
+     position: fixed;
+     inset: 0;
+     z-index: -1; // behind .vcd-panel but inside :host stacking context
+     background: rgba($midnight, 0.72);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+     animation: vcd-backdrop-in 200ms ease forwards;
+     cursor: pointer; // communicates "click to dismiss"
+ }
+
+ // ============================================================
+ //  DIALOG PANEL
+ // ============================================================
+
+ @keyframes vcd-panel-enter {
+     from {
+         opacity: 0;
+         transform: translateY(18px) scale(0.97);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }
+
+ .vcd-panel {
+     position: relative;
+     z-index: 1;
+     width: 100%;
+     max-width: 496px;
+     border-radius: 12px; // Squircle system — cards = 12px
+     background: $midnight;
+     border: 1px solid $ruby-border;
+     box-shadow:
+         0 0 0 1px rgba($ruby, 0.10), // inner ruby glow ring
+         0 8px 40px rgba($midnight, 0.75), // deep blue soft shadow — NO black
+         0 4px 16px rgba($ruby, 0.22); // ruby threat shadow
+     overflow: hidden;
+     animation: vcd-panel-enter 260ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+     display: flex;
+     flex-direction: column;
+
+     // Ruby accent top bar
+     &__accent-bar {
+         height: 3px;
+         background: linear-gradient(to right,
+                 transparent,
+                 rgba($ruby, 0.55),
+                 $ruby-medium,
+                 rgba($ruby, 0.55),
+                 transparent);
+     }
+ }
+
+ // ============================================================
+ //  WARNING ICON AREA
+ // ============================================================
+
+ @keyframes vcd-ring-pulse {
+
+     0%,
+     100% {
+         transform: scale(1);
+         opacity: 0.60;
+     }
+
+     50% {
+         transform: scale(1.08);
+         opacity: 1.00;
+     }
+ }
+
+ .vcd-icon-wrap {
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 72px;
+     height: 72px;
+     margin: 1.75rem auto 0;
+     flex-shrink: 0;
+ }
+
+ .vcd-icon-ring {
+     position: absolute;
+     border-radius: 50%;
+     border: 1.5px solid rgba($ruby, 0.40);
+     animation: vcd-ring-pulse 2.4s ease-in-out infinite;
+
+     &--outer {
+         inset: 0;
+         animation-delay: 0ms;
+     }
+
+     &--inner {
+         inset: 10px;
+         border-color: rgba($ruby, 0.60);
+         animation-delay: 300ms;
+     }
+ }
+
+ .vcd-icon {
+     width: 28px;
+     height: 28px;
+     color: $ruby-light;
+     position: relative;
+     z-index: 1;
+     filter: drop-shadow(0 0 6px rgba($ruby, 0.55));
+ }
+
+ // ============================================================
+ //  HEADER
+ // ============================================================
+
+ .vcd-header {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.375rem;
+     padding: 1rem 1.75rem 0.25rem;
+     text-align: center;
+ }
+
+ .vcd-title {
+     font-size: 1.1875rem;
+     font-weight: 700;
+     letter-spacing: -0.02em;
+     line-height: 1.2;
+     color: $ruby-light;
+     margin: 0;
+     // Subtle text shadow for the "luxury danger" feel
+     text-shadow: 0 0 20px rgba($ruby, 0.30);
+ }
+
+ .vcd-ticket-code {
+     font-family: 'Courier New', monospace;
+     font-size: 0.75rem;
+     font-weight: 700;
+     letter-spacing: 0.08em;
+     color: $champagne;
+     background: rgba($champagne, 0.07);
+     border: 1px solid rgba($champagne, 0.18);
+     border-radius: 100px;
+     padding: 0.125rem 0.625rem;
+     margin: 0;
+ }
+
+ // ============================================================
+ //  BODY
+ // ============================================================
+
+ .vcd-body {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     padding: 1.25rem 1.75rem;
+ }
+
+ // ── Warning Banner ────────────────────────────────────────────
+ .vcd-warning-banner {
+     display: flex;
+     align-items: flex-start;
+     gap: 0.75rem;
+     padding: 0.875rem 1rem;
+     border-radius: 8px;
+     background: $ruby-bg;
+     border: 1px solid $ruby-border;
+
+     &__icon {
+         width: 1.125rem;
+         height: 1.125rem;
+         color: $ruby-light;
+         flex-shrink: 0;
+         margin-top: 1px;
+     }
+
+     p {
+         font-size: 0.8125rem;
+         line-height: 1.55;
+         color: rgba(255, 255, 255, 0.65);
+         margin: 0;
+
+         strong {
+             color: $ruby-light;
+             font-weight: 700;
+         }
+     }
+ }
+
+ // ── Reason Field ──────────────────────────────────────────────
+ .vcd-reason-field {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+
+     &__label-row {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         gap: 0.5rem;
+     }
+
+     &__label {
+         font-size: 0.6875rem;
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.07em;
+         color: rgba($champagne, 0.55);
+         display: flex;
+         align-items: center;
+         gap: 0.2rem;
+         cursor: default;
+     }
+
+     &__required {
+         color: $ruby-light;
+         font-size: 0.75rem;
+         line-height: 1;
+     }
+
+     &__char-count {
+         font-size: 0.6875rem;
+         font-weight: 600;
+         letter-spacing: 0.04em;
+         color: rgba($champagne, 0.35);
+         transition: color $t-fast;
+
+         &--valid {
+             color: lighten($emerald, 28%);
+         }
+     }
+ }
+
+ // ── Textarea ──────────────────────────────────────────────────
+ .vcd-textarea {
+     width: 100%;
+     box-sizing: border-box;
+     padding: 0.625rem 0.875rem;
+     border-radius: 6px;
+     border: 1px solid rgba($champagne, 0.18);
+     background: rgba(255, 255, 255, 0.03);
+     color: rgba(255, 255, 255, 0.85);
+     font-family: var(--aoms-font-body, 'Inter', system-ui, sans-serif);
+     font-size: 0.8125rem;
+     line-height: 1.55;
+     resize: vertical;
+     min-height: 92px;
+     outline: none;
+     transition:
+         border-color $t-fast,
+         box-shadow $t-fast;
+
+     &::placeholder {
+         color: rgba($champagne, 0.22);
+         font-size: 0.75rem;
+     }
+
+     &:focus {
+         border-color: rgba($champagne, 0.55);
+         box-shadow: 0 0 0 3px rgba($gold, 0.10);
+     }
+
+     // Show ruby-tinted focus ring when invalid (aria-invalid=true)
+     &[aria-invalid="true"] {
+         border-color: rgba($ruby, 0.55);
+         box-shadow: 0 0 0 3px rgba($ruby, 0.10);
+     }
+
+     &:disabled {
+         opacity: 0.40;
+         cursor: not-allowed;
+         resize: none;
+     }
+
+     // Custom scrollbar — luxury slim
+     scrollbar-width: thin;
+     scrollbar-color: rgba($champagne, 0.25) transparent;
+
+     &::-webkit-scrollbar {
+         width: 4px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: rgba($champagne, 0.25);
+         border-radius: 10px;
+     }
+ }
+
+ // ── Reason hint & error texts ─────────────────────────────────
+ .vcd-reason-hint {
+     font-size: 0.6875rem;
+     color: rgba($champagne, 0.28);
+     margin: 0;
+     line-height: 1.4;
+     letter-spacing: 0.01em;
+ }
+
+ .vcd-reason-error {
+     font-size: 0.6875rem;
+     font-weight: 600;
+     color: $ruby-light;
+     margin: 0;
+     display: flex;
+     align-items: center;
+     gap: 0.25rem;
+     animation: vcd-fadein 180ms ease forwards;
+
+     &::before {
+         content: '!';
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         width: 14px;
+         height: 14px;
+         border-radius: 50%;
+         background: rgba($ruby, 0.25);
+         font-size: 0.625rem;
+         font-weight: 900;
+         flex-shrink: 0;
+     }
+ }
+
+ // ── API / Store Error Banner ──────────────────────────────────
+ .vcd-api-error {
+     display: flex;
+     align-items: center;
+     gap: 0.625rem;
+     padding: 0.75rem 1rem;
+     border-radius: 6px;
+     font-size: 0.8125rem;
+     font-weight: 500;
+     color: $ruby-light;
+     background: $ruby-bg;
+     border: 1px solid $ruby-border;
+     animation: vcd-fadein 180ms ease forwards;
+     line-height: 1.4;
+
+     &__icon {
+         width: 1rem;
+         height: 1rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================
+ //  FOOTER — Action Buttons
+ // ============================================================
+
+ .vcd-footer {
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     gap: 0.625rem;
+     padding: 1rem 1.75rem 1.5rem;
+     border-top: 1px solid rgba($champagne, 0.08);
+ }
+
+ // ── Base Button ───────────────────────────────────────────────
+ .vcd-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.35rem;
+     height: 2.25rem;
+     padding: 0 1.25rem;
+     border-radius: 4px; // Squircle — buttons = 4px
+     font-family: var(--aoms-font-body, 'Inter', system-ui, sans-serif);
+     font-size: 0.8125rem;
+     font-weight: 700;
+     letter-spacing: 0.02em;
+     cursor: pointer;
+     white-space: nowrap;
+     transition:
+         background $t-fast,
+         border-color $t-fast,
+         color $t-fast,
+         box-shadow $t-fast,
+         transform $t-fast;
+
+     &:active:not(:disabled) {
+         transform: scale(0.97);
+     }
+
+     &:disabled {
+         opacity: 0.40;
+         cursor: not-allowed;
+         pointer-events: none;
+     }
+
+     &:focus-visible {
+         outline: 2px solid $champagne;
+         outline-offset: 2px;
+     }
+
+     // ── Cancel / Keep Ticket ───────────────────────────────────
+     &--cancel {
+         background: transparent;
+         border: 1px solid rgba($champagne, 0.22);
+         color: rgba(255, 255, 255, 0.65);
+
+         &:hover:not(:disabled) {
+             border-color: $champagne;
+             color: $champagne;
+             background: rgba($champagne, 0.06);
+         }
+     }
+
+     // ── Confirm Void — Ruby Red ────────────────────────────────
+     &--confirm {
+         background: rgba($ruby, 0.14);
+         border: 1px solid rgba($ruby, 0.50);
+         color: $ruby-light;
+         box-shadow: 0 0 12px rgba($ruby, 0.15);
+
+         &:hover:not(:disabled) {
+             background: $ruby;
+             border-color: $ruby;
+             color: #ffffff;
+             box-shadow: 0 4px 20px rgba($ruby, 0.50);
+         }
+     }
+
+     // Spinner icon inside confirm button
+     &__spin {
+         width: 0.875rem;
+         height: 0.875rem;
+         animation: vcd-spin 1s linear infinite;
+     }
+
+     // Static icon inside confirm button
+     &__icon {
+         width: 0.875rem;
+         height: 0.875rem;
+         flex-shrink: 0;
+     }
+ }
+
+ // ============================================================
+ //  KEYFRAMES
+ // ============================================================
+
+ @keyframes vcd-fadein {
+     from {
+         opacity: 0;
+         transform: translateY(4px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes vcd-spin {
+     from {
+         transform: rotate(0deg);
+     }
+
+     to {
+         transform: rotate(360deg);
+     }
+ }
+
+ // ============================================================
+ //  DARK MODE (aoms-dark host-context — matches parent pattern)
+ // ============================================================
+
+ :host-context(.aoms-dark) {
+     .vcd-panel {
+         background: darken($midnight, 4%);
+         box-shadow:
+             0 0 0 1px rgba($ruby, 0.15),
+             0 12px 50px rgba(0, 0, 0, 0.65),
+             0 4px 20px rgba($ruby, 0.28);
+     }
+
+     .vcd-textarea {
+         background: rgba(255, 255, 255, 0.02);
+         color: rgba(255, 255, 255, 0.90);
+     }
+ }
+
+ // ============================================================
+ //  RESPONSIVE — small screens
+ // ============================================================
+
+ @media (max-width: 540px) {
+     :host {
+         padding: 0.75rem;
+         align-items: flex-end; // slide up from bottom on mobile
+     }
+
+     .vcd-panel {
+         max-width: 100%;
+         border-bottom-left-radius: 0;
+         border-bottom-right-radius: 0;
+     }
+
+     .vcd-footer {
+         flex-direction: column-reverse;
+
+         .vcd-btn {
+             width: 100%;
+             height: 2.625rem;
+         }
+     }
+ }

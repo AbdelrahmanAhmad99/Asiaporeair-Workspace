@@ -1,0 +1,393 @@
+// ============================================================================
+// trip-card.component.scss
+// Asiaporeair | Trip Card — Luxury Midnight
+// ============================================================================
+
+$midnight-sapphire : #051937;
+$royal-gold : #B68F24;
+$champagne-gold : #E2C780;
+$pure-white : #FFFFFF;
+$charcoal-navy : #101056;
+$success-green : #2E7D52;
+
+$font-stack : 'Inter',
+'Montserrat',
+-apple-system,
+sans-serif;
+$ease-luxury : cubic-bezier(0.4, 0, 0.2, 1);
+$t-fast : 180ms $ease-luxury;
+$t-smooth : 300ms $ease-luxury;
+
+// ── Card Shell ────────────────────────────────────────────────────────────────
+.trip-card {
+    background: $pure-white;
+    border: 1px solid rgba($champagne-gold, 0.12);
+    border-radius: 12px;
+    padding: 1.5rem;
+    font-family: $font-stack;
+    color: $pure-white;
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+    box-shadow:
+        0 4px 24px rgba($midnight-sapphire, 0.18),
+        0 1px 4px rgba($midnight-sapphire, 0.10);
+    transition: border-color $t-smooth, box-shadow $t-smooth;
+
+    &:hover {
+        border-color: rgba($champagne-gold, 0.25);
+        box-shadow:
+            0 8px 32px rgba($midnight-sapphire, 0.28),
+            0 2px 8px rgba($midnight-sapphire, 0.15);
+    }
+
+    &--flown {
+        opacity: 0.7;
+        background: rgba($pure-white, 0.03);
+    }
+}
+
+// ── Top Row ───────────────────────────────────────────────────────────────────
+.card-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.pnr-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: rgba($pure-white, 0.50);
+}
+
+.pnr-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 700;
+    color: $champagne-gold;
+    letter-spacing: 0.06em;
+
+    svg {
+        flex-shrink: 0;
+        opacity: 0.7;
+    }
+}
+
+.pnr-sep {
+    opacity: 0.3;
+}
+
+.booked-date {
+    font-weight: 400;
+    color: $midnight-sapphire;
+}
+
+// ── Route Row ─────────────────────────────────────────────────────────────────
+.route-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+}
+
+.endpoint {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    &--right {
+        text-align: right;
+        align-items: flex-end;
+    }
+}
+
+.iata-code {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #000000;
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.city-name {
+    font-size: 0.72rem;
+    color: rgba(#000000, 0.55);
+    font-weight: 500;
+}
+
+.time {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #000000;
+    letter-spacing: -0.02em;
+    position: relative;
+}
+
+.next-day {
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: $royal-gold;
+    vertical-align: super;
+    margin-left: 2px;
+}
+
+.date {
+    font-size: 0.68rem;
+    color: $midnight-sapphire;
+}
+
+// ── Flight Path ───────────────────────────────────────────────────────────────
+.flight-path {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.path-line {
+    flex: 1;
+    height: 1px;
+
+    &--left {
+        background: linear-gradient(to right, transparent, rgba($champagne-gold, 0.35));
+    }
+
+    &--right {
+        background: linear-gradient(to right, rgba($champagne-gold, 0.35), transparent);
+    }
+}
+
+.path-centre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.plane-icon {
+    color: $royal-gold;
+    width: 18px;
+    height: 18px;
+    filter: drop-shadow(0 1px 3px rgba($royal-gold, 0.4));
+}
+
+.duration {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: $champagne-gold;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.flight-num {
+    font-size: 0.6rem;
+    color: $midnight-sapphire;
+    white-space: nowrap;
+}
+
+// ── Return Banner ─────────────────────────────────────────────────────────────
+.return-banner {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.5rem 0.875rem;
+    background: rgba($royal-gold, 0.06);
+    border: 1px solid rgba($royal-gold, 0.18);
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: $champagne-gold;
+
+    svg {
+        flex-shrink: 0;
+        opacity: 0.8;
+    }
+}
+
+// ── Meta Row ──────────────────────────────────────────────────────────────────
+.meta-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: rgba($midnight-sapphire, 0.60);
+    font-weight: 500;
+
+    svg {
+        flex-shrink: 0;
+        opacity: 0.7;
+    }
+
+    &--countdown {
+        color: $champagne-gold;
+
+        svg {
+            opacity: 1;
+        }
+    }
+}
+
+// ── Gold Divider ──────────────────────────────────────────────────────────────
+.card-divider {
+    height: 1px;
+    background: linear-gradient(to right,
+            transparent 0%,
+            rgba($royal-gold, 0.25) 10%,
+            $royal-gold 30%,
+            $champagne-gold 50%,
+            $royal-gold 70%,
+            rgba($royal-gold, 0.25) 90%,
+            transparent 100%);
+}
+
+// ── Action Hub ────────────────────────────────────────────────────────────────
+.action-hub {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+}
+
+// Primary button
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.625rem 1.25rem;
+    background: linear-gradient(135deg, $midnight-sapphire 0%, darken($midnight-sapphire, 10%) 100%);
+    border: 1px solid rgba($champagne-gold, 0.25);
+    border-radius: 4px;
+    font-family: $font-stack;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: $pure-white;
+    cursor: pointer;
+    transition: all $t-fast;
+    white-space: nowrap;
+
+    &:hover {
+        background: linear-gradient(135deg, #082a5c 0%, #051937 100%);
+        box-shadow: 0 4px 14px rgba($royal-gold, 0.35);
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $champagne-gold;
+        outline-offset: 2px;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Ghost button
+.btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.625rem 1rem;
+    background: $champagne-gold;
+    border: 1px solid rgba($champagne-gold, 0.25);
+    border-radius: 4px;
+    font-family: $font-stack;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba($midnight-sapphire, 0.70);
+    cursor: pointer;
+    transition: all $t-fast;
+    white-space: nowrap;
+
+    &:hover {
+        border-color: $royal-gold;
+        color: $midnight-sapphire;
+        background: $champagne-gold;
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba($royal-gold, 0.7);
+        outline-offset: 2px;
+    }
+}
+
+// Check-in accent button
+.btn-checkin {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.625rem 1rem;
+    background: rgba($success-green, 0.12);
+    border: 1px solid rgba($success-green, 0.40);
+    border-radius: 4px;
+    font-family: $font-stack;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: lighten($success-green, 30%);
+    cursor: pointer;
+    transition: all $t-fast;
+    white-space: nowrap;
+
+    &:hover {
+        background: rgba($success-green, 0.22);
+        border-color: lighten($success-green, 20%);
+    }
+
+    &:focus-visible {
+        outline: 2px solid lighten($success-green, 20%);
+        outline-offset: 2px;
+    }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 540px) {
+    .trip-card {
+        padding: 1.125rem;
+    }
+
+    .iata-code {
+        font-size: 1.35rem;
+    }
+
+    .time {
+        font-size: 0.9rem;
+    }
+
+    .action-hub {
+        gap: 0.5rem;
+    }
+
+    .btn-primary,
+    .btn-ghost,
+    .btn-checkin {
+        font-size: 0.72rem;
+        padding: 0.5rem 0.875rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .trip-card,
+    .btn-primary,
+    .btn-ghost,
+    .btn-checkin {
+        transition: none !important;
+    }
+
+    .btn-primary:hover {
+        transform: none;
+    }
+}
